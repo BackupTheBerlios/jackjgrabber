@@ -70,7 +70,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	
 	public void checkForStartWizard() {
 		if (ControlMain.getSettingsMain().getBoxList().size()==0) { //First start, go to Settings-Tab
-	        this.getView().getMainTabPane().setSelectedIndex(5);
+	        this.getView().getMainTabPane().setSelectedIndex(6);
 	        ControlSettingsTabMain ctrl = 
 	        	(ControlSettingsTabMain)this.getView().getTabSettings().getSettingsTabMain().getControl();
 	        ctrl.startWizard(); 
@@ -238,6 +238,10 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 				new Thread(pane.getTabStart().getControl()).start();
 				break;
 			}
+            if (count == 1) { //ProgrammTab
+                pane.setComponentAt(count, pane.getTabProgramm());
+                break;
+            }
 			if (count == 2) { //TimerTab
 				new Thread(pane.getTabTimer().getControl()).start();
 				break;
