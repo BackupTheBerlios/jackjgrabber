@@ -41,7 +41,13 @@ public class GuiNeutrinoRecordTimerTableModel extends GuiRecordTimerTableModel
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
+		BOTimer timer;
+        try {
+            timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
+        } catch (IndexOutOfBoundsException e) {
+            this.fireTableDataChanged();
+            return "";
+        }
 		if (columnIndex == 0) {
 			return new Boolean(timer.getLocalTimer().isLocal());
 		} else if (columnIndex == 1) {
