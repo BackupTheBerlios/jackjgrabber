@@ -135,7 +135,7 @@ public class GuiTimerEditView extends JDialog {
         if (panelRecordSettings == null) {
             panelRecordSettings = new JPanel();
             FormLayout layout = new FormLayout("pref:grow, 5, pref", //columns
-                    "pref, pref, pref, pref, pref, pref, 10, pref, pref, pref, 15, pref, 5, pref"); //rows
+                    "pref, pref, pref, pref, pref, 10, pref, pref, pref, pref, 15, pref, 5, pref"); //rows
             PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
             CellConstraints cc = new CellConstraints();
 
