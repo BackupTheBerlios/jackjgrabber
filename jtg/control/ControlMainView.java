@@ -243,6 +243,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
                 break;
             }
 			if (count == 2) { //TimerTab
+                pane.setComponentAt(count, pane.getTabTimer());
 				new Thread(pane.getTabTimer().getControl()).start();
 				break;
 			}
