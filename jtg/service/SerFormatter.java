@@ -26,6 +26,21 @@ public class SerFormatter {
 	private static HashMap calCache = new HashMap();
 
 	/** entferne alle unerlaubten Zeichen
+	 *  und ersetzt diese durch "_"
+	 * @param input
+	 * @return
+	 */
+	public static String removeInvalidChars(String value){
+		String search ="[äÄöÖüÜß|{};/#// /^$ ':]";
+        Pattern find = Pattern.compile(search, Pattern.CASE_INSENSITIVE);
+        Matcher m = find.matcher(value);
+        while(m.find()) {
+            value = value.replaceAll(m.group(0),"_");
+        }
+        return value;    
+	}
+	
+	/** entferne alle unerlaubten Zeichen
 	 * 
 	 * @param input
 	 * @return
