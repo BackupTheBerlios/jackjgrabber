@@ -65,6 +65,8 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 
 	private AbstractAction refreshAction;
 
+	private boolean currentlyDirectoryRefresh;
+
 	public ControlRecordInfoTab(GuiMainView view) {
 		this.setMainView(view);
 
@@ -89,6 +91,10 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 */
 	protected void reloadAvailableFiles() {
 
+		if (currentlyDirectoryRefresh) {
+			return;
+		}
+		currentlyDirectoryRefresh = true;
 		DefaultTreeModel model = guiTabRecordInfo.getTreeModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
@@ -129,6 +135,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		} else {
 			root.setUserObject(ControlMain.getProperty("err_noStorePath"));
 		}
+		currentlyDirectoryRefresh = false;
 	}
 
 	/**
@@ -178,6 +185,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 			if (!files[i].getName().startsWith(".")) {
 
 				if (files[i].isDirectory()) {
+
 					BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
 					node.setIdent("Directory:" + files[i].getName());
 					parent.add(node);
@@ -185,8 +193,9 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				}
 			}
 		}
-
-	} /*
+	} 
+	
+	/*
 	   * (non-Javadoc)
 	   * 
 	   * @see control.ControlTab#getMainView()
@@ -464,8 +473,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				if (play != null) {
 					String exec = play.getExecString();
 					exec = getExecStringWithoutParam(exec);
-					
-					
+
 					exec += " " + file.getAbsolutePath();
 
 					try {
@@ -507,17 +515,16 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		}
 	}
 
-	/** 
+	/**
 	 * @param exec
 	 * @return
 	 */
 	private String getExecStringWithoutParam(String exec) {
-		String[] knownEnd = {".exe ",".bin ",".cmd ",".bat "};
+		String[] knownEnd = {".exe ", ".bin ", ".cmd ", ".bat "};
 		for (int i = 0; i < knownEnd.length; i++) {
 			int index = exec.indexOf(knownEnd[i]);
-			if (index > -1)
-			{
-				exec = exec.substring(0,index + 5);
+			if (index > -1) {
+				exec = exec.substring(0, index + 5);
 			}
 		}
 		return exec;
@@ -633,9 +640,9 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 * @return
 	 */
 	private boolean askToDelete() {
-		int res = JOptionPane.showOptionDialog(guiTabRecordInfo,ControlMain.getProperty("msg_deleteFiles"),
-				ControlMain.getProperty("button_cancel"),0,JOptionPane.QUESTION_MESSAGE,null,
-				new String[] {ControlMain.getProperty("button_delete"),ControlMain.getProperty("button_cancel")},"");
+		int res = JOptionPane.showOptionDialog(guiTabRecordInfo, ControlMain.getProperty("msg_deleteFiles"), ControlMain
+				.getProperty("button_cancel"), 0, JOptionPane.QUESTION_MESSAGE, null, new String[]{
+				ControlMain.getProperty("button_delete"), ControlMain.getProperty("button_cancel")}, "");
 		return res == 0;
 	}
 

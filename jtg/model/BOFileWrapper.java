@@ -5,19 +5,18 @@ import java.net.*;
 
 public class BOFileWrapper {
 	private File file;
-	
+
 	private String additionalName;
 
 	public BOFileWrapper(File file) {
 		this.file = file;
 	}
-	
-	public BOFileWrapper(File file,String additionalName) {
+
+	public BOFileWrapper(File file, String additionalName) {
 		this.file = file;
 		this.additionalName = additionalName;
 	}
-	
-	
+
 	public boolean canRead() {
 		return file.canRead();
 	}
@@ -103,8 +102,7 @@ public class BOFileWrapper {
 		return file.setReadOnly();
 	}
 	public String toString() {
-		if (additionalName != null)
-		{
+		if (additionalName != null) {
 			return additionalName;
 		}
 		return file.getName();
@@ -115,12 +113,12 @@ public class BOFileWrapper {
 	public URL toURL() throws MalformedURLException {
 		return file.toURL();
 	}
-	
+
 	public String getAdditionalName() {
 		return additionalName;
 	}
 	public void setAdditionalName(String additionalName) {
 		this.additionalName = additionalName;
 	}
-	
+
 }
