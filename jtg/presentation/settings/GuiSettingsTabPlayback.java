@@ -329,7 +329,7 @@ public class GuiSettingsTabPlayback extends JPanel implements GuiSettingsTab {
 		if (jButtonAddPlayer == null) {
 			jButtonAddPlayer = new JButton();
 			jButtonAddPlayer.setIcon(iconManager.getIcon("new.png"));
-			jButtonAddPlayer.setText("Anlegen");
+			jButtonAddPlayer.setText(ControlMain.getProperty("button_create"));
 			jButtonAddPlayer.setActionCommand("addPlayer");
 			jButtonAddPlayer.addActionListener(control);
 		}
@@ -342,7 +342,7 @@ public class GuiSettingsTabPlayback extends JPanel implements GuiSettingsTab {
 		if (jButtonDeletePlayer == null) {
 			jButtonDeletePlayer = new JButton();
 			jButtonDeletePlayer.setIcon(iconManager.getIcon("trash.png"));
-			jButtonDeletePlayer.setText("Löschen");
+			jButtonDeletePlayer.setText(ControlMain.getProperty("button_delete"));
 			jButtonDeletePlayer.setActionCommand("deletePlayer");
 			jButtonDeletePlayer.addActionListener(control);
 		}
