@@ -2,14 +2,18 @@ package presentation;
 /*
  * GuiMainView.java by Geist Alexander
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 675 Mass
+ * Ave, Cambridge, MA 02139, USA.
  *  
  */
 import java.awt.GraphicsDevice;
@@ -43,10 +47,12 @@ import control.ControlMainView;
  */
 public class GuiMainView extends JFrame {
 
-	private GuiMainTabPane		mainTabPane	= null;
-	private ControlMainView		control;
-	private SysTrayMenuIcon[]	sysTrayIcon	= {new SysTrayMenuIcon("ico/jgrabber"), new SysTrayMenuIcon("ico/jgrabber")};
-	private SysTrayMenu			menu;
+	private GuiMainTabPane mainTabPane = null;
+	private ControlMainView control;
+	private SysTrayMenuIcon[] sysTrayIcon = {
+			new SysTrayMenuIcon("ico/jgrabber"),
+			new SysTrayMenuIcon("ico/jgrabber")};
+	private SysTrayMenu menu;
 
 	public GuiMainView(ControlMainView ctrl) {
 		super("FormLayout");
@@ -55,15 +61,17 @@ public class GuiMainView extends JFrame {
 				try {
 					if (ControlMain.getSettings().isSettingsChanged()) {
 						SerSettingsHandler.saveAllSettings();
-						Logger.getLogger("ControlMainView").info("Settings saved");
+						Logger.getLogger("ControlMainView").info(
+								"Settings saved");
 					}
 					if (ControlMain.getSettings().isProjectXSettingsChanged()) {
 						X.inisave();
-						Logger.getLogger("ControlMainView").info("ProjectX-Settings saved");
+						Logger.getLogger("ControlMainView").info(
+								"ProjectX-Settings saved");
 					}
-				}
-				catch (IOException e1) {
-					Logger.getLogger("ControlMainView").error("Error while save Settings");
+				} catch (IOException e1) {
+					Logger.getLogger("ControlMainView").error(
+							"Error while save Settings");
 				}
 				System.exit(0);
 			}
@@ -73,15 +81,32 @@ public class GuiMainView extends JFrame {
 				}
 			}
 		});
+
+		try {
+			// Installiere das Plastic Look And Feel
+			PlasticTheme inst = (PlasticTheme) (Class
+					.forName("com.jgoodies.plaf.plastic.theme."
+							+ ControlMain.getSettings().getThemeLayout()))
+					.newInstance();
+			PlasticLookAndFeel.setMyCurrentTheme(inst);
+			PlasticLookAndFeel l = new PlasticLookAndFeel();
+			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l
+					.getName(), PlasticLookAndFeel.class.getName());
+			UIManager.installLookAndFeel(info);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
 		setLookAndFeel();
 		control = ctrl;
 		initialize();
-		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2] + ", "
-				+ ControlMain.version[3]);
+		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " "
+				+ ControlMain.version[2] + ", " + ControlMain.version[3]);
 		pack();
 		SerGUIUtils.center(this);
 		if (ControlMain.getSettings().isStartFullscreen()) {
-			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			GraphicsDevice device = GraphicsEnvironment
+					.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			device.setFullScreenWindow(this);
 		}
 		setVisible(true);
@@ -89,12 +114,9 @@ public class GuiMainView extends JFrame {
 
 	private void setLookAndFeel() {
 		try {
-			PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
-					+ ControlMain.getSettings().getThemeLayout())).newInstance();
-			PlasticLookAndFeel.setMyCurrentTheme(inst);
-			UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-		}
-		catch (Exception e) {
+			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
+			UIManager.setLookAndFeel(lookAndFeel);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -104,7 +126,8 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
-		setIconImage(new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
+		setIconImage(new ImageIcon(ClassLoader
+				.getSystemResource("ico/grabber1.gif")).getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
 			sysTrayIcon[0].addSysTrayMenuListener(control);
 			sysTrayIcon[1].addSysTrayMenuListener(control);
@@ -119,27 +142,35 @@ public class GuiMainView extends JFrame {
 			mainTabPane = new GuiMainTabPane(this);
 			mainTabPane.addChangeListener(control);
 
-			mainTabPane.addTab(ControlMain.getProperty("tab_program"), mainTabPane.getTabProgramm());
-			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_program"),
+					mainTabPane.getTabProgramm());
+			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"),
+					new JPanel());
 			mainTabPane.addTab("MovieGuide", new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_projectx"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_about"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_projectx"),
+					new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_settings"),
+					new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_about"),
+					new JPanel());
 		}
 		return mainTabPane;
 	}
 
 	void createMenu() {
 		//	  create an exit item
-		SysTrayMenuItem itemOpen = new SysTrayMenuItem(ControlMain.getProperty("open"), "open");
+		SysTrayMenuItem itemOpen = new SysTrayMenuItem(ControlMain
+				.getProperty("open"), "open");
 		itemOpen.addSysTrayMenuListener(control);
 
 		// create an exit item
-		SysTrayMenuItem itemExit = new SysTrayMenuItem(ControlMain.getProperty("exit"), "exit");
+		SysTrayMenuItem itemExit = new SysTrayMenuItem(ControlMain
+				.getProperty("exit"), "exit");
 		itemExit.addSysTrayMenuListener(control);
 
 		// create an about item
-		SysTrayMenuItem itemAbout = new SysTrayMenuItem(ControlMain.getProperty("about"), "about");
+		SysTrayMenuItem itemAbout = new SysTrayMenuItem(ControlMain
+				.getProperty("about"), "about");
 		itemAbout.addSysTrayMenuListener(control);
 
 		// create the main menu
@@ -154,7 +185,8 @@ public class GuiMainView extends JFrame {
 	}
 
 	/**
-	 * Setzt das Tray Menü in Abhängigkeit von useTray Wird vom Einstellungstab aufgerufen wenn die CheckBox ihren Status ändert.
+	 * Setzt das Tray Menü in Abhängigkeit von useTray Wird vom Einstellungstab
+	 * aufgerufen wenn die CheckBox ihren Status ändert.
 	 * 
 	 * @param useTray
 	 * @author Reinhard Achleitner (crazyreini)
@@ -166,13 +198,11 @@ public class GuiMainView extends JFrame {
 
 				// Falls es noch kein Menü gibt, erzeuge es
 				createMenu();
-			}
-			else {
+			} else {
 				// Das Menü existiert schon, zeige das Icon
 				menu.showIcon();
 			}
-		}
-		else {
+		} else {
 
 			if (menu != null) {
 				// Verstecke Icon

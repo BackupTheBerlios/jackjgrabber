@@ -1,34 +1,34 @@
 package model;
 /*
-BOSettings.java by Geist Alexander 
+ BOSettings.java by Geist Alexander 
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2, or (at your option)
+ any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
-*/ 
+ */
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
- * Klasse referenziert die Settings
- * Settings werden beim Start gelesen und beim Beenden gespeichert
- * Sind keine Änderungen an den Settings vorgenommen worden, werden diese nicht gespeichert
- * Werden settings geaendert muss die Variable "settingsChanged" auf true gesetzt werden.
- * Dies geschieht in den Setter-Methoden der einzelnen Settings-Optionen
+ * Klasse referenziert die Settings Settings werden beim Start gelesen und beim
+ * Beenden gespeichert Sind keine Änderungen an den Settings vorgenommen worden,
+ * werden diese nicht gespeichert Werden settings geaendert muss die Variable
+ * "settingsChanged" auf true gesetzt werden. Dies geschieht in den
+ * Setter-Methoden der einzelnen Settings-Optionen
  */
 public class BOSettings {
-    
+
 	public String locale;
 	public String themeLayout;
 	public ArrayList boxList;
@@ -48,33 +48,33 @@ public class BOSettings {
 	public String udrecPath;
 	public String udrecOptions;
 	public String playbackString;
-    public String jgrabberStreamType;	//PES, TS, ES
-    public String udrecStreamType;		//PES, TS
-    public int streamingEngine; //0=JGrabber, 1=udrec
-    public String recordTimeBefore; 
-    public String recordTimeAfter; 
-    
-    public void removeBox(int number) {
-    	setSettingsChanged(true);
-    	getBoxList().remove(number);
-    }
-    
-    
-    public void addPlaybackOption(BOPlaybackOption playbackOption) {
-    	setSettingsChanged(true);
-    	this.getPlaybackOptions().add(playbackOption);
-    }
-    
-    public void removePlaybackOption(int number) {
-    	setSettingsChanged(true);
-    	this.getPlaybackOptions().remove(number);
-    }
-    
-    public void addBox(BOBox box) {
-    	setSettingsChanged(true);
-    	getBoxList().add(box);
-    }
-     
+	public String jgrabberStreamType; //PES, TS, ES
+	public String udrecStreamType; //PES, TS
+	public int streamingEngine; //0=JGrabber, 1=udrec
+	public String recordTimeBefore;
+	public String recordTimeAfter;
+	public String lookAndFeel;
+
+	public void removeBox(int number) {
+		setSettingsChanged(true);
+		getBoxList().remove(number);
+	}
+
+	public void addPlaybackOption(BOPlaybackOption playbackOption) {
+		setSettingsChanged(true);
+		this.getPlaybackOptions().add(playbackOption);
+	}
+
+	public void removePlaybackOption(int number) {
+		setSettingsChanged(true);
+		this.getPlaybackOptions().remove(number);
+	}
+
+	public void addBox(BOBox box) {
+		setSettingsChanged(true);
+		getBoxList().add(box);
+	}
+
 	/**
 	 * @return Returns the boxList.
 	 */
@@ -82,7 +82,8 @@ public class BOSettings {
 		return boxList;
 	}
 	/**
-	 * @param boxList The boxList to set.
+	 * @param boxList
+	 *            The boxList to set.
 	 */
 	public void setBoxList(ArrayList box) {
 		this.boxList = box;
@@ -94,10 +95,11 @@ public class BOSettings {
 		return themeLayout;
 	}
 	/**
-	 * @param themeLayout The themeLayout to set.
+	 * @param themeLayout
+	 *            The themeLayout to set.
 	 */
 	public void setThemeLayout(String layout) {
-		if(!this.themeLayout.equals(layout)) {
+		if (!this.themeLayout.equals(layout)) {
 			setSettingsChanged(true);
 			this.themeLayout = layout;
 		}
@@ -109,7 +111,8 @@ public class BOSettings {
 		return settingsChanged;
 	}
 	/**
-	 * @param settingsChanged The settingsChanged to set.
+	 * @param settingsChanged
+	 *            The settingsChanged to set.
 	 */
 	public void setSettingsChanged(boolean settingsChanged) {
 		this.settingsChanged = settingsChanged;
@@ -121,13 +124,14 @@ public class BOSettings {
 		return locale;
 	}
 	/**
-	 * @param locale The locale to set.
+	 * @param locale
+	 *            The locale to set.
 	 */
 	public void setLocale(String locale) {
-		if(!this.locale.equals(locale)) {
+		if (!this.locale.equals(locale)) {
 			setSettingsChanged(true);
 			this.locale = locale;
-		}	
+		}
 	}
 	/**
 	 * @return Returns the streamingServerPort.
@@ -136,7 +140,8 @@ public class BOSettings {
 		return streamingServerPort;
 	}
 	/**
-	 * @param streamingServerPort The streamingServerPort to set.
+	 * @param streamingServerPort
+	 *            The streamingServerPort to set.
 	 */
 	public void setStreamingServerPort(String streamingServerPort) {
 		if (!this.streamingServerPort.equals(streamingServerPort)) {
@@ -151,7 +156,8 @@ public class BOSettings {
 		return startStreamingServer;
 	}
 	/**
-	 * @param startStreamingServer The startStreamingServer to set.
+	 * @param startStreamingServer
+	 *            The startStreamingServer to set.
 	 */
 	public void setStartStreamingServer(boolean startServer) {
 		if (this.startStreamingServer != startServer) {
@@ -166,13 +172,14 @@ public class BOSettings {
 		return savePath;
 	}
 	/**
-	 * @param savePath The savePath to set.
+	 * @param savePath
+	 *            The savePath to set.
 	 */
 	public void setSavePath(String savePath) {
-		if(!this.savePath.equals(savePath)) {
+		if (!this.savePath.equals(savePath)) {
 			setSettingsChanged(true);
 			this.savePath = savePath;
-		}	
+		}
 	}
 	/**
 	 * @return Returns the projectXSettingsChanged.
@@ -181,7 +188,8 @@ public class BOSettings {
 		return projectXSettingsChanged;
 	}
 	/**
-	 * @param projectXSettingsChanged The projectXSettingsChanged to set.
+	 * @param projectXSettingsChanged
+	 *            The projectXSettingsChanged to set.
 	 */
 	public void setProjectXSettingsChanged(boolean projectXSettingsChanged) {
 		this.projectXSettingsChanged = projectXSettingsChanged;
@@ -190,13 +198,14 @@ public class BOSettings {
 	 * @return Returns the playbackPlayer.
 	 */
 	public String getPlaybackString() {
-		if (playbackString!=null) {
+		if (playbackString != null) {
 			return playbackString;
 		}
-		return"";
+		return "";
 	}
 	/**
-	 * @param playbackPlayer The playbackPlayer to set.
+	 * @param playbackPlayer
+	 *            The playbackPlayer to set.
 	 */
 	public void setPlaybackString(String playbackString) {
 		if (!this.playbackString.equals(playbackString)) {
@@ -213,16 +222,19 @@ public class BOSettings {
 
 	/**
 	 * Sets the streamType.
-	 * @param streamType The streamType to set
+	 * 
+	 * @param streamType
+	 *            The streamType to set
 	 */
 	public void setJgrabberStreamType(String streamType) {
-		if(this.jgrabberStreamType==null || !this.jgrabberStreamType.equals(streamType)) {
+		if (this.jgrabberStreamType == null
+				|| !this.jgrabberStreamType.equals(streamType)) {
 			setSettingsChanged(true);
 			this.jgrabberStreamType = streamType;
 		}
 	}
 	public void setStreamType(String streamType) {
-		if(this.getStreamingEngine()==0) {
+		if (this.getStreamingEngine() == 0) {
 			this.setJgrabberStreamType(streamType);
 		} else {
 			this.setUdrecStreamType(streamType);
@@ -235,7 +247,8 @@ public class BOSettings {
 		return startPX;
 	}
 	/**
-	 * @param startPX The startPX to set.
+	 * @param startPX
+	 *            The startPX to set.
 	 */
 	public void setStartPX(boolean startPX) {
 		if (this.startPX != startPX) {
@@ -250,14 +263,15 @@ public class BOSettings {
 		return streamingEngine;
 	}
 	/**
-	 * @param streamingEngine The streamingEngine to set.
+	 * @param streamingEngine
+	 *            The streamingEngine to set.
 	 */
 	public void setStreamingEngine(int engine) {
-		if(this.streamingEngine!=engine) {
+		if (this.streamingEngine != engine) {
 			setSettingsChanged(true);
 			this.streamingEngine = engine;
-		}	
-		
+		}
+
 	}
 	/**
 	 * @return Returns the udrecPath.
@@ -266,13 +280,14 @@ public class BOSettings {
 		return udrecPath;
 	}
 	/**
-	 * @param udrecPath The udrecPath to set.
+	 * @param udrecPath
+	 *            The udrecPath to set.
 	 */
 	public void setUdrecPath(String path) {
-		if(this.udrecPath==null || !this.udrecPath.equals(path)) {
+		if (this.udrecPath == null || !this.udrecPath.equals(path)) {
 			setSettingsChanged(true);
 			this.udrecPath = path;
-		}	
+		}
 	}
 	/**
 	 * @return Returns the jUdrecStreamType.
@@ -281,23 +296,25 @@ public class BOSettings {
 		return udrecStreamType;
 	}
 	/**
-	 * @param udrecStreamType The jUdrecStreamType to set.
+	 * @param udrecStreamType
+	 *            The jUdrecStreamType to set.
 	 */
 	public void setUdrecStreamType(String streamType) {
-		if(this.udrecStreamType==null ||!this.udrecStreamType.equals(streamType)) {
+		if (this.udrecStreamType == null
+				|| !this.udrecStreamType.equals(streamType)) {
 			setSettingsChanged(true);
 			this.udrecStreamType = streamType;
 		}
 	}
-	
+
 	public String getShortJGrabberStreamType() {
-	    StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
-	    return st.nextToken();
+		StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
+		return st.nextToken();
 	}
-	
+
 	public String getShortUdrecStreamType() {
-	    StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
-	    return st.nextToken().toLowerCase();
+		StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
+		return st.nextToken().toLowerCase();
 	}
 	/**
 	 * @return Returns the recordAllPids.
@@ -306,7 +323,8 @@ public class BOSettings {
 		return recordAllPids;
 	}
 	/**
-	 * @param recordAllPids The recordAllPids to set.
+	 * @param recordAllPids
+	 *            The recordAllPids to set.
 	 */
 	public void setRecordAllPids(boolean recordPids) {
 		if (this.recordAllPids != recordPids) {
@@ -314,117 +332,127 @@ public class BOSettings {
 			this.recordAllPids = recordPids;
 		}
 	}
-    /**
-     * @return Returns the playbackOptions.
-     */
-    public ArrayList getPlaybackOptions() {
-        return playbackOptions;
-    }
-    /**
-     * @param playbackOptions The playbackOptions to set.
-     */
-    public void setPlaybackOptions(ArrayList playbackOptions) {
-        this.playbackOptions = playbackOptions;
-    }
-    /**
-     * @return Returns the alwaysUseStandardPlayback.
-     */
-    public boolean isAlwaysUseStandardPlayback() {
-        return alwaysUseStandardPlayback;
-    }
-    /**
-     * @param alwaysUseStandardPlayback The alwaysUseStandardPlayback to set.
-     */
-    public void setAlwaysUseStandardPlayback(boolean alwaysUseStandardPlayback) {
-        if (this.alwaysUseStandardPlayback != alwaysUseStandardPlayback) {
+	/**
+	 * @return Returns the playbackOptions.
+	 */
+	public ArrayList getPlaybackOptions() {
+		return playbackOptions;
+	}
+	/**
+	 * @param playbackOptions
+	 *            The playbackOptions to set.
+	 */
+	public void setPlaybackOptions(ArrayList playbackOptions) {
+		this.playbackOptions = playbackOptions;
+	}
+	/**
+	 * @return Returns the alwaysUseStandardPlayback.
+	 */
+	public boolean isAlwaysUseStandardPlayback() {
+		return alwaysUseStandardPlayback;
+	}
+	/**
+	 * @param alwaysUseStandardPlayback
+	 *            The alwaysUseStandardPlayback to set.
+	 */
+	public void setAlwaysUseStandardPlayback(boolean alwaysUseStandardPlayback) {
+		if (this.alwaysUseStandardPlayback != alwaysUseStandardPlayback) {
 			setSettingsChanged(true);
 			this.alwaysUseStandardPlayback = alwaysUseStandardPlayback;
 		}
-    }
-    
-    /**
-     * if more Options available, return the standard-option
-     * if no standard-option declared, return 1st Option
-     */
-    public BOPlaybackOption getStandardPlaybackOption() {
-        if (this.getPlaybackOptions()==null || this.getPlaybackOptions().size() ==0) {
-            return null;
-        }
-        for (int i=0; i<this.getPlaybackOptions().size(); i++) {
-            BOPlaybackOption option = (BOPlaybackOption)this.getPlaybackOptions().get(i);
-            if (option.isStandard().booleanValue()) {
-                return option;
-            }
-        }
-        return (BOPlaybackOption)this.getPlaybackOptions().get(0);
-    }
-    
-    public Object[] getPlaybackOptionNames () {
-        String[] names = new String[this.getPlaybackOptions().size()];
-        for (int i=0; i<this.getPlaybackOptions().size(); i++) {
-            names[i] = ((BOPlaybackOption)this.getPlaybackOptions().get(i)).getName();
-        }
-        return names;
-    }
-    
-    public BOPlaybackOption getPlaybackOption(String searchName) {
-        for (int i=0; i<this.getPlaybackOptions().size(); i++) {
-            BOPlaybackOption option = (BOPlaybackOption)this.getPlaybackOptions().get(i);
-            if (option.getName().equals(searchName)) {
-                return option;
-            }
-        }
-        return null; //should not happen
-    }
-    /**
-     * @return Returns the showLogo.
-     */
-    public boolean isShowLogo() {
-        return showLogo;
-    }
-    /**
-     * @param showLogo The showLogo to set.
-     */
-    public void setShowLogo(boolean showLogo) {
-        if (this.showLogo != showLogo) {
+	}
+
+	/**
+	 * if more Options available, return the standard-option if no
+	 * standard-option declared, return 1st Option
+	 */
+	public BOPlaybackOption getStandardPlaybackOption() {
+		if (this.getPlaybackOptions() == null
+				|| this.getPlaybackOptions().size() == 0) {
+			return null;
+		}
+		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
+			BOPlaybackOption option = (BOPlaybackOption) this
+					.getPlaybackOptions().get(i);
+			if (option.isStandard().booleanValue()) {
+				return option;
+			}
+		}
+		return (BOPlaybackOption) this.getPlaybackOptions().get(0);
+	}
+
+	public Object[] getPlaybackOptionNames() {
+		String[] names = new String[this.getPlaybackOptions().size()];
+		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
+			names[i] = ((BOPlaybackOption) this.getPlaybackOptions().get(i))
+					.getName();
+		}
+		return names;
+	}
+
+	public BOPlaybackOption getPlaybackOption(String searchName) {
+		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
+			BOPlaybackOption option = (BOPlaybackOption) this
+					.getPlaybackOptions().get(i);
+			if (option.getName().equals(searchName)) {
+				return option;
+			}
+		}
+		return null; //should not happen
+	}
+	/**
+	 * @return Returns the showLogo.
+	 */
+	public boolean isShowLogo() {
+		return showLogo;
+	}
+	/**
+	 * @param showLogo
+	 *            The showLogo to set.
+	 */
+	public void setShowLogo(boolean showLogo) {
+		if (this.showLogo != showLogo) {
 			setSettingsChanged(true);
 			this.showLogo = showLogo;
 		}
-    }
-    /**
-     * @return Returns the startFullscreen.
-     */
-    public boolean isStartFullscreen() {
-        return startFullscreen;
-    }
-    /**
-     * @param startFullscreen The startFullscreen to set.
-     */
-    public void setStartFullscreen(boolean startFullscreen) {
-        if (this.startFullscreen != startFullscreen) {
+	}
+	/**
+	 * @return Returns the startFullscreen.
+	 */
+	public boolean isStartFullscreen() {
+		return startFullscreen;
+	}
+	/**
+	 * @param startFullscreen
+	 *            The startFullscreen to set.
+	 */
+	public void setStartFullscreen(boolean startFullscreen) {
+		if (this.startFullscreen != startFullscreen) {
 			setSettingsChanged(true);
 			this.startFullscreen = startFullscreen;
 		}
-    }
-    /**
-     * @return Returns the useSysTray.
-     */
-    public boolean isUseSysTray() {
-        return useSysTray;
-    }
-    /**
-     * @param useSysTray The useSysTray to set.
-     */
-    public void setUseSysTray(boolean useSysTray) {
-        if (this.useSysTray != useSysTray) {
+	}
+	/**
+	 * @return Returns the useSysTray.
+	 */
+	public boolean isUseSysTray() {
+		return useSysTray;
+	}
+	/**
+	 * @param useSysTray
+	 *            The useSysTray to set.
+	 */
+	public void setUseSysTray(boolean useSysTray) {
+		if (this.useSysTray != useSysTray) {
 			setSettingsChanged(true);
 			this.useSysTray = useSysTray;
+
 		}
-    }
-    
-    public String getShortLocale() {
-    	return this.getLocale().substring(0,2);
-    }
+	}
+
+	public String getShortLocale() {
+		return this.getLocale().substring(0, 2);
+	}
 	/**
 	 * @return Returns the recordTimeAfter.
 	 */
@@ -432,10 +460,12 @@ public class BOSettings {
 		return recordTimeAfter;
 	}
 	/**
-	 * @param recordTimeAfter The recordTimeAfter to set.
+	 * @param recordTimeAfter
+	 *            The recordTimeAfter to set.
 	 */
 	public void setRecordTimeAfter(String recordTimeAfter) {
-		if(this.recordTimeAfter==null ||!this.recordTimeAfter.equals(recordTimeAfter)) {
+		if (this.recordTimeAfter == null
+				|| !this.recordTimeAfter.equals(recordTimeAfter)) {
 			setSettingsChanged(true);
 			this.recordTimeAfter = recordTimeAfter;
 		}
@@ -447,10 +477,12 @@ public class BOSettings {
 		return recordTimeBefore;
 	}
 	/**
-	 * @param recordTimeBefore The recordTimeBefore to set.
+	 * @param recordTimeBefore
+	 *            The recordTimeBefore to set.
 	 */
 	public void setRecordTimeBefore(String recordTimeBefore) {
-		if(this.recordTimeBefore==null ||!this.recordTimeBefore.equals(recordTimeBefore)) {
+		if (this.recordTimeBefore == null
+				|| !this.recordTimeBefore.equals(recordTimeBefore)) {
 			setSettingsChanged(true);
 			this.recordTimeBefore = recordTimeBefore;
 		}
@@ -462,7 +494,8 @@ public class BOSettings {
 		return ac3ReplaceStereo;
 	}
 	/**
-	 * @param ac3ReplaceStereo The ac3ReplaceStereo to set.
+	 * @param ac3ReplaceStereo
+	 *            The ac3ReplaceStereo to set.
 	 */
 	public void setAc3ReplaceStereo(boolean ac3ReplaceStereo) {
 		if (this.ac3ReplaceStereo != ac3ReplaceStereo) {
@@ -474,18 +507,29 @@ public class BOSettings {
 	 * @return Returns the udrecOptions.
 	 */
 	public String getUdrecOptions() {
-		if (udrecOptions==null) {
+		if (udrecOptions == null) {
 			return "";
 		}
 		return udrecOptions;
 	}
 	/**
-	 * @param udrecOptions The udrecOptions to set.
+	 * @param udrecOptions
+	 *            The udrecOptions to set.
 	 */
 	public void setUdrecOptions(String udrecOptions) {
-		if(this.udrecOptions==null ||!this.udrecOptions.equals(udrecOptions)) {
+		if (this.udrecOptions == null
+				|| !this.udrecOptions.equals(udrecOptions)) {
 			setSettingsChanged(true);
 			this.udrecOptions = udrecOptions;
+		}
+	}
+	public String getLookAndFeel() {
+		return lookAndFeel;
+	}
+	public void setLookAndFeel(String lookAndFeel) {
+		if (this.lookAndFeel == null || !this.lookAndFeel.equals(lookAndFeel)) {
+			setSettingsChanged(true);
+			this.lookAndFeel = lookAndFeel;
 		}
 	}
 }
