@@ -328,11 +328,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
         }
         return (BOPid)this.getPids().getAPids().get(0);
     }
-	
-	private String getServiceId() {
-	    String chanId = this.getSelectedSender().getChanId(); 
-	    return chanId.substring(chanId.length()-4, chanId.length());
-	}
 
 	private String getPlaybackRequestString(BOPlaybackOption option, BOPid audioPid){
 		String execString = option.getPlaybackOption();
@@ -454,19 +449,11 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	        long nowTime = now.getTimeInMillis();
 	        for (int i = 0; i < epgList.size(); i++) {
 	            BOEpg epgObj = (BOEpg) epgList.get(i);
-	            long epgStart = Long.parseLong(epgObj.getUnformattedStart()) * 1000;
-	            int epgIndex = i - 1;
-	            if (now.get(Calendar.DATE) == epgObj.getStartdate().get(Calendar.DATE)) {
-	                if (nowTime - epgStart < 0 && epgIndex > -1 ) {
-	                    BOEpg neededEpg = (BOEpg) epgList.get(epgIndex);
-	                    if (neededEpg != null) {
-	                        return neededEpg;
-	                    }
-	                }
-	                if (i+1==epgList.size()) {
-	                    return (BOEpg) epgList.get(i);
-	                }
-	            }
+	            long epgStart = epgObj.getStartdate().getTimeInMillis();
+                long epgStop = epgObj.getEndDate().getTimeInMillis();
+                if (nowTime>epgStart && nowTime<epgStop) {
+                    return epgObj;
+                }
 	        }
 	    }
 	    return null;
