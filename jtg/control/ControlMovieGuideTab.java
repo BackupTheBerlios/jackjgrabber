@@ -249,7 +249,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 
 	private void openFileChooser() {
-		JFileChooser fc = new JFileChooser();
+		JFileChooser fc = new JFileChooser(new File("movieguide.xml"));
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc.setDialogType(JFileChooser.OPEN_DIALOG);
 		fc.setApproveButtonText("Auswählen");
