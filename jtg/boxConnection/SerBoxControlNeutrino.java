@@ -223,9 +223,12 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			if ((indexSearchString = line.indexOf(searchString))>0) {
 				for (int i=0; i<timerList.size(); i++) {
 					BOTimer timer = (BOTimer)timerList.get(i);
-					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0) {
-						indexIdentifier= line.indexOf(">", indexSearchString);
-						timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
+					if (line.indexOf(timer.getSenderName())>0 && line.indexOf(timer.getStartTime())>0) {
+						String date = Integer.toString(timer.getStartDate().getDate())+"."+Integer.toString(timer.getStartDate().getMonth()+1);
+						if (line.indexOf(date)>0) {
+							indexIdentifier= line.indexOf(">", indexSearchString);
+							timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
+						}
 					}
 				}
 			}
