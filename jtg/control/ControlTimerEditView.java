@@ -76,6 +76,21 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	}
 
 	private void initialize() {
+		
+		view.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				timer.setLocked(false);
+				saveDialogPosition();
+			}
+
+			public void windowClosed(WindowEvent e) {
+				timer.setLocked(false);
+				saveDialogPosition();				
+			}
+		});
+		
+		
+		
 		this.getView().getJComboBoxStreamType().setSelectedItem(timer.getJgrabberStreamType());
 		this.getView().getCbStartPX().setSelected(timer.isStartPX());
 		this.getView().getCbRecordVtxt().setSelected(timer.isRecordVtxt());
@@ -97,15 +112,14 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		this.initializeAudioSettings();
 		this.initializeStreamingEngine();
 
-		view.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				timer.setLocked(false);
-			}
-
-			public void windowClosed(WindowEvent e) {
-				timer.setLocked(false);
-			}
-		});
+	}
+	
+	/** speichert die aktuelle Position des Fensters
+	 * 
+	 */
+	protected void saveDialogPosition() {
+		ControlMain.getSettings().getLayoutSettings().setLocationOfTimerDialog(view.getLocation());
+		
 	}
 
 	private void initializeAudioSettings() {

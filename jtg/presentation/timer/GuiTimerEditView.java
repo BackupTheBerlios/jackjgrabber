@@ -101,22 +101,11 @@ public class GuiTimerEditView extends JFrame {
 		this.setTitle(control.getTimer().getMainTimer().getSenderName() + " " + control.getTimer().getMainTimer().getStartDate());
 		pack();
 
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				saveDialogPosition();
-			}
-		});
 		setLocation(ControlMain.getSettings().getLayoutSettings().getLocationOfTimerDialog());
 		
 	}
 
-	/** speichert die aktuelle Position des Fensters
-	 * 
-	 */
-	protected void saveDialogPosition() {
-		ControlMain.getSettings().getLayoutSettings().setLocationOfTimerDialog(getLocation());
-		
-	}
+	
 
 	public void initialize() {
 		this.getContentPane().add(this.getMainPanel());
