@@ -2,6 +2,7 @@ package model;
 
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
@@ -11,58 +12,63 @@ import java.util.GregorianCalendar;
 public class BOTimer extends java.lang.Object{
     private String channelId, timerNumber, modifiedId, eventTypeId, eventRepeatId, announceTime, senderName, description;
     private GregorianCalendar unformattedStartTime, unformattedStopTime;
-    
+
     public String getTimerNumber (){
         return this.timerNumber;
     }
-    
+
     public void setTimerNumber(String eventId){
         this.timerNumber = eventId;
     }
-    
-    public String getEventTypeId(){	
+
+    public String getEventTypeId(){
     	return eventTypeId;
     }
-    
+
     public void setEventTypeId(String eventType){
         this.eventTypeId = eventType;
     }
-    
+
     public String getEventRepeatId (){
         return this.eventRepeatId;
     }
-    
+
     public void setEventRepeatId(String eventRepeat){
         this.eventRepeatId = eventRepeat;
     }
-    
+
     public String getAnnounceTime (){
         return this.announceTime;
     }
-    
+
     public void setAnnounceTime(String announceTime){
         this.announceTime = announceTime;
     }
-    
+
     public String getStartTime (){
-    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
     	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
+    public String getShortStartTime (){
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    	return sdf.format(this.getUnformattedStartTime().getTime());
+    }
+
     public String getStopTime(){
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	return sdf.format(this.getUnformattedStopTime().getTime());
     }
-    
-	
+
+
 	public String getInfo() {
 		return this.getStartTime()+" "+this.getSenderName()+" "+this.getDescription();
 	}
-    
+
     public String getSenderName (){
         return this.senderName;
     }
-    
+
     public void setSenderName(String sender){
         this.senderName = sender;
     }
@@ -73,12 +79,28 @@ public class BOTimer extends java.lang.Object{
 		return unformattedStartTime;
 	}
 	/**
+	 * @param time in milliseconds
+	 * Bei Setzen eines neuen Start-Datum, muss das Stop-Datum angepasst werden
+	 */
+	public void setUnformattedStartTime(long startMillis) {
+		this.getUnformattedStartTime().setTimeInMillis(startMillis);
+		
+		int startDay = this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH);
+		this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay);
+		
+		long stopMillis = this.getUnformattedStopTime().getTimeInMillis();
+		if ((stopMillis-startMillis)<0) {
+			this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay+1);
+		}
+	}
+	
+	/**
 	 * @param unformattedStartTime The unformattedStartTime to set.
 	 */
 	public void setUnformattedStartTime(GregorianCalendar startDate) {
 		this.unformattedStartTime = startDate;
 	}
-     
+
 	/**
 	 * @return Returns the description.
 	 */
