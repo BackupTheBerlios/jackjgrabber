@@ -174,8 +174,34 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			return line;
 		}
 		return line;
+	}	
+	public String setRecordModusWithPlayback() throws IOException {
+		BufferedReader input = getConnection("/control/setmode?record=start&stopplayback=true");
+		
+		String line;
+		while((line=input.readLine())!=null) {
+			return line;
+		}
+		return line;
+	} 
+	public String setRecordModus() throws IOException {
+		BufferedReader input = getConnection("/control/setmode?record=start");
+		
+		String line;
+		while((line=input.readLine())!=null) {
+			return line;
+		}
+		return line;
 	}
-	
+	 public String removeRecordModus() throws IOException {
+		BufferedReader input = getConnection("/control/setmode?record=stop");
+		
+		String line;
+		while((line=input.readLine())!=null) {
+			return line;
+		}
+		return line;
+	} 
 	public String setRadioTvMode(String mode) throws IOException {
 		BufferedReader input = getConnection("/control/setmode?"+mode);
 		
