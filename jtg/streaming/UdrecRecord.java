@@ -56,10 +56,11 @@ public class UdrecRecord  extends Record {
 	            boxIp, 
 	            Integer.toString(spktBufNum), 
 	            ControlMain.getSettings().getShortUdrecStreamType(),
-	            '"'+new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()+'"'
+	            '"'+new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()+'"',
+	            ControlMain.getSettings().getUdrecOptions()
 	    };
 	    
-	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3} -o {4}");
+	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3} -o {4} {5}");
 	    cmd.append(mf.format(args));
 	    
 	    if (recordArgs.getVPid() != null) {
@@ -106,5 +107,6 @@ public class UdrecRecord  extends Record {
     	    fullPathFiles[i] = files[i].getAbsolutePath();
     	}
     	return fullPathFiles;
+    	//TODO nicht alle Files übergeben!! Nur Files mit identischem Standardnamen
     }
 }

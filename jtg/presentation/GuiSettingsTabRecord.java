@@ -53,6 +53,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldUdrecPath;
 	private JTextField jTextFieldPlaybackString = null;
+	private JTextField jTextFieldUdrecOptions = null;
 	private JButton jButtonRecordPathFileChooser;
 	private JButton jButtonUdrecPathFileChooser;
 	private JRadioButton jRadioButtonUdrec;
@@ -62,6 +63,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbStartStreamingServer;
 	private JCheckBox cbRecordAllPids;
 	private JCheckBox cbStartPX;
+	private JCheckBox cbAC3ReplaceStereo;
 	private JSpinner recordMinsBefore, recordMinsAfter; 
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
@@ -96,9 +98,9 @@ public class GuiSettingsTabRecord extends GuiTab {
 
 			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),		cc.xywh	(1, 1, 5, 1));
 			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 2));
-			builder.add(this.getJTextFieldRecordSavePath(),									cc.xy	(3, 2));
-			builder.add(this.getJButtonRecordPathFileChooser(),								cc.xy	(5, 2));
-			builder.add(this.getCbStartPX(),															cc.xywh	(1, 3, 3, 1));
+			builder.add(this.getJTextFieldRecordSavePath(),								cc.xy	(3, 2));
+			builder.add(this.getJButtonRecordPathFileChooser(),							cc.xy	(5, 2));
+			builder.add(this.getCbStartPX(),											cc.xywh	(1, 3, 3, 1));
 		}
 		return panelRecordSettings;
 	}
@@ -108,14 +110,15 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelServerRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					  "pref, 10,  pref:grow, 5, pref",	 		//columns 
-			  "pref:grow, pref:grow");		//rows
+			  "pref:grow, pref:grow, pref:grow");		//rows
 			PanelBuilder builder = new PanelBuilder(panelServerRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_serverRecordSettings"),		cc.xyw	(1, 1, 5));
-			builder.add(this.getCbStartStreamingServer(),										cc.xyw	(1, 2, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  		cc.xyw	(3, 2, 1, CellConstraints.RIGHT, CellConstraints.FILL));
-			builder.add(this.getTfServerPort(),														cc.xy	(5, 2));
+			builder.add(this.getCbStartStreamingServer(),									cc.xy	(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  		cc.xy	(3, 2, CellConstraints.RIGHT, CellConstraints.FILL));
+			builder.add(this.getTfServerPort(),												cc.xy	(5, 2));
+			builder.add(this.getCbAC3ReplaceStereo(),										cc.xy	(1, 3));
 		}
 		return panelServerRecordSettings;
 	}
@@ -139,18 +142,20 @@ public class GuiSettingsTabRecord extends GuiTab {
 		if (panelEngineSettings == null) {
 		    panelEngineSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-			        "pref, 5, pref, 10, pref:grow,  5, pref",	 		//columns 
-			  "pref:grow, pref, 4, pref:grow");							//rows
+			        "pref, 5, pref, 15, pref:grow,  5, pref",	 		//columns 
+			  "pref:grow, pref, 10, pref:grow, pref");							//rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_engine"),			cc.xywh	(1, 1, 7, 1));	
-			builder.add(this.getJRadioButtonJGrabber(),									cc.xy	(1, 2));
-			builder.add(this.getJRadioButtonUdrec(),										cc.xy	(3, 2));
-			builder.add(this.getJComboBoxStreamType(),									cc.xywh	(5, 2, 2, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),	cc.xy	(1, 4));
-			builder.add(this.getJTextFieldUdrecPath(),									cc.xywh	(4, 4, 2, 1));
+			builder.add(this.getJRadioButtonJGrabber(),								cc.xy	(1, 2));
+			builder.add(this.getJRadioButtonUdrec(),								cc.xy	(3, 2));
+			builder.add(this.getJComboBoxStreamType(),								cc.xywh	(5, 2, 1, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),		cc.xy	(1, 4));
+			builder.add(this.getJTextFieldUdrecPath(),								cc.xywh	(5, 4, 1, 1));
 			builder.add(this.getJButtonUdrecPathFileChooser(),						cc.xy	(7, 4));
+			builder.add(new JLabel(ControlMain.getProperty("label_udrecOptions")),	cc.xyw	(1, 5, 7));
+			builder.add(this.getJTextFieldUdrecOptions(),							cc.xywh	(5, 5, 1, 1));
 		}
 		return panelEngineSettings;
 	}
@@ -275,6 +280,20 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return jTextFieldPlaybackString;
 	}
+	
+	/**
+	 * @return Returns the jTextFieldUdrecOptions.
+	 */
+	public JTextField getJTextFieldUdrecOptions() {
+		if (jTextFieldUdrecOptions == null) {
+			jTextFieldUdrecOptions = new JTextField();
+			jTextFieldUdrecOptions.addKeyListener(control);
+			jTextFieldUdrecOptions.setName("udrecOptions");
+			jTextFieldUdrecOptions.setPreferredSize(new Dimension(340, 19));
+		}
+		return jTextFieldUdrecOptions;
+	}
+	
 	public JSpinner getJSpinnerRecordMinsBefore() {
 		if (recordMinsBefore == null) {
 			SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 60, 1);
@@ -305,6 +324,17 @@ public class GuiSettingsTabRecord extends GuiTab {
 			cbStartPX.addItemListener(control);
 		}
 		return cbStartPX;
+	}
+	/**
+	 * @return Returns the cbAC3ReplaceStereo.
+	 */
+	public JCheckBox getCbAC3ReplaceStereo() {
+		if (cbAC3ReplaceStereo == null) {
+			cbAC3ReplaceStereo = new JCheckBox(ControlMain.getProperty("cbAC3ReplaceStereo"));
+			cbAC3ReplaceStereo.setName("cbAC3ReplaceStereo");
+			cbAC3ReplaceStereo.addItemListener(control);
+		}
+		return cbAC3ReplaceStereo;
 	}
 	/**
 	 * @return Returns the cbRecordAllPids.

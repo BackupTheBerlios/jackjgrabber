@@ -61,10 +61,31 @@ public class SerSettingsHandler {
 		getSettingsUseSysTray(root, settings);
 		getSettingsRecordtimeBefore(root, settings);
 		getSettingsRecordtimeAfter(root, settings);
+		getSettingsAc3ReplaceStereo(root, settings);
+		getSettingsUdrecOptions(root, settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
 		return settings;
+	}
+	
+	private static void getSettingsAc3ReplaceStereo(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/ac3ReplaceStereo");
+		if (node != null) {
+			settings.ac3ReplaceStereo=node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root,"ac3ReplaceStereo", "false");
+			settings.setAc3ReplaceStereo(false);
+		}
+	}
+	
+	private static void getSettingsUdrecOptions(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/udrecOptions");
+		if (node != null) {
+			settings.udrecOptions=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root, "udrecOptions", "");
+		}
 	}
 	
 	private static void getSettingsRecordtimeBefore(Element root, BOSettings settings) {
@@ -383,7 +404,11 @@ public class SerSettingsHandler {
 		Node showLogo = settingsDocument.selectSingleNode("/settings/showLogo");
 		Node recordTimeBefore = settingsDocument.selectSingleNode("/settings/recordTimeBefore");
 		Node recordTimeAfter = settingsDocument.selectSingleNode("/settings/recordTimeAfter");
+		Node ac3ReplaceStereo = settingsDocument.selectSingleNode("/settings/ac3ReplaceStereo");
+		Node udrecOptions = settingsDocument.selectSingleNode("/settings/udrecOptions");
 
+		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().isAc3ReplaceStereo()));
+		udrecOptions.setText(ControlMain.getSettings().getUdrecOptions());
 		recordTimeBefore.setText(ControlMain.getSettings().getRecordTimeBefore());
 		recordTimeAfter.setText(ControlMain.getSettings().getRecordTimeAfter());
 		useSysTray.setText(Boolean.toString(ControlMain.getSettings().isUseSysTray()));

@@ -88,6 +88,7 @@ public class RecordControl extends Thread
 	public void stopRecord() {
 	    record.stop();
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
+    	controlProgramTab.getMainView().setSystrayDefaultIcon();
     	if (ControlMain.getSettings().isStartPX() && record.getFiles()!=null && record.getFiles().length>0) {
     		this.startProjectX();
     		Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));

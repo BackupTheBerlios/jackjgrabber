@@ -43,8 +43,10 @@ public class BOSettings {
 	public boolean startStreamingServer;
 	public boolean startPX;
 	public boolean recordAllPids;
+	public boolean ac3ReplaceStereo;
 	public String savePath;
 	public String udrecPath;
+	public String udrecOptions;
 	public String playbackString;
     public String jgrabberStreamType;	//PES, TS, ES
     public String udrecStreamType;		//PES, TS
@@ -451,6 +453,39 @@ public class BOSettings {
 		if(this.recordTimeBefore==null ||!this.recordTimeBefore.equals(recordTimeBefore)) {
 			setSettingsChanged(true);
 			this.recordTimeBefore = recordTimeBefore;
+		}
+	}
+	/**
+	 * @return Returns the ac3ReplaceStereo.
+	 */
+	public boolean isAc3ReplaceStereo() {
+		return ac3ReplaceStereo;
+	}
+	/**
+	 * @param ac3ReplaceStereo The ac3ReplaceStereo to set.
+	 */
+	public void setAc3ReplaceStereo(boolean ac3ReplaceStereo) {
+		if (this.ac3ReplaceStereo != ac3ReplaceStereo) {
+			setSettingsChanged(true);
+			this.ac3ReplaceStereo = ac3ReplaceStereo;
+		}
+	}
+	/**
+	 * @return Returns the udrecOptions.
+	 */
+	public String getUdrecOptions() {
+		if (udrecOptions==null) {
+			return "";
+		}
+		return udrecOptions;
+	}
+	/**
+	 * @param udrecOptions The udrecOptions to set.
+	 */
+	public void setUdrecOptions(String udrecOptions) {
+		if(this.udrecOptions==null ||!this.udrecOptions.equals(udrecOptions)) {
+			setSettingsChanged(true);
+			this.udrecOptions = udrecOptions;
 		}
 	}
 }

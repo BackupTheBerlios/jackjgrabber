@@ -57,14 +57,14 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
         this.getTab().getTfServerPort().setText(this.getSettings().getStreamingServerPort());
         this.getTab().getJTextFieldRecordSavePath().setText(this.getSettings().getSavePath());
         this.getTab().getCbStartStreamingServer().setSelected(this.getSettings().isStartStreamingServer());
-        this.getTab().getJTextFieldPlaybackString().setText(this.getSettings().getPlaybackString());
         this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
         this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
         this.getTab().getCbRecordAllPids().setSelected(this.getSettings().isRecordAllPids());
         this.getTab().getJSpinnerRecordMinsBefore().setValue(Integer.valueOf(this.getSettings().getRecordTimeBefore()));
         this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
+        this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions());
+        this.getTab().getCbAC3ReplaceStereo().setSelected(this.getSettings().isAc3ReplaceStereo());
 		this.initializeStreamingEngine();
-
     }
 
     private void initializeStreamingEngine() {
@@ -117,11 +117,20 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	
 	public void keyReleased(KeyEvent event) {
 		JTextField tf = (JTextField)event.getSource();
-		if (tf.getName().equals("serverPort")){
-			this.getSettings().setStreamingServerPort(tf.getText());
-		}
-		if (tf.getName().equals("udrecPath")){
-		    this.getSettings().setUdrecPath(tf.getText());
+		while (true) {
+			if (tf.getName().equals("serverPort")){
+				this.getSettings().setStreamingServerPort(tf.getText());
+				break;
+			}
+			if (tf.getName().equals("udrecPath")){
+			    this.getSettings().setUdrecPath(tf.getText());
+			    break;
+			}
+			if (tf.getName().equals("udrecOptions")){
+			    this.getSettings().setUdrecOptions(tf.getText());
+			    break;
+			}
+			break;
 		}
 	}
 	
@@ -164,6 +173,10 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				}
 				if (checkBox.getName().equals("recordAllPids")) {
 				    this.getSettings().setRecordAllPids(checkBox.isSelected());
+					break;
+				}
+				if (checkBox.getName().equals("cbAC3ReplaceStereo")) {
+				    this.getSettings().setAc3ReplaceStereo(checkBox.isSelected());
 					break;
 				}
 				break;

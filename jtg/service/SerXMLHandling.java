@@ -60,6 +60,8 @@ public class SerXMLHandling {
 		setElementInElement(root,"startFullscreen", "false");
 		setElementInElement(root,"recordTimeBefore", "0");
 		setElementInElement(root,"recordTimeAfter", "0");
+		setElementInElement(root,"ac3ReplaceStereo", "false");
+		setElementInElement(root,"udrecOptions", "");
 
 		root.addElement("boxList");
 		root.addElement("playbackList");
