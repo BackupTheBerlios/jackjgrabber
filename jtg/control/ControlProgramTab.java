@@ -37,8 +37,6 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
-import com.jgoodies.forms.layout.CellConstraints;
-
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
 import boxConnection.SerStreamingServer;
@@ -108,7 +106,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Laufenden Sender in den Bouquets suchen und selektieren
 	 * Wird beim Start der Anwendung benötigt.
 	 */
-	public void selectRunningSender() {
+	public String selectRunningSender() {
 		try {
 			String runningChanId = ControlMain.getBoxAccess().getChanIdOfRunningSender();
 			for (int i=0; i<getBouquetList().size(); i++) { //Schleife ueber die Bouquets
@@ -121,15 +119,15 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 						this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(i);
 						this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(i2, i2);
 						this.setSelectedSender(sender);
-						break;
+						return sender.getChanId();
 					}
 				}
 			}
-			
 		} catch (IOException e) {
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		}
+		return null;
 	}
 	
 	/**
@@ -497,12 +495,12 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		long endtime = unformattedStart+unformattedDuration;
 		long announce = unformattedStart-(60*1000);
 		
+		timer.setModifiedId("new");
 		timer.setChannelId(this.getSelectedSender().getChanId());
 		timer.setSenderName(this.getSelectedSender().getName());
 		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
 		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart));
 		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime));
-		timer.setModifiedId("new");
 		
 		timer.setEventRepeatId("0");
 		timer.setEventTypeId("5");
