@@ -25,6 +25,7 @@ import model.BOSender;
 import model.BOTimer;
 import model.BOTimerList;
 import presentation.GuiMainView;
+import service.SerNewsHandler;
 
 
 public class ControlStartTab extends ControlTab {
@@ -36,6 +37,12 @@ public class ControlStartTab extends ControlTab {
 	}
 
 	public void run() {
+	    this.getMainView().getTabStart().getPaneVersion().setText(this.getVersion());
+	    this.getMainView().getTabStart().getPaneWarns().setText(this.checkWarns());
+	    this.getMainView().getTabStart().getLabelRunningSender().setText("Sender: "+getRunningSender());
+	    this.getMainView().getTabStart().getLabelNextRecord().setText(
+	            ControlMain.getProperty("label_nextTimer")+getNextTimerInfo());
+	    new SerNewsHandler(this.getMainView().getTabStart().getPaneNews()).start();
 	}
 	
 	public String getVersion() {

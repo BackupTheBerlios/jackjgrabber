@@ -228,8 +228,8 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 		while (true) {
 			//Change-Events bei betreten neuer Tabs
 		    if (count == 0) { //StartTab
-		        pane.tabStart=null;
 				pane.setComponentAt(count, pane.getTabStart());
+				new Thread(pane.getTabStart().getControl()).start();
 				break;
 			}
 			if (count == 1) { //ProgrammTab

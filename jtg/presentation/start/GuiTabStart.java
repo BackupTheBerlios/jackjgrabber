@@ -29,7 +29,6 @@ import javax.swing.UIManager;
 
 import service.SerHyperlinkAdapter;
 import service.SerIconManager;
-import service.SerNewsHandler;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -46,6 +45,8 @@ public class GuiTabStart extends JPanel {
 	private JPanel panelInfo;
 	private JPanel panelWarn;
 	private JPanel panelNews;
+	private JLabel labelRunningSender;
+	private JLabel labelNextRecord;
 	private JTextPane paneClient;
 	private JTextPane paneInfo;
 	private JTextPane paneNews;
@@ -126,8 +127,10 @@ public class GuiTabStart extends JPanel {
 			
 			builder.add(new JLabel(iconManager.getIcon("info2.png")),			cc.xy(1, 1));
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_info")+"</font><HTML>",			cc.xy(3, 1));
-			builder.addLabel("Sender: "+control.getRunningSender(),				cc.xy(3, 3));
-			builder.addLabel(ControlMain.getProperty("label_nextTimer")+control.getNextTimerInfo(),	cc.xy(3, 5));
+			builder.add(this.getLabelRunningSender(),				cc.xy(3, 3));
+			builder.add(this.getLabelNextRecord(),	cc.xy(3, 5));
+			//builder.addLabel("Sender: "+control.getRunningSender(),				cc.xy(3, 3));
+			//builder.addLabel(ControlMain.getProperty("label_nextTimer")+control.getNextTimerInfo(),	cc.xy(3, 5));
 		}
         return panelInfo;
     }
@@ -193,7 +196,6 @@ public class GuiTabStart extends JPanel {
             paneNews.setEditable(false);
             paneNews.setBackground(background);
             paneNews.addHyperlinkListener(hyperlinkAdapter);
-            new SerNewsHandler(paneNews).start();
         }
         return paneNews;
     }
@@ -219,7 +221,6 @@ public class GuiTabStart extends JPanel {
 	        paneWarns.setBackground(background);
 	        paneWarns.setContentType("text/html");
 	        paneWarns.setEditable(false);	
-	        paneWarns.setText(control.checkWarns());
 	    }
 	    return paneWarns;
 	}
@@ -230,7 +231,6 @@ public class GuiTabStart extends JPanel {
 	        paneVersion.setBackground(background);
 	        paneVersion.setContentType("text/html");
 	        paneVersion.setEditable(false);	
-	        paneVersion.setText(control.getVersion());
 	    }
 	    return paneVersion;
 	}
@@ -241,4 +241,23 @@ public class GuiTabStart extends JPanel {
 		}
 		return imageLogo;
 	}
+	
+    /**
+     * @return Returns the labelNextRecord.
+     */
+    public JLabel getLabelNextRecord() {
+        if (labelNextRecord==null) {
+            labelNextRecord=new JLabel();
+        }
+        return labelNextRecord;
+    }
+    /**
+     * @return Returns the labelRunningSender.
+     */
+    public JLabel getLabelRunningSender() {
+        if (labelRunningSender==null) {
+            labelRunningSender=new JLabel();
+        }
+        return labelRunningSender;
+    }
 }
