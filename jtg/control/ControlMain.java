@@ -186,21 +186,21 @@ public class ControlMain {
 		BOBox box;
 		if (boxList.size() == 1) { //nur eine Box vorhanden, diese als Standard benutzen
 			box = (BOBox) boxList.get(0);
-			box.setSelected(true);
+			box.setSelectedBox(true);
 			setActiveBox(box);
 			return true;
 		}
 		for (int i = 0; boxList.size() > i; i++) {
 			box = (BOBox) boxList.get(i);
 			if (box.isStandard()) { //mehrer Boxen vorhanden, die Standardbox zurückgeben
-				box.setSelected(true);
+				box.setSelectedBox(true);
 				setActiveBox(box);
 				return true;
 			}
 		}
 		if (boxList.size() > 0) {//mehrere Boxen vorhanden, die 1. als Standard benutzen
 			box = (BOBox) boxList.get(0);
-			box.setSelected(true);
+			box.setSelectedBox(true);
 			setActiveBox(box);
 			return true;
 		}
@@ -220,7 +220,7 @@ public class ControlMain {
 		return -1;
 	}
 	public static void newBoxSelected(BOBox box) {
-		box.setSelected(true);
+		box.setSelectedBox(true);
 		setActiveBox(box);
 		ControlMain.detectImage();
 	}
