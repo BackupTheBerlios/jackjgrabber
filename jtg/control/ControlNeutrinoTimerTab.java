@@ -4,27 +4,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import presentation.GuiMainView;
+import presentation.GuiNeutrinoTimerPanel;
 import service.SerAlertDialog;
 
 /**
- * @author Alexander Geist
+ * @author Treito
  *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ControlTimerTab extends ControlTab {
+public class ControlNeutrinoTimerTab extends ControlTab {
 	
 	GuiMainView mainView;
 	ArrayList timerList;
+	GuiNeutrinoTimerPanel tab;
 	
-	public ControlTimerTab(GuiMainView view) {
+	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);
 	}
 	
 	public void initialize() {
+		this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
 		try {
 			this.setTimerList(ControlMain.getBoxAccess().getTimer());
-			//this.getMainView().getTabTimer().getTimerTableModel().fireTableDataChanged();
+			this.getTab().getTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
 	}
 	/**
@@ -51,5 +56,17 @@ public class ControlTimerTab extends ControlTab {
 	 */
 	public void setTimerList(ArrayList timerList) {
 		this.timerList = timerList;
+	}
+	/**
+	 * @return Returns the tab.
+	 */
+	public GuiNeutrinoTimerPanel getTab() {
+		return tab;
+	}
+	/**
+	 * @param tab The tab to set.
+	 */
+	public void setTab(GuiNeutrinoTimerPanel tab) {
+		this.tab = tab;
 	}
 }
