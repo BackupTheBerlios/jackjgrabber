@@ -66,7 +66,6 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
 			try {
 				Date newDate = sdf.parse((String)value);
-				System.out.println(newDate.getMonth());
 				timer.setUnformattedStartTime(newDate.getTime());
 				
 				if (timer.getModifiedId() == null) {
