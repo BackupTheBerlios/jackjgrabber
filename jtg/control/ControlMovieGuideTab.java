@@ -23,6 +23,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -52,6 +53,7 @@ import presentation.MovieGuideTimerTableModel;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
 import service.SerXMLHandling;
+import service.SerAlertDialog;
 
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener  {
@@ -216,29 +218,6 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		setTimerTableSize(getBOMovieGuide4Timer().getDatum().size());
 		reInitTimerTable();
 	}
-	/*
-	private BOTimer buildTimer(BOEpg epg) {
-		BOTimer timer = new BOTimer();		
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60;
-		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
-		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
-		long endtime = unformattedStart+unformattedDuration;
-		long announce = unformattedStart-(120);
-		
-		timer.setModifiedId("new");
-		timer.setChannelId(this.getSelectedSender().getChanId());
-		timer.setSenderName(this.getSelectedSender().getName());
-		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart-timeBefore));
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime+timeAfter));
-		
-		timer.setEventRepeatId("0");
-		timer.setEventTypeId("5");
-		timer.setDescription(epg.getTitle());
-		return timer;
-	}
-	*/
 	
 	private void getTimerTableSelectToTimer(){
 		int modelIndexTimer=getSelectRowTimerTable();
@@ -251,12 +230,21 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			botimer.setModifiedId("new");
 		//	botimer.setChannelId(this.getSelectedSender().getChanId());
 		//	botimer.setSenderName(this.getSelectedSender().getName());		
+			/*  FIXME schein irgendwie nicht zu gehen
 			botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore));
 			botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter));			
 			botimer.setAnnounceTime( String.valueOf((SerFormatter.getGC(botimer.getUnformattedStartTime(),2)).getTimeInMillis()) );
 			botimer.setEventRepeatId("0");
 			botimer.setEventTypeId("5");
 			botimer.setDescription(getBOMovieGuide4Timer().getTitel());
+			*/
+			/*
+			try {
+                ControlMain.getBoxAccess().writeTimer(botimer);
+            } catch (IOException e) {
+                SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+            }
+            */		          
 		//
 
 		System.out.println(getBOMovieGuide4Timer().getTitel());
