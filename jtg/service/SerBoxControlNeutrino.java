@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -142,4 +143,27 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		epgDetail.setText(text);
 		return epgDetail;
 	}
+	private String sendCommand (String message) throws IOException {
+        String line;          
+        BufferedReader input = getConnection("/control/"+message);          
+        while ((line = input.readLine()) != null) {  
+          StringTokenizer st = new StringTokenizer(line);    
+              message = (st.nextToken());
+        }         
+       return message;  
+  }
+  
+  public String sendMessage(String message) throws IOException {                                   
+      ControlMain.getMainLogger().info("Sende Message zur Box...");
+      return sendCommand("message?popup="+message); 
+  } 
+  public String standbyBox(String modus) throws IOException {
+      ControlMain.getMainLogger().info("Ihre Dbox wird in den StandbyModus gebracht.");
+      return sendCommand("standby?"+modus);
+  }
+  public String shutdownBox() throws IOException {
+      ControlMain.getMainLogger().info("Ihre Dbox wird runtegefahren.");       
+      return sendCommand("shutdown");
+  }       
+
 }

@@ -78,6 +78,11 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		if (action == "Aufnahme") {
 			Logger.getLogger("ControlProgrammTab").info("bla bla");
 		}
+		if (action == "Box Reboot"){
+			try{
+				box.shutdownBox();
+			}catch (IOException ex){}
+		}
 	}
 	/**
 	 * Klick-Events der Tables
