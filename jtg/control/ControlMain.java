@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import model.BOSettings;
 
@@ -96,6 +97,7 @@ public class ControlMain implements ActionListener {
 	private void initializeTabControls() {
 		this.getView().getTabSettings().getControl().initialize();
 		this.getView().getTabProgramm().getControl().initialize();
+		this.getView().getTabProjectX().getControl().initialize();
 
 	}
 	
@@ -110,6 +112,24 @@ public class ControlMain implements ActionListener {
 		mainLogger.info("java.class.vers\t"+System.getProperty("java.class.version"));
 		mainLogger.info("java.class.path\t"+System.getProperty("java.class.path"));
 	}
+	
+	public void javaEV() {
+		mainLogger.info("  "+java.text.DateFormat.getTimeInstance(java.text.DateFormat.FULL).format(new Date()));
+		mainLogger.info("\njava.version\t"+System.getProperty("java.version"));
+		mainLogger.info("\njava.vendor\t"+System.getProperty("java.vendor"));
+		mainLogger.info("\njava.home\t"+System.getProperty("java.home"));
+		mainLogger.info("\njava.vm.version\t"+System.getProperty("java.vm.version"));
+		mainLogger.info("\njava.vm.vendor\t"+System.getProperty("java.vm.vendor"));
+		mainLogger.info("\njava.vm.name\t"+System.getProperty("java.vm.name"));
+		mainLogger.info("\njava.class.vers\t"+System.getProperty("java.class.version"));
+		mainLogger.info("\njava.class.path\t"+System.getProperty("java.class.path"));
+		mainLogger.info("\nos.name\t"+System.getProperty("os.name"));
+		mainLogger.info("\nos.arch\t"+System.getProperty("os.arch"));
+		mainLogger.info("\nos.version\t"+System.getProperty("os.version"));
+		mainLogger.info("\nuser.name\t"+System.getProperty("user.name"));
+		mainLogger.info("\nuser.home\t"+System.getProperty("user.home"));
+	}
+
 	
 	public void startLogger() {
 		PatternLayout layout = new PatternLayout();
