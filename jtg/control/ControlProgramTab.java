@@ -33,7 +33,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.TableColumn;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
 import boxConnection.SerStreamingServer;
@@ -70,7 +69,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	GuiMainView mainView;	
 	RecordControl recordControl;
 	SerStreamingServer streamingServerThread;
-	boolean tvMode;
+	public static boolean tvMode;
 	
 	public ControlProgramTab(GuiMainView view) {
 		this.setMainView(view);		
@@ -79,10 +78,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void initialize() {
 		try {
 			if (this.getBoxAccess().isTvMode()) {
-				this.initializeTVMode();
+			    this.setTvMode(true);
+			    this.getMainView().getTabProgramm().getJRadioButtonTVMode().setSelected(true);
 			} else {
-				this.initializeRadioMode();
+			    this.setTvMode(false);
+			    this.getMainView().getTabProgramm().getJRadioButtonRadioMode().setSelected(true);
 			}
+			this.setBouquetList(this.getBoxAccess().getBouquetList());
 			this.selectRunningSender();
 			this.getMainView().getTabProgramm().setConnectModus();
 			this.reInitStreamingServer();
@@ -90,34 +92,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
-	
-	public void initializeTVMode() {
-		try {
-			this.setTvMode(true);
-			this.setBouquetList(this.getBoxAccess().getBouquetList());
-			this.getMainView().getTabProgramm().getJRadioButtonTVMode().setSelected(true);
-		} catch (IOException e) {			
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
-		}
-	}
-	
-	public void initializeRadioMode() {
-		try {
-			this.setTvMode(false);
-			TableColumn nummerColumn = this.getJTableSender().getColumnModel().getColumn(0);
-			this.getJTableSender().getTableHeader().getColumnModel().removeColumn(nummerColumn); //eventId ausblenden
-			 
-			BOBouquet bouquet = new BOBouquet("0", "Radio-Sender");
-			bouquet.setSender(this.getBoxAccess().getAllSender());
-			ArrayList bouquetList = new ArrayList();
-			bouquetList.add(bouquet);
-			this.setBouquetList(bouquetList); 
-			this.getMainView().getTabProgramm().getJRadioButtonRadioMode().setSelected(true);
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
-		}
-	}
-	
+		
 	/*
 	 * Versetzen des Programm-Tabs in den Ausgangszustand
 	 * und initialisiere diesen neu
@@ -243,11 +218,12 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
 					new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
-					args = this.buildTVRecordArgs();
+					if (this.getPids().size()>0) {
+					    this.startRecord(this.buildTVRecordArgs());
+					}
 				} else {
-					args = this.buildRadioRecordArgs();
+				    this.startRecord(this.buildRadioRecordArgs());
 				}
-				this.startRecord(args);                          
 			} else {
 				this.stopRecord();
 			}
@@ -761,7 +737,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	/**
 	 * @param tvMode The tvMode to set.
 	 */
-	public void setTvMode(boolean tvMode) {
-		this.tvMode = tvMode;
+	public void setTvMode(boolean mode) {
+		tvMode = mode;
 	}
 }
