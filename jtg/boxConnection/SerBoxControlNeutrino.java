@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
@@ -124,7 +124,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		ArrayList epgList=new ArrayList();
 		BufferedReader input = getConnection("/control/epg?"+sender.getChanId());
 		String line, eventId, startTime, duration, title, endTime, valueStart, valueDuration;;
-		Date startDate, endDate;
+		GregorianCalendar startDate, endDate;
                 
 		while((line=input.readLine())!=null) {
 			StringBuffer buffer = new StringBuffer(line);
@@ -141,7 +141,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			}
 
 			startTime = SerFormatter.formatUnixTime(valueStart);
-			startDate = SerFormatter.formatUnixDate(valueStart);                        
+			startDate = SerFormatter.formatUnixDate(valueStart);
 			duration = SerFormatter.formatedEndTime(valueDuration);
 			endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
 			endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);                        
@@ -245,11 +245,8 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 				for (int i=0; i<timerList.size(); i++) {
 					BOTimer timer = (BOTimer)timerList.get(i);
 					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0 && line.indexOf(timer.getStartTime())>0) {
-						String date = Integer.toString(timer.getStartDate().getDate())+"."+Integer.toString(timer.getStartDate().getMonth()+1);
-						if (line.indexOf(date)>0) {
-							indexIdentifier= line.indexOf(">", indexSearchString);
-							timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
-						}
+						indexIdentifier= line.indexOf(">", indexSearchString);
+						timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
 					}
 				}
 			}

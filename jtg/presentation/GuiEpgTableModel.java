@@ -2,13 +2,13 @@ package presentation;
 
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
 
 import model.BOEpg;
 import control.ControlProgramTab;
-import service.SerFormatter;
 /**
  * @author Geist Alexander
  *
@@ -75,18 +75,20 @@ public class GuiEpgTableModel extends AbstractTableModel
 	}
 	
 	/**
-	 * create a new EPG-List which compare to the Date of DateChooser
+	 * create a new EPG-List with equal Date to DateChooser
 	 */
 	public void createEpgList() {
 		this.setEpgList(new ArrayList());
 		if (control.getSelectedSender() != null && control.getSelectedSender().getEpg() != null ) {
 			ArrayList fullList = control.getSelectedSender().getEpg();
-			Date dateChooserDate = control.getDateChooserDate();
+			GregorianCalendar chooserDate = new GregorianCalendar();
+			chooserDate.setTime(control.getDateChooserDate());
 			
 			for (int i=0; i<fullList.size(); i++) {
-				BOEpg epg = (BOEpg)fullList.get(i);                                
-				if (SerFormatter.shortDate(epg.getStartdate().getTime()).equalsIgnoreCase(SerFormatter.shortDate(dateChooserDate.getTime()))){                              
-					this.getEpgList().add(epg);
+				BOEpg epg = (BOEpg)fullList.get(i);
+				if (epg.getStartdate().get(Calendar.DATE)==chooserDate.get(Calendar.DATE) && 
+					epg.getStartdate().get(Calendar.MONTH)==chooserDate.get(Calendar.MONTH)){                              
+						this.getEpgList().add(epg);
 				}
 			}
 		}

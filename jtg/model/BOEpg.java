@@ -8,7 +8,7 @@ package model;
 
 import java.io.IOException;
 import control.ControlMain;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @author alexg
@@ -19,11 +19,11 @@ import java.util.Date;
 public class BOEpg {
 	BOSender sender;
 	String eventId, startTime, endTime, duration, title, unformattedStart, unformattedDuration;
-	Date startDate, endDate;
+	GregorianCalendar startDate, endDate;
 	BOEpgDetails epgGetail;
 	
-	public BOEpg(BOSender sender, String eventId, String startTime, Date startDate, 
-			String endTime, Date endDate, String duration, String title, String unformStart, String unformDuration) {		
+	public BOEpg(BOSender sender, String eventId, String startTime, GregorianCalendar startDate, 
+			String endTime, GregorianCalendar endDate, String duration, String title, String unformStart, String unformDuration) {		
 		this.setSender(sender);
 		this.setDuration(duration);
 		this.setEndTime(endTime);
@@ -91,13 +91,13 @@ public class BOEpg {
         /**
 	 * @return Returns the startDate.
 	 */
-	public Date getStartdate() {
+	public GregorianCalendar getStartdate() {
 		return startDate;
 	}
 	/**
 	 * @param startDate The startDate to set.
 	 */
-	public void setStartDate(Date startDate) {
+	public void setStartDate(GregorianCalendar startDate) {
 		this.startDate = startDate;
 	}
 	/**
@@ -145,13 +145,13 @@ public class BOEpg {
 	/**
 	 * @return Returns the endDate.
 	 */
-	public Date getEndDate() {
+	public GregorianCalendar getEndDate() {
 		return endDate;
 	}
 	/**
 	 * @param endDate The endDate to set.
 	 */
-	public void setEndDate(Date endDate) {
+	public void setEndDate(GregorianCalendar endDate) {
 		this.endDate = endDate;
 	}
 	/**

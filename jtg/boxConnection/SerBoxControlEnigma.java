@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
@@ -207,7 +207,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		}
 		int startEpgInfo;
 		int endEpgInfo;
-		Date startDate=new Date(), endDate=new Date();
+		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
 		String line, eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String() ;
 		String valueStart, valueDuration;
 		while((line=input.readLine())!=null) {
@@ -301,7 +301,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		BufferedReader input=getConnection("/body?mode=controlTimerList");
 		boolean recurring = false;
 		boolean onetimer=false;
-		Date startDate=new Date(), endDate=new Date();
+		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
 		String line, channelID=new String(), eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String(), channel=new String();
 		String valueStart, valueDuration, timerType;
 		int startpos, endpos;

@@ -9,22 +9,11 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
-import java.util.Date;
 
 /**
  * @author  ralix
  */
 public class SerFormatter {
-
-	private static Date shortDateDefault(long i){		
-		Calendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );
-		cal.setTimeInMillis(i);                  
-                cal.set(Calendar.HOUR_OF_DAY,0);
-                cal.set(Calendar.MINUTE,0);
-                cal.set(Calendar.SECOND,0);                
-                cal.set(Calendar.MILLISECOND,0);                
-                return cal.getTime();
-	}
         
 	public static String shortDate(long i){
 		DateFormat formater;
@@ -61,12 +50,16 @@ public class SerFormatter {
 		return shortTime(formatLong(date));
 	}
         
-	public static Date formatUnixDate(String date, String dauer){	    
-	    return shortDateDefault( (formatLong(date)+formatLong(dauer)) );
+	public static GregorianCalendar formatUnixDate(String date, String dauer){	
+		GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );
+		cal.setTimeInMillis( (formatLong(date)+formatLong(dauer)) );                                 
+		return cal;
 	}
         
-	public static Date formatUnixDate(String date){	    
-	    return shortDateDefault(formatLong(date));
+	public static GregorianCalendar formatUnixDate(String date){
+		GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );
+		cal.setTimeInMillis(formatLong(date));                                 
+		return cal;
 	}
         
 	public static String formatedEndTime(String zeit){       
