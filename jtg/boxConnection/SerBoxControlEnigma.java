@@ -350,15 +350,13 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			title="";
 		}
 		String line;
-		while ((startpos=title.indexOf(" ",0))>0) {
-			title=title.substring(0, startpos)+"%20"+title.substring(startpos+1);
-		}
+		title=title.replaceAll(" ","%20");
+		title=title.replaceAll("&","_");
 		String success;
 		int a=Integer.parseInt(stop)-Integer.parseInt(alarm);
 		success="failed";
 		if (action.equalsIgnoreCase("new")) {
 			String requestString = "/addTimerEvent?timer=regular&ref="+chanId+"&start="+alarm+"&duration="+a+"&descr="+title;
-			System.out.println(requestString);
 			BufferedReader input = getConnection(requestString);
 			while((line=input.readLine())!=null) {
 				if ((line.indexOf("success")>0)^(line.indexOf("erfolgreich")>0)) {
