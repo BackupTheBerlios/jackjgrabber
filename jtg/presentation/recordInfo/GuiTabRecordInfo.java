@@ -107,7 +107,7 @@ public class GuiTabRecordInfo extends GuiTab {
 
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("710:grow", // columns
-				"pref,10,pref"); // rows
+				"pref,5,pref"); // rows
 
 		p.setLayout(layout);
 		PanelBuilder builder = new PanelBuilder(p, layout);
@@ -186,7 +186,7 @@ public class GuiTabRecordInfo extends GuiTab {
 
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("170:grow, 10, 170:grow, 10, 350:grow, pref", // columns
-				"pref, 10,f:130:grow"); // rows
+				"pref, 10,f:120:grow"); // rows
 
 		p.setLayout(layout);
 		PanelBuilder builder = new PanelBuilder(p, layout);
