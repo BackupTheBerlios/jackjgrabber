@@ -1,5 +1,6 @@
 package presentation;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
@@ -22,11 +23,7 @@ import control.ControlTimerTab;
 public class GuiMainView extends JFrame {
 
 	
-	private JTabbedPane mainTabPane = null;
-	public GuiTabProgramm tabProgramm = null;
-	private GuiTabSettings tabSettings = null;
-	private GuiTabTimer tabTimer=null;
-	private GuiTabProjectX tabProjectX=null;
+	private GuiMainTabPane mainTabPane = null;
 	private ControlMain control;    
 	
 	public GuiMainView(ControlMain ctrl) {
@@ -57,63 +54,48 @@ public class GuiMainView extends JFrame {
 	/**
 	 * Haupt-TabPane. Neue Tabs werden hier angemeldet.
 	 */    
-	private JTabbedPane getMainTabPane() {
+	public GuiMainTabPane getMainTabPane() {
 		if (mainTabPane == null) {
-			mainTabPane = new JTabbedPane();
+			mainTabPane = new GuiMainTabPane(this);
+			mainTabPane.addChangeListener(control);
 			mainTabPane.setBackground(new java.awt.Color(204,204,204));
 			mainTabPane.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
 			mainTabPane.setForeground(java.awt.Color.black);
 			mainTabPane.setDoubleBuffered(true);
 			
-			mainTabPane.addTab("Programm", null, getTabProgramm(), null);
-			mainTabPane.addTab("Timerliste", null, getTabTimer(), null);
-			mainTabPane.addTab("Project-X", null, getTabProjectX(), null);
-			mainTabPane.addTab("Settings", null, getTabSettings(), null);
+			mainTabPane.addTab("Programm", null, new JPanel(), null);
+			mainTabPane.addTab("Timerliste", null, new JPanel(), null);
+			mainTabPane.addTab("Project-X", null, new JPanel(), null);
+			mainTabPane.addTab("Settings", null, new JPanel(), null);
 		}
 		return mainTabPane;
 	}
-	/**
-	 * Aufbau der Tabs "Programm"
-	 * Aufbau der Gui, Start des Controls
-	 */    
+	    
 	public GuiTabProgramm getTabProgramm() {
-		if (tabProgramm == null) {
-			ControlProgramTab control = new ControlProgramTab(this);
-			tabProgramm = new GuiTabProgramm(control);
-		}
-		return tabProgramm;
+		return this.getMainTabPane().getTabProgramm();
 	}
-	
-	/**
-	 * Aufbau des Tabs Timerliste		
-	 */    
+	    
 	public GuiTabTimer getTabTimer() {
-		if (tabTimer == null) {
-			ControlTimerTab control = new ControlTimerTab(this);
-			tabTimer = new GuiTabTimer(control);
-		}
-		return tabTimer;
+		return this.getMainTabPane().getTabTimer();
 	}
-	
-	/**
-	 * Aufbau des Tabs Settings		
-	 */    
+	    
 	public GuiTabSettings getTabSettings() {
-		if (tabSettings == null) {
-			ControlSettingsTab control = new ControlSettingsTab(this);
-			tabSettings = new GuiTabSettings(control);
-		}
-		return tabSettings;
+		return this.getMainTabPane().getTabSettings();
 	}
-	
-	/**
-	 * Aufbau des Tabs Settings		
-	 */    
+	    
 	public GuiTabProjectX getTabProjectX() {
-		if (tabProjectX == null) {
-			ControlProjectXTab control = new ControlProjectXTab(this);
-			tabProjectX = new GuiTabProjectX(control);
-		}
-		return tabProjectX;
+		return this.getMainTabPane().getTabProjectX();
+	}
+	/**
+	 * @return Returns the control.
+	 */
+	public ControlMain getControl() {
+		return control;
+	}
+	/**
+	 * @param control The control to set.
+	 */
+	public void setControl(ControlMain control) {
+		this.control = control;
 	}
 }

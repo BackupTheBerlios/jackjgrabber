@@ -155,7 +155,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void reInitSender() {
 		try {
 			this.getSelectedBouquet().readSender();
-			if (this.getMainView().tabProgramm != null) { //Beim 1. Start gibt es noch keine Table zum refreshen
+			if (this.getMainView().getMainTabPane().tabProgramm != null) { //Beim 1. Start gibt es noch keine Table zum refreshen
 				this.getSenderTableModel().fireTableRowsInserted(1,1);
 			}
 		} catch (IOException e) {
@@ -213,9 +213,11 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.selectedSender = selectedSender;
 		this.reInitEpg();
 		
-		this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(0,0);
-		BOEpg epg = (BOEpg)this.getSelectedSender().getEpg().get(0);
-		this.setSelectedEpg(epg.getEventId());
+		if (selectedSender.getEpg().size() > 0) {
+			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(0,0);
+			BOEpg epg = (BOEpg)this.getSelectedSender().getEpg().get(0);
+			this.setSelectedEpg(epg.getEventId());
+		}
 	}
 	/**
 	 * @return Returns the box.

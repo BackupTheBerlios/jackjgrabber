@@ -1,10 +1,16 @@
 package control;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import model.BOSettings;
 
@@ -13,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
+import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
 import service.SerAlertDialog;
@@ -29,7 +36,7 @@ import service.SerXMLHandling;
  *
  *Startklasse, hier wird die Anwendung initialisiert und gestartet
  */
-public class ControlMain implements ActionListener {
+public class ControlMain implements ActionListener, ChangeListener {
 	
 	GuiMainView view;
 	ControlMain control;
@@ -74,7 +81,7 @@ public class ControlMain implements ActionListener {
 		this.startLogger();
 		this.getLogAppender().setView(this.getView());
 		this.init();
-		this.initializeTabControls();
+		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
 		this.getMainLogger().info("Anwendung gestartet");
 	}
 	
@@ -88,17 +95,6 @@ public class ControlMain implements ActionListener {
 		mainLogger.info("Searching Box-Image");
 		this.detectImage();
 		mainLogger.info(getBox().getName()+"-Access loaded");
-	}
-	
-	/**
-	 * Initialisierung der Controls,
-	 * Anzeige der ermittelten Daten
-	 */
-	private void initializeTabControls() {
-		this.getView().getTabSettings().getControl().initialize();
-		this.getView().getTabProgramm().getControl().initialize();
-		this.getView().getTabProjectX().getControl().initialize();
-
 	}
 	
 	private void writeSystemInfo() {
@@ -188,6 +184,28 @@ public class ControlMain implements ActionListener {
 			this.runAfterTerms();
 		} else if (actName.equals("I disagree (closing)")) {
 			System.exit(0);
+		}
+	}
+	
+	/**
+	 * Change-Events des TabPane
+	 */
+	public void stateChanged(ChangeEvent event) {
+		GuiMainTabPane pane = (GuiMainTabPane)event.getSource();
+		int count = pane.getSelectedIndex(); //number of selected Tab
+		JPanel comp = (JPanel)pane.getComponent(count);
+		
+		if (count == 0) { //ProgrammTab
+			comp.add(pane.getTabProgramm());
+		}
+		if (count == 1) { //TimerTab
+			comp.add(pane.getTabTimer());
+		}
+		if (count == 2) { //ProjectXTab
+			comp.add(pane.getTabProjectX());
+		}
+		if (count == 3) { //SettingsTab
+			comp.add(pane.getTabSettings());
 		}
 	}
 	
