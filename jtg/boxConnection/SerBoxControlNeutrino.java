@@ -153,6 +153,16 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return line;
 	}
 	
+	public String setRadioTvMode(String mode) throws IOException {
+		BufferedReader input = getConnection("/control/setmode?"+mode);
+		
+		String line;
+		while((line=input.readLine())!=null) {
+			return line;
+		}
+		return line;
+	}
+	
 	public ArrayList getEpg(BOSender sender) throws IOException {
 		ArrayList epgList=new ArrayList();
 		BufferedReader input = getConnection("/control/epg?"+sender.getChanId());

@@ -93,6 +93,8 @@ public class SerBoxControlDefault extends SerBoxControl {
 	public String writeTimer(BOTimer timer) throws IOException {
 		throw new IOException();
 	}
-
+	public String setRadioTvMode(String mode) throws IOException {
+		throw new IOException();
+	}
 
 }
