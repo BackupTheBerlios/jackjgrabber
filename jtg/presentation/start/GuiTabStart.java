@@ -28,9 +28,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
-import model.BOSender;
-import model.BOTimer;
-import model.BOTimerList;
 import service.SerHyperlinkAdapter;
 import service.SerIconManager;
 import service.SerNewsHandler;
@@ -53,9 +50,9 @@ public class GuiTabStart extends JPanel {
 	private JPanel panelVersion;
 	private JTextPane paneClient;
 	private JTextPane paneInfo;
-	private JTextPane paneWarn;
 	private JTextPane paneNews;
 	private JTextPane linkWiki;
+	private JTextPane paneWarns;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	Color background = (Color)UIManager.get("Panel.background");
 	SerHyperlinkAdapter hyperlinkAdapter = new SerHyperlinkAdapter(this);
@@ -100,7 +97,7 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelClient() {
         if (panelClient == null) {
             panelClient = new JPanel();
-			FormLayout layout = new FormLayout("40, 10, pref", //columna
+			FormLayout layout = new FormLayout("40, 10, pref", //columns
 					"pref, 5, pref, 5, pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelClient, layout);
 			CellConstraints cc = new CellConstraints();
@@ -119,15 +116,15 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelInfo() {
         if (panelInfo == null) {
             panelInfo = new JPanel();
-			FormLayout layout = new FormLayout("40, 10, pref", //columna
+			FormLayout layout = new FormLayout("40, 10, pref", //columns
 					"pref, 5, pref, 5, pref, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelInfo, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(new JLabel(iconManager.getIcon("info2.png")),			cc.xy(1, 1));
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_info")+"</font><HTML>",			cc.xy(3, 1));
-			builder.addLabel("Sender: "+this.getRunningSender(),				cc.xy(3, 3));
-			builder.addLabel(ControlMain.getProperty("label_nextTimer")+this.getNextTimerInfo(),	cc.xy(3, 5));
+			builder.addLabel("Sender: "+control.getRunningSender(),				cc.xy(3, 3));
+			builder.addLabel(ControlMain.getProperty("label_nextTimer")+control.getNextTimerInfo(),	cc.xy(3, 5));
 //			builder.addLabel(ControlMain.version[0],			cc.xy(3, 3));
 		}
         return panelInfo;
@@ -138,7 +135,7 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelNews() {
         if (panelNews == null) {
             panelNews = new JPanel();
-			FormLayout layout = new FormLayout("40, 10, 600", //columna
+			FormLayout layout = new FormLayout("40, 10, 600", //columns
 					"pref, 5, f:120"); //rows
 			PanelBuilder builder = new PanelBuilder(panelNews, layout);
 			CellConstraints cc = new CellConstraints();
@@ -158,13 +155,18 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelWarn() {
         if (panelWarn == null) {
             panelWarn = new JPanel();
-			FormLayout layout = new FormLayout("40, 10, pref", //columna
-					"pref, pref, pref, pref"); //rows
+            FormLayout layout = new FormLayout("40, 10, 600", //columns
+				"pref, 5, f:95"); //rows
 			PanelBuilder builder = new PanelBuilder(panelWarn, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(new JLabel(iconManager.getIcon("warning.png")),			cc.xy(1, 1));
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_warn")+"</font><HTML>",			cc.xy(3, 1));
+			
+			JScrollPane scrollPane = new JScrollPane(this.getPaneWarns());
+			scrollPane.setBorder(null);
+			builder.add(scrollPane,    cc.xy(3, 3));
+			
 		}
         return panelWarn;
     }
@@ -172,7 +174,7 @@ public class GuiTabStart extends JPanel {
     private JPanel getPanelVersion() {
         if (panelVersion==null) {
             panelVersion=new JPanel();
-            FormLayout layout = new FormLayout("pref", //columna
+            FormLayout layout = new FormLayout("pref", //columns
 			""); //rows 
             PanelBuilder builder = new PanelBuilder(panelVersion, layout);
             CellConstraints cc = new CellConstraints();
@@ -223,12 +225,7 @@ public class GuiTabStart extends JPanel {
         }
         return paneNews;
     }
-    /**
-     * @return Returns the paneWarn.
-     */
-    public JTextPane getPaneWarn() {
-        return paneWarn;
-    }
+    
     /**
 	 * @return Returns the linkHomePage.
 	 */
@@ -244,28 +241,14 @@ public class GuiTabStart extends JPanel {
 		return linkWiki;
 	}
 	
-	private String getRunningSender() {
-	    try {
-	        BOSender sender = ControlMain.getBoxAccess().getRunningSender();
-	        if (sender !=null) {
-	            return sender.getName();    
-	        }
-        } catch (IOException e) {
-            return new String();
-        }
-        return new String();
-	}
-	
-	private String getNextTimerInfo() {
-	    try {
-            BOTimerList list = ControlMain.getBoxAccess().getTimerList();
-            BOTimer timer = list.getFirstBoxRecordTimer();
-            if (timer!=null) {
-                return timer.getStartTime()+"    Sender:"+timer.getSenderName();    
-            }
-        } catch (IOException e) {
-            return new String();
-        }
-        return new String();
+	public JTextPane getPaneWarns() {
+	    if (paneWarns==null) {
+	        paneWarns=new JTextPane();
+	        paneWarns.setBackground(background);
+	        paneWarns.setContentType("text/html");
+	        paneWarns.setEditable(false);	
+	        paneWarns.setText(control.checkWarns());
+	    }
+	    return paneWarns;
 	}
 }
