@@ -25,6 +25,7 @@ import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
 import control.ControlSettingsTab;
+import control.ControlMovieGuideTab;
 
 public class GuiMainTabPane extends JTabbedPane {
 
@@ -34,7 +35,7 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiTimerPanel tabTimer=null;
 	public JPanel tabProjectX=null;
 	public GuiMainView view;
-	//public GuiTabMovieGuide tabMovieGuide = null;
+	public GuiTabMovieGuide tabMovieGuide = null;
 	int index;
 
 	
@@ -110,16 +111,16 @@ public class GuiMainTabPane extends JTabbedPane {
 		}
 		return tabAbout;
 	}
-/*	
+	
 	public GuiTabMovieGuide getTabMovieGuide() {
-		if (tabAbout == null) {
+		if (tabMovieGuide == null) {
 			ControlMovieGuideTab control = new ControlMovieGuideTab(this.getView());
 			tabMovieGuide = new GuiTabMovieGuide(control);
 			control.initialize();
 		}
 		return tabMovieGuide;
 	}
-	*/
+	
 	/**
 	 * @return Returns the tabSettings.
 	 */
