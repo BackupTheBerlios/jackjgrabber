@@ -95,10 +95,12 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 				counter++;
 			}
 			//Radiobutton for vtxt-pid
-			jRadioButtonVtxtPid = new JRadioButton();			
-			jRadioButtonVtxtPid.setText(pidList.getVtxtPid()[0]+" "+pidList.getVtxtPid()[1]);
-			jRadioButtonVtxtPid.setSelected(true);
-			builder.add(jRadioButtonVtxtPid,		cc.xy(1,  counter+2));
+			if (pidList.getVtxtPid() != null) {
+			    jRadioButtonVtxtPid = new JRadioButton();			
+					jRadioButtonVtxtPid.setText(pidList.getVtxtPid()[0]+" "+pidList.getVtxtPid()[1]);
+					jRadioButtonVtxtPid.setSelected(true);
+					builder.add(jRadioButtonVtxtPid,		cc.xy(1,  counter+2));  
+			}
 			
 			builder.add(this.getJButtonOk(),cc.xy(1, pidsCount+2));
 		}
@@ -126,7 +128,7 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	        if (!jRadioButtonVPid.isSelected()) {
 	            pidList.setVPid(null);
 	        }
-	        if (!jRadioButtonVtxtPid.isSelected()) {
+	        if (jRadioButtonVtxtPid!=null && !jRadioButtonVtxtPid.isSelected()) {
 	            pidList.setVtxtPid(null);
 	        }
 	        for (int i=pidList.getAPids().size()-1; 0<=i; i--) {
