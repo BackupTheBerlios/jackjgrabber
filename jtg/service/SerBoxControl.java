@@ -13,6 +13,8 @@ import java.net.Authenticator;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -54,12 +56,14 @@ public abstract class SerBoxControl {
 				}
 			}
 			in.close();
-		} catch (IOException e) { //Box ist aus, Rï¿½ckgabe des Defaultwertes
+		} catch (IOException e) { //Box ist aus, Rückgabe des Defaultwertes
+			Logger.getLogger("SerBoxControl").error("Unable to connect");
 			return(imageType);
 		}
 		return(imageType);
 	}
 
+	public abstract String getName();
 	public abstract BufferedReader getConnection(String request) throws IOException;
 	public abstract ArrayList getPids() throws IOException;
 	public abstract ArrayList getBouquetList() throws IOException;
