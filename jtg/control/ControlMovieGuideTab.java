@@ -240,6 +240,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (action == "allDates") {	
 			if(this.getTitelMap()!=null){
 				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");
 				searchString = "";
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
 				this.getTab().getComboBoxSender().setSelectedIndex(0); 
@@ -254,6 +255,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxDatum();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");
 				searchString = "";
 				this.getTab().getJLabelSearchCount().setText("");
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
@@ -268,6 +270,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxGenre();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");
 				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
@@ -282,6 +285,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxSender();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");
 				searchString = "";				
 				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
@@ -332,7 +336,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}else{	
 			JComboBox comboBox = (JComboBox)event.getSource();			
 			if (comboBox.getName().equals("jComboBoxDatum")) {	
-				this.getTab().getTfSuche().setText("");				
+				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");		
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 				reInitFilmTable(1);						
 				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
@@ -340,6 +345,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}	
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
 				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");
 				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
@@ -353,6 +359,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}
 			if (comboBox.getName().equals("jComboBoxSender")) {	
 				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfZeitab().setText("");
 				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
@@ -473,7 +480,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		SerFormatter.underScore(this.getTab().getTaAudioVideo(), ControlMain.getProperty("txt_audio"),true,0);
 		SerFormatter.underScore(this.getTab().getTaAudioVideo()," / ",false,ControlMain.getProperty("txt_audio").length());
 		SerFormatter.underScore(this.getTab().getTaAudioVideo(), ControlMain.getProperty("txt_video"),true,ControlMain.getProperty("txt_audio").length()+3);
-							
+						
 		SerFormatter.underScore(this.getTab().getTaLand()," "+getBOMovieGuide4Timer().getLand()+" / "+getBOMovieGuide4Timer().getJahr()+" / ",false,0);
 		SerFormatter.underScore(this.getTab().getTaLand(), ControlMain.getProperty("txt_prod"),true,0);				
 		SerFormatter.underScore(this.getTab().getTaLand(), ControlMain.getProperty("txt_regie"),true,this.getTab().getTaLand().getText().length());

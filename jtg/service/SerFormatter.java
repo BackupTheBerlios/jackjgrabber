@@ -217,7 +217,14 @@ public class SerFormatter {
         newCal.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
     	return newCal;
     }
-  
+    public static GregorianCalendar convTime2GreCal (String time) {	        
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+        try {
+            cal.set(GregorianCalendar.HOUR_OF_DAY,Integer.parseInt(time.substring(0,time.indexOf(":"))));
+            cal.set(GregorianCalendar.MINUTE,Integer.parseInt(time.substring(time.indexOf(":")+1)));
+        }catch(Exception pex){}        
+        return cal;
+    }
     public static boolean compareDates(String date1, String date2){    	
     	if( date2.equals("today")){
     		date2=getFormatGreCal();

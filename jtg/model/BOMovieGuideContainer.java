@@ -222,7 +222,7 @@ public class BOMovieGuideContainer{
     	}
     	if(value==14){
     		searchGC = SerFormatter.convString2GreCal(SerFormatter.getFormatGreCal(),DATE_FULL);
-    		searchGCTime = SerFormatter.convString2GreCal(search,TIME);    		
+    		searchGCTime = SerFormatter.convTime2GreCal(search);        		    		
     		check.set(GregorianCalendar.HOUR_OF_DAY,23);
     		check.set(GregorianCalendar.MINUTE,59);
     	}

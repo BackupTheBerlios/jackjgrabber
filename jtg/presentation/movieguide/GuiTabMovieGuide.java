@@ -20,6 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import java.awt.Component;
 import java.awt.Insets;
+import java.text.SimpleDateFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,6 +33,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 
 import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
 import javax.swing.JProgressBar; 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -85,7 +87,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private JScrollPane jScrollPaneGenre= null;
 	
 	private JTextField tfSuche;
-	private JTextField tfZeitAb;
+	private JFormattedTextField tfZeitAb;
 	
 	private JCheckBox  jCheckBoxAbAktuell;
 	
@@ -184,7 +186,7 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jPanelSuche;
 	}
-	
+	/*
 	private JPanel getJPanelSucheErw() {
 		if (jPanelSucheErw == null) {
 			jPanelSucheErw = new JPanel();
@@ -202,8 +204,8 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jPanelSucheErw;
 	}
+	*/
 	
-	/*
 	private JPanel getJPanelSucheErw() {
 		if (jPanelSucheErw == null) {
 			jPanelSucheErw = new JPanel();
@@ -223,7 +225,7 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jPanelSucheErw;
 	}
-	*/
+	
 	private JPanel getJPanelProgressBar() {
 		if (jPanelProgressBar == null) {
 			jPanelProgressBar = new JPanel();
@@ -485,12 +487,13 @@ public class GuiTabMovieGuide extends JPanel {
 		return tfSuche;
 	}
 	
-	public JTextField getTfZeitab() {
+	public JFormattedTextField getTfZeitab() {
 		if (tfZeitAb == null) {
-			tfZeitAb = new JTextField();
+			tfZeitAb = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
 			tfZeitAb.setEditable(true);			
 			tfZeitAb.setAutoscrolls(true);
 			tfZeitAb.setActionCommand("zeitab");
+			tfZeitAb.setToolTipText("HH:mm");
 			tfZeitAb.addActionListener(this.getControl());
 		}
 		return tfZeitAb;
