@@ -59,6 +59,7 @@ import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
+import service.SerTimerHandler;
 import service.pat.ProgramAssociationSection;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
@@ -482,7 +483,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			if (tableName == "Epg") {
 				if (me.getClickCount() == 2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
-					ControlMain.getBoxAccess().writeTimer(timer);
+					SerTimerHandler.saveTimer(timer);
 				}
 			}
 		} catch (IOException e) {
@@ -684,21 +685,17 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		this.reInitEpgDetail();
 	}
 
-    private void actionAddToTimer() {
-        ArrayList list = this.getEpgTableModel().getEpgList();
-        int[] rows = this.getMainView().getTabProgramm().getJTableEPG().getSelectedRows(); //Selektierter EPG´s
+	private void actionAddToTimer() {
+		ArrayList list = this.getEpgTableModel().getEpgList();
+		int[] rows = this.getMainView().getTabProgramm().getJTableEPG().getSelectedRows(); //Selektierter EPG´s
 
-        for (int i = 0; i < rows.length; i++) {       //      Schleife über die selektierten epg-Zeilen
+		for (int i = 0; i < rows.length; i++) {       //      Schleife über die selektierten epg-Zeilen
             int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(rows[i]);
             BOEpg epg = (BOEpg)this.getEpgTableModel().getEpgList().get(modelIndex);            
             BOTimer timer = this.buildTimer(epg);
-            try {
-                ControlMain.getBoxAccess().writeTimer(timer);
-            } catch (IOException e) {
-                SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
-            }
-        }
-    }
+            SerTimerHandler.saveTimer(timer);
+		}
+	}
 	
 	/**
 	 * @param epg

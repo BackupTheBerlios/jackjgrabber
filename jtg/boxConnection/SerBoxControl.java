@@ -30,6 +30,8 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
+import service.SerTimerHandler;
+
 import control.ControlMain;
 
 public abstract class SerBoxControl {
@@ -37,9 +39,11 @@ public abstract class SerBoxControl {
     public boolean newTimerAdded=true;
     public BOTimerList timerList;
     
-    public BOTimerList getTimerList() throws IOException {
-        if (timerList==null || newTimerAdded) {
-            timerList=this.readTimer();
+    public BOTimerList getTimerList(boolean newRead) throws IOException {
+        if (newRead || timerList==null || newTimerAdded) {
+            reReadTimerList();
+            SerTimerHandler.readLocalTimer(timerList);
+            newTimerAdded=false;
         }
         return timerList;
     }
@@ -50,32 +54,38 @@ public abstract class SerBoxControl {
 	public static int ConnectBox(String ConnectBoxIP) {
 		int imageType = 3; //Defaultwert!!!
 		URL url;
+		BufferedReader in;
+		String inputLine;
 		Authenticator.setDefault(new SerBoxAuthenticator());
 
 		try {
+		    url=new URL("http://"+ConnectBoxIP+"/control/info");
+		    in = new BufferedReader(new InputStreamReader(url.openStream()));
+		    if (in.readLine().equals("Neutrino")){
+		        imageType=1;
+		        return imageType;
+		    }
+		    
 			url = new URL("http://" + ConnectBoxIP);
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-			String inputLine;
-
+			in = new BufferedReader(new InputStreamReader(url.openStream()));
+			
 			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.toLowerCase().indexOf("neutrino") > 0) {
-					imageType = 1;
-				} else if  (inputLine.toLowerCase().indexOf("enigma") > 0) {
+				if  (inputLine.toLowerCase().indexOf("enigma") > 0) {
 					imageType = 2;
+					return imageType;
 				} 
 			}
-			in.close();
 		} catch (IOException e) { //Box ist aus, Rückgabe des Defaultwertes
 			Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_connect"));
 			return (imageType);
 		} catch (IllegalArgumentException ex) {
 			Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_valid_ip"));
 		}
-		return (imageType);
+		return imageType;
 	}
 
 	public abstract String getName();
-	public abstract BOTimerList reReadTimerList() throws IOException;
+	protected abstract BOTimerList reReadTimerList() throws IOException;
 	public abstract GregorianCalendar getBoxTime() throws IOException;
 	public abstract BufferedReader getConnection(String request) throws IOException;
 	public abstract BOPids getPids() throws IOException;

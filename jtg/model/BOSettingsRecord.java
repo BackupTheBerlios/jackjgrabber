@@ -1,7 +1,4 @@
 package model;
-
-
-
 /*
  * BOSettingsRecords.java by Geist Alexander
  * 
@@ -18,6 +15,8 @@ package model;
 public class BOSettingsRecord {
 
 	private BOSettings settings;
+	private boolean saveLocal;
+	
 	public String streamingServerPort;
 	public boolean startStreamingServer;
 	public boolean startPX;
@@ -355,4 +354,16 @@ public class BOSettingsRecord {
 			setSettingsChanged(true);
 		}
 	}
+    /**
+     * @return Returns the saveLocal.
+     */
+    public boolean isSaveLocal() {
+        return saveLocal;
+    }
+    /**
+     * @param saveLocal The saveLocal to set.
+     */
+    public void setSaveLocal(boolean saveLocal) {
+        this.saveLocal = saveLocal;
+    }
 }

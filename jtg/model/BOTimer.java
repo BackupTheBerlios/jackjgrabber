@@ -27,17 +27,17 @@ import service.SerTimerHandler;
 import control.ControlNeutrinoTimerTab;
 
 public class BOTimer extends java.lang.Object{
-    private String channelId; 
+    public String channelId; 
     public String timerNumber; 
     private String modifiedId;
     public String eventTypeId;
     public String eventRepeatId;
-    public String repeatCount; 
+    public String repeatCount="0"; 
     public String announceTime; 
     public String senderName;
     public String description;
-    private BOSender sender;
-    private BOLocalTimer localTimer;
+    
+    public BOLocalTimer localTimer;
     
     public GregorianCalendar unformattedStartTime, unformattedStopTime;
 
@@ -94,6 +94,15 @@ public class BOTimer extends java.lang.Object{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
 		return sdf.format(this.getUnformattedStartTime().getTime());
 	}
+    
+    public String getLongStartTime() {
+        long time = this.getUnformattedStartTime().getTimeInMillis();
+        return Long.toString(time/1000)+"000";
+    }
+    
+    public String getLongStopTime() {
+        return Long.toString(this.getUnformattedStopTime().getTimeInMillis());
+    }
 
     public String getStartTime (){
     	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
@@ -215,18 +224,6 @@ public class BOTimer extends java.lang.Object{
 	public void setLocalTimer(BOLocalTimer localeTimer) {
 		this.localTimer = localeTimer;
 	}
-    /**
-     * @return Returns the sender.
-     */
-    public BOSender getSender() {
-        return sender;
-    }
-    /**
-     * @param sender The sender to set.
-     */
-    public void setSender(BOSender sender) {
-        this.sender = sender; 
-    }
     
     public void setUnformattedStartDate(GregorianCalendar date) {
         this.setModifiedId("modify");

@@ -50,7 +50,7 @@ public class SerXPathHandling {
 		return node.selectSingleNode("following-sibling::node()[1]/*");
 	}
 		
-	public static Node getFirstPrecedinggNode(Node node) {
+	public static Node getFirstPrecedingNode(Node node) {
 		return node.selectSingleNode("preceding-sibling::node()[1]/*");
 	}
 	

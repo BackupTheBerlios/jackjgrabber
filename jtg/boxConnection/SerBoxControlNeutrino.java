@@ -339,7 +339,8 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    }
 
 		    botimer.unformattedStartTime=SerFormatter.formatUnixDate(valueStart);  
-			botimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop); 
+			botimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop);
+            botimer.getLocalTimer().setLocal(false);
 		    
 		    if (botimer.getEventTypeId().equals("5")) {
 		    	timerList.getRecordTimerList().add(botimer);
@@ -348,7 +349,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    }
 		}
 		setTimerDesctiptionName(timerList.getRecordTimerList());
-        newTimerAdded=false;
 		return timerList;
 	}
 	
@@ -404,7 +404,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("/fb/timer.dbox2?action="+modifiedId);
 			buffer.append("&id="+timer.getTimerNumber());
 		}
-		if (modifiedId.equals("modify")) {
+        else if (modifiedId.equals("modify")) {
 			buffer.append("/fb/timer.dbox2?action="+modifiedId);
 			//buffer.append("/control/timer?action="+modifiedId);
 			buffer.append("&id="+timer.getTimerNumber());
@@ -426,7 +426,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&rep="+timer.getEventRepeatId());
 			buffer.append("&channel_id="+timer.getChannelId());
 		} 
-		if (modifiedId.equals("new")) {
+        else if (modifiedId.equals("new")) {
             this.newTimerAdded=true;
 			buffer.append("/control/timer?action="+modifiedId);
 			buffer.append("&alarm="+alarm);

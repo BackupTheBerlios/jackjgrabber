@@ -73,7 +73,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public void run() {
 	    this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
         try {
-            this.setTimerList(ControlMain.getBoxAccess().getTimerList());
+            this.setTimerList(ControlMain.getBoxAccess().getTimerList(false));
             this.refreshTables();
             this.getView().recordTimerSorter.setSortingStatus(1, 1);
             this.getView().systemTimerSorter.setSortingStatus(1, 1);
@@ -121,14 +121,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 				this.actionSend();
 				break;
 			}
-			if (action == "recordTimer") {
-				this.actionRecordTimerRepeatDaysChanged();
-				break;
-			}
-			if (action == "systemTimer") {
-				this.actionSystemTimerRepeatDaysChanged();
-				break;
-			}
 			break;
 		}
 	}
@@ -149,40 +141,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		this.getView().getSystemTimerTableModel().fireTableDataChanged();
 		this.getView().systemTimerSorter.fireTableDataChanged();
 	}
-	
-	/*
-	 * wird aufgerufen wenn ein Wochentag selektiert wird.
-	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
-	 * Wochentage festgestellt und gesetzt
-	 */
-	public void actionRecordTimerRepeatDaysChanged () {
-		BOTimer timer = this.getSelectedRecordTimer();
-		timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage));
-		timer.setModifiedId("modify");
-	}
-	/*
-	 * wird aufgerufen wenn ein Wochentag selektiert wird.
-	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
-	 * Wochentage festgestellt und gesetzt
-	 */
-	public void actionSystemTimerRepeatDaysChanged () {
-		BOTimer timer = this.getSelectedSystemTimer();
-		timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage2));
-		timer.setModifiedId("modify");
-	}
-	/*
-	 * Beim jeweiligen RadioButton ist als Name die RepeatId eingestellt
-	 */
-	private String getRepeatOptionValue(JRadioButton[] buttons) {
-		int result=0;
-		for (int i=0; i<buttons.length; i++) {
-			if (buttons[i].isSelected()) {
-				result+=Integer.parseInt(buttons[i].getName());
-			}
-		}
-		return Integer.toString(result);
-	}
-	
 	
 	private void actionDeleteAll() {
 		try {
@@ -268,7 +226,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	
 	private void deleteTimer(BOTimer timer) throws IOException {
 		timer.setModifiedId("remove");
-		SerTimerHandler.deleteLocalTimer(timer.getLocalTimer());
 		this.writeTimer(timer);
 	}
 	
@@ -277,7 +234,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	 */
 	public void reReadTimerList() {
 		try {
-            this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
+            this.setTimerList(ControlMain.getBoxAccess().getTimerList(true));
             this.refreshTables();
         } catch (IOException e) {
             Logger.getLogger("ControlNeutrinoTimerTab").error(e.getMessage());
@@ -285,9 +242,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	}
 	
 	public void writeTimer(BOTimer timer) throws IOException {
-	    if (timer.getModifiedId()!=null) {
-	        ControlMain.getBoxAccess().writeTimer(timer);    
-	    }
+        SerTimerHandler.saveTimer(timer);    
 	}
 	
 	private void writeAllTimer(ArrayList timerList) throws IOException {

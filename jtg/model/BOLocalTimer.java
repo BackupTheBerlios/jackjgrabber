@@ -27,6 +27,7 @@ import control.ControlMain;
 
 public class BOLocalTimer {
 	
+    private boolean local;
 	private boolean startPX;
 	private boolean recordAllPids;
 	private boolean ac3ReplaceStereo;
@@ -47,9 +48,10 @@ public class BOLocalTimer {
 	private long startTime;
 	private Node timerNode;
 	
+	
 	private BOTimer mainTimer;
 	
-	public BOLocalTimer() {
+	private BOLocalTimer() {
 	    
 	}
 	
@@ -60,6 +62,7 @@ public class BOLocalTimer {
 
 	public static BOLocalTimer getDefaultLocalTimer(BOTimer mainTimer) {
 		BOLocalTimer timer = new BOLocalTimer(mainTimer);
+		timer.setLocal(ControlMain.getSettingsRecord().isSaveLocal());
 		timer.setAc3ReplaceStereo(ControlMain.getSettingsRecord().isAc3ReplaceStereo());
 		timer.setDirPattern(ControlMain.getSettingsRecord().getDirPattern());
 		timer.setFilePattern(ControlMain.getSettingsRecord().getFilePattern());
@@ -80,7 +83,9 @@ public class BOLocalTimer {
 		timer.setDescription(mainTimer.getDescription());
 		return timer;
 	}
-
+	/*
+	 * Objekt dient fuer Streamingserver-Aufnahmen ohne Timer!!! 
+	 */
 	public static BOLocalTimer getDefaultLocalTimer() {
 		BOLocalTimer timer = new BOLocalTimer();
 		timer.setAc3ReplaceStereo(ControlMain.getSettingsRecord().isAc3ReplaceStereo());
@@ -357,5 +362,17 @@ public class BOLocalTimer {
      */
     public void setTimerNode(Node timerNode) {
         this.timerNode = timerNode;
+    }
+    /**
+     * @return Returns the local.
+     */
+    public boolean isLocal() {
+        return local;
+    }
+    /**
+     * @param local The local to set.
+     */
+    public void setLocal(boolean local) {
+        this.local = local;
     }
 }

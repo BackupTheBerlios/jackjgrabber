@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 
@@ -30,8 +31,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
+
+import model.BOTimer;
+
+import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -52,6 +59,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JPanel jPanelButtonsRecordTimer = null;
 	private JPanel jPanelButtonsSystemTimer = null;
 	private JPanel jPanelButtonsGui = null;
+    private JPanel jPanelTimerIcons = null;
 	private JButton jButtonReload = null;
 	private JButton jButtonDeleteAllRecordTimer = null;
 	private JButton jButtonDeleteSelectedRecordTimer = null;
@@ -101,16 +109,16 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		CellConstraints cc = new CellConstraints();
 
 		builder.addSeparator(ControlMain.getProperty("label_recordTimer"),						cc.xyw  (1, 1, 4));
-		builder.add(this.getJScrollPaneRecordTimerTable(),   											cc.xyw  (1, 2, 4));
-		builder.add(this.getJPanelDauerTimer(),	 														cc.xyw  (1, 3, 4, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.add(this.getJScrollPaneRecordTimerTable(),   									cc.xyw  (1, 2, 4));
+		builder.add(this.getJPanelDauerTimer(),	 												cc.xyw  (1, 3, 4, CellConstraints.CENTER, CellConstraints.TOP));
 		builder.addSeparator(ControlMain.getProperty("label_systemTimer"),						cc.xyw  (1, 5, 3));
-		builder.add(this.getJScrollPaneSystemTimerTable(),  											cc.xywh (1, 6, 1, 2));
-		builder.add(this.getJPanelDauerTimer2(), 															cc.xywh (3, 6, 1, 2, CellConstraints.LEFT, CellConstraints.TOP));
-		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),								cc.xy     (6, 1));
-		builder.add(this.getJPanelButtonsRecordTimer(), 												cc.xywh (6, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),								cc.xy   (6, 5, CellConstraints.CENTER, CellConstraints.DEFAULT));
-		builder.add(this.getJPanelButtonsSystemTimer(),												cc.xywh (6, 6, 1, 1, CellConstraints.CENTER, CellConstraints.TOP));
-		builder.add(this.getJPanelButtonsGui(),																cc.xywh (6, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
+		builder.add(this.getJScrollPaneSystemTimerTable(),  									cc.xywh (1, 6, 1, 2));
+		builder.add(this.getJPanelDauerTimer2(), 												cc.xywh (3, 6, 1, 2, CellConstraints.LEFT, CellConstraints.TOP));
+		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),							cc.xy     (6, 1));
+		builder.add(this.getJPanelButtonsRecordTimer(), 										cc.xywh (6, 2, 1, 1,  CellConstraints.FILL, CellConstraints.TOP));
+		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),							cc.xy   (6, 5, CellConstraints.CENTER, CellConstraints.DEFAULT));
+		builder.add(this.getJPanelButtonsSystemTimer(),											cc.xywh (6, 6, 1, 1, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.add(this.getJPanelButtonsGui(),													cc.xywh (6, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
 	public ControlTabTimer getControl() {
@@ -138,25 +146,32 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 			jTableRecordTimer.setName("recordTimerTable");
 			jTableRecordTimer.addMouseListener(control);
-			jTableRecordTimer.setRowHeight(20);
-			jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(0).setPreferredWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(1).setPreferredWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(50);
-			jTableRecordTimer.getColumnModel().getColumn(3).setPreferredWidth(80);
-			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(80);
+            jTableRecordTimer.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(30);
+			jTableRecordTimer.getColumnModel().getColumn(1).setPreferredWidth(85);
+            jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(85);
+			jTableRecordTimer.getColumnModel().getColumn(2).setPreferredWidth(90);
+            jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(90);
+            jTableRecordTimer.getColumnModel().getColumn(3).setPreferredWidth(55);
+			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(55);
+            jTableRecordTimer.getColumnModel().getColumn(4).setPreferredWidth(85);
+			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(85);
 
-
-			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);
-			TableColumn columnStartTime = jTableRecordTimer.getColumnModel().getColumn(1);
-			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(2);
-			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(3);
-
-			columnSender.setCellEditor(new DefaultCellEditor(this.getComboBoxSender()));
-			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerStartTime()));
-			columnEndTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerEndTime()));
-			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatRecordTimer()));
+            jTableRecordTimer.setDefaultRenderer(Boolean.class, new DefaultTableCellRenderer() {
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
+                        int column) {
+                    int modelIndex = recordTimerSorter.modelIndex(row);
+                    BOTimer timer = (BOTimer)control.getTimerList().getRecordTimerList().get(modelIndex);
+                    JLabel l;
+                    if (timer.getLocalTimer().isLocal()) {
+                        l = new JLabel(SerIconManager.getInstance().getIcon("localtimer.gif"));    
+                    } else {
+                        l = new JLabel(SerIconManager.getInstance().getIcon("boxtimer.gif"));   
+                    }
+                    l.setHorizontalAlignment(SwingConstants.CENTER);
+                    return l;
+                }
+            });
 		}
 		return jTableRecordTimer;
 	}
@@ -211,22 +226,43 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.recordTimerTableModel = TimerTableModel;
 	}
 
-	public JPanel getJPanelButtonsRecordTimer() {
-		if (jPanelButtonsRecordTimer == null) {
-			jPanelButtonsRecordTimer = new JPanel();
-			FormLayout layout = new FormLayout(
-				      "pref",	 		//columna
-		      "pref, pref, pref, 20, pref");	//rows
-			PanelBuilder builder = new PanelBuilder(jPanelButtonsRecordTimer, layout);
-			CellConstraints cc = new CellConstraints();
+    public JPanel getJPanelButtonsRecordTimer() {
+        if (jPanelButtonsRecordTimer == null) {
+            jPanelButtonsRecordTimer = new JPanel();
+            FormLayout layout = new FormLayout(
+                      "pref",           //columna
+              "pref, pref, pref, 15, pref, 20, pref");    //rows
+            PanelBuilder builder = new PanelBuilder(jPanelButtonsRecordTimer, layout);
+            CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getJButtonNewRecordTimer(),  				cc.xy	(1, 1));
-			builder.add(this.getJButtonDeleteSelectedRecordTimer(),	cc.xy	(1, 2));
-			builder.add(this.getJButtonDeleteAllRecordTimer(),			cc.xy	(1, 3));
-			builder.add(new JLabel(this.getImageIconNeutrino()),		cc.xy	(1, 5));
-		}
-		return jPanelButtonsRecordTimer;
-	}
+            builder.add(this.getJButtonNewRecordTimer(),                cc.xy   (1, 1));
+            builder.add(this.getJButtonDeleteSelectedRecordTimer(),     cc.xy   (1, 2));
+            builder.add(this.getJButtonDeleteAllRecordTimer(),          cc.xy   (1, 3));
+            builder.add(this.getPanelTimerIcons(),                      cc.xy   (1, 5));
+            builder.add(new JLabel(this.getImageIconNeutrino()),        cc.xy   (1, 7));
+        }
+        return jPanelButtonsRecordTimer;
+    }
+    
+    public JPanel getPanelTimerIcons() {
+        if (jPanelTimerIcons == null) {
+            jPanelTimerIcons = new JPanel();
+            FormLayout layout = new FormLayout(
+                      "pref, pref",         //columns
+              "pref, pref");    //rows
+            PanelBuilder builder = new PanelBuilder(jPanelTimerIcons, layout);
+            CellConstraints cc = new CellConstraints();
+
+            JLabel l1 = new JLabel(SerIconManager.getInstance().getIcon("localtimer.gif"));
+            JLabel l2 = new JLabel(SerIconManager.getInstance().getIcon("boxtimer.gif")); 
+            
+            builder.addLabel(ControlMain.getProperty("label_boxTimer"), cc.xy(1, 1));
+            builder.add(l2, cc.xy(2, 1));
+            builder.addLabel(ControlMain.getProperty("label_localTimer"), cc.xy(1, 2));
+            builder.add(l1, cc.xy(2, 2));
+        }
+        return jPanelTimerIcons;
+    }
 
 	public JPanel getJPanelButtonsSystemTimer() {
 		if (jPanelButtonsSystemTimer == null) {

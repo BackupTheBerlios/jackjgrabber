@@ -53,7 +53,6 @@ import presentation.timer.GuiTimerEditView;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerHelper;
-import service.SerTimerHandler;
  
 
 public class ControlTimerEditView implements ActionListener, KeyListener, ItemListener, MouseListener{
@@ -228,9 +227,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	                this.getControlTimer().addRecordTimer(this.getTimer().getMainTimer());
 	            }
 	        }
-	        SerTimerHandler.saveTimer(this.getTimer().getMainTimer());
 	        this.getControlTimer().writeTimer(this.getTimer().getMainTimer());
-	        this.getControlTimer().reReadTimerList();
         } catch (IOException e) {
             SerAlertDialog.alertConnectionLost("ControlTimerEditView", this.getView());
         }

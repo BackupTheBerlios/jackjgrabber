@@ -50,10 +50,13 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JPanel panelQuickRecordSettings = null;
 	private JPanel panelRecordtimeSettings = null;
 	private JPanel panelFileNameSettings;
+    private JPanel panelSaveOptions;
 	private JPanel panelNorth = null;
 	private JPanel panelSouth = null;
 	private JComboBox jComboBoxStreamType = null;
 	private JTextField jTextFieldUdrecOptions = null;
+    private JRadioButton jRadioButtonSaveLocal;
+    private JRadioButton jRadioButtonSaveBox;
 	private JRadioButton jRadioButtonUdrec;
 	private JRadioButton jRadioButtonJGrabber;
 	private JRadioButton jRadioButtonRecordAllPids;
@@ -61,6 +64,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JRadioButton jRadioButtonStereoReplaceAc3;
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
 	private ButtonGroup buttonGroupAudioOptions = new ButtonGroup();
+    private ButtonGroup buttonGroupSaveOptions = new ButtonGroup();
 	private JFormattedTextField tfServerPort = null;
 	private JCheckBox cbStartStreamingServer;
 	private JCheckBox cbStartPX;
@@ -105,16 +109,33 @@ public class GuiSettingsTabRecord extends GuiTab {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
 			FormLayout layout = new FormLayout("pref, 25, pref:grow", //columns
-					"t:pref"); //rows
+					"pref, 10, t:pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelNorth, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getPanelRecordSettings(), cc.xy(1, 1));
-			builder.add(this.getPanelEngineSettings(), cc.xy(3, 1));
+            builder.add(this.getPanelSaveOptions(), cc.xyw(1, 1, 3));
+			builder.add(this.getPanelRecordSettings(), cc.xy(1, 3));
+			builder.add(this.getPanelEngineSettings(), cc.xy(3, 3));
 		}
 		return panelNorth;
 	}
 
+    private JPanel getPanelSaveOptions() {
+        if (panelSaveOptions == null) {
+            panelSaveOptions = new JPanel();
+            FormLayout layout = new FormLayout("pref, 20, pref, 10, pref", //columns
+                    "t:pref"); //rows
+            PanelBuilder builder = new PanelBuilder(panelSaveOptions, layout);
+            CellConstraints cc = new CellConstraints();
+
+            builder.addLabel(ControlMain.getProperty("label_saveOption"),   cc.xy(1, 1));
+            builder.add(this.getJRadioButtonSaveLocal(), cc.xy(3, 1));
+            builder.add(this.getJRadioButtonSaveBox(), cc.xy(5, 1));
+        }
+        return panelSaveOptions;
+    }
+
+    
 	private JPanel getPanelSouth() {
 		if (panelSouth == null) {
 		    panelSouth = new JPanel();
@@ -522,6 +543,30 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return jRadioButtonUdrec;
 	}
+    /**
+     * @return Returns the jRadioButtonSaveLocal.
+     */
+    public JRadioButton getJRadioButtonSaveLocal() {
+        if (jRadioButtonSaveLocal == null) {
+            jRadioButtonSaveLocal = new JRadioButton(ControlMain.getProperty("button_local"));
+            jRadioButtonSaveLocal.addActionListener(control);
+            jRadioButtonSaveLocal.setActionCommand("saveLocal");
+            buttonGroupSaveOptions.add(jRadioButtonSaveLocal);
+        }
+        return jRadioButtonSaveLocal;
+    }
+    /**
+     * @return Returns the jRadioButtonSaveBox.
+     */
+    public JRadioButton getJRadioButtonSaveBox() {
+        if (jRadioButtonSaveBox == null) {
+            jRadioButtonSaveBox = new JRadioButton("Box");
+            jRadioButtonSaveBox.addActionListener(control);
+            jRadioButtonSaveBox.setActionCommand("saveBox");
+            buttonGroupSaveOptions.add(jRadioButtonSaveBox);
+        }
+        return jRadioButtonSaveBox;
+    }
 	/**
 	 * @return Returns the streamTypeComboModel.
 	 */

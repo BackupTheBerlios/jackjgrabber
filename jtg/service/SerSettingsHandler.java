@@ -144,6 +144,7 @@ public class SerSettingsHandler {
 		rec.setStoreLogAfterRecord(false);
 		rec.setDirPattern("%DATE YY-MM-DD% %TIME% %CHANNEL% %NAME%");
 		rec.setFilePattern("");
+		rec.setSaveLocal(false);
 		
 		main.setPlasticTheme("ExperienceBlue");
 		main.setLocale("DE");

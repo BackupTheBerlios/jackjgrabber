@@ -18,13 +18,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-import java.util.GregorianCalendar;
-
 import javax.swing.table.AbstractTableModel;
 
-import model.BOSender;
 import model.BOTimer;
-import service.SerFormatter;
 import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
 
@@ -37,7 +33,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	}
 
 	public int getColumnCount() {
-		return 5;
+		return 6;
 	}
 
 	public int getRowCount() {
@@ -50,61 +46,35 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
 		if (columnIndex == 0) {
-			return timer.getSenderName();
+			return new Boolean(timer.getLocalTimer().isLocal());
 		} else if (columnIndex == 1) {
-			return timer.getStartTime();
+		    return timer.getSenderName();
 		} else if (columnIndex == 2) {
-			return timer.getStopTime();
+		    return timer.getStartTime();
 		} else if (columnIndex == 3) {
+		    return timer.getStopTime();
+		} else if (columnIndex == 4) {
 			return control.convertShortEventRepeat(timer.getEventRepeatId());
 		} 
-		return timer.getDescription();
+		return timer.getLocalTimer().getDescription();
 	}
-
-	public void setValueAt(Object value, int row, int col) {
-		BOTimer timer = (BOTimer)control.getTimerList().getRecordTimerList().get(row);
-		if (col == 0) {
-			int senderIndex = this.getControl().getView().getComboBoxSender().getSelectedIndex();
-			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
-			timer.setChannelId(sender.getChanId());
-			timer.setSenderName((String)value);
-		}
-		if (col == 1) {
-			GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "dd.MM.yy   HH:mm");
-			timer.setUnformattedStartTime(newDate.getTimeInMillis());
-		}
-		if (col == 2) {
-			GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "HH:mm");
-			timer.setUnformattedStopTime(newDate);
-		}
-		if (col == 3) {
-			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			ControlNeutrinoTimerTab.selectRepeatDaysForRecordTimer(timer, control.getView().jRadioButtonWhtage);
-		}
-		timer.setModifiedId("modify");
-    }
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return ControlMain.getProperty("sender");
+			return " ";
 		} else if (columnIndex == 1) {
-			return ControlMain.getProperty("start");
+			return ControlMain.getProperty("sender");
 		} else if (columnIndex == 2) {
-			return ControlMain.getProperty("end");
+			return ControlMain.getProperty("start");
 		} else if (columnIndex == 3) {
+			return ControlMain.getProperty("end");
+		} else if (columnIndex == 4) {
 			return ControlMain.getProperty("repeat");
 		} 
 		return ControlMain.getProperty("title");
 	}
 
 	public boolean isCellEditable (int row, int col) {
-//	    if (col==4) {
-//	    	return false;
-//	    }
-//	    BOTimer timer = (BOTimer)control.getTimerList().getRecordTimerList().get(row);
-//	    if (col==0 && timer.getModifiedId()==null) {
-//	    	return false;
-//	    }
 	    return false;
 	}
 
@@ -120,4 +90,11 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		super.fireTableDataChanged();
 		this.getControl().getView().enableRecordTimerWeekdays(false);
 	}
+    
+    public Class getColumnClass (int col) {
+        if (col==0) {
+            return Boolean.class;
+        }
+        return String.class;
+    }
 }

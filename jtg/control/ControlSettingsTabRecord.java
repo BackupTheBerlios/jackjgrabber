@@ -56,11 +56,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.setSettingsTab(tabSettings);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see control.ControlTab#initialize()
-	 */
 	public void run() {
 		this.getTab().getTfServerPort().setText(this.getSettings().getStreamingServerPort());
 		this.getTab().getCbStartStreamingServer().setSelected(this.getSettings().isStartStreamingServer());
@@ -76,9 +71,18 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.getTab().getCbStopPlaybackAtRecord().setSelected(this.getSettings().isStopPlaybackAtRecord());
 		this.getTab().getTfFilePattern().setText(getSettings().getFilePattern());
 		this.getTab().getTfDirPattern().setText(getSettings().getDirPattern());
+        this.initializeTimerSaveOptions();
 		this.initializeAudioSettings();
 		this.initializeStreamingEngine();
 	}
+    
+    private void initializeTimerSaveOptions() {
+        if (getSettings().isSaveLocal()) {
+            this.getTab().getJRadioButtonSaveLocal().setSelected(true);
+        } else {
+            this.getTab().getJRadioButtonSaveBox().setSelected(true);
+        }
+    }
 
 	private void initializeAudioSettings() {
 		if (this.getSettings().isRecordAllPids()) {
@@ -119,6 +123,14 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		while (true) {
+            if (action.equals("saveLocal")) {
+                this.getSettings().setSaveLocal(true);
+                break;
+            }
+            if (action.equals("saveBox")) {
+                this.getSettings().setSaveLocal(false);
+                break;
+            }
 			if (action.equals("jgrabber")) {
 				this.getSettings().setStreamingEngine(0);
 				this.initializeJGrabberEngine();

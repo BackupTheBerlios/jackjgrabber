@@ -50,6 +50,7 @@ import presentation.movieguide.GuiTabMovieGuide;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
+import service.SerTimerHandler;
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener, Runnable, KeyListener {
 	
@@ -547,7 +548,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             int timeAnnounce = (Integer.parseInt(ControlMain.getSettingsRecord().getRecordTimeBefore())+2)*60000;
             
             botimer.setModifiedId("new");
-            botimer.setChannelId(sender.getChanId());
+            botimer.channelId=sender.getChanId();
             botimer.setSenderName(sender.getName());		
             botimer.unformattedStartTime=SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().get(modelIndexTimer),timeBefore);
             botimer.unformattedStopTime=SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().get(modelIndexTimer),timeAfter);			
@@ -555,11 +556,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             botimer.setEventRepeatId("0");
             botimer.setEventTypeId("5");
             botimer.setDescription(getBOMovieGuide4Timer().getTitel());
-            try {
-                ControlMain.getBoxAccess().writeTimer(botimer);
-            } catch (IOException e) {
-                SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
-            }
+            
+            SerTimerHandler.saveTimer(botimer);
         } catch (IOException e) {            
             Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_sender"));
         }		

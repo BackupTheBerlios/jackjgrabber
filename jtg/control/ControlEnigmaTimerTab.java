@@ -66,7 +66,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	    this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
 			try {
 			    this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
+				this.setTimerList(ControlMain.getBoxAccess().getTimerList(false));
 				this.refreshTables();
 				//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
 				this.setSenderList(ControlMain.getBoxAccess().getAllSender());
@@ -224,7 +224,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	public void reReadTimerList(){
 	    try {
             this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            this.setTimerList(ControlMain.getBoxAccess().getTimerList());
+            this.setTimerList(ControlMain.getBoxAccess().getTimerList(true));
             this.getTab().setCursor(Cursor.getDefaultCursor());
             this.refreshTables();
         } catch (IOException e) {
