@@ -1,0 +1,15 @@
+Einige wichtige Hinweise zum ersten Testrelease von Jack the JGrabber!!
+
+Folgendes Hinweise beachten, damit das Programm gestartet werden kann.
+
+1. SUN JRE > 1.4.0 muß installiert sein, zu bekommen unter http://java.sun.com/
+Mit java -version ermittelt man die installierta Java-Version.
+Die aktuelle und empfohlene Verion ist 5.0 aka Tiger.
+
+2. Das Programm kann mit start.sh(UNIX) bzw. start.bat(WINDOWS) gestartet werden.
+Wird das jar-File direkt ausgeführt und nicht ueber die oben ganannten
+Scripte, ist es zwingend notwendig sich beim Start im gleichen Verzeichnis zu befinden.
+
+Die Scripte muessen vorher nach den eigenen Gegebenheiten angepasst werden!!
+
+
