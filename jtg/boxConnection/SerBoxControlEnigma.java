@@ -73,11 +73,21 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		BufferedReader input = getConnection("/control/zapto?getpids");
 		if (tvMode) {
 		    String[] vPid = new String[1];
-		    vPid[0]=Integer.toHexString(Integer.parseInt(input.readLine()));
+		    line=input.readLine();
+		    System.out.println(line);
+		    if (line.length() > 5) {
+		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Zappen, bitte erneut versuchen!");
+		        return pids;
+		    }
+		    vPid[0]=Integer.toHexString(Integer.parseInt(line));
 		    pids.setVPid(vPid);
 		} 
 		while((line=input.readLine())!=null) {
 		    String[] aPid = new String[1];
+		    if (line.length() > 5) {
+		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Zappen, bitte erneut versuchen!");
+		        return pids;
+		    }
 		    aPid[0]=Integer.toHexString(Integer.parseInt(line));
 			pids.getAPids().add(aPid);
 		}
