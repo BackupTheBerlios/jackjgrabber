@@ -252,7 +252,7 @@ public class SerTimerHandler {
         botimer.eventRepeatId=mainTimerNode.selectSingleNode("eventRepeatId").getText();
         botimer.repeatCount=mainTimerNode.selectSingleNode("repeatCount").getText();
         botimer.channelId=mainTimerNode.selectSingleNode("channelId").getText();
-        botimer.senderName=mainTimerNode.selectSingleNode("senderName").getText();
+        botimer.setSenderName(mainTimerNode.selectSingleNode("senderName").getText());
         botimer.announceTime=mainTimerNode.selectSingleNode("announceMainTimer").getText();
 
         long startMillis = Long.parseLong(mainTimerNode.selectSingleNode("startMainTimer").getText());
@@ -461,4 +461,19 @@ public class SerTimerHandler {
         }
         return list;
     }
+    
+    /*
+	 * zentrale Methode um neue/geänderte Timer zu speichern
+	 */
+	public static void saveSystemTimer(BOTimer timer, boolean reloadList) {
+		//nur veraenderte Timer speichern
+		if (timer.getModifiedId() != null) {
+			saveBoxTimer(timer, reloadList);
+		}
+		timer.setModifiedId(null);
+		//ermittle naechsten faelligen lokalen-RecordTimer neu
+		if (timer.getLocalTimer().isLocal()) {
+			ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
+		}
+	}
 }
