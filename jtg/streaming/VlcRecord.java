@@ -69,7 +69,7 @@ public class VlcRecord  extends Record {
 	}	
 	
 	public void stop() {
-	    if (run != null) {
+	    if (run != null && run.getProcess()!=null) {
 	        run.getProcess().destroy();  
 	    }
 	}
