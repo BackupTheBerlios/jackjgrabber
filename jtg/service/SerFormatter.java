@@ -14,12 +14,6 @@ public class SerFormatter {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		return sdf.format(new Date(i));
 	}
-	
-	public static String getShortTime(GregorianCalendar cal){
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		return sdf.format(cal);
-		//return out(cal.get(Calendar.HOUR_OF_DAY))+":"+out(cal.get(Calendar.MINUTE));		
-	} 
         
 	private static String out( int i ) {
 	    return ( i >= 10 ) ? Integer.toString(i) : "0"+i;
@@ -32,6 +26,12 @@ public class SerFormatter {
 	}
 	
 	public static GregorianCalendar formatUnixDate(long date){
+		GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );
+		cal.setTimeInMillis(date*1000);                                 
+		return cal;
+	}
+	
+	public static GregorianCalendar formatDate(long date){
 		GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );
 		cal.setTimeInMillis(date);                                 
 		return cal;
