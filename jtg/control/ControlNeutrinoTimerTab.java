@@ -38,6 +38,7 @@ import presentation.timer.GuiNeutrinoTimerPanel;
 import presentation.timer.GuiTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
+import service.SerTimerHandler;
 
 
 public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionListener, MouseListener {
@@ -262,10 +263,9 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	}
 	
 	private void deleteTimer(BOTimer timer) throws IOException {
-		if (timer.getTimerNumber() != null) {  //Neu angelegte Timer muessen nicht geloescht werden
-			timer.setModifiedId("remove");
-			this.writeTimer(timer);
-		}
+		timer.setModifiedId("remove");
+		SerTimerHandler.deleteLocalTimer(timer.getLocalTimer());
+		this.writeTimer(timer);
 	}
 	
 	/**
@@ -281,9 +281,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	}
 	
 	public void writeTimer(BOTimer timer) throws IOException {
-	    if (timer.getModifiedId() != null) { //nur neue und modifizierte Timer wegschreiben
-	        ControlMain.getBoxAccess().writeTimer(timer);
-		}
+	    ControlMain.getBoxAccess().writeTimer(timer);
 	}
 	
 	private void writeAllTimer(ArrayList timerList) throws IOException {

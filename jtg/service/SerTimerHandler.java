@@ -104,6 +104,17 @@ public class SerTimerHandler {
         } catch (IOException e) {}
     }
     
+    public static void deleteLocalTimer(BOLocalTimer timer) {
+        if (timer.getTimerNode()!=null) {
+            try {
+                getTimerDocument().getRootElement().remove(timer.getTimerNode());
+                SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     private static void saveNewTimer(BOLocalTimer timer) {
 		Element root = getTimerDocument().getRootElement();
 		Element recordTimer = DocumentHelper.createElement("recordTimer");
@@ -129,7 +140,9 @@ public class SerTimerHandler {
 		root.add(recordTimer);
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public static void editOldTimer(BOLocalTimer timer) {
@@ -154,7 +167,9 @@ public class SerTimerHandler {
         timerNode.selectSingleNode("udrecStreamType").setText(timer.getUdrecStreamType());
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();    
+        }
     }
     
     public static void saveTimer(BOTimer timer) {
