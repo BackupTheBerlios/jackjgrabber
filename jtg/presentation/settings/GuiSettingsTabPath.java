@@ -47,7 +47,7 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
 	private JTextField jTextFieldShutdonwToolPath;
 	private JTextField jTextFieldWorkDirectory;
 	private JTextField jTextFieldBrowserPath;
-	private JTextField jTextFieldDVDAuthor;
+	private JTextField jTextFieldMplex;
 	
 	private JButton jButtonRecordPathFileChooser = null;
 	private JButton jButtonBrowserPathFileChooser = null;
@@ -56,7 +56,7 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
 	private JButton jButtonProjectXPathFileChooser = null;
 	private JButton jButtonVlcPathFileChooser = null;
 	private JButton jButtonShutdownToolPathFileChooser = null;
-	private JButton jButtonDVDAuthor = null;
+	private JButton jButtonMplex = null;
 	
 	private SerIconManager iconManager = SerIconManager.getInstance();
        
@@ -95,9 +95,9 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
 				builder.add(new JLabel(ControlMain.getProperty("label_browserPath")),		cc.xy	(1, 8));
 				builder.add(this.getJTextFieldBrowserPath(),								cc.xy	(3, 8));
 				builder.add(this.getJButtonBrowserPathFileChooser(),						cc.xy	(5, 8));
-				builder.add(new JLabel(ControlMain.getProperty("label_mplex")),			cc.xy	(1, 9));
-				builder.add(this.getJTextFieldDVDAuthor(),								cc.xy	(3, 9));
-				builder.add(this.getJButtonDVDAuthorFileChooser(),						cc.xy	(5, 9));
+				builder.add(new JLabel(ControlMain.getProperty("label_mplex")),		       	cc.xy	(1, 9));
+				builder.add(this.getJTextFieldMplex(),						    		cc.xy	(3, 9));
+				builder.add(this.getJButtonMplexFileChooser(),						        cc.xy	(5, 9));
     }
 	    	
 	
@@ -251,13 +251,13 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
         return jButtonWorkDirChooser;
     }
    
-    public JButton getJButtonDVDAuthorFileChooser() {
-        if (jButtonDVDAuthor == null) {
-        	jButtonDVDAuthor = new JButton(iconManager.getIcon("Open16.gif"));
-        	jButtonDVDAuthor.setActionCommand("dvdAuthor");
-        	jButtonDVDAuthor.addActionListener(control);
+    public JButton getJButtonMplexFileChooser() {
+        if (jButtonMplex == null) {
+        	jButtonMplex = new JButton(iconManager.getIcon("Open16.gif"));
+        	jButtonMplex.setActionCommand("mplex");
+        	jButtonMplex.addActionListener(control);
 		}
-        return jButtonDVDAuthor;
+        return jButtonMplex;
     }
    
     
@@ -290,14 +290,14 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
     /**
      * @return Returns the jTextFieldBrowserPath.
      */
-    public JTextField getJTextFieldDVDAuthor() {
-        if (jTextFieldDVDAuthor == null) {
-        	jTextFieldDVDAuthor = new JTextField();
-            jTextFieldDVDAuthor.addKeyListener(control);
-            jTextFieldDVDAuthor.setName("mplexPath");
-            jTextFieldDVDAuthor.setPreferredSize(new Dimension(340, 19));
+    public JTextField getJTextFieldMplex() {
+        if (jTextFieldMplex == null) {
+        	jTextFieldMplex = new JTextField();
+            jTextFieldMplex.addKeyListener(control);
+            jTextFieldMplex.setName("mplexPath");
+            jTextFieldMplex.setPreferredSize(new Dimension(340, 19));
 		}
-        return jTextFieldDVDAuthor;
+        return jTextFieldMplex;
     }
     
     

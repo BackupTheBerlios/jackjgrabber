@@ -52,7 +52,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
         this.getTab().getJTextFieldShutdonwToolPath().setText(this.getSettings().getShutdownToolPath());
         this.getTab().getJTextFieldBrowserPath().setText(this.getSettings().getBrowserPath());
         this.getTab().getJTextFieldWorkDirectory().setText(this.getSettings().getWorkDirectory());
-        this.getTab().getJTextFieldDVDAuthor().setText(this.getSettings().getMplexPath());
+        this.getTab().getJTextFieldMplex().setText(this.getSettings().getMplexPath());
     }
 		
 	public void actionPerformed(ActionEvent e) {
@@ -85,8 +85,8 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		  			this.openWorkDirFileChooser();
 		  			break;
 		  		}
-		  		if (action.equals("dvdAuthor")) {
-		  			this.openDVDAuthorFileChooser();
+		  		if (action.equals("mplex")) {
+		  			this.openMplexFileChooser();
 		  			break;
 		  		}
 		  		break;
@@ -266,18 +266,18 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		}
 	}
 	
-	private void openDVDAuthorFileChooser() {
+	private void openMplexFileChooser() {
 		JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
 		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseMplex"));
 		int returnVal = fc.showSaveDialog( null ) ;
 
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 			String path = fc.getSelectedFile().toString();
-			this.getTab().getJTextFieldDVDAuthor().setText(path);
+			this.getTab().getJTextFieldMplex().setText(path);
 			this.getSettings().setMplexPath(path);
 		}
 	}
