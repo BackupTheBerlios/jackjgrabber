@@ -58,9 +58,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 
 		if (columnIndex == 0) {
 			return epg.getStartdate().getTime();
-		} if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return epg.getEndDate().getTime();
-		} if (columnIndex == 2) {
+		} else if (columnIndex == 2) {
 			return epg.getDuration();
 		} else {
 			return epg.getTitle();
@@ -73,9 +73,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
 			return ControlMain.getProperty("start");
-		} if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return ControlMain.getProperty("end");
-		} if (columnIndex == 2) {
+		} else if (columnIndex == 2) {
 			return ControlMain.getProperty("duration");
 		} else {
 			return ControlMain.getProperty("title");

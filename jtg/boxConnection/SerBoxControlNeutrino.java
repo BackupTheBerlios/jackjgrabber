@@ -258,11 +258,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public ArrayList getEpg(BOSender sender) throws IOException {
 		ArrayList epgList=new ArrayList();
 		BufferedReader input = getConnection("/control/epg?"+sender.getChanId());
-		String line, eventId, startTime, duration, title, endTime, valueStart, valueDuration;;
+		String line, eventId, duration, title, valueStart, valueDuration;
 		GregorianCalendar startDate, endDate;
                 
 		while((line=input.readLine())!=null) {
-			StringBuffer buffer = new StringBuffer(line);
 			StringTokenizer st = new StringTokenizer(line);
 			
 			eventId = st.nextToken();
@@ -275,13 +274,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    	title += " ";
 			}
 
-			startTime = SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
 			startDate = SerFormatter.formatUnixDate(valueStart);
-			duration = SerFormatter.formatUnixTimeToDuration(valueDuration);
-			endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
-			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);                        
-			
-			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title.trim(), valueStart, valueDuration));                        
+			duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
+			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));
+			epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title.trim(), valueStart, valueDuration));                        
 		}
 		return epgList;
 	} 
@@ -330,7 +326,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader inputNhttpd = getConnection("/control/timer");
 		String line;
 		while ((line = inputNhttpd.readLine()) != null) {
-			String valueStart, valueStop, valueAnno, valueSenderName = new String();
+			String valueStart, valueStop, valueSenderName = new String();
 			BOTimer botimer = new BOTimer();
 						
 	        StringTokenizer st = new StringTokenizer(line);

@@ -24,18 +24,16 @@ import control.ControlMain;
 
 public class BOEpg {
 	BOSender sender;
-	String eventId, startTime, endTime, duration, title, unformattedStart, unformattedDuration;
+	String eventId, duration, title, unformattedStart, unformattedDuration;
 	GregorianCalendar startDate, endDate;
 	BOEpgDetails epgGetail;
 	
-	public BOEpg(BOSender sender, String eventId, String startTime, GregorianCalendar startDate, 
-			String endTime, GregorianCalendar endDate, String duration, String title, String unformStart, String unformDuration) {		
+	public BOEpg(BOSender sender, String eventId, GregorianCalendar startDate, 
+			GregorianCalendar endDate, String duration, String title, String unformStart, String unformDuration) {		
 		this.setSender(sender);
 		this.setDuration(duration);
-		this.setEndTime(endTime);
 		this.setEndDate(endDate);
 		this.setEventId(eventId);
-		this.setStartTime(startTime);
 		this.setTitle(title);
 		this.setStartDate(startDate);
 		this.setUnformattedStart(unformStart);
@@ -78,18 +76,6 @@ public class BOEpg {
 	public void setEventId(String eventId) {
 		this.eventId = eventId;
 	}
-	/**
-	 * @return Returns the startTime.
-	 */
-	public String getStartTime() {
-		return startTime;
-	}
-	/**
-	 * @param startTime The startTime to set.
-	 */
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
         /**
 	 * @return Returns the startDate.
 	 */
@@ -131,18 +117,6 @@ public class BOEpg {
 		BOEpgDetails detail = ControlMain.getBoxAccess().getEpgDetail(this);
 		this.setEpgDetail(detail);
 		return detail;
-	}
-	/**
-	 * @return Returns the endTime.
-	 */
-	public String getEndTime() {
-		return endTime;
-	}
-	/**
-	 * @param endTime The endTime to set.
-	 */
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
 	}
 	/**
 	 * @return Returns the endDate.

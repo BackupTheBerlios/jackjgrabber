@@ -13,7 +13,6 @@ package presentation.program;
  *  
  */
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
@@ -101,7 +100,7 @@ public class GuiTabProgramm extends GuiTab {
 	private SpinnerDateModel dateModelSpinnerStopTime;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
-	private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");;
+	private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
 	
 	public GuiTabProgramm(ControlProgramTab control) {
@@ -291,13 +290,7 @@ public class GuiTabProgramm extends GuiTab {
 
 					JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 					l.setText(timeFormat.format((Date) value));
-					if (column==0){
-					    l.setForeground(new Color(47,103,165));
-					    l.setHorizontalAlignment(SwingConstants.CENTER);
-					} else if (column==1) {
-					    l.setForeground(new Color(212,69,65));
-					    l.setHorizontalAlignment(SwingConstants.CENTER);
-					}
+				    l.setHorizontalAlignment(SwingConstants.CENTER);
 					return l;
 				}
 			});
