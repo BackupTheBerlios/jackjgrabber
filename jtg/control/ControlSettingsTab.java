@@ -25,6 +25,7 @@ import java.awt.event.ItemListener;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 
 import model.BOBox;
 import model.BOSettings;
@@ -52,6 +53,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener,  I
 		this.getMainView().getTabSettings().getTfServerPort().setText(settings.getStreamingServerPort());
 		this.getMainView().getTabSettings().getJTextFieldRecordSavePath().setText(settings.getSavePath());
 		this.getMainView().getTabSettings().getCbStartStreamingServer().setSelected(settings.isStartStreamingServer());
+		this.getMainView().getTabSettings().getJTextFieldPlaybackString().setText(settings.getPlaybackString());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -65,6 +67,14 @@ public class ControlSettingsTab extends ControlTab implements ActionListener,  I
 		if (action == "recordPath") {
 			this.openFileChooser();
 		}
+		if (action == "playbackString") {
+			this.actionSetPlaybackString(e);
+		}
+	}
+	
+	private void actionSetPlaybackString(ActionEvent event) {
+		JTextField tf = (JTextField)event.getSource();
+		this.getSettings().setPlaybackString(tf.getText());
 	}
 
 	//Change-Events der Combos und der Checkbox
@@ -80,6 +90,9 @@ public class ControlSettingsTab extends ControlTab implements ActionListener,  I
 			}
 			if (comboBox.getName().equals("locale")) {
 				settings.setLocale((String)comboBox.getSelectedItem());
+			}
+			if (comboBox.getName().equals("playbackDevice")) {
+				settings.setPlaybackString((String)comboBox.getSelectedItem());
 			}
 		}
 	}
