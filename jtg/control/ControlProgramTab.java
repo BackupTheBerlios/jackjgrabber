@@ -33,6 +33,9 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.apache.log4j.Logger;
+
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
 import boxConnection.SerStreamingServer;
@@ -250,24 +253,32 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * TV-Wiedergabe des laufenden Senders
 	 */
 	private void actionPlayback() {
+	    String execString = this.getPlaybackRequestString();
 		try {
-			this.zapToSelectedSender();
-			String vPid = "0x"+(String)this.getPids().getVPid()[0];
-			String[] aPids = (String[])this.getPids().getAPids().get(0);
-			String aPid = "0x"+aPids[0];
-			String ip = ControlMain.getBoxIpOfActiveBox();
-			String execString =  ControlMain.getSettings().getPlaybackString();
-			
-			execString = SerFormatter.replace(execString, "$ip",  ip);
-			execString = SerFormatter.replace(execString, "$vPid", vPid);
-			execString = SerFormatter.replace(execString, "$aPid", aPid);
-			
 			Process run = Runtime.getRuntime().exec(execString);
 			new SerInputStreamReadThread(run.getInputStream()).start();
             new SerErrorStreamReadThread(run.getErrorStream()).start();
 		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		    Logger.getLogger("ControlProgrammTab").error("No valid Playback-String"+execString);
 		}
+	}
+	private String getPlaybackRequestString() {
+	    try {
+            this.zapToSelectedSender();
+            String vPid = "0x"+(String)this.getPids().getVPid()[0];
+            String[] aPids = (String[])this.getPids().getAPids().get(0);
+            String aPid = "0x"+aPids[0];
+            String ip = ControlMain.getBoxIpOfActiveBox();
+            String execString =  ControlMain.getSettings().getPlaybackString();
+            
+            execString = SerFormatter.replace(execString, "$ip",  ip);
+            execString = SerFormatter.replace(execString, "$vPid", vPid);
+            execString = SerFormatter.replace(execString, "$aPid", aPid);
+            return execString;
+        } catch (IOException e) {
+            SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+        }
+        return new String();
 	}
 	
 	/**
