@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
@@ -128,71 +129,120 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	}
 	
 	private void actionDeleteAll() {
-		try {
-			this.deleteAllTimer(this.getTimerList().getRecordTimerList());
-			this.getTimerList().setRecordTimerList(new ArrayList());
-			this.deleteAllTimer(this.getTimerList().getSystemTimerList());
-			this.getTimerList().setSystemTimerList(new ArrayList());
-			this.refreshTables();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-		}
+        int result = JOptionPane.showConfirmDialog(
+                this.getView(),
+                ControlMain.getProperty("msg_deleteAll"),
+                "",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (result==0) {
+            try {
+                this.deleteAllTimer(this.getTimerList().getRecordTimerList());
+                this.getTimerList().setRecordTimerList(new ArrayList());
+                this.deleteAllTimer(this.getTimerList().getSystemTimerList());
+                this.getTimerList().setSystemTimerList(new ArrayList());
+                this.refreshTables();
+            } catch (IOException e) {
+                SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+            }    
+        }
 	}
 	
 	private void actionDeleteAllRecordTimer() {
-		try {
-			this.deleteAllTimer(this.getTimerList().getRecordTimerList());
-			this.getView().getRecordTimerTableModel().fireTableDataChanged();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-		}
+        if (this.getTimerList().getRecordTimerList().size()>0) {
+            int result = JOptionPane.showConfirmDialog(
+                    this.getView(),
+                    ControlMain.getProperty("msg_deleteRecord"),
+                    "",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (result==0) {
+                try {
+                    this.deleteAllTimer(this.getTimerList().getRecordTimerList());
+                    this.getView().getRecordTimerTableModel().fireTableDataChanged();
+                } catch (IOException e) {
+                    SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+                }
+            }    
+        }
 	}
 	
 	private void actionDeleteAllSystemTimer() {
-		try {
-			this.deleteAllTimer(this.getTimerList().getSystemTimerList());
-			this.getTimerList().setSystemTimerList(new ArrayList());
-			this.getView().getSystemTimerTableModel().fireTableDataChanged();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-		}
+        if (this.getTimerList().getSystemTimerList().size()>0) {
+            int result = JOptionPane.showConfirmDialog(
+                    this.getView(),
+                    ControlMain.getProperty("msg_deleteSystem"),
+                    "",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (result==0) {
+                try {
+                    this.deleteAllTimer(this.getTimerList().getSystemTimerList());
+                    this.getTimerList().setSystemTimerList(new ArrayList());
+                    this.getView().getSystemTimerTableModel().fireTableDataChanged();
+                } catch (IOException e) {
+                    SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+                }
+            }    
+        }   
 	}
 	
 	private void actionDeleteSelectedRecordTimer() {
-        ArrayList timerList = this.getTimerList().getRecordTimerList();
-        int modelIndex;
-        
-		int[] rows = this.getView().getJTableRecordTimer().getSelectedRows();
-        BOTimer[] timerArray = new BOTimer[rows.length];
-        for (int i=0; i<rows.length; i++) {
-            modelIndex = this.getView().recordTimerSorter.modelIndex(rows[i]);
-            timerArray[i] = (BOTimer)timerList.get(modelIndex);
-        }
+        int[] rows = this.getView().getJTableRecordTimer().getSelectedRows();
+        if (rows.length>0) {
+            int result = JOptionPane.showConfirmDialog(
+                    this.getView(),
+                    ControlMain.getProperty("msg_deleteSelRecord"),
+                    "",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (result==0) {
+                ArrayList timerList = this.getTimerList().getRecordTimerList();
+                int modelIndex;
+                
+                
+                BOTimer[] timerArray = new BOTimer[rows.length];
+                for (int i=0; i<rows.length; i++) {
+                    modelIndex = this.getView().recordTimerSorter.modelIndex(rows[i]);
+                    timerArray[i] = (BOTimer)timerList.get(modelIndex);
+                }
 
-		for (int i=timerArray.length-1; 0<=i; i--) {
-			try {
-				this.deleteTimer(timerArray[i]);
-			} catch (IOException e) {
-				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-			}
-		}
-        this.refreshRecordTimerTable();
+                for (int i=timerArray.length-1; 0<=i; i--) {
+                    try {
+                        this.deleteTimer(timerArray[i]);
+                    } catch (IOException e) {
+                        SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+                    }
+                }
+                this.refreshRecordTimerTable();    
+            }
+        }
 	}
 	
 	private void actionDeleteSelectedSystemTimer() {
 		int[] rows = this.getView().getJTableSystemTimer().getSelectedRows();
-		ArrayList timerList = this.getTimerList().getSystemTimerList();
-		for (int i=rows.length-1; 0<=i; i--) {
-		    int modelIndex = this.getView().systemTimerSorter.modelIndex(rows[i]);
-			BOTimer timer = (BOTimer)timerList.get(modelIndex);
-			try {
-				this.deleteTimer(timer);
-				timerList.remove(modelIndex);
-			} catch (IOException e) {
-				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-			}
-		}
-        this.getView().getSystemTimerTableModel().fireTableDataChanged();
+        if (rows.length>0) {
+            int result = JOptionPane.showConfirmDialog(
+                    this.getView(),
+                    ControlMain.getProperty("msg_deleteSelSystem"),
+                    "",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (result==0) {
+                ArrayList timerList = this.getTimerList().getSystemTimerList();
+                for (int i=rows.length-1; 0<=i; i--) {
+                    int modelIndex = this.getView().systemTimerSorter.modelIndex(rows[i]);
+                    BOTimer timer = (BOTimer)timerList.get(modelIndex);
+                    try {
+                        this.deleteTimer(timer);
+                        timerList.remove(modelIndex);
+                    } catch (IOException e) {
+                        SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+                    }
+                }
+                this.getView().getSystemTimerTableModel().fireTableDataChanged();
+            }
+        }
 	}
 	
 	private void actionSend() {
@@ -203,7 +253,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
             } 
             this.reReadTimerList();
 		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
 		}
 	}
 	
