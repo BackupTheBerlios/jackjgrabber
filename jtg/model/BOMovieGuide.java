@@ -5,11 +5,7 @@
  * Window - Preferences - Java - Code Style - Code Templates
  */
 package model;
-
 import java.util.ArrayList;
-
-
-
 
 /**
  * @author ralix
@@ -32,6 +28,11 @@ public class BOMovieGuide {
      * Holds value of property start.
      */
     private ArrayList start;
+    
+    /**
+     * Holds value of property start.
+     */
+    private ArrayList ende;
     
     /**
      * Holds value of property titel.
@@ -87,8 +88,7 @@ public class BOMovieGuide {
      * Holds value of property inhalt.
      */
     private String inhalt;
-    //private Hashtable ht_value = new Hashtable(); 
-    //private ArrayList genreList = new ArrayList();
+  
     private ArrayList sucheList = new ArrayList();
     
     /** Creates a new instance of BOMovieGuide */
@@ -96,16 +96,18 @@ public class BOMovieGuide {
     public BOMovieGuide() {  
     	
     }
-    public BOMovieGuide(String sender, String datum , String start, String titel, String episode,
+    public BOMovieGuide(String sender, String datum , String start, String ende, String titel, String episode,
             String genre, String dauer, String land, String jahr, String regie,
             String bild, String ton, String darsteller, String inhalt){
     		this.sender = new ArrayList();
     		this.datum  = new ArrayList();
-    		this.start  = new ArrayList(); 
+    		this.start  = new ArrayList();
+    		this.ende  = new ArrayList(); 
     		this.dauer  = new ArrayList();
     		this.setSender(sender);
 			this.setDatum(datum);
 			this.setStart(start);
+			this.setEnde(ende);
 			this.titel      = titel;        
 			this.episode    = episode;
 			this.genre      = genre;
@@ -116,15 +118,16 @@ public class BOMovieGuide {
 			this.bild       = bild;
 			this.ton        = ton;
 			this.darsteller = darsteller;
-			this.inhalt     = inhalt;                    
+			this.inhalt     = inhalt;        			
     }
     
-    public BOMovieGuide(ArrayList sender, ArrayList datum , ArrayList start, String titel, String episode,
+    public BOMovieGuide(ArrayList sender, ArrayList datum , ArrayList start, ArrayList ende,String titel, String episode,
                         String genre, ArrayList dauer, String land, String jahr, String regie,
-                        String bild, String ton, String darsteller, String inhalt){
-        this.sender     = sender;
+                        String bild, String ton, String darsteller, String inhalt){        
+    	this.sender     = sender;
         this.datum      = datum;
         this.start      = start;
+        this.ende		= ende;
         this.titel      = titel;        
         this.episode    = episode;
         this.genre      = genre;
@@ -135,7 +138,7 @@ public class BOMovieGuide {
         this.bild       = bild;
         this.ton        = ton;
         this.darsteller = darsteller;
-        this.inhalt     = inhalt;                    
+        this.inhalt     = inhalt;             
     }
     /**
      * Getter for property sender.
@@ -184,6 +187,19 @@ public class BOMovieGuide {
     public void setStart(String start) {
         this.start.add(start);
     }
+    
+    public ArrayList getEnde() {
+        return this.ende;
+    }
+    
+    /**
+     * Setter for property start.
+     * @param start New value of property start.
+     */
+    public void setEnde(String ende) {
+        this.ende.add(ende);
+    }
+    
     
     /**
      * Getter for property titel.
@@ -362,10 +378,12 @@ public class BOMovieGuide {
     }
    
     public ArrayList getSucheList(){    	
-    	setSucheList();
+    	if(sucheList.isEmpty()){
+    		setSucheList();
+    	}
     	return sucheList;
     }
-  
+ 
     public void setSucheList(){    	
     	sucheList.add("Titel");
     	sucheList.add("Darsteller");    	
@@ -376,21 +394,5 @@ public class BOMovieGuide {
     	sucheList.add("Produktionsjahr");
     	sucheList.add("Regie");
     }
-    
-    public void toOut(){
-    	System.out.println("this.sender     = "+sender);
-    	System.out.println("this.datum      = "+datum);
-    	System.out.println("this.start      = "+start);
-		System.out.println("this.titel      = "+titel);        
-		System.out.println("this.episode    = "+episode);
-		System.out.println("this.genre      = "+genre);
-		System.out.println("this.dauer      = "+dauer);
-		System.out.println("this.land       = "+land);
-		System.out.println("this.jahr       = "+jahr);
-		System.out.println("this.regie      = "+regie);
-		System.out.println("this.bild       = "+bild);
-		System.out.println("this.ton        = "+ton);
-		System.out.println("this.darsteller = "+darsteller);
-		System.out.println("this.inhalt     = "+inhalt);              
-    }
+ 
 }
