@@ -34,7 +34,7 @@ public class GuiMovieGuideTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		Object value = null;
 		try{
-		Integer selectRow = this.getControl().getSelectRowFilmTable();				
+		int selectRow = this.getControl().getSelectRowFilmTable().intValue();				
 		if (columnIndex == 0) {		
 			value = SerFormatter.getFormatGreCal((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().get(rowIndex),DATE_SHORT);
 		}else if (columnIndex == 1) {						

@@ -36,7 +36,7 @@ public class GuiMovieGuideFilmTableModel extends AbstractTableModel
 		Object value = null;
 		try{
 		if (columnIndex == 0) {					
-				value= ((BOMovieGuide)this.getControl().getTitelMap().get(new Integer(rowIndex))).getTitel();
+				value= ((BOMovieGuide)this.getControl().getTitelMap().get(rowIndex)).getTitel();
 		}
 		}catch (Exception ex){}
 		return value;	
