@@ -101,8 +101,7 @@ public class SerFormatter {
 		return out(stunden) + ":" + out(minuten);
 	}
 
-	public static String replace(String sourcestring, String stringToReplace,
-			String newString) {
+	public static String replace(String sourcestring, String stringToReplace,String newString) {
 		int i = -1;
 		while ((i = sourcestring.indexOf(stringToReplace, i + 1)) != -1)
 			sourcestring = sourcestring.substring(0, i) + newString
@@ -111,8 +110,7 @@ public class SerFormatter {
 	}
 
 	public static Date setCorrectYear(Date datum) {
-		GregorianCalendar cal = new GregorianCalendar(TimeZone
-				.getTimeZone("ECT"));
+		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
 		int i = cal.get(GregorianCalendar.YEAR);
 		cal.setTimeInMillis(datum.getTime());
 		cal.set(GregorianCalendar.YEAR, i);
@@ -234,8 +232,9 @@ public class SerFormatter {
 		return cal;
     }
     public static GregorianCalendar getGC(GregorianCalendar gc, int value){
-    	gc.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
-    	return gc;
+        GregorianCalendar newCal = (GregorianCalendar)gc.clone();
+        newCal.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
+    	return newCal;
     }
     public static String getGC2String(GregorianCalendar gc){
     	return ( out(gc.get(GregorianCalendar.HOUR_OF_DAY))+":"+out(gc.get(GregorianCalendar.MINUTE)));
