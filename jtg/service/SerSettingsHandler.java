@@ -17,6 +17,8 @@ package service;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
+import java.awt.Dimension;
+import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
@@ -392,8 +394,6 @@ public class SerSettingsHandler {
 			SerXMLHandling.setElementInElement(root, "mgstoreoriginal", "false");
 			settings.getMovieGuideSettings().setMgStoreOriginal(false);
 		}
-		
-		
 	}	
 	
 	private static void getSettingsLayout(Element root, BOSettings settings) {

@@ -30,6 +30,7 @@ import java.util.Properties;
 
 import model.BOBox;
 import model.BOSettings;
+import model.BOSettingsLayout;
 import model.BOSettingsMain;
 import model.BOSettingsMovieGuide;
 import model.BOSettingsPath;
