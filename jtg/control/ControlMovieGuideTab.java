@@ -85,7 +85,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	
 	Element root;
 
-	public static File movieGuideFile = new File("movieguide.xml");
+	public static File movieGuideFile = new File("movieguide_"+SerFormatter.getAktuellDateString(0,"MM_yy")+".xml");
+	public static File movieGuideFileNext = new File("movieguide_"+SerFormatter.getAktuellDateString(1,"MM_yy")+".xml");
 	ArrayList aboList = getSettings().getMgSelectedChannels();
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
@@ -105,8 +106,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	public void run() {
-			try {
-          this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
+		try {
+          this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());          
           if(getSettings().getMgLoadType()==1){
           	if(SerMovieGuide2Xml.checkNewMovieGuide()){
           		SerAlertDialog.alert("Es ist ein neuer MovieGuide für: "+SerFormatter.getAktuellDateString(1,"MMMM")+" verfügbar!",this.getMainView()); 					
@@ -149,14 +150,25 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     }
 	
 	
-	public void actionPerformed(ActionEvent e) {	
-		String action = e.getActionCommand();
-		if (action == "download") {
+	private void downloadMovieGuide(){
+		if(getMovieGuideFile().exists()){
+			if(SerMovieGuide2Xml.checkNewMovieGuide()){
+          		SerAlertDialog.alert("Es ist ein neuer MovieGuide für "+SerFormatter.getAktuellDateString(1,"MMMM")+" verfügbar!",this.getMainView()); 					
+          	}else{
+          		SerAlertDialog.alert("Es existiert bereits ein MovieGuide für "+SerFormatter.getAktuellDateString(0,"MMMM")+".\nDer MovieGuide für "+SerFormatter.getAktuellDateString(1,"MMMM")+" ist noch nicht verfügbar.",this.getMainView());
+          	}
+		}else{				
 			try{
 				new SerMovieGuide2Xml(null, this.getMainView()).start();
 			}catch (Exception ex){
 				Logger.getLogger("ControlMovieGuideTab").error("MovieGuide konnte nicht runtergeladen werden");
-			}			
+			}		
+		}
+	}
+	public void actionPerformed(ActionEvent e) {	
+		String action = e.getActionCommand();
+		if (action == "download") {
+			downloadMovieGuide();
 		}
 		if (action == "neuEinlesen") {
 			//
