@@ -82,7 +82,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private ControlNeutrinoTimerTab control;
 	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
 	public GuiNeutrinoSystemTimerTableModel systemTimerTableModel;
-	private GuiNeutrinoTimerSenderComboModel senderComboModel = null;
+	private GuiTimerSenderComboModel senderComboModel = null;
 
 
 	public GuiNeutrinoTimerPanel(ControlNeutrinoTimerTab control) {
@@ -396,14 +396,14 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	/**
 	 * @return Returns the senderComboModel.
 	 */
-	public GuiNeutrinoTimerSenderComboModel getSenderComboModel() {
+	public GuiTimerSenderComboModel getSenderComboModel() {
 		return senderComboModel;
 	}
 	/**
 	 * @param senderComboModel The senderComboModel to set.
 	 */
 	public void setSenderComboModel(
-			GuiNeutrinoTimerSenderComboModel senderComboModel) {
+			GuiTimerSenderComboModel senderComboModel) {
 		this.senderComboModel = senderComboModel;
 	}
 	/**
@@ -417,7 +417,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxEventType() {
 		if (comboBoxEventType == null) {
-			comboBoxEventType = new JComboBox(new GuiNeutrinoTimerEventTypeComboModel(control));
+			comboBoxEventType = new JComboBox(new GuiTimerEventTypeComboModel(control));
 		}
 		return comboBoxEventType;
 	}
@@ -426,7 +426,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxRepeatRecordTimer() {
 		if (comboBoxRepeatRecordTimer == null) {
-			comboBoxRepeatRecordTimer = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
+			comboBoxRepeatRecordTimer = new JComboBox(new GuiTimerRepeatComboModel(control));
 		}
 		return comboBoxRepeatRecordTimer;
 	}
@@ -435,7 +435,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxRepeatSystemTimer() {
 		if (comboBoxRepeatSystemTimer == null) {
-			comboBoxRepeatSystemTimer = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
+			comboBoxRepeatSystemTimer = new JComboBox(new GuiTimerRepeatComboModel(control));
 		}
 		return comboBoxRepeatSystemTimer;
 	}
@@ -444,7 +444,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxSender() {
 		if (comboBoxSender == null) {
-			comboBoxSender = new JComboBox(new GuiNeutrinoTimerSenderComboModel(control));
+			comboBoxSender = new JComboBox(new GuiTimerSenderComboModel(control));
 		}
 		return comboBoxSender;
 	}

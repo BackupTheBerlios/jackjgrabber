@@ -7,12 +7,9 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import javax.swing.JTable;
 
-import model.BOEpg;
 import model.BOSender;
 import model.BOTimer;
 
@@ -25,7 +22,7 @@ import service.SerFormatter;
 /**
  * @author Alexander Geist, Treito
  */
-public class ControlEnigmaTimerTab extends ControlTab implements ActionListener, MouseListener {
+public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
@@ -239,5 +236,29 @@ public class ControlEnigmaTimerTab extends ControlTab implements ActionListener,
 	 */
 	public void setSenderList(ArrayList senderList) {
 		this.senderList = senderList;
+	}
+	/**
+	 * @return Returns the repeatOptions.
+	 */
+	public String[] getRepeatOptions() {
+		return repeatOptions;
+	}
+	/**
+	 * @param repeatOptions The repeatOptions to set.
+	 */
+	public void setRepeatOptions(String[] repeatOptions) {
+		this.repeatOptions = repeatOptions;
+	}
+	/**
+	 * @return Returns the timerType.
+	 */
+	public String[] getTimerType() {
+		return timerType;
+	}
+	/**
+	 * @param timerType The timerType to set.
+	 */
+	public void setTimerType(String[] timerType) {
+		this.timerType = timerType;
 	}
 }

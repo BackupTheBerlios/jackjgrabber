@@ -39,7 +39,7 @@ import service.SerAlertDialog;
 import service.SerFormatter;
 
 
-public class ControlNeutrinoTimerTab extends ControlTab implements ActionListener, MouseListener {
+public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
@@ -431,5 +431,29 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	 */
 	public void setSenderList(ArrayList senderList) {
 		this.senderList = senderList;
+	}
+	/**
+	 * @return Returns the repeatOptions.
+	 */
+	public String[] getRepeatOptions() {
+		return repeatOptions;
+	}
+	/**
+	 * @param repeatOptions The repeatOptions to set.
+	 */
+	public void setRepeatOptions(String[] repeatOptions) {
+		this.repeatOptions = repeatOptions;
+	}
+	/**
+	 * @return Returns the timerType.
+	 */
+	public String[] getTimerType() {
+		return timerType;
+	}
+	/**
+	 * @param timerType The timerType to set.
+	 */
+	public void setTimerType(String[] timerType) {
+		this.timerType = timerType;
 	}
 }

@@ -54,7 +54,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	private JTable jTableRecordTimer = null;
 	private JTable jTableSystemTimer = null;
 	private JScrollPane jScrollPaneRecordTimerTable = null;
-	private GuiEnigmaTimerSenderComboModel senderComboModel = null;
+	private GuiTimerSenderComboModel senderComboModel = null;
 	
 
 	public GuiEnigmaTimerPanel(ControlEnigmaTimerTab control) {
@@ -326,14 +326,14 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	/**
 	 * @return Returns the senderComboModel.
 	 */
-	public GuiEnigmaTimerSenderComboModel getSenderComboModel() {
+	public GuiTimerSenderComboModel getSenderComboModel() {
 		return senderComboModel;
 	}
 	/**
 	 * @param senderComboModel The senderComboModel to set.
 	 */
 	public void setSenderComboModel(
-			GuiEnigmaTimerSenderComboModel senderComboModel) {
+			GuiTimerSenderComboModel senderComboModel) {
 		this.senderComboModel = senderComboModel;
 	}
 	/**
@@ -341,7 +341,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxEventType() {
 		if (comboBoxEventType == null) {
-			comboBoxEventType = new JComboBox(new GuiEnigmaTimerEventTypeComboModel(control));
+			comboBoxEventType = new JComboBox(new GuiTimerEventTypeComboModel(control));
 		}
 		return comboBoxEventType;
 	}
@@ -350,7 +350,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxRepeatProgramTimer() {
 		if (comboBoxRepeatProgramTimer == null) {
-			comboBoxRepeatProgramTimer = new JComboBox(new GuiEnigmaTimerRepeatComboModel(control));
+			comboBoxRepeatProgramTimer = new JComboBox(new GuiTimerRepeatComboModel(control));
 		}
 		return comboBoxRepeatProgramTimer;
 	}
@@ -359,7 +359,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	 */
 	public JComboBox getComboBoxSender() {
 		if (comboBoxSender == null) {
-			comboBoxSender = new JComboBox(new GuiEnigmaTimerSenderComboModel(control));
+			comboBoxSender = new JComboBox(new GuiTimerSenderComboModel(control));
 		}
 		return comboBoxSender;
 	}
