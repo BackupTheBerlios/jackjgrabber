@@ -136,7 +136,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				if (me.getClickCount()==2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
 					if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
-						Logger.getLogger("ControlProgramTab").info("Timer ï¿½bertragen "+this.getSelectedEpg().getInfo());
+						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+this.getSelectedEpg().getInfo());
 					} else {
 						Logger.getLogger("ControlProgramTab").error(this.getSelectedEpg().getInfo());
 					}
@@ -166,7 +166,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		if (comboBox.getName().equals("ipList")) {
 			BOBox newSelectedBox = (BOBox)ControlMain.getSettings().getBoxList().get(comboBox.getSelectedIndex());
 			if (this.getSelectedBox().isSelected() != newSelectedBox.isSelected()) {
-				this.getSelectedBox().setSelected(false); //alte Box zurï¿½cksetzen!	
+				this.getSelectedBox().setSelected(false); //alte Box zurücksetzen!	
 				this.setSelectedBox(newSelectedBox);
 				newSelectedBox.setSelected(true);
 				ControlMain.detectImage();
@@ -287,8 +287,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return selectedEpg;
 	}
 	/**
-	 * Setzen des aktuellen Epg, refreshen der dazugehï¿½rigen Epg-Details.
-	 * Durch die Sortierung geht die Objektidentitï¿½t verloren
+	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details.
+	 * Durch die Sortierung geht die Objektidentität verloren
 	 * Passendes EPG durch Event-ID finden
 	 */
 	public void setSelectedEpg(String eventId) {
@@ -307,20 +307,20 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	private void actionAddToTimer() {
 		ArrayList list = this.getEpgTableModel().getEpgList();
-		int[] rows = this.getMainView().getTabProgramm().getJTableEPG().getSelectedRows(); //Selektierter EPGï¿½s
+		int[] rows = this.getMainView().getTabProgramm().getJTableEPG().getSelectedRows(); //Selektierter EPG´s
 		
-//		Schleife ï¿½ber die selektierten epg-Zeilen
+//		Schleife über die selektierten epg-Zeilen
 		for (int i=0; i<rows.length; i++) { 	
 			String eventId = (String)this.getMainView().getTabProgramm().sorter.getValueAt(rows[i], 0);
 			
-//			Schleife ï¿½ber die EPG-Liste um das passende EPG zur epg-event-id zu ermitteln
+//			Schleife über die EPG-Liste um das passende EPG zur epg-event-id zu ermitteln
 			for (int i2 = 0; i2<list.size(); i2++) {
 				BOEpg epg = (BOEpg)list.get(i2);
 				if (epg.getEventId().equals(eventId)) {
 					BOTimer timer = this.buildTimer(epg);
 					try {
 						if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
-							Logger.getLogger("ControlProgramTab").info("Timer ï¿½bertragen "+epg.getInfo());
+							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+epg.getInfo());
 						} else {
 							Logger.getLogger("ControlProgramTab").error(epg.getInfo());
 						}
