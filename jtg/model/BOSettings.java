@@ -35,7 +35,6 @@ public class BOSettings {
 	public ArrayList playbackOptions;
 	public boolean alwaysUseStandardPlayback;
 	public boolean settingsChanged = false;
-	public boolean projectXSettingsChanged = false;
 	public boolean startFullscreen = false;
 	public boolean useSysTray = false;
 	public boolean showLogo = false;
@@ -181,19 +180,6 @@ public class BOSettings {
 			setSettingsChanged(true);
 			this.savePath = savePath;
 		}
-	}
-	/**
-	 * @return Returns the projectXSettingsChanged.
-	 */
-	public boolean isProjectXSettingsChanged() {
-		return projectXSettingsChanged;
-	}
-	/**
-	 * @param projectXSettingsChanged
-	 *            The projectXSettingsChanged to set.
-	 */
-	public void setProjectXSettingsChanged(boolean projectXSettingsChanged) {
-		this.projectXSettingsChanged = projectXSettingsChanged;
 	}
 	/**
 	 * @return Returns the playbackPlayer.

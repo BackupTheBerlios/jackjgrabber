@@ -27,8 +27,8 @@ import java.io.IOException;
 import javax.swing.JLabel;
 
 import presentation.GuiMainView;
-import projectX.ejalbert.BrowserLauncher;
 import service.SerAlertDialog;
+import service.BrowserLauncher;
 
 
 public class ControlAboutTab extends ControlTab implements MouseListener {
