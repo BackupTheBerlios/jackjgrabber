@@ -26,6 +26,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
@@ -48,6 +49,7 @@ import org.apache.log4j.Logger;
 
 import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
+import presentation.GuiNeutrinoTimerPanel;
 import presentation.GuiPidsQuestionDialog;
 import presentation.GuiSenderTableModel;
 import presentation.GuiTabProgramm;
@@ -354,17 +356,19 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public BOEpg getRunnigEpg(ArrayList epgList) {
 		if (epgList != null) {
-			Date now = new Date();
-			long nowTime = now.getTime();
+			GregorianCalendar now = new GregorianCalendar();
+			long nowTime = now.getTimeInMillis();
 			for (int i=0; i<epgList.size(); i++) {
 				BOEpg epgObj = (BOEpg)epgList.get(i);
 				long epgStart = Long.parseLong(epgObj.getUnformattedStart())*1000;
 				int epgIndex = i-1;
-				if (nowTime-epgStart<0 && epgIndex>-1) {
-					BOEpg neededEpg = (BOEpg)epgList.get(i-1);
-					if (neededEpg != null) {
-						return neededEpg;
-					}
+				if (now.get(GregorianCalendar.DATE)==epgObj.getStartdate().get(GregorianCalendar.DATE)) {
+				    if (nowTime-epgStart<0 && epgIndex>-1) {
+						BOEpg neededEpg = (BOEpg)epgList.get(i-1);
+						if (neededEpg != null) {
+							return neededEpg;
+						}
+					}   
 				}
 			}
 		}
@@ -491,16 +495,18 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.getEpgTableModel().fireTableDataChanged();
 		this.selectedEpg=null;
 		int indexRunningEpg = this.getEpgTableModel().getIndexRunningEpg();
+		
 		if (indexRunningEpg >= 0) {
+		    int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(indexRunningEpg);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(2, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(3, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(4, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
-			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(indexRunningEpg, indexRunningEpg);
-			BOEpg selEpg = (BOEpg)this.getSelectedSender().getEpg().get(indexRunningEpg);
+			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(modelIndex, modelIndex);
+			BOEpg selEpg = (BOEpg)this.getSelectedSender().getEpg().get(modelIndex);
 			this.setSelectedEpg(selEpg);
 		}
-		//this.reInitEpgDetail();
+		this.reInitEpgDetail();
 	}
 	/**
 	 * Aktualisieren des Tables Sender
