@@ -123,9 +123,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				if (me.getClickCount()==2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
 					if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
-						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+this.getSelectedEpg().getText());
+						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+this.getSelectedEpg().getInfo());
 					} else {
-						Logger.getLogger("ControlProgramTab").error(this.getSelectedEpg().getText());
+						Logger.getLogger("ControlProgramTab").error(this.getSelectedEpg().getInfo());
 					}
 				}
 			}
@@ -306,9 +306,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 					BOTimer timer = this.buildTimer(epg);
 					try {
 						if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
-							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+epg.getText());
+							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+epg.getInfo());
 						} else {
-							Logger.getLogger("ControlProgramTab").error(epg.getText());
+							Logger.getLogger("ControlProgramTab").error(epg.getInfo());
 						}
 					} catch (IOException e) {
 						SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
