@@ -65,9 +65,9 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	}
 	
 	private void checkStartVlc() {
-	    if (ControlMain.getSettings().isStartVlcAtStart()) {
+	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
 	        try {
-	            String execString=ControlMain.getSettings().getVlcPath()+" --intf=telnet --extraintf=http";
+	            String execString=ControlMain.getSettings().getMainSettings().getVlcPath()+" --intf=telnet --extraintf=http";
 	  	        Logger.getLogger("ControlSettingsTabMain").info(execString);
 	  	        Process run = Runtime.getRuntime().exec(execString);
 	  	        new SerInputStreamReadThread(true, run.getInputStream()).start();
@@ -99,14 +99,14 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	
 	public void setLookAndFeel() {
 		try {
-			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
+			String lookAndFeel = ControlMain.getSettings().getMainSettings().getLookAndFeel();
 			String current = UIManager.getLookAndFeel().getClass().getName();
 			boolean lfChanged = !current.equals(lookAndFeel);
 			boolean themeChanged = this.isThemeChanged();
 			
 			if (themeChanged) {
 				PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
-						+ ControlMain.getSettings().getThemeLayout())).newInstance();
+						+ ControlMain.getSettings().getMainSettings().getThemeLayout())).newInstance();
 				PlasticLookAndFeel.setMyCurrentTheme(inst);
 			}
 
@@ -128,7 +128,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	private boolean isThemeChanged() {
 	    String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
 		currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
-		return !currentTheme.equals(ControlMain.getSettings().getThemeLayout());
+		return !currentTheme.equals(ControlMain.getSettings().getMainSettings().getThemeLayout());
 	}
 	
 	private void logSystemInfo() {

@@ -41,14 +41,14 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	}	
 
 	public int getRowCount() {
-		if (ControlMain.getSettings().getBoxList().size() == 0) {
+		if (ControlMain.getSettingsMain().getBoxList().size() == 0) {
 			return 0;
 		}
-		return ControlMain.getSettings().getBoxList().size();
+		return ControlMain.getSettingsMain().getBoxList().size();
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(rowIndex);
+		BOBox box = (BOBox)ControlMain.getSettingsMain().getBoxList().get(rowIndex);
 		if (columnIndex == 0) {
 			return box.getDboxIp();
 		}
@@ -63,7 +63,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(rowIndex);
+		BOBox box = (BOBox)ControlMain.getSettingsMain().getBoxList().get(rowIndex);
 		if (columnIndex == 0) {
 			box.setDboxIp((String)aValue);
 		}
@@ -76,7 +76,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		//nur eine Checkbox darf selektiert sein!!
 		if (columnIndex == 3) {
 			if (((Boolean)aValue).booleanValue()) {
-				ArrayList boxList = ControlMain.getSettings().getBoxList();
+				ArrayList boxList = ControlMain.getSettingsMain().getBoxList();
 				for (int i=0; i<boxList.size(); i++) { 
 					BOBox boxx = (BOBox)boxList.get(i);
 					boxx.setStandard(Boolean.FALSE);
@@ -106,10 +106,10 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	 * Wenn die 1. Box angelegt wird, diese als Standard deklarieren
 	 */
 	public void addRow(BOBox box) {
-		if (ControlMain.getSettings().getBoxList().size()==0) {
+		if (ControlMain.getSettingsMain().getBoxList().size()==0) {
 			box.setStandard(Boolean.TRUE);
 		}
-		ControlMain.getSettings().addBox(box);
+		ControlMain.getSettingsMain().addBox(box);
 		fireTableDataChanged();
 		this.refreshIpComboBox();
 	}
@@ -122,7 +122,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	
 	public void removeRow(int rowNumber) {
 		try {
-			ControlMain.getSettings().removeBox(rowNumber);
+			ControlMain.getSettingsMain().removeBox(rowNumber);
 			fireTableDataChanged();
 			this.refreshIpComboBox();
 		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());};

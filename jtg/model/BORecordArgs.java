@@ -196,7 +196,7 @@ public class BORecordArgs {
      * Checken ob ein AC3-Stream den Streostrem ersetzen muss
      */
     public void checkSettings() {
-        if (ControlMain.getSettings().isAc3ReplaceStereo()) {
+        if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
             for (int i=this.getAPids().size()-1; 0<=i; i--) {
                 String[] aPid = (String[])this.getAPids().get(i);
                 String desc = aPid[1];

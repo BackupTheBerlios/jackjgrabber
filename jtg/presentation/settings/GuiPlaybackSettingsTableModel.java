@@ -40,14 +40,14 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	}	
 
 	public int getRowCount() {
-		if (ControlMain.getSettings().getPlaybackOptions().size() == 0) {
+		if (ControlMain.getSettingsPlayback().getPlaybackOptions().size() == 0) {
 			return 0;
 		}
-		return ControlMain.getSettings().getPlaybackOptions().size();
+		return ControlMain.getSettingsPlayback().getPlaybackOptions().size();
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-	    BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettings().getPlaybackOptions().get(rowIndex);
+	    BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettingsPlayback().getPlaybackOptions().get(rowIndex);
 		if (columnIndex == 0) {
 			return playbackOption.getName();
 		}
@@ -61,7 +61,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-	    BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettings().getPlaybackOptions().get(rowIndex);
+	    BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettingsPlayback().getPlaybackOptions().get(rowIndex);
 		if (columnIndex == 0) {
 		    playbackOption.setName((String)aValue);
 		}
@@ -74,7 +74,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		//nur eine Checkbox darf selektiert sein!!
 		if (columnIndex == 3) {
 			if (((Boolean)aValue).booleanValue()) {
-				ArrayList playbackList = ControlMain.getSettings().getPlaybackOptions();
+				ArrayList playbackList = ControlMain.getSettingsPlayback().getPlaybackOptions();
 				for (int i=0; i<playbackList.size(); i++) { 
 				    BOPlaybackOption boxx = (BOPlaybackOption)playbackList.get(i);
 					boxx.setStandard(Boolean.FALSE);
@@ -103,17 +103,17 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	 * und Logoutput auf aktiv setzen.
 	 */
 	public void addRow(BOPlaybackOption playbackOption) {
-		if (ControlMain.getSettings().getPlaybackOptions().size()==0) {
+		if (ControlMain.getSettingsPlayback().getPlaybackOptions().size()==0) {
 		    playbackOption.setStandard(Boolean.TRUE);
 		    playbackOption.setLogOutput(Boolean.TRUE);
 		}
-		ControlMain.getSettings().addPlaybackOption(playbackOption);
+		ControlMain.getSettingsPlayback().addPlaybackOption(playbackOption);
 		fireTableDataChanged();
 	}
 	
 	public void removeRow(int rowNumber) {
 		try {
-			ControlMain.getSettings().removePlaybackOption(rowNumber);
+			ControlMain.getSettingsPlayback().removePlaybackOption(rowNumber);
 			fireTableDataChanged();
 		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());};
 	}

@@ -18,21 +18,23 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package control;
 
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
-import javax.swing.*;
 import javax.swing.JCheckBox;
-import javax.swing.event.*;
+import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import model.BOSettings;
+import model.BOSettingsMovieGuide;
 import presentation.GuiMainView;
-import presentation.settings.*;
-
+import presentation.settings.GuiSettingsTabMovieGuide;
 import presentation.settings.GuiTabSettings;
 
 public class ControlSettingsTabMovieGuide extends ControlTabSettings implements ActionListener, ItemListener,ListSelectionListener {
@@ -155,8 +157,8 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
     public void setSettingsTab(GuiTabSettings tabSettings) {
         settingsTab = tabSettings;
     }
-    private BOSettings getSettings() {
-        return ControlMain.getSettings();
+    private BOSettingsMovieGuide getSettings() {
+        return ControlMain.getSettingsMovieGuide();
     }
     
     private GuiSettingsTabMovieGuide getTab() {

@@ -165,11 +165,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		}
 	}
 	
-	private void actionSetPlaybackString(ActionEvent event) {
-		JTextField tf = (JTextField)event.getSource();
-		this.getSettings().setPlaybackString(tf.getText());
-	}
-	
 	private void actionSetServerPort(ActionEvent event) {
 		JTextField tf = (JTextField)event.getSource();
 		this.getSettings().setStreamingServerPort(tf.getText());
@@ -211,7 +206,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			{
 				String path = fc.getSelectedFile().toString();
 				this.getTab().getJTextFieldRecordSavePath().setText(path);
-				ControlMain.getSettings().setSavePath(path);
+				this.getSettings().setSavePath(path);
 			}
 	}
 	
@@ -234,7 +229,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 			String path = chooser.getSelectedFile().toString();
 			this.getTab().getJTextFieldProjectXPath().setText(path);
-			ControlMain.getSettings().setProjectXPath(path);	
+			this.getSettings().setProjectXPath(path);	
 		}
 	}
 	
@@ -258,7 +253,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 			String path = chooser.getSelectedFile().toString();
 			this.getTab().getJTextFieldUdrecPath().setText(path);
-			ControlMain.getSettings().setUdrecPath(path);	
+			this.getSettings().setUdrecPath(path);	
 		}
 	}
     
@@ -277,8 +272,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 
     }
     
-    private BOSettings getSettings() {
-        return ControlMain.getSettings();
+    private BOSettingsRecord getSettings() {
+        return ControlMain.getSettingsRecord();
     }
     
     private GuiSettingsTabRecord getTab() {

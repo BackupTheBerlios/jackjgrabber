@@ -218,8 +218,7 @@ public class GuiSettingsTabMain extends GuiTab {
 			jComboBoxTheme = new JComboBox(themes);
 			jComboBoxTheme.addItemListener(control);
 			jComboBoxTheme.setName("theme");
-			String currentSelLFClassName = ControlMain.getSettings()
-			.getLookAndFeel();
+			String currentSelLFClassName = ControlMain.getSettingsMain().getLookAndFeel();
 			jComboBoxTheme.setEnabled(currentSelLFClassName.equals(PlasticLookAndFeel.class.getName()));
 
 		}

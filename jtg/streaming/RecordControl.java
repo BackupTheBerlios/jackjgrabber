@@ -51,11 +51,11 @@ public class RecordControl extends Thread {
 	}
 
 	private boolean detectRecord() {
-		if (controlProgramTab.isTvMode() && ControlMain.getSettings().getStreamingEngine() == 0) {
+		if (controlProgramTab.isTvMode() && ControlMain.getSettingsRecord().getStreamingEngine() == 0) {
 			record = new UdpRecord(recordArgs, this);
 			return true;
 		}
-		if (controlProgramTab.isTvMode() && ControlMain.getSettings().getStreamingEngine() == 1) {
+		if (controlProgramTab.isTvMode() && ControlMain.getSettingsRecord().getStreamingEngine() == 1) {
 			record = new UdrecRecord(recordArgs, this);
 			return true;
 		} else {
@@ -69,7 +69,7 @@ public class RecordControl extends Thread {
 	 */
 	public void run() {
 
-		if (ControlMain.getSettings().isStoreEPG()) {
+		if (ControlMain.getSettingsRecord().isStoreEPG()) {
 			saveEPGInfos();
 		}
 		record.start();
@@ -152,7 +152,7 @@ public class RecordControl extends Thread {
 
 	public void stopRecord() {
 		record.stop();
-		if (ControlMain.getSettings().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
+		if (ControlMain.getSettingsRecord().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
 		    Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
 		    this.startProjectX();
 		}
@@ -168,7 +168,7 @@ public class RecordControl extends Thread {
 		}
 		try {
 			Object[] args = {System.getProperty("java.home") + separator + "bin" + separator + "java -jar",
-					ControlMain.getSettings().getProjectXPath(),
+					ControlMain.getSettingsRecord().getProjectXPath(),
 					//"-g",
 					fileString};
 			MessageFormat form = new MessageFormat("{0} {1} {2}");
@@ -202,7 +202,7 @@ public class RecordControl extends Thread {
 
 	public File getDirectory() {
 		if (directory == null) {
-			directory = new File(ControlMain.getSettings().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName().replace(' ',
+			directory = new File(ControlMain.getSettingsRecord().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName().replace(' ',
 					'_')));
 			directory.mkdir();
 		}

@@ -30,6 +30,10 @@ import java.util.Properties;
 
 import model.BOBox;
 import model.BOSettings;
+import model.BOSettingsMain;
+import model.BOSettingsMovieGuide;
+import model.BOSettingsPlayback;
+import model.BOSettingsRecord;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -86,7 +90,7 @@ public class ControlMain {
 	public static void main( String args[] ) {
 		startLogger();
 		readSettings();
-		if (ControlMain.getSettings().showLogo) {
+		if (ControlMain.getSettingsMain().showLogo) {
 			screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application..." );
 		}
 		setResourceBundle();
@@ -175,7 +179,7 @@ public class ControlMain {
 	 * Wenn mehrere Boxen angelegt sind, und keine als Standard definiert ist, die 1. Box als Standard benutzen
 	 */
 	public static boolean  detectActiveBox() {
-		ArrayList boxList = getSettings().getBoxList();
+		ArrayList boxList = getSettingsMain().getBoxList();
 		BOBox box;
 		if (boxList.size()==1) { //nur eine Box vorhanden, diese als Standard benutzen
 			box = (BOBox)boxList.get(0);
@@ -201,7 +205,7 @@ public class ControlMain {
 	}
 	
 	public static int getIndexOfActiveBox() {
-		ArrayList boxList = getSettings().getBoxList();
+		ArrayList boxList = getSettingsMain().getBoxList();
 		if (getActiveBox() != null) { 
 			for (int i=0; boxList.size()>i; i++) {
 				BOBox box = (BOBox)boxList.get(i);
@@ -217,6 +221,18 @@ public class ControlMain {
 	 */
 	public static BOSettings getSettings() {
 		return settings;
+	}
+	public static BOSettingsMain getSettingsMain() {
+		return settings.getMainSettings();
+	}
+	public static BOSettingsRecord getSettingsRecord() {
+		return settings.getRecordSettings();
+	}
+	public static BOSettingsPlayback getSettingsPlayback() {
+		return settings.getPlaybackSettings();
+	}
+	public static BOSettingsMovieGuide getSettingsMovieGuide() {
+		return settings.getMovieGuideSettings();
 	}
 	/**
 	 * @param settings The settings to set.
@@ -262,7 +278,7 @@ public class ControlMain {
 	}
 
 	public static void setResourceBundle(){		
-		String _MESSAGE_BUNDLE ="locale/messages_"+ControlMain.getSettings().getShortLocale()+".properties";   
+		String _MESSAGE_BUNDLE ="locale/messages_"+ControlMain.getSettingsMain().getShortLocale()+".properties";   
 		
         File f = new File(_MESSAGE_BUNDLE.toLowerCase());
         try {

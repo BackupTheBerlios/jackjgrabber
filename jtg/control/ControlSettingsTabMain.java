@@ -30,11 +30,12 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.log4j.Logger;
-
 import model.BOBox;
 import model.BOLookAndFeelHolder;
-import model.BOSettings;
+import model.BOSettingsMain;
+
+import org.apache.log4j.Logger;
+
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
@@ -78,7 +79,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 			LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
 			lookAndFeels = new BOLookAndFeelHolder[looks.length];
 	
-			String currentSelLFClassName = ControlMain.getSettings().getLookAndFeel();
+			String currentSelLFClassName = this.getSettings().getLookAndFeel();
 			for (int i = 0; i < looks.length; i++) {
 				lookAndFeels[i] = new BOLookAndFeelHolder(looks[i].getName(),looks[i].getClassName());
 				if (lookAndFeels[i].getLookAndFeelClassName().equals(currentSelLFClassName)) {
@@ -201,13 +202,13 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 			if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 				String path = chooser.getSelectedFile().toString();
 				this.getTab().getJTextFieldVlcPath().setText(path);
-				ControlMain.getSettings().setVlcPath(path);	
+				this.getSettings().setVlcPath(path);	
 			}
 		}
 
 	private void actionStartVlc() {
 	    try {
-	        String execString=ControlMain.getSettings().getVlcPath()+" --intf=telnet --extraintf=http";
+	        String execString=this.getSettings().getVlcPath()+" -I http";
 	        Logger.getLogger("ControlSettingsTabMain").info(execString);
 	        Process run = Runtime.getRuntime().exec(execString);
 	        new SerInputStreamReadThread(true, run.getInputStream()).start();
@@ -246,8 +247,8 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		settingsTab = tabSettings;
 
 	}
-	private BOSettings getSettings() {
-		return ControlMain.getSettings();
+	private BOSettingsMain getSettings() {
+		return ControlMain.getSettings().getMainSettings();
 	}
 
 	private GuiSettingsTabMain getTab() {

@@ -20,19 +20,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Collections;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -43,7 +43,7 @@ import javax.swing.event.ChangeListener;
 
 import model.BOMovieGuide;
 import model.BOSender;
-import model.BOSettings;
+import model.BOSettingsMovieGuide;
 import model.BOTimer;
 
 import org.apache.log4j.Logger;
@@ -52,9 +52,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import presentation.GuiMainView;
-import presentation.movieguide.GuiTabMovieGuide;
 import presentation.movieguide.GuiMovieGuideFilmTableModel;
 import presentation.movieguide.GuiMovieGuideTimerTableModel;
+import presentation.movieguide.GuiTabMovieGuide;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
@@ -421,9 +421,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             BOSender sender = this.getSenderObject(senderName);
             
             BOTimer botimer = new BOTimer();  	
-            int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*-1;
-            int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter());
-            int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*60000;
+            int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore())*-1;
+            int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeAfter());
+            int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore())+2)*60000;
             
             botimer.setModifiedId("new");
             botimer.setChannelId(sender.getChanId());
@@ -898,7 +898,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     }
     public void keyReleased(KeyEvent ke){     	
     }
-    private BOSettings getSettings() {
-        return ControlMain.getSettings();
+    private BOSettingsMovieGuide getSettings() {
+        return ControlMain.getSettings().getMovieGuideSettings();
     }
 }

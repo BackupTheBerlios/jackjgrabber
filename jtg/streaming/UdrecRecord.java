@@ -52,12 +52,12 @@ public class UdrecRecord  extends Record {
 	private String getRequestString() {
 	    StringBuffer cmd = new StringBuffer();
 	    Object[] args = {
-	            ControlMain.getSettings().getUdrecPath(), 
+	            ControlMain.getSettingsRecord().getUdrecPath(), 
 	            boxIp, 
 	            Integer.toString(spktBufNum), 
-	            ControlMain.getSettings().getShortUdrecStreamType(),
+	            ControlMain.getSettingsRecord().getShortUdrecStreamType(),
 	            new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath(),
-	            ControlMain.getSettings().getUdrecOptions()
+	            ControlMain.getSettingsRecord().getUdrecOptions()
 	    };
 	    
 	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3} -o {4} {5}");

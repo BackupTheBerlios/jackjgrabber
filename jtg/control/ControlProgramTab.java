@@ -252,7 +252,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				BORecordArgs args;
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
-					if (!ControlMain.getSettings().isRecordAllPids()) {
+					if (!ControlMain.getSettings().getRecordSettings().isRecordAllPids()) {
 						new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
 					}
 				}
@@ -356,13 +356,13 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	private void startRecordInInfoTab(BORecordArgs recordArgs) {
 
-		int stream = ControlMain.getSettings().getStreamingEngine();
+		int stream = ControlMain.getSettings().getRecordSettings().getStreamingEngine();
 		String engine = "";
 		if (stream == 0) // JGrabber Engine
 		{
-			engine = "JGrabber " + ControlMain.getSettings().getJgrabberStreamType();
+			engine = "JGrabber " + ControlMain.getSettings().getRecordSettings().getJgrabberStreamType();
 		} else if (stream == 1) {
-			engine = "Udrec " + ControlMain.getSettings().getUdrecStreamType();
+			engine = "Udrec " + ControlMain.getSettings().getRecordSettings().getUdrecStreamType();
 		}
 
 		getMainView().getTabRecordInfo().getControl().startRecord(recordArgs.getSenderName() + ": " + recordArgs.getEpgTitle(), engine,
@@ -379,7 +379,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		}
 		args.setAPids(this.getPids().getAPids());
 		
-		if (ControlMain.getSettings().isRecordVtxt() && this.getPids().getVtxtPid()!=null) {
+		if (ControlMain.getSettings().getRecordSettings().isRecordVtxt() && this.getPids().getVtxtPid()!=null) {
 		    args.setVideotextPid(this.getPids().getVtxtPid()[0]);  
 		}
 		this.fillRecordArgsWithEpgData(args);
@@ -509,7 +509,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 *            Reinitialisierung der Timer-GUI
 	 */
 	private void newBoxSelected(JComboBox boxIpComboBox) {
-		BOBox newSelectedBox = (BOBox) ControlMain.getSettings().getBoxList().get(boxIpComboBox.getSelectedIndex());
+		BOBox newSelectedBox = (BOBox) ControlMain.getSettings().getMainSettings().getBoxList().get(boxIpComboBox.getSelectedIndex());
 		BOBox oldSelectedBox = ControlMain.getActiveBox();
 		//      Konstellation möglich, wenn erste Box angelegt wird
 		if (oldSelectedBox == null || oldSelectedBox.isSelected() != newSelectedBox.isSelected()) {
@@ -697,8 +697,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	private BOTimer buildTimer(BOEpg epg) {
 		BOTimer timer = new BOTimer();
 
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore()) * 60;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter()) * 60;
+		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore()) * 60;
+		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeAfter()) * 60;
 		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
 		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
 		long endtime = unformattedStart + unformattedDuration;
@@ -718,7 +718,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void startStreamingSever() {
-		int port = Integer.parseInt(ControlMain.getSettings().getStreamingServerPort());
+		int port = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
 		setStreamingServerThread(new SerStreamingServer(port, this));
 		getStreamingServerThread().start();
 		this.getMainView().getTabProgramm().startStreamingServerModus();
@@ -733,7 +733,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void reInitStreamingServer() {
-		if (ControlMain.getSettings().isStartStreamingServer()) {
+		if (ControlMain.getSettings().getRecordSettings().isStartStreamingServer()) {
 			startStreamingSever();
 		}
 	}

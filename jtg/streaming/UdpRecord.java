@@ -130,7 +130,7 @@ public class UdpRecord  extends Record {
 		} else {
 			cmd.append("AUDIO");
 		}
-		if (ControlMain.getSettings().getShortJGrabberStreamType().equals("TS")) {
+		if (ControlMain.getSettingsRecord().getShortJGrabberStreamType().equals("TS")) {
 			cmd.append("TS");
 		}
 		Object[] args = {Integer.toString(udpPort), Integer.toString(spktBufNum)};
@@ -173,7 +173,7 @@ public class UdpRecord  extends Record {
 		int pidNum = Integer.parseInt(dboxArgs[2]);
 		if (pidNum + 3 > dboxArgs.length) return -3;
 
-		if (ControlMain.getSettings().getShortJGrabberStreamType().equals("TS")) {
+		if (ControlMain.getSettingsRecord().getShortJGrabberStreamType().equals("TS")) {
 			writeStream = new DataWriteStream[1];
 			writeStream[0] = new DataWriteStream('t', 0, recordControl);
 		}  else {

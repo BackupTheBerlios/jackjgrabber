@@ -111,10 +111,10 @@ public class BOPlaybackOption {
 	 * oder Start eines Abfragedialogs
 	 */
 	public static BOPlaybackOption detectPlaybackOption() {
-		if (ControlMain.getSettings().getPlaybackOptions() != null && ControlMain.getSettings().getPlaybackOptions().size()>0) {
+		if (getPlaybackSettings().getPlaybackOptions() != null && getPlaybackSettings().getPlaybackOptions().size()>0) {
 			BOPlaybackOption option;
-	        if (ControlMain.getSettings().isAlwaysUseStandardPlayback()) {
-	            option = ControlMain.getSettings().getStandardPlaybackOption();
+	        if (getPlaybackSettings().isAlwaysUseStandardPlayback()) {
+	            option = getPlaybackSettings().getStandardPlaybackOption();
 	        } else {
 	            option = startPlaybackOptionsQuestDialog();
 	        }
@@ -125,7 +125,7 @@ public class BOPlaybackOption {
 	}
 	
 	private static BOPlaybackOption startPlaybackOptionsQuestDialog() {
-	    ArrayList options = ControlMain.getSettings().getPlaybackOptions();
+	    ArrayList options = getPlaybackSettings().getPlaybackOptions();
 	    
 	    String ret = (String)JOptionPane.showInputDialog(
 	    		ControlMain.getControl().getView(),
@@ -133,11 +133,11 @@ public class BOPlaybackOption {
                 ControlMain.getProperty("msg_choose"),
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                ControlMain.getSettings().getPlaybackOptionNames(),
-                ControlMain.getSettings().getPlaybackOptionNames()[0]
+                getPlaybackSettings().getPlaybackOptionNames(),
+                getPlaybackSettings().getPlaybackOptionNames()[0]
               );
 	    if (ret!=null) {
-	        return ControlMain.getSettings().getPlaybackOption(ret);
+	        return getPlaybackSettings().getPlaybackOption(ret);
 	    }
 	    return null;
 	}
@@ -147,6 +147,10 @@ public class BOPlaybackOption {
 	 */
 	public String toString() {
 		return getName();
+	}
+	
+	private static BOSettingsPlayback getPlaybackSettings() {
+		return ControlMain.getSettings().getPlaybackSettings();
 	}
 	
 }

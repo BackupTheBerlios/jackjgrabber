@@ -55,7 +55,7 @@ public class GuiMainView extends JFrame {
 				ControlMain.endProgram();
 			}
 			public void windowIconified(WindowEvent e) {
-				if (ControlMain.getSettings().useSysTray) {
+				if (ControlMain.getSettingsMain().useSysTray) {
 					ControlMain.getControl().getView().setVisible(false);
 				}
 			}
@@ -66,7 +66,7 @@ public class GuiMainView extends JFrame {
 		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2]);
 		pack();
 		SerGUIUtils.center(this);
-		if (ControlMain.getSettings().isStartFullscreen()) {
+		if (ControlMain.getSettingsMain().isStartFullscreen()) {
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			device.setFullScreenWindow(this);
 		}
@@ -85,7 +85,7 @@ public class GuiMainView extends JFrame {
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
 		setIconImage(iconManager.getIcon("grabber1.gif").getImage());
-		if (ControlMain.getSettings().isUseSysTray()) {
+		if (ControlMain.getSettingsMain().isUseSysTray()) {
 			createMenu();
 		}
 	}

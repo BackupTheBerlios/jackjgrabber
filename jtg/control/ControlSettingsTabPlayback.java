@@ -26,7 +26,7 @@ import java.awt.event.ItemListener;
 import javax.swing.JCheckBox;
 
 import model.BOPlaybackOption;
-import model.BOSettings;
+import model.BOSettingsPlayback;
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabPlayback;
 import presentation.settings.GuiTabSettings;
@@ -95,8 +95,8 @@ public class ControlSettingsTabPlayback extends ControlTabSettings implements Ac
     public void setSettingsTab(GuiTabSettings tabSettings) {
         settingsTab = tabSettings;
     }
-    private BOSettings getSettings() {
-        return ControlMain.getSettings();
+    private BOSettingsPlayback getSettings() {
+        return ControlMain.getSettingsPlayback();
     }
     
     private GuiSettingsTabPlayback getTab() {

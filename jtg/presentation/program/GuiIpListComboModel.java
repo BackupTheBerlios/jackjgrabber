@@ -29,11 +29,11 @@ import control.ControlMain;
 public class GuiIpListComboModel extends DefaultComboBoxModel { //implements ComboBoxModel {
 	
 	public Object getElementAt(int index) {
-		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(index);
+		BOBox box = (BOBox)ControlMain.getSettingsMain().getBoxList().get(index);
 		return box.getDboxIp();
 	}
 
 	public int getSize() {
-		return ControlMain.getSettings().getBoxList().size();
+		return ControlMain.getSettingsMain().getBoxList().size();
 	}
 }

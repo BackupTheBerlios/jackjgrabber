@@ -42,7 +42,7 @@ public class GuiPlaybackSettingsTableCellRenderer extends DefaultTableCellRender
 					int row,
 					int column) 
 		{
-			BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettings().getPlaybackOptions().get(row);
+			BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettingsPlayback().getPlaybackOptions().get(row);
 			JCheckBox checkbox = new JCheckBox();
 			checkbox.setHorizontalAlignment(SwingConstants.CENTER);
 			if (column==3) {
