@@ -36,6 +36,7 @@ import model.BOEpgDetails;
 import model.BOSender;
 import model.BOTimer;
 import control.ControlMain;
+import control.ControlProgramTab;
 
 /**
  * Schnittstelle zum NeutrinoImage
@@ -124,8 +125,14 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public ArrayList getSender(BOBouquet bouquet) throws IOException {
 		ArrayList senderList = new ArrayList();
 		String line;
+		String mode;
+		if (ControlProgramTab.tvMode) {
+		    mode = "TV";
+		} else {
+		    mode = "RADIO";
+		}
 	
-		BufferedReader input = getConnection("/control/getbouquet?bouquet="+bouquet.getBouquetNummer()+"&mode=TV");
+		BufferedReader input = getConnection("/control/getbouquet?bouquet="+bouquet.getBouquetNummer()+"&mode="+mode);
 		
 		while((line=input.readLine())!=null) {
 			StringTokenizer st = new StringTokenizer(line);
