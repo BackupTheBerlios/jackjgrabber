@@ -546,26 +546,7 @@ public class Resource {
 	 */
 	public static URL getResourceURL(String resource)
 	{
-		try
-		{
-			String filename = workdir + filesep + resource;
-			File file = new File(filename);
-			if (file.exists() && file.canRead())
-			{
-				return file.toURL();
-			}
-		}
-		catch(Exception e)
-		{
-			// ignore it, it was just a try to get this resource from the filesystem
-		}
-		
-		// for the classloader we need to replace all backslashes to forward slashes.
-		// this is only necessary on windows systems and doesn't harm others
-		resource = resource.replace('\\', '/');
-		
-		// ok, not founde in the filesystem, now try the classloader
-		return Resource.class.getClassLoader().getResource(resource);
+		return ClassLoader.getSystemResource("projectX" + filesep + resource);
 	}
 
 	/**
