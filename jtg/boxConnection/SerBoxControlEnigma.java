@@ -131,7 +131,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public BOPids getPids() throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
-		int startpos, endpos, zaptries;
+		int startpos, endpos, getPidTries;
 		if (isTvMode()) {
 			BufferedReader input = getConnection("/cgi-bin/status");
 			line=input.readLine();
@@ -149,23 +149,24 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			    }
 			}
 		}
-		zaptries=0;
+		getPidTries=0;
 		BufferedReader input = getConnection("/cgi-bin/audioChannels");
 		while((line=input.readLine())!=null) {
+			System.out.println(line);
 		    if (line.indexOf("selected") > 0) {
 		    	startpos=0;
 		    	while ((startpos=line.indexOf("value=", startpos+1))> 1) {
 		    		endpos=line.indexOf("\"", startpos+7);
-		    		System.out.println(zaptries);
+		    		System.out.println(getPidTries);
 		    		pids.getAPids().add(new BOPid(line.substring(startpos+9, endpos)+"h",line.substring(endpos+2,line.indexOf("<", endpos)), 1));
 		    	}
 		    } else {
-		    	zaptries++;
-				if (zaptries>20) {
+		    	getPidTries++;
+				if (getPidTries>50) {
 					throw new IOException();
 				}
-				System.out.println(zaptries);
-				zapTo(getChanIdOfRunningSender());
+				System.out.println(getPidTries);
+				//zapTo(getChanIdOfRunningSender());
 				input = getConnection("/cgi-bin/audioChannels");
 		    }
 			
@@ -218,18 +219,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public ArrayList getSender(BOBouquet bouquet) throws IOException {
-		/*ArrayList senderList = new ArrayList();
-		String line;
-		int seperator;
-		BufferedReader in = getConnection("/cgi-bin/getServices?ref="+bouquet.getBouquetNummer());
-		long countChannels = 0;
-		while ((line = in.readLine()) != null) {
-		    seperator=line.indexOf(";");
-		    if (seperator>0) {
-		        countChannels++;
-		        senderList.add(new BOSender(""+(countChannels),line.substring(0,seperator),line.substring(seperator+1,line.indexOf(";",seperator+1))));
-		    }
-		}*/
 	    ArrayList senderList = new ArrayList();
 		String line;
 		int seperator;
@@ -278,6 +267,10 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		        }
 		    }
 		}
+		try {			
+			Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
 		return status;
 	}
 	
@@ -314,9 +307,9 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                endpos=line2.indexOf(" ", startpos+1);
 		                endTime=line2.substring(startpos, endpos);
 		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime, "dd.MM./HH:mm");
-		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
-		                valueStart=""+(startDate.getTimeInMillis()/1000);
-		                valueDuration = ""+((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
+		                endDate = SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
+		                valueStart = Long.toString(startDate.getTimeInMillis()/1000);
+		                valueDuration = Long.toString((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
 		                startDate = SerFormatter.formatUnixDate(valueStart);
 		    			duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
 		    			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));    
@@ -334,7 +327,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public BOEpgDetails getEpgDetail(BOEpg epg) throws IOException {
 	    BOEpgDetails epgDetail = new BOEpgDetails();
 		BOSender sender=epg.getSender();
-		String text = "";
+		String text = new String();
 		String line, line2;
 		String eventId=epg.getEventId();	
 		BufferedReader input = getConnection("/EPGDetails?ID="+eventId+"&ref="+sender.getChanId());
@@ -554,7 +547,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		        } 
 		        requestString = "/addTimerEvent?timer=repeating&ref="+chanId+"&shour="+timer.getShortStartTime().substring(0,2)+"&smin="+timer.getShortStartTime().substring(3,5)+"&ehour="+timer.getStopTime().substring(0,2)+"&emin=" +timer.getStopTime().substring(3,5)+ "&mo=" + mo + "&tu=" + tu + "&we=" + we + "&th=" + th + "&fr=" + fr + "&sa=" + sa + "&su=" + su +"&duration="+duration+"&descr="+title+"&after_event="+eventType;
 		    }
-		    //System.out.println (requestString);
 		    BufferedReader input = getConnection(requestString);
 		    while((line=input.readLine())!=null) {
 		       	if ((line.indexOf("success")>0)^(line.indexOf("erfolgreich")>0)) {
