@@ -208,7 +208,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    startpos=line.indexOf("ID: ");
 		    if (startpos > 0){
 		        while ((line2=input.readLine())!=null) {
-		            if (line2.indexOf("ID: ")>0) {
+		            if ((startpos=line2.indexOf("ID: "))>0) {
 		                startpos+=4;
 		                endpos=line.indexOf(" ", startpos+1);
 		                eventId=line.substring(startpos, endpos);
