@@ -49,7 +49,7 @@ public class SerTimerHandler {
      */
     public static BOLocalTimer getRunningLocalTimer() {
         try {
-            BOTimerList timerList = ControlMain.getBoxAccess().getTimerList();
+            BOTimerList timerList = ControlMain.getBoxAccess().reReadTimerList();
             synchroniseTimer(timerList);
             BOLocalTimer timer = timerList.getFirstLocalTimer();
             if (isValidTimer(timer)) {
