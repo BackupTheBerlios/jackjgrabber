@@ -18,11 +18,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.*;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
+import com.jgoodies.plaf.plastic.*;
+
 import model.BOBox;
 import model.BOSettings;
+import presentation.*;
 import presentation.GuiMainView;
 import presentation.GuiSettingsTabMain;
 import presentation.GuiTabSettings;
@@ -96,6 +100,11 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 					}
 					if (comboBox.getName().equals("locale")) {
 						getSettings().setLocale((String) comboBox.getSelectedItem());
+						break;
+					}
+					if (comboBox.getName().equals("lookAndFeel")) {
+						String lookAndFeel = ((LookAndFeelHolder)comboBox.getSelectedItem()).getLookAndFeelClassName();
+						getSettings().setLookAndFeel(lookAndFeel);
 						break;
 					}
 				}
