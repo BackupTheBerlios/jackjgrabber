@@ -65,14 +65,15 @@ import javax.swing.JRadioButtonMenuItem;
  */
 public class Resource {
 	
-	/** os dependent file separator */
-	public static final String filesep = System.getProperty("file.separator");
+//	/** os dependent file separator */
+//	public static final String filesep = System.getProperty("file.separator");
 		
 	/** the prefix of all pjx resource files */
-	private static final String PJX_RESOURCE_PREFIX = "projectX"+filesep+"pjxresources";
+	//private static final String PJX_RESOURCE_PREFIX = "projectX"+filesep+"pjxresources";
+	private static final String PJX_RESOURCE_PREFIX = "projectX/pjxresources";
 	
 	/** current working directory */
-	public static final String workdir = System.getProperty("user.dir")+filesep+"projectX";
+	public static final String workdir = System.getProperty("user.dir")+"/projectX";
 
 	/** the users locale */
 	private static Locale locale = null;
@@ -97,7 +98,7 @@ public class Resource {
 		// first we try to find one in the current working directory
 		try 
 		{
-			File file = new File(workdir + filesep + resourceName);
+			File file = new File(workdir + "/" + resourceName);
 			if (file.exists() && file.canRead())
 			{
 				newBundle = new PropertyResourceBundle(new FileInputStream(file));
@@ -546,7 +547,7 @@ public class Resource {
 	 */
 	public static URL getResourceURL(String resource)
 	{
-		return ClassLoader.getSystemResource("projectX" + filesep + resource);
+		return ClassLoader.getSystemResource("projectX/" + resource);
 	}
 
 	/**
@@ -567,7 +568,7 @@ public class Resource {
 			usedLocale = Locale.getDefault();
 		}
 
-		String localizedResource = path + filesep + usedLocale.getLanguage() + filesep + resourceName;
+		String localizedResource = path + "/" + usedLocale.getLanguage() + "/" + resourceName;
 		
 		URL url = getResourceURL(localizedResource);
 		if (url != null)
@@ -576,7 +577,7 @@ public class Resource {
 		}
 
 		// there is no localized version of this file, try the default version
-		return getResourceURL(path + filesep + resourceName);
+		return getResourceURL(path + "/" + resourceName);
 	}
 
 	/**
