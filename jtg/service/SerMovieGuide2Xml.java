@@ -12,12 +12,13 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-
-import control.ControlMain;
+import org.dom4j.*;
 
 import java.util.*;
 import java.io.*;
 import java.net.*;
+
+import control.ControlMain;
 
 /**
  * @author ralix
@@ -27,7 +28,6 @@ import java.net.*;
  */
 public class SerMovieGuide2Xml {
     static Hashtable htToken = new Hashtable();
-    static Hashtable htGenreMap = new Hashtable();
     static Document doc;
     static Element root;
     static Element movie;
@@ -42,17 +42,13 @@ public class SerMovieGuide2Xml {
         //XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
         XMLWriter writer = new XMLWriter(new FileWriter(path), format);
         writer.write(ControlMain.getMovieGuideDocument());
-        writer.close();
+        writer.close();    
     }
     
     public static void setElementInElement(Element parentElement, String childElementName, String childElementValue) {
         Element element = DocumentHelper.createElement(childElementName);
         element.setText(childElementValue);
         parentElement.add(element);
-    }
-    
-    private static void generateGenreMap(String entry) {
-        htGenreMap.put(entry, entry);
     }
     
     private static String getAktuellDateString() {
@@ -70,39 +66,36 @@ public class SerMovieGuide2Xml {
         htToken.put((String) "Darsteller", new Integer(5));
     }
     
-    private static String[] createElement(int i, String input) {
-        String value[] = new String[3];
+    private static void createElement(int i, String input) {
         try {
             switch (i) {
                 case 0:
-                    value[0] = input.substring(0, input.indexOf(":"));
-                    value[1] = SerFormatter.getCorrectDate(input.substring(input.indexOf(":") + 2));
-                    value[2] = input.substring(input.indexOf("/")+1);
+                    setElementInElement(movie,"sender",input.substring(0, input.indexOf(":")));
+                    setElementInElement(movie,"datum",SerFormatter.getCorrectDate(input.substring(input.indexOf(":") + 2)));
+                    setElementInElement(movie,"start", input.substring(input.indexOf("/")+1));
                     break;
                 case 1:
-                case 5:
-                    value[0] = input.substring(input.indexOf(":") + 2);
+                    setElementInElement(movie,"titel", input.substring(input.indexOf(":") + 2));
                     break;
                 case 2:
-                    value[0] = input.substring(9, input.indexOf("Genre") - 2);
-                    value[1] = input.substring(input.indexOf("Genre") + 7, input.indexOf("Länge") - 2);
-                    generateGenreMap(value[1]);
-                    value[2] = input.substring(input.indexOf("Länge") + 7, input.indexOf("Stunden") - 1);
+                    setElementInElement(movie,"episode",input.substring(9, input.indexOf("Genre") - 2));
+                    setElementInElement(movie,"genre", input.substring(input.indexOf("Genre") + 7, input.indexOf("Länge") - 2));
+                    setElementInElement(movie,"dauer", input.substring(input.indexOf("Länge") + 7, input.indexOf("Stunden") - 1));
                     break;
                 case 3:
-                    value[0] = input.substring(input.indexOf(":") + 2, input.indexOf("Produktionsjahr") - 2);
-                    value[1] = input.substring(
-                    input.indexOf("Produktionsjahr") + 17, input.indexOf("Regie") - 2);
-                    value[2] = input.substring(input.indexOf("Regie") + 7);
+                    setElementInElement(movie,"land",input.substring(input.indexOf(":") + 2, input.indexOf("Produktionsjahr") - 2));
+                    setElementInElement(movie,"jahr", input.substring(input.indexOf("Produktionsjahr") + 17, input.indexOf("Regie") - 2));
+                    setElementInElement(movie,"regie", input.substring(input.indexOf("Regie") + 7));
                     break;
                 case 4:
-                    value[0] = input.substring(input.indexOf(":") + 2, input.indexOf("/"));
-                    value[1] = input.substring(input.indexOf("/") + 1);
+                    setElementInElement(movie,"bild",input.substring(input.indexOf(":") + 2, input.indexOf("/")));
+                    setElementInElement(movie,"ton", input.substring(input.indexOf("/") + 1));
+                    break;
+                case 5:
+                    setElementInElement(movie,"darsteller", input.substring(input.indexOf(":") + 2));
                     break;
             }
-        } catch (StringIndexOutOfBoundsException ex) {
-        }
-        return value;
+        } catch (StringIndexOutOfBoundsException ex) {}
     }
     
     private static boolean[] getLineCounter(String input) {
@@ -148,39 +141,11 @@ public class SerMovieGuide2Xml {
             String[] out;
             while ((input = in.readLine()) != null) {
                 lineCounter = getLineCounter(input);
-                if (lineCounter[0]) {                    
-                    out = createElement(0, input);
+                if (lineCounter[0]) {
                     movie = root.addElement("entry");
-                    setElementInElement(movie,"sender",out[0]);
-                    setElementInElement(movie,"datum", out[1]);
-                    setElementInElement(movie,"start", out[2]);
+                    createElement(0, input);
                 } else if (lineCounter[1]) {
-                    number = getNumber(input);
-                    switch (number) {
-                        case 1:
-                            setElementInElement(movie,"titel", createElement(number, input)[0]);
-                            break;
-                        case 2:
-                            out = createElement(number, input);
-                            setElementInElement(movie,"episode",out[0]);
-                            setElementInElement(movie,"genre", out[1]);
-                            setElementInElement(movie,"dauer", out[2]);
-                            break;
-                        case 3:
-                            out = createElement(number, input);
-                            setElementInElement(movie,"land",out[0]);
-                            setElementInElement(movie,"jahr", out[1]);
-                            setElementInElement(movie,"regie", out[2]);
-                            break;
-                        case 4:
-                            out = createElement(number, input);
-                            setElementInElement(movie,"bild",out[0]);
-                            setElementInElement(movie,"ton", out[1]);
-                            break;
-                        case 5:
-                            setElementInElement(movie,"darsteller", createElement(number, input)[0]);
-                            break;
-                    }
+                    createElement(getNumber(input),input);
                 } else if ((lineCounter[0] && lineCounter[1]) == false){
                     if(input.length() > 0){
                         inhalt.append(input);
@@ -197,7 +162,7 @@ public class SerMovieGuide2Xml {
         }
         saveXMLFile(new File(ControlMain.movieGuideFileName));
     }
-    
+   
     /**
      * @param args
      *            the command line arguments
