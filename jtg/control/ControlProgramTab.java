@@ -717,7 +717,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		this.getMainView().getTabProgramm().startStreamingServerModus();
 	}
 
-	private void stopStreamingServer() {
+	public void stopStreamingServer() {
 		if (streamingServerThread != null) {
 			streamingServerThread.stopServer();
 			this.getMainView().getTabProgramm().stopStreamingServerModus();
