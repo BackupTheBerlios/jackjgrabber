@@ -31,11 +31,13 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+import javax.swing.table.*;
 import javax.swing.tree.*;
 
 import presentation.*;
 import presentation.GuiTab;
 
+import service.*;
 import service.SerHelper;
 
 import com.jgoodies.forms.builder.*;
@@ -92,8 +94,8 @@ public class GuiTabRecordInfo extends GuiTab {
 		// found files tab
 
 		guiFilesTab = new GuiTabAvailableFiles(control);
-		tab.addTab("Aktuelle Aufnahme", currentRecord);
-		tab.addTab("Vorhandene Dateien", guiFilesTab);
+		tab.addTab(ControlMain.getProperty("tab_currentRecord"), currentRecord);
+		tab.addTab(ControlMain.getProperty("tab_recordInfos"), guiFilesTab);
 		add(tab);
 
 	}
@@ -183,7 +185,7 @@ public class GuiTabRecordInfo extends GuiTab {
 		video.addMouseListener(control);
 		audio.addMouseListener(control);
 		other.addMouseListener(control);
-		
+
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("170:grow, 10, 170:grow, 10, 350:grow, pref", // columns
 				"pref, 10,f:120:grow"); // rows
@@ -392,15 +394,14 @@ public class GuiTabRecordInfo extends GuiTab {
 	 */
 	public void setFileInfo(String fileInfo) {
 		guiFilesTab.setFileInfo(fileInfo);
-		
+
 	}
 
 	/**
 	 * @return
 	 */
 	public JTable getFileTable() {
-		
+
 		return guiFilesTab.getFileTable();
 	}
-
 }

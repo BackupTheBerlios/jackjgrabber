@@ -38,7 +38,6 @@ import org.apache.log4j.*;
 import presentation.*;
 import presentation.recordInfo.*;
 import service.*;
-import service.recordinfo.*;
 
 /**
  * Controlklasse des Programmtabs.
@@ -461,44 +460,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 			ArrayList player = ControlMain.getSettingsPlayback().getPlaybackOptions();
 
 			if (player.size() > 0) {
-				BOPlaybackOption play = null;
-				if (player.size() > 1) {
-					// choosing player
-					JList list = new JList();
-					DefaultListModel m = new DefaultListModel();
-					list.setModel(m);
-					BOPlaybackOption def = null;
-					for (int i = 0; i < player.size(); i++) {
-						BOPlaybackOption opt = (BOPlaybackOption) player.get(i);
-						m.addElement(opt);
-						if (opt.isStandard().booleanValue()) {
-							def = opt;
-						}
-					}
-
-					if (ControlMain.getSettingsPlayback().isAlwaysUseStandardPlayback() && def != null) {
-						play = def;
-					} else {
-						if (def != null) {
-							list.setSelectedValue(def, true);
-						} else {
-							list.setSelectedIndex(0);
-						}
-
-						String message = ControlMain.getProperty("msg_choosePlayer");
-
-						int res = JOptionPane.showOptionDialog(guiTabRecordInfo, new Object[]{message, new JScrollPane(list)}, "Player", 0,
-								JOptionPane.QUESTION_MESSAGE, null, new String[]{ControlMain.getProperty("button_playback"),
-										ControlMain.getProperty("button_cancel")}, "Play");
-						if (res == 0) {
-							play = (BOPlaybackOption) list.getSelectedValue();
-						}
-					}
-
-				} else {
-					play = (BOPlaybackOption) player.get(0);
-				}
-
+				BOPlaybackOption play = BOPlaybackOption.detectPlaybackOption();
 				if (play != null) {
 					String exec = play.getExecString();
 					exec += " " + file.getAbsolutePath();
@@ -564,7 +526,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				}
 				if (SwingUtilities.isRightMouseButton(e)) {
 					if (e.getSource() instanceof JTree) {
-						//showTreePopup((JTree) e.getSource(), e);		not finished
+						showTreePopup((JTree) e.getSource(), e);	
 					}
 				}
 			}
@@ -575,7 +537,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	/**
 	 * @param tree
 	 */
-	private void showPopup(JTable table, MouseEvent e) {
+	private void showPopup(final JTable table, MouseEvent e) {
 
 		JPopupMenu m = new JPopupMenu();
 		int count = table.getSelectedRowCount();
@@ -617,6 +579,14 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				}
 			}
 		}
+		else if (count > 0)
+		{
+			m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_delete")) {
+				public void actionPerformed(ActionEvent e) {
+					deleteSelectedFromTable(table);
+				}
+			}));
+		}
 		if (m.getComponentCount() > 0) {
 			m.show(table, e.getX(), e.getY());
 		}
@@ -624,6 +594,45 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	
 	
 	
+	/**
+	 * @param table
+	 */
+	protected void deleteSelectedFromTable(JTable table) {
+		ArrayList toDelete = new ArrayList();
+		int[] aiRows = table.getSelectedRows();
+		for (int i = 0; i < aiRows.length; i++) {
+			toDelete.add(table.getModel().getValueAt(aiRows[i],2));
+		}
+		deleteFiles(toDelete);
+		reloadAvailableFiles();				
+	}
+	
+	
+	private void deleteFiles(Object[] files)
+	{
+		ArrayList l = new ArrayList(Arrays.asList(files));
+		deleteFiles(l);
+	}
+
+	/** delete all the given files
+	 * @param toDelete
+	 */
+	private void deleteFiles(ArrayList toDelete) {
+		Iterator iter = toDelete.iterator();
+
+		while (iter.hasNext()) {
+			File element = (File) iter.next();
+			if (element.delete())
+			{
+				Logger.getLogger("ControlProgramTab").info(element.getAbsolutePath() + " " + ControlMain.getProperty("msg_deleted"));
+			}
+			else
+			{
+				Logger.getLogger("ControlProgramTab").error(element.getAbsolutePath() + " " + ControlMain.getProperty("msg_cantdelete"));
+			}					
+		}
+	}
+
 	/** not activated yet
 	 * @param tree
 	 */
@@ -631,11 +640,11 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 
 		JPopupMenu m = new JPopupMenu();
 		int count = table.getSelectionCount();
-		if (count == 1) {
+		if (count > 0) {
 		
 			m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_delete")) {
 				public void actionPerformed(ActionEvent e) {
-					deleteSelected();
+					deleteSelectedOfDirectoryTree();
 				}
 			}));
 
@@ -709,6 +718,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
+		
 	}
 
 	/*
@@ -750,41 +760,54 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	/**
 	 *  
 	 */
-	protected void deleteSelected() {
-		HashSet filesToDelete = new HashSet();
+	protected void deleteSelectedOfDirectoryTree() {
+		ArrayList filesToDelete = new ArrayList();
+		ArrayList dirToDelete = new ArrayList();
 	
 		// Delete all selected files
 		JTree tree = guiTabRecordInfo.getTree();
 		TreePath[] sel = tree.getSelectionPaths();
 		for (int i = 0; i < sel.length; i++) {
-			BaseTreeNode nodeToDelete = (BaseTreeNode) sel[i].getLastPathComponent();
-			nodeToDelete.getUserObject();
-		}
-	
-		// Directory has to be deleted last
-		Iterator it = filesToDelete.iterator();
-		Vector toDelete = new Vector();
-		while (it.hasNext()) {
-			File element = (File) it.next();
-			
-
-			if (element.isDirectory()) {
-				toDelete.add(element);
-			} else {
-				toDelete.insertElementAt(element, 0);
+			DefaultMutableTreeNode nodeToDelete = (DefaultMutableTreeNode) sel[i].getLastPathComponent();
+			Object obj = nodeToDelete.getUserObject();
+			if (obj instanceof BOFileWrapper)
+			{
+				File dirToDel = ((BOFileWrapper)obj).getAbsoluteFile();
+				addAllFiles(dirToDel,filesToDelete,dirToDelete);
 			}
 		}
 	
-		Iterator iter = toDelete.iterator();
-	
-		while (iter.hasNext()) {
-			File element = (File) iter.next();
-			if (!element.delete()) {
-				JOptionPane.showMessageDialog(guiTabRecordInfo, element.getAbsolutePath() + " konnte nicht gelöscht werden!");
-			}
-		}
+		// Delete files
+		
+		deleteFiles(filesToDelete);
+		
+		// Delete directories
+		deleteFiles(dirToDelete);
+		
 		reloadAvailableFiles();
 	
+	}
+
+	/**
+	 * @param dirToDel
+	 * @param filesToDelete
+	 * @param dirToDelete
+	 */
+	private void addAllFiles(File dirToDel, ArrayList filesToDelete, ArrayList dirToDelete) {
+		dirToDelete.add(0,dirToDel);
+		
+		File[] files = dirToDel.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].isDirectory())
+			{
+				addAllFiles(files[i],filesToDelete,dirToDelete);
+			}
+			else
+			{
+				filesToDelete.add(files[i]);
+			}
+		}
+		
 	}
 
 }

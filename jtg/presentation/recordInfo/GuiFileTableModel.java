@@ -3,6 +3,7 @@ package presentation.recordInfo;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
@@ -18,14 +19,17 @@ import model.*;
 public class GuiFileTableModel extends DefaultTableModel implements TreeSelectionListener {
 
 	private ArrayList files = new ArrayList();
-	
+
 	private String[] columns = new String[]{"Name"};
+
+	private JTable table;
 
 	/**
 	 *  
 	 */
-	public GuiFileTableModel() {
+	public GuiFileTableModel(JTable table) {
 		super();
+		this.table = table;
 	}
 	/*
 	 * (non-Javadoc)
@@ -39,55 +43,56 @@ public class GuiFileTableModel extends DefaultTableModel implements TreeSelectio
 			return 0;
 		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.DefaultTableModel#getColumnCount()
 	 */
 	public int getColumnCount() {
 		return columns.length;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.DefaultTableModel#getColumnName(int)
 	 */
 	public String getColumnName(int column) {
 		return columns[column];
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.DefaultTableModel#isCellEditable(int, int)
 	 */
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.DefaultTableModel#setValueAt(java.lang.Object, int, int)
 	 */
 	public void setValueAt(Object aValue, int row, int column) {
-		try
-		{
-			if (aValue != null && aValue.toString().length() > 0)
-			{
+		try {
+			if (aValue != null && aValue.toString().length() > 0) {
 				Object[] oneFile = (Object[]) files.get(row);
 				File f = (File) oneFile[2];
-				File newF = new File(f.getParent(),aValue.toString());
-				if (f.renameTo(newF))
-				{
+				File newF = new File(f.getParent(), aValue.toString());
+				if (f.renameTo(newF)) {
 					oneFile[0] = newF.getName();
 					oneFile[2] = newF;
-				}
-				else
-				{
+				} else {
 					fireTableDataChanged();
 				}
 			}
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			fireTableDataChanged();
 		}
-		
+
 	}
 
 	/*
@@ -96,8 +101,12 @@ public class GuiFileTableModel extends DefaultTableModel implements TreeSelectio
 	 * @see javax.swing.table.DefaultTableModel#getValueAt(int, int)
 	 */
 	public Object getValueAt(int row, int column) {
-		Object[] oneFile = (Object[]) files.get(row);
-		return oneFile[column];
+		if (row < files.size())
+		{
+			Object[] oneFile = (Object[]) files.get(row);
+			return oneFile[column];
+		}
+		return null;
 	}
 	/*
 	 * (non-Javadoc)
@@ -108,16 +117,15 @@ public class GuiFileTableModel extends DefaultTableModel implements TreeSelectio
 		ArrayList list = new ArrayList();
 		if (e.getPath() != null) {
 			Object o = e.getPath().getLastPathComponent();
-			if (o instanceof BaseTreeNode && ((BaseTreeNode)o).getUserObject() instanceof BOFileWrapper) {
+			if (o instanceof BaseTreeNode && ((BaseTreeNode) o).getUserObject() instanceof BOFileWrapper) {
 				BOFileWrapper fileWr = (BOFileWrapper) ((BaseTreeNode) o).getUserObject();
 				File[] files = fileWr.listFiles();
-				if (files != null)
-				{
+				if (files != null) {
 					for (int i = 0; i < files.length; i++) {
 						if (!files[i].isDirectory()) {
 							Object[] oneFile = new Object[3];
 							oneFile[0] = files[i].getName();
-							oneFile[1] = SerHelper.calcSize(files[i].length(),"MB");
+							oneFile[1] = SerHelper.calcSize(files[i].length(), "MB");
 							oneFile[2] = files[i].getAbsoluteFile();
 							list.add(oneFile);
 						}
@@ -126,8 +134,32 @@ public class GuiFileTableModel extends DefaultTableModel implements TreeSelectio
 			}
 		}
 		files = list;
-		fireTableDataChanged();
 
+		// Aktuell selektierte Merken
+		int[] aiSel = table.getSelectedRows();
+		ArrayList toSel = new ArrayList();
+		if (aiSel != null) {
+			for (int i = 0; i < aiSel.length; i++) {
+				toSel.add(getValueAt(aiSel[i],0));
+			}
+		}
+		fireTableDataChanged();
+		// Wieder setzen
+		
+		Iterator iter = toSel.iterator();
+
+		int rowCount = getRowCount();
+		while (iter.hasNext()) {
+			String element = (String) iter.next();
+			for (int i = 0; i < rowCount; i++) {
+				
+				if (element != null && element.equals(getValueAt(i,0)))
+				{
+					table.getSelectionModel().addSelectionInterval(i,i);
+				}
+			}
+			
+		}
 	}
 
 }

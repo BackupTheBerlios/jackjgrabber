@@ -24,23 +24,11 @@ package presentation.recordInfo;
  */
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
 
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.tree.*;
 
 import presentation.*;
-import presentation.GuiTab;
-
-import service.SerHelper;
-
-import com.jgoodies.forms.builder.*;
-import com.jgoodies.forms.layout.*;
-
 import control.*;
 
 public class GuiTabAvailableFiles extends GuiTab {
@@ -68,7 +56,7 @@ public class GuiTabAvailableFiles extends GuiTab {
 	protected void initialize() {
 		setLayout(new BorderLayout());
 
-		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		final JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		JSplitPane splitFilesInfos = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitFilesInfos.setDividerLocation(350);
 		add(split, BorderLayout.CENTER);
@@ -87,7 +75,19 @@ public class GuiTabAvailableFiles extends GuiTab {
 		splitFilesInfos.setTopComponent(new JScrollPane(getFileTable()));
 		splitFilesInfos.setBottomComponent(new JScrollPane(fileInfo));
 		fileTree.getSelectionModel().addTreeSelectionListener(fileTableModel);
-		split.setDividerLocation(300);
+		split.setDividerLocation(ControlMain.getSettingsLayout().getRecordInfoDirectorySplitPos());
+		
+		split.getLeftComponent().addComponentListener(new ComponentAdapter()
+				{
+				/* (non-Javadoc)
+				 * @see java.awt.event.ComponentAdapter#componentResized(java.awt.event.ComponentEvent)
+				 */
+				public void componentResized(ComponentEvent e) {
+					int divLoc = split.getDividerLocation();
+					ControlMain.getSettingsLayout().setRecordInfoDirectorySplitPos(divLoc);
+				}
+				});
+		
 	}
 
 	/**
@@ -96,10 +96,12 @@ public class GuiTabAvailableFiles extends GuiTab {
 	public JTable getFileTable() {
 		if (fileTable == null)
 		{
-			fileTableModel = new GuiFileTableModel();
-			GuiTableSorter sorter = new GuiTableSorter(fileTableModel);
 			
-			fileTable = new JTable(sorter);
+			fileTable = new JTable();
+			fileTableModel = new GuiFileTableModel(fileTable);
+			GuiTableSorter sorter = new GuiTableSorter(fileTableModel);
+			fileTable.setModel(sorter);
+			
 			sorter.setTableHeader(fileTable.getTableHeader());
 			fileTable.addMouseListener(control);
 			fileTable.getSelectionModel().addListSelectionListener(control);
