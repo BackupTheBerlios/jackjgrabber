@@ -21,11 +21,15 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.BOPid;
+import model.BOPids;
 import model.BORecordArgs;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
+
+import control.ControlMain;
 
 public class SerXMLConverter {
     /**
@@ -35,6 +39,7 @@ public class SerXMLConverter {
 	public static BORecordArgs parseRecordDocument(Document document) {
 		BORecordArgs recordArgs = new BORecordArgs();
 		Element root = document.getRootElement();
+		recordArgs.setPids(new BOPids());
 		
 		Element command = (Element)root.selectSingleNode("//record");
 		Node channelname = root.selectSingleNode("//channelname");
@@ -57,18 +62,22 @@ public class SerXMLConverter {
 		recordArgs.setEpgInfo2(epgInfo2.getText());
 		recordArgs.setEpgId(epgid.getText());
 		recordArgs.setMode(mode.getText());
-		recordArgs.setVPid(Integer.toHexString(Integer.parseInt(videopid.getText())));
-		recordArgs.setVideotextPid(Integer.toHexString(Integer.parseInt(vtxtpid.getText())));
+		recordArgs.getPids().setVPid(new BOPid(Integer.toHexString(Integer.parseInt(videopid.getText())), "video", 0));
+		if (ControlMain.getSettingsRecord().isRecordVtxt()) {
+			recordArgs.getPids().setVtxtPid(new BOPid(Integer.toHexString(Integer.parseInt(vtxtpid.getText())), "vtxt", 2));	
+		}
+		
 		
 		ArrayList pidList = new ArrayList();
 		for( int i=0; i<aPidNodes.size(); i++ ) {
-			String[] pidInfo = new String[2];
 			Element aPid = (Element)aPidNodes.get(i);
-			pidInfo[0] = Integer.toHexString(Integer.parseInt(aPid.attributeValue("pid")));
-			pidInfo[1] = aPid.attributeValue("name");
-			pidList.add(pidInfo);
+			BOPid pid = new BOPid();
+			pid.setId(1);
+			pid.setNumber(Integer.toHexString(Integer.parseInt(aPid.attributeValue("pid"))));
+			pid.setName(aPid.attributeValue("name"));
+			pidList.add(pid);
 		}
-		recordArgs.setAPids(pidList);
+		recordArgs.getPids().setAPids(pidList);
 		return recordArgs;
 	}
 }
