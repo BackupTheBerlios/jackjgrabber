@@ -7,12 +7,11 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import javax.swing.JTable;
 
-import model.BOEpg;
+import org.apache.log4j.Logger;
+
 import model.BOSender;
 import model.BOTimer;
 
@@ -32,7 +31,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	ArrayList senderList;
 	GuiNeutrinoTimerPanel tab;
 	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "Wochentage" };
-	public String[] timerType = { "Shutdown", "Umschalten", "Standby", "Erinnerung", "Sleep-Timer"};
+	public String[] timerType = { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "REMIND", "SLEEPTIMER"};
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -41,7 +40,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	public void initialize() {
 		this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
 		try {
-			this.setTimerList(ControlMain.getBoxAccess().getTimer());
+			this.setTimerList(ControlMain.getBoxAccess().readTimer());
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 		} catch (IOException e) {
@@ -71,13 +70,36 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "addSystemTimer") {
-			
+			this.getTimerList()[1].add(this.buildSystemTimer());
+			this.getTab().getSystemTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "reload") {
 			
 		}
 		if (action == "send") {
-			
+			this.actionSend();
+		}
+	}
+	
+	private void actionSend() {
+		this.sendTimer(this.getTimerList()[0]);
+		this.sendTimer(this.getTimerList()[1]);
+	}
+	
+	private void sendTimer(ArrayList timerList) {
+		for (int i=0; i<timerList.size(); i++) {
+			BOTimer timer = (BOTimer)timerList.get(i);
+			if (timer.getModifiedId() != null) { //nur neue und modifizierte Timer wegschreiben
+				try {
+					if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
+						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
+					} else {
+						Logger.getLogger("ControlProgramTab").error(timer.getInfo());
+					}
+				} catch (IOException e) {
+					SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+				}
+			}
 		}
 	}
 	
@@ -159,7 +181,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
     	return new String();
 	}
 	
-	public String convertEventType(String eventType) {
+	public String convertShortEventType(String eventType) {
 		switch(Integer.parseInt(eventType)) {
 			case 1: return "SHUTDOWN";
 			case 2: return "NEXTPROGRAM";
@@ -172,6 +194,29 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 		return new String();
 	}
 	
+	public String convertLongEventType(String longString) {
+		if (longString.equals("SHUTDOWN")){
+			return "1";
+		}
+		if (longString.equals("NEXTPROGRAM")){
+			return "2";
+		}
+		if (longString.equals("ZAPTO")){
+			return "3";
+		}
+		if (longString.equals("STANDBY")){
+			return "4";
+		}
+		if (longString.equals("RECORD")){
+			return "5";
+		}
+		if (longString.equals("REMIND")) {
+			return  "6";
+		} else {
+			return "7";
+		}
+	}
+	
 	private BOTimer buildRecordTimer() {
 		BOTimer timer = new BOTimer();
 		
@@ -179,12 +224,14 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 		long now = new Date().getTime();
 		
 		timer.setSenderName( defaultSender.getName() );
-		timer.setAnnounceTime(Long.toString(new Date().getTime()));
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
+		timer.setChannelId(defaultSender.getChanId());
+		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
+		timer.setUnformattedStartTime(SerFormatter.formatDate(now));  
+		timer.setUnformattedStopTime(SerFormatter.formatDate(now)); 
+		timer.setModifiedId("new");
 				
-		timer.setEventRepeat("0");
-		timer.setEventType("5");
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("5");
 		return timer;
 	}
 	private BOTimer buildSystemTimer() {
@@ -193,13 +240,13 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
 		long now = new Date().getTime();
 		
-		timer.setSenderName( defaultSender.getName() );
-		timer.setAnnounceTime(Long.toString(new Date().getTime()));
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
-		
-		timer.setEventRepeat("0");
-		timer.setEventType("5");
+		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
+		timer.setUnformattedStartTime(SerFormatter.formatDate(now));  
+		timer.setUnformattedStopTime(SerFormatter.formatDate(now)); 
+		timer.setModifiedId("new");
+				
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("1");
 		return timer;
 	}
 	/**

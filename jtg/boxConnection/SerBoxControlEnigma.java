@@ -293,7 +293,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		Logger.getLogger("SerBoxControlEnigma").info("Ihre Dbox wird in den StandbyModus gebracht.");
 		return sendCommand("standby");
 	}
-	public ArrayList[] getTimer() throws IOException {
+	public ArrayList[] readTimer() throws IOException {
 		ArrayList[] timerList = new ArrayList[2];
 		timerList[0] = new ArrayList();
 		timerList[1] = new ArrayList();
@@ -343,19 +343,19 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) * 1000+Long.parseLong(valueDuration) * 1000);
 					BOTimer botimer = new BOTimer();
 					if (timerType.equalsIgnoreCase("44")) {
-						botimer.setEventType("offen");
+						botimer.setEventTypeId("offen");
 					}
 					else if (timerType.equalsIgnoreCase("256")|timerType.equalsIgnoreCase("268")) {
-						botimer.setEventType("erfolgreich");
+						botimer.setEventTypeId("erfolgreich");
 					}
 					else if (timerType.equalsIgnoreCase("76")) {
-						botimer.setEventType("Aufnahme läuft");
+						botimer.setEventTypeId("Aufnahme läuft");
 					}
 					else {
-						botimer.setEventType("Fehler");
+						botimer.setEventTypeId("Fehler");
 					}
-					botimer.setEventId("");
-					botimer.setEventRepeat("0");
+					botimer.setTimerNumber("");
+					botimer.setEventRepeatId("0");
 	    			botimer.setSenderName(channel);
 	    			botimer.setAnnounceTime(""); //vorwarnzeit
 	    			botimer.setUnformattedStartTime(startDate);  //startDatum
@@ -369,12 +369,13 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		}
 		return timerList;
 	}
-	public String setTimer(String action, BOTimer timer) throws IOException {
+	public String writeTimer(BOTimer timer) throws IOException {
 		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis());
 		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis());
 		String announce = timer.getAnnounceTime();
-		String type = timer.getEventType();
-		String repeat = timer.getEventRepeat();
+		String modifiedId = timer.getModifiedId();
+		String type = timer.getEventTypeId();
+		String repeat = timer.getEventRepeatId();
 		String chanId = timer.getSenderName();
 		String title = timer.getDescription();
 		int startpos;
@@ -387,7 +388,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		String success;
 		int a=Integer.parseInt(stop)-Integer.parseInt(alarm);
 		success="failed";
-		if (action.equalsIgnoreCase("new")) {
+		if (modifiedId.equalsIgnoreCase("new")) {
 			String requestString = "/addTimerEvent?timer=regular&ref="+chanId+"&start="+alarm+"&duration="+a+"&descr="+title;
 			BufferedReader input = getConnection(requestString);
 			while((line=input.readLine())!=null) {

@@ -41,7 +41,7 @@ public class ControlEnigmaTimerTab extends ControlTab implements ActionListener,
 	public void initialize() {
 		this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
 		try {
-			this.setTimerList(ControlMain.getBoxAccess().getTimer());
+			this.setTimerList(ControlMain.getBoxAccess().readTimer());
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 		} catch (IOException e) {
@@ -172,8 +172,8 @@ public class ControlEnigmaTimerTab extends ControlTab implements ActionListener,
 		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
 		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
 				
-		timer.setEventRepeat("0");
-		timer.setEventType("5");
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("5");
 		return timer;
 	}
 	private BOTimer buildSystemTimer() {
@@ -187,8 +187,8 @@ public class ControlEnigmaTimerTab extends ControlTab implements ActionListener,
 		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
 		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
 		
-		timer.setEventRepeat("0");
-		timer.setEventType("5");
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("5");
 		return timer;
 	}
 	/**

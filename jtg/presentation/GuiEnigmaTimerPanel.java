@@ -374,11 +374,11 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	 */
 	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
 		int result;
-		if (Integer.parseInt((String)timer.getEventRepeat())>5) {
-			result = Integer.parseInt((String)timer.getEventRepeat())-256;
+		if (Integer.parseInt((String)timer.getEventRepeatId())>5) {
+			result = Integer.parseInt((String)timer.getEventRepeatId())-256;
 			this.enableRecordTimerWeekdays();
 		} else {
-			result = Integer.parseInt((String)timer.getEventRepeat());
+			result = Integer.parseInt((String)timer.getEventRepeatId());
 			this.disableRecordTimerWeekdays();
 		}
 		while (result>=0) {

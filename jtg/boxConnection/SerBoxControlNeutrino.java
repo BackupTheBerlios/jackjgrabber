@@ -82,8 +82,13 @@ public class SerBoxControlNeutrino extends SerBoxControl{
         while ((line = in.readLine()) != null) {
         	StringTokenizer st = new StringTokenizer(line);
 			String chanId = st.nextToken();
-			String name = st.nextToken();
-			senderList.add(new BOSender("1",chanId, name)); //TODO no Number available here
+			
+			String name = new String();	
+			while (st.hasMoreTokens()) {
+				name += st.nextToken();
+				name += " ";
+			}
+			senderList.add(new BOSender("1",chanId, name.substring(0, name.length()-1))); 
         }
         return senderList;
 	}
@@ -191,40 +196,42 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	 * Rückgabe eines Arrays mit 2 ArrayListen. An 1. Postion Programm-Timer
 	 * 2. Position ArrayList mit SystemTimer
 	 */
-	public ArrayList[] getTimer() throws IOException {
+	public ArrayList[] readTimer() throws IOException {
 		ArrayList[] timerList = new ArrayList[2];
 		timerList[0] = new ArrayList();
 		timerList[1] = new ArrayList();
 		
 		BufferedReader inputNhttpd = getConnection("/control/timer");
-		
-		String line, valueStart, valueStop, valueAnno, valueSenderName;
+		String line;
 		while ((line = inputNhttpd.readLine()) != null) {
+			String valueStart, valueStop, valueAnno, valueSenderName = new String();
 			BOTimer botimer = new BOTimer();
 						
 	        StringTokenizer st = new StringTokenizer(line);
 	        
-            botimer.setEventId(st.nextToken());
-            botimer.setEventType(st.nextToken());
-            botimer.setEventRepeat(st.nextToken());
+            botimer.setTimerNumber(st.nextToken());
+            botimer.setEventTypeId(st.nextToken());
+            botimer.setEventRepeatId(st.nextToken());
             
             valueAnno=st.nextToken(); 
 		    valueStart=st.nextToken();
 		    valueStop=st.nextToken();
 		    if (!valueStop.equals("0")) {
-		    	valueSenderName=st.nextToken();
-		    	botimer.setSenderName( valueSenderName );
+		    	while (st.hasMoreTokens()) {
+		    		valueSenderName += st.nextToken();
+		    		valueSenderName += " ";
+				}
+		    	botimer.setSenderName( valueSenderName.substring(0, valueSenderName.length()-1) );
 		    }
 
 		    botimer.setAnnounceTime(valueAnno);
 		    botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(valueStart));  
 			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(valueStop)); 
 		    
-		    if (botimer.getEventType().equals("5")) {
+		    if (botimer.getEventTypeId().equals("5")) {
 		    	timerList[0].add(botimer);
 		    } else {
-		    	timerList[1].add(botimer);
-		    	
+		    	timerList[1].add(botimer);   	
 		    }
 		}
 		setTimerDesctiptionName(timerList[0]);
@@ -254,17 +261,19 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		}	
 	} 
 	
-	public String setTimer(String action, BOTimer timer) throws IOException {
-		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis());
-		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis());
+	public String writeTimer(BOTimer timer) throws IOException {
+		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis()/1000);
+		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis()/1000);
+		String modifiedId = timer.getModifiedId();
 		String announce = timer.getAnnounceTime();
-		String type = timer.getEventType();
-		String repeat = timer.getEventRepeat();
-		String chanId = timer.getSenderName();
+		String type = timer.getEventTypeId();
+		String repeat = timer.getEventRepeatId();
+		String chanId = timer.getChannelId();
 
-		String requestString = "/control/timer?action="+action+"&alarm="+alarm+
-			"&stop="+stop+"&announce="+announce+"&type="+type+"&rep="+repeat+"&channel_id="+chanId+"&msg=blabla";
+		String requestString = "/control/timer?action="+modifiedId+"&alarm="+alarm+
+			"&stop="+stop+"&announce="+announce+"&type="+type+"&rep="+repeat+"&channel_id="+chanId;
 		BufferedReader input = getConnection(requestString);
+		Logger.getLogger("test").info(requestString);
 		String line;
 		while((line=input.readLine())!=null) {
 			return line;

@@ -144,10 +144,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.setSelectedEpg(eventId); 
 				if (me.getClickCount()==2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
-					if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
-						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+this.getSelectedEpg().getInfo());
+					if (ControlMain.getBoxAccess().writeTimer(timer).equals("ok")) {
+						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
 					} else {
-						Logger.getLogger("ControlProgramTab").error(this.getSelectedEpg().getInfo());
+						Logger.getLogger("ControlProgramTab").error(timer.getInfo());
 					}
 				}
 			}
@@ -323,10 +323,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				if (epg.getEventId().equals(eventId)) {
 					BOTimer timer = this.buildTimer(epg);
 					try {
-						if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
-							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+epg.getInfo());
+						if (ControlMain.getBoxAccess().writeTimer(timer).equals("ok")) {
+							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
 						} else {
-							Logger.getLogger("ControlProgramTab").error(epg.getInfo());
+							Logger.getLogger("ControlProgramTab").error(timer.getInfo());
 						}
 					} catch (IOException e) {
 						SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
@@ -339,18 +339,20 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	private BOTimer buildTimer(BOEpg epg) {
 		BOTimer timer = new BOTimer();
 		
-		int unformattedStart = Integer.parseInt(epg.getUnformattedStart());
-		int unformattedDuration = Integer.parseInt(epg.getUnformattedDuration());
-		int endtime = unformattedStart+unformattedDuration;
-		int announce = unformattedStart-(60*1000);
+		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
+		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
+		long endtime = unformattedStart+unformattedDuration;
+		long announce = unformattedStart-(60*1000);
 		
-		timer.setSenderName(this.getSelectedSender().getChanId());
-		timer.setAnnounceTime(Integer.toString(announce)); //Vorwarnzeit
+		timer.setChannelId(this.getSelectedSender().getChanId());
+		timer.setSenderName(this.getSelectedSender().getName());
+		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
 		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart));
 		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime));
+		timer.setModifiedId("new");
 		
-		timer.setEventRepeat("0");
-		timer.setEventType("5");
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("5");
 		timer.setDescription(epg.getTitle());
 		return timer;
 	}

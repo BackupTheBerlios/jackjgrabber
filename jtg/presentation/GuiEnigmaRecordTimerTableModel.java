@@ -31,7 +31,7 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(rowIndex);
 		if (columnIndex == 0) {
-		    return timer.getEventType();
+		    return timer.getEventTypeId();
 		} if (columnIndex == 1) {
 			return timer.getSenderName();
 		} if (columnIndex == 2) {
@@ -41,9 +41,9 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 		//} if (columnIndex == 4)
 		//	return timer.getStopTime();
 		} if (columnIndex == 5) {
-			return control.convertShortEventRepeat(timer.getEventRepeat());
+			return control.convertShortEventRepeat(timer.getEventRepeatId());
 		} if (columnIndex == 6) {
-		    return timer.getEventId();
+		    return timer.getTimerNumber();
 		} else {
 			return timer.getDescription(); 
 		}
@@ -68,7 +68,7 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 		}
 		if (col == 5) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
-			timer.setEventRepeat(control.convertLongEventRepeat((String)value));
+			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.getTab().selectRepeatDaysForRecordTimer(timer);
 		}
     }
