@@ -97,6 +97,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			this.setTvMode(true);
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
+			this.getMainView().getTabProgramm().getJRadioButtonTVMode().setSelected(true);
 		} catch (IOException e) {			
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -113,6 +114,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			ArrayList bouquetList = new ArrayList();
 			bouquetList.add(bouquet);
 			this.setBouquetList(bouquetList); 
+			this.getMainView().getTabProgramm().getJRadioButtonRadioMode().setSelected(true);
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -190,6 +192,32 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		}
 		if (action == "startServer"){
 			this.actionStreamingServer();
+		}
+		if (action == "radioMode"){
+			this.actionRadioMode();
+		}
+		if (action == "tvMode"){
+			this.actionTvMode();
+		}
+	}
+	
+	private void actionTvMode() {
+		try {
+			if (this.getBoxAccess().setRadioTvMode("tv").equals("ok")) {
+				this.reInitialize();
+			}
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		}
+	}
+	
+	private void actionRadioMode() {
+		try {
+			if (this.getBoxAccess().setRadioTvMode("radio").equals("ok")) {
+				this.reInitialize();
+			}
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 		
