@@ -438,25 +438,23 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		}
 	}
 
-	/*
-	 * Gibt das laufende EPG-Objekt zurück Die EPG's sind aufsteigend sortiert Das 1. EPG vor dem 1. EPG mit negativer Zeit wird
-	 * zurückgegeben
-	 */
-	public BOEpg getRunnigEpg(ArrayList epgList) {
-	    if (epgList != null) {
-	        GregorianCalendar now = new GregorianCalendar();
-	        long nowTime = now.getTimeInMillis();
-	        for (int i = 0; i < epgList.size(); i++) {
-	            BOEpg epgObj = (BOEpg) epgList.get(i);
-	            long epgStart = epgObj.getStartdate().getTimeInMillis();
-                long epgStop = epgObj.getEndDate().getTimeInMillis();
-                if (nowTime>epgStart && nowTime<epgStop) {
-                    return epgObj;
+    public BOEpg getRunnigEpg(ArrayList epgList) {
+        if (epgList != null) {
+            GregorianCalendar now = new GregorianCalendar();
+            long nowTime = now.getTimeInMillis();
+            for (int i = 0; i < epgList.size(); i++) {
+                BOEpg epgObj = (BOEpg) epgList.get(i);
+                long epgStart = epgObj.getStartdate().getTimeInMillis();
+                if (nowTime>epgStart) {
+                    long epgStop = epgObj.getEndDate().getTimeInMillis();
+                    if (nowTime<epgStop) {
+                        return epgObj;    
+                    }
                 }
-	        }
-	    }
-	    return null;
-	}
+            }
+        }
+        return null;
+    }
 
 	/*
 	 * Zapping zum selektierten Sender und Ermittlung der Pids
