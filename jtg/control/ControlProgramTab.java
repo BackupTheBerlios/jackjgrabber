@@ -286,11 +286,11 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		
 		ArrayList pidList = new ArrayList();
 		
-		String[] aPids = new String[this.getPids().size()-1];
 		for (int i=0; i<this.getPids().size()-1; i++) {
-			aPids[i]=(String)this.getPids().get(i+1);
+			String[] pidInfo = new String[1];
+			pidInfo[0]=(String)this.getPids().get(i+1);
+			pidList.add(pidInfo);
 		}
-		pidList.add(aPids);
 		args.setAPids(pidList);
 
 		this.fillRecordArgsWithEpgData(args);
@@ -301,8 +301,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		args.setSenderName(this.getSelectedSender().getName());
 		BOEpg epg = this.getSelectedSender().getRunnigEpgWithUpdate();
 		if (epg != null) {
-			String title = epg.getTitle();
-			args.setEpgTitle(title.substring(0, title.length()-1));
+			args.setEpgTitle(epg.getTitle());
 		}
 	}
 	
