@@ -71,7 +71,8 @@ public class BOLocalTimer {
 		timer.setRecordAllPids(ControlMain.getSettingsRecord().isRecordAllPids());
 		timer.setRecordVtxt(ControlMain.getSettingsRecord().isRecordVtxt());
 		timer.setShutdownAfterRecord(ControlMain.getSettingsRecord().isShutdownAfterRecord());
-		timer.setAfterRecordOptions(ControlMain.getSettingsRecord().getAfterRecordOptions());
+		timer.setAfterRecordOptions(
+                (BOAfterRecordOptions)SerHelper.serialClone(ControlMain.getSettingsRecord().getAfterRecordOptions()));
 		timer.setStereoReplaceAc3(ControlMain.getSettingsRecord().isStereoReplaceAc3());
 		timer.setStopPlaybackAtRecord(ControlMain.getSettingsRecord().isStopPlaybackAtRecord());
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
@@ -97,7 +98,8 @@ public class BOLocalTimer {
 		timer.setRecordAllPids(ControlMain.getSettingsRecord().isRecordAllPids());
 		timer.setRecordVtxt(ControlMain.getSettingsRecord().isRecordVtxt());
 		timer.setShutdownAfterRecord(ControlMain.getSettingsRecord().isShutdownAfterRecord());
-		timer.setAfterRecordOptions(ControlMain.getSettingsRecord().getAfterRecordOptions());
+		timer.setAfterRecordOptions(
+                (BOAfterRecordOptions)SerHelper.serialClone(ControlMain.getSettingsRecord().getAfterRecordOptions()));
 		timer.setStereoReplaceAc3(ControlMain.getSettingsRecord().isStereoReplaceAc3());
 		timer.setStopPlaybackAtRecord(ControlMain.getSettingsRecord().isStopPlaybackAtRecord());
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
