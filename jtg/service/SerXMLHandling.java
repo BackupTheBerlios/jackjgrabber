@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.*;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -30,6 +31,9 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import com.jgoodies.plaf.plastic.*;
+
+import control.*;
 import control.ControlMain;
 
 
@@ -66,7 +70,16 @@ public class SerXMLHandling {
 		setElementInElement(root,"recordVtxt", "false");
 		setElementInElement(root,"startVlc", "false");
 		setElementInElement(root,"vlcPath", new File("vlc.exe").getAbsolutePath());
-
+		setElementInElement(root, "lookandfeel", PlasticLookAndFeel.class.getName());
+		setElementInElement(root, "storeepg", "false");
+		setElementInElement(root, "storelogafterrecord", "false");
+		setElementInElement(root, "mgselectedchannels","13TH STREET|CLASSICA|DISNEY CHANNEL|FOX KIDS|HEIMATKANAL|HIT24|JUNIOR|" +
+				"MGM|PREMIERE 1|PREMIERE 2|PREMIERE 3|PREMIERE 4|PREMIERE 5|PREMIERE 6|PREMIERE 7|PREMIERE KRIMI|" +
+				"PREMIERE NOSTALGIE|PREMIERE SERIE|PREMIERE START|SCI FI");
+		
+		setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_AUTO + "");
+		setElementInElement(root, "mgdefault", ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL + "");
+		setElementInElement(root, "mgstoreoriginal", "false");
 		root.addElement("boxList");
 		root.addElement("playbackList");
 		ControlMain.setSettingsDocument(doc);
