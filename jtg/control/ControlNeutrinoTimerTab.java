@@ -66,6 +66,8 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 			this.setTimerList(ControlMain.getBoxAccess().readTimer());
 			this.refreshTables();
+			this.getTab().recordTimerSorter.setSortingStatus(1, 1);
+			this.getTab().systemTimerSorter.setSortingStatus(1, 1);
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
@@ -115,12 +117,14 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 		if (radioButton.getName().equals("recordTimer")){
 			JTable table = this.getTab().getJTableRecordTimer();
 			int selectedRow = table.getSelectedRow();
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(selectedRow);
+			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
 			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
 		} else {
 			JTable table = this.getTab().getJTableSystemTimer();
 			int selectedRow = table.getSelectedRow();
-			BOTimer timer = (BOTimer)this.getTimerList()[1].get(selectedRow);
+			int modelIndex = this.getTab().systemTimerSorter.modelIndex(selectedRow);
+			BOTimer timer = (BOTimer)this.getTimerList()[1].get(modelIndex);
 			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage2));
 		}
 	}
@@ -283,13 +287,15 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 	public void mousePressed(MouseEvent me) {
 		JTable table = (JTable)me.getSource();
 		String tableName = table.getName();
-		int selectedRow = table.getSelectedRow();
+		int selectedRow = table.getSelectedRow();		
 		if (tableName == "recordTimerTable") {
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(selectedRow);
+			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
 			this.selectRepeatDaysForRecordTimer(timer);
 		}
 		if (tableName == "systemTimerTable") {
-			BOTimer timer = (BOTimer)this.getTimerList()[1].get(selectedRow);
+			int modelIndex = this.getTab().systemTimerSorter.modelIndex(selectedRow);
+			BOTimer timer = (BOTimer)this.getTimerList()[1].get(modelIndex);
 			this.selectRepeatDaysForSystemTimer(timer);
 		}
 	}
