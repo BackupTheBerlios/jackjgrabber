@@ -308,7 +308,7 @@ public class GuiTabAbout extends JPanel {
 	public JTextPane getLinkHomePage() {
 		if (linkHomePage == null) {
 		    linkHomePage = new JTextPane();	
-		    linkHomePage.setPreferredSize(new Dimension(120,20));
+		    linkHomePage.setPreferredSize(new Dimension(160,20));
 		    linkHomePage.setBackground(background);
 		    linkHomePage.setContentType("text/html");
 		    linkHomePage.setEditable(false);
