@@ -93,15 +93,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
 	private static final String GENRE  = ControlMain.getProperty("txt_genre2");
 	private static final String SENDER = ControlMain.getProperty("txt_sender2");
-	//private static String HTML_ON  = "<HTML><font size=3>";
-	//private static String HTML_OFF = "</font></HTML>";
-	private static String HTML_ON  = "<HTML><font face='System' size='3'>";
-	private static String HTML_OFF = "</font></HTML>";
+	
+	private static String HTML_ON  = SerFormatter.getHTML_ON_OFF(0);
+	private static String HTML_OFF = SerFormatter.getHTML_ON_OFF(1);
+	
 	String SelectedItemJComboBox;
 	int SelectedItemJComboBoxSucheNach;
     int timerTableSize; 
-    int zaehler = 0;
-    
+    int zaehler = 0;    
 	public ControlMovieGuideTab(GuiMainView view) {
 		this.setMainView(view);		
 	}

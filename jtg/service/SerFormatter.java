@@ -7,7 +7,8 @@ import java.util.TimeZone;
 import java.util.GregorianCalendar;
 import java.text.ParseException;
 import java.util.regex.*;
-
+import java.util.Enumeration;
+import javax.swing.UIManager;
 /**
  * @author ralix
  */
@@ -253,5 +254,24 @@ public class SerFormatter {
     		}
     	}
         return value;
+    }   
+    public static String getHTML_ON_OFF(int value){
+        if(value==0){
+            return "<HTML><font face="+getUIFontDefault()+" size='-1'>";
+        }else{
+            return "</font></HTML>";
+        }
+    }
+    private static String getUIFontDefault(){
+    	Enumeration keys = UIManager.getDefaults().keys();
+    	String t = "";
+        while (keys.hasMoreElements()) {           
+           Object value = UIManager.get (keys.nextElement());        
+            if (value instanceof javax.swing.plaf.FontUIResource){            
+                t = value.toString();
+                t = t.substring( (t.indexOf("name")+5), (t.indexOf("style")-1));         
+            }
+        }
+        return t;
     }    
 }

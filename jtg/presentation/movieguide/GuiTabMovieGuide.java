@@ -33,7 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.JProgressBar; 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
+import service.SerFormatter;
 
 import model.BOMovieGuide;
 
@@ -101,8 +101,8 @@ public class GuiTabMovieGuide extends JPanel {
 	public GuiMovieGuideFilmTableModel filmTableModel;
 	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
 
-	private static String HTML_ON  = "<HTML><font face='System' size='3'><u>";
-	private static String HTML_OFF = "</u></font></HTML>";
+	private static String HTML_ON  = SerFormatter.getHTML_ON_OFF(0)+"<u>";
+	private static String HTML_OFF = "</u>"+SerFormatter.getHTML_ON_OFF(1);
 			
 	public GuiTabMovieGuide(ControlMovieGuideTab ctrl) {
 		super();
