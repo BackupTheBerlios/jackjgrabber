@@ -35,10 +35,6 @@ public class BOEpg {
 		this.setUnformattedStart(unformStart);
 		this.setUnformattedDuration(unformDuration);
 	}
-	
-	public String getInfo() {
-		return this.getStartTime()+" "+this.getTitle();
-	}
 
 	/**
 	 * @return Returns the sender.
