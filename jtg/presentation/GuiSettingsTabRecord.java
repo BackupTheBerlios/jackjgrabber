@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -228,7 +229,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JButton getJButtonRecordPathFileChooser() {
 		if (jButtonRecordPathFileChooser == null) {
-			jButtonRecordPathFileChooser = new JButton("...");
+			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
+			jButtonRecordPathFileChooser = new JButton(icon);
 			jButtonRecordPathFileChooser.setActionCommand("recordPath");
 			jButtonRecordPathFileChooser.addActionListener(control);
 		}
@@ -239,7 +241,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JButton getJButtonUdrecPathFileChooser() {
 		if (jButtonUdrecPathFileChooser == null) {
-			jButtonUdrecPathFileChooser = new JButton("...");
+			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
+			jButtonUdrecPathFileChooser = new JButton(icon);
 			jButtonUdrecPathFileChooser.setActionCommand("udrecPath");
 			jButtonUdrecPathFileChooser.addActionListener(control);
 		}
