@@ -214,13 +214,9 @@ public class GuiSettingsTabMain extends GuiTab {
 	public JFormattedTextField getTfBoxIp() {
 		if (tfBoxIp == null) {
 			try {
-				tfBoxIp = new JFormattedTextField(new MaskFormatter(
-						"###.###.###.###"));
-				((MaskFormatter) tfBoxIp.getFormatter())
-						.setAllowsInvalid(false);
-				((MaskFormatter) tfBoxIp.getFormatter()).setOverwriteMode(true);
+				tfBoxIp = new JFormattedTextField(new MaskFormatter("###.###.###.###"));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		}
