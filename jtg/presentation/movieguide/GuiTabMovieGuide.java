@@ -230,7 +230,7 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 	public JLabel getJLabelSearchCount(){
 		if (jLabelSearchCount == null) {
-			jLabelSearchCount = new JLabel("Treffer:");
+			jLabelSearchCount = new JLabel("");
 		}
 		return jLabelSearchCount;
 	}
