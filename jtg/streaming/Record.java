@@ -159,7 +159,7 @@ public class Record {
 	}
 	
 	public String getFileName() {
-	    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+	    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_ HH-mm");
 	    Date now = new Date();
 	    String date = f.format(now);
 	    String name;

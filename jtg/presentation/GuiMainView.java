@@ -49,12 +49,18 @@ public class GuiMainView extends JFrame {
 		addWindowListener (new WindowAdapter() { 
 			public void windowClosing(WindowEvent e) { 
 				try {
-					SerXMLConverter.saveAllSettings();
-					Logger.getLogger("ControlMainView").info("Settings saved");
+					if (ControlMain.getSettings().isSettingsChanged()) {
+						SerXMLConverter.saveAllSettings();
+						X.inisave();
+						Logger.getLogger("ControlMainView").info("Settings saved");
+					}
+					if (ControlMain.getSettings().isProjectXSettingsChanged()) {
+						X.inisave();
+						Logger.getLogger("ControlMainView").info("ProjectX-Settings saved");
+					}
 				} catch (IOException e1) {
 					Logger.getLogger("ControlMainView").error("Error while save Settings");
 				}
-				X.inisave();
 				System.exit(0); 
 			}
 		});

@@ -22,12 +22,14 @@ import java.text.ParseException;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
@@ -57,6 +59,9 @@ public class GuiTabSettings extends JPanel {
 	private JComboBox jComboBoxLocale = null;
 	private JFormattedTextField tfServerPort = null;
 	private JFormattedTextField tfBoxIp = null;
+	private JCheckBox cbStartStreamingServer;
+	private JTextField jTextFieldRecordSavePath;
+	private JButton jButtonRecordPathFileChooser;
 
 	public GuiTabSettings(ControlSettingsTab ctrl) {
 		super();
@@ -98,14 +103,18 @@ public class GuiTabSettings extends JPanel {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref:grow, 5, pref",	 		//columna 
-			  "pref:grow, pref:grow, pref:grow, 40:grow");				//rows
+					  "pref, 5, pref, pref:grow,  5, pref",	 		//columna 
+			  "pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow");				//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",					cc.xywh	(1, 1, 3, 1));
-			builder.add(new JLabel("Streamingserver-Port"),	  			cc.xy	(1, 2));
-			builder.add(this.getTfServerPort(),							cc.xy	(3, 2));
+			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 6, 1));
+			builder.add(this.getCbStartStreamingServer(),					cc.xywh	(1, 2, 5, 1));
+			builder.add(new JLabel("Streamingserver-Port"),	  			cc.xy	(1, 3));
+			builder.add(this.getTfServerPort(),										cc.xy	(3, 3));
+			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),		cc.xy	(1, 4));
+			builder.add(this.getJTextFieldRecordSavePath(),					cc.xywh	(3, 4, 2, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(),			cc.xy	(6, 4));
 		}
 		return panelRecordSettings;
 	}
@@ -274,5 +283,37 @@ public class GuiTabSettings extends JPanel {
 			}
 		}
 		return tfBoxIp;
+	}
+	/**
+	 * @return Returns the cbStartStreamingServer.
+	 */
+	public JCheckBox getCbStartStreamingServer() {
+		if (cbStartStreamingServer == null) {
+			cbStartStreamingServer = new JCheckBox("Streamingserver beim Start starten");
+			cbStartStreamingServer.addItemListener(control);
+		}
+		return cbStartStreamingServer;
+	}
+	/**
+	 * @return Returns the jButtonRecordPathFileChooser.
+	 */
+	public JButton getJButtonRecordPathFileChooser() {
+		if (jButtonRecordPathFileChooser == null) {
+			jButtonRecordPathFileChooser = new JButton("...");
+			jButtonRecordPathFileChooser.setActionCommand("recordPath");
+			jButtonRecordPathFileChooser.addActionListener(control);
+		}
+		return jButtonRecordPathFileChooser;
+	}
+	/**
+	 * @return Returns the jTextFieldRecordSavePath.
+	 */
+	public JTextField getJTextFieldRecordSavePath() {
+		if (jTextFieldRecordSavePath == null) {
+			jTextFieldRecordSavePath = new JTextField();
+			jTextFieldRecordSavePath.setPreferredSize(new Dimension(340, 22));
+			jTextFieldRecordSavePath.setEditable(false);
+		}
+		return jTextFieldRecordSavePath;
 	}
 }

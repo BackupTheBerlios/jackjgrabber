@@ -20,7 +20,11 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
@@ -48,24 +52,33 @@ public class SerXMLHandling {
 		Element serverPort = DocumentHelper.createElement("streamingServerPort");
 		serverPort.setText("4000");
 		
+		Element startServer = DocumentHelper.createElement("startStremingServer");
+		startServer.setText("true");
+		
+		Element savePath = DocumentHelper.createElement("savePath");
+		savePath.setText(new File(System.getProperty("user.home")).getAbsolutePath());
+		
+		
+		root.add(startServer);
+		root.add(savePath);
 		root.add(locale);
 		root.add(theme);
 		root.add(serverPort);
 		
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);
-		saveXMLFile(path);
+		saveSettingsFile(path);
 		return doc;
 	}
 		
-	public static void saveXMLFile(File path) throws IOException {
+	public static void saveSettingsFile(File path) throws IOException {
 		OutputFormat format = OutputFormat.createPrettyPrint(); 
 		XMLWriter writer = new XMLWriter( new FileWriter( path ), format );
 		writer.write( ControlMain.getSettingsDocument() );
 		writer.close();
 	}
 	
-	public static Document readDocument(File path) throws Exception {
+	public static Document readDocument(File path)  throws DocumentException, MalformedURLException {
 		SAXReader reader = new SAXReader();  
 		Document doc = reader.read(path);
 		return doc;

@@ -45,6 +45,8 @@ public class SerXMLConverter {
 		//Auswertung der User-Settings
 		settings.setThemeLayout(root.selectSingleNode("/settings/theme").getText());
 		settings.setStreamingServerPort(root.selectSingleNode("/settings/streamingServerPort").getText());
+		settings.setStartStreamingServer(Boolean.parseBoolean(root.selectSingleNode("/settings/startStremingServer").getText()));
+		settings.setSavePath(root.selectSingleNode("/settings/savePath").getText());
 		settings.setLocale(root.selectSingleNode("/settings/locale").getText());
 		
 		//Auswertund der Box-Settings
@@ -99,8 +101,6 @@ public class SerXMLConverter {
 			newBoxListRoot.add(boxElement);
 		}
 		settingsDocument.add(newBoxListRoot);
-		
-		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
 	}
 	
 	public static void saveUserSettings() throws IOException {
@@ -108,45 +108,20 @@ public class SerXMLConverter {
 		Node theme = settingsDocument.selectSingleNode("/settings/theme");
 		Node locale = settingsDocument.selectSingleNode("/settings/locale");
 		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
+		Node startServer = settingsDocument.selectSingleNode("/settings/startStremingServer");
+		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
 		
+		startServer.setText(Boolean.toString(ControlMain.getSettings().isStartStreamingServer()));
+		savePath.setText(ControlMain.getSettings().getSavePath());
 		serverPort.setText(ControlMain.getSettings().getStreamingServerPort());
 		theme.setText(ControlMain.getSettings().getThemeLayout());
 		locale.setText(ControlMain.getSettings().getLocale());
-		
-		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
 	}
 	
 	public static void saveAllSettings() throws IOException {
-		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
-		
-		//Aufbereitung der User-Settings
-		Node theme = settingsDocument.selectSingleNode("/settings/theme");
-		Node locale = settingsDocument.selectSingleNode("/settings/locale");
-		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
-		
-		serverPort.setText(ControlMain.getSettings().getStreamingServerPort());
-		theme.setText(ControlMain.getSettings().getThemeLayout());
-		locale.setText(ControlMain.getSettings().getLocale());
-		
-		
-		//Aufbereitung der Box-Settings
-		Node boxListRoot = settingsDocument.selectSingleNode("/settings/boxList");
-		settingsDocument.remove(boxListRoot);
-		Element newBoxListRoot = DocumentHelper.createElement("boxList");
-		ArrayList boxList = ControlMain.getSettings().getBoxList();
-	
-		for (int i=0; i<boxList.size(); i++) {
-			BOBox box = (BOBox)boxList.get(i);
-			Element boxElement = DocumentHelper.createElement("box");
-			boxElement.addElement("boxIp").addText(box.getDboxIp());
-			boxElement.addElement("login").addText(box.getLogin());
-			boxElement.addElement("password").addText(box.getPassword());
-			boxElement.addElement("standard").addText(box.isStandard().toString());
-			newBoxListRoot.add(boxElement);
-		}
-		settingsDocument.add(newBoxListRoot);
-		
-		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
+		saveUserSettings();
+		saveBoxSettings();
+		SerXMLHandling.saveSettingsFile(new File(ControlMain.filename));
 	}
 	/**
 	 * @param XML-Document der BOX

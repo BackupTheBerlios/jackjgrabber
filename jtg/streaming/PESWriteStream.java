@@ -25,6 +25,8 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import control.ControlMain;
+
 
 /**
  * 
@@ -38,7 +40,7 @@ public class PESWriteStream {
 	boolean isActive = true;
 
 	public PESWriteStream(char dataType, int number, String filename) throws FileNotFoundException {
-	    baseFileName = filename;
+	    baseFileName = ControlMain.getSettings().getSavePath()+"/"+filename;
 	    stremNum = number;
 		switch (dataType) {
 			case 'v':
@@ -70,7 +72,6 @@ public class PESWriteStream {
 	    try {
             fileOut.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 	}

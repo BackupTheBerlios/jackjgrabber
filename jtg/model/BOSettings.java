@@ -27,24 +27,28 @@ public class BOSettings {
     private ArrayList boxList;
     private boolean boxIpChanged = false;
     private boolean settingsChanged = false;
+    private boolean projectXSettingsChanged = false;
     private String streamingServerPort;
+    private boolean startStreamingServer;
+    private String savePath;
     
-    public BOSettings() {
+    public void removeBox(int number) {
+    	setSettingsChanged(true);
+    	getBoxList().remove(number);
     }
     
-    public BOSettings (String dboxIp, String login, String password, String vlcPath){
-        this.vlcPath  = vlcPath;
+    public void addBox(BOBox box) {
+    	setSettingsChanged(true);
+    	getBoxList().add(box);
     }
-    
+     
     public String getVlcPath() {
         return vlcPath;
     }
 	
     public void setVlcPath(String vlcPath) {
+    	setSettingsChanged(true);
         this.vlcPath = vlcPath;
-    }
-    public void setAll(BOSettings bosettings){       
-        this.vlcPath  = bosettings.getVlcPath();
     }
 	/**
 	 * @return Returns the boxList.
@@ -68,6 +72,7 @@ public class BOSettings {
 	 * @param themeLayout The themeLayout to set.
 	 */
 	public void setThemeLayout(String themeLayout) {
+		setSettingsChanged(true);
 		this.themeLayout = themeLayout;
 	}
 	/**
@@ -107,6 +112,7 @@ public class BOSettings {
 	 * @param locale The locale to set.
 	 */
 	public void setLocale(String locale) {
+		setSettingsChanged(true);
 		this.locale = locale;
 	}
 	/**
@@ -119,6 +125,45 @@ public class BOSettings {
 	 * @param streamingServerPort The streamingServerPort to set.
 	 */
 	public void setStreamingServerPort(String streamingServerPort) {
+		setSettingsChanged(true);
 		this.streamingServerPort = streamingServerPort;
+	}
+	/**
+	 * @return Returns the startStreamingServer.
+	 */
+	public boolean isStartStreamingServer() {
+		return startStreamingServer;
+	}
+	/**
+	 * @param startStreamingServer The startStreamingServer to set.
+	 */
+	public void setStartStreamingServer(boolean startStreamingServer) {
+		setSettingsChanged(true);
+		this.startStreamingServer = startStreamingServer;
+	}
+	/**
+	 * @return Returns the savePath.
+	 */
+	public String getSavePath() {
+		return savePath;
+	}
+	/**
+	 * @param savePath The savePath to set.
+	 */
+	public void setSavePath(String savePath) {
+		setSettingsChanged(true);
+		this.savePath = savePath;
+	}
+	/**
+	 * @return Returns the projectXSettingsChanged.
+	 */
+	public boolean isProjectXSettingsChanged() {
+		return projectXSettingsChanged;
+	}
+	/**
+	 * @param projectXSettingsChanged The projectXSettingsChanged to set.
+	 */
+	public void setProjectXSettingsChanged(boolean projectXSettingsChanged) {
+		this.projectXSettingsChanged = projectXSettingsChanged;
 	}
 }

@@ -23,6 +23,7 @@ import javax.swing.*;
 
 import model.BOBox;
 
+import control.ControlMain;
 import control.ControlSettingsTab;
 
 import java.awt.*;
@@ -44,7 +45,7 @@ public class GuiBoxSettingsTableCellRenderer extends DefaultTableCellRenderer {
 					int row,
 					int column) 
 		{
-			BOBox box = (BOBox)control.getBoxList().get(row);
+			BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(row);
 			JCheckBox checkbox = new JCheckBox();
 			checkbox.setHorizontalAlignment(SwingConstants.CENTER);
 			checkbox.setSelected(box.isStandard().booleanValue());

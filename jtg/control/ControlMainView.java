@@ -155,6 +155,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 			pane.getTabTimer().getControl().initialize();
 		}
 		if (count == 2) { //ProjectXTab
+			ControlMain.getSettings().setProjectXSettingsChanged(true);
 			try {
 				comp.getComponent(0);
 			} catch (ArrayIndexOutOfBoundsException e) {

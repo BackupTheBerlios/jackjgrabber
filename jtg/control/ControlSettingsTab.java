@@ -21,27 +21,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
-import java.util.ArrayList;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JTable;
-import javax.swing.filechooser.FileFilter;
 
 import model.BOBox;
+import model.BOSettings;
 
 import presentation.GuiMainView;
 
 
-public class ControlSettingsTab extends ControlTab implements ActionListener, MouseListener, ItemListener {
+public class ControlSettingsTab extends ControlTab implements ActionListener,  ItemListener {
 
 	GuiMainView mainView;
+	BOSettings settings;
 	
 	public ControlSettingsTab(GuiMainView view) {
 		this.setMainView(view);
+		this.setSettings(ControlMain.getSettings());
 	}
 	
 	/*
@@ -49,9 +47,11 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	 * @see control.ControlTab#initialize()
 	 */
 	public void initialize() {
-		this.getMainView().getTabSettings().getJComboBoxTheme().setSelectedItem(ControlMain.getSettings().getThemeLayout());
-		this.getMainView().getTabSettings().getJComboBoxLocale().setSelectedItem(ControlMain.bolocale.getLocale());
-		this.getMainView().getTabSettings().getTfServerPort().setText(ControlMain.getSettings().getStreamingServerPort());
+		this.getMainView().getTabSettings().getJComboBoxTheme().setSelectedItem(settings.getThemeLayout());
+		this.getMainView().getTabSettings().getJComboBoxLocale().setSelectedItem(settings.getLocale());
+		this.getMainView().getTabSettings().getTfServerPort().setText(settings.getStreamingServerPort());
+		this.getMainView().getTabSettings().getJTextFieldRecordSavePath().setText(settings.getSavePath());
+		this.getMainView().getTabSettings().getCbStartStreamingServer().setSelected(settings.isStartStreamingServer());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -62,35 +62,27 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		if (action == "add") {
 			this.actionAddBox();
 		}
+		if (action == "recordPath") {
+			this.openFileChooser();
+		}
 	}
 
-	//Change-Events der Combos
+	//Change-Events der Combos und der Checkbox
 	public void itemStateChanged (ItemEvent event) {
-		JComboBox comboBox = (JComboBox)event.getSource();
-		if (comboBox.getName().equals("theme")) {
-			ControlMain.getSettings().setThemeLayout((String)comboBox.getSelectedItem());
-		}
-		if (comboBox.getName().equals("locale")) {
-			ControlMain.getSettings().setLocale((String)comboBox.getSelectedItem());
-		}
-	}
-		
-	public void mousePressed(MouseEvent me) {
-		JTable table = (JTable)me.getSource();
-		String tableName = table.getName();
-		if (tableName == "BoxSettings") {
-			
+		String comp = event.getSource().getClass().getName();
+		if (comp.equals("javax.swing.JCheckBox")) {
+			JCheckBox checkBox = (JCheckBox)event.getSource();
+			settings.setStartStreamingServer(checkBox.isSelected());
+		} else {
+			JComboBox comboBox = (JComboBox)event.getSource();
+			if (comboBox.getName().equals("theme")) {
+				settings.setThemeLayout((String)comboBox.getSelectedItem());
+			}
+			if (comboBox.getName().equals("locale")) {
+				settings.setLocale((String)comboBox.getSelectedItem());
+			}
 		}
 	}
-	
-	public void mouseClicked(MouseEvent me)
-	{}
-	public void mouseReleased(MouseEvent me)
-	{}
-	public void mouseExited(MouseEvent me)
-	{}
-	public void mouseEntered(MouseEvent me)
-	{}
 	
 	private void actionAddBox() {
 		BOBox box = new BOBox();
@@ -102,23 +94,21 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		this.getMainView().getTabSettings().getModelBoxTable().removeRow(selectedRow);
 	}
 
-	private void openFileChooser() {		
-		JFileChooser chooser = new JFileChooser();
-		FileFilter filter = new FileFilter(){
-			public boolean accept(File f){
-				return (f.getName().endsWith("vlc.exe") || f.isDirectory() );
-			}
-			public String getDescription(){
-				return "vlc.exe";
-			}
-		};
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showSaveDialog( null ) ;
-	
-		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-			String path = chooser.getSelectedFile().toString();
+	private void openFileChooser() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
-		}
+		fc.setApproveButtonText( "Auswählen");
+		fc.setApproveButtonToolTipText( "Verzeichnis auswählen");
+		int returnVal = fc.showSaveDialog( null ) ;
+
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
+			{
+				String path = fc.getSelectedFile().toString();
+				this.getMainView().getTabSettings().getJTextFieldRecordSavePath().setText(path);
+				ControlMain.getSettings().setSavePath(path);
+			}
 	}
 	
 	/**
@@ -134,9 +124,15 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		this.mainView = mainView;
 	}
 	/**
-	 * @return Returns the boxList.
+	 * @return Returns the settings.
 	 */
-	public ArrayList getBoxList() {
-		return ControlMain.getSettings().getBoxList();
+	public BOSettings getSettings() {
+		return settings;
+	}
+	/**
+	 * @param settings The settings to set.
+	 */
+	public void setSettings(BOSettings settings) {
+		this.settings = settings;
 	}
 }

@@ -40,14 +40,14 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	}	
 
 	public int getRowCount() {
-		if (control.getBoxList().size() == 0) {
+		if (ControlMain.getSettings().getBoxList().size() == 0) {
 			return 0;
 		}
-		return control.getBoxList().size();
+		return ControlMain.getSettings().getBoxList().size();
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOBox box = (BOBox)control.getBoxList().get(rowIndex);
+		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(rowIndex);
 		if (columnIndex == 0) {
 			return box.getDboxIp();
 		}
@@ -63,7 +63,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		ControlMain.getSettings().setBoxIpChanged(true);
-		BOBox box = (BOBox)control.getBoxList().get(rowIndex);
+		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(rowIndex);
 		if (columnIndex == 0) {
 			box.setDboxIp((String)aValue);
 		}
@@ -76,7 +76,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		//nur eine Checkbox darf selektiert sein!!
 		if (columnIndex == 3) {
 			if (((Boolean)aValue).booleanValue()) {
-				ArrayList boxList = control.getBoxList();
+				ArrayList boxList = ControlMain.getSettings().getBoxList();
 				for (int i=0; i<boxList.size(); i++) { 
 					BOBox boxx = (BOBox)boxList.get(i);
 					boxx.setStandard(Boolean.FALSE);
@@ -103,13 +103,13 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	}
 	
 	public void addRow(BOBox data) {
-		control.getBoxList().add(data);
+		ControlMain.getSettings().addBox(data);
 		fireTableDataChanged();
 	}
 	
 	public void removeRow(int rowNumber) {
 		try {
-			control.getBoxList().remove(rowNumber);
+			ControlMain.getSettings().removeBox(rowNumber);
 			fireTableDataChanged();
 		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert("Bitte eine Zeile markieren", control.getMainView());};
 	}

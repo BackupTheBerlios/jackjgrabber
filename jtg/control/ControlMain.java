@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
 import model.BOBox;
 import model.BOLocale;
@@ -30,6 +31,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
@@ -90,7 +92,9 @@ public class ControlMain {
 		startLogger();
 		readSettings();
 		control = new ControlMainView();
-		startStreamingSever();
+		if (settings.isStartStreamingServer()) {
+			startStreamingSever();
+		}
 	};
 	
 	public static void startLogger() {
@@ -137,17 +141,25 @@ public class ControlMain {
 	 * Dokument wird immer gebraucht, falls neue Settings gespeichert werden.
 	 */
 	public static void readSettings() {
-		try {
-			File pathToXMLFile = new File(filename).getAbsoluteFile();
-			if (pathToXMLFile.exists()) {
-				settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
-				Logger.getLogger("ControlMain").info("Settings found");
-			} else {
-				settingsDocument = SerXMLHandling.buildEmptyXMLFile(pathToXMLFile);
-				Logger.getLogger("ControlMain").info("Settings not found, created empty document");
+			try {
+				File pathToXMLFile = new File(filename).getAbsoluteFile();
+				if (pathToXMLFile.exists()) {
+					settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
+					Logger.getLogger("ControlMain").info("Settings found");
+				} else {
+					settingsDocument = SerXMLHandling.buildEmptyXMLFile(pathToXMLFile);
+					Logger.getLogger("ControlMain").info("Settings not found, created empty document");
+				}
+				setSettings(SerXMLConverter.buildSettings(getSettingsDocument()));
+			} catch (MalformedURLException e) {
+				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
+			} catch (DocumentException e) {
+				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
+			} catch (IOException e) {
+				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
 			}
-			setSettings(SerXMLConverter.buildSettings(getSettingsDocument()));
-		} catch (Exception ex) {Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");}
+
+
 	}
 	/**
 	 * Wenn nur ein Box angelegt, diese als Standard benutzen
