@@ -1,5 +1,22 @@
 package boxConnection;
+/*
+SerStreamingServer.java by Geist Alexander 
 
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,22 +27,16 @@ import model.BORecordArgs;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import service.SerXMLConverter;
-import streaming.StreamThread;
+import streaming.RecordControl;
 
-/**
- * @author Geist Alexander
- *
- */
 public class SerStreamingServer extends Thread {
 	
 	int port = 4000;
 	ServerSocket server;
-	StreamThread recordThread;
+	RecordControl recordControl;
 	
 	public SerStreamingServer(int port) {
 		this.setPort(port);
@@ -48,12 +59,12 @@ public class SerStreamingServer extends Thread {
 		Document document = reader.read(socket.getInputStream());
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		
-		if (recordArgs.getCommand().equals("stop") && this.getRecordThread() != null) {
-			this.getRecordThread().setRunFlag(false);
+		if (recordArgs.getCommand().equals("stop") && this.recordControl != null) {
+			recordControl.stopRecord();
 		}
 		if (recordArgs.getCommand().equals("record")) {
-			this.setRecordThread(new StreamThread(recordArgs));
-			this.getRecordThread().start();
+			recordControl = new RecordControl(recordArgs);
+			recordControl.start();
 		}
 		server.close();  //server restart
 		this.run();
@@ -70,17 +81,5 @@ public class SerStreamingServer extends Thread {
 	 */
 	public void setPort(int port) {
 		this.port = port;
-	}
-	/**
-	 * @return Returns the recordThread.
-	 */
-	public StreamThread getRecordThread() {
-		return recordThread;
-	}
-	/**
-	 * @param recordThread The recordThread to set.
-	 */
-	public void setRecordThread(StreamThread recordThread) {
-		this.recordThread = recordThread;
 	}
 }
