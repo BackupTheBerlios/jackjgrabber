@@ -1,8 +1,7 @@
-ReadMe zu JtJG 0.1.6c, Stand 04.12.2004
+ReadMe zu JtJG 0.2.1, Stand 17.12.2004
 
 1.Voraussetzungen
-2.Download und Installation von JtJG
-3.diverse Einstellungen
+2.diverse Einstellungen
 
 
 1.Voraussetzungen
@@ -13,25 +12,7 @@ Mit java -version ermittelt man die installierta Java-Version.
 Die aktuelle Version ist 5.0 aka Tiger.
 
 
-2.Download und Installation von JtJG
-
-Nach dem Download muss JtJG in ein Verzeichnis nach Wahl entpackt werden.
-In diesem Verzeichnis befinden sich 2 vorbereitete Startscripte (start.bat für Win32, 
-start.sh für Linux)! Falls kein Startscript benutzt wird, ist es zwingend erfoderlich 
-das Programm aus dem Verzeichnis auszuführen, in dem sich die Datei jackTheJGrabber.jar 
-befindet. Wird dies nicht getan, können Einstellungen, Icons 
-sowie Sprachdateien nicht geladen werden. 
-
-In diesen Scripten sind 2 Einstellungen nach eigenen Bedürfnissen anzupassen
-1. Pfad zum JDK bzw. JRE
-2. Pfad zum JtJG-Verzeichnis
-
-Unter Linux muss das Script gegebenfalls ausführbar gemacht werden.
-JtJG kann dann über die modifizierte Start-Datei gestartet werden.
-
-3.Allgemeine Einstellungen
-
-3.1 Eintragen der Box-IP und weitere Einstellungen:
+2.1 Eintragen der Box-IP und weitere Einstellungen:
 
 Reiter 'Einstellungen --> Allgemein'
 Anlegen eines Box-IP Eintrags über den Button 'Anlegen'.
@@ -45,13 +26,13 @@ Genauere Auskunft über den Zielpfad gibt der Button 'Hilfe' in dem kleinen Fenst
 welches bei aktiviertem SystemTray-Icon zusammen mit Jack erscheint.
 
 
-3.2 Aufnahmeeinstellungen
+2.2 Aufnahmeeinstellungen
 
 Reiter 'Einstellungen --> Aufnahme'
 Auswahl des Aufnahme-Verzeichnisses über den Browse-Button.
 Einige Einstellungen sind selbsterklärend und nach belieben zu setzen.
 
-3.2.1
+2.2.1
 Nutzung von udrec unter Linux
 Um udrec nutzen zu können, muss mono installiert sein.
 Mono ist bei den grösseren Linux-Distributionenen dabei,
@@ -64,7 +45,7 @@ Die Datei udrec.exe wird mit dem Programm ausgeliefert!!
 Desweiteren können udrec-Optionen gesetzt werden (z.B. -vsplit oder -asplit).
 Unabhängig von der ausgewählten Engine kann noch das Aufnahmeformat gewählt werden (TS, PES und bei udrec noch ES).
 
-3.3 Wiedergabeeinstellungen
+2.3 Wiedergabeeinstellungen
 
 Reiter 'Einstellungen --> Wiedergabe'
 Dieser Eintrag kann aus dem angegebenen Beispiel übernommen werden.
