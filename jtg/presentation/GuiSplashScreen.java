@@ -54,8 +54,8 @@ public class GuiSplashScreen extends JWindow
     
     
     dim=getToolkit().getScreenSize();
-    dim.width/=3;
-    dim.height/=1.7;
+    dim.width=320;
+    dim.height=500;
     setSize(dim.width,dim.height);
     SerGUIUtils.center(this);
      this.setVisible(true);
