@@ -120,11 +120,14 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void selectRunningSender() {
 		try {
+		    int listSize=getBouquetList().size();
 			String runningChanId = ControlMain.getBoxAccess().getChanIdOfRunningSender();
-			for (int i=0; i<getBouquetList().size(); i++) { //Schleife ueber die Bouquets
+			
+			for (int i=0; i<listSize; i++) { //Schleife ueber die Bouquets
 				BOBouquet bouquet = (BOBouquet)this.getBouquetList().get(i);
 				bouquet.readSender();
-				for (int i2=0; i2<bouquet.getSender().size(); i2++) { //Schleife ueber die Sender im Bouquet
+				int senderSize=bouquet.getSender().size();
+				for (int i2=0; i2<senderSize; i2++) { //Schleife ueber die Sender im Bouquet
 					BOSender sender = (BOSender)bouquet.getSender().get(i2);
 					if (sender.getChanId().equals(runningChanId) && this.getSelectedSender() == null) {
 						this.setSelectedBouquet(bouquet);
