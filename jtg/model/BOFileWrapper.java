@@ -17,6 +17,14 @@ public class BOFileWrapper {
 		this.additionalName = additionalName;
 	}
 
+	/**
+	 * @param savePath
+	 */
+	public BOFileWrapper(String savePath) {
+		this(new File(savePath));
+		this.additionalName = savePath;
+	}
+
 	public boolean canRead() {
 		return file.canRead();
 	}

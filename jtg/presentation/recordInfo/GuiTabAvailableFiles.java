@@ -25,6 +25,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
+import model.*;
+
 import presentation.*;
 import control.*;
 
@@ -58,7 +60,7 @@ public class GuiTabAvailableFiles extends GuiTab {
 		splitFilesInfos.setDividerLocation(350);
 		add(split, BorderLayout.CENTER);
 
-		treeModel = new DefaultTreeModel(new BaseTreeNode(ControlMain.getSettingsPath().getSavePath()));
+		treeModel = new DefaultTreeModel(new BaseTreeNode(new BOFileWrapper(ControlMain.getSettingsPath().getSavePath())));
 
 		fileTree = new JTree(treeModel);
 		fileTree.addMouseListener(control);
