@@ -52,7 +52,6 @@ public class GuiMainView extends JFrame {
 				try {
 					if (ControlMain.getSettings().isSettingsChanged()) {
 						SerXMLConverter.saveAllSettings();
-						X.inisave();
 						Logger.getLogger("ControlMainView").info("Settings saved");
 					}
 					if (ControlMain.getSettings().isProjectXSettingsChanged()) {
