@@ -33,8 +33,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 
-import model.BOTimer;
-
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -45,10 +43,8 @@ import control.ControlTab;
 
 public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	
-	private JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
-	private JRadioButton[] jRadioButtonWhtage2 = new JRadioButton[7];
-	private static String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
-	public static final int[] WOCHENTAGE_VALUE = {256, 512, 1024, 2048, 4096, 8192, 16384};
+	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
+	public JRadioButton[] jRadioButtonWhtage2 = new JRadioButton[7];
 	
 	private JPanel jPanelDauerTimer = null;
 	private JPanel jPanelDauerTimer2 = null;
@@ -168,7 +164,6 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			jTableSystemTimer.setName("systemTimerTable");
 			jTableSystemTimer.addMouseListener(control);
 			jTableSystemTimer.setRowHeight(20);
-			//jTableSystemTimer.getColumnModel().getColumn(0).setMaxWidth(100);
 			jTableSystemTimer.getColumnModel().getColumn(1).setPreferredWidth(120);
 			jTableSystemTimer.getColumnModel().getColumn(1).setMaxWidth(120);
 
@@ -271,8 +266,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			for(int i = 0 ; i< 7; i++){
 				if (jRadioButtonWhtage[i]== null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
+					jRadioButtonWhtage[i].addItemListener(control);
+					jRadioButtonWhtage[i].setName("recordTimer");
+					jRadioButtonWhtage[i].setActionCommand(Integer.toString(control.WOCHENTAGE_VALUE[i]));
 					jRadioButtonWhtage[i].setEnabled(false);					
-					jRadioButtonWhtage[i].setText(WOCHENTAGE[i]);
+					jRadioButtonWhtage[i].setText(control.WOCHENTAGE[i]);
 				}
 				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
 				a = a+2;
@@ -294,7 +292,10 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 				if (jRadioButtonWhtage2[i]== null) {
 					jRadioButtonWhtage2[i] = new JRadioButton();
 					jRadioButtonWhtage2[i].setEnabled(false);
-					jRadioButtonWhtage2[i].setText(WOCHENTAGE[i]);
+					jRadioButtonWhtage2[i].setName("systemTimer");
+					jRadioButtonWhtage2[i].setActionCommand(Integer.toString(control.WOCHENTAGE_VALUE[i]));
+					jRadioButtonWhtage2[i].addItemListener(control);
+					jRadioButtonWhtage2[i].setText(control.WOCHENTAGE[i]);
 				}
 				builder.add(jRadioButtonWhtage2[i],cc.xy(1, a));
 				a = a+2;
@@ -448,43 +449,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return comboBoxSender;
 	}
-	/**
-	 * 512 = Montags
-	 * 1024 = Dienstags
-	 * 2048 = Mittwochs
-	 * 4096 = Donnerstags
-	 * 8192 = Freitags
-	 * 16384 = Samstags
-	 * 32768 = Sonntags
-	 */
-	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
-		int result;		
-		if (Integer.parseInt((String)timer.getEventRepeatId())>5) {
-			result = Integer.parseInt((String)timer.getEventRepeatId())-256;
-			this.enableRecordTimerWeekdays();
-		} else {
-			result = Integer.parseInt((String)timer.getEventRepeatId());
-			this.disableRecordTimerWeekdays();
-		}
-		for (int i = 0; i<7; i++){
-			jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
-		}
-	}
 	
-public void selectRepeatDaysForSystemTimer(BOTimer timer) {
-		int result;
-		if (Integer.parseInt((String)timer.getEventRepeatId())>5) {
-			result = Integer.parseInt((String)timer.getEventRepeatId())-256;
-			this.enableSystemTimerWeekdays();
-		} else {
-			result = Integer.parseInt((String)timer.getEventRepeatId());
-			this.disableSystemTimerWeekdays();
-		}
-		for (int i = 0; i<7; i++){
-			jRadioButtonWhtage2[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
-		}
-
-	}
 	public void enableRecordTimerWeekdays() {		
 		enableRecordTimerWeekdays(true);
 	}
