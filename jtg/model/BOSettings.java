@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Klasse referenziert die Settings
@@ -266,5 +267,10 @@ public class BOSettings {
 			setSettingsChanged(true);
 			this.udrecStreamType = streamType;
 		}
+	}
+	
+	public String getShortJGrabberStreamType() {
+	    StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
+	    return st.nextToken();
 	}
 }
