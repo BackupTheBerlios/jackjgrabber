@@ -35,8 +35,14 @@ import control.ControlMain;
 public abstract class SerBoxControl {
         
     public boolean newTimerAdded=true;
-    public abstract BOTimerList getTimerList() throws IOException;
-    public abstract BOTimerList reReadTimerList() throws IOException;
+    public BOTimerList timerList;
+    
+    public BOTimerList getTimerList() throws IOException {
+        if (timerList==null || newTimerAdded) {
+            timerList=this.readTimer();
+        }
+        return timerList;
+    }
 
 	/**
 	 * Detect the Image of the Box Rückgabe von 0 (default), 1 (Neutrino), 2 (Enigma), 3 (Sonstige)
@@ -69,6 +75,7 @@ public abstract class SerBoxControl {
 	}
 
 	public abstract String getName();
+	public abstract BOTimerList reReadTimerList() throws IOException;
 	public abstract GregorianCalendar getBoxTime() throws IOException;
 	public abstract BufferedReader getConnection(String request) throws IOException;
 	public abstract BOPids getPids() throws IOException;

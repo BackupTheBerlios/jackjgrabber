@@ -44,16 +44,7 @@ import control.ControlMain;
  * Schnittstelle zum NeutrinoImage
  */
 public class SerBoxControlNeutrino extends SerBoxControl{
-			
-    private BOTimerList timerList;
-    
-    public BOTimerList getTimerList() throws IOException {
-        if (timerList==null) {
-            timerList=this.readTimer();
-        }
-        return timerList;
-    }
-    
+        
     public BOTimerList reReadTimerList() throws IOException {
         timerList=this.readTimer();
         return timerList;

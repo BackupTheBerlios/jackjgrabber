@@ -73,11 +73,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public void run() {
 	    this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
         try {
-            if (ControlMain.getBoxAccess().newTimerAdded) {    
-                this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
-            } else {
-                this.setTimerList(ControlMain.getBoxAccess().getTimerList());
-            }
+            this.setTimerList(ControlMain.getBoxAccess().getTimerList());
             this.refreshTables();
             this.getView().recordTimerSorter.setSortingStatus(1, 1);
             this.getView().systemTimerSorter.setSortingStatus(1, 1);
