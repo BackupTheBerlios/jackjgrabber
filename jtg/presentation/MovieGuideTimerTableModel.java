@@ -1,5 +1,7 @@
 package presentation;
 
+import java.util.GregorianCalendar;
+
 import javax.swing.table.AbstractTableModel;
 import model.BOMovieGuide;
 import control.ControlMovieGuideTab;
@@ -32,10 +34,10 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		Integer selectRow = this.getControl().getSelectRowFilmTable();				
 		if (columnIndex == 0) {							
 			value = (SerFormatter.getShortDate(Long.parseLong(((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().toArray()[rowIndex].toString())));
-		}else if (columnIndex == 1) {
-			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().toArray()[rowIndex];
-		}else if (columnIndex == 2) {			
-			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().toArray()[rowIndex];
+		}else if (columnIndex == 1) {			
+			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().toArray()[rowIndex] );
+		}else if (columnIndex == 2) {	
+			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().toArray()[rowIndex] );
 		}else if (columnIndex == 3) {
 			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDauer().toArray()[rowIndex];
 		}else if (columnIndex == 4) {
