@@ -20,6 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import model.BOExternalProcess;
 import model.BOPid;
 import model.BORecordArgs;
@@ -55,7 +57,10 @@ public class VlcRecord  extends Record {
             pidString=pidString+aPid;
         }
         pidString=pidString.substring(0, pidString.length()-1);
-        execString[1]="http://"+boxIp+":31339/0,0x"+recordArgs.getPids().getPmtPid().getNumber()+",0x";
+        try {
+            execString[1]="http://"+boxIp+":31339/0,0x"+recordArgs.getPids().getPmtPid().getNumber()+",0x";    
+        } catch (NullPointerException ex) {Logger.getLogger("VlcRecord").error("PMT-Pid not available!");}
+        
         execString[1]=execString[1]+recordArgs.getPids().getVPid().getNumber()+","+pidString;
         
         //Ziel

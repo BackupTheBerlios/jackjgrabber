@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package service.XML;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,9 @@ public class SerXMLConverter {
 			pidList.add(pid);
 		}
 		recordArgs.getPids().setAPids(pidList);
-		
+		try {
+            recordArgs.getPids().setPmtPid(ControlMain.getBoxAccess().getPids().getPmtPid());
+        } catch (IOException e) {}
 		recordArgs.loadLocalTimer();
 		return recordArgs;
 	}
