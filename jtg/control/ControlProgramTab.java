@@ -174,7 +174,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		JComboBox comboBox = (JComboBox)e.getSource();
 		if (comboBox.getName().equals("ipList")) {
 			BOBox newSelectedBox = (BOBox)ControlMain.getSettings().getBoxList().get(comboBox.getSelectedIndex());
-			if (this.getSelectedBox().isSelected() != newSelectedBox.isSelected()) {
+			if (this.getSelectedBox().isSelected() != newSelectedBox.isSelected() || 
+					this.getSelectedBox().getDboxIp() == null) { 
 				this.getSelectedBox().setSelected(false); //alte Box zurücksetzen!	
 				this.setSelectedBox(newSelectedBox);
 				newSelectedBox.setSelected(true);
