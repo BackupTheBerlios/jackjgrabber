@@ -58,7 +58,8 @@ public class DataWriteStream {
 		this.createFileOutput();
 	}
 	
-	public DataWriteStream(RecordControl control) {
+	public DataWriteStream(RecordControl control, String extension) {
+	    fileNameExtension=extension;
 	    recordControl = control;
 	    streamNumber = 0;
 	    fileNumber = 0;

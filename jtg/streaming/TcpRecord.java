@@ -50,9 +50,9 @@ public class TcpRecord extends Record{
         boxIp = ControlMain.getBoxIpOfActiveBox();
         String[] pid = (String[])recordArgs.getAPids().get(0);
         aPid = pid[0];
-        Logger.getLogger("TcpRecord").info("Start record Pid "+aPid);
+        Logger.getLogger("TcpRecord").info(ControlMain.getProperty("msg_recordPid")+aPid);
         String baseFileName = recordControl.getFileName();
-        writeStream[0] = new DataWriteStream(recordControl);
+        writeStream[0] = new DataWriteStream(recordControl, ".mp2");
 	}
 	
 	public void start() {
@@ -71,7 +71,7 @@ public class TcpRecord extends Record{
 			if (!running) {
 				//Do nothing, Socket wurde regulaer geschlossen
 			} else {
-				SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
+				SerAlertDialog.alertConnectionLost("TcpRecord", ControlMain.getControl().getView());
 				recordControl.controlProgramTab.stopRecord();
 			}
 		} 
@@ -79,7 +79,7 @@ public class TcpRecord extends Record{
 	
 	public void readStream(InputStream inStream) throws IOException {
 		BufferedInputStream in = new  BufferedInputStream(inStream);
-		Logger.getLogger("TcpRecord").info("Receiving data");
+		Logger.getLogger("TcpRecord").info(ControlMain.getProperty("msg_receiveData"));
 		in.read(new byte[42]);
 		int length = 0;
 		do {
