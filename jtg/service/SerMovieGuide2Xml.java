@@ -134,7 +134,7 @@ public class SerMovieGuide2Xml extends Thread{
         		url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");        	
     		}    		
     		if(storeOrignalMG){        		        		            		        		
-        		fw = new FileWriter( url.getFile().substring(18));
+        		fw = new FileWriter(ControlMovieGuideTab.getHomePath()+url.getFile().substring(18));
     		}
     		con =url.openConnection();
     	}

@@ -73,9 +73,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	ArrayList boxSenderList;
 	
 	String searchString = "";
+	private static String homePath;
 	
-	public static File movieGuideFile = new File("movieguide_"+SerFormatter.getAktuellDateString(0,"MM_yy")+".xml");
-	public static File movieGuideFileNext = new File("movieguide_"+SerFormatter.getAktuellDateString(1,"MM_yy")+".xml");	
+	public static File movieGuideFile = new File(getHomePath()+"movieguide_"+SerFormatter.getAktuellDateString(0,"MM_yy")+".xml");
+	public static File movieGuideFileNext = new File(getHomePath()+"movieguide_"+SerFormatter.getAktuellDateString(1,"MM_yy")+".xml");	
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String GENRE  = ControlMain.getProperty("txt_genre2");
@@ -732,5 +733,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     }
     private void clearTextFields(){
     	
+    }
+    public static String getHomePath() {
+        if (homePath==null) {
+            String sep = System.getProperty("file.separator");
+            File dir = new File(System.getProperty("user.home")+sep+".JtJG");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            homePath = dir.getAbsolutePath()+sep;    
+        }
+        return homePath;
     }
 }
