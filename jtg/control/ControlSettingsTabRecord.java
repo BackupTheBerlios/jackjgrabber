@@ -18,27 +18,15 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package control;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 
-import model.BOSettings;
-import presentation.settings.GuiSettingsTabRecord;
-import presentation.settings.GuiStreamTypeComboModel;
-import presentation.settings.GuiTabSettings;
+import model.*;
+import presentation.settings.*;
 
 public class ControlSettingsTabRecord extends ControlTabSettings implements KeyListener, ActionListener, ItemListener, ChangeListener {
 
@@ -65,6 +53,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
         this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
         this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions());
         this.getTab().getCbAC3ReplaceStereo().setSelected(this.getSettings().isAc3ReplaceStereo());
+        this.getTab().getStoreEPG().setSelected(this.getSettings().isStoreEPG());
+        this.getTab().getStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
 		this.initializeStreamingEngine();
     }
 
@@ -97,22 +87,30 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "recordPath") {
+		if (action.equals("recordPath")) {
 			this.openRecordPathFileChooser();
 		}
-		if (action == "udrecPath") {
+		if (action.equals("udrecPath")) {
 			this.openUdrecPathFileChooser();
 		}
-		if (action == "jgrabber") {
+		if (action.equals("jgrabber")) {
 			this.getSettings().setStreamingEngine(0);
 			this.initializeJGrabberEngine();
 		}
-		if (action == "udrec") {
+		if (action.equals("udrec")) {
 			this.getSettings().setStreamingEngine(1);
 			this.initializeUdrecEngine();
 		}
-		if (action == "projectxPath") {
+		if (action.equals("projectxPath")) {
 			this.openProjectXPathFileChooser();
+		}
+		if (action.equals("storeEPG"))
+		{
+			this.getSettings().setStoreEPG(((JCheckBox)e.getSource()).isSelected());
+		}
+		if (action.equals("storeLogAfterRecord"))
+		{
+			this.getSettings().setStoreLogAfterRecord(((JCheckBox)e.getSource()).isSelected());
 		}
 	}
 	public void keyTyped(KeyEvent event) {}
