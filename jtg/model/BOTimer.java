@@ -1,7 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Date;
+
+import java.util.GregorianCalendar;
 
 /*
  * BOTimer.java
@@ -15,13 +15,13 @@ import java.util.Date;
  */
 public class BOTimer extends java.lang.Object{
     private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, senderName, description;
-    Date startDate, endDate;
-    /** Creates a new instance of BOTimer */
+    GregorianCalendar startDate, endDate;
+
     public BOTimer() {
     }
    
     public BOTimer(String eventId, String eventType, String eventRepeat, String announceTime, 
-                    String startTime, String stopTime, String sender,Date startDate, String description ){
+                    String startTime, String stopTime, String sender,GregorianCalendar startDate, String description ){
         this.setEventId(eventId);
         this.setEventType(eventType);
         this.setEventRepeat(eventRepeat);
@@ -44,68 +44,12 @@ public class BOTimer extends java.lang.Object{
     	return eventType;
     }
     
-    public String getFormattedEventType() {
-    	switch(Integer.parseInt(eventType)) {
-			case 1: return "SHUTDOWN";
-			case 2: return "NEXTPROGRAM";
-			case 3: return "ZAPTO";
-			case 4: return "STANDBY";
-			case 5: return "RECORD";
-			case 6: return "REMIND";
-			case 7: return "SLEEPTIMER";										
-    	}
-    	return new String();
-    }
-    
     public void setEventType(String eventType){
         this.eventType = eventType;
     }
     
     public String getEventRepeat (){
         return this.eventRepeat;
-    }
-    
-    public String getFormattedEventRepeat(){
-    	int repeatNumber = Integer.parseInt(eventRepeat);
-    	switch(repeatNumber) {
-			case 0:
-			return "einmal";
-			case 1:
-			return "täglich";
-			case 2:
-			return "wöchentlich";
-			case 3:
-			return "2-wöchentlich";
-			case 4:
-			return "4-wöchentlich";
-			case 5:
-			return "monatlich";
-    	}
-    	if (repeatNumber >5) {
-    		return "Wochentage"; 
-    	}
-    	return new String();
-    }
-    
-    public void setFormattedEventRepeat(String repeatString){
-		if (repeatString.equals("einmal")) {
-			eventRepeat = "0";
-		}
-		if (repeatString.equals("täglich")){
-			eventRepeat = "1";
-		}
-		if (repeatString.equals("wöchentlich")){
-			eventRepeat = "2";
-		}
-		if (repeatString.equals("2-wöchentlich")){
-			eventRepeat = "3";
-		}
-		if (repeatString.equals("4-wöchentlich")){
-			eventRepeat = "4";
-		}
-		if (repeatString.equals("monatlich")){
-			eventRepeat = "5";
-		}
     }
     
     public void setEventRepeat(String eventRepeat){
@@ -146,13 +90,13 @@ public class BOTimer extends java.lang.Object{
     /**
 	 * @return Returns the startDate.
 	 */
-	public Date getStartDate() {
+	public GregorianCalendar getStartDate() {
 		return startDate;
 	}
 	/**
 	 * @param startDate The startDate to set.
 	 */
-	public void setStartDate(Date startDate) {
+	public void setStartDate(GregorianCalendar startDate) {
 		this.startDate = startDate;
 	}
      
@@ -171,13 +115,13 @@ public class BOTimer extends java.lang.Object{
 	/**
 	 * @return Returns the endDate.
 	 */
-	public Date getEndDate() {
+	public GregorianCalendar getEndDate() {
 		return endDate;
 	}
 	/**
 	 * @param endDate The endDate to set.
 	 */
-	public void setEndDate(Date endDate) {
+	public void setEndDate(GregorianCalendar endDate) {
 		this.endDate = endDate;
 	}
 }

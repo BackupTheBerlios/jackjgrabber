@@ -2,20 +2,12 @@ package control;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 
-import javax.swing.JComboBox;
 import javax.swing.JTable;
-
-import org.apache.log4j.Logger;
-
-import model.BOSender;
 import model.BOTimer;
 
 
@@ -52,7 +44,31 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "Aufnahme") {
+		if (action == "deleteAll") {
+			
+		}
+		if (action == "deleteAllProgramTimer") {
+			
+		}
+		if (action == "deleteAllSystemTimer") {
+			
+		}
+		if (action == "deleteSelectedProgramTimer") {
+			
+		}
+		if (action == "deleteSelectedSystemTimer") {
+			
+		}
+		if (action == "addProgramTimer") {
+			
+		}
+		if (action == "addSystemTimer") {
+			
+		}
+		if (action == "reload") {
+			
+		}
+		if (action == "send") {
 			
 		}
 	}
@@ -88,6 +104,65 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	{}
 	public void mouseEntered(MouseEvent me)
 	{}
+	
+	
+	public String convertLongEventRepeat (String longString) {
+		if (longString.equals("einmal")) {
+			return "0";
+		}
+		if (longString.equals("täglich")){
+			return "1";
+		}
+		if (longString.equals("wöchentlich")){
+			return "2";
+		}
+		if (longString.equals("2-wöchentlich")){
+			return "3";
+		}
+		if (longString.equals("4-wöchentlich")){
+			return "4";
+		}
+		if (longString.equals("monatlich")) {
+			return  "5";
+		} else {
+			return "768";
+		}
+	}
+	
+	public String convertShortEventRepeat(String shortString){
+		int repeatNumber = Integer.parseInt(shortString);
+    	switch(repeatNumber) {
+			case 0:
+			return "einmal";
+			case 1:
+			return "täglich";
+			case 2:
+			return "wöchentlich";
+			case 3:
+			return "2-wöchentlich";
+			case 4:
+			return "4-wöchentlich";
+			case 5:
+			return "monatlich";
+    	}
+    	if (repeatNumber >5) {
+    		return "Wochentage"; 
+    	}
+    	return new String();
+	}
+	
+	public String convertEventType(String eventType) {
+		switch(Integer.parseInt(eventType)) {
+			case 1: return "SHUTDOWN";
+			case 2: return "NEXTPROGRAM";
+			case 3: return "ZAPTO";
+			case 4: return "STANDBY";
+			case 5: return "RECORD";
+			case 6: return "REMIND";
+			case 7: return "SLEEPTIMER";										
+		}
+		return new String();
+	}
 	/**
 	 * @return Returns the mainView.
 	 */

@@ -406,6 +406,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonDeleteAllProgramTimer() {
 		if (jButtonDeleteAllProgramTimer == null) {
 			jButtonDeleteAllProgramTimer = new JButton("Aufnahmetimer löschen");
+			jButtonDeleteAllProgramTimer.setActionCommand("deleteAllProgramTimer");
 			jButtonDeleteAllProgramTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllProgramTimer.addActionListener(control);
 		}
@@ -415,6 +416,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonDeleteAllSystemTimer() {
 		if (jButtonDeleteAllSystemTimer == null) {
 			jButtonDeleteAllSystemTimer = new JButton("Systemtimer löschen");
+			jButtonDeleteAllSystemTimer.setActionCommand("deleteAllSystemTimer");
 			jButtonDeleteAllSystemTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllSystemTimer.addActionListener(control);
 		}
@@ -455,6 +457,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonSenden() {
 		if (jButtonSenden == null) {
 			jButtonSenden = new JButton("Senden");
+			jButtonSenden.setActionCommand("send");
 			jButtonSenden.addActionListener(control);
 			jButtonSenden.setPreferredSize(new Dimension(150,25));
 		}
@@ -464,6 +467,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonDeleteAl() {
 		if (jButtonDeleteAll == null) {
 			jButtonDeleteAll = new JButton("Alle Löschen");
+			jButtonDeleteAll.setActionCommand("deleteAll");
 			jButtonDeleteAll.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAll.addActionListener(control);
 		}
@@ -473,6 +477,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonReload() {
 		if (jButtonReload == null) {
 			jButtonReload = new JButton("Neu laden");
+			jButtonReload.setActionCommand("reload");
 			jButtonReload.addActionListener(control);
 		}
 		return jButtonReload;

@@ -2,8 +2,6 @@ package presentation;
 
 
 import javax.swing.DefaultComboBoxModel;
-import model.BOSender;
-import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
 
 
