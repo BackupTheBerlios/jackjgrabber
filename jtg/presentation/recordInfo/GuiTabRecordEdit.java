@@ -35,12 +35,13 @@ import javax.swing.tree.DefaultTreeModel;
 import model.BOFileWrapper;
 import presentation.GuiTab;
 import presentation.GuiTableSorter;
+import control.*;
 import control.ControlMain;
 import control.ControlRecordInfoTab;
 
-public class GuiTabAvailableFiles extends GuiTab {
+public class GuiTabRecordEdit extends GuiTab {
 
-	private ControlRecordInfoTab control;
+	private ControlRecordEditTab control;
 
 	private JTree fileTree;
 
@@ -51,7 +52,7 @@ public class GuiTabAvailableFiles extends GuiTab {
 
 	private DefaultTreeModel treeModel;
 
-	public GuiTabAvailableFiles(ControlRecordInfoTab control) {
+	public GuiTabRecordEdit(ControlRecordEditTab control) {
 		this.setControl(control);
 		initialize();
 	}
@@ -84,8 +85,12 @@ public class GuiTabAvailableFiles extends GuiTab {
 		splitFilesInfos.setTopComponent(p);
 		splitFilesInfos.setBottomComponent(new JScrollPane(fileInfo));
 		fileTree.getSelectionModel().addTreeSelectionListener(fileTableModel);
-		split.setDividerLocation(ControlMain.getSettingsLayout().getRecordInfoDirectorySplitPos());
-
+		
+		int splitLoc = ControlMain.getSettingsLayout().getRecordInfoDirectorySplitPos();
+		if (splitLoc > 0)
+		{
+			split.setDividerLocation(splitLoc);
+		}
 		split.getLeftComponent().addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				int divLoc = split.getDividerLocation();
@@ -133,7 +138,7 @@ public class GuiTabAvailableFiles extends GuiTab {
 	/**
 	 * @return ControlProgramTab
 	 */
-	public ControlRecordInfoTab getControl() {
+	public ControlRecordEditTab getControl() {
 		return control;
 	}
 
@@ -143,7 +148,7 @@ public class GuiTabAvailableFiles extends GuiTab {
 	 * @param control
 	 *            The control to set
 	 */
-	public void setControl(ControlRecordInfoTab control) {
+	public void setControl(ControlRecordEditTab control) {
 		this.control = control;
 	}
 

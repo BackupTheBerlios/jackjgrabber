@@ -22,39 +22,19 @@ package presentation.recordInfo;
  * 
  * @author Reinhard Achleitner
  */
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.awt.*;
+import java.text.*;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.*;
+import javax.swing.border.*;
 
-import presentation.GuiTab;
+import presentation.*;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.builder.*;
+import com.jgoodies.forms.layout.*;
 
-import control.ControlMain;
-import control.ControlRecordInfoTab;
+import control.*;
 
 public class GuiTabRecordInfo extends GuiTab {
 
@@ -73,11 +53,7 @@ public class GuiTabRecordInfo extends GuiTab {
 
 	private JComponent recordState;
 
-	private JTabbedPane tab;
-
-	private GuiTabAvailableFiles guiFilesTab;
-
-	public GuiTabRecordInfo(ControlRecordInfoTab control) {
+		public GuiTabRecordInfo(ControlRecordInfoTab control) {
 		this.setControl(control);
 		initialize();
 	}
@@ -87,13 +63,9 @@ public class GuiTabRecordInfo extends GuiTab {
 	 *  
 	 */
 	protected void initialize() {
-		setLayout(new BorderLayout());
-		tab = new JTabbedPane();
-
-		JPanel currentRecord = new JPanel();
 		FormLayout layout = new FormLayout("pref:grow", // columns
 				"55,75,pref, f:150:grow"); // rows
-		PanelBuilder builder = new PanelBuilder(currentRecord, layout);
+		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
@@ -101,13 +73,6 @@ public class GuiTabRecordInfo extends GuiTab {
 		builder.add(initStatePanel(), cc.xywh(1, 2, 1, 1));
 		builder.add(initFilePanel(), cc.xywh(1, 3, 1, 1));
 		builder.add(initLogPanel(), cc.xywh(1, 4, 1, 1));
-
-		// found files tab
-
-		guiFilesTab = new GuiTabAvailableFiles(control);
-		tab.addTab(ControlMain.getProperty("tab_currentRecord"), currentRecord);
-		tab.addTab(ControlMain.getProperty("label_recordPath"), guiFilesTab);
-		add(tab);
 
 	}
 
@@ -127,6 +92,7 @@ public class GuiTabRecordInfo extends GuiTab {
 		CellConstraints cc = new CellConstraints();
 
 		recordState = builder.addSeparator(ControlMain.getProperty("label_recordTitle"));
+		
 		builder.add(recordTitle, cc.xywh(1, 3, 1, 1));
 		return p;
 	}
@@ -265,16 +231,16 @@ public class GuiTabRecordInfo extends GuiTab {
 	 *            Titel der Aufnahme (Filmtitel)
 	 * @param engine
 	 *            Verwendete Engine und Einstellung
+	 * @param currentStartBegin
 	 * @param directory
 	 *            Verzeichnis in der die Dateien geschrieben werden
 	 * @param timer
 	 *            true, wenn es eine Timeraufnahme ist
 	 */
-	public void startRecord(String title, String engine) {
+	public void startRecord(Date start,String title, String engine) {
 
 		clear();
-		((JLabel) recordState.getComponent(0)).setText(ControlMain.getProperty("label_recordInProgress") + " "
-				+ DateFormat.getTimeInstance().format(new Date()));
+		setRecordText(start,-1,-1);
 
 		recordState.getComponent(0).setForeground(Color.red);
 		recordState.getComponent(0).setFont(recordState.getComponent(0).getFont().deriveFont(Font.BOLD));
@@ -282,6 +248,28 @@ public class GuiTabRecordInfo extends GuiTab {
 		recordTitle.setText(title);
 		setEngine(engine);
 
+	}
+
+	/**
+	 * 
+	 */
+	public void setRecordText(Date d,int min,int remain) {
+		
+		String title = ControlMain.getProperty("label_recordInProgress") + " "
+		+ DateFormat.getTimeInstance().format(d);
+		
+		if (min > -1)
+		{
+			title += "  ( " + min; 
+		}
+		
+		if (remain > -1)
+		{
+			title += " / " + remain + " )"; 
+		}
+		
+		
+		((JLabel) recordState.getComponent(0)).setText(title);
 	}
 
 	/**
@@ -383,35 +371,4 @@ public class GuiTabRecordInfo extends GuiTab {
 
 	}
 
-	public DefaultTreeModel getTreeModel() {
-		return guiFilesTab.getTreeModel();
-	}
-
-	/**
-	 *  
-	 */
-	public JTree getTree() {
-		return guiFilesTab.getTree();
-
-	}
-
-	public GuiFileTableModel getTableModel() {
-		return guiFilesTab.getTableModel();
-	}
-
-	/**
-	 * @param fileInfo
-	 */
-	public void setFileInfo(String fileInfo) {
-		guiFilesTab.setFileInfo(fileInfo);
-
-	}
-
-	/**
-	 * @return
-	 */
-	public JTable getFileTable() {
-
-		return guiFilesTab.getFileTable();
-	}
 }
