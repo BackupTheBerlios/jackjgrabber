@@ -12,10 +12,7 @@ package presentation.timer;
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.util.GregorianCalendar;
-
 import model.BOTimer;
-import service.SerFormatter;
 import control.ControlMain;
 import control.ControlTimerTab;
 

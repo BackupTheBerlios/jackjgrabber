@@ -32,8 +32,6 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import javax.swing.JOptionPane;
-
 import model.BOSettingsMovieGuide;
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabMovieGuide;

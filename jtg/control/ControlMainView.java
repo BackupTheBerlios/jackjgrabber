@@ -21,9 +21,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;

@@ -21,28 +21,16 @@ package presentation.recordInfo;
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.*;
 
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
-import javax.swing.event.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import javax.swing.table.*;
-import javax.swing.tree.DefaultTreeModel;
 
-import model.*;
-import model.BOFileWrapper;
+import model.BORecordInfos;
 import presentation.GuiTab;
 import presentation.GuiTableSorter;
-import control.*;
-import control.ControlMain;
-import control.ControlRecordEditTab;
+import control.ControlRecordInfoTab;
 
 public class GuiTabRecordInfoOverview extends GuiTab {
 
