@@ -60,7 +60,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JButton jButtonClickfinder = null;
 	private JTextArea jTextAreaEPG = null;
 	private JComboBox jComboBoxBoxIP = null;
-	public JTextPane jTextPaneAusgabe = null;
+	public JTextArea jTextPaneAusgabe = null;
 	public GuiSenderTableModel senderTableModel;
 	public GuiBoquetsComboModel boquetsComboModel;
 	public GuiEpgTableModel epgTableModel;
@@ -512,9 +512,9 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JTextPane	
 	 */    
-	public JTextPane getJTextPaneAusgabe() {
+	public JTextArea getJTextPaneAusgabe() {
 		if (jTextPaneAusgabe == null) {
-			jTextPaneAusgabe = new JTextPane();
+			jTextPaneAusgabe = new JTextArea();
 					
 		}
 		return jTextPaneAusgabe;
