@@ -89,7 +89,7 @@ public class BOBox {
 	 * @param standard The standard to set.
 	 */
 	public void setStandard(Boolean standard) {
-	    if (this.standard.compareTo(standard) != 0) {
+	    if (this.standard.booleanValue() != standard.booleanValue()) {
 	        this.standard = standard;
 	        this.setSettingsChanged(true);
 	    }
