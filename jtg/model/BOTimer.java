@@ -1,6 +1,7 @@
 package model;
 
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /*
@@ -14,23 +15,9 @@ import java.util.GregorianCalendar;
  * @author  ralix
  */
 public class BOTimer extends java.lang.Object{
-    private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, senderName, description;
-    GregorianCalendar startDate, endDate;
-
-    public BOTimer() {
-    }
-   
-    public BOTimer(String eventId, String eventType, String eventRepeat, String announceTime, 
-                    String startTime, String stopTime, String sender,GregorianCalendar startDate, String description ){
-        this.setEventId(eventId);
-        this.setEventType(eventType);
-        this.setEventRepeat(eventRepeat);
-        this.setAnnounceTime(announceTime);
-        this.setStartTime(startTime);
-        this.setStopTime(stopTime);
-        this.setSenderName(sender);         
-        this.setStartDate(startDate);
-    }
+    private String eventId, eventType, eventRepeat, announceTime, senderName, description;;
+    private String stopTime;
+    private GregorianCalendar unformattedStartTime, unformattedStopTime;
     
     public String getEventId (){
         return this.eventId;
@@ -65,15 +52,21 @@ public class BOTimer extends java.lang.Object{
     }
     
     public String getStartTime (){
-        return this.startTime;
+		String hour = Integer.toString(this.getUnformattedStartTime().get(Calendar.HOUR_OF_DAY));
+		String minute = Integer.toString(this.getUnformattedStartTime().get(Calendar.MINUTE));
+        return hour+":"+minute;
     }
     
-    public void setStartTime(String startTime){
-        this.startTime = startTime;
+    public String getDateWithoutYear(GregorianCalendar cal) {
+		String day = Integer.toString(this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH));
+		String month = Integer.toString(this.getUnformattedStartTime().get(Calendar.MONTH));
+		return day+"."+month;
     }
     
     public String getStopTime(){
-        return this.stopTime;
+    	String hour = Integer.toString(this.getUnformattedStopTime().get(Calendar.HOUR_OF_DAY));
+		String minute = Integer.toString(this.getUnformattedStopTime().get(Calendar.MINUTE));
+        return hour+":"+minute;
     }
     
     public void setStopTime(String stopTime){
@@ -88,16 +81,16 @@ public class BOTimer extends java.lang.Object{
         this.senderName = sender;
     }
     /**
-	 * @return Returns the startDate.
+	 * @return Returns the unformattedStartTime.
 	 */
-	public GregorianCalendar getStartDate() {
-		return startDate;
+	public GregorianCalendar getUnformattedStartTime() {
+		return unformattedStartTime;
 	}
 	/**
-	 * @param startDate The startDate to set.
+	 * @param unformattedStartTime The unformattedStartTime to set.
 	 */
-	public void setStartDate(GregorianCalendar startDate) {
-		this.startDate = startDate;
+	public void setUnformattedStartTime(GregorianCalendar startDate) {
+		this.unformattedStartTime = startDate;
 	}
      
 	/**
@@ -113,15 +106,24 @@ public class BOTimer extends java.lang.Object{
 		this.description = description;
 	}
 	/**
-	 * @return Returns the endDate.
+	 * @return Returns the unformattedStopTime.
 	 */
-	public GregorianCalendar getEndDate() {
-		return endDate;
+	public GregorianCalendar getUnformattedStopTime() {
+		return unformattedStopTime;
 	}
 	/**
-	 * @param endDate The endDate to set.
+	 * @param unformattedStopTime The unformattedStopTime to set.
 	 */
-	public void setEndDate(GregorianCalendar endDate) {
-		this.endDate = endDate;
+	public void setUnformattedStopTime(GregorianCalendar endDate) {
+		this.unformattedStopTime = endDate;
+	}
+	/**
+	 * @return Returns the startDate.
+	 */
+	public String getStartDate() {
+		String day = Integer.toString(this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH));
+		String month = Integer.toString(this.getUnformattedStartTime().get(Calendar.MONTH));
+		String year = Integer.toString(this.getUnformattedStartTime().get(Calendar.YEAR));
+		return day+"."+month+"."+year;
 	}
 }

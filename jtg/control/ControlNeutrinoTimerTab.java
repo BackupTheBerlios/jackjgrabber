@@ -6,14 +6,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.swing.JTable;
+
+import model.BOEpg;
+import model.BOSender;
 import model.BOTimer;
 
 
 import presentation.GuiMainView;
 import presentation.GuiNeutrinoTimerPanel;
 import service.SerAlertDialog;
+import service.SerFormatter;
 
 /**
  * @author Alexander Geist
@@ -60,7 +67,8 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 			
 		}
 		if (action == "addProgramTimer") {
-			
+			this.getTimerList()[0].add(this.buildRecordTimer());
+			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "addSystemTimer") {
 			
@@ -162,6 +170,37 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 			case 7: return "SLEEPTIMER";										
 		}
 		return new String();
+	}
+	
+	private BOTimer buildRecordTimer() {
+		BOTimer timer = new BOTimer();
+		
+		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
+		long now = new Date().getTime();
+		
+		timer.setSenderName( defaultSender.getName() );
+		timer.setAnnounceTime(Long.toString(new Date().getTime()));
+		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
+		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
+				
+		timer.setEventRepeat("0");
+		timer.setEventType("5");
+		return timer;
+	}
+	private BOTimer buildSystemTimer() {
+		BOTimer timer = new BOTimer();
+		
+		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
+		long now = new Date().getTime();
+		
+		timer.setSenderName( defaultSender.getName() );
+		timer.setAnnounceTime(Long.toString(new Date().getTime()));
+		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
+		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
+		
+		timer.setEventRepeat("0");
+		timer.setEventType("5");
+		return timer;
 	}
 	/**
 	 * @return Returns the mainView.

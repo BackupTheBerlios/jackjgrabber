@@ -358,10 +358,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					botimer.setEventRepeat("");
 	    			botimer.setSenderName(channel);
 	    			botimer.setAnnounceTime(""); //vorwarnzeit
-	    			botimer.setStartTime(startTime); //startZeit
-	    			botimer.setStartDate(startDate);  //startDatum
-	    			botimer.setStopTime(endTime); //ende
-	    			botimer.setEndDate(endDate);
+	    			botimer.setUnformattedStartTime(startDate);  //startDatum
+	    			botimer.setUnformattedStopTime(endDate);
 	    			botimer.setDescription(title);
 	    			timerList[0].add(botimer);
 	    			startpos=endpos;

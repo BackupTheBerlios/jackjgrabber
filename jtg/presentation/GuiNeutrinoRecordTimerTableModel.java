@@ -3,8 +3,6 @@ package presentation;
 
 
 import javax.swing.table.AbstractTableModel;
-
-import service.SerFormatter;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
 
@@ -35,7 +33,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return timer.getSenderName();
 		} if (columnIndex == 1) {
-			return SerFormatter.getPrettyDateFormat(timer.getStartDate());
+			return timer.getStartDate();
 		} if (columnIndex == 2) {
 			return timer.getStartTime();
 		} if (columnIndex == 3) {
@@ -51,6 +49,18 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		if (col == 0) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			timer.setSenderName((String)value);
+		}
+		if (col == 1) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+			System.out.println(value);
+		}
+		if (col == 2) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+			System.out.println(value);
+		}
+		if (col == 3) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+			System.out.println(value);
 		}
 		if (col == 4) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
@@ -90,8 +100,4 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
 	}
-	
-//	public Class getColumnClass(int c) {
-//        return getValueAt(0, c).getClass();
-//	}
 }

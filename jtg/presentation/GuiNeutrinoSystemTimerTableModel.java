@@ -3,8 +3,6 @@ package presentation;
 
 
 import javax.swing.table.AbstractTableModel;
-
-import service.SerFormatter;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
 
@@ -35,7 +33,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return control.convertEventType(timer.getEventType());
 		} if (columnIndex == 1) {
-			return SerFormatter.getPrettyDateFormat(timer.getStartDate());
+			return timer.getStartDate();
 		} if (columnIndex == 2) {
 			return timer.getStartTime();
 		} else {

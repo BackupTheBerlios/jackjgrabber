@@ -214,10 +214,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    valueSenderName=st.nextToken();
 		    
 		    botimer.setSenderName( valueSenderName );
-		    botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)); //vorwarnzeit
-		    botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //startZeit
-			botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));  //startDatum
-		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
+		    botimer.setAnnounceTime(valueAnno);
+		    botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(valueStart));  
+			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(valueStop)); 
 		    
 		    if (botimer.getEventType().equals("5")) {
 		    	timerList[0].add(botimer);
@@ -254,8 +253,8 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	} 
 	
 	public String setTimer(String action, BOTimer timer) throws IOException {
-		String alarm = timer.getStartTime();
-		String stop = timer.getStopTime();
+		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis());
+		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis());
 		String announce = timer.getAnnounceTime();
 		String type = timer.getEventType();
 		String repeat = timer.getEventRepeat();
