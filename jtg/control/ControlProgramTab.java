@@ -40,6 +40,7 @@ import model.BOBouquet;
 import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOExternalProcess;
 import model.BOPid;
 import model.BOPids;
 import model.BOPlaybackOption;
@@ -50,6 +51,7 @@ import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
+import presentation.GuiAudioPidOptionsDialog;
 import presentation.GuiLogWindow;
 import presentation.GuiMainView;
 import presentation.GuiQuickRecordOptionsDialog;
@@ -79,6 +81,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	Date dateChooserDate;
 	GuiMainView mainView;
 	RecordControl recordControl;
+	BOExternalProcess playbackProcess;
 	boolean firstStart = true;
 
 	public ControlProgramTab(GuiMainView view) {
@@ -286,47 +289,67 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 * Wiedergabe des laufenden Senders
 	 */
 	private void actionPlayback() {
+		//alte Wiedergabe beenden
+		if (playbackProcess != null) {
+			playbackProcess.getProcess().destroy();
+		}
 		BOPlaybackOption option = BOPlaybackOption.detectPlaybackOption();
 		if (option != null) {
 			try {
+				Thread.sleep(200);
 				this.zapToSelectedSender();
-				String execString = this.getPlaybackRequestString(option);
+				BOPid audioPid = this.getPlaybackAudioPid();
+				String execString = option.getPlaybackPlayer() + 
+					" "+this.getPlaybackRequestString(option, audioPid);
 				if (execString != null) {
-					SerExternalProcessHandler.startProcess(option.getName(), execString, option.isLogOutput());
+					playbackProcess = SerExternalProcessHandler.startProcess(
+							option.getName(), execString, option.isLogOutput());
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				Logger.getLogger("ControlProgramTab").error(e.getMessage());
 			}
 		} 
 	}
+	
+    private BOPid getPlaybackAudioPid() {
+    	int count = this.getPids().getAPids().size();
+    	int option = ControlMain.getSettingsPlayback().getAudioOption();
+        if (count>1) {
+        	if (option==0) {
+        		GuiAudioPidOptionsDialog dlg = new GuiAudioPidOptionsDialog(this.getPids());
+                return dlg.startPidsQuestDialog();
+        	}
+        	if (option==1) {
+        		BOPid ac3Pid = this.getPids().getAc3Pid();
+        		if (ac3Pid != null) {
+        			return ac3Pid;	
+        		}
+        	}
+        }
+        return (BOPid)this.getPids().getAPids().get(0);
+    }
 	
 	private String getServiceId() {
 	    String chanId = this.getSelectedSender().getChanId(); 
 	    return chanId.substring(chanId.length()-4, chanId.length());
 	}
 
-	private String getPlaybackRequestString(BOPlaybackOption option) {
-		String execString = option.getExecString();
-		String vPid = "0x" + this.getPids().getVPid().getNumber();
-		String ip = ControlMain.getBoxIpOfActiveBox();
+	private String getPlaybackRequestString(BOPlaybackOption option, BOPid audioPid){
+		String execString = option.getPlaybackOption();
+        String vPid = "0x" + this.getPids().getVPid().getNumber();
+        String ip = ControlMain.getBoxIpOfActiveBox();
         String pmt = "0x"+this.getPids().getPmtPid().getNumber();
 
-		execString = SerFormatter.replace(execString, "$pmt", pmt);
-		execString = SerFormatter.replace(execString, "$ip", ip);
-		execString = SerFormatter.replace(execString, "$vPid", vPid);
-		int aPidStringIndex = execString.indexOf("aPid");
-		try {
-			if (aPidStringIndex > 0) {
-				int pidIndex = Integer.parseInt(execString.substring(aPidStringIndex + 4, aPidStringIndex + 5));
-				String aPid = "0x" + ((BOPid) this.getPids().getAPids().get(pidIndex - 1)).getNumber();
-				execString = SerFormatter.replace(execString, "$aPid" + Integer.toString(pidIndex), aPid);
-			}
-		} catch (IndexOutOfBoundsException e) {
-			SerAlertDialog.alert(ControlMain.getProperty("msg_aPidNotAvailabe")
-					+ execString.substring(aPidStringIndex, aPidStringIndex + 4), this.getMainView());
-			return null;
-		}
-		return execString;
+        execString = SerFormatter.replace(execString, "$pmt", pmt);
+        execString = SerFormatter.replace(execString, "$ip", ip);
+        execString = SerFormatter.replace(execString, "$vPid", vPid);
+        execString = SerFormatter.replace(execString, "$aPid", "0x"+audioPid.getNumber());
+        this.getPids().getAPids().remove(audioPid);
+        for (int i=0; i<this.getPids().getAPids().size(); i++) {
+            BOPid pid = (BOPid)this.getPids().getAPids().get(i);
+            execString = execString+",0x"+pid.getNumber();
+        }
+        return execString;
 	}
 
 	/**
@@ -381,18 +404,18 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	private void startRecordInInfoTab(BORecordArgs recordArgs) {
 
-		int stream = ControlMain.getSettings().getRecordSettings().getStreamingEngine();
-		String engine = "";
-		if (stream == 0) // JGrabber Engine
-		{
-			engine = "JGrabber " + ControlMain.getSettings().getRecordSettings().getJgrabberStreamType();
-		} else if (stream == 1) {
-			engine = "Udrec " + ControlMain.getSettings().getRecordSettings().getUdrecStreamType();
-		}
+        int stream = ControlMain.getSettings().getRecordSettings().getStreamingEngine();
+        String engine = "";
+        if (stream == 0) // JGrabber Engine
+        {
+            engine = "JGrabber " + ControlMain.getSettings().getRecordSettings().getJgrabberStreamType();
+        } else if (stream == 1) {
+            engine = "Udrec " + ControlMain.getSettings().getRecordSettings().getUdrecStreamType();
+        }
 
-		getMainView().getTabRecordInfo().getControl().startRecord(recordArgs.getEpgTitle(), engine,
-				recordControl.getDirectory(), !recordArgs.isQuickRecord());
-	}
+        getMainView().getTabRecordInfo().getControl().startRecord(recordArgs.getEpgTitle(), engine,
+                recordControl.getDirectory(), !recordArgs.isQuickRecord());
+    }
 
 	/**
 	 * @return BORecordArgs Erstellen des Objektes BORecordArgs und Setzen der Pids

@@ -50,6 +50,16 @@ public class BOPids {
         return aPid[1];
     }
     
+    public BOPid getAc3Pid() {
+    	for (int i=0; i<this.getAPids().size();i++) {
+    		BOPid pid = (BOPid)this.getAPids().get(i);
+    		if (pid.isAc3()) {
+    			return pid;
+    		}
+    	}
+    	return null;
+    }
+    
     public ArrayList getAllPids() {
         if (allPids==null) {
             allPids = new ArrayList();

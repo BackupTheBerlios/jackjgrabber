@@ -1,18 +1,22 @@
-/*
- * BOPlaybackOption.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
 package model;
+/*
+BOPlaybackOption.java by Geist Alexander 
 
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.util.ArrayList;
 
 import javax.swing.JList;
@@ -25,29 +29,37 @@ import control.ControlMain;
 
 public class BOPlaybackOption {
 
-	public String name = "mplayer";
-	public String execString = "d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid1";
+    public String name = "vlc";
+    public String playbackPlayer; 
+    public String playbackOption = "http://$ip:31339/0,$pmt,$vPid,$aPid";
 	public boolean standard = false;
 	public boolean logOutput = true;
 
-	/**
-	 * @return Returns the execString.
-	 */
-	public String getExecString() {
-		if (execString == null) {
-			return "";
+	public int getModelPlayerIndex() {
+		ArrayList playerList = ControlMain.getSettingsPlayback().getPlaybackPlayer();
+		for (int i=0; i<playerList.size(); i++) {
+			String player = (String)playerList.get(i);
+			if (player.equals(this.getPlaybackPlayer())) {
+				return i;
+			}
 		}
-		return execString;
+		return -1;
 	}
 	/**
-	 * @param execString
-	 *            The execString to set.
+	 * @return Returns the playbackOption.
 	 */
-	public void setExecString(String execString) {
-		if (this.execString == null || !this.execString.equals(execString)) {
-			this.execString = execString;
-			this.setSettingsChanged(true);
+	public String getPlaybackOption() {
+		if (playbackOption == null) {
+			return "";
 		}
+		return playbackOption;
+	}
+	/**
+	 * @param playbackOption
+	 *            The playbackOption to set.
+	 */
+	public void setPlaybackOption(String execString) {
+			this.playbackOption = execString;
 	}
 	/**
 	 * @return Returns the name.
@@ -116,7 +128,10 @@ public class BOPlaybackOption {
 	 */
 	public static BOPlaybackOption detectPlaybackOption() {
 		if (getPlaybackSettings().getPlaybackOptions() != null && getPlaybackSettings().getPlaybackOptions().size() > 0) {
-			BOPlaybackOption option;
+            if (getPlaybackSettings().getPlaybackOptions().size() == 1) {
+                return (BOPlaybackOption)getPlaybackSettings().getPlaybackOptions().get(0);
+            }
+            BOPlaybackOption option;
 			if (getPlaybackSettings().isAlwaysUseStandardPlayback()) {
 				option = getPlaybackSettings().getStandardPlaybackOption();
 			} else {
@@ -159,4 +174,16 @@ public class BOPlaybackOption {
 		return ControlMain.getSettings().getPlaybackSettings();
 	}
 
+	/**
+	 * @return Returns the playbackPlayer.
+	 */
+	public String getPlaybackPlayer() {
+		return playbackPlayer;
+	}
+	/**
+	 * @param playbackPlayer The playbackPlayer to set.
+	 */
+	public void setPlaybackPlayer(String playbackPlayer) {
+		this.playbackPlayer = playbackPlayer;
+	}
 }

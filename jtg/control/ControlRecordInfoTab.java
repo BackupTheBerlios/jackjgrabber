@@ -481,7 +481,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 			if (player.size() > 0) {
 				BOPlaybackOption play = BOPlaybackOption.detectPlaybackOption();
 				if (play != null) {
-					String exec = play.getExecString();
+					String exec = play.getPlaybackPlayer() + " "+play.getPlaybackPlayer();
 					exec = getExecStringWithoutParam(exec);
 
 					if (file.getAbsolutePath().indexOf(" ") > -1) {

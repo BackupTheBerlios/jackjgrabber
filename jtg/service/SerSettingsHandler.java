@@ -115,9 +115,9 @@ public class SerSettingsHandler {
 		layout.setLocation(new Point(x,y));
 		layout.setSize(wSize);
 		
-		play.setPlaybackString("d: http://$ip:31339/$vPid,$aPid");
 		play.setAlwaysUseStandardPlayback(false);
 		play.setPlaybackOptions(new ArrayList());
+		play.setAudioOption(0);
 
 		pathS.setUdrecPath( new File("udrec.exe").getAbsolutePath());
 		pathS.setProjectXPath(new File("ProjectX.jar").getAbsolutePath());

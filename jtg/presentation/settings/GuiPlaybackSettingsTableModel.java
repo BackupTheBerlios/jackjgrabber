@@ -52,7 +52,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 			return playbackOption.getName();
 		}
 		if (columnIndex == 1) {
-			return playbackOption.getExecString();
+			return playbackOption.getPlaybackOption();
 		}
 		if (columnIndex == 2) {
 			return new Boolean(playbackOption.isLogOutput());
@@ -66,7 +66,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		    playbackOption.setName((String)aValue);
 		}
 		if (columnIndex == 1) {
-		    playbackOption.setExecString((String)aValue);
+		    playbackOption.setPlaybackOption((String)aValue);
 		}
 		if (columnIndex == 2) {
 		    playbackOption.setLogOutput(((Boolean)aValue).booleanValue());
