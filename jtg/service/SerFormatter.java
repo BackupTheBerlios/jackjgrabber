@@ -152,11 +152,25 @@ public class SerFormatter {
 	public static Date setCorrectYear(Date datum) {
 		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
 		int i = cal.get(GregorianCalendar.YEAR);
-		cal.setTimeInMillis(datum.getTime());
-		cal.set(GregorianCalendar.YEAR, i);
+		cal.setTimeInMillis(datum.getTime());		
+		GregorianCalendar caltoday = new GregorianCalendar(TimeZone.getTimeZone("ECT"));		
+		if (cal.get(GregorianCalendar.MONTH) <  caltoday.get(GregorianCalendar.MONTH)){
+			i = i + 1;
+			cal.set(GregorianCalendar.YEAR, i);
+		}else{					
+			cal.set(GregorianCalendar.YEAR, i);
+		}
 		return cal.getTime();
 	}
-
+/*
+		public static Date setCorrectYear(Date datum) {
+			GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));			
+			int i = cal.get(GregorianCalendar.YEAR);
+			cal.setTimeInMillis(datum.getTime());
+			cal.set(GregorianCalendar.YEAR, i);	
+			return cal.getTime();
+		}
+			*/
 	public static String getCorrectEndTime(String start, String ende) {
 	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, TIME,true);
 		int hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
@@ -275,7 +289,7 @@ public class SerFormatter {
     	return convString2GreCal(date1, DATE_FULL,true).getTimeInMillis() >= convString2GreCal(date2, DATE_FULL,true).getTimeInMillis();
     }
 
-    public static boolean compareDates(String date1, Calendar date2){    	
+    public static boolean compareDates(String date1, Calendar date2){  
     	return convString2GreCal(date1, DATE_FULL,true).getTimeInMillis() >= date2.getTimeInMillis();
     }
     

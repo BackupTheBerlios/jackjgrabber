@@ -47,6 +47,7 @@ public class SerMovieGuide2Xml extends Thread{
     JProgressBar bar;
     FileWriter fw = null;
     boolean storeOrignalMG;
+	int xml ;
     public SerMovieGuide2Xml(String file, GuiMainView view) {
     		try {
     			mainView=view;
@@ -123,15 +124,17 @@ public class SerMovieGuide2Xml extends Thread{
     }
     
     private URLConnection getConnection() throws IOException {
-    	URLConnection con;
+    	URLConnection con;    
     	if (path != null) {
         	con = (new File(path).toURL()).openConnection();
     	} else {
     		URL url = null;
     		if(!ControlMovieGuideTab.movieGuideFile.exists()){
     			url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
+    			xml = 0;
     		}else{
-        		url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");        	
+        		url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");     
+        		xml = 1;
     		}    		
     		if(storeOrignalMG){        		        		            		        		
         		fw = new FileWriter(ControlMovieGuideTab.getHomePath()+url.getFile().substring(18));
@@ -173,7 +176,11 @@ public class SerMovieGuide2Xml extends Thread{
                 }
             }
             bar.setValue(fileLength);
+            if (xml == 0){
             SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFile, doc);
+            }else {
+            	SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFileNext, doc);
+            }
             if( (storeOrignalMG) && (path==null)){
             	fw.close();
             }

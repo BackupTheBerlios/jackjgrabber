@@ -42,6 +42,7 @@ import model.BOMovieGuideContainer;
 import model.BOSender;
 import model.BOSettingsMovieGuide;
 import model.BOTimer;
+import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
@@ -99,7 +100,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
           this.getTab().getComboBoxGenre().setEnabled(false);
           this.getTab().getComboBoxSender().setEnabled(false);
           this.getTab().getComboBoxSucheNach().setEnabled(false);          
+          /*
           if(getSettings().getMgLoadType()==0){          	
+          	
           	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){          		
           		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info2"))){
               		try{
@@ -143,8 +146,38 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
           	setMovieGuideFile(movieGuideFileNext);          	
           	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());
           	beautifyGui(); 
-          }                   
-                   
+          } */
+          	
+          
+          	if(getSettings().getMgLoadType()==0 && (!movieGuideFile.exists())){       
+          		//infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"));
+              		try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}              	
+          	}
+          	
+          	if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){                 		
+          		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"))){
+              		try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}
+              	}
+          	}          	
+          
+          	 if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
+              	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
+              	//beautifyGui(); 
+              }           
+              if(movieGuideFileNext.exists()){          	
+              	setMovieGuideFile(movieGuideFileNext);                  
+              	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());              
+              	//beautifyGui(); 
+              }
+              beautifyGui();
 	}
 	
 	
@@ -159,7 +192,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		this.getTab().getComboBoxDatum().setEnabled(true);	
 		  this.getTab().getComboBoxGenre().setEnabled(true);
           this.getTab().getComboBoxSender().setEnabled(true);
-          this.getTab().getComboBoxSucheNach().setEnabled(true);
+          this.getTab().getComboBoxSucheNach().setEnabled(true);                           
+          
 		if(getSettings().getMgDefault()==0){
 			setTitelMapSelected(GET_FORMAT_GRE_CAL,13);   // TitelMap Alles      
 		}else{
@@ -167,11 +201,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			this.getTab().getComboBoxDatum().setSelectedItem(GET_FORMAT_GRE_CAL);	 
 		}              
         this.getTab().getComboBoxGenre().setSelectedIndex(0);          
-        this.getTab().getComboBoxSender().setSelectedIndex(0);
+        this.getTab().getComboBoxSender().setSelectedIndex(0);        
         try{
         	this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         	getJTableFilm().getSelectionModel().setSelectionInterval(0,0); //1 Row selected
         }catch(ArrayIndexOutOfBoundsException ex){System.out.println(ex);}
+        
         
    }
 	
@@ -198,6 +233,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}
 		}
 	}
+	
 	public void actionPerformed(ActionEvent e) {	
 		String action = e.getActionCommand();
 		if (action == "download") {
