@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class BOMovieGuide {
 	
-	private static final String[] LIST_ENTRYS = {"Suche in...","Titel","Darsteller","Episode","Bild","Ton","Produktionsland","Produktionsjahr","Regie"};
+	private static final String[] LIST_ENTRYS = {"Suche in...","Titel","Darsteller","Episode","Bild","Ton","Produktionsland","Produktionsjahr","Regie","Alles"};
 	
 	/**
      * Holds value of property sender.
@@ -398,7 +398,31 @@ public class BOMovieGuide {
 	    	sucheList.add(LIST_ENTRYS[6]);
 	    	sucheList.add(LIST_ENTRYS[7]);
 	    	sucheList.add(LIST_ENTRYS[8]);
+	    	sucheList.add(LIST_ENTRYS[9]);
     	}catch(Exception ex){}
     }
- 
+   
+    public boolean getIfStringInObject(String search){
+    	boolean value = false;
+    	if (this.getGenre().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getDarsteller().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getEpisode().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getInhalt().toLowerCase().indexOf(search)>=0){
+    		value = true;    	
+    	}else if(this.getLand().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getJahr().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getBild().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getTon().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}else if(this.getRegie().toLowerCase().indexOf(search)>=0){
+    		value = true;
+    	}
+    	return value;
+    }
 }
