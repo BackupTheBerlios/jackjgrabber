@@ -18,12 +18,12 @@ import java.util.Date;
  */
 public class BOEpg {
 	BOSender sender;
-	String eventId, startTime, endTime, duration, title, unformattedStart, unformattedDuration, description;
+	String eventId, startTime, endTime, duration, title, unformattedStart, unformattedDuration;
 	Date startDate, endDate;
 	BOEpgDetails epgGetail;
 	
 	public BOEpg(BOSender sender, String eventId, String startTime, Date startDate, 
-			String endTime, Date endDate, String duration, String title, String unformStart, String unformDuration, String description) {		
+			String endTime, Date endDate, String duration, String title, String unformStart, String unformDuration) {		
 		this.setSender(sender);
 		this.setDuration(duration);
 		this.setEndTime(endTime);
@@ -177,17 +177,5 @@ public class BOEpg {
 	 */
 	public void setUnformattedDuration(String unformattedDuration) {
 		this.unformattedDuration = unformattedDuration;
-	}
-	/**
-	 * @return Returns the description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-	/**
-	 * @param description The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
 	}
 }
