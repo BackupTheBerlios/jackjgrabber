@@ -187,7 +187,7 @@ public class BORecordArgs {
         if (this.getLocalTimer().isAc3ReplaceStereo()) {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
-                if (!aPid.isAc3() && this.getPids().includingStereoPid()) {
+                if (!aPid.isAc3() && this.getPids().includesAc3Pid()) {
                     this.getPids().getAPids().remove(aPid);
                 }
             }    

@@ -63,10 +63,20 @@ public class BOPids {
         return allPids;
     }
     
-    public boolean includingStereoPid() {
+    public boolean includesStereoPid() {
         for (int i=0; i<this.getAPids().size(); i++) {
             BOPid pid = (BOPid)this.getAPids().get(i);
             if (!pid.isAc3()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean includesAc3Pid() {
+        for (int i=0; i<this.getAPids().size(); i++) {
+            BOPid pid = (BOPid)this.getAPids().get(i);
+            if (pid.isAc3()) {
                 return true;
             }
         }
@@ -95,6 +105,11 @@ public class BOPids {
                     break;
                 }
                 if (!pid.isAc3() && !pid.isTeletext() && ControlMain.getSettingsRecord().isStereoReplaceAc3()) {
+                    ind[indCount]=i;
+                    indCount++;
+                    break;
+                }
+                if (!pid.isAc3() && !pid.isTeletext() && !this.includesAc3Pid()) {
                     ind[indCount]=i;
                     indCount++;
                     break;
