@@ -203,13 +203,13 @@ public class RecordControl extends Thread {
 				fileName = date + "_" + args.getSenderName();
 			}
 		}
-		return SerFormatter.ersetzeUmlaute(fileName.replace(' ', '_'));
+		return SerFormatter.removeInvalidCharacters(fileName.replace(' ', '_'));
 	}
 
 	public File getDirectory() {
 		if (directory == null) {
 			directory = new File(ControlMain.getSettings().getSavePath(),
-					SerFormatter.ersetzeUmlaute(getFileName().replace(' ', '_')));
+					SerFormatter.removeInvalidCharacters(getFileName().replace(' ', '_')));
 			directory.mkdir();
 		}
 		return directory;
