@@ -127,7 +127,7 @@ public class SerMovieGuide2Xml extends Thread{
         		xml = 1;
     		}    		
     		if(storeOrignalMG){        		        		            		        		
-        		fw = new FileWriter(ControlMovieGuideTab.getHomePath()+url.getFile().substring(18));
+        		fw = new FileWriter(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+url.getFile().substring(18));
     		}
     		con =url.openConnection();
     	}
