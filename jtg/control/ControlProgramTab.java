@@ -58,13 +58,13 @@ import streaming.RecordControl;
 public class ControlProgramTab extends ControlTab implements ActionListener, MouseListener, ItemListener {
 	
 	ArrayList bouquetList = new ArrayList();
-	ArrayList pids;
 	BOSender selectedSender;
 	BOBox selectedBox;
 	BOEpg selectedEpg;
 	BOBouquet selectedBouquet;
 	Date dateChooserDate;
 	GuiMainView mainView;	
+	RecordControl recordControl;
 	
 	public ControlProgramTab(GuiMainView view) {
 		this.setMainView(view);		
@@ -121,7 +121,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "Aufnahme") {
+		if (action == "record") {
 			this.actionRecord();
 		}
 		if (action == "Box Reboot"){
@@ -143,10 +143,31 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}catch (Exception ex){}
 		}
 	}
-	
+	/*
+	 * Steuerung der 2 Zustaende. 
+	 * Aufnahme läuft bereits ->stop
+	 * Aufnahme läuft nicht->start
+	 */
 	private void actionRecord() {
-		RecordControl recordControl = new RecordControl(this.buildRecordArgs());
+		if (recordControl ==  null) {
+			this.startRecordModus();                           
+		} else {
+			recordControl.stopRecord();
+			this.stopRecordModus();
+		}
+	}
+	
+	public void stopRecordModus() {
+		recordControl=null;
+		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Aufnahme");
+		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufnahme starten");
+	}
+	
+	public void startRecordModus() {
+		recordControl = new RecordControl(this.buildRecordArgs(), this);
 		recordControl.start();
+		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Stop");
+		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufname stoppen");
 	}
 	
 	private BORecordArgs buildRecordArgs() {
@@ -171,7 +192,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
 				if (me.getClickCount()==2) { //Zapping
 					if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
-						this.setPids(ControlMain.getBoxAccess().getPids());
 					}
 				}
 			}
@@ -396,18 +416,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return timer;
 	}
 	/**
-	 * @return Returns the pids.
-	 */
-	public ArrayList getPids() {
-		return pids;
-	}
-	/**
-	 * @param pids The pids to set.
-	 */
-	public void setPids(ArrayList pids) {
-		this.pids = pids;
-	}
-	/**
 	 * @return BOBouquet
 	 */
 	public BOBouquet getSelectedBouquet() {
@@ -469,5 +477,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void setSelectedBox(BOBox selectedBox) {
 		this.selectedBox = selectedBox;
+	}
+	/**
+	 * @return Returns the recordControl.
+	 */
+	public RecordControl getRecordControl() {
+		return recordControl;
+	}
+	/**
+	 * @param recordControl The recordControl to set.
+	 */
+	public void setRecordControl(RecordControl recordControl) {
+		this.recordControl = recordControl;
 	}
 }

@@ -20,6 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.io.IOException;
 import java.net.DatagramSocket;
 
+import org.apache.log4j.Logger;
+
 
 import service.SerAlertDialog;
 import control.ControlMain;
@@ -32,6 +34,7 @@ public class UdpReceiver extends Thread {
 	
 	public boolean isStopped = false;
 	public long packetCount = 0;
+	DatagramSocket udpSocket;
 	Record record; 
 
 	
@@ -41,19 +44,33 @@ public class UdpReceiver extends Thread {
 	
 	public void run() {
 		try {
-			DatagramSocket fromSocket = new DatagramSocket(31341);
+			udpSocket = new DatagramSocket(31341);
 			UdpPacket udpPacket = new UdpPacket();
 			int curStatus = 0;
 			
 			do {			
 				if (isStopped) break;
-				fromSocket.receive( udpPacket.packet);
+				udpSocket.receive( udpPacket.packet);
 				curStatus = udpPacket.getPacketStatus();					
 				record.writeStream[udpPacket.getStream()].write(udpPacket);
 				packetCount++;
 			} while (curStatus != 2 && !isStopped);		
 		} catch (IOException e) {
-		    SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
+			if (isStopped) {
+				//Do nothing, regulaerer Stop
+			} else {
+				SerAlertDialog.alertConnectionLost("UdpReceiver", ControlMain.getControl().getView());
+			    record.recordControl.stopRecord();
+			}
+		}
+	}
+	
+	public void closeSocket() {
+		isStopped = true;
+		if (udpSocket.isBound()) {
+			isStopped=true;
+			udpSocket.close();
+			Logger.getLogger("UdpReceiver").info("UdpReceiver stopped");
 		}
 	}
 }

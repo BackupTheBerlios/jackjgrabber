@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import control.ControlProgramTab;
 import model.BORecordArgs;
 
 
@@ -27,16 +28,30 @@ import model.BORecordArgs;
 public class RecordControl extends Thread
 {
 	Record record;
+	ControlProgramTab controlProgramTab;
 
+	/*
+	 * Aufnahmestart über die GUI
+	 */
+	public RecordControl(BORecordArgs args, ControlProgramTab control) {
+		controlProgramTab = control;
+		record = new Record(args, this);
+	}
+	/*
+	 * Timer-Aufnahmestart
+	 */
 	public RecordControl(BORecordArgs args) {
-		this.record = new Record(args);
+		record = new Record(args, this);
 	}
 	
 	public void run() {
-	    record.start();
+	   record.start();
 	}
 	
 	public void stopRecord() {
 	    record.stop();
+	    if (controlProgramTab != null) {
+	    	controlProgramTab.stopRecordModus();
+	    }
 	}
 }

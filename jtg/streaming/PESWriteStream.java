@@ -36,11 +36,13 @@ public class PESWriteStream {
     String baseFileName;
 	String fileNameExtension;
 	BufferedOutputStream fileOut;
+	RecordControl recordControl;
 	int stremNum;
 	boolean isActive = true;
 
-	public PESWriteStream(char dataType, int number, String filename) throws FileNotFoundException {
+	public PESWriteStream(char dataType, int number, String filename, RecordControl control ) throws FileNotFoundException {
 	    baseFileName = ControlMain.getSettings().getSavePath()+"/"+filename;
+	    recordControl = control;
 	    stremNum = number;
 		switch (dataType) {
 			case 'v':
@@ -65,6 +67,7 @@ public class PESWriteStream {
             fileOut.write(udpPacket.buffer, udpPacket.dataOffset, udpPacket.UsedLength - udpPacket.dataOffset);
         } catch (IOException e) {
             Logger.getLogger("PESWriteStream").error("unable to write Data");
+            recordControl.stopRecord();
         }
 	}
 	

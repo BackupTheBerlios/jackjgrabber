@@ -23,11 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+
+import service.SerAlertDialog;
 import control.ControlMain;
 
 import model.BORecordArgs;
@@ -44,6 +45,7 @@ public class Record {
 	int spktBufNum = 16;
 
 	PESWriteStream[] writeStream;
+	RecordControl recordControl;
 	UdpReceiver udpReceiver;
 	TcpReceiver tcpReceiver;
 	Socket tcpSocket;
@@ -52,12 +54,13 @@ public class Record {
 	public String avString;
 	String[] dboxArgs;	
 	
-	public Record(BORecordArgs args) {
+	public Record(BORecordArgs args, RecordControl control) {
+		recordControl = control;
 	    recordArgs = args;
 	    boxIp = ControlMain.getBoxIpOfSelectedBox();
 	}
 	
-	public boolean start() {
+	public void start() {
 		try {
 			tcpSocket = new Socket(boxIp,31340);
 			
@@ -79,7 +82,7 @@ public class Record {
 				    String s = replyString[i];
 					if (s == "") continue;
 					if (s == "EXIT") {
-					    this.stop();
+						recordControl.stopRecord();
 					}
 					Logger.getLogger("Record").info("from DBox: "+s);
 					if (0 < this.parseDBoxReply(s, spktBufNum)) isPid = true;
@@ -93,13 +96,10 @@ public class Record {
 			tcpReceiver = new TcpReceiver(this);
 			udpReceiver.start();
 			tcpReceiver.start();
-			
-		} catch (UnknownHostException e) {
-			return false;
 		} catch (IOException e) {
-			return false;
+			SerAlertDialog.alertConnectionLost("Record", ControlMain.getControl().getView());
+			recordControl.stopRecord();
 		}
-		return true;
 	}
 	
 	public String getRequestString() {
@@ -150,10 +150,11 @@ public class Record {
 		try {
             writeStream = new PESWriteStream[pidNum];
             for (int i = 0; i < pidNum; i++) {
-                writeStream[i] = new PESWriteStream(avString.charAt(i), i, fileName);
+                writeStream[i] = new PESWriteStream(avString.charAt(i), i, fileName, recordControl);
             }
         } catch (FileNotFoundException e) {
             Logger.getLogger("Record").error("Unable to create Output-Files");
+            recordControl.stopRecord();
         }
 		return pidNum;
 	}
@@ -176,10 +177,10 @@ public class Record {
 	
 	public void stop()
 	{
-	    udpReceiver.isStopped=true;
-	    tcpReceiver.isStopped=true;
+	    udpReceiver.closeSocket();
+	    tcpReceiver.closeSocket();
 	    for (int i=0; i<writeStream.length; i++) {
-	        writeStream.clone();
+	        writeStream[i].stop();
 	    }
 	}
 }

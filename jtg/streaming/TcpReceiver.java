@@ -44,23 +44,42 @@ public class TcpReceiver extends Thread {
 		try {
 			tcpSocket = record.tcpSocket;
 			byte[] reply = new byte[1000];
+			int len;
+			
 			while (!isStopped) {
-				int len;
 				len = tcpSocket.getInputStream().read(reply);
 				if (len == 0) {
 					continue;
 				}
-				String replyString = new String(reply, 0, len);
-				Logger.getLogger("TcpReceiver").info(new String(replyString).replace("\n", ""));
-				if (replyString.indexOf("EXIT") != -1) {
-				    isStopped = true;
+				
+				String[] replyString = new String(reply, 0, len).split("\n");
+				for (int i=0; i<replyString.length; i++) {
+					Logger.getLogger("TcpReceiver").info(replyString[i]);
+					if (replyString[i].indexOf("EXIT") != -1) {
+						closeSocket();
+					}
 				}
 			}
-			tcpSocket.close();
-			Logger.getLogger("Streaming").info("TcpReceiver stopped\n");
 		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
+			if (isStopped) {
+				//Do nothing, Socket wurde regulaer geschlossen
+			} else {
+				SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
+				record.recordControl.stopRecord();
+			}
 		} 
+	}
+	
+	public void closeSocket() {
+		isStopped = true;
+		if (tcpSocket.isBound()) {
+			try {
+				tcpSocket.close();
+				Logger.getLogger("TcpReceiver").info("TcpReceiver stopped");
+			} catch (IOException e) {
+				Logger.getLogger("TcpReceiver").error("Unable to stop Tcp-Socket");
+			}
+		}
 	}
 
 }
