@@ -4472,7 +4472,7 @@ public static JPanel start(GuiTabProjectX tab, String[] args) {
 	boolean CutsLoaded=false;
 	int ac3f=0;
 	
-	if (args.length > 0) {
+	if (args != null && args.length > 0) {
 
 			int aaa1=0;
 			if ( args[0].equalsIgnoreCase("-c") ) {
