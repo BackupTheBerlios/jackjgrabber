@@ -86,6 +86,10 @@ public class ControlMain {
 	public static final String[] themes = {
 		"Silver", "BrownSugar", "DarkStar", "DesertBlue", "ExperienceBlue", "SkyBluerTahoma"
 	};
+	
+	public static final String[] streamTypes = {
+			"PES", "TS"
+		};
 
 	public static void main( String args[] ) {
 		startLogger();

@@ -104,8 +104,11 @@ public class Record {
 	
 	public String getRequestString() {
 		StringBuffer cmd = new StringBuffer();
-		cmd.append("VIDEO ");
-		cmd.append(udpPort+" ");
+		cmd.append("VIDEO");
+		if (ControlMain.getSettings().getStreamType().equals("TS")) {
+			cmd.append("TS");
+		}
+		cmd.append(" "+udpPort+" ");
 		cmd.append(spktBufNum+" ");
 		if (recordArgs.getBouquetNr() == null) { //Timer-Record hat keine bouquetNr
 		    cmd.append("0 ");
@@ -148,10 +151,15 @@ public class Record {
 		if (pidNum + 3 > dboxArgs.length) return -3;
 
 		try {
-            writeStream = new PESWriteStream[pidNum];
-            for (int i = 0; i < pidNum; i++) {
-                writeStream[i] = new PESWriteStream(avString.charAt(i), i, fileName, recordControl);
-            }
+			if (ControlMain.getSettings().getStreamType().equals("TS")) {
+				writeStream = new PESWriteStream[1];
+				writeStream[0] = new PESWriteStream('t', 0, fileName, recordControl);
+			}  else {
+				writeStream = new PESWriteStream[pidNum];
+	            for (int i = 0; i < pidNum; i++) {
+	            	writeStream[i] = new PESWriteStream(avString.charAt(i), i, fileName, recordControl);
+	            }
+			}
         } catch (FileNotFoundException e) {
             Logger.getLogger("Record").error("Unable to create Output-Files");
             recordControl.stopRecord();

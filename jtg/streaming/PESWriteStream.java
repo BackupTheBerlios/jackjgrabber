@@ -51,7 +51,7 @@ public class PESWriteStream {
 			case 'a':
 				fileNameExtension = ".apes";
 				break;
-			case 3:
+			case 't':
 				fileNameExtension = ".ts";
 				break;
 			default:
