@@ -33,7 +33,6 @@ import control.ControlMain;
  */
 public class PESWriteStream {
 
-    String baseFileName;
 	String fileNameExtension;
 	BufferedOutputStream fileOut;
 	RecordControl recordControl;
@@ -41,7 +40,6 @@ public class PESWriteStream {
 	boolean isActive = true;
 
 	public PESWriteStream(char dataType, int number, String filename, RecordControl control ) throws FileNotFoundException {
-	    baseFileName = ControlMain.getSettings().getSavePath()+"/"+filename;
 	    recordControl = control;
 	    stremNum = number;
 		switch (dataType) {
@@ -57,8 +55,9 @@ public class PESWriteStream {
 			default:
 				return;
 		}
-		
-		File file = new File(baseFileName+"_"+stremNum+fileNameExtension);
+		String fullFileName = filename+"_"+stremNum+fileNameExtension;
+		File file = new File(ControlMain.getSettings().getSavePath(), fullFileName);
+		recordControl.recordFiles.add(file);
 		fileOut = new BufferedOutputStream(new FileOutputStream(file));			
 	}
 	

@@ -37,6 +37,7 @@ public class BOSettings {
 	public boolean projectXSettingsChanged = false;
 	public String streamingServerPort;
 	public boolean startStreamingServer;
+	public boolean startPX;
 	public String savePath;
 	public String playbackString;
     public String streamType; //PES, TS
@@ -209,4 +210,17 @@ public class BOSettings {
 		this.streamType = streamType;
 	}
 
+	/**
+	 * @return Returns the startPX.
+	 */
+	public boolean isStartPX() {
+		return startPX;
+	}
+	/**
+	 * @param startPX The startPX to set.
+	 */
+	public void setStartPX(boolean startPX) {
+		setSettingsChanged(true);
+		this.startPX = startPX;
+	}
 }

@@ -51,20 +51,20 @@ public class GuiTabSettings extends JPanel {
 	private JPanel panelRecordSettings = null;
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxStreamType = null;
+	private JComboBox jComboBoxLocale = null;
+	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldPlaybackString = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
+	private JButton jButtonRecordPathFileChooser;
 	private JScrollPane jScrollPaneBoxSettings = null;
 	private JTable jTableBoxSettings = null;
-	private ControlSettingsTab control;
-	private GuiBoxSettingsTableModel modelBoxTable;
-	private JLabel jLabel1 = null;
-	private JComboBox jComboBoxLocale = null;
 	private JFormattedTextField tfServerPort = null;
 	private JFormattedTextField tfBoxIp = null;
 	private JCheckBox cbStartStreamingServer;
-	private JTextField jTextFieldRecordSavePath;
-	private JButton jButtonRecordPathFileChooser;
+	private JCheckBox cbStartPX;
+	private ControlSettingsTab control;
+	private GuiBoxSettingsTableModel modelBoxTable;
 
 	public GuiTabSettings(ControlSettingsTab ctrl) {
 		super();
@@ -112,15 +112,16 @@ public class GuiTabSettings extends JPanel {
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 6, 1));
-			builder.add(this.getCbStartStreamingServer(),					cc.xywh	(1, 2, 5, 1));
-			builder.add(new JLabel("Streamingserver-Port"),	  			cc.xy	(1, 3));
-			builder.add(this.getTfServerPort(),										cc.xy	(3, 3));
-			builder.add(new JLabel("Stream-Typ"),					  			cc.xy	(1, 4));
-			builder.add(this.getJComboBoxStreamType(),						cc.xy	(3, 4));
-			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),		cc.xy	(1, 5));
-			builder.add(this.getJTextFieldRecordSavePath(),					cc.xywh	(3, 5, 2, 1));
-			builder.add(this.getJButtonRecordPathFileChooser(),			cc.xy	(6, 5));
+			builder.addSeparator("Aufname-Settings",								cc.xywh	(1, 1, 6, 1));
+			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 5, 1));
+			builder.add(new JLabel("Streamingserver-Port"),	  				cc.xy	(1, 3));
+			builder.add(this.getTfServerPort(),											cc.xy	(3, 3));
+			builder.add(new JLabel("Stream-Typ"),					  				cc.xy	(1, 4));
+			builder.add(this.getJComboBoxStreamType(),							cc.xy	(3, 4));			
+			builder.add(this.getCbStartPX(),												cc.xywh	(1, 5, 5, 1));
+			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),			cc.xy	(1, 6));
+			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(3, 6, 2, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(),				cc.xy	(6, 6));
 		}
 		return panelRecordSettings;
 	}
@@ -328,6 +329,7 @@ public class GuiTabSettings extends JPanel {
 	public JCheckBox getCbStartStreamingServer() {
 		if (cbStartStreamingServer == null) {
 			cbStartStreamingServer = new JCheckBox("Streamingserver beim Start starten");
+			cbStartStreamingServer.setName("startStreamingServer");
 			cbStartStreamingServer.addItemListener(control);
 		}
 		return cbStartStreamingServer;
@@ -367,5 +369,16 @@ public class GuiTabSettings extends JPanel {
 			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 19));
 		}
 		return jTextFieldPlaybackString;
+	}
+	/**
+	 * @return Returns the cbStartPX.
+	 */
+	public JCheckBox getCbStartPX() {
+		if (cbStartPX == null) {
+			cbStartPX = new JCheckBox("Nach Aufnahme mit PX demuxen");
+			cbStartPX.setName("startPX");
+			cbStartPX.addItemListener(control);
+		}
+		return cbStartPX;
 	}
 }

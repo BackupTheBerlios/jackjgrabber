@@ -17,19 +17,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.io.File;
+import java.util.ArrayList;
+
+import presentation.GuiTabProjectX;
+import control.ControlMain;
 import control.ControlProgramTab;
+import control.ControlProjectXTab;
 import model.BORecordArgs;
 
 
-/**
- * @author Geist Alexander
- *
- */
 public class RecordControl extends Thread
 {
 	Record record;
 	public boolean isRunning = true;
 	ControlProgramTab controlProgramTab;
+	ArrayList recordFiles = new ArrayList();
 
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
 		controlProgramTab = control;
@@ -43,6 +46,24 @@ public class RecordControl extends Thread
 	public void stopRecord() {
 	    record.stop();
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
+    	if (ControlMain.getSettings().isStartPX()) {
+    		this.startProjectX();
+    	}
     	isRunning = false;
+	}
+	
+	public void startProjectX() {
+		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), this.buildPXcommand());
+		controlProgramTab.getMainView().getMainTabPane().setTabProjectX( new GuiTabProjectX(control));
+		control.initialize();
+	}
+	
+	private String[] buildPXcommand() {
+		String[] args = new String[recordFiles.size()];
+		for (int i=0; i<args.length; i++) {
+			File file = (File)recordFiles.get(i);
+			args[i] = file.getAbsolutePath();
+		}
+		return args;
 	}
 }

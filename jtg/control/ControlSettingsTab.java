@@ -57,6 +57,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Fo
 		this.getMainView().getTabSettings().getCbStartStreamingServer().setSelected(settings.isStartStreamingServer());
 		this.getMainView().getTabSettings().getJTextFieldPlaybackString().setText(settings.getPlaybackString());
 		this.getMainView().getTabSettings().getJComboBoxStreamType().setSelectedItem(settings.getStreamType());
+		this.getMainView().getTabSettings().getCbStartPX().setSelected(settings.isStartPX());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -85,7 +86,12 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Fo
 		String comp = event.getSource().getClass().getName();
 		if (comp.equals("javax.swing.JCheckBox")) {
 			JCheckBox checkBox = (JCheckBox)event.getSource();
-			settings.setStartStreamingServer(checkBox.isSelected());
+			if (checkBox.getName().equals("startStreamingServer")) {
+				settings.setStartStreamingServer(checkBox.isSelected());
+			}
+			if (checkBox.getName().equals("startPX")) {
+				settings.setStartPX(checkBox.isSelected());
+			}
 		} else {
 			JComboBox comboBox = (JComboBox)event.getSource();
 			if (comboBox.getName().equals("theme")) {

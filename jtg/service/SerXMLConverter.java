@@ -50,9 +50,20 @@ public class SerXMLConverter {
 		getSettingsLocale(root, settings);
 		getSettingsPlaybackPlayer(root, settings);
 		getSettingsStreamType(root, settings);
+		getSettingsStartPX(root, settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		return settings;
+	}
+	
+	private static void getSettingsStartPX(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/startPX");
+		if (node != null) {
+			settings.startPX=Boolean.parseBoolean(node.getText());
+		} else {
+			SerXMLHandling.setElementInElement(root,"startPX", "true");
+			settings.setStartPX(true);
+		}
 	}
 	
 	private static void getSettingsStreamType(Element root, BOSettings settings) {
@@ -193,7 +204,9 @@ public class SerXMLConverter {
 		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
 		Node playbackPlayer = settingsDocument.selectSingleNode("/settings/playbackPlayer");
 		Node streamType = settingsDocument.selectSingleNode("/settings/streamType");
-		
+		Node startPx = settingsDocument.selectSingleNode("/settings/startPX");
+
+		startPx.setText(Boolean.toString(ControlMain.getSettings().isStartPX()));
 		streamType.setText(ControlMain.getSettings().getStreamType());
 		playbackPlayer.setText(ControlMain.getSettings().getPlaybackString());
 		startServer.setText(Boolean.toString(ControlMain.getSettings().isStartStreamingServer()));

@@ -49,6 +49,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"theme", "Silver");
 		setElementInElement(root,"locale", "DE");
 		setElementInElement(root,"streamType", "PES");
+		setElementInElement(root,"startPX", "true");
 
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);

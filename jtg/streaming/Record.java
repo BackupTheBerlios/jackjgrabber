@@ -50,7 +50,7 @@ public class Record {
 	TcpReceiver tcpReceiver;
 	Socket tcpSocket;
 	String boxIp;
-	String fileName;
+//	String fileName;
 	public String avString;
 	String[] dboxArgs;	
 	
@@ -144,7 +144,7 @@ public class Record {
 
 		if (dboxArgs[0].equals("INFO:")) return 0;
 		if (!dboxArgs[0].equals("PID")) return -1;  // "EXIT" ist moeglich
-		fileName = this.getFileName();
+		String baseFileName = this.getFileName();
 		if (dboxArgs.length < 4) return -2;
 	  	avString = dboxArgs[1];
 		int pidNum = Integer.parseInt(dboxArgs[2]);
@@ -153,11 +153,11 @@ public class Record {
 		try {
 			if (ControlMain.getSettings().getStreamType().equals("TS")) {
 				writeStream = new PESWriteStream[1];
-				writeStream[0] = new PESWriteStream('t', 0, fileName, recordControl);
+				writeStream[0] = new PESWriteStream('t', 0, baseFileName, recordControl);
 			}  else {
 				writeStream = new PESWriteStream[pidNum];
 	            for (int i = 0; i < pidNum; i++) {
-	            	writeStream[i] = new PESWriteStream(avString.charAt(i), i, fileName, recordControl);
+	            	writeStream[i] = new PESWriteStream(avString.charAt(i), i, baseFileName, recordControl);
 	            }
 			}
         } catch (FileNotFoundException e) {
@@ -168,7 +168,7 @@ public class Record {
 	}
 	
 	public String getFileName() {
-	    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_ HH-mm");
+	    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
 	    Date now = new Date();
 	    String date = f.format(now);
 	    String name;

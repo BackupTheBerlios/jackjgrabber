@@ -4511,11 +4511,6 @@ public static JPanel start(GuiTabProjectX tab, String[] args) {
 				iniLoaded=true;
 			}
 
-			if (RButton[0].isSelected() || !RButton[1].isSelected()) {
-				System.out.println("-> to agree to these terms you have to start the GUI first");
-				//System.exit(0);
-			}
-
 			for (int f=aaa1;f<args.length-1;f++) {
 				if ( args[f].equalsIgnoreCase("-o") ) {
 					outchange=true;
@@ -5028,8 +5023,8 @@ public void run() {
 		extract.setEnabled(true);
 
 	qinfo=false;
-	if (running) 
-		System.exit(0);
+	//if (running) 
+		//System.exit(0);
 }  
 
 
