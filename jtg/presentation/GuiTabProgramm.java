@@ -73,9 +73,16 @@ public class GuiTabProgramm extends GuiTab {
 	private JDateChooser jDateChooser = null;
 	private JScrollPane jScrollPaneEPGDetail = null;
 	private JScrollPane jScrollPaneAusgabe = null;
+	private JPanel jPanelAktionen = null; 
 	
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
+		initialize();
+	}
+	
+	private  void initialize() {
+		
+		java.awt.GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -87,22 +94,27 @@ public class GuiTabProgramm extends GuiTab {
 		gridBagConstraints7.gridy = 0;
 		gridBagConstraints7.anchor = java.awt.GridBagConstraints.CENTER;
 		gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-		gridBagConstraints7.gridwidth = 2;
+		gridBagConstraints7.gridwidth = 4;
 		gridBagConstraints9.gridx = 1;
 		gridBagConstraints9.gridy = 4;
 		gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints9.gridwidth = 3;
 		gridBagConstraints10.gridx = 0;
 		gridBagConstraints10.gridy = 4;
-		gridBagConstraints12.gridx = 0;
+		gridBagConstraints12.gridx = 2;
 		gridBagConstraints12.gridy = 5;
 		gridBagConstraints12.gridwidth = 2;
 		gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
-		this.setPreferredSize(new java.awt.Dimension(630,400));
+		//this.setPreferredSize(new java.awt.Dimension(630,400));
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
+		gridBagConstraints6.gridx = 0;
+		gridBagConstraints6.gridy = 5;
+		gridBagConstraints6.gridwidth = 2;
 		this.add(getJPanelProgramm(), gridBagConstraints7);
 		this.add(getJPanelEpgInfo(), gridBagConstraints9);
 		this.add(getJPanelEpgInfoButtons(), gridBagConstraints10);
 		this.add(getJPanelAusgabe(), gridBagConstraints12);
+		this.add(getJPanelAktionen(), gridBagConstraints6);
 	}
 	
 	private JPanel getJPanelProgramm() {
@@ -172,6 +184,21 @@ public class GuiTabProgramm extends GuiTab {
 	 */    
 	private JPanel getJPanelAusgabe() {
 		if (jPanelAusgabe == null) {
+			java.awt.GridBagConstraints gridBagConstraints92 = new GridBagConstraints();
+			jPanelAusgabe = new JPanel();
+			jPanelAusgabe.setLayout(new GridBagLayout());
+			jPanelAusgabe.setPreferredSize(new java.awt.Dimension(100,110));
+			jPanelAusgabe.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Ausgabe", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			jPanelAusgabe.setSize(100, 150);
+			gridBagConstraints92.gridx = 0;
+			gridBagConstraints92.gridy = 0;
+			gridBagConstraints92.weightx = 1.0;
+			gridBagConstraints92.weighty = 1.0;
+			gridBagConstraints92.fill = java.awt.GridBagConstraints.BOTH;
+			jPanelAusgabe.add(getJScrollPaneAusgabe(), gridBagConstraints92);
+		}
+		
+		/*if (jPanelAusgabe == null) {
 			jPanelAusgabe = new JPanel();		
 			JPanel jPanel1 = new JPanel();
 			JPanel jPanel2 = new JPanel();
@@ -199,7 +226,6 @@ public class GuiTabProgramm extends GuiTab {
 			jPanel1.add(this.getJButtonEpgReset(), new GridBagConstraints(3, 1, 3, 1, 0.0, 0.0, 10, 1, new Insets(0, 0, 0, 0), 0, 0));
 			jPanel1.add(this.getJSpinner(), new GridBagConstraints(3, 0, 2, 1, 0.0, 0.0, 10, 1, new Insets(0, 0, 0, 0), 0, 0));
 			jPanel1.add(new JLabel("min"), new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0, 10, 0, new Insets(0, 0, 0, 0), 0, 0));
-			jPanelAusgabe.add(jPanel1, new GridBagConstraints(0, 0, 2, 1, 0.0, 0.0, 10, 1, new Insets(0, 0, 0, 0), 0, 0));
 				
 			GridLayout jPanel2Layout = new GridLayout(1,1);
 			jPanel2.setLayout(jPanel2Layout);
@@ -210,8 +236,60 @@ public class GuiTabProgramm extends GuiTab {
 			jPanel2Layout.setRows(1);
 			jPanel2.add(this.getJScrollPaneAusgabe());
 			jPanelAusgabe.add(jPanel2, new GridBagConstraints(2, 0, 18, 1, 0.0, 0.0, 10, 1, new Insets(0, 0, 0, 0), 0, 0));
-		}
+			*/
 		return jPanelAusgabe;
+	}
+	private JPanel getJPanelAktionen() {
+		if (jPanelAktionen == null) {
+			java.awt.GridBagConstraints gridBagConstraints72 = new GridBagConstraints();
+			java.awt.GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			javax.swing.JLabel jLabel = new JLabel();
+			java.awt.GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			java.awt.GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			java.awt.GridBagConstraints gridBagConstraints131 = new GridBagConstraints();
+			java.awt.GridBagConstraints gridBagConstraints101 = new GridBagConstraints();
+			java.awt.GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
+			java.awt.GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			jPanelAktionen = new JPanel();
+			jPanelAktionen.setLayout(new GridBagLayout());
+			jPanelAktionen.setPreferredSize(new java.awt.Dimension(225,110));
+			jPanelAktionen.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Aktionen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.gridy = 0;
+			gridBagConstraints8.insets = new java.awt.Insets(0,0,0,0);
+			gridBagConstraints91.gridx = 1;
+			gridBagConstraints91.gridy = 2;
+			gridBagConstraints91.insets = new java.awt.Insets(0,0,0,0);
+			gridBagConstraints91.gridwidth = 3;
+			gridBagConstraints101.gridx = 0;
+			gridBagConstraints101.gridy = 2;
+			gridBagConstraints131.gridx = 0;
+			gridBagConstraints131.gridy = 1;
+			gridBagConstraints131.gridwidth = 1;
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.gridy = 2;
+			gridBagConstraints14.gridwidth = 3;
+			gridBagConstraints15.gridx = 1;
+			gridBagConstraints15.gridy = 0;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.insets = new java.awt.Insets(0,5,0,5);
+			gridBagConstraints17.gridx = 3;
+			gridBagConstraints17.gridy = 0;
+			gridBagConstraints17.insets = new java.awt.Insets(0,0,0,5);
+			jLabel.setText("Min");
+			gridBagConstraints72.gridx = 1;
+			gridBagConstraints72.gridy = 1;
+			gridBagConstraints72.gridwidth = 3;
+			jPanelAktionen.add(getJButtonAufnahme(), gridBagConstraints8);
+			jPanelAktionen.add(getJButtonReboot(), gridBagConstraints131);
+			jPanelAktionen.add(getJButtonNhttpdReset(), gridBagConstraints91);
+			jPanelAktionen.add(getJSpinner(), gridBagConstraints15);
+			jPanelAktionen.add(jLabel, gridBagConstraints17);
+			jPanelAktionen.add(getJButtonVLC(), gridBagConstraints101);
+			jPanelAktionen.add(getJButtonEpgReset(), gridBagConstraints72);
+		}
+		return jPanelAktionen;
 	}
 	/**
 	 * This method initializes jPanel2	
@@ -416,7 +494,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonToTimer = new JButton();
 			jButtonToTimer.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonToTimer.setText("To Timer");
-			jButtonToTimer.setToolTipText("ausgewählte Dateien zum Timer hinzufügen.");
+			jButtonToTimer.setToolTipText("ausgewï¿½hlte Dateien zum Timer hinzufï¿½gen.");
 		}
 		return jButtonToTimer;
 	}
@@ -585,9 +663,9 @@ public class GuiTabProgramm extends GuiTab {
 	 * This method initializes jDateChooser	
 	 * 
 	 * Achtung modifizierter DateChooser!!!	
-	 * Es wird das Control ControlProgramTab als "Listener" übergeben
-	 * wird das Datum geändert wird das aktuelle Datum automatisch
-	 * über setDateChooserDate(Date) gesetzt
+	 * Es wird das Control ControlProgramTab als "Listener" ï¿½bergeben
+	 * wird das Datum geï¿½ndert wird das aktuelle Datum automatisch
+	 * ï¿½ber setDateChooserDate(Date) gesetzt
 	 */    
 	public JDateChooser getJDateChooser() {
 	      if (jDateChooser == null) {
