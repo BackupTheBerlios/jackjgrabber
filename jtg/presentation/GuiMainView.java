@@ -35,7 +35,6 @@ import presentation.program.GuiTabProgramm;
 import presentation.recordInfo.GuiTabRecordInfo;
 import presentation.settings.GuiTabSettings;
 import presentation.start.GuiTabStart;
-import service.SerGUIUtils;
 import service.SerIconManager;
 import snoozesoft.systray4j.SysTrayMenu;
 import snoozesoft.systray4j.SysTrayMenuIcon;
@@ -73,7 +72,6 @@ public class GuiMainView extends JFrame {
 		initialize();
 		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2]);
 		pack();
-		SerGUIUtils.center(this);
 		checkSettings();
 		registerKeys();
 
