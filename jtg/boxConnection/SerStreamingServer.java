@@ -49,6 +49,7 @@ public class SerStreamingServer extends Thread {
 			        ControlMain.getBoxIpOfActiveBox()+" Port: "+
 			        ControlMain.getSettingsRecord().getStreamingServerPort());
 			ControlMain.getBoxAccess().sendMessage("Start%20Streaming-Server");
+            switchServerButton(true);
 			Socket socket = server.accept();
 			this.record(socket);
 		} catch (IOException e) {
@@ -60,6 +61,19 @@ public class SerStreamingServer extends Thread {
 			Logger.getLogger("SerStreamingServer").error("Not valid XML-Stream");	
 		}
 	}
+    
+    public static void switchServerButton(boolean status) {
+        try {
+            if (status) {
+                ControlMain.getControl().getView().getTabProgramm().startStreamingServerModus();    
+            } else {
+                ControlMain.getControl().getView().getTabProgramm().stopStreamingServerModus();
+            }
+            
+        } catch (Exception e) {
+            //do nothing, Button nicht da
+        }
+    }
 	
 	public void record(Socket socket) throws IOException, DocumentException {
 	    
@@ -91,15 +105,13 @@ public class SerStreamingServer extends Thread {
 		
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		if (recordArgs.getCommand().equals("stop") ) {
-		    ControlMain.getControl().getView().getTabProgramm().stopStreamingServerModus();
 		    ControlMain.getControl().getView().getTabProgramm().getControl().stopRecord();
 		    Logger.getLogger("SerStreamingServer").info("From DBox: Stop record");
 		}
 		if (recordArgs.getCommand().equals("record")) {
 		    recordArgs.setQuickRecord(false);
 			recordArgs.checkRecordPids();
-			recordArgs.checkTitle();
-			ControlMain.getControl().getView().getTabProgramm().startStreamingServerModus();
+			recordArgs.checkTitle();		
 			ControlMain.getControl().getView().getTabProgramm().getControl().startRecord(recordArgs);
 			Logger.getLogger("SerStreamingServer").info("From DBox: Start record");
 		}
@@ -112,7 +124,8 @@ public class SerStreamingServer extends Thread {
 			if (server != null && server.isBound()) {
 			    isRunning=false;
 				server.close();
-				Logger.getLogger("SerStreamingServer").info("StreamingServer stopped");	
+                switchServerButton(false);
+				Logger.getLogger("SerStreamingServer").info("StreamingServer stopped");
 				return true;
 			}
 		} catch (IOException e) {

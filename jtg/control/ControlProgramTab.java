@@ -725,7 +725,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void startStreamingSever() {
-	    ControlMain.initStreamingServer();
+	    if (!SerStreamingServer.isRunning) {
+            new SerStreamingServer().start();
+        }
 	}
 
 	public void stopStreamingServer() {
