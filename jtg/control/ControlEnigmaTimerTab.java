@@ -1,5 +1,3 @@
-package control;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -7,9 +5,14 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
+import model.BOEpg;
 import model.BOSender;
 import model.BOTimer;
 
@@ -19,17 +22,33 @@ import presentation.GuiMainView;
 import service.SerAlertDialog;
 import service.SerFormatter;
 
-/**
- * @author Alexander Geist, Treito
- */
-public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
+package control;
+/*
+ControlEnigmaTimerTab.java by Geist Alexander, Treito
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
+public class ControlEnigmaTimerTab extends ControlTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
 	ArrayList senderList;
 	GuiEnigmaTimerPanel tab;
-	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "Wochentage" };
-	public String[] timerType = { "Shutdown", "Umschalten", "Standby", "Erinnerung", "Sleep-Timer"};
+	public String[] repeatOptions = { "einmal", "Wochentage" };
+	public String[] timerType = { "Nichts", "Standby", "Shutdown"};
 	
 	public ControlEnigmaTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -48,14 +67,12 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "deleteAll") {
-			
-		}
-		if (action == "deleteAllProgramTimer") {
-			
+		
+		if (action == "deleteAllRecordTimer") {
+		    this.actionDeleteAllRecordTimer();
 		}		
-		if (action == "deleteSelectedProgramTimer") {
-			
+		if (action == "deleteSelectedRecordTimer") {
+		    this.actionDeleteSelectedRecordTimer();
 		}
 		
 		if (action == "addProgramTimer") {
@@ -63,16 +80,126 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "cleanup") {
-			
+		    this.actionCleanUpRecordTimer();
 		}
 		if (action == "reload") {
-			
+			this.actionReload();
 		}
 		if (action == "send") {
-			
+			this.actionSend();
 		}
 	}
 	
+	
+	private void actionDeleteAllRecordTimer() {
+		try {
+			this.deleteAllTimer();
+			this.getTimerList()[0] = new ArrayList();
+			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+		}
+	}
+	
+	private void deleteAllTimer() throws IOException {
+	    try {
+	        BOTimer timer= new BOTimer();
+	        timer.setModifiedId("deleteall");
+	        this.writeTimer(timer);
+	    } catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+	    }
+	}
+	
+	private void actionCleanUpRecordTimer()
+	{
+	        BOTimer timer= new BOTimer();
+	        timer.setModifiedId("cleanup");
+	        try {
+	            this.writeTimer(timer);
+	            this.rereadTimerList();
+	        } catch (IOException e) {
+				SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+	        }
+	}
+	
+	private void actionDeleteSelectedRecordTimer() {
+		int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
+		ArrayList timerList = this.getTimerList()[0];
+		for (int i=rows.length-1; 0<=i; i--) {
+			BOTimer timer = (BOTimer)timerList.get(rows[i]);
+			try {
+				this.deleteTimer(timer);
+				timerList.remove(i);
+				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			} catch (IOException e) {
+				SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+			}
+		}
+	}
+	
+	private void actionReload() {
+		try {
+			this.rereadTimerList();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+		}
+	}
+	
+	private void deleteTimer(BOTimer timer) throws IOException {
+		if (timer.getTimerNumber() != null) {  //Neu angelegte Timer muessen nicht geloescht werden
+			timer.setModifiedId("remove");
+			this.writeTimer(timer);
+			this.rereadTimerList();
+		}
+	}
+	
+	private void writeTimer(BOTimer timer) throws IOException {
+		if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
+			if (timer.getModifiedId().equals("cleanup")) {
+			    Logger.getLogger("ControlProgramTab").info("Timer gesäubert");
+			} else if (timer.getModifiedId().equals("deleteall")) {
+			    Logger.getLogger("ControlProgramTab").info("alle Timer gelöscht");
+			} else if (timer.getModifiedId().equals("remove")) {
+			    Logger.getLogger("ControlProgramTab").info("Timer wird gelöscht");
+	        } else {
+			    Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
+			}
+		} else {
+		    if (timer.getModifiedId().equals("cleanup")) {
+		        Logger.getLogger("ControlProgramTab").error("Timer nicht gesäubert");
+			} else if (timer.getModifiedId().equals("deleteall")) {
+			    Logger.getLogger("ControlProgramTab").error("alle Timer nicht gelöscht");
+			} else if (timer.getModifiedId().equals("remove")) {
+			    Logger.getLogger("ControlProgramTab").error("Timer wurde nicht gelöscht");
+	        } else {
+			Logger.getLogger("ControlProgramTab").error(timer.getInfo());
+			throw new IOException();
+	        }
+		}
+	}
+	
+	private void writeAllTimer(ArrayList timerList) throws IOException {
+		for (int i=0; i<timerList.size(); i++) {
+			BOTimer timer = (BOTimer)timerList.get(i);
+			if (timer.getModifiedId() != null) { //nur neue und modifizierte Timer wegschreiben
+				this.writeTimer(timer);
+			}
+		}
+	}
+	private void rereadTimerList() throws IOException {
+		this.setTimerList(ControlMain.getBoxAccess().readTimer());
+		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+	}
+	private void actionSend() {
+		//this.setChanId(this.getTimerList()[0]);
+		try {
+			this.writeAllTimer(this.getTimerList()[0]);
+			this.rereadTimerList();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+		}
+	}
 	/**
 	 * Klick-Events der Tables
 	 */
@@ -100,27 +227,19 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 	{}
 	
 	
-	public String convertLongEventRepeat (String longString) {
-		if (longString.equals("einmal")) {
-			return "0";
-		}
-		if (longString.equals("täglich")){
-			return "1";
-		}
-		if (longString.equals("wöchentlich")){
-			return "2";
-		}
-		if (longString.equals("2-wöchentlich")){
-			return "3";
-		}
-		if (longString.equals("4-wöchentlich")){
-			return "4";
-		}
-		if (longString.equals("monatlich")) {
-			return  "5";
+	public String convertShortTimerType (String timerTypeString) {
+		long timerType=Long.parseLong(timerTypeString);
+	    
+		if ((timerType&256)==256) {
+		    return "erfolgreich";
+		} else if ((timerType&76)==76) {
+		    return "Aufnahme";
+		} else if ((timerType&44)==44) {
+		    return "offen";
 		} else {
-			return "768";
+		    return "Fehler";
 		}
+	
 	}
 	
 	public String convertShortEventRepeat(String shortString){
@@ -128,66 +247,62 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
     	switch(repeatNumber) {
 			case 0:
 			return "einmal";
-			case 1:
-			return "täglich";
-			case 2:
-			return "wöchentlich";
-			case 3:
-			return "2-wöchentlich";
-			case 4:
-			return "4-wöchentlich";
-			case 5:
-			return "monatlich";
+			
     	}
-    	if (repeatNumber >5) {
+    	if (repeatNumber >1) {
     		return "Wochentage"; 
     	}
     	return new String();
 	}
 	
-	public String convertEventType(String eventType) {
-		switch(Integer.parseInt(eventType)) {
-			case 1: return "SHUTDOWN";
-			case 2: return "NEXTPROGRAM";
-			case 3: return "ZAPTO";
-			case 4: return "STANDBY";
-			case 5: return "RECORD";
-			case 6: return "REMIND";
-			case 7: return "SLEEPTIMER";										
+	public String convertLongEventRepeat (String longString) {
+		if (longString.equals("einmal")) {
+			return "0";
+		} else {		
+			return "768";
 		}
-		return new String();
+	}
+	
+	public String convertShortEventType(String shortString) {
+	    long timerType=Long.parseLong(shortString);
+	    
+		if ((timerType&134217728)==134217728) {
+		    return "Standby";
+		} else if ((timerType&67108864)==67108864) {
+		    return "Shutdown";
+		} else {
+		    return "Nichts";
+		}
+	}
+	
+	public String convertLongEventType(String longString) {
+	    if (longString.equals("Standby")) {
+	        return "134217728";
+	    } else if (longString.equals("Shutdown")) {
+	        return "67108864";
+	    } else {
+	        return "0";
+	    }
 	}
 	
 	private BOTimer buildRecordTimer() {
-		BOTimer timer = new BOTimer();
+	    BOTimer timer = new BOTimer();
 		
 		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
 		long now = new Date().getTime();
 		
 		timer.setSenderName( defaultSender.getName() );
-		timer.setAnnounceTime(Long.toString(new Date().getTime()));
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
+		timer.setChannelId(defaultSender.getChanId());
+		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
+		timer.setUnformattedStartTime(SerFormatter.formatDate(now));  
+		timer.setUnformattedStopTime(SerFormatter.formatDate(now)); 
+		timer.setModifiedId("new");
 				
 		timer.setEventRepeatId("0");
-		timer.setEventTypeId("5");
+		timer.setEventTypeId("44");
 		return timer;
 	}
-	private BOTimer buildSystemTimer() {
-		BOTimer timer = new BOTimer();
-		
-		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
-		long now = new Date().getTime();
-		
-		timer.setSenderName( defaultSender.getName() );
-		timer.setAnnounceTime(Long.toString(new Date().getTime()));
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(now)); 
-		
-		timer.setEventRepeatId("0");
-		timer.setEventTypeId("5");
-		return timer;
-	}
+	
 	/**
 	 * @return Returns the mainView.
 	 */
@@ -236,29 +351,5 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 	 */
 	public void setSenderList(ArrayList senderList) {
 		this.senderList = senderList;
-	}
-	/**
-	 * @return Returns the repeatOptions.
-	 */
-	public String[] getRepeatOptions() {
-		return repeatOptions;
-	}
-	/**
-	 * @param repeatOptions The repeatOptions to set.
-	 */
-	public void setRepeatOptions(String[] repeatOptions) {
-		this.repeatOptions = repeatOptions;
-	}
-	/**
-	 * @return Returns the timerType.
-	 */
-	public String[] getTimerType() {
-		return timerType;
-	}
-	/**
-	 * @param timerType The timerType to set.
-	 */
-	public void setTimerType(String[] timerType) {
-		this.timerType = timerType;
 	}
 }
