@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import control.ControlMain;
@@ -63,6 +64,12 @@ public class GuiMainTabPane extends JTabbedPane {
 			}
 		}
 		return tabTimer;
+	}
+	
+	public void reInitTimerPanel() {
+		this.tabTimer=null;
+		JPanel panel = (JPanel)this.getComponent(1);
+		panel.removeAll();
 	}
 	
 	/**
