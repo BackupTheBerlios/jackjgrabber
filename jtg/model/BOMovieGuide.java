@@ -6,6 +6,7 @@
  */
 package model;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author ralix
@@ -75,12 +76,12 @@ public class BOMovieGuide {
     /**
      * Holds value of property bild.
      */
-    private String bild;
+    private ArrayList bild;
     
     /**
      * Holds value of property ton.
      */
-    private String ton;
+    private ArrayList ton;
     
     /**
      * Holds value of property darsteller.
@@ -107,6 +108,8 @@ public class BOMovieGuide {
     		this.start  = new ArrayList();
     		this.ende  = new ArrayList(); 
     		this.dauer  = new ArrayList();
+    		this.bild  = new ArrayList();
+    		this.ton  = new ArrayList();
     		this.setSender(sender);
 			this.setDatum(datum);
 			this.setStart(start);
@@ -118,15 +121,15 @@ public class BOMovieGuide {
 			this.land       = land;
 			this.jahr       = jahr;
 			this.regie      = regie;
-			this.bild       = bild;
-			this.ton        = ton;
+			this.setBild(bild);
+			this.setTon(ton);
 			this.darsteller = darsteller;
 			this.inhalt     = inhalt;        			
     }
     
     public BOMovieGuide(ArrayList sender, ArrayList datum , ArrayList start, ArrayList ende,String titel, String episode,
                         String genre, ArrayList dauer, String land, String jahr, String regie,
-                        String bild, String ton, String darsteller, String inhalt){        
+                        ArrayList bild, ArrayList ton, String darsteller, String inhalt){        
     	this.sender     = sender;
         this.datum      = datum;
         this.start      = start;
@@ -320,7 +323,7 @@ public class BOMovieGuide {
      * Getter for property bild.
      * @return Value of property bild.
      */
-    public String getBild() {
+    public ArrayList getBild() {
         return this.bild;
     }
     
@@ -329,14 +332,14 @@ public class BOMovieGuide {
      * @param bild New value of property bild.
      */
     public void setBild(String bild) {
-        this.bild = bild;
+    	this.bild.add(bild);
     }
     
     /**
      * Getter for property ton.
      * @return Value of property ton.
      */
-    public String getTon() {
+    public ArrayList getTon() {
         return this.ton;
     }
     
@@ -345,7 +348,7 @@ public class BOMovieGuide {
      * @param ton New value of property ton.
      */
     public void setTon(String ton) {
-        this.ton = ton;
+    	this.ton.add(ton);
     }
     
     /**
@@ -401,7 +404,15 @@ public class BOMovieGuide {
 	    	sucheList.add(LIST_ENTRYS[9]);
     	}catch(Exception ex){}
     }
-   
+    public boolean booleanArrayTest(ArrayList value,String search){
+    	boolean retVal = false;
+    	for (Iterator i = value.iterator(); i.hasNext();) {   			
+    			if(i.next().toString().toLowerCase().indexOf(search)>=0){
+    				retVal = true;
+    			}
+    	}
+    	return retVal;
+    }
     public boolean getIfStringInObject(String search){
     	boolean value = false;
     	if (this.getGenre().toLowerCase().indexOf(search)>=0){
@@ -416,9 +427,9 @@ public class BOMovieGuide {
     		value = true;
     	}else if(this.getJahr().toLowerCase().indexOf(search)>=0){
     		value = true;
-    	}else if(this.getBild().toLowerCase().indexOf(search)>=0){
+    	}else if(this.booleanArrayTest(this.getBild(),search.toLowerCase())){
     		value = true;
-    	}else if(this.getTon().toLowerCase().indexOf(search)>=0){
+    	}else if(this.booleanArrayTest(this.getTon(),search.toLowerCase())){
     		value = true;
     	}else if(this.getRegie().toLowerCase().indexOf(search)>=0){
     		value = true;
