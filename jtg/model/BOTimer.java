@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -63,7 +64,7 @@ public class BOTimer extends java.lang.Object{
     }
 
     public String getStartTime (){
-    	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy  HH:mm");
     	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
@@ -86,7 +87,9 @@ public class BOTimer extends java.lang.Object{
 		} else {
 			outputString = this.getSenderName();
 		}
-		return this.getStartTime()+" "+outputString+" "+this.getDescription();
+		Object[] args = {this.getStartTime(), this.getModifiedId(), outputString, this.getDescription()};
+		MessageFormat form = new MessageFormat("-{1}-  {0} -{2}- {3}");
+		return form.format(args);
 	}
 
     public String getSenderName (){
