@@ -38,7 +38,7 @@ public class SerInputStreamReadThread extends Thread {
         try {
             while((line=input.readLine())!=null) {
             	if (logging) {
-            		Logger.getLogger("SerErrorStreamReadThread").error(line);
+            		Logger.getLogger("SerInputStreamReadThread").info(line);
             	}
             	line=null;
             }
