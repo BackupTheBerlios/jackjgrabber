@@ -75,7 +75,7 @@ public class ControlMain {
     public static String settingsFilename = "settings.xml";
     
 	public static String version[] = { 
-		"Jack the JGrabber 0.2.0 RC1",
+		"Jack the JGrabber 0.2.1",
 		"05.12.2004",
 		"User: "+System.getProperty("user.name")
 	};
