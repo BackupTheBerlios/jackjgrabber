@@ -44,9 +44,11 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
+import presentation.GuiStartFrame;
 import presentation.GuiLogWindow;
 import presentation.GuiSplashScreen;
 import service.SerExternalProcessHandler;
+import service.SerIconManager;
 import service.SerLogAppender;
 import service.SerSettingsHandler;
 import boxConnection.SerBoxControl;
@@ -70,7 +72,7 @@ public class ControlMain {
 	private static Properties properties = new Properties();
 	public static String jtjgDirectory = System.getProperty("user.home")+File.separator+".JtJG";
 	private static Locale locale = new Locale("");
-	public static GuiSplashScreen screen;
+	public static GuiSplashScreen splash = null;
 	public static GuiLogWindow logWindow;
 
 	private static String settingsFilename;
@@ -78,15 +80,13 @@ public class ControlMain {
 	public static String version[] = {"Jack the JGrabber 0.2.3", "26.12.2004", "User: " + System.getProperty("user.name")};
 
 	public static void main(String args[]) {
+	    startSplash();
 		startLogger();
 		logWindow = new GuiLogWindow();
 		logSystemInfo();
 		readSettings();	
 		initLogWindow();
 		
-		if (ControlMain.getSettingsMain().isShowLogo()) {
-			screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application...");
-		}
 		setResourceBundle();
 		detectActiveBox();
 		detectImage();
@@ -94,16 +94,17 @@ public class ControlMain {
 		control = new ControlMainView();
 		control.initialize();
 		checkStartVlc();
-		if (screen != null) {
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-			}
-			screen.dispose();
-		}
 		checkGuiSettings();
-		
+		splash.setProgress(100, ControlMain.getProperty("msg_app_starting"));
+		splash.dispose();
 	};
+	
+	private static void startSplash() {
+	    GuiStartFrame connectFrame = new GuiStartFrame();
+        splash = new GuiSplashScreen(connectFrame, SerIconManager.getInstance().getIcon(
+            "grabber1.png").getImage(), version[0], 0, 100);
+        splash.setVisible(true);
+	}
 	
 	private static void checkGuiSettings() {
 	    if (getSettings().getMainSettings().isStartMinimized()) {
@@ -177,6 +178,7 @@ public class ControlMain {
 
 	public static void detectImage() {
 		log(ControlMain.getProperty("msg_searchImage"));
+		splash.setProgress(15, ControlMain.getProperty("msg_searchImage"));
 		int image = SerBoxControl.ConnectBox(ControlMain.getBoxIpOfActiveBox());
 		if (image == 0) {
 			boxAccess = new SerBoxControlDefault();
@@ -321,6 +323,7 @@ public class ControlMain {
 		URL url = ClassLoader.getSystemResource("locale/"+locale.toLowerCase());
 		try {
 			properties.load(url.openStream());
+			splash.setProgress(5, ControlMain.getProperty("progress_settings"));
 		} catch (IOException ex) {
 			Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_propertyError") + locale);
 		}
@@ -366,7 +369,7 @@ public class ControlMain {
 				log("Settings saved");
 			}
 		} catch (Exception e1) {
-			Logger.getLogger("ControlMainView").error("Error while save Settings");
+			Logger.getLogger("ControlMain").error("Error while save Settings");
 		}
 		System.exit(0);
 	}

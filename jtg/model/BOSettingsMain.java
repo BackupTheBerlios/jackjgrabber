@@ -27,7 +27,6 @@ public class BOSettingsMain {
 	public String skinLFTheme;
 	public boolean startFullscreen = false;
 	public boolean useSysTray = false;
-	public boolean showLogo = false;
 	public boolean startVlcAtStart;
 	public boolean showLogWindow;
 
@@ -118,22 +117,6 @@ public class BOSettingsMain {
 	public void addBox(BOBox box) {
 		setSettingsChanged(true);
 		getBoxList().add(box);
-	}
-	/**
-	 * @return Returns the showLogo.
-	 */
-	public boolean isShowLogo() {
-		return showLogo;
-	}
-	/**
-	 * @param showLogo
-	 *            The showLogo to set.
-	 */
-	public void setShowLogo(boolean showLogo) {
-		if (this.showLogo != showLogo) {
-			setSettingsChanged(true);
-			this.showLogo = showLogo;
-		}
 	}
 	/**
 	 * @return Returns the startFullscreen.

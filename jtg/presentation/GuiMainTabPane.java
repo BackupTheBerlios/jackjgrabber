@@ -53,6 +53,7 @@ public class GuiMainTabPane extends JTabbedPane {
 		super();
 		this.setView(mainView);
 	}
+
 	
 	/**
 	 * Aufbau der Tabs "Programm"

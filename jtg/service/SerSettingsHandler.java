@@ -122,7 +122,6 @@ public class SerSettingsHandler {
 		
 		main.setPlasticTheme("ExperienceBlue");
 		main.setLocale("DE");
-		main.setShowLogo(true);
 		main.setShowLogWindow(true);
 		main.setStartFullscreen(false);
 		main.setUseSysTray(false);

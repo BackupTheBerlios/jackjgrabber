@@ -137,12 +137,19 @@ public class GuiMainView extends JFrame {
 			mainTabPane.addChangeListener(control);
 
 			mainTabPane.addTab("Start", iconManager.getIcon("gohome_2.png"), mainTabPane.getTabStart());
+			ControlMain.splash.setProgress(20, ControlMain.getProperty("progress_start"));
 			mainTabPane.addTab(ControlMain.getProperty("tab_program"), iconManager.getIcon("main.png"), mainTabPane.getTabProgramm());
-			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), iconManager.getIcon("clock.png"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_movieGuide"), iconManager.getIcon("download.png"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_recordInfo"), iconManager.getIcon("help.png"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), iconManager.getIcon("configure.png"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_about"), iconManager.getIcon("info.gif"), new JPanel());
+			ControlMain.splash.setProgress(30, ControlMain.getProperty("progress_programm"));
+			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), iconManager.getIcon("clock.png"), mainTabPane.getTabTimer());
+			ControlMain.splash.setProgress(40, ControlMain.getProperty("progress_timer"));
+			mainTabPane.addTab(ControlMain.getProperty("tab_movieGuide"), iconManager.getIcon("download.png"), mainTabPane.getTabMovieGuide());
+			ControlMain.splash.setProgress(60, ControlMain.getProperty("progress_movieguide"));
+			mainTabPane.addTab(ControlMain.getProperty("tab_recordInfo"), iconManager.getIcon("help.png"), mainTabPane.getTabRecordInfo());
+			ControlMain.splash.setProgress(70, ControlMain.getProperty("progress_aufnahmeinfo"));
+			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), iconManager.getIcon("configure.png"), mainTabPane.getTabSettings());
+			ControlMain.splash.setProgress(80, ControlMain.getProperty("progress_settingsPanel"));
+			mainTabPane.addTab(ControlMain.getProperty("tab_about"), iconManager.getIcon("info.gif"), mainTabPane.getTabAbout());
+			ControlMain.splash.setProgress(90, ControlMain.getProperty("progress_about"));
 
 		}
 		return mainTabPane;

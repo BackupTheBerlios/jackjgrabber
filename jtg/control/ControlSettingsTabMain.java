@@ -57,7 +57,6 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	public void run() {
 		this.getTab().getJComboBoxTheme().setSelectedItem(this.getSettings().getPlasticTheme());
 		this.getTab().getJComboBoxLocale().setSelectedItem(this.getSettings().getLocale());
-		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
 		this.getTab().getCbStartVlcAtStart().setSelected(this.getSettings().isStartVlcAtStart());
 		this.getTab().getCbShowLogWindow().setSelected(this.getSettings().isShowLogWindow());
@@ -95,10 +94,6 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  		if (action == "launchVlc") {
 			  		this.actionStartVlc();
 			  	}
-		  		if (action.equals("showLogo")) {
-		  			this.getSettings().setShowLogo(((JCheckBox)e.getSource()).isSelected());
-		  			break;
-		  		}
 		  		if (action.equals("showLogWindow")) {
 	  				this.getSettings().setShowLogWindow(((JCheckBox)e.getSource()).isSelected());
 	  				break;
