@@ -54,7 +54,7 @@ public class GuiTabStart extends JPanel {
 	private JTextPane linkWiki;
 	private JTextPane paneWarns;
 	private JTextPane paneVersion;
-	private JButton jButtonSwithLog;
+	private JButton jButtonSwitchLog;
 	private ImageIcon imageLogo;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	Color background = (Color)UIManager.get("Panel.background");
@@ -269,17 +269,17 @@ public class GuiTabStart extends JPanel {
 	 * @return javax.swing.JButton
 	 */
 	public JButton getJButtonSwitchLog() {
-		if (jButtonSwithLog == null) {
-			jButtonSwithLog = new JButton();
+		if (jButtonSwitchLog == null) {
+			jButtonSwitchLog = new JButton();
 			if (ControlMain.getSettingsMain().isShowLogWindow()) {
-				jButtonSwithLog.setText(ControlMain.getProperty("button_off"));
+				jButtonSwitchLog.setText(ControlMain.getProperty("button_off"));
 			} else {
-				jButtonSwithLog.setText(ControlMain.getProperty("button_on"));
+				jButtonSwitchLog.setText(ControlMain.getProperty("button_on"));
 			}
-			jButtonSwithLog.setActionCommand("switchLog");
-			jButtonSwithLog.setToolTipText(ControlMain.getProperty("buttontt_log"));
-			jButtonSwithLog.addActionListener(this.getControl());
+			jButtonSwitchLog.setActionCommand("switchLog");
+			jButtonSwitchLog.setToolTipText(ControlMain.getProperty("buttontt_log"));
+			jButtonSwitchLog.addActionListener(this.getControl());
 		}
-		return jButtonSwithLog;
+		return jButtonSwitchLog;
 	}
 }
