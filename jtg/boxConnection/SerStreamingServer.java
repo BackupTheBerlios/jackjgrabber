@@ -52,11 +52,18 @@ public class SerStreamingServer extends Thread {
 			}	
 		} catch (DocumentException e) {
 		    isRunning=false;
-			Logger.getLogger("SerStreamingServer").error("Recording failed");	
+			Logger.getLogger("SerStreamingServer").error("Not valid XML-Stream");	
 		}
 	}
 	
-	public void record(Socket socket) throws IOException, DocumentException {		
+	public void record(Socket socket) throws IOException, DocumentException {
+	    
+//	    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+//	    String line;
+//	    while ((line=input.readLine())!=null) {
+//	        System.out.println(line);
+//	    }
+
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(socket.getInputStream());
 
