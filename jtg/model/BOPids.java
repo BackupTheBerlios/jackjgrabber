@@ -60,11 +60,14 @@ public class BOPids {
 		list.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		
 		m.addElement(pids.getVPid());
+		list.setSelectedIndex(0);
 		for (int i = 0; i < pids.getAPids().size(); i++) {
 			BOPid pid = (BOPid) pids.getAPids().get(i);
 			m.addElement(pid);
+			list.setSelectedIndex(i+1);
 		}
 		m.addElement(pids.getVtxtPid());
+		list.setSelectedIndex(pids.getPidCount());
 
 		int res = JOptionPane.showOptionDialog(
 				ControlMain.getControl().getView(), 
@@ -77,16 +80,16 @@ public class BOPids {
 				ControlMain.getProperty("button_ok"));
 		
 		if (res == 0) {
-		    Object[] test = list.getSelectedValues();
-			BOPid[] pidArray = (BOPid[]) list.getSelectedValues();
+		    Object[] pidArray = list.getSelectedValues();
 			BOPids newPidList = new BOPids();
 			for (int i=0; i<pidArray.length; i++) {
-				switch (pidArray[i].getId()) {
-					case 0: newPidList.setVPid(pidArray[i]);
+			    BOPid pid = (BOPid)pidArray[i];
+				switch (pid.getId()) {
+					case 0: newPidList.setVPid(pid);
 					break;
-					case 1: newPidList.getAPids().add(pidArray[i]);
+					case 1: newPidList.getAPids().add(pid);
 					break;
-					case 2: newPidList.setVtxtPid(pidArray[i]);
+					case 2: newPidList.setVtxtPid(pid);
 					break;
 				}
 			}

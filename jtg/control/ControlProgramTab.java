@@ -50,6 +50,7 @@ import model.BOTimer;
 import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
+import presentation.GuiPidsQuestionDialog;
 import presentation.program.GuiEpgTableModel;
 import presentation.program.GuiSenderTableModel;
 import presentation.program.GuiTabProgramm;
@@ -260,7 +261,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
 					if (!ControlMain.getSettings().getRecordSettings().isRecordAllPids()) {
-						this.setPids(BOPids.startPidsQuestDialog(this.getPids()));
+					   new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
+						//this.setPids(BOPids.startPidsQuestDialog(this.getPids()));
 					}
 				}
 				if (this.getPids().getPidCount() > 0) {
