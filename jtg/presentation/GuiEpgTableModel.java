@@ -31,6 +31,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
+		if (this.getEpgList() == null) {
+			return 0;
+		}
 		return this.getEpgList().size();
 	}
 
@@ -93,9 +96,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 	/**
 	 * update the own EPG-List
 	 */
-	public void fireTableRowsInserted(int i, int i2) {
+	public void fireTableDataChanged() {
 		this.createEpgList();
-		super.fireTableRowsInserted(i, i2);
+		super.fireTableDataChanged();
 	}
 	/**
 	 * @return ArrayList

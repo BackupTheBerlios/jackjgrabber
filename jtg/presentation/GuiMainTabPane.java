@@ -10,10 +10,11 @@ import control.ControlTimerTab;
 public class GuiMainTabPane extends JTabbedPane {
 
 	public GuiTabProgramm tabProgramm = null;
-	private GuiTabSettings tabSettings = null;
-	private GuiTabTimer tabTimer=null;
-	private GuiTabProjectX tabProjectX=null;
-	private GuiMainView view;
+	public GuiTabSettings tabSettings = null;
+	public GuiTabTimer tabTimer=null;
+	public GuiTabProjectX tabProjectX=null;
+	public GuiMainView view;
+	int index;
 
 	
 	public GuiMainTabPane(GuiMainView mainView) {
@@ -80,5 +81,17 @@ public class GuiMainTabPane extends JTabbedPane {
 	 */
 	public void setView(GuiMainView view) {
 		this.view = view;
+	}
+	/**
+	 * @return Returns the index.
+	 */
+	public int getIndex() {
+		return index;
+	}
+	/**
+	 * @param index The index to set.
+	 */
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

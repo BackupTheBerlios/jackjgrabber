@@ -8,14 +8,19 @@ package control;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileFilter;
+
+import model.BOBox;
 
 import presentation.GuiMainView;
 import service.SerAlertDialog;
@@ -29,7 +34,7 @@ import service.SerXMLHandling;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ControlSettingsTab extends ControlTab implements ActionListener, MouseListener {
+public class ControlSettingsTab extends ControlTab implements ActionListener, MouseListener{
 
 	GuiMainView mainView;
 	
@@ -42,8 +47,8 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	 * @see control.ControlTab#initialize()
 	 */
 	public void initialize() {
-		this.getMainView().getTabSettings().getTfBoxIp().setText(ControlMain.getBoxIp());
-		this.getMainView().getTabSettings().getTfVlcPath().setText(ControlMain.getSettings().getVlcPath());
+		//this.getMainView().getTabSettings().getTfBoxIp().setText(ControlMain.getBoxIp());
+		//this.getMainView().getTabSettings().getTfVlcPath().setText(ControlMain.getSettings().getVlcPath());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -51,15 +56,18 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		if (action == "save") {
 			this.actionSpeichern();
 		}
-		if (action == "VlcFileChooser") {
-			this.openFileChooser();
+		if (action == "delete") {
+			this.actionRemoveBox();
+		}
+		if (action == "add") {
+			this.actionAddBox();
 		}
 	}
-	
+
 	public void mousePressed(MouseEvent me) {
 		JTable table = (JTable)me.getSource();
 		String tableName = table.getName();
-		if (tableName == "bla") {
+		if (tableName == "BoxSettings") {
 			
 		}
 	}
@@ -72,16 +80,22 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	{}
 	public void mouseEntered(MouseEvent me)
 	{}
+	
+	private void actionAddBox() {
+		this.getMainView().getTabSettings().getModelBoxTable().addRow(new BOBox("","",""));
+	}
+	private void actionRemoveBox() {
+		int selectedRow = this.getMainView().getTabSettings().getJTableBoxSettings().getSelectedRow();
+		this.getMainView().getTabSettings().getModelBoxTable().removeRow(selectedRow);
+		this.actionSpeichern();
+	}
 
 	private void actionSpeichern() {	
-		//Abfrage der zu speichernden Werte
-		ControlMain.setBoxIp(this.getMainView().getTabSettings().tfBoxIp.getText());
-		ControlMain.setVlcPath(this.getMainView().getTabSettings().tfVlcPath.getText());
-		//erstellen eines XML-Dokuments aus den erstellten Settings
-		SerXMLConverter.buildXMLDocument(ControlMain.getSettingsDocument(), ControlMain.getSettings());
 		try {
-			SerXMLHandling.saveXMLFile(new File("settings.xml"), ControlMain.getSettingsDocument());				
-		} catch (IOException ex) {SerAlertDialog.alert("Fehler beim Speichern!", this.getMainView());};
+			SerXMLConverter.saveBoxSettings();
+		} catch (IOException e) {
+			SerAlertDialog.alert("Fehler beim Speichern der Settings", this.getMainView());
+		}
 	}
 	
 	private void openFileChooser() {		
@@ -99,7 +113,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 			String path = chooser.getSelectedFile().toString();
-			this.getMainView().getTabSettings().getTfVlcPath().setText(path);
+			//this.getMainView().getTabSettings().getTfVlcPath().setText(path);
 			actionSpeichern();		
 		}
 	}
@@ -115,5 +129,11 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	 */
 	public void setMainView(GuiMainView mainView) {
 		this.mainView = mainView;
+	}
+	/**
+	 * @return Returns the boxList.
+	 */
+	public ArrayList getBoxList() {
+		return ControlMain.getSettings().getBoxList();
 	}
 }

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import service.SerAlertDialog;
+
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -59,6 +61,8 @@ public abstract class SerBoxControl {
 		} catch (IOException e) { //Box ist aus, Rückgabe des Defaultwertes
 			Logger.getLogger("SerBoxControl").error("Unable to connect");
 			return(imageType);
+		} catch (IllegalArgumentException ex) {
+			Logger.getLogger("SerBoxControl").error("No valid BoxIp");
 		}
 		return(imageType);
 	}
