@@ -441,6 +441,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&announce="+timer.getAnnounceTime());
 			buffer.append("&type="+timer.getEventTypeId());
 			buffer.append("&rep="+timer.getEventRepeatId());
+            buffer.append("&repcount=999");
 			buffer.append("&channel_id="+timer.getChannelId());
 		} 
         else if (modifiedId.equals("new")) {
@@ -451,6 +452,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&announce="+timer.getAnnounceTime());
 			buffer.append("&type="+timer.getEventTypeId());
 			buffer.append("&rep="+timer.getEventRepeatId());
+            buffer.append("&repcount=999");
 			buffer.append("&channel_id="+timer.getChannelId());
 		}
 		return buffer;
