@@ -102,7 +102,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(	
 			      "320px:grow,10, 400px:grow",  				// columns
-			      "pref, 200px:grow, 10, pref, pref, pref");	// rows
+			      "pref, f:200px:grow, 10, pref, pref, pref");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -144,17 +144,17 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"140px:grow, 95px:grow, 42px:grow, pref,pref,pref,pref");		//rows
+						"f:140px:grow, f:95px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
 					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
-			builder.add(this.getJScrollPaneTimer(),			cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));			
-			builder.add(this.getJScrollPaneInfo(), 			cc.xyw	(1, 2, 1, CellConstraints.FILL, CellConstraints.FILL));	
-			builder.add(this.getJScrollPaneDarsteller(), 	cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJScrollPaneEpisode(), 		cc.xyw	(1, 4, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJScrollPaneLand(), 			cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));				
-			builder.add(this.getTfGenre(),					cc.xyw	(1, 6, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJScrollPaneAudioVideo(),	cc.xyw	(1, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJScrollPaneTimer(),			cc.xy	(1, 1));			
+			builder.add(this.getJScrollPaneInfo(), 				cc.xy	(1, 2));	
+			builder.add(this.getJScrollPaneDarsteller(), 	cc.xy	(1, 3));
+			builder.add(this.getJScrollPaneEpisode(), 		cc.xy	(1, 4));
+			builder.add(this.getJScrollPaneLand(), 			cc.xy	(1, 5));				
+			builder.add(this.getTfGenre(),							cc.xy	(1, 6));
+			builder.add(this.getJScrollPaneAudioVideo(),	cc.xy	(1, 7));
 		}
 		return jPanelInfo;
 	}
