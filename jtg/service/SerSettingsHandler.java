@@ -12,19 +12,37 @@ package service;
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.beans.*;
-import java.io.*;
-import java.util.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.beans.ExceptionListener;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
-import model.*;
+import model.BOSettings;
+import model.BOSettingsLayout;
+import model.BOSettingsMain;
+import model.BOSettingsMovieGuide;
+import model.BOSettingsPath;
+import model.BOSettingsPlayback;
+import model.BOSettingsRecord;
+import model.BOUdrecOptions;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.jgoodies.plaf.plastic.*;
+import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 
-import control.*;
+import control.ControlMain;
+import control.ControlSettingsTabMovieGuide;
 
 public class SerSettingsHandler {
 
@@ -89,6 +107,14 @@ public class SerSettingsHandler {
 		settings.setRecordSettings(rec);
 		settings.standardSettings=true;
 		
+
+		Dimension screenSize =  Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension wSize = new Dimension(800,565);
+	
+		int x = (screenSize.width - wSize.width) / 2;
+		int y = (screenSize.height - wSize.height) / 2;
+		layout.setLocation(new Point(x,y));
+		layout.setSize(wSize);
 		
 		play.setPlaybackString("d: http://$ip:31339/$vPid,$aPid");
 		play.setAlwaysUseStandardPlayback(false);
@@ -98,7 +124,7 @@ public class SerSettingsHandler {
 		pathS.setProjectXPath(new File("ProjectX.jar").getAbsolutePath());
 		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
 		pathS.setShutdownToolPath("");
-		pathS.setSavePath( System.getProperty("user.home"));
+		pathS.setSavePath(ControlMain.jtjgDirectory);
 		pathS.setWorkDirectory(ControlMain.jtjgDirectory);
 		
 		rec.setStartStreamingServer(true);
@@ -122,11 +148,11 @@ public class SerSettingsHandler {
 		
 		main.setPlasticTheme("ExperienceBlue");
 		main.setLocale("DE");
-		main.setShowLogWindow(true);
+		main.setShowLogWindow(false);
 		main.setStartFullscreen(false);
 		main.setUseSysTray(false);
 		main.setStartVlcAtStart(false);
-		main.setLookAndFeel(PlasticLookAndFeel.class.getName());
+		main.setLookAndFeel(Plastic3DLookAndFeel.class.getName());
 		main.setBoxList(new ArrayList());
 		
 		ArrayList selChannels = new ArrayList();
