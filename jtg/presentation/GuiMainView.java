@@ -109,7 +109,7 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
-		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber.gif")).getImage());
+		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
 		    sysTrayIcon[0].addSysTrayMenuListener( control );
 		    sysTrayIcon[1].addSysTrayMenuListener( control );
@@ -181,10 +181,14 @@ public class GuiMainView extends JFrame {
 		return this.getMainTabPane().getTabMovieGuide();
 	}
 	public void setSystrayRecordIcon() {
-	    menu.setIcon( sysTrayIcon[0] );
+		if (menu != null) {
+			menu.setIcon( sysTrayIcon[0] );	
+		}
 	}
 	public void setSystrayDefaultIcon() {
-	    menu.setIcon( sysTrayIcon[1] );
+		if (menu != null) {
+			menu.setIcon( sysTrayIcon[1] );
+		}
 	}
 	/**
 	 * @return Returns the control.
