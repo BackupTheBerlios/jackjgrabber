@@ -21,24 +21,51 @@ package control;
  * Kontrollklasse für die Aufnahme Infos
  * @author Reinhard Achleitner
  */
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.awt.AWTKeyStroke;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
-import model.*;
+import model.BOAfterRecordOptions;
+import model.BOFileWrapper;
+import model.BOPlaybackOption;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import presentation.*;
-import presentation.recordInfo.*;
-import service.*;
-import service.Muxxer.*;
+import presentation.GuiMainView;
+import presentation.recordInfo.BaseTreeNode;
+import presentation.recordInfo.GuiTabRecordEdit;
+import service.SerExternalProcessHandler;
+import service.SerHelper;
 
 /**
  * Controlklasse des Programmtabs.

@@ -7,27 +7,28 @@ Alexander Geist (Z3R0)   geistalex@yahoo.de
 
 OO-Design
 OO-Programmierung
-Programminfo-Settings-NeutrinoTimer-About
+Start-Programminfo-Settings-NeutrinoTimer-About
 
 Neutrino-Schnittstelle
-Udrec/ProjectX-Integration
+Mplex/VLC/Udrec/ProjectX-Integration
 JGrabber-Streaming-Engine
----------------------------------------------------
+----------------------------------------------
 Sven Zielke (Treito)     mail@treito.de
 
 OO-Programmierung EnigmaTimer
 
 Enigma-Schnittstelle
----------------------------------------------------
+----------------------------------------------
 Ralph Henneberger (Ralix)    ralix@gmx.de
 			
 OO-Programmierung Movieguide
 
 Telnet-Schnittstelle
----------------------------------------------------
+----------------------------------------------
 Reinhard Achleitner (crazyreini) crazyreini@yahoo.de
 			
-OO-Programmierung RecordInfo
+OO-Programmierung 
+RecordInfo-Systemtimer-Usertimer
 ========================
 
 Tester-Team
