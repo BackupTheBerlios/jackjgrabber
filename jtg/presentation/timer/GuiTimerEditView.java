@@ -584,8 +584,11 @@ public class GuiTimerEditView extends JDialog {
 			jComboBoxBoxSender = new JComboBox(new GuiTimerSenderComboModel(control.getControlTimer()));
 			jComboBoxBoxSender.addItemListener(control);
 			jComboBoxBoxSender.setName("sender");
+            //Bei bestehenden Box-Timern ist ein Sender-Wechsel nicht möglich
 			if (control.getTimer().getMainTimer().getModifiedId() == null) {
-				jComboBoxBoxSender.setEnabled(false);
+                if (!control.getTimer().isLocal()) {
+                    jComboBoxBoxSender.setEnabled(false);   
+                }
 			}
 		}
 		return jComboBoxBoxSender;
