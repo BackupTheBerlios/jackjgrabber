@@ -30,9 +30,7 @@ public class BOSettings {
     
 	public String locale;
 	public String themeLayout;
-	public String vlcPath;
 	public ArrayList boxList;
-	public boolean boxIpChanged = false;
 	public boolean settingsChanged = false;
 	public boolean projectXSettingsChanged = false;
 	public String streamingServerPort;
@@ -52,14 +50,6 @@ public class BOSettings {
     	getBoxList().add(box);
     }
      
-    public String getVlcPath() {
-        return vlcPath;
-    }
-	
-    public void setVlcPath(String vlcPath) {
-    	setSettingsChanged(true);
-        this.vlcPath = vlcPath;
-    }
 	/**
 	 * @return Returns the boxList.
 	 */
@@ -81,24 +71,11 @@ public class BOSettings {
 	/**
 	 * @param themeLayout The themeLayout to set.
 	 */
-	public void setThemeLayout(String themeLayout) {
-		setSettingsChanged(true);
-		this.themeLayout = themeLayout;
-	}
-	/**
-	 * @return Returns the boxIpChanged.
-	 */
-	public boolean isBoxIpChanged() {
-		return boxIpChanged;
-	}
-	/**
-	 * @param boxIpChanged The boxIpChanged to set.
-	 */
-	public void setBoxIpChanged(boolean changed) {
-		if (changed) {
-			this.setSettingsChanged(true);
+	public void setThemeLayout(String layout) {
+		if(!this.themeLayout.equals(layout)) {
+			setSettingsChanged(true);
+			this.themeLayout = layout;
 		}
-		this.boxIpChanged = changed;
 	}
 	/**
 	 * @return Returns the settingsChanged.
@@ -122,8 +99,10 @@ public class BOSettings {
 	 * @param locale The locale to set.
 	 */
 	public void setLocale(String locale) {
-		setSettingsChanged(true);
-		this.locale = locale;
+		if(!this.locale.equals(locale)) {
+			setSettingsChanged(true);
+			this.locale = locale;
+		}	
 	}
 	/**
 	 * @return Returns the streamingServerPort.
@@ -163,8 +142,10 @@ public class BOSettings {
 	 * @param savePath The savePath to set.
 	 */
 	public void setSavePath(String savePath) {
-		setSettingsChanged(true);
-		this.savePath = savePath;
+		if(!this.savePath.equals(savePath)) {
+			setSettingsChanged(true);
+			this.savePath = savePath;
+		}	
 	}
 	/**
 	 * @return Returns the projectXSettingsChanged.
@@ -190,9 +171,11 @@ public class BOSettings {
 	/**
 	 * @param playbackPlayer The playbackPlayer to set.
 	 */
-	public void setPlaybackString(String playbackPlayer) {
-		setSettingsChanged(true);
-		this.playbackString = playbackPlayer;
+	public void setPlaybackString(String playbackString) {
+		if (!this.playbackString.equals(playbackString)) {
+			setSettingsChanged(true);
+			this.playbackString = playbackString;
+		}
 	}
 	/**
 	 * @return int
@@ -206,8 +189,10 @@ public class BOSettings {
 	 * @param streamType The streamType to set
 	 */
 	public void setStreamType(String streamType) {
-		setSettingsChanged(true);
-		this.streamType = streamType;
+		if(!this.streamType.equals(streamType)) {
+			setSettingsChanged(true);
+			this.streamType = streamType;
+		}
 	}
 
 	/**
@@ -220,7 +205,9 @@ public class BOSettings {
 	 * @param startPX The startPX to set.
 	 */
 	public void setStartPX(boolean startPX) {
-		setSettingsChanged(true);
-		this.startPX = startPX;
+		if (this.startPX != startPX) {
+			setSettingsChanged(true);
+			this.startPX = startPX;
+		}
 	}
 }
