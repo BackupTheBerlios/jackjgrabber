@@ -1,11 +1,15 @@
 package control;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import model.BOBox;
 import model.BOSettings;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
 import boxConnection.SerBoxControl;
@@ -13,10 +17,13 @@ import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
 import service.SerAlertDialog;
+import service.SerLogAppender;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Properties;
 
 /**
  * @author Alexander Geist
@@ -27,11 +34,17 @@ import java.util.ArrayList;
 public class ControlMain {
 	
 	static BOSettings settings;
-	public static String filename = "settings.xml";
 	static Document settingsDocument;
 	static SerBoxControl box;
+	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static int CurrentBox=0;
+	
+	private static final String _MESSAGE_BUNDLE = "/locale/messages";
+	static Locale locale = new Locale("de","DE");
+    private static Properties prop = new Properties();
+    
+    public static String filename = "settings.xml";
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
 		"18.09.2004",
@@ -55,6 +68,20 @@ public class ControlMain {
 		control = new ControlMainView();
 	};
 	
+	public static void startLogger() {
+		PatternLayout layout = new PatternLayout();
+		
+		//http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html
+		layout.setConversionPattern("%d{HH:mm:ss} %-5p %c - %m%n");
+		
+		try {
+			ControlMain.setLogAppender(new SerLogAppender(layout));
+			ControlMain.getLogAppender().setMaxBackupIndex(3); //Number of max Backup-Files
+			ControlMain.getLogAppender().setMaxFileSize("100KB");
+			BasicConfigurator.configure(ControlMain.getLogAppender());
+		} catch (IOException e) {}
+	}
+		
 	public static void detectImage() {
 		Logger.getLogger("ControlMain").info("Searching Box-Image");
 		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIp());
@@ -171,4 +198,35 @@ public class ControlMain {
 	public static void setTerms(String[] terms) {
 		ControlMain.terms = terms;
 	}
+	/**
+	 * @return Returns the logAppender.
+	 */
+	public static SerLogAppender getLogAppender() {
+		return logAppender;
+	}
+	/**
+	 * @param logAppender The logAppender to set.
+	 */
+	public static void setLogAppender(SerLogAppender logAppender) {
+		ControlMain.logAppender = logAppender;
+	}
+	private void setLocale(String sprache, String land){
+        locale = new Locale(sprache,land);    	
+    }
+
+    private Locale getLocale(){
+        return locale;
+    }
+
+    public static String getProperty(String key){
+    	return prop.getProperty(key);
+    }
+
+    public static void setResourceBundle(Locale loc){
+        ControlMain.locale=loc;
+        try{    	                       
+        	InputStream is=new String().getClass().getResourceAsStream(_MESSAGE_BUNDLE+"_"+locale.getLanguage()+".properties");                    	        	
+        	prop.load(is);                    	
+        }catch (IOException ex){}       	        
+    }    
 }
