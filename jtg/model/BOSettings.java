@@ -37,8 +37,11 @@ public class BOSettings {
 	public boolean startStreamingServer;
 	public boolean startPX;
 	public String savePath;
+	public String udrecPath;
 	public String playbackString;
-    public String streamType; //PES, TS
+    public String jgrabberStreamType;	//PES, TS, ES
+    public String udrecStreamType;		//PES, TS
+    public int streamingEngine; //0=JGrabber, 1=udrec
     
     public void removeBox(int number) {
     	setSettingsChanged(true);
@@ -182,21 +185,27 @@ public class BOSettings {
 	/**
 	 * @return int
 	 */
-	public String getStreamType() {
-		return streamType;
+	public String getJgrabberStreamType() {
+		return jgrabberStreamType;
 	}
 
 	/**
 	 * Sets the streamType.
 	 * @param streamType The streamType to set
 	 */
-	public void setStreamType(String streamType) {
-		if(!this.streamType.equals(streamType)) {
+	public void setJgrabberStreamType(String streamType) {
+		if(this.jgrabberStreamType==null || !this.jgrabberStreamType.equals(streamType)) {
 			setSettingsChanged(true);
-			this.streamType = streamType;
+			this.jgrabberStreamType = streamType;
 		}
 	}
-
+	public void setStreamType(String streamType) {
+		if(this.getStreamingEngine()==0) {
+			this.setJgrabberStreamType(streamType);
+		} else {
+			this.setUdrecStreamType(streamType);
+		}
+	}
 	/**
 	 * @return Returns the startPX.
 	 */
@@ -210,6 +219,52 @@ public class BOSettings {
 		if (this.startPX != startPX) {
 			setSettingsChanged(true);
 			this.startPX = startPX;
+		}
+	}
+	/**
+	 * @return Returns the streamingEngine.
+	 */
+	public int getStreamingEngine() {
+		return streamingEngine;
+	}
+	/**
+	 * @param streamingEngine The streamingEngine to set.
+	 */
+	public void setStreamingEngine(int engine) {
+		if(this.streamingEngine!=engine) {
+			setSettingsChanged(true);
+			this.streamingEngine = engine;
+		}	
+		
+	}
+	/**
+	 * @return Returns the udrecPath.
+	 */
+	public String getUdrecPath() {
+		return udrecPath;
+	}
+	/**
+	 * @param udrecPath The udrecPath to set.
+	 */
+	public void setUdrecPath(String path) {
+		if(this.udrecPath==null || !this.udrecPath.equals(path)) {
+			setSettingsChanged(true);
+			this.udrecPath = path;
+		}	
+	}
+	/**
+	 * @return Returns the jUdrecStreamType.
+	 */
+	public String getUdrecStreamType() {
+		return udrecStreamType;
+	}
+	/**
+	 * @param udrecStreamType The jUdrecStreamType to set.
+	 */
+	public void setUdrecStreamType(String streamType) {
+		if(this.udrecStreamType==null ||!this.udrecStreamType.equals(streamType)) {
+			setSettingsChanged(true);
+			this.udrecStreamType = streamType;
 		}
 	}
 }
