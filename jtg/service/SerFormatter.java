@@ -45,13 +45,11 @@ public class SerFormatter {
 	} 
 		
 	private static long formatLong(String date){
-		long a = 0L;
 		return Long.parseLong(date) * 1000;                          
 	}
 	
-	public static String getUnixEndTime(String start, String dauer){
-    	Long l = new Long((formatLong(start) + formatLong(dauer)));  
-    	return l.toString();   	
+	public static String getUnixEndTime(String start, String dauer){ 	
+		return new Long((formatLong(start) + formatLong(dauer))).toString();
     }
                         
 	public static String formatUnixTime(String date, String dauer){
