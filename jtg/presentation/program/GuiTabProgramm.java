@@ -324,7 +324,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JButton getJButtonAufnahme() {
 		if (jButtonQuickRecord == null) {
-			jButtonQuickRecord = new JButton();
+			jButtonQuickRecord = new JButton(iconManager.getIcon("record.png"));
 			jButtonQuickRecord.setText(ControlMain.getProperty("button_record"));
 			jButtonQuickRecord.setActionCommand("record");
 			jButtonQuickRecord.setToolTipText(ControlMain.getProperty("buttontt_record"));
@@ -649,7 +649,7 @@ public class GuiTabProgramm extends GuiTab {
 	public void stopRecordModus() {
 		this.getJButtonAufnahme().setText(ControlMain.getProperty("button_record"));
 		this.getJButtonAufnahme().setToolTipText(ControlMain.getProperty("buttontt_record"));
-		this.getJButtonAufnahme().setIcon(null);
+		this.getJButtonAufnahme().setIcon(iconManager.getIcon("record.png"));
 	}
 
 	/**
