@@ -52,6 +52,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
         this.getTab().getJTextFieldShutdonwToolPath().setText(this.getSettings().getShutdownToolPath());
         this.getTab().getJTextFieldBrowserPath().setText(this.getSettings().getBrowserPath());
         this.getTab().getJTextFieldWorkDirectory().setText(this.getSettings().getWorkDirectory());
+        this.getTab().getJTextFieldDVDAuthor().setText(this.getSettings().getDVDAuthorPath());
     }
 		
 	public void actionPerformed(ActionEvent e) {
@@ -84,6 +85,10 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		  			this.openWorkDirFileChooser();
 		  			break;
 		  		}
+		  		if (action.equals("dvdAuthor")) {
+		  			this.openDVDAuthorFileChooser();
+		  			break;
+		  		}
 		  		break;
 		}
 	}
@@ -112,6 +117,10 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			}
 			if (tf.getName().equals("workDirPath")){
 			    this.getSettings().setWorkDirectory(tf.getText());
+			    break;
+			}
+			if (tf.getName().equals("dvdAuthorPath")){
+			    this.getSettings().setDVDAuthorPath(tf.getText());
 			    break;
 			}
 			break;
@@ -256,6 +265,23 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			this.getSettings().setWorkDirectory(path);
 		}
 	}
+	
+	private void openDVDAuthorFileChooser() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+			String path = fc.getSelectedFile().toString();
+			this.getTab().getJTextFieldDVDAuthor().setText(path);
+			this.getSettings().setDVDAuthorPath(path);
+		}
+	}
+    
     
     /* (non-Javadoc)
      * @see control.ControlTab#getMainView()
