@@ -51,6 +51,7 @@ import presentation.GuiMainView;
 import presentation.GuiTabMovieGuide;
 import presentation.MovieGuideFilmTableModel;
 import presentation.MovieGuideTimerTableModel;
+import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
 import service.SerXMLHandling;
@@ -274,7 +275,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             botimer.setEventRepeatId("0");
             botimer.setEventTypeId("5");
             botimer.setDescription(getBOMovieGuide4Timer().getTitel());
-
+            try {
+                ControlMain.getBoxAccess().writeTimer(botimer);
+            } catch (IOException e) {
+                SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+            }
             System.out.println(getBOMovieGuide4Timer().getTitel());
             System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
             System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);
