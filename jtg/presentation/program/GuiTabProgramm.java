@@ -96,7 +96,7 @@ public class GuiTabProgramm extends GuiTab {
 	}
 
 	protected void initialize() {
-		FormLayout layout = new FormLayout("f:pref, 10, f:170, 10, f:pref, 10, f:250:grow", // columns
+		FormLayout layout = new FormLayout("f:pref, 10, f:180, 10, f:pref, 10, f:250:grow", // columns
 				"f:290:grow, 10, f:pref, 5, f:120:grow"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
@@ -175,7 +175,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelButtonsAktionen() {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
-			FormLayout layout = new FormLayout("f:pref, 2, f:105, 2, f:110, 2, f:85", //columna
+			FormLayout layout = new FormLayout("f:pref, 2, f:105, 2, f:110, 2, f:95", //columna
 					"pref, f:22, 2, f:22"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
