@@ -113,7 +113,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				bouquet.readSender();
 				for (int i2=0; i2<bouquet.getSender().size(); i2++) { //Schleife ueber die Sender im Bouquet
 					BOSender sender = (BOSender)bouquet.getSender().get(i2);
-					if (sender.getChanId().equals(runningChanId)) {
+					if (sender.getChanId().equals(runningChanId) && this.getSelectedSender() == null) {
 						this.setSelectedBouquet(bouquet);
 						this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(i);
 						this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(i2, i2);
@@ -264,8 +264,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}
 			//Neue Epg-Zeile selektiert
 			if (tableName == "Epg") {
-				String eventId = (String)this.getMainView().getTabProgramm().sorter.getValueAt(table.getSelectedRow(), 0);
-				this.setSelectedEpg(eventId); 
+				int selectedRow = table.getSelectedRow();		
+				int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(selectedRow);
+				this.setSelectedEpg((BOEpg)this.getEpgTableModel().getEpgList().get(modelIndex)); 
 				if (me.getClickCount()==2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
 					if (ControlMain.getBoxAccess().writeTimer(timer).equals("ok")) {
@@ -367,7 +368,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
 			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(indexRunningEpg, indexRunningEpg);
 			BOEpg selEpg = (BOEpg)this.getSelectedSender().getEpg().get(indexRunningEpg);
-			this.setSelectedEpg(selEpg.getEventId());
+			this.setSelectedEpg(selEpg);
 		}
 		this.reInitEpgDetail();
 	}
@@ -452,20 +453,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	}
 	/**
 	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details.
-	 * Durch die Sortierung geht die Objektidentität verloren
-	 * Passendes EPG durch Event-ID finden
 	 */
-	public void setSelectedEpg(String eventId) {
-		if (eventId != null) {
-			ArrayList epgList = this.getEpgTableModel().getEpgList();
-			for (int i = 0; i<epgList.size(); i++) {
-				BOEpg epg = (BOEpg)epgList.get(i);
-				if (epg.getEventId().equals(eventId)) {
-					this.selectedEpg = epg;
-					break;
-				}
-			}
-		}
+	public void setSelectedEpg(BOEpg epg) {
+		this.selectedEpg = epg;
 		this.reInitEpgDetail();
 	}
 	
