@@ -33,24 +33,11 @@ public class GuiAvailableFilesTreeRenderer extends DefaultTreeCellRenderer {
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row,
 			boolean hasFocus) {
 
-		JLabel lab = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+		JLabel lab = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, false, row, hasFocus);
 		if (row == 0) {
 			lab.setIcon(SerIconManager.getInstance().getIcon("grabber1.gif"));
 
-		} else {
-			if (value instanceof FileTypeTreeNode) {
-				Icon icon = ((FileTypeTreeNode) value).getIcon();
-				if (icon != null) {
-					lab.setIcon(icon);
-				}
-
-			}
-			
-			if (leaf)
-			{
-				lab.setIcon(null);
-			}
-		}
+		} 
 		return lab;
 
 	}

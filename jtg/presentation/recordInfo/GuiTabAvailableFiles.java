@@ -47,8 +47,13 @@ public class GuiTabAvailableFiles extends GuiTab {
 
 	private ControlRecordInfoTab control;
 
-		private JTree fileTree;
-
+	private JTree fileTree;
+	
+	private JTable fileTable;
+	private GuiFileTableModel fileTableModel;
+	
+	private JTextArea fileInfo;
+	
 	private DefaultTreeModel treeModel;
 
 	public GuiTabAvailableFiles(ControlRecordInfoTab control) {
@@ -63,7 +68,9 @@ public class GuiTabAvailableFiles extends GuiTab {
 	protected void initialize() {
 		setLayout(new BorderLayout());
 
-		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		JSplitPane splitFilesInfos = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitFilesInfos.setDividerLocation(350);
 		add(split, BorderLayout.CENTER);
 
 		treeModel = new DefaultTreeModel(new BaseTreeNode(ControlMain.getProperty("label_recordPath")));
@@ -72,6 +79,32 @@ public class GuiTabAvailableFiles extends GuiTab {
 		fileTree.addMouseListener(control);
 		fileTree.setCellRenderer(new GuiAvailableFilesTreeRenderer());
 		split.setLeftComponent(new JScrollPane(fileTree));
+		
+		split.setRightComponent(splitFilesInfos);
+		fileInfo = new JTextArea();
+		fileInfo.setEditable(false);
+		
+		splitFilesInfos.setTopComponent(new JScrollPane(getFileTable()));
+		splitFilesInfos.setBottomComponent(new JScrollPane(fileInfo));
+		fileTree.getSelectionModel().addTreeSelectionListener(fileTableModel);
+		split.setDividerLocation(300);
+	}
+
+	/**
+	 * @return
+	 */
+	public JTable getFileTable() {
+		if (fileTable == null)
+		{
+			fileTableModel = new GuiFileTableModel();
+			GuiTableSorter sorter = new GuiTableSorter(fileTableModel);
+			
+			fileTable = new JTable(sorter);
+			sorter.setTableHeader(fileTable.getTableHeader());
+			fileTable.addMouseListener(control);
+			fileTable.getSelectionModel().addListSelectionListener(control);
+		}
+		return fileTable;
 	}
 
 	/**
@@ -95,11 +128,22 @@ public class GuiTabAvailableFiles extends GuiTab {
 		return treeModel;
 	}
 
+	public GuiFileTableModel getTableModel() {
+		return fileTableModel;
+	}
 	/**
 	 * @return
 	 */
 	public JTree getTree() {
 		return fileTree;
+	}
+
+	/**
+	 * @param fileInfo2
+	 */
+	public void setFileInfo(String fileInfoText) {
+		fileInfo.setText(fileInfoText);
+		
 	}
 
 }

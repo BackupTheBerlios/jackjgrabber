@@ -29,7 +29,11 @@ import java.text.*;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.tree.*;
 
+import presentation.*;
 import presentation.GuiTab;
 
 import service.SerHelper;
@@ -43,26 +47,22 @@ public class GuiTabRecordInfo extends GuiTab {
 
 	private ControlRecordInfoTab control;
 
-	private JTextArea state;
-	private JTextArea type;
 	private JTextArea engine;
 
-	private JTextArea start;
-
-	private JTextArea end;
-	private JTextArea video;
-	private JTextArea audio;
-	private JTextArea other;
+	private JList video;
+	private JList audio;
+	private JList other;
 	private JTextArea log;
 	private JTextArea recordTitle;
+	private JTextArea averageBitRate;
+	private JTextArea minBitRate;
+	private JTextArea maxBitRate;
 
-	private javax.swing.Timer fileInfoTimer;
+	private JComponent recordState;
 
-	private File currentDir;
+	private JTabbedPane tab;
 
-	private static final int REFRESH_TIME = 1000; // Refresh Zeit der Dateiinfos
-	// in Millisekunden
-
+	private GuiTabAvailableFiles guiFilesTab;
 
 	public GuiTabRecordInfo(ControlRecordInfoTab control) {
 		this.setControl(control);
@@ -74,93 +74,119 @@ public class GuiTabRecordInfo extends GuiTab {
 	 *  
 	 */
 	protected void initialize() {
+		setLayout(new BorderLayout());
+		tab = new JTabbedPane();
 
+		JPanel currentRecord = new JPanel();
 		FormLayout layout = new FormLayout("pref:grow", // columns
-				"pref,pref,pref, pref,pref,pref,f:150:grow"); // rows
-		PanelBuilder builder = new PanelBuilder(this, layout);
+				"55,75,pref, f:150:grow"); // rows
+		PanelBuilder builder = new PanelBuilder(currentRecord, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
 		builder.add(initRecordPanel(), cc.xywh(1, 1, 1, 1));
-		builder.add(initStatePanel(), cc.xywh(1, 3, 1, 1));
-		builder.add(initFilePanel(), cc.xywh(1, 5, 1, 1));
-		builder.add(initLogPanel(), cc.xywh(1, 7, 1, 1));
+		builder.add(initStatePanel(), cc.xywh(1, 2, 1, 1));
+		builder.add(initFilePanel(), cc.xywh(1, 3, 1, 1));
+		builder.add(initLogPanel(), cc.xywh(1, 4, 1, 1));
+
+		// found files tab
+
+		guiFilesTab = new GuiTabAvailableFiles(control);
+		tab.addTab("Aktuelle Aufnahme", currentRecord);
+		tab.addTab("Vorhandene Dateien", guiFilesTab);
+		add(tab);
+
 	}
 
 	private JPanel initRecordPanel() {
-		recordTitle = new JTextArea();
+		recordTitle = new JTextArea("");
 
 		recordTitle.setEditable(false);
 		recordTitle.setBorder(BorderFactory.createEtchedBorder());
+		Border etchedBorder = BorderFactory.createEtchedBorder();
 
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("710:grow", // columns
-				"pref,10,pref"); // rows
+				"pref,5,pref"); // rows
 
 		p.setLayout(layout);
 		PanelBuilder builder = new PanelBuilder(p, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
-		builder.addSeparator(ControlMain.getProperty("label_recordTitle"));
+		recordState = builder.addSeparator(ControlMain.getProperty("label_recordTitle"));
 		builder.add(recordTitle, cc.xywh(1, 3, 1, 1));
 		return p;
 	}
 
 	private JPanel initStatePanel() {
-		state = new JTextArea("");
-		type = new JTextArea("");
-		start = new JTextArea("");
-		end = new JTextArea();
+
 		engine = new JTextArea();
+		averageBitRate = new JTextArea();
+		minBitRate = new JTextArea();
+		maxBitRate = new JTextArea();
+		averageBitRate.setPreferredSize(new Dimension(75, 20));
+		maxBitRate.setPreferredSize(new Dimension(75, 20));
+		minBitRate.setPreferredSize(new Dimension(75, 20));
 
-		state.setEditable(false);
-		type.setEditable(false);
-		start.setEditable(false);
-		end.setEditable(false);
 		engine.setEditable(false);
-		state.setBorder(BorderFactory.createEtchedBorder());
-		type.setBorder(BorderFactory.createEtchedBorder());
-		start.setBorder(BorderFactory.createEtchedBorder());
-		end.setBorder(BorderFactory.createEtchedBorder());
-		engine.setBorder(BorderFactory.createEtchedBorder());
+		averageBitRate.setEditable(false);
+		minBitRate.setEditable(false);
+		maxBitRate.setEditable(false);
+		Border etchedBorder = BorderFactory.createEtchedBorder();
 
-		JPanel p = new JPanel();
-		FormLayout layout = new FormLayout("pref, 20, 120, 20,30,20,100,20,50,pref,f:330:grow", // columns
-				"pref, pref,pref,pref,pref,pref"); // rows
+		engine.setBorder(etchedBorder);
+		averageBitRate.setBorder(etchedBorder);
+		minBitRate.setBorder(etchedBorder);
+		maxBitRate.setBorder(etchedBorder);
 
-		p.setLayout(layout);
-		PanelBuilder builder = new PanelBuilder(p, layout);
+		JPanel bitrate = new JPanel();
+		FormLayout layoutBitrate = new FormLayout("350,10,pref", // columns
+				"30"); // rows
+
+		bitrate.setLayout(layoutBitrate);
+		PanelBuilder builder = new PanelBuilder(bitrate, layoutBitrate);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
+		//builder.addSeparator(ControlMain.getProperty("label_recordBitRate"), cc.xywh(1, 1, 1, 1));
 
-		builder.add(new JLabel(ControlMain.getProperty("label_recordState")), cc.xywh(1, 1, 1, 1));
-		builder.add(state, cc.xywh(3, 1, 1, 1));
-		builder.add(new JLabel(ControlMain.getProperty("label_recordType")), cc.xywh(5, 1, 1, 1));
-		builder.add(type, cc.xywh(7, 1, 1, 1));
-		builder.add(new JLabel(ControlMain.getProperty("label_recordEngine")), cc.xywh(9, 1, 1, 1));
-		builder.add(engine, cc.xywh(11, 1, 1, 1));
+		JPanel rateP = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		rateP.add(new JLabel("Avg: "));
+		rateP.add(averageBitRate);
+		rateP.add(new JLabel(" Min: "));
+		rateP.add(minBitRate);
+		rateP.add(new JLabel(" Max: "));
+		rateP.add(maxBitRate);
+		builder.add(rateP, cc.xywh(1, 1, 1, 1));
 
-		builder.add(new JLabel(ControlMain.getProperty("label_recordStart")), cc.xywh(1, 3, 1, 1));
-		builder.add(start, cc.xywh(3, 3, 1, 1));
-		builder.add(new JLabel(ControlMain.getProperty("label_recordEnd")), cc.xywh(5, 3, 1, 1));
-		builder.add(end, cc.xywh(7, 3, 1, 1));
+		JPanel p = new JPanel();
+		FormLayout layout = new FormLayout("350,10,365:grow", // columns
+				"15,pref"); // rows
 
+		p.setLayout(layout);
+		builder = new PanelBuilder(p, layout);
+		builder.setDefaultDialogBorder();
+		cc = new CellConstraints();
+
+		builder.addSeparator(ControlMain.getProperty("label_recordBitRate"), cc.xywh(1, 1, 1, 1));
+		builder.add(bitrate, cc.xywh(1, 2, 1, 1));
+		builder.addSeparator(ControlMain.getProperty("label_recordEngine"), cc.xywh(3, 1, 1, 1));
+		builder.add(engine, cc.xywh(3, 2, 1, 1));
 		return p;
 	}
 
 	private JPanel initFilePanel() {
-		video = new JTextArea();
-		audio = new JTextArea();
-		other = new JTextArea();
+		video = new JList();
+		audio = new JList();
+		other = new JList();
 
-		video.setEditable(false);
-		audio.setEditable(false);
-		other.setEditable(false);
-
+		video.addMouseListener(control);
+		audio.addMouseListener(control);
+		other.addMouseListener(control);
+		
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("170:grow, 10, 170:grow, 10, 350:grow, pref", // columns
-				"pref, 10,f:130:grow"); // rows
+				"pref, 10,f:120:grow"); // rows
 
 		p.setLayout(layout);
 		PanelBuilder builder = new PanelBuilder(p, layout);
@@ -234,137 +260,37 @@ public class GuiTabRecordInfo extends GuiTab {
 	 */
 	public void startRecord(String title, String engine, File directory, boolean timer) {
 
-		// Lösche Log
-		log.setText("");
-		end.setText("");
-		currentDir = directory;
-		state.setText(ControlMain.getProperty("label_recordInProgress"));
-		state.setForeground(Color.red);
-		state.setFont(state.getFont().deriveFont(Font.BOLD));
-		start.setText(SimpleDateFormat.getTimeInstance().format(new Date()));
+		clear();
+		((JLabel) recordState.getComponent(0)).setText(ControlMain.getProperty("label_recordInProgress") + " "
+				+ SimpleDateFormat.getTimeInstance().format(new Date()));
+
+		recordState.getComponent(0).setForeground(Color.red);
+		recordState.getComponent(0).setFont(recordState.getComponent(0).getFont().deriveFont(Font.BOLD));
 
 		recordTitle.setText(title);
-
 		setEngine(engine);
-		setType(timer);
-
-		// Erzeuge Timer der periodisch die Dateiinfos aktualisiert
-		if (fileInfoTimer == null) {
-			fileInfoTimer = new javax.swing.Timer(REFRESH_TIME, new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					reloadFileInfos();
-				}
-
-			});
-		}
-		fileInfoTimer.start();
 
 	}
 
 	/**
-	 * aktualisiert die Dateiinformationen (wird vom Timer aufgerufen)
 	 *  
 	 */
-	protected void reloadFileInfos() {
-
-		// Lade alle Files
-		File[] aFiles = currentDir.listFiles();
-
-		StringBuffer video = new StringBuffer();
-		StringBuffer audio = new StringBuffer();
-		StringBuffer other = new StringBuffer();
-		int videoCount = 0;
-		int audioCount = 0;
-		int otherCount = 0;
-
-		for (int i = 0; i < aFiles.length; i++) {
-			String size = calcSize(aFiles[i].length(), "MB");
-
-			String end = getEnd(aFiles[i]);
-			if (SerHelper.isVideo(aFiles[i].getName())) {
-				videoCount++;
-				video.append("Video " + end + " (" + videoCount + ")  : " + size + "\n");
-			} else if (SerHelper.isAudio(aFiles[i].getName())) {
-				audioCount++;
-				audio.append("Audio " + " " + end + " (" + audioCount + ")  : " + size + "\n");
-			} else {
-				size = calcSize(aFiles[i].length(), "KB");
-				otherCount++;
-				other.append(aFiles[i].getName() + ":      " + size + "\n");
-			}
-		}
-
-		this.video.setText(video.toString());
-		this.audio.setText(audio.toString());
-		this.other.setText(other.toString());
-
+	public void clear() {
+		// Lösche Log
+		log.setText("");
+		averageBitRate.setText("");
+		minBitRate.setText("");
+		maxBitRate.setText("");
 	}
 
 	/**
-	 * @param file
-	 * @return
+	 * setzt den Status auf Aufnahme beendet und stoppt den Dateiinfo timer Speichert bei Bedarf das Log
 	 */
-	private String getEnd(File file) {
+	public void stopRecord(String text) {
 
-		String fileName = file.getAbsolutePath();
-		int end = fileName.lastIndexOf(".");
-		if (end > -1) {
-			return fileName.substring(end + 1);
-		}
-		return "";
-	}
-
-	/**
-	 * berechnet die angezeigte Größe einer Datei in der angegebenen Einheit
-	 * 
-	 * @param size
-	 * @param type
-	 *            MB für MByte und KB für Kilobyte
-	 * @return
-	 */
-	private String calcSize(long size, String type) {
-
-		double s = size;
-		if (type.equals("MB")) {
-			s = s / 1024; // kb
-			s = s / 1024; // MB
-			return NumberFormat.getNumberInstance().format(s) + " " + type;
-		} else if (type.equals("KB")) {
-			s = s / 1024; // kb
-			return NumberFormat.getNumberInstance().format(s) + " " + type;
-		}
-		return NumberFormat.getNumberInstance().format(s) + " " + type;
-	}
-
-	/**
-	 * setzt den Status auf Aufnahme beendet und stoppt den Dateiinfo timer
-	 * Speichert bei Bedarf das Log
-	 */
-	public void stopRecord() {
-		state.setText(ControlMain.getProperty("label_recordStopped"));
-		state.setForeground((Color) UIManager.get("TextArea.foreground"));
-		state.setFont(state.getFont().deriveFont(Font.PLAIN));
-		end.setText(SimpleDateFormat.getTimeInstance().format(new Date()));
-
-		if (fileInfoTimer != null && fileInfoTimer.isRunning()) {
-			fileInfoTimer.stop();
-		}
-
-	}
-
-	/**
-	 * setzt den Typ der Aufnahme
-	 * 
-	 * @param timer
-	 *            wenn true, handelt es sich um eine Timeraufnahme
-	 */
-	public void setType(boolean timer) {
-		if (timer) {
-			type.setText(ControlMain.getProperty("label_recordTimer"));
-		} else {
-			type.setText(ControlMain.getProperty("label_recordDirect"));
-		}
+		((JLabel) recordState.getComponent(0)).setText(text);
+		recordState.getComponent(0).setForeground((Color) UIManager.get("TextArea.foreground"));
+		recordState.getComponent(0).setFont(recordState.getComponent(0).getFont().deriveFont(Font.PLAIN));
 	}
 
 	/**
@@ -393,25 +319,88 @@ public class GuiTabRecordInfo extends GuiTab {
 	}
 
 	/**
-	 * @return Erzeugte Videofiles
-	 */
-	public String getVideo() {
-		return video.getText();
-	}
-
-	/**
-	 * @return Erzeugte Audiofiles
-	 */
-	public String getAudio() {
-		return audio.getText();
-	}
-
-	/**
 	 * @return Log für die aktuelle, bzw. beendete Aufnahme
 	 */
 	public String getLog() {
 
 		return log.getText();
+	}
+
+	public void setVideo(ArrayList files) {
+		DefaultListModel m = new DefaultListModel();
+		Iterator iter = files.iterator();
+
+		while (iter.hasNext()) {
+			Object element = iter.next();
+			m.addElement(element);
+		}
+		video.setModel(m);
+	}
+
+	public void setAudio(ArrayList files) {
+		DefaultListModel m = new DefaultListModel();
+		Iterator iter = files.iterator();
+
+		while (iter.hasNext()) {
+			Object element = iter.next();
+			m.addElement(element);
+		}
+		audio.setModel(m);
+	}
+	public void setOther(ArrayList files) {
+		DefaultListModel m = new DefaultListModel();
+		Iterator iter = files.iterator();
+
+		while (iter.hasNext()) {
+			Object element = iter.next();
+			m.addElement(element);
+		}
+		other.setModel(m);
+
+	}
+
+	/**
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 */
+	public void setBitrate(String average, String min, String max) {
+		averageBitRate.setText(average);
+		minBitRate.setText(min);
+		maxBitRate.setText(max);
+
+	}
+
+	public DefaultTreeModel getTreeModel() {
+		return guiFilesTab.getTreeModel();
+	}
+
+	/**
+	 *  
+	 */
+	public JTree getTree() {
+		return guiFilesTab.getTree();
+
+	}
+
+	public GuiFileTableModel getTableModel() {
+		return guiFilesTab.getTableModel();
+	}
+
+	/**
+	 * @param fileInfo
+	 */
+	public void setFileInfo(String fileInfo) {
+		guiFilesTab.setFileInfo(fileInfo);
+		
+	}
+
+	/**
+	 * @return
+	 */
+	public JTable getFileTable() {
+		
+		return guiFilesTab.getFileTable();
 	}
 
 }
