@@ -48,7 +48,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 	private GuiTabRecordInfo guiTabRecordInfo;
 	private File directory;
 	private javax.swing.Timer fileInfoTimer;
-	
+
 	private Date currentStartForBitrate; // Starttime when the first file has been written (for bitrate calculation)
 	private Date currentStartBegin;
 
@@ -109,23 +109,23 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		currentRecArgs = recArgs;
 		String title = recArgs.getEpgTitle();
 		boolean timer = !recArgs.isQuickRecord();
-		
+
 		this.directory = directory;
 		SerLogAppender.getTextAreas().add(guiTabRecordInfo.getLogArea());
-		
+
 		if (timer) {
 			title = ControlMain.getProperty("label_recordTimerInfo") + ": " + title;
 		} else {
 			title = ControlMain.getProperty("label_recordDirect") + ": " + title;
 		}
-		
+
 		//		 Erzeuge Timer der periodisch die Dateiinfos aktualisiert
 		if (fileInfoTimer == null) {
 			fileInfoTimer = new javax.swing.Timer(REFRESH_TIME, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					reloadFileInfos();
-					
+
 					refreshTime();
 				}
 
@@ -133,26 +133,25 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		}
 		fileInfoTimer.start();
 		currentStartBegin = new Date();
-		guiTabRecordInfo.startRecord(currentStartBegin,title, engine);
+		guiTabRecordInfo.startRecord(currentStartBegin, title, engine);
 
 	}
 
 	/**
-	 * 
+	 *  
 	 */
 	protected void refreshTime() {
 		Date now = new Date();
 		int time = (int) ((now.getTime() - currentStartBegin.getTime()) / 1000 / 60);
-		
+
 		long stopTime = currentRecArgs.getLocalTimer().getStopTime();
-		if (stopTime == 0) 
-		{
+		if (stopTime == 0) {
 			stopTime = currentRecArgs.getStopTimeOfQuickRecord();
 		}
-		int remain = ( int)((stopTime - now.getTime()) / 60000) + 1;
-		
-		guiTabRecordInfo.setRecordText(currentStartBegin,time,remain);
-		
+		int remain = (int) ((stopTime - now.getTime()) / 60000) + 1;
+
+		guiTabRecordInfo.setRecordText(currentStartBegin, time, remain);
+
 	}
 
 	/**
@@ -192,6 +191,25 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		if (ControlMain.getSettingsRecord().isStoreLogAfterRecord()) {
 			saveLog();
 		}
+
+		String time = text.substring(text.indexOf("(") + 1);
+
+		if (time.lastIndexOf(")") > -1) {
+			time = time.substring(0, time.lastIndexOf(")"));
+		}
+		BORecordInfo info = new BORecordInfo();
+		info.setTitle(currentRecArgs.getEpgTitle());
+		info.setTime(time);
+		info.setEngine(guiTabRecordInfo.getEngine().getText());
+		info.setEpg(currentRecArgs.getEpgInfo1());
+		info.setChannel(currentRecArgs.getSenderName());
+		info.setLog(guiTabRecordInfo.getLog());
+		info.setVideo(guiTabRecordInfo.getVideoList());
+		info.setAudio(guiTabRecordInfo.getAudioList());
+		info.setOther(guiTabRecordInfo.getOtherList());
+		
+		BORecordInfos.getInfos().addRecordInfo(info);
+		guiTabRecordInfo.getGuiRecordOverview().getTableModel().fireTableDataChanged();
 	}
 
 	/**
@@ -272,12 +290,11 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		guiTabRecordInfo.setOther(other);
 
 		refreshBitrate(videoSize);
-		
+
 		//Date c = new Date();
 		//int min = (int) ((c.getTime() - currentStartBegin.getTime()) / 60000);
 		//guiTabRecordInfo.setRecordText(currentStartBegin,min,-1);
-		
-		
+
 	}
 
 	/**
@@ -341,7 +358,74 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 
 				}
 			}
+		} else if (e.getSource() instanceof JTable) {
+			if (SwingUtilities.isRightMouseButton(e)) {
+				showRecordOverviewPopup((JTable) e.getSource(),e);
+			}
+			else if (e.getClickCount() == 2)
+			{
+				showDetail();
+			}
 		}
+	}
+
+	/**
+	 * @param e
+	 *  
+	 */
+	private void showRecordOverviewPopup(final JTable source, MouseEvent e) {
+		JPopupMenu menu = new JPopupMenu();
+		JMenuItem open = new JMenuItem("Details");
+		JMenuItem delete = new JMenuItem("Löschen");
+		if (source.getSelectedRowCount() == 1) {
+			menu.add(open);
+		}
+		menu.add(delete);
+
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Vector vToRemove = new Vector();
+				int[] aiRows = source.getSelectedRows();
+				for (int i = 0; i < aiRows.length; i++) {
+					vToRemove.addElement(BORecordInfos.getInfos().elementAt(aiRows[i]));
+				}
+				BORecordInfos.getInfos().removeAll(vToRemove);
+				guiTabRecordInfo.getGuiRecordOverview().getTableModel().fireTableDataChanged();
+				BORecordInfos.getInfos().setChanged(true);
+				BORecordInfos.saveInfos();
+				
+			}
+		});
+		
+		open.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showDetail();
+			}
+		});
+		
+		menu.show(source,e.getX(),e.getY());
+
+	}
+
+	/**
+	 * 
+	 */
+	protected void showDetail() {
+		JTable source = guiTabRecordInfo.getGuiRecordOverview().getRecordInfoTable();
+		int iRow = source.getSelectedRow();
+		BORecordInfo info = (BORecordInfo) BORecordInfos.getInfos().elementAt(iRow);
+		
+		JTextArea a = new JTextArea();
+		a.setEditable(false);
+		a.setLineWrap(true);
+		a.setWrapStyleWord(true);
+		
+		a.setText(info.toString());
+		a.setCaretPosition(0);
+		JScrollPane p = new JScrollPane(a);
+		p.setPreferredSize(new Dimension(500,400));
+		a.scrollRectToVisible(new Rectangle(0,0,10,10));
+		JOptionPane.showMessageDialog(guiTabRecordInfo,p,"",JOptionPane.PLAIN_MESSAGE,null);
 	}
 
 	/**
@@ -404,44 +488,54 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		return tok.nextToken().trim();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
 	 */
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
