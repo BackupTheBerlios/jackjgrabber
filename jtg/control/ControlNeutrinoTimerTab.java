@@ -186,7 +186,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		try {
 			this.deleteAllTimer(this.getTimerList().getRecordTimerList());
 			this.deleteAllTimer(this.getTimerList().getSystemTimerList());
-			this.reReadTimerList();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
@@ -266,7 +265,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		timer.setModifiedId("remove");
 		SerTimerHandler.deleteLocalTimer(timer.getLocalTimer());
 		this.writeTimer(timer);
-		this.reReadTimerList();
 	}
 	
 	/**
@@ -291,7 +289,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		for (int i=0; i<timerList.size(); i++) {
 			this.writeTimer((BOTimer)timerList.get(i));
 		}
-		this.reReadTimerList();
 	}
 	
 	/**
