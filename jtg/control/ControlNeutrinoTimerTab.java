@@ -1,5 +1,7 @@
 package control;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -13,7 +15,7 @@ import service.SerAlertDialog;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ControlNeutrinoTimerTab extends ControlTab {
+public class ControlNeutrinoTimerTab extends ControlTab implements ActionListener {
 	
 	GuiMainView mainView;
 	ArrayList timerList;
@@ -32,6 +34,14 @@ public class ControlNeutrinoTimerTab extends ControlTab {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
+		if (action == "Aufnahme") {
+			
+		}
+	}
+		
 	/**
 	 * @return Returns the mainView.
 	 */
