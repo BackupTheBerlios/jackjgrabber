@@ -91,7 +91,7 @@ public class SerSettingsHandler {
 		
 		
 		play.setPlaybackString("d: http://$ip:31339/$vPid,$aPid");
-		pathS.setSavePath( ControlMain.userHomeDirectory);
+		pathS.setSavePath( System.getProperty("user.home"));
 		rec.setStartStreamingServer(true);
 		rec.setStreamingServerPort("4000");
 		main.setThemeLayout("ExperienceBlue");
