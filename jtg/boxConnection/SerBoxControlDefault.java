@@ -29,8 +29,9 @@ import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
 import model.BOTimerList;
-import presentation.timer.GuiNeutrinoRecordTimerTableModel;
-import presentation.timer.GuiNeutrinoSystemTimerTableModel;
+import presentation.timer.*;
+import presentation.timer.GuiEnigmaRecordTimerTableModel;
+import presentation.timer.GuiEnigmaSystemTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;
 import presentation.timer.GuiSystemTimerTableModel;
 import control.ControlTimerTab;
@@ -154,8 +155,8 @@ public class SerBoxControlDefault extends SerBoxControl {
 		return new String [] {};
 	}
 	
-	public String [] getTimerType() throws IOException {
-		return new String [] {};
+	public String [][] getTimerType() throws IOException {
+		return new String [][] {{}};
 	}
 	
 	public GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl) {
