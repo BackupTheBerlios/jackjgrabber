@@ -58,7 +58,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	    this.initPlasticLookAndFeel();
 	    this.setLookAndFeel();
 	    this.setView(new GuiMainView(this));		
-	    SerLogAppender.getTextAreas().add(this.getView().getTabProgramm().getJTextPaneAusgabe());
+	    SerLogAppender.getTextAreas().add(this.getView().getTabProgramm().getJTextAreaAusgabe());
 	    this.logSystemInfo();
 	    this.checkStartVlc();
 	    this.log(ControlMain.getProperty("msg_app_starting"));		

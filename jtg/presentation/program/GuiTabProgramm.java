@@ -68,16 +68,17 @@ public class GuiTabProgramm extends GuiTab {
 	private JButton jButtonStartServer = null;
 	private JButton jButtonRefresh = null;
 	private JButton jButtonShutdown = null;
+	private JButton jButtonClearLogArea = null;
 	private JRadioButton jRadioButtonTVMode = null;
 	private JRadioButton jRadioButtonRadioMode = null;
 	private ButtonGroup tvRadioButtonGroup = new ButtonGroup();
 	private JTextArea jTextAreaEPG = null;
+	private JTextArea jTextAreaAusgabe = null;
 	private JSpinner jSpinnerRecordStopTime;
 	private JComboBox jComboBoxBoxIP = null;
-	public JTextArea jTextPaneAusgabe = null;
-	public GuiSenderTableModel senderTableModel;
-	public GuiBoquetsComboModel boquetsComboModel;
-	public GuiEpgTableModel epgTableModel;
+	private GuiSenderTableModel senderTableModel;
+	private GuiBoquetsComboModel boquetsComboModel;
+	private GuiEpgTableModel epgTableModel;
 	private JScrollPane jScrollPaneChannels = null;
 	private JTable jTableChannels = null;
 	private ControlProgramTab control;
@@ -188,6 +189,7 @@ public class GuiTabProgramm extends GuiTab {
 			builder.add(this.getJRadioButtonRadioMode(), cc.xy(1, 4));
 			builder.add(this.getJButtonReboot(), cc.xy(3, 4));
 			builder.add(this.getJButtonShutdown(), cc.xy(5, 4));
+			builder.add(this.getJButtonClearLogArea(), cc.xy(7, 4));
 		}
 		return jPanelButtonsAktionen;
 	}
@@ -359,6 +361,21 @@ public class GuiTabProgramm extends GuiTab {
 		return jButtonReboot;
 	}
 	/**
+	 * This method initializes jButtonClearLogArea
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	public JButton getJButtonClearLogArea() {
+		if (jButtonClearLogArea == null) {
+		    jButtonClearLogArea = new JButton();
+		    jButtonClearLogArea.setText(ControlMain.getProperty("button_clearLog"));
+		    jButtonClearLogArea.setActionCommand("clearLog");
+		    jButtonClearLogArea.setToolTipText(ControlMain.getProperty("buttontt_clearLog"));
+		    jButtonClearLogArea.addActionListener(this.getControl());
+		}
+		return jButtonClearLogArea;
+	}
+	/**
 	 * This method initializes jButtonPlayback
 	 * 
 	 * @return javax.swing.JButton
@@ -440,7 +457,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JScrollPane getJScrollPaneAusgabe() {
 		if (jScrollPaneAusgabe == null) {
 			jScrollPaneAusgabe = new JScrollPane();
-			jScrollPaneAusgabe.setViewportView(getJTextPaneAusgabe());
+			jScrollPaneAusgabe.setViewportView(getJTextAreaAusgabe());
 		}
 		return jScrollPaneAusgabe;
 	}
@@ -449,11 +466,11 @@ public class GuiTabProgramm extends GuiTab {
 	 * 
 	 * @return javax.swing.JTextPane
 	 */
-	public JTextArea getJTextPaneAusgabe() {
-		if (jTextPaneAusgabe == null) {
-			jTextPaneAusgabe = new JTextArea();
+	public JTextArea getJTextAreaAusgabe() {
+		if (jTextAreaAusgabe == null) {
+			jTextAreaAusgabe = new JTextArea();
 		}
-		return jTextPaneAusgabe;
+		return jTextAreaAusgabe;
 	}
 
 	private JScrollPane getJScrollPaneChannels() {

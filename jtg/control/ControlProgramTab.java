@@ -203,8 +203,16 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.actionShutdown();
 				break;
 			}
+			if (action == "clearLog") {
+					this.actionClearLog();
+					break;
+				}
 			break;
 		}
+	}
+	
+	private void actionClearLog() {
+	    this.getMainView().getTabProgramm().getJTextAreaAusgabe().setText(null);
 	}
 
 	private void actionShutdown() {
