@@ -17,12 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 import javax.swing.table.TableModel;
-
-import service.SerFormatter;
 
 public class GuiTimerTableSorter extends GuiTableSorter {
 	
@@ -53,9 +53,16 @@ public class GuiTimerTableSorter extends GuiTableSorter {
 	
 	public static final Comparator DATE_COMPARATOR = new Comparator() {
         public int compare(Object o1, Object o2) {
-            GregorianCalendar firstDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
-			GregorianCalendar secondDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
-			return firstDate.compareTo(secondDate);
+        	try {
+				String firstString = (String)o1;
+				String secondString = (String)o2;
+				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
+				Date firstDate = sdf.parse(firstString);
+				Date secondDate = sdf.parse(secondString);
+				return firstDate.compareTo(secondDate);
+			} catch (ParseException e) {
+				return 0;
+			}
         }
     };
 }
