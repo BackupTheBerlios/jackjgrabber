@@ -112,6 +112,7 @@ public class SerMovieGuide2Xml {
     
     public static void readGuide(String datei,int quelle) throws FileNotFoundException, IOException {
         BufferedReader in = (null);
+        
         try {
             switch (quelle){
                 case 1:
@@ -152,17 +153,7 @@ public class SerMovieGuide2Xml {
         //saveXMLFile(new File(ControlMovieGuideTab.movieGuideFileName));
         saveXMLFile(doc);
     }
-    
-    public ArrayList getGenryList(String value) throws Exception{    	            	
-    	Document doc = SerXMLHandling.readDocument(new File("/tmp/output.xml"));    	
-    	Element root = doc.getRootElement();                
-        ArrayList al = new ArrayList();
-        for ( Iterator i = root.elementIterator("entry"); i.hasNext(); ) {
-            Element entry = (Element) i.next();                     
-            al.add(entry.element(value).getStringValue());
-        }
-        return al;
-    }
+   
     /**
      * @param args
      *            the command line arguments
