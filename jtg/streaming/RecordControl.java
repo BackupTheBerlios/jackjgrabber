@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import model.BOAfterRecordOptions;
 import model.BORecordArgs;
 import model.BOTimer;
 
@@ -193,7 +194,8 @@ public class RecordControl extends Thread implements SerProcessStopListener {
         }
 
 		record.stop();
-		if (recordArgs.getLocalTimer().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
+        BOAfterRecordOptions option = recordArgs.getLocalTimer().getAfterRecordOptions(); 
+		if (option.isUseProjectX() && record.getFiles() != null && record.getFiles().size() > 0) {
 			Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
 			this.startProjectX();
 		} else {

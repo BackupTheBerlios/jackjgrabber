@@ -64,7 +64,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 
 	public void run() {		
 		this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
-		this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
 		this.getTab().getCbRecordVtxt().setSelected(this.getSettings().isRecordVtxt());
 		this.getTab().getJSpinnerRecordMinsBefore().setValue(Integer.valueOf(this.getSettings().getRecordTimeBefore()));
 		this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
@@ -188,10 +187,10 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				this.getSettings().setRecordVtxt(((JCheckBox) e.getSource()).isSelected());
 				break;
 			}
-			if (action.equals("startPX")) {
-				this.getSettings().setStartPX(((JCheckBox) e.getSource()).isSelected());
-				break;
-			}
+			if (action.equals("afterRecordOptions")) {
+                new ControlMuxxerView(ControlMain.getSettingsRecord().getAfterRecordOptions());
+                break;
+            }
 			if (action.equals("shutdownAfterRecord")) {
 				this.getSettings().setShutdownAfterRecord(((JCheckBox) e.getSource()).isSelected());
 				break;

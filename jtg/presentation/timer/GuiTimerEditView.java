@@ -20,8 +20,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -39,7 +39,7 @@ import control.ControlMain;
 import control.ControlTimerEditView;
 import control.ControlTimerTab;
 
-public class GuiTimerEditView extends JFrame {
+public class GuiTimerEditView extends JDialog {
 
 	ControlTimerEditView control;
 	private JPanel panelEngineSettings;
@@ -74,7 +74,6 @@ public class GuiTimerEditView extends JFrame {
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
 	private ButtonGroup buttonGroupAudioOptions = new ButtonGroup();
 
-	private JCheckBox cbStartPX;
 	private JCheckBox cbRecordVtxt;
 	private JCheckBox cbShutdownAfterRecord;
 	private JCheckBox cbStopPlaybackAtRecord;
@@ -88,12 +87,14 @@ public class GuiTimerEditView extends JFrame {
 	private JButton jButtonCancel;
 	private JButton jButtonRecordPathFileChooser;
 	private JButton jButtonUdrecOptions;
+    private JButton jButtonAfterRecordOptions;
 
 	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
 
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public GuiTimerEditView(ControlTimerEditView control) {
+        super(ControlMain.getControl().getView());
 		this.setControl(control);
 		initialize();
 		this.setResizable(false);
@@ -130,27 +131,31 @@ public class GuiTimerEditView extends JFrame {
 		return mainPanel;
 	}
 
-	private JPanel getPanelRecordSettings() {
-		if (panelRecordSettings == null) {
-			panelRecordSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref:grow", //columns
-					"pref, pref, pref, pref, pref, pref, 10, pref, pref, pref"); //rows
-			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
-			CellConstraints cc = new CellConstraints();
+    private JPanel getPanelRecordSettings() {
+        if (panelRecordSettings == null) {
+            panelRecordSettings = new JPanel();
+            FormLayout layout = new FormLayout("pref:grow, 5, pref", //columns
+                    "pref, pref, pref, pref, pref, pref, 10, pref, pref, pref, 15, pref, 5, pref"); //rows
+            PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
+            CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_recordSettings"), cc.xy(1, 1));
-			builder.add(this.getCbStartPX(), cc.xy(1, 2));
-			builder.add(this.getCbStoreEPG(), cc.xy(1, 3));
-			builder.add(this.getCbStoreLogAfterRecord(), cc.xy(1, 4));
-			builder.add(this.getCbStopPlaybackAtRecord(), cc.xy(1, 5));
+            builder.addSeparator(ControlMain.getProperty("label_recordSettings"), cc.xyw(1, 1, 3));
+            builder.add(this.getCbStoreEPG(), cc.xyw(1, 2, 3));
+            builder.add(this.getCbStoreLogAfterRecord(), cc.xyw(1, 3, 3));
+            builder.add(this.getCbStopPlaybackAtRecord(), cc.xyw(1, 4, 3));
 
-			builder.add(this.getCbRecordVtxt(), cc.xy(1, 6));
-			builder.add(this.getJRadioButtonRecordAllPids(), cc.xy(1, 8));
-			builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xy(1, 9));
-			builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xy(1, 10));
-		}
-		return panelRecordSettings;
-	}
+            builder.add(this.getCbRecordVtxt(), cc.xyw(1, 5, 3));
+            builder.add(this.getJRadioButtonRecordAllPids(), cc.xyw(1, 7, 3));
+            builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xyw(1, 8, 3));
+            builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xyw(1, 9, 3));
+            
+            builder.add(this.getCbShutdownAfterRecord(), cc.xyw(1, 12, 3));
+            
+            builder.addLabel(ControlMain.getProperty("label_afterRecord"), cc.xy(1, 14));
+            builder.add(this.getJButtonAfterRecordOptions(), cc.xy(3, 14));
+        }
+        return panelRecordSettings;
+    }
 
 	private JPanel getPanelEngineSettings() {
 		if (panelEngineSettings == null) {
@@ -435,18 +440,17 @@ public class GuiTimerEditView extends JFrame {
 		}
 		return jTextFieldUdrecOptions;
 	}
-
-	/**
-	 * @return Returns the cbStartPX.
-	 */
-	public JCheckBox getCbStartPX() {
-		if (cbStartPX == null) {
-			cbStartPX = new JCheckBox(ControlMain.getProperty("cbStartPX"));
-			cbStartPX.setActionCommand("startPX");
-			cbStartPX.addActionListener(control);
-		}
-		return cbStartPX;
-	}
+    /**
+     * @return Returns the cbStartPX.
+     */
+    public JButton getJButtonAfterRecordOptions() {
+        if (jButtonAfterRecordOptions == null) {
+            jButtonAfterRecordOptions = new JButton(ControlMain.getProperty("label_options"));
+            jButtonAfterRecordOptions.setActionCommand("afterRecordOptions");
+            jButtonAfterRecordOptions.addActionListener(control);
+        }
+        return jButtonAfterRecordOptions;
+    }
 	/**
 	 * @return Returns the jRadioButtonAC3ReplaceStereo.
 	 */

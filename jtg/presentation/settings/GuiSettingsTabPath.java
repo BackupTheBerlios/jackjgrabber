@@ -95,7 +95,7 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
 				builder.add(new JLabel(ControlMain.getProperty("label_browserPath")),		cc.xy	(1, 8));
 				builder.add(this.getJTextFieldBrowserPath(),								cc.xy	(3, 8));
 				builder.add(this.getJButtonBrowserPathFileChooser(),						cc.xy	(5, 8));
-				builder.add(new JLabel(ControlMain.getProperty("label_dvdauthor")),			cc.xy	(1, 9));
+				builder.add(new JLabel(ControlMain.getProperty("label_mplex")),			cc.xy	(1, 9));
 				builder.add(this.getJTextFieldDVDAuthor(),								cc.xy	(3, 9));
 				builder.add(this.getJButtonDVDAuthorFileChooser(),						cc.xy	(5, 9));
     }
@@ -294,7 +294,7 @@ public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
         if (jTextFieldDVDAuthor == null) {
         	jTextFieldDVDAuthor = new JTextField();
             jTextFieldDVDAuthor.addKeyListener(control);
-            jTextFieldDVDAuthor.setName("dvdAuthorPath");
+            jTextFieldDVDAuthor.setName("mplexPath");
             jTextFieldDVDAuthor.setPreferredSize(new Dimension(340, 19));
 		}
         return jTextFieldDVDAuthor;

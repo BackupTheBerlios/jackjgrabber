@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import model.BOAfterRecordOptions;
 import model.BOLocalTimer;
 import model.BOTimer;
 import model.BOTimerList;
@@ -120,7 +121,9 @@ public class SerTimerHandler {
 
         //BOLocalTimer
 		Element localTimer = DocumentHelper.createElement("localTimer");
-		localTimer.addElement("startPX").addText(Boolean.toString(timer.isStartPX()));
+		localTimer.addElement("startPX").addText(Boolean.toString(timer.getAfterRecordOptions().isUseProjectX()));
+		localTimer.addElement("startMplex").addText(Boolean.toString(timer.getAfterRecordOptions().isUseMplex()));
+		localTimer.addElement("mplexOption").addText(Integer.toString(timer.getAfterRecordOptions().getMplexOption()));
 		localTimer.addElement("recordAllPids").addText(Boolean.toString(timer.isRecordAllPids()));
 		localTimer.addElement("ac3ReplaceStereo").addText(Boolean.toString(timer.isAc3ReplaceStereo()));
 		localTimer.addElement("stereoReplaceAc3").addText(Boolean.toString(timer.isStereoReplaceAc3()));
@@ -177,7 +180,9 @@ public class SerTimerHandler {
         timerNode.selectSingleNode("recordVtxt").setText(Boolean.toString(timer.isRecordVtxt()));
         timerNode.selectSingleNode("savePath").setText(timer.getSavePath());
         timerNode.selectSingleNode("shutdownAfterRecord").setText(Boolean.toString(timer.isShutdownAfterRecord()));
-        timerNode.selectSingleNode("startPX").setText(Boolean.toString(timer.isStartPX()));
+        timerNode.selectSingleNode("startPX").setText(Boolean.toString(timer.getAfterRecordOptions().isUseProjectX()));
+        timerNode.selectSingleNode("startMplex").setText(Boolean.toString(timer.getAfterRecordOptions().isUseMplex()));
+        timerNode.selectSingleNode("mplexOption").setText(Integer.toString(timer.getAfterRecordOptions().getMplexOption()));
         timerNode.selectSingleNode("startTime").setText(timer.getMainTimer().getLongStartTime());
         timerNode.selectSingleNode("stopTime").setText(timer.getMainTimer().getLongStopTime());
         timerNode.selectSingleNode("stereoReplaceAc3").setText(Boolean.toString(timer.isStereoReplaceAc3()));
@@ -234,11 +239,7 @@ public class SerTimerHandler {
 		    Node node = (Node) nodes.get(i);
 		    long localTimerStart=Long.parseLong(node.getText());
 		    if (mainTimerStart==localTimerStart) {
-                long mainTimerStop=mainTimer.getUnformattedStopTime().getTimeInMillis();
-                long localTimerStop=Long.parseLong(SerXPathHandling.getFirstDescendentNode(node).getText());
-                if (mainTimerStop==localTimerStop) {
-                    return node.getParent();   
-                }
+		        return node.getParent();
 		    }
 		}
 		return null;
@@ -269,6 +270,12 @@ public class SerTimerHandler {
     }
 
     public static BOLocalTimer buildLocalTimer(Node timerNode, BOLocalTimer localTimer) {
+    	BOAfterRecordOptions afterRecordOptions = new BOAfterRecordOptions();
+        afterRecordOptions.setUseProjectX(timerNode.selectSingleNode("startPX").getText().equals("true"));
+        afterRecordOptions.setUseMplex(timerNode.selectSingleNode("startMplex").getText().equals("true"));
+        afterRecordOptions.setMplexOption(Integer.parseInt(timerNode.selectSingleNode("mplexOption").getText()));
+        localTimer.setAfterRecordOptions(afterRecordOptions);
+    	
         localTimer.setAc3ReplaceStereo(timerNode.selectSingleNode("ac3ReplaceStereo").getText().equals("true"));
         localTimer.setDescription(timerNode.selectSingleNode("description").getText());
         localTimer.setDirPattern(timerNode.selectSingleNode("dirPattern").getText());
@@ -279,7 +286,6 @@ public class SerTimerHandler {
         localTimer.setRecordVtxt(timerNode.selectSingleNode("recordVtxt").getText().equals("true"));
         localTimer.setSavePath(timerNode.selectSingleNode("savePath").getText());
         localTimer.setShutdownAfterRecord(timerNode.selectSingleNode("shutdownAfterRecord").getText().equals("true"));
-        localTimer.setStartPX(timerNode.selectSingleNode("startPX").getText().equals("true"));
         localTimer.setStartTime(Long.parseLong(timerNode.selectSingleNode("startTime").getText()));
         localTimer.setStopTime(Long.parseLong(timerNode.selectSingleNode("stopTime").getText()));
         localTimer.setStereoReplaceAc3(timerNode.selectSingleNode("stereoReplaceAc3").getText().equals("true"));
@@ -352,25 +358,23 @@ public class SerTimerHandler {
      * 
      */
     private static BOTimer validateTimer(BOTimer requestedTimer) {
-        if (requestedTimer.getModifiedId() != null && requestedTimer.getModifiedId().equals("new")) {
-    		ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
-    		
-    		if (timerList.size()>0) {
-    			ArrayList equalTimer = new ArrayList();
-    
-    			for (int i=0; i<timerList.size(); i++) {
-    				BOTimer timer = (BOTimer)timerList.get(i);
-    				if (SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
-    					equalTimer.add(timer);
-    				}
-    			}
-    			if (equalTimer.size()>0) {
-    				equalTimer.add(0, requestedTimer);
-    				return startTimerQuestDialag(equalTimer);
-    			}
-    		} 
-        }
-    	return requestedTimer;
+		ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
+		
+		if (timerList.size()>0) {
+			ArrayList equalTimer = new ArrayList();
+
+			for (int i=0; i<timerList.size(); i++) {
+				BOTimer timer = (BOTimer)timerList.get(i);
+                if (timer != requestedTimer && SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
+					equalTimer.add(timer);
+				}
+			}
+			if (equalTimer.size()>0) {
+				equalTimer.add(0, requestedTimer);
+				return startTimerQuestDialag(equalTimer);
+			}
+		} 
+		return requestedTimer;
 	}
     
     private static BOTimer startTimerQuestDialag(ArrayList equalTimer) {
@@ -378,19 +382,19 @@ public class SerTimerHandler {
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		int ret = JOptionPane.showConfirmDialog(ControlMain.getControl().getView(), new Object[]{
-				ControlMain.getProperty("msg_chooseTimer2"), 
+				ControlMain.getProperty("msg_choosePlayback2"), 
 				new JScrollPane(list)}, 
-				ControlMain.getProperty("msg_chooseTimer"),
+				ControlMain.getProperty("msg_choose"),
 				JOptionPane.OK_CANCEL_OPTION, 
 				JOptionPane.QUESTION_MESSAGE);
 		if (ret == JOptionPane.OK_OPTION) {
-			if (list.getSelectedIndex()==0) { //alternative Timer löschen!
-				for (int i=1; i<equalTimer.size(); i++) {
-				    BOTimer timer = (BOTimer)equalTimer.get(i);
+			if (list.getSelectedIndex()==0) { //alternativer Timer gewählt
+                for (int i=1; i<equalTimer.size(); i++) {
+                    BOTimer timer = (BOTimer)equalTimer.get(i);
                     timer.setModifiedId("remove");
                     saveTimer(timer, !timer.getLocalTimer().isLocal());
-                    return (BOTimer)equalTimer.get(0);
                 }
+                return (BOTimer)equalTimer.get(0);
 			}
 		}
 		return null;

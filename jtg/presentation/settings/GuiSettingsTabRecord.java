@@ -67,7 +67,6 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
 	private ButtonGroup buttonGroupAudioOptions = new ButtonGroup();
     private ButtonGroup buttonGroupSaveOptions = new ButtonGroup();
-	private JCheckBox cbStartPX;
 	private JCheckBox cbRecordVtxt;
 	private JCheckBox cbShutdownAfterRecord;
 	private JCheckBox cbStopPlaybackAtRecord;
@@ -79,6 +78,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 	private JButton jButtonDirTag;
 	private JButton jButtonFileTag;
 	private JButton jButtonUdrecOptions;
+	private JButton jButtonAfterRecordOptions;
 	
 	private JTextField tfDirPattern;
 	private JTextField tfFilePattern;
@@ -136,23 +136,25 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref:grow", //columns
-					"pref, pref, pref, pref, pref, pref, 10, pref, pref, pref, 15, pref"); //rows
+			FormLayout layout = new FormLayout("pref:grow, 5, pref", //columns
+					"pref, pref, pref, pref, pref, pref, 10, pref, pref, pref, 15, pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_recordSettings"), cc.xy(1, 1));
-			builder.add(this.getCbStartPX(), cc.xy(1, 2));
-			builder.add(this.getCbStoreEPG(), cc.xy(1, 3));
-			builder.add(this.getCbStoreLogAfterRecord(), cc.xy(1, 4));
-			builder.add(this.getCbStopPlaybackAtRecord(), cc.xy(1, 5));
+			builder.addSeparator(ControlMain.getProperty("label_recordSettings"), cc.xyw(1, 1, 3));
+			builder.add(this.getCbStoreEPG(), cc.xyw(1, 2, 3));
+			builder.add(this.getCbStoreLogAfterRecord(), cc.xyw(1, 3, 3));
+			builder.add(this.getCbStopPlaybackAtRecord(), cc.xyw(1, 4, 3));
 
-			builder.add(this.getCbRecordVtxt(), cc.xy(1, 6));
-			builder.add(this.getJRadioButtonRecordAllPids(), cc.xy(1, 8));
-			builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xy(1, 9));
-			builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xy(1, 10));
+			builder.add(this.getCbRecordVtxt(), cc.xyw(1, 5, 3));
+			builder.add(this.getJRadioButtonRecordAllPids(), cc.xyw(1, 7, 3));
+			builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xyw(1, 8, 3));
+			builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xyw(1, 9, 3));
 			
-			builder.add(this.getCbShutdownAfterRecord(), cc.xy(1, 12));
+			builder.add(this.getCbShutdownAfterRecord(), cc.xyw(1, 12, 3));
+            
+            builder.addLabel(ControlMain.getProperty("label_afterRecord"), cc.xy(1, 14));
+            builder.add(this.getJButtonAfterRecordOptions(), cc.xy(3, 14));
 		}
 		return panelRecordSettings;
 	}
@@ -405,13 +407,13 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 	/**
 	 * @return Returns the cbStartPX.
 	 */
-	public JCheckBox getCbStartPX() {
-		if (cbStartPX == null) {
-			cbStartPX = new JCheckBox(ControlMain.getProperty("cbStartPX"));
-			cbStartPX.setActionCommand("startPX");
-			cbStartPX.addActionListener(control);
+	public JButton getJButtonAfterRecordOptions() {
+		if (jButtonAfterRecordOptions == null) {
+			jButtonAfterRecordOptions = new JButton(ControlMain.getProperty("label_options"));
+			jButtonAfterRecordOptions.setActionCommand("afterRecordOptions");
+			jButtonAfterRecordOptions.addActionListener(control);
 		}
-		return cbStartPX;
+		return jButtonAfterRecordOptions;
 	}
 	/**
 	 * @return Returns the jRadioButtonAC3ReplaceStereo.

@@ -21,24 +21,57 @@ package control;
  * Kontrollklasse für die Aufnahme Infos
  * @author Reinhard Achleitner
  */
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.awt.AWTKeyStroke;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
-import model.*;
+import model.BOAfterRecordOptions;
+import model.BOFileWrapper;
+import model.BOPlaybackOption;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import presentation.*;
-import presentation.recordInfo.*;
-import service.*;
-import service.Muxxer.*;
+import presentation.GuiMainView;
+import presentation.recordInfo.BaseTreeNode;
+import presentation.recordInfo.GuiTabRecordInfo;
+import service.SerExternalProcessHandler;
+import service.SerHelper;
+import service.SerLogAppender;
 
 /**
  * Controlklasse des Programmtabs.
@@ -616,11 +649,12 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 					ArrayList l = new ArrayList();
 					int[] aiSel = table.getSelectedRows();
 					for (int i = 0; i < aiSel.length; i++) {
-						File file = (File) guiTabRecordInfo.getTableModel().getValueAt(table.getSelectedRow(), 2);
-						l.add(file.getAbsolutePath());
+						File file = (File) guiTabRecordInfo.getTableModel().getValueAt(aiSel[i], 2);
+						l.add(file);
 					}
-
-					SerMuxxerSelFile.checkFilesToMux(l);
+					
+                    BOAfterRecordOptions options=ControlMain.getSettingsRecord().getAfterRecordOptions();
+					new ControlMuxxerView((BOAfterRecordOptions)SerHelper.serialClone(options), l);
 				}
 			}));
 		}

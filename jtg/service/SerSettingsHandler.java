@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
+import model.BOAfterRecordOptions;
 import model.BOSettings;
 import model.BOSettingsLayout;
 import model.BOSettingsMain;
@@ -122,6 +123,7 @@ public class SerSettingsHandler {
 		pathS.setUdrecPath( new File("udrec.exe").getAbsolutePath());
 		pathS.setProjectXPath(new File("ProjectX.jar").getAbsolutePath());
 		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
+        pathS.setMplexPath(new File("mplex.exe").getAbsolutePath());
 		pathS.setShutdownToolPath("");
 		pathS.setSavePath(ControlMain.jtjgDirectory);
 		pathS.setWorkDirectory(ControlMain.jtjgDirectory);
@@ -146,6 +148,7 @@ public class SerSettingsHandler {
 		rec.setDirPattern("%DATE YY-MM-DD% %TIME% %CHANNEL% %NAME%");
 		rec.setFilePattern("");
 		rec.setSaveLocal(false);
+		rec.setAfterRecordOptions(new BOAfterRecordOptions());
 		
 		main.setPlasticTheme("ExperienceBlue");
 		main.setLocale("DE");

@@ -88,11 +88,8 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				saveDialogPosition();				
 			}
 		});
-		
-		
-		
+
 		this.getView().getJComboBoxStreamType().setSelectedItem(timer.getJgrabberStreamType());
-		this.getView().getCbStartPX().setSelected(timer.isStartPX());
 		this.getView().getCbRecordVtxt().setSelected(timer.isRecordVtxt());
 		this.getView().getJTextFieldUdrecOptions().setText(timer.getUdrecOptions().toString());
 		this.getView().getCbStoreEPG().setSelected(timer.isStoreEPG());
@@ -228,8 +225,8 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				this.getTimer().setRecordVtxt(((JCheckBox) e.getSource()).isSelected());
 				break;
 			}
-			if (action.equals("startPX")) {
-				this.getTimer().setStartPX(((JCheckBox) e.getSource()).isSelected());
+			if (action.equals("afterRecordOptions")) {
+				new ControlMuxxerView(this.getTimer().getAfterRecordOptions());
 				break;
 			}
 			if (action.equals("shutdownAfterRecord")) {

@@ -46,6 +46,8 @@ public class BOSettingsRecord {
 	public String dirPattern;
 	public String filePattern;
 
+	private BOAfterRecordOptions afterRecordOptions;
+	
 	public BOSettingsRecord(BOSettings settings) {
 		this.setSettings(settings);
 	}
@@ -392,4 +394,19 @@ public class BOSettingsRecord {
             this.vlcStreamType = vlcStreamType;
         }
     }
+	/**
+	 * @return Returns the afterRecordOptions.
+	 */
+	public BOAfterRecordOptions getAfterRecordOptions() {
+		if (afterRecordOptions==null) {
+			afterRecordOptions = new BOAfterRecordOptions();
+		}
+		return afterRecordOptions;
+	}
+	/**
+	 * @param afterRecordOptions The afterRecordOptions to set.
+	 */
+	public void setAfterRecordOptions(BOAfterRecordOptions afterRecordOption) {
+		this.afterRecordOptions = afterRecordOption;
+	}
 }

@@ -28,7 +28,6 @@ import control.ControlMain;
 public class BOLocalTimer {
 
 	private boolean local;
-	private boolean startPX;
 	private boolean recordAllPids;
 	private boolean ac3ReplaceStereo;
 	private boolean stereoReplaceAc3;
@@ -51,7 +50,8 @@ public class BOLocalTimer {
 	private Node timerNode;
 	private boolean locked;
 	private BOTimer mainTimer;
-
+	private BOAfterRecordOptions afterRecordOptions;
+	
 	private BOLocalTimer() {
 
 	}
@@ -71,7 +71,7 @@ public class BOLocalTimer {
 		timer.setRecordAllPids(ControlMain.getSettingsRecord().isRecordAllPids());
 		timer.setRecordVtxt(ControlMain.getSettingsRecord().isRecordVtxt());
 		timer.setShutdownAfterRecord(ControlMain.getSettingsRecord().isShutdownAfterRecord());
-		timer.setStartPX(ControlMain.getSettingsRecord().isStartPX());
+		timer.setAfterRecordOptions(ControlMain.getSettingsRecord().getAfterRecordOptions());
 		timer.setStereoReplaceAc3(ControlMain.getSettingsRecord().isStereoReplaceAc3());
 		timer.setStopPlaybackAtRecord(ControlMain.getSettingsRecord().isStopPlaybackAtRecord());
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
@@ -97,7 +97,7 @@ public class BOLocalTimer {
 		timer.setRecordAllPids(ControlMain.getSettingsRecord().isRecordAllPids());
 		timer.setRecordVtxt(ControlMain.getSettingsRecord().isRecordVtxt());
 		timer.setShutdownAfterRecord(ControlMain.getSettingsRecord().isShutdownAfterRecord());
-		timer.setStartPX(ControlMain.getSettingsRecord().isStartPX());
+		timer.setAfterRecordOptions(ControlMain.getSettingsRecord().getAfterRecordOptions());
 		timer.setStereoReplaceAc3(ControlMain.getSettingsRecord().isStereoReplaceAc3());
 		timer.setStopPlaybackAtRecord(ControlMain.getSettingsRecord().isStopPlaybackAtRecord());
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
@@ -231,19 +231,6 @@ public class BOLocalTimer {
 	 */
 	public void setShutdownAfterRecord(boolean shutdownAfterRecord) {
 		this.shutdownAfterRecord = shutdownAfterRecord;
-	}
-	/**
-	 * @return Returns the startPX.
-	 */
-	public boolean isStartPX() {
-		return startPX;
-	}
-	/**
-	 * @param startPX
-	 *            The startPX to set.
-	 */
-	public void setStartPX(boolean startPX) {
-		this.startPX = startPX;
 	}
 	/**
 	 * @return Returns the stereoReplaceAc3.
@@ -451,4 +438,16 @@ public class BOLocalTimer {
     public void setVlcStreamType(String vlcStreamType) {
         this.vlcStreamType = vlcStreamType;
     }
+	/**
+	 * @return Returns the afterRecordOptions.
+	 */
+	public BOAfterRecordOptions getAfterRecordOptions() {
+		return afterRecordOptions;
+	}
+	/**
+	 * @param afterRecordOptions The afterRecordOptions to set.
+	 */
+	public void setAfterRecordOptions(BOAfterRecordOptions afterRecordOptions) {
+		this.afterRecordOptions = afterRecordOptions;
+	}
 }

@@ -30,7 +30,7 @@ public class BOSettingsPath {
 	public String shutdownToolPath;
 	public String workDirectory;
 	public String browserPath;
-	public String dvdAuthorPath = "";
+	public String mplexPath;
 
 	public BOSettingsPath(BOSettings settings) {
 		this.setSettings(settings);
@@ -168,17 +168,16 @@ public class BOSettingsPath {
     /**
      * @return Returns the workDirectory.
      */
-    public String getDVDAuthorPath() {
-        return dvdAuthorPath;
+    public String getMplexPath() {
+        return mplexPath;
     }
     /**
      * @param workDirectory The workDirectory to set.
      */
-    public void setDVDAuthorPath(String dvdAuthorPath) {
-    	if (this.dvdAuthorPath == null || !this.dvdAuthorPath.equals(dvdAuthorPath))
-    	{
+    public void setMplexPath(String mplexPath) {
+    	if (this.mplexPath == null || !this.mplexPath.equals(mplexPath)) {
     		setSettingsChanged(true);
-    		this.dvdAuthorPath = dvdAuthorPath;
+    		this.mplexPath = mplexPath;
     	}
     }
 }
