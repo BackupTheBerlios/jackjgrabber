@@ -157,7 +157,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
         			}              	
           	}
-          	
+          	if(getSettings().getMgLoadType()==0 && (!movieGuideFileNext.exists()) && (SerMovieGuide2Xml.checkNewMovieGuide())){       
+          		//infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"));
+              		try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}              	
+          	}
           	if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){                 		
           		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"))){
               		try{
@@ -166,7 +173,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
         			}
               	}
-          	}          	
+          	}     
+          	if(getSettings().getMgLoadType()==1 && (!movieGuideFileNext.exists()) && (SerMovieGuide2Xml.checkNewMovieGuide())){                 		
+          		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info2"))){
+              		try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}
+              	}
+          	}  
           
           	 if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
               	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
