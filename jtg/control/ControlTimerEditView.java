@@ -229,7 +229,6 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	        }
 	        SerTimerHandler.saveTimer(this.getTimer().getMainTimer());
 	        this.getControlTimer().writeTimer(this.getTimer().getMainTimer());
-	        this.getControlTimer().reReadTimerList();
         } catch (IOException e) {
             SerAlertDialog.alertConnectionLost("ControlTimerEditView", this.getView());
         }
