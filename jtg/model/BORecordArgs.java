@@ -30,24 +30,13 @@ public class BORecordArgs {
 	String epgInfo1;
 	String epgInfo2;
 	String epgId;
-	String vPid;
 	String mode;
-	ArrayList aPids;
-	String VideotextPid;
 	String command;
+	BOPids pids;
 	boolean quickRecord=true;
 	/**
 	 * @return Returns the aPids.
 	 */
-	public ArrayList getAPids() {
-		return aPids;
-	}
-	/**
-	 * @param pids The aPids to set.
-	 */
-	public void setAPids(ArrayList pids) {
-		aPids = pids;
-	}
 	/**
 	 * @return Returns the channelId.
 	 */
@@ -133,30 +122,6 @@ public class BORecordArgs {
 		this.senderName = senderName;
 	}
 	/**
-	 * @return Returns the videotextPid.
-	 */
-	public String getVideotextPid() {
-		return VideotextPid;
-	}
-	/**
-	 * @param videotextPid The videotextPid to set.
-	 */
-	public void setVideotextPid(String videotextPid) {
-		VideotextPid = videotextPid;
-	}
-	/**
-	 * @return Returns the vPid.
-	 */
-	public String getVPid() {
-		return vPid;
-	}
-	/**
-	 * @param pid The vPid to set.
-	 */
-	public void setVPid(String pid) {
-		vPid = pid;
-	}
-	/**
 	 * @return Returns the command.
 	 */
 	public String getCommand() {
@@ -192,18 +157,30 @@ public class BORecordArgs {
     public void setQuickRecord(boolean quickRecord) {
         this.quickRecord = quickRecord;
     }
-    /*
+	/**
+	 * @return Returns the pids.
+	 */
+	public BOPids getPids() {
+		return pids;
+	}
+	/**
+	 * @param pids The pids to set.
+	 */
+	public void setPids(BOPids pids) {
+		this.pids = pids;
+	}
+	/*
      * Checken ob ein AC3-Stream den Streostrem ersetzen muss
      */
     public void checkSettings() {
         if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
-            for (int i=this.getAPids().size()-1; 0<=i; i--) {
-                String[] aPid = (String[])this.getAPids().get(i);
+            for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
+                String[] aPid = (String[])this.getPids().getAPids().get(i);
                 String desc = aPid[1];
                 if (desc.indexOf("AC3")>-1) {
                     ArrayList newList = new ArrayList();
                     newList.add(aPid);
-                    this.setAPids(newList);
+                    this.getPids().setAPids(newList);
                     break;
                 }
             }    
