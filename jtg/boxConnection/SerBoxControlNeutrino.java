@@ -76,18 +76,13 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public BOSender getRunningSender() throws IOException {
+	    ArrayList senderList = getAllSender();
 	    String runningChanId = getChanIdOfRunningSender();
-	    ArrayList bouquetList = getBouquetList();
-	    for (int i = 0; i < bouquetList.size(); i++) { //Schleife ueber die Bouquets
-			BOBouquet bouquet = (BOBouquet) bouquetList.get(i);
-			bouquet.readSender();
-			int senderSize = bouquet.getSender().size();
-			for (int i2 = 0; i2 < senderSize; i2++) { //Schleife ueber die
-				// Sender im Bouquet
-				BOSender sender = (BOSender) bouquet.getSender().get(i2);
-				if (sender.getChanId().equals(runningChanId)) {
+
+	    for (int i = 0; i < senderList.size(); i++) { 
+	        BOSender sender = (BOSender) senderList.get(i);
+			if (sender.getChanId().equals(runningChanId)) {
 				    return sender;
-				}
 			}
 		}
 	    return null;
