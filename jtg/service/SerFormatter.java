@@ -15,36 +15,15 @@ import javax.swing.ImageIcon;
  */
 public class SerFormatter {
 
+	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
+	private static final String DATE_SHORT_TIME = "dd.MM./HH:mm";
+	private static final String TIME = "HH:mm";
+
 	/** entferne alle unerlaubten Zeichen
 	 * 
 	 * @param input
 	 * @return
 	 */
-	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
-	private static final String DATE_SHORT_TIME = "dd.MM./HH:mm";
-	private static final String TIME = "HH:mm";
-	
-	public static String getCorrectPath (String path) {
-		// This Function adds " at the start and end of a path if needed to support paths with blanks.
-		if (path.substring(0,1).equals("\"")) {
-		} else {
-			path = "\"" + path;
-		}
-		if (path.substring(path.length()-1,path.length()).equals("\"")) {
-		} else {
-			path += "\"";
-		}
-		int i=1;
-		int j=0;
-		while ((j=path.indexOf("\"",j+1))>0) {
-			i++;
-		}
-		if (i%2!=0) {
-			path += "\"";
-		}
-		return path;
-	}
-	
 	public static String removeInvalidCharacters(String input) {
 
 		StringBuffer umlBuf = new StringBuffer();
