@@ -358,7 +358,13 @@ public class SerSettingsHandler {
 			settings.setMgSelectedChannels(list);
 		} else {
 			SerXMLHandling.setElementInElement(root, "mgselectedchannels", "");
-			settings.setMgSelectedChannels(null);
+			ArrayList list = new ArrayList();
+			String[] channels = new String[]{"13TH STREET", "CLASSICA", "DISNEY CHANNEL", "FOX KIDS", "HEIMATKANAL", "HIT24", "JUNIOR",
+					"MGM", "PREMIERE 1", "PREMIERE 2", "PREMIERE 3", "PREMIERE 4", "PREMIERE 5", "PREMIERE 6", "PREMIERE 7",
+					"PREMIERE KRIMI", "PREMIERE NOSTALGIE", "PREMIERE SERIE", "PREMIERE START", "SCI FI"};
+			list.addAll(Arrays.asList(channels));
+			
+			settings.setMgSelectedChannels(list);
 		}
 		
 		node = root.selectSingleNode("/settings/mgloadtype");
