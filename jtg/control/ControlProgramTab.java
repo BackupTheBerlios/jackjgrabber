@@ -1,5 +1,22 @@
 package control;
+/*
+ControlProgramTab.java by Geist Alexander 
 
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -24,6 +41,7 @@ import model.BOBouquet;
 import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BORecordArgs;
 import model.BOSender;
 import model.BOTimer;
 import presentation.GuiEpgTableModel;
@@ -31,10 +49,11 @@ import presentation.GuiMainView;
 import presentation.GuiSenderTableModel;
 import service.SerAlertDialog;
 import service.SerFormatter;
+import streaming.RecordControl;
+
 
 /**
- * @author Alexander Geist
- * Verwaltung des Programmtabs.
+ * Controlklasse des Programmtabs.
  */
 public class ControlProgramTab extends ControlTab implements ActionListener, MouseListener, ItemListener {
 	
@@ -70,14 +89,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
 		this.initialize();
 	}
-	
+	/*
+	 * Sender in den Bouquets suchen und selektieren
+	 */
 	public void selectRunningSender() {
 		try {
 			String runningChanId = ControlMain.getBoxAccess().getChanIdOfRunningSender();
-			for (int i=0; i<getBouquetList().size(); i++) {
+			for (int i=0; i<getBouquetList().size(); i++) { //Schleife ueber die Bouquets
 				BOBouquet bouquet = (BOBouquet)this.getBouquetList().get(i);
 				bouquet.readSender();
-				for (int i2=0; i2<bouquet.getSender().size(); i2++) {
+				for (int i2=0; i2<bouquet.getSender().size(); i2++) { //Schleife ueber die Sender im Bouquet
 					BOSender sender = (BOSender)bouquet.getSender().get(i2);
 					if (sender.getChanId().equals(runningChanId)) {
 						this.setSelectedBouquet(bouquet);
@@ -101,7 +122,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action == "Aufnahme") {
-			
+			this.actionRecord();
 		}
 		if (action == "Box Reboot"){
 			try{
@@ -121,6 +142,22 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				SerBoxTelnet.runSectiondReset();
 			}catch (Exception ex){}
 		}
+	}
+	
+	private void actionRecord() {
+		RecordControl recordControl = new RecordControl(this.buildRecordArgs());
+		recordControl.start();
+	}
+	
+	private BORecordArgs buildRecordArgs() {
+		BORecordArgs args = new BORecordArgs();
+		args.setBouquetNr(this.getSelectedBouquet().getBouquetNummer());
+		args.setChannelId(this.getSelectedSender().getChanId());
+		args.setSenderName(this.getSelectedSender().getName());
+		if (this.getSelectedEpg() != null) {
+		    args.setEpgTitle(" "+this.getSelectedEpg().getTitle());
+		}; 
+		return args;
 	}
 	/**
 	 * Klick-Events der Tables
@@ -188,7 +225,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		}
 	}
 	
-	//Setzen des aktuellen Bouquets, Selektion des 1. Senders
+	//Setzen des aktuellen Bouquets
 	public void reInitBouquetList(JComboBox  comboBox) {
 		if (this.getBouquetList().size()>0) {
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(comboBox.getSelectedIndex()));
