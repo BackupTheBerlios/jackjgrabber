@@ -32,8 +32,6 @@ import control.ControlMain;
 public class UdrecRecord  extends Record {
 
 	BORecordArgs recordArgs;
-	int TcpPort = 31340;
-	int udpPort = 31341;
 	int spktBufNum = 16;
 	RecordControl recordControl;
 	String boxIp;
@@ -62,7 +60,7 @@ public class UdrecRecord  extends Record {
 	    cmd.add("-now");
 	    cmd.add("-"+streamType);
 	    cmd.add("-o");
-	    cmd.add((new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()));
+	    cmd.add(new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath());
 	    cmd.addAll(recordArgs.getLocalTimer().getUdrecOptions().toStringList());
 	    
 	    if (recordArgs.getPids().getVPid() != null) {

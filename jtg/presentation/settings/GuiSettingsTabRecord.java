@@ -1,17 +1,22 @@
 package presentation.settings;
 /*
- * GuiSettingsTabRecord.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+GuiSettingsTabRecord.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 
 import java.awt.Dimension;
 import java.text.ParseException;
@@ -61,6 +66,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
     private JRadioButton jRadioButtonSaveBox;
 	private JRadioButton jRadioButtonUdrec;
 	private JRadioButton jRadioButtonJGrabber;
+    private JRadioButton jRadioButtonVlc;
 	private JRadioButton jRadioButtonRecordAllPids;
 	private JRadioButton jRadioButtonAC3ReplaceStereo;
 	private JRadioButton jRadioButtonStereoReplaceAc3;
@@ -209,16 +215,19 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 		if (panelEngineSettings == null) {
 			panelEngineSettings = new JPanel();
 			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
-					"pref, pref, 10, pref"); //rows
+					"pref, pref, pref, pref, pref, 10, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_engine"), cc.xywh(1, 1, 5, 1));
 			builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
-			builder.add(this.getJRadioButtonUdrec(), cc.xy(3, 2));
-			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 2));
-			builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 4, 1));
-			builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 4, 3));
+            builder.add(this.getJRadioButtonVlc(), cc.xy(1, 3));
+			builder.add(this.getJRadioButtonUdrec(), cc.xy(1, 4));            
+            builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 5, 1));
+            builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 5, 3));
+            
+            builder.addLabel(ControlMain.getProperty("label_recordType"), cc.xywh(1, 7, 3, 1));
+			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 7));
 		}
 		return panelEngineSettings;
 	}
@@ -533,6 +542,18 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 		}
 		return jRadioButtonJGrabber;
 	}
+    /**
+     * @return Returns the jRadioButtonVlc.
+     */
+    public JRadioButton getJRadioButtonVlc() {
+        if (jRadioButtonVlc == null) {
+            jRadioButtonVlc = new JRadioButton("VLC");
+            jRadioButtonVlc.addActionListener(control);
+            jRadioButtonVlc.setActionCommand("vlc");
+            buttonGroupStreamingEngine.add(jRadioButtonVlc);
+        }
+        return jRadioButtonVlc;
+    }
 	/**
 	 * @return Returns the jRadioButtonUdrec.
 	 */

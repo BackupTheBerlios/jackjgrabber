@@ -1,17 +1,22 @@
 package control;
 /*
- * ControlTimerEditView.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+GuiSettingsTabRecord.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
@@ -118,11 +123,13 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	private void initializeStreamingEngine() {
 		if (timer.getStreamingEngine() == 0) {
 			this.initializeJGrabberEngine();
-		} else {
+		} else if (timer.getStreamingEngine() == 1) {
 			this.initializeUdrecEngine();
-		}
+		} else {
+            this.initializeVlcEngine();
+        }
 	}
-
+    
 	private void initializeJGrabberEngine() {
 		this.getView().getJRadioButtonJGrabber().setSelected(true);
 		GuiStreamTypeComboModel streamTypeComboModel = new GuiStreamTypeComboModel(ControlSettingsTabRecord.streamTypesJGrabber);
@@ -138,6 +145,14 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		this.getView().getJComboBoxStreamType().setModel(streamTypeComboModel);
 		this.getView().getStreamTypeComboModel().setSelectedItem(streamType);
 	}
+    
+    private void initializeVlcEngine() {
+        this.getView().getJRadioButtonVlc().setSelected(true);
+        GuiStreamTypeComboModel streamTypeComboModel = new GuiStreamTypeComboModel(ControlSettingsTabRecord.streamTypesVlc);
+        String streamType = timer.getVlcStreamType();
+        this.getView().getJComboBoxStreamType().setModel(streamTypeComboModel);
+        this.getView().getStreamTypeComboModel().setSelectedItem(streamType);
+    }
 
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
@@ -166,6 +181,11 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				this.initializeUdrecEngine();
 				break;
 			}
+            if (action.equals("vlc")) {
+                this.getTimer().setStreamingEngine(2);
+                this.initializeVlcEngine();
+                break;
+            }
 			if (action.equals("storeEPG")) {
 				this.getTimer().setStoreEPG(((JCheckBox) e.getSource()).isSelected());
 				break;

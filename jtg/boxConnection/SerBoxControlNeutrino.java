@@ -167,13 +167,15 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public boolean isTvMode() throws IOException{
-		BufferedReader input = getConnection("/control/getmode");
-		
-		String line;
-		while((line=input.readLine())!=null) {
-			return line.equalsIgnoreCase("tv");
-		}
-		return true;
+        if (isTvMode==null) {
+            BufferedReader input = getConnection("/control/getmode");
+            
+            String line;
+            while((line=input.readLine())!=null) {
+                isTvMode=new Boolean(line.equalsIgnoreCase("tv"));
+            }
+        }
+		return isTvMode.booleanValue();
 	}
 	
 	public ArrayList getSender(BOBouquet bouquet) throws IOException {
@@ -241,6 +243,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return line;
 	} 
 	public String setRadioTvMode(String mode) throws IOException {
+        isTvMode=null;
 		BufferedReader input = getConnection("/control/setmode?"+mode);
 		
 		String line;

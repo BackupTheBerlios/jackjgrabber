@@ -1,17 +1,22 @@
 package control;
 /*
- * ControlSettingsTabRecord.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+ControlSettingsTabRecord.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +55,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	GuiTabSettings settingsTab;
 	public static final String[] streamTypesJGrabber = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport"};
 	public static final String[] streamTypesUdrec = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport", "ES MPEG-Elementary"};
+    public static final String[] streamTypesVlc = {"PS MPEG-Program"};
 	private GuiTagFrame tagFrame;
 
 	public ControlSettingsTabRecord(GuiTabSettings tabSettings) {
@@ -99,9 +105,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	private void initializeStreamingEngine() {
 		if (this.getSettings().getStreamingEngine() == 0) {
 			this.initializeJGrabberEngine();
-		} else {
+		} else  if ((this.getSettings().getStreamingEngine() == 1)){
 			this.initializeUdrecEngine();
-		}
+		} else {
+		    this.initializeVlcEngine();
+        }
 	}
 
 	private void initializeJGrabberEngine() {
@@ -119,6 +127,14 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.getTab().getJComboBoxStreamType().setModel(streamTypeComboModel);
 		this.getTab().getStreamTypeComboModel().setSelectedItem(streamType);
 	}
+    
+    private void initializeVlcEngine() {
+        this.getTab().getJRadioButtonVlc().setSelected(true);
+        GuiStreamTypeComboModel streamTypeComboModel = new GuiStreamTypeComboModel(streamTypesVlc);
+        String streamType = this.getSettings().getVlcStreamType();
+        this.getTab().getJComboBoxStreamType().setModel(streamTypeComboModel);
+        this.getTab().getStreamTypeComboModel().setSelectedItem(streamType);
+    }
 
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
@@ -141,6 +157,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				this.initializeUdrecEngine();
 				break;
 			}
+            if (action.equals("vlc")) {
+                this.getSettings().setStreamingEngine(2);
+                this.initializeVlcEngine();
+                break;
+            }
 			if (action.equals("storeEPG")) {
 				this.getSettings().setStoreEPG(((JCheckBox) e.getSource()).isSelected());
 				break;

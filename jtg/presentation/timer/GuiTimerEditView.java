@@ -70,6 +70,7 @@ public class GuiTimerEditView extends JFrame{
 	private JFormattedTextField tfRecordTimerStopTime;
 	
 	private JRadioButton jRadioButtonUdrec;
+    private JRadioButton jRadioButtonVlc;
 	private JRadioButton jRadioButtonJGrabber;
 	private JRadioButton jRadioButtonRecordAllPids;
 	private JRadioButton jRadioButtonAC3ReplaceStereo;
@@ -155,21 +156,23 @@ public class GuiTimerEditView extends JFrame{
 	}
 
 	private JPanel getPanelEngineSettings() {
-		if (panelEngineSettings == null) {
-			panelEngineSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
-			"pref, pref, 10, pref, 20, pref"); //rows
-			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
-			CellConstraints cc = new CellConstraints();
+        if (panelEngineSettings == null) {
+            panelEngineSettings = new JPanel();
+            FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
+                    "pref, pref, pref, pref, pref, 10, pref"); //rows
+            PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
+            CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_engine"), cc.xywh(1, 1, 5, 1));
-			builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
-			builder.add(this.getJRadioButtonUdrec(), cc.xy(3, 2));
-			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 2));
-			builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 4, 1));
-			builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 4, 3));
-			builder.add(this.getCbShutdownAfterRecord(), cc.xyw(1, 6, 5));
-		}
+            builder.addSeparator(ControlMain.getProperty("label_engine"), cc.xywh(1, 1, 5, 1));
+            builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
+            builder.add(this.getJRadioButtonVlc(), cc.xy(1, 3));
+            builder.add(this.getJRadioButtonUdrec(), cc.xy(1, 4));            
+            builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 5, 1));
+            builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 5, 3));
+            
+            builder.addLabel(ControlMain.getProperty("label_recordType"), cc.xywh(1, 7, 3, 1));
+            builder.add(this.getJComboBoxStreamType(), cc.xy(5, 7));
+        }
 		return panelEngineSettings;
 	}
 
@@ -522,7 +525,18 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return jRadioButtonUdrec;
 	}
-	
+	/**
+     * @return Returns the jRadioButtonVlc.
+     */
+    public JRadioButton getJRadioButtonVlc() {
+        if (jRadioButtonVlc == null) {
+            jRadioButtonVlc = new JRadioButton("VLC");
+            jRadioButtonVlc.addActionListener(control);
+            jRadioButtonVlc.setActionCommand("vlc");
+            buttonGroupStreamingEngine.add(jRadioButtonVlc);
+        }
+        return jRadioButtonVlc;
+    }
 	/**
 	 * @return Returns the jButtonRecordPathFileChooser.
 	 */

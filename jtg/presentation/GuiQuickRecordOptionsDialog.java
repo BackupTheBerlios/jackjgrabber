@@ -82,7 +82,8 @@ public class GuiQuickRecordOptionsDialog {
 		Integer value = (Integer)minsSpinner.getValue();
 		long millis = new Date().getTime();
 		Date stopTime = new Date(millis + value.intValue()*60000);
-		
+		//PMT 
+        newPidList.setPmtPid(this.getPids().getPmtPid());
 		return new BOQuickRecordOptions(newPidList, stopTime);
     }
     

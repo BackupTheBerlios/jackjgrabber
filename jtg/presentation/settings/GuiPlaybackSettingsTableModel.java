@@ -40,9 +40,6 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	}	
 
 	public int getRowCount() {
-		if (ControlMain.getSettingsPlayback().getPlaybackOptions().size() == 0) {
-			return 0;
-		}
 		return ControlMain.getSettingsPlayback().getPlaybackOptions().size();
 	}
 

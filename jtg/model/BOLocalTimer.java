@@ -1,17 +1,22 @@
 package model;
 /*
- * BOLocalTimer.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+BOLocalTimer.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
@@ -33,7 +38,8 @@ public class BOLocalTimer {
 	private String savePath;
 	private String jgrabberStreamType; //PES, TS, ES
 	private String udrecStreamType; //PES, TS
-	private int streamingEngine; //0=JGrabber, 1=udrec
+    public String vlcStreamType; //PS
+	private int streamingEngine; //0=JGrabber, 1=udrec , 2=vlc
 	private boolean storeEPG;
 	private boolean storeLogAfterRecord;
 	private boolean recordVtxt;
@@ -423,9 +429,6 @@ public class BOLocalTimer {
 	public void setLocal(boolean local) {
 		this.local = local;
 	}
-
-	
-	
 	
 	public boolean isLocked() {
 		return locked;
@@ -433,4 +436,19 @@ public class BOLocalTimer {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
+    /**
+     * @return Returns the vlcStreamType.
+     */
+    public String getVlcStreamType() {
+        if (vlcStreamType==null) {
+            vlcStreamType="PS MPEG-Program";
+        }
+        return vlcStreamType;
+    }
+    /**
+     * @param vlcStreamType The vlcStreamType to set.
+     */
+    public void setVlcStreamType(String vlcStreamType) {
+        this.vlcStreamType = vlcStreamType;
+    }
 }

@@ -1,17 +1,22 @@
 package model;
 /*
- * BOSettingsRecords.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+BOSettingsRecord.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 public class BOSettingsRecord {
 
 	private BOSettings settings;
@@ -28,7 +33,8 @@ public class BOSettingsRecord {
 
 	public String jgrabberStreamType; //PES, TS, ES
 	public String udrecStreamType; //PES, TS
-	public int streamingEngine; //0=JGrabber, 1=udrec
+    public String vlcStreamType; //PS
+	public int streamingEngine; //0=JGrabber, 1=udrec, 2=vlc
 	public String recordTimeBefore;
 	public String recordTimeAfter;
 
@@ -116,9 +122,11 @@ public class BOSettingsRecord {
 	public void setStreamType(String streamType) {
 		if (this.getStreamingEngine() == 0) {
 			this.setJgrabberStreamType(streamType);
-		} else {
+		} else if (this.getStreamingEngine() == 1){
 			this.setUdrecStreamType(streamType);
-		}
+		} else {
+            this.setVlcStreamType(streamType);
+        }
 	}
 	/**
 	 * @return Returns the startPX.
@@ -365,5 +373,23 @@ public class BOSettingsRecord {
      */
     public void setSaveLocal(boolean saveLocal) {
         this.saveLocal = saveLocal;
+    }
+    /**
+     * @return Returns the vlcStreamType.
+     */
+    public String getVlcStreamType() {
+        if (vlcStreamType==null) {
+            vlcStreamType="PS MPEG-Program";
+        }
+        return vlcStreamType;
+    }
+    /**
+     * @param vlcStreamType The vlcStreamType to set.
+     */
+    public void setVlcStreamType(String vlcStreamType) {
+        if (this.vlcStreamType == null || !this.vlcStreamType.equals(vlcStreamType)) {
+            setSettingsChanged(true);
+            this.vlcStreamType = vlcStreamType;
+        }
     }
 }

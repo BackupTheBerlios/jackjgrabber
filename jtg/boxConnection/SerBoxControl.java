@@ -37,10 +37,12 @@ import control.ControlMain;
 import control.ControlTimerTab;
 
 public abstract class SerBoxControl {
-        
+    
+    protected Boolean isTvMode;
     public boolean newTimerAdded=true;
     public BOTimerList timerList;
     private BOTimer nextLocalRecordTimer;
+    
     
     public BOTimer detectNextLocalRecordTimer(boolean newRead) {
         if (timerList != null && (newRead || nextLocalRecordTimer==null)) {

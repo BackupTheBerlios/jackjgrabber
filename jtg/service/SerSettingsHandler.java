@@ -130,6 +130,7 @@ public class SerSettingsHandler {
 		rec.setStreamingServerPort("4000");
 		rec.setStreamType("PES MPEG-Packetized Elementary");
 		rec.setUdrecStreamType("PES MPEG-Packetized Elementary");
+        rec.setVlcStreamType("PS MPEG-Program");
 		rec.setStartPX(true);
 		rec.setShutdownAfterRecord(false);
 		rec.setStreamingEngine(0);

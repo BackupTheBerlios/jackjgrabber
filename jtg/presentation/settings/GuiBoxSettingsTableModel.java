@@ -41,9 +41,6 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	}	
 
 	public int getRowCount() {
-		if (ControlMain.getSettingsMain().getBoxList().size() == 0) {
-			return 0;
-		}
 		return ControlMain.getSettingsMain().getBoxList().size();
 	}
 

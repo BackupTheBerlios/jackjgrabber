@@ -124,6 +124,7 @@ public class SerTimerHandler {
 		localTimer.addElement("udrecOptions").addText(timer.getUdrecOptions().toString());
 		localTimer.addElement("savePath").addText(timer.getSavePath());
 		localTimer.addElement("jgrabberStreamType").addText(timer.getJgrabberStreamType());
+        localTimer.addElement("vlcStreamType").addText(timer.getVlcStreamType());
 		localTimer.addElement("udrecStreamType").addText(timer.getUdrecStreamType());
 		localTimer.addElement("streamingEngine").addText(Integer.toString(timer.getStreamingEngine()));
 		localTimer.addElement("storeLogAfterRecord").addText(Boolean.toString(timer.isStoreLogAfterRecord()));
@@ -166,6 +167,7 @@ public class SerTimerHandler {
         timerNode.selectSingleNode("dirPattern").setText(timer.getDirPattern());
         timerNode.selectSingleNode("filePattern").setText(timer.getFilePattern());
         timerNode.selectSingleNode("jgrabberStreamType").setText(timer.getJgrabberStreamType());
+        timerNode.selectSingleNode("vlcStreamType").setText(timer.getVlcStreamType());
         timerNode.selectSingleNode("recordAllPids").setText(Boolean.toString(timer.isRecordAllPids()));
         timerNode.selectSingleNode("recordVtxt").setText(Boolean.toString(timer.isRecordVtxt()));
         timerNode.selectSingleNode("savePath").setText(timer.getSavePath());
@@ -263,6 +265,7 @@ public class SerTimerHandler {
         localTimer.setDirPattern(timerNode.selectSingleNode("dirPattern").getText());
         localTimer.setFilePattern(timerNode.selectSingleNode("filePattern").getText());
         localTimer.setJgrabberStreamType(timerNode.selectSingleNode("jgrabberStreamType").getText());
+        localTimer.setVlcStreamType(timerNode.selectSingleNode("vlcStreamType").getText());
         localTimer.setRecordAllPids(timerNode.selectSingleNode("recordAllPids").getText().equals("true"));
         localTimer.setRecordVtxt(timerNode.selectSingleNode("recordVtxt").getText().equals("true"));
         localTimer.setSavePath(timerNode.selectSingleNode("savePath").getText());
