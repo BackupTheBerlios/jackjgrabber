@@ -57,9 +57,53 @@ public class SerBoxTelnet  {
 		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_sectiond"));
 		createTelnetSession("killall sectionsd && sectionsd");						            
 	}
+	/*
 	public static void runReboot() throws IOException, InterruptedException{	
 		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_reboot"));
-		createTelnetSession("halt"); //FIXME reboot einfügen
+		createTelnetSession("reboot"); //FIXME reboot einfügen
 		//createTelnetSession("reboot");
+	}
+	*/
+	public static void runReboot() throws IOException, InterruptedException{	
+		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_reboot"));		
+		telnet.connect(ControlMain.getActiveBox().getDboxIp());
+		InputStream istream = telnet.getInputStream();
+	    OutputStream ostream = telnet.getOutputStream();
+	    Reader reader = new InputStreamReader( istream );
+	    Writer writer = new OutputStreamWriter( ostream );
+	    writer.write( ControlMain.getActiveBox().getLogin() + "\n" );
+        writer.flush();
+        Thread.sleep(1000);	        
+        writer.write( ControlMain.getActiveBox().getPassword() + "\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall sectionsd"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall camd2"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall timerd"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall timerd"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall zapit"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall controld"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("killall nhttpd"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("sleep 3"+"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        writer.write("busybox -reboot" +"\n" );
+        writer.flush();
+        Thread.sleep(1000);	 
+        closeTelnetSession();      
 	}
 }
