@@ -1,4 +1,5 @@
 package control;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -62,11 +63,14 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	public void run() {
 	    this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
 			try {
+			    this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				this.setTimerList(ControlMain.getBoxAccess().readTimer());
 				this.refreshTables();
 				//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
 				this.setSenderList(ControlMain.getBoxAccess().getAllSender());
+				this.getTab().setCursor(Cursor.getDefaultCursor());
 			} catch (IOException e) {
+			    this.getTab().setCursor(Cursor.getDefaultCursor());
 				SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
 			}
 	}
@@ -225,7 +229,9 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		}
 	}
 	private void rereadTimerList() throws IOException {
+	    this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		this.setTimerList(ControlMain.getBoxAccess().readTimer());
+		this.getTab().setCursor(Cursor.getDefaultCursor());
 		this.refreshTables();
 	}
 	private void actionSend() {
