@@ -173,6 +173,7 @@ public class SerMovieGuide2Xml {
                             out = createElement(number, input);
                             setElementInElement(movie,"bild",out[0]);
                             setElementInElement(movie,"ton", out[1]);
+                            break;
                         case 5:
                             setElementInElement(movie,"darsteller", createElement(number, input)[0]);
                             break;
