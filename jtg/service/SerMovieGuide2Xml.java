@@ -197,14 +197,27 @@ public class SerMovieGuide2Xml extends Thread{
         
     }
     public static boolean checkNewMovieGuide(){    
-    boolean value = false;
+    	BOSettingsProxy proxySettings = ControlMain.getSettingsProxy();
+    	boolean value = false;
     try{
+    	if (proxySettings.isUse()) {
+            System.getProperties().put("proxyHost", proxySettings.getHost());
+            System.getProperties().put("proxyPort", proxySettings.getPort());
+        }
 	    URLConnection con;   
 	    URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");        
 		con =url.openConnection();
+		if (proxySettings.isUse()) {
+            con.setRequestProperty("Proxy-Authorization",
+                                  "Basic " + proxySettings.getUserPass());
+        }
 		if(con.getContentLength()>0){
 			value = true;
 		}
+		if (proxySettings.isUse()) {
+            System.getProperties().remove("proxyHost");
+            System.getProperties().remove("proxyPort");
+        }
     }catch (IOException ioex){	
          Logger.getLogger("SerMovieGuide2Xml").error(ioex.getMessage());	
     }
