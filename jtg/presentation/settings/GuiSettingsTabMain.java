@@ -34,7 +34,6 @@ import javax.swing.text.MaskFormatter;
 
 import presentation.GuiTab;
 import presentation.program.GuiBoxSettingsTableCellRenderer;
-import presentation.program.GuiBoxSettingsTableModel;
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
