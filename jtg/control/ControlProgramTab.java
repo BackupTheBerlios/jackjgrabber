@@ -391,6 +391,10 @@ public class ControlProgramTab extends ControlTab
 						if (neededEpg != null) {
 							return neededEpg;
 						}
+//						Wenn keines gefunden wurde, gib den letzten Eintrag zurück
+						if (i + 1 == epgList.size()) {
+							return (BOEpg) epgList.get(epgList.size() - 1);
+						}
 					}   
 				}
 			}
