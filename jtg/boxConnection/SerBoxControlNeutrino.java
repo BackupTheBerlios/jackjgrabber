@@ -343,10 +343,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             if (temp.length()>5) {
                 botimer.announceTime=temp;
             } else {
-                botimer.repeatCount=temp; 
+                botimer.repeatCount=temp;
+                botimer.announceTime=st.nextToken();
             }
-
-		    valueStart=st.nextToken();
+            valueStart=st.nextToken();
 		    valueStop=st.nextToken();
 		    if (!valueStop.equals("0")) {
 		    	while (st.hasMoreTokens()) {
@@ -356,7 +356,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    	botimer.senderName=valueSenderName.trim();
 		    }
 
-		    
 		    botimer.unformattedStartTime=SerFormatter.formatUnixDate(valueStart);  
 			botimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop); 
 		    
