@@ -86,7 +86,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
 			      "f:330:grow, 110:grow, 160:grow, 4dlu, pref",  							// columns 
-			      "pref, f:440:grow, pref, 8dlu, pref"); 			// rows
+			      "pref, f:440:grow, pref, 8dlu"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -96,7 +96,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 		builder.add(this.getJPanelDauerTimer(),	 				cc.xyw  (1, 3, 3));
 		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),				cc.xy    (5, 1));
 		builder.add(this.getJPanelButtonsProgramTimer(), 		cc.xywh(5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
-		builder.add(this.getJPanelButtonsGui(),					cc.xywh(5, 3, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
+		builder.add(this.getJPanelButtonsGui(),					cc.xywh(5, 2, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
 	public ControlTabTimer getControl() {
