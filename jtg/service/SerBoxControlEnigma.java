@@ -234,4 +234,16 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		epg.setEpgDetail(epgDetail);
 		return epgDetail;
 	}
+	public String sendMessage(String message) throws IOException {
+        throw new IOException();
+	}
+   
+	public String shutdownBox() throws IOException {
+        throw new IOException();
+	}
+   
+	public String standbyBox(String modus) throws IOException {
+        throw new IOException();
+	}
+
 }
