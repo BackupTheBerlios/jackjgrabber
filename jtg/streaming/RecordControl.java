@@ -42,7 +42,6 @@ public class RecordControl extends Thread {
 	BORecordArgs recordArgs;
 	String fileName;
 	File directory;
-	public Date stopTime;
 	private static final String EPGFILENAME = "epg.txt";
 
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
@@ -76,9 +75,6 @@ public class RecordControl extends Thread {
 		record.start();
 
 		if (recordArgs.isQuickRecord()) {
-			long millis = new Date().getTime();
-			stopTime = new Date(millis + 1500000);
-			controlProgramTab.setRecordStoptTime(stopTime);
 			waitForStop();
 		}
 	}
@@ -144,7 +140,7 @@ public class RecordControl extends Thread {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 			}
-			if (new Date().getTime() - stopTime.getTime() > 0) {
+			if (new Date().getTime() - controlProgramTab.getRecordStopTime().getTime() > 0) {
 				running = false;
 			}
 		}
@@ -190,13 +186,12 @@ public class RecordControl extends Thread {
 				fileName = date + "_" + args.getSenderName();
 			}
 		}
-		return SerFormatter.removeInvalidCharacters(fileName.replace(' ', '_'));
+		return SerFormatter.removeInvalidCharacters(fileName);
 	}
 
 	public File getDirectory() {
 		if (directory == null) {
-			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName().replace(' ',
-					'_')));
+			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName()));
 			directory.mkdir();
 		}
 		return directory;

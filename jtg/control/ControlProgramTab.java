@@ -30,9 +30,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -256,7 +258,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	private void actionRecord() {
 		try {
 			if (recordControl == null || !recordControl.isRunning) {
-				BORecordArgs args;
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
 					if (!ControlMain.getSettings().getRecordSettings().isRecordAllPids()) {
@@ -264,7 +265,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 					}
 				}
 				if (this.getPids()!=null && this.getPids().getPidCount() > 0) {
-					this.startRecord(this.buildRecordArgs());
+				    if (this.askStopTime()) {
+				        this.startRecord(this.buildRecordArgs());  
+				    }
 				}
 			} else {
 				this.stopRecord();
@@ -272,6 +275,27 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
+	}
+	
+	private boolean askStopTime() {
+	    SpinnerNumberModel model = new SpinnerNumberModel(60, 1, 60, 1);
+	    JSpinner minsSpinner = new JSpinner(model);	
+	    
+	    int ret = JOptionPane.showConfirmDialog(
+	            ControlMain.getControl().getView(),
+	            new Object[] {ControlMain.getProperty("msg_stopTime"), minsSpinner},
+               "",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+	    );
+	    if (ret == JOptionPane.OK_OPTION) {
+	        Integer value = (Integer)minsSpinner.getValue();
+			long millis = new Date().getTime();
+			Date stopTime = new Date(millis + value.intValue()*60000);
+			this.setRecordStopTime(stopTime);
+	        return true;
+	    }
+	    return false;
 	}
 
 	/*
@@ -496,9 +520,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	public void stateChanged(ChangeEvent event) {
 		JSpinner stopTimeSpinner = (JSpinner) event.getSource();
 		Date stopTime = (Date) stopTimeSpinner.getModel().getValue();
-		if (this.getRecordControl() != null) {
-			this.getRecordControl().stopTime = stopTime;
-		}
+		this.setRecordStopTime(stopTime);
 	}
 
 	/**
@@ -750,7 +772,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		}
 	}
 
-	public void setRecordStoptTime(Date time) {
+	public void setRecordStopTime(Date time) {
 		GuiTabProgramm tabProg = this.getMainView().getTabProgramm();
 		tabProg.getDateModelSpinnerStopTime().setValue(time);
 	}
