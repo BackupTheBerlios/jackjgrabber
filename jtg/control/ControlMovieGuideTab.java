@@ -103,7 +103,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			getTimerTableSelectToTimer();
 		}
 		if (action == "suchen") {					
-			setSelectedItemJComboBox(this.getMainView().getTabMovieGuide().getTfSuche().getText());					
+			setSelectedItemJComboBox(this.getMainView().getTabMovieGuide().getTfSuche().getText());	
 			reInitFilmTable(getSelectedItemJComboBoxSucheNach());						
 		}
 		if (action == "allDates") {
@@ -133,7 +133,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 		if (comboBox.getName().equals("jComboBoxSender")) {		
 			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-			reInitFilmTable(11);		
+			reInitFilmTable(12);		
 		}
 	}
 	
@@ -398,18 +398,23 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;
-    			case 11: //sender
+    			case 11:
+					if(bomovieguide.getIfStringInObject(search.toLowerCase())){
+						titelListAktuell.put(new Integer(a++),bomovieguide);
+					}
+					break;
+    			case 12: //sender
     				if(bomovieguide.getSender().contains(search)){
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
-    				break;    				
+    				break;     								
     		};    		
     		if(search.equals("all")){
     			titelListAktuell.put(new Integer(a++),bomovieguide);
-    		}
+    		}    		
     	}    
     }
-
+    
     public static void setTitelMap() {				    	    
     	titelList = new Hashtable();
     	controlMap = new Hashtable();
