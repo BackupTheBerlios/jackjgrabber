@@ -583,7 +583,10 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		}
 		if (count == 1) {
 			final Object obj = ((BaseTreeNode) tree.getSelectionPath().getLastPathComponent()).getUserObject();
+			
 			if (obj instanceof BOFileWrapper) {
+				final BOFileWrapper file = (BOFileWrapper) obj;
+				
 				m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_rename")) {
 					public void actionPerformed(ActionEvent e) {
 						renameSelected();
@@ -597,6 +600,28 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 					 */
 
 				}
+				
+				String name = file.getName();
+				if (SerHelper.isVideo(name) || SerHelper.isAudio(name))
+				{
+					m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_playback")) {
+						public void actionPerformed(ActionEvent e) {
+							openFile(file);
+						}
+					}));
+				}
+				else
+				{
+					if (file != null && !file.isDirectory())
+					{
+						m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("open")) {
+							public void actionPerformed(ActionEvent e) {
+								openFile(file);
+							}
+						}));
+					}
+				}
+				
 
 			}
 		}
