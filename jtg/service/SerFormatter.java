@@ -216,5 +216,16 @@ public class SerFormatter {
 		}
 		return value;
 	}
+	
+    public static GregorianCalendar getDateFromString (String date) {
+        SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+        try {
+            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(date)).getTime());
+        }catch(ParseException pex){
+        }        
+        return cal;
+    }
+
 
 }
