@@ -41,6 +41,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import control.ControlMain;
 import control.ControlMovieGuideTab;
 
 public class GuiTabMovieGuide extends JPanel {
@@ -280,10 +281,12 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 	public JButton getJButtonSelectedToTimer() {
 		if (jButtonToTimer == null) {
-			jButtonToTimer = new JButton();
+			jButtonToTimer = new JButton();			
+			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/attach.png"));
+			jButtonToTimer.setIcon(icon);	
 			jButtonToTimer.setActionCommand("select2Timer");
-			jButtonToTimer.setText("Selected to Timer");
-			jButtonToTimer.setToolTipText("ausgewählte Programme zum Timer hinzufügen.");
+			jButtonToTimer.setText(ControlMain.getProperty("button_toTimer"));
+			jButtonToTimer.setToolTipText(ControlMain.getProperty("buttontt_toTimer"));
 			jButtonToTimer.addActionListener(this.getControl());
 		}
 		return jButtonToTimer;
