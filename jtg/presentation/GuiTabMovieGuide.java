@@ -183,7 +183,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelSucheErw, layout);
 			CellConstraints cc = new CellConstraints();										
 			builder.add(this.getComboBoxSucheNach(), 	cc.xyw	(1, 1, 1));
-			builder.add(this.getCheckBoxAbAktuell(), 	cc.xyw	(3, 1, 1));
+			//builder.add(this.getCheckBoxAbAktuell(), 	cc.xyw	(3, 1, 1));
 			builder.addSeparator("Suche nach Genre", 	cc.xyw	(1, 2, 1));
 			builder.add(this.getComboBoxGenre(), 	 	cc.xyw	(1, 3, 1));
 			builder.addSeparator("Suche nach Sendern", 	cc.xyw	(3, 2, 1));
