@@ -1,12 +1,10 @@
-/*
- * Created on 17.09.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package control;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import presentation.GuiMainView;
+import service.SerAlertDialog;
 
 /**
  * @author Treito
@@ -17,13 +15,19 @@ import presentation.GuiMainView;
 public class ControlTimerTab extends ControlTab {
 	
 	GuiMainView mainView;
+	ArrayList timerList;
 	
 	public ControlTimerTab(GuiMainView view) {
 		this.setMainView(view);
 	}
 	
 	public void initialize() {
-		
+		try {
+			this.setTimerList(ControlMain.getBoxAccess().getTimer());
+			this.getMainView().getTabTimer().getTimerTableModel().fireTableDataChanged();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
+		}
 	}
 	/**
 	 * @return Returns the mainView.
@@ -38,4 +42,16 @@ public class ControlTimerTab extends ControlTab {
 		this.mainView = mainView;
 	}
 
+	/**
+	 * @return Returns the timerList.
+	 */
+	public ArrayList getTimerList() {
+		return timerList;
+	}
+	/**
+	 * @param timerList The timerList to set.
+	 */
+	public void setTimerList(ArrayList timerList) {
+		this.timerList = timerList;
+	}
 }
