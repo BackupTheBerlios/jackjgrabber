@@ -64,12 +64,13 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		//erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
 		//manuell erfolgen
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();	
-		try {
-			int index = ControlMain.getIndexOfActiveBox();
-			this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
-		} catch (IllegalArgumentException e) {
+		
+		int index = ControlMain.getIndexOfActiveBox();
+		if (index ==-1) {
 			SerAlertDialog.alert("No Box-IP in the Settings found", this.getView());
-		}
+		} 
+		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
+		
 	}
 	
 	private void initialize() {
