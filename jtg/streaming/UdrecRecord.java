@@ -79,6 +79,10 @@ public class UdrecRecord  extends Record {
 		    cmd.add("-ap");
 		    cmd.add(aPid);
 		}
+		if (recordArgs.getPids().getVtxtPid() != null) {
+		    cmd.add("-ap");
+		    cmd.add(pids.getVtxtPid().getNumber());
+		} 
 		cmdReturn = new String[cmd.size()];
 		cmd.toArray(cmdReturn);
 		return cmdReturn;
