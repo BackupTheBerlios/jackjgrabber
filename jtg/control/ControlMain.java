@@ -85,12 +85,12 @@ public class ControlMain {
 	public static void main(String args[]) {
 	    startSplash();
 		startLogger();
+		readSettings();
+		setResourceBundle();
 		logWindow = new GuiLogWindow();
-		logSystemInfo();
-		readSettings();	
+		logSystemInfo();	
 		initLogWindow();
 		
-		setResourceBundle();
 		detectActiveBox();
 		detectImage();
 		initStreamingServer();

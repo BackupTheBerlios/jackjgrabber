@@ -17,6 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,11 +26,12 @@ import java.util.ArrayList;
 import model.BOSender;
 import model.BOTimer;
 import model.BOTimerList;
+import presentation.GuiLogWindow;
 import presentation.GuiMainView;
 import service.SerNewsHandler;
 
 
-public class ControlStartTab extends ControlTab {
+public class ControlStartTab extends ControlTab implements ActionListener {
 	
 	GuiMainView mainView;
 	
@@ -43,6 +46,16 @@ public class ControlStartTab extends ControlTab {
 	    new SerNewsHandler(this.getMainView().getTabStart().getPaneNews()).start();
         this.getMainView().getTabStart().getLabelNextRecord().setText(
                 ControlMain.getProperty("label_nextTimer")+getNextTimerInfo());
+	}
+	
+	/**
+	 * Klick-Events der Buttons
+	 */
+	public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
+		if (action == "switchLog") {
+		    GuiLogWindow.switchLogVisiblity();
+		}
 	}
 	
 	public String getVersion() {

@@ -21,6 +21,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.awt.Color;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -53,6 +54,7 @@ public class GuiTabStart extends JPanel {
 	private JTextPane linkWiki;
 	private JTextPane paneWarns;
 	private JTextPane paneVersion;
+	private JButton jButtonSwithLog;
 	private ImageIcon imageLogo;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	Color background = (Color)UIManager.get("Panel.background");
@@ -90,7 +92,7 @@ public class GuiTabStart extends JPanel {
 		builder.add(this.getPanelInfo(), 				cc.xyw(3, 2, 3));
 		builder.add(this.getPanelNews(), 				cc.xyw(1, 3, 5));
 		builder.add(this.getPanelWarn(),	 			cc.xyw(1, 4, 4));
-		builder.add(new JLabel(this.getImageLogo()),    cc.xywh(5, 4, 1, 1, CellConstraints.RIGHT, CellConstraints.BOTTOM ));
+		builder.add(new JLabel(this.getImageLogo()),   cc.xywh(5, 4, 1, 1, CellConstraints.CENTER, CellConstraints.BOTTOM ));
 	}
 	
     /**
@@ -120,17 +122,17 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelInfo() {
         if (panelInfo == null) {
             panelInfo = new JPanel();
-			FormLayout layout = new FormLayout("40, 10, pref", //columns
-					"pref, 5, pref, 5, pref, pref"); //rows
+			FormLayout layout = new FormLayout("40, 10, pref, 5, pref, f:default:grow", //columns
+					"pref, 5, pref, 5, pref, 10, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelInfo, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(new JLabel(iconManager.getIcon("info2.png")),			cc.xy(1, 1));
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_info")+"</font><HTML>",			cc.xy(3, 1));
-			builder.add(this.getLabelRunningSender(),				cc.xy(3, 3));
-			builder.add(this.getLabelNextRecord(),	cc.xy(3, 5));
-			//builder.addLabel("Sender: "+control.getRunningSender(),				cc.xy(3, 3));
-			//builder.addLabel(ControlMain.getProperty("label_nextTimer")+control.getNextTimerInfo(),	cc.xy(3, 5));
+			builder.add(this.getLabelRunningSender(),							cc.xyw(3, 3, 4));
+			builder.add(this.getLabelNextRecord(),								cc.xyw(3, 5, 4));
+			builder.addLabel(ControlMain.getProperty("label_logWindow"),		cc.xy(3, 7));
+			builder.add(this.getJButtonSwitchLog(),								cc.xy(5, 7));
 		}
         return panelInfo;
     }
@@ -260,4 +262,24 @@ public class GuiTabStart extends JPanel {
         }
         return labelRunningSender;
     }
+    
+    /**
+	 * This method initializes jButtonPlayback
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	public JButton getJButtonSwitchLog() {
+		if (jButtonSwithLog == null) {
+			jButtonSwithLog = new JButton();
+			if (ControlMain.getSettingsMain().isShowLogWindow()) {
+				jButtonSwithLog.setText(ControlMain.getProperty("button_off"));
+			} else {
+				jButtonSwithLog.setText(ControlMain.getProperty("button_on"));
+			}
+			jButtonSwithLog.setActionCommand("switchLog");
+			jButtonSwithLog.setToolTipText(ControlMain.getProperty("buttontt_log"));
+			jButtonSwithLog.addActionListener(this.getControl());
+		}
+		return jButtonSwithLog;
+	}
 }

@@ -1,17 +1,22 @@
 package presentation.program;
 /*
- * GuiTabProgramm.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+GuiTabProgramm.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -54,30 +59,22 @@ public class GuiTabProgramm extends GuiTab {
 
 	private JTabbedPane jControlTab = null;
 	private JPanel tabProgramm = null;
-	private JPanel jPanelProgramm = null;
 	private JPanel jPanelButtonsAktionen = null;
-	private JPanel jPanelButtonsProgrammInfo = null;
-	private JPanel jPanelProgrammInfo = null;
-	private JPanel jPanelAusgabe = null;
 	private JPanel jPanelChannel = null;
 	private JPanel jPanelEpg = null;
 	private JPanel jPanelEpgDetails = null;
-	private JPanel jPanelLog = null;
 	private JPanel jPanelRecordInfo = null;
-	private JPanel jPanelBoxActions = null;
 	private JPanel jPanelOutput = null;
+	private JPanel jPanelSouth = null;
 	private JComboBox jComboChooseDate = null;
 	private JTable jTableEPG = null;
 	private JScrollPane jScrollPaneEPG = null;
 	private JButton jButtonQuickRecord = null;
-	private JButton jButtonReboot = null;
+	private JButton jButtonBroadcastList = null;
 	private JButton jButtonPlayback = null;
 	private JButton jButtonToTimer = null;
 	private JButton jButtonStartServer = null;
 	private JButton jButtonRefresh = null;
-	private JButton jButtonShutdown = null;
-	private JButton jButtonClearLogArea = null;
-	private JButton jButtonSwithLog = null;
 	private JRadioButton jRadioButtonTVMode = null;
 	private JRadioButton jRadioButtonRadioMode = null;
 	private ButtonGroup tvRadioButtonGroup = new ButtonGroup();
@@ -116,14 +113,32 @@ public class GuiTabProgramm extends GuiTab {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
-		builder.add(this.getJPanelChannels(), cc.xy(1, 1));
-		builder.add(this.getJPanelEpg(), cc.xywh(3, 1, 3, 1));
-		builder.add(this.getJPanelButtonsAktionen(), cc.xywh(1, 3, 1, 1));
-		builder.add(this.getJPanelLog(), cc.xywh(1, 5, 1, 1));
-		builder.add(this.getJPanelRecordInfo(), cc.xywh(3, 3, 1, 1));
-		builder.add(this.getJPanelBoxActions(), cc.xywh(3, 5, 1, 1));
-		builder.add(this.getJPanelEpgDetails(), cc.xywh(5, 3, 1, 3));
+		builder.add(this.getJPanelChannels(), 	cc.xy(1, 1));
+		builder.add(this.getJPanelEpg(), 		cc.xywh(3, 1, 3, 1));
+		builder.add(this.getJPanelSouth(), 		cc.xywh(1, 3, 5, 1));
 	}
+	
+	/**
+	 * This method initializes jPanelEpgSouth
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanelSouth() {
+		if (jPanelSouth == null) {
+			jPanelSouth = new JPanel();
+			FormLayout layout = new FormLayout("f:pref, 10, f:pref, 10, f:340:grow", // columns
+			"f:pref, 5, pref"); // rows
+			PanelBuilder builder = new PanelBuilder(jPanelSouth, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.add(this.getJPanelButtonsAktionen(), 	cc.xywh(1, 1, 1, 1));
+			builder.add(this.getJPanelRecordInfo(), 		cc.xywh(3, 1, 1, 1));
+			builder.add(this.getJPanelEpgDetails(), 		cc.xywh(5, 1, 1, 3));
+		}
+		return jPanelSouth;
+	}
+	
+	
 
 	/**
 	 * This method initializes jPanelEpgDetails
@@ -133,14 +148,15 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelEpgDetails() {
 		if (jPanelEpgDetails == null) {
 			jPanelEpgDetails = new JPanel();
-			FormLayout layout = new FormLayout("f:d:grow, 20, pref", //columns
+			FormLayout layout = new FormLayout("f:d:grow, 20, pref, 5, pref", //columns
 					"pref, 5, f:d:grow"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelEpgDetails, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getJButtonSelectedToTimer(), cc.xy(3, 1));
+			builder.add(this.getJButtonBroadcastList(), cc.xy(3, 1));
+			builder.add(this.getJButtonSelectedToTimer(), cc.xy(5, 1));
 			builder.addSeparator(ControlMain.getProperty("label_epgDetails"), cc.xy(1, 1, CellConstraints.FILL, CellConstraints.TOP));
-			builder.add(this.getJScrollPaneEPGDetail(), cc.xyw(1, 3, 3));
+			builder.add(this.getJScrollPaneEPGDetail(), cc.xyw(1, 3, 5));
 		}
 		return jPanelEpgDetails;
 	}
@@ -172,7 +188,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelButtonsAktionen() {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
-			FormLayout layout = new FormLayout("30, 170", //columna
+			FormLayout layout = new FormLayout("30, 130", //columna
 					"pref, 5, pref, 5, pref, 5, pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
@@ -202,36 +218,6 @@ public class GuiTabProgramm extends GuiTab {
 			builder.add(this.getCbShutdownAfterRecord(), cc.xy(1, 9));
 		}
 		return jPanelRecordInfo;
-	}
-
-	private JPanel getJPanelBoxActions() {
-		if (jPanelBoxActions == null) {
-			jPanelBoxActions = new JPanel();
-			FormLayout layout = new FormLayout("f:pref, 5, f:pref", //columna
-					"pref, 5, pref"); //rows
-			PanelBuilder builder = new PanelBuilder(jPanelBoxActions, layout);
-			CellConstraints cc = new CellConstraints();
-
-			builder.addSeparator(ControlMain.getProperty("label_boxActions"), cc.xyw(1, 1, 3));
-			builder.add(this.getJButtonReboot(), cc.xy(1, 3));
-			builder.add(this.getJButtonShutdown(), cc.xy(3, 3));
-		}
-		return jPanelBoxActions;
-	}
-
-	private JPanel getJPanelLog() {
-		if (jPanelLog == null) {
-			jPanelLog = new JPanel();
-			FormLayout layout = new FormLayout("98, 4, 98", //columna
-					"pref, 5, pref"); //rows
-			PanelBuilder builder = new PanelBuilder(jPanelLog, layout);
-			CellConstraints cc = new CellConstraints();
-
-			builder.addSeparator(ControlMain.getProperty("label_logWindow") + " (Strg+L)", cc.xyw(1, 1, 3));
-			builder.add(this.getJButtonClearLogArea(), cc.xy(3, 3));
-			builder.add(this.getJButtonSwitchLog(), cc.xy(1, 3));
-		}
-		return jPanelLog;
 	}
 
 	private JPanel getJPanelChannels() {
@@ -351,7 +337,7 @@ public class GuiTabProgramm extends GuiTab {
 	}
 
 	/**
-	 * This method initializes jButtonReboot
+	 * This method initializes jButtonBroadcastList
 	 * 
 	 * @return javax.swing.JButton
 	 */
@@ -379,51 +365,23 @@ public class GuiTabProgramm extends GuiTab {
 		}
 		return jButtonRefresh;
 	}
+
 	/**
-	 * This method initializes jButtonShutdown
+	 * This method initializes jButtonBroadcastList
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getJButtonShutdown() {
-		if (jButtonShutdown == null) {
-			jButtonShutdown = new JButton();
-			jButtonShutdown.setText(ControlMain.getProperty("button_shutdown"));
-			jButtonShutdown.setActionCommand("shutdown");
-			jButtonShutdown.setToolTipText(ControlMain.getProperty("buttontt_shutdown"));
-			jButtonShutdown.addActionListener(this.getControl());
+	public JButton getJButtonBroadcastList() {
+		if (jButtonBroadcastList == null) {
+			jButtonBroadcastList = new JButton(iconManager.getIcon("notice.png"));
+			jButtonBroadcastList.setText(ControlMain.getProperty("button_broadcast"));
+			jButtonBroadcastList.setActionCommand("broadcastList");
+			jButtonBroadcastList.setToolTipText(ControlMain.getProperty("buttontt_broadcast"));
+			jButtonBroadcastList.addActionListener(this.getControl());
 		}
-		return jButtonShutdown;
+		return jButtonBroadcastList;
 	}
-	/**
-	 * This method initializes jButtonReboot
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	public JButton getJButtonReboot() {
-		if (jButtonReboot == null) {
-			jButtonReboot = new JButton();
-			jButtonReboot.setText(ControlMain.getProperty("button_reboot"));
-			jButtonReboot.setActionCommand("reboot");
-			jButtonReboot.setToolTipText(ControlMain.getProperty("buttontt_reboot"));
-			jButtonReboot.addActionListener(this.getControl());
-		}
-		return jButtonReboot;
-	}
-	/**
-	 * This method initializes jButtonClearLogArea
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	public JButton getJButtonClearLogArea() {
-		if (jButtonClearLogArea == null) {
-			jButtonClearLogArea = new JButton();
-			jButtonClearLogArea.setText(ControlMain.getProperty("button_clearLog"));
-			jButtonClearLogArea.setActionCommand("clearLog");
-			jButtonClearLogArea.setToolTipText(ControlMain.getProperty("buttontt_clearLog"));
-			jButtonClearLogArea.addActionListener(this.getControl());
-		}
-		return jButtonClearLogArea;
-	}
+
 	/**
 	 * This method initializes jButtonPlayback
 	 * 
@@ -438,26 +396,6 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonPlayback.addActionListener(this.getControl());
 		}
 		return jButtonPlayback;
-	}
-
-	/**
-	 * This method initializes jButtonPlayback
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	public JButton getJButtonSwitchLog() {
-		if (jButtonSwithLog == null) {
-			jButtonSwithLog = new JButton();
-			if (ControlMain.getSettingsMain().isShowLogWindow()) {
-				jButtonSwithLog.setText(ControlMain.getProperty("button_off"));
-			} else {
-				jButtonSwithLog.setText(ControlMain.getProperty("button_on"));
-			}
-			jButtonSwithLog.setActionCommand("switchLog");
-			jButtonSwithLog.setToolTipText(ControlMain.getProperty("buttontt_log"));
-			jButtonSwithLog.addActionListener(this.getControl());
-		}
-		return jButtonSwithLog;
 	}
 
 	/**
@@ -654,18 +592,14 @@ public class GuiTabProgramm extends GuiTab {
 	}
 	public void setDisconnectModus() {
 		this.getJButtonAufnahme().setEnabled(false);
-		this.getJButtonReboot().setEnabled(false);
 		this.getJButtonSelectedToTimer().setEnabled(false);
 		this.getJButtonPlayback().setEnabled(false);
-		this.getJButtonShutdown().setEnabled(false);
 	}
 
 	public void setConnectModus() {
 		this.getJButtonAufnahme().setEnabled(true);
-		this.getJButtonReboot().setEnabled(true);
 		this.getJButtonSelectedToTimer().setEnabled(true);
 		this.getJButtonPlayback().setEnabled(true);
-		this.getJButtonShutdown().setEnabled(true);
 	}
 
 	public void stopStreamingServerModus() {

@@ -51,7 +51,6 @@ import model.BOTimer;
 import org.apache.log4j.Logger;
 
 import presentation.GuiAudioPidOptionsDialog;
-import presentation.GuiLogWindow;
 import presentation.GuiMainView;
 import presentation.GuiQuickRecordOptionsDialog;
 import presentation.program.GuiEpgTableModel;
@@ -60,10 +59,10 @@ import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
+import service.SerNoticeListHandler;
 import service.SerTimerHandler;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
-import boxConnection.SerBoxTelnet;
 import boxConnection.SerStreamingServer;
 
 /**
@@ -173,14 +172,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.actionPlayback();
 				break;
 			}
-			if (action == "reboot") {
-				try {
-					SerBoxTelnet.runReboot();
-				} catch (Exception ex) {
-                    Logger.getLogger("ControlProgramTab").error(ex.getMessage());
-				}
-				break;
-			}
 			if (action == "toTimer") {
 				this.actionAddToTimer();
 				break;
@@ -201,33 +192,17 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.actionRefresh();
 				break;
 			}
-			if (action == "shutdown") {
-				this.actionShutdown();
-				break;
-			}
-			if (action == "clearLog") {
-			    this.actionClearLog();
-			    break;
-			}
-			if (action == "switchLog") {
-			    GuiLogWindow.switchLogVisiblity();
-			    break;
-				}
+            if (action == "broadcastList") {
+                this.actionOpenNoticeList();
+                break;
+            }
 			break;
 		}
 	}
-
-	private void actionClearLog() {
-	    ControlMain.logWindow.getLogArea().setText(null);
-	}
-
-	private void actionShutdown() {
-		try {
-			ControlMain.getBoxAccess().shutdownBox();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
-		}
-	}
+    
+    private void actionOpenNoticeList() {
+        new ControlNoticeBroadcastView(SerNoticeListHandler.getNoticeList());
+    }
 
 	private void actionRefresh() {
 		ControlMain.detectImage();
