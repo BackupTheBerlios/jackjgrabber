@@ -303,6 +303,10 @@ public class ControlMain {
 	public static void setActiveBox(BOBox activeBox) {
 		ControlMain.activeBox = activeBox;
 	}
+	
+	public static void shutdownPC() {
+	    SerExternalProcessHandler.startProcess("shutdown", getSettingsPath().getShutdownToolPath(), true);
+	}
 
 	public static void endProgram() {
 	    SerExternalProcessHandler.closeAll();
