@@ -55,6 +55,10 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JButton jButtonNewProgramtimer = null;
 	private JButton jButtonNewSystemtimer = null;
 	private JButton jButtonDeleteAll = null;
+	private JComboBox comboBoxSender = null;
+	private JComboBox comboBoxRepeatProgramTimer = null;
+	private JComboBox comboBoxEventType = null;
+	private JComboBox comboBoxRepeatSystemTimer = null;
 	private ImageIcon imageIconNeutrino = null;
 	private ControlNeutrinoTimerTab control;
 	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
@@ -113,10 +117,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	}
  
 	public JTable getJTableRecordTimer() {
-		if (jTableRecordTimer == null) {
-			JComboBox comboBoxSender = new JComboBox(new GuiNeutrinoTimerSenderComboModel(control));
-			JComboBox comboBoxRepeat = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
-			
+		if (jTableRecordTimer == null) {		
 			recordTimerTableModel = new GuiNeutrinoRecordTimerTableModel(control);	
 			
 			jTableRecordTimer = new JTable(recordTimerTableModel);
@@ -130,17 +131,14 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			
 			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);			
 			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
-			columnSender.setCellEditor(new DefaultCellEditor(comboBoxSender));
-			columnRepeat.setCellEditor(new DefaultCellEditor(comboBoxRepeat));
+			columnSender.setCellEditor(new DefaultCellEditor(this.getComboBoxSender()));
+			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatProgramTimer()));
 		}
 		return jTableRecordTimer;
 	}
 	
 	public JTable getJTableSystemTimer() {
-		if (jTableSystemTimer == null) {
-			JComboBox comboBoxEventType = new JComboBox(new GuiNeutrinoTimerEventTypeComboModel(control));
-			JComboBox comboBoxRepeat = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
-			
+		if (jTableSystemTimer == null) {		
 			systemTimerTableModel = new GuiNeutrinoSystemTimerTableModel(control);
 			jTableSystemTimer = new JTable(systemTimerTableModel);
 			jTableSystemTimer.setRowHeight(20);
@@ -151,8 +149,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			TableColumn columnEventType = jTableSystemTimer.getColumnModel().getColumn(0);
 			TableColumn columnRepeat = jTableSystemTimer.getColumnModel().getColumn(3);
 			
-			columnEventType.setCellEditor(new DefaultCellEditor(comboBoxEventType));
-			columnRepeat.setCellEditor(new DefaultCellEditor(comboBoxRepeat));
+			columnEventType.setCellEditor(new DefaultCellEditor(this.getComboBoxEventType()));
+			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatSystemTimer()));
 		}
 		return jTableSystemTimer;
 	}
@@ -486,6 +484,42 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public GuiNeutrinoSystemTimerTableModel getSystemTimerTableModel() {
 		return systemTimerTableModel;
+	}
+	/**
+	 * @return Returns the comboBoxEventType.
+	 */
+	public JComboBox getComboBoxEventType() {
+		if (comboBoxEventType == null) {
+			comboBoxEventType = new JComboBox(new GuiNeutrinoTimerEventTypeComboModel(control));
+		}
+		return comboBoxEventType;
+	}
+	/**
+	 * @return Returns the comboBoxRepeatProgramTimer.
+	 */
+	public JComboBox getComboBoxRepeatProgramTimer() {
+		if (comboBoxRepeatProgramTimer == null) {
+			comboBoxRepeatProgramTimer = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
+		}
+		return comboBoxRepeatProgramTimer;
+	}
+	/**
+	 * @return Returns the comboBoxRepeatSystemTimer.
+	 */
+	public JComboBox getComboBoxRepeatSystemTimer() {
+		if (comboBoxRepeatSystemTimer == null) {
+			comboBoxRepeatSystemTimer = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
+		}
+		return comboBoxRepeatSystemTimer;
+	}
+	/**
+	 * @return Returns the comboBoxSender.
+	 */
+	public JComboBox getComboBoxSender() {
+		if (comboBoxSender == null) {
+			comboBoxSender = new JComboBox(new GuiNeutrinoTimerSenderComboModel(control));
+		}
+		return comboBoxSender;
 	}
 }
 

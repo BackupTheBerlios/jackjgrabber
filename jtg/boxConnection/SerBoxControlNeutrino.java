@@ -187,10 +187,15 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird runtegefahren.");         
 		return sendCommand("shutdown");
 	}
-	
-	public ArrayList getTimer() throws IOException {
+	/**
+	 * Rückgabe eines Arrays mit 2 ArrayListen. An 1. Postion Programm-Timer
+	 * 2. Position ArrayList mit SystemTimer
+	 */
+	public ArrayList[] getTimer() throws IOException {
+		ArrayList[] timerList = new ArrayList[2];
+		timerList[0] = new ArrayList();
+		timerList[1] = new ArrayList();
 		
-		ArrayList timerList = new ArrayList();
 		BufferedReader inputNhttpd = getConnection("/control/timer");
 		
 		String line, valueStart, valueStop, valueAnno;
@@ -216,9 +221,14 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));  //startDatum
 		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
 		    
-            timerList.add(botimer); 
+		    if (botimer.getEventType().equals("RECORD")) {
+		    	timerList[0].add(botimer);
+		    } else {
+		    	timerList[1].add(botimer);
+		    	
+		    }
 		}
-		setTimerDesctiptionName(timerList);
+		setTimerDesctiptionName(timerList[0]);
 		return timerList;
 	}
 	

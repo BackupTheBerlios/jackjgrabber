@@ -40,7 +40,16 @@ public class BOTimer extends java.lang.Object{
     }
     
     public String getEventType(){
-        return this.eventType;
+    	switch(Integer.parseInt(eventType)) {
+			case 1: return "SHUTDOWN";
+			case 2: return "NEXTPROGRAM";
+			case 3: return "ZAPTO";
+			case 4: return "STANDBY";
+			case 5: return "RECORD";
+			case 6: return "REMIND";
+			case 7: return "SLEEPTIMER";										
+    	}				
+    	return eventType;
     }
     
     public void setEventType(String eventType){

@@ -23,13 +23,13 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 
 	public int getRowCount() {
 		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList().size();
+			return this.getControl().getTimerList()[1].size();
 		}
 		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList().get(rowIndex);
+		BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
 		if (columnIndex == 0) {
 			return timer.getEventType();
 		} if (columnIndex == 1) {
@@ -43,12 +43,12 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	
 	public void setValueAt(Object value, int row, int col) {
 		if (col == 0) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList().get(row);
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventType((String)value);
 			this.fireTableDataChanged();
 		}
 		if (col == 3) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList().get(row);
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventRepeat((String)value);
 			this.fireTableDataChanged();
 		}
@@ -78,8 +78,4 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
 	}
-	
-//	public Class getColumnClass(int c) {
-//        return getValueAt(0, c).getClass();
-//	}
 }

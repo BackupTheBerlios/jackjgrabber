@@ -17,10 +17,10 @@ import service.SerAlertDialog;
 /**
  * @author Alexander Geist
  */
-public class ControlNeutrinoTimerTab extends ControlTab implements ActionListener, ItemListener {
+public class ControlNeutrinoTimerTab extends ControlTab implements ActionListener {
 	
 	GuiMainView mainView;
-	ArrayList timerList;
+	ArrayList[] timerList;
 	ArrayList senderList;
 	GuiNeutrinoTimerPanel tab;
 	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "wochentage" };
@@ -38,19 +38,6 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-		}
-	}
-	
-	/**
-	 * Select-Events der Combobox
-	 */
-	public void itemStateChanged( ItemEvent e ) {
-		JComboBox comboBox = (JComboBox)e.getSource();
-		if (comboBox.getName().equals("sender")) {
-	
-		}
-		if (comboBox.getName().equals("bouquets")) {
-	
 		}
 	}
 	
@@ -77,13 +64,13 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	/**
 	 * @return Returns the timerList.
 	 */
-	public ArrayList getTimerList() {
+	public ArrayList[] getTimerList() {
 		return timerList;
 	}
 	/**
 	 * @param timerList The timerList to set.
 	 */
-	public void setTimerList(ArrayList timerList) {
+	public void setTimerList(ArrayList[] timerList) {
 		this.timerList = timerList;
 	}
 	/**

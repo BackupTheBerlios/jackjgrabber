@@ -101,21 +101,12 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action == "Aufnahme") {
-			try {
-				ArrayList list = ControlMain.getBoxAccess().getTimer();
-				for (int i=0; i<list.size(); i++) { 	
-					BOTimer timer = (BOTimer)list.get(i);
-					System.out.println(timer.getStartTime());
-				}
-			} catch (IOException e1) {
-				SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
-			}
+			
 		}
 		if (action == "Box Reboot"){
-		try{
-		//		this.getBoxAccess().shutdownBox();				
+			try{
 				SerBoxTelnet.runReboot();					
-		}catch (Exception ex){}
+			}catch (Exception ex){}
 		}
 		if (action == "add to timer"){
 			this.actionAddToTimer();

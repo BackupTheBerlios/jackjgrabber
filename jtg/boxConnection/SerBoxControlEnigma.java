@@ -277,8 +277,11 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		Logger.getLogger("SerBoxControlEnigma").info("Ihre Dbox wird in den StandbyModus gebracht.");
 		return sendCommand("standby");
 	}
-	public ArrayList getTimer() throws IOException {
-		ArrayList timerList = new ArrayList();
+	public ArrayList[] getTimer() throws IOException {
+		ArrayList[] timerList = new ArrayList[2];
+		timerList[0] = new ArrayList();
+		timerList[1] = new ArrayList();
+		
 		BufferedReader input=getConnection("/body?mode=controlTimerList");
 		boolean recurring = false;
 		boolean onetimer=false;
@@ -344,7 +347,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    			botimer.setStopTime(endTime); //ende
 	    			botimer.setEndDate(endDate);
 	    			botimer.setDescription(title);
-	    			timerList.add(botimer);
+	    			timerList[0].add(botimer);
 	    			startpos=endpos;
 				} 
 			}
