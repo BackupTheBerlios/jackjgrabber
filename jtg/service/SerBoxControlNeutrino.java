@@ -11,6 +11,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
+
+import org.apache.log4j.Logger;
+
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -21,7 +24,7 @@ import control.ControlMain;
  * @author AlexG
  */
 public class SerBoxControlNeutrino extends SerBoxControl{
-	
+			
 	public String getName() {
 		return "Neutrino";
 	}
@@ -153,16 +156,16 @@ public class SerBoxControlNeutrino extends SerBoxControl{
        return message;  
   }
   
-  public String sendMessage(String message) throws IOException {                                   
-      ControlMain.getMainLogger().info("Sende Message zur Box...");
+  public String sendMessage(String message) throws IOException {                                         
+      Logger.getLogger("SerBoxControlNeutrino").info("Sende Message zur Box...");
       return sendCommand("message?popup="+message); 
   } 
   public String standbyBox(String modus) throws IOException {
-      ControlMain.getMainLogger().info("Ihre Dbox wird in den StandbyModus gebracht.");
+  	  Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird in den StandbyModus gebracht.");
       return sendCommand("standby?"+modus);
   }
   public String shutdownBox() throws IOException {
-      ControlMain.getMainLogger().info("Ihre Dbox wird runtegefahren.");       
+  	  Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird runtegefahren.");         
       return sendCommand("shutdown");
   }       
 
