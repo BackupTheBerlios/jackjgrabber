@@ -113,7 +113,6 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		fireTableDataChanged();
 		
 		if (ControlMain.getSettingsMain().getBoxList().size()==1) {
-		    ControlMain.getControl().getView().getTabProgramm().getControl().stopStreamingServer();
 		    ControlMain.getControl().getView().getMainTabPane().tabProgramm=null;
 		    ControlMain.getControl().getView().getMainTabPane().firstIpSetted=true;
 		} else {
