@@ -30,13 +30,9 @@ public class SerErrorStreamReadThread extends Thread {
     boolean logging=true;
     boolean logAsInfo=false;
     
-    public SerErrorStreamReadThread(boolean log, InputStream in) {
-    	logging=log;
-    	input = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public SerErrorStreamReadThread(InputStream in, boolean logasinfo) {
+    public SerErrorStreamReadThread(boolean log, boolean logasinfo, InputStream in) {
         logAsInfo=logasinfo;
+        logging=log;
         input = new BufferedReader(new InputStreamReader(in));
     }
     

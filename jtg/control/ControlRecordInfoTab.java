@@ -696,23 +696,9 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	private void startMuxxi(File file) {
 
 		String execMuxxi = "C:\\Programme\\D-Box\\DVDAuthorMuxxi\\Muxxi.exe -i " + file.getAbsolutePath() + " -out DVD";
-		Process run;
-		try {
-			run = Runtime.getRuntime().exec(execMuxxi);
-			Logger.getLogger("ControlProgramTab").info(execMuxxi);
-			new SerInputStreamReadThread(true, run.getInputStream()).start();
-			new SerErrorStreamReadThread(true, run.getErrorStream()).start();
-
-		} catch (IOException e) {
-			Logger.getLogger("ControlProgramTab").error(e.getMessage());
-			e.printStackTrace();
-		}
-
+		SerExternalProcessHandler.startProcess("Muxxi", execMuxxi, true);
 	}
 
-	/**
-	 *  
-	 */
 	protected void renameSelected(File f) {
 		String newName = JOptionPane.showInputDialog(guiTabRecordInfo, ControlMain.getProperty("msg_rename"), f.getName());
 		if (newName != null && newName.length() > 0) {

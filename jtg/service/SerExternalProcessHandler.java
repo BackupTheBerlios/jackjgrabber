@@ -28,16 +28,25 @@ public class SerExternalProcessHandler {
 	
 	private static ArrayList processList;
 	
-	public static void startProcess(String name, String execString, boolean logging) {
+	public static BOExternalProcess startProcess(String name, String execString, boolean logging) {
 		BOExternalProcess process = new BOExternalProcess(name, execString, logging);
 		getProcessList().add(process);
 		process.start();
+		return process;
 	}
 	
-	public static void startProcess(String name, String[] execStringArray, boolean logging) {
+	public static BOExternalProcess startProcess(String name, String execString, boolean logging, boolean logErrorAsInfo, boolean closeWithoutPrompt) {
+			BOExternalProcess process = new BOExternalProcess(name, execString, logging, logErrorAsInfo, closeWithoutPrompt);
+			getProcessList().add(process);
+			process.start();
+			return process;
+		}
+	
+	public static BOExternalProcess startProcess(String name, String[] execStringArray, boolean logging) {
 		BOExternalProcess process = new BOExternalProcess(name, execStringArray, logging);
 		getProcessList().add(process);
-		process.startArray();
+		process.start();
+		return process;
 	}
 
 	public static void closeAll() {
@@ -46,16 +55,19 @@ public class SerExternalProcessHandler {
 				BOExternalProcess boProc = (BOExternalProcess)list.get(i);
 				Process proc = boProc.getProcess();
 		    try {
-		        if (proc.exitValue()==0) {} //Prozess beendet
-		            
+		        if (proc.exitValue()==0) {} //Prozess beendet            
 		    } catch (IllegalThreadStateException e) {
-		        int ret = JOptionPane.showConfirmDialog(
-		                ControlMain.getControl().getView(),
-		                ControlMain.getProperty("msg_closeProcess1")+boProc.getName()+" "+ControlMain.getProperty("msg_closeProcess2"),
-		                "",
-		                JOptionPane.OK_CANCEL_OPTION);
-		        if (ret==0) {
-		            proc.destroy();      
+		        if (boProc.isCloseWithoutPrompt()) {
+		            proc.destroy(); 
+		        } else {
+		            int ret = JOptionPane.showConfirmDialog(
+				                ControlMain.getControl().getView(),
+				                ControlMain.getProperty("msg_closeProcess1")+boProc.getName()+" "+ControlMain.getProperty("msg_closeProcess2"),
+				                "",
+				                JOptionPane.OK_CANCEL_OPTION);
+				        if (ret==0) {
+				            proc.destroy();      
+				        }    
 		        }
 		    }		    
 			}

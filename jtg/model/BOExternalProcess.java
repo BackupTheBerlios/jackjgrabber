@@ -30,7 +30,9 @@ public class BOExternalProcess {
 	private String execString;
 	private String[] execStringArray;
 	private Process process;
-	private boolean logging;
+	private boolean logging=false;
+	private boolean logErrorAsInfo=false;
+	private boolean closeWithoutPrompt=false;
 
 	public BOExternalProcess(String name, String execString, boolean logging) {
 		this.setName(name);
@@ -38,39 +40,40 @@ public class BOExternalProcess {
 		this.setLogging(logging);
 	}
 	
+	public BOExternalProcess(String name, String execString, boolean logging, boolean logErrorAsInfo, boolean closeWithoutPrompt) {
+	    this.setCloseWithoutPrompt(closeWithoutPrompt);
+	    this.setLogErrorAsInfo(logErrorAsInfo);
+	    this.setLogging(logging);
+			this.setName(name);
+			this.setExecString(execString);
+		}
+	
 	public BOExternalProcess(String name, String[] execStringArray, boolean logging) {
 		this.setName(name);
-		execString="";
-		for (int i = 0;i < execStringArray.length; i++) {
-			execString += " "+ execStringArray[i];
-		}
-		this.setExecString(execString.trim());
 		this.setExecStringArray(execStringArray);
 		this.setLogging(logging);
 	}
 	
 	public void start() {
 		try {
-			this.setProcess(Runtime.getRuntime().exec(this.getExecString()));
-			new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
-			new SerErrorStreamReadThread(this.isLogging(), this.getProcess().getErrorStream()).start();
-			Logger.getLogger("BOExternalProcess").info(this.getExecString());
+		    if (this.getExecString()==null) {
+		    		String logString="";
+		    		for (int i = 0;i < execStringArray.length; i++) {
+		    		    logString += " "+ execStringArray[i];
+		    		}
+		        this.setProcess(Runtime.getRuntime().exec(this.getExecStringArray()));
+		        Logger.getLogger("BOExternalProcess").info(logString.trim());
+		    } else {
+		        this.setProcess(Runtime.getRuntime().exec(this.getExecString()));
+		        Logger.getLogger("BOExternalProcess").info(this.getExecString());
+		    }
+		    new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
+		    new SerErrorStreamReadThread(this.isLogging(), this.isLogErrorAsInfo(), this.getProcess().getErrorStream()).start();
 		} catch (IOException e) {
-			Logger.getLogger("BOExternalProcess").error(e.getMessage());
+		    Logger.getLogger("BOExternalProcess").error(e.getMessage());
 		}
 	}
 	
-	public void startArray() {
-		try {
-			this.setProcess(Runtime.getRuntime().exec(this.getExecStringArray()));
-			new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
-			new SerErrorStreamReadThread(this.isLogging(), this.getProcess().getErrorStream()).start();
-			Logger.getLogger("BOExternalProcess").info(this.getExecString());
-		} catch (IOException e) {
-			Logger.getLogger("BOExternalProcess").error(e.getMessage());
-		}
-	}
-
 	/**
 	 * @return Returns the execString.
 	 */
@@ -130,5 +133,29 @@ public class BOExternalProcess {
      */
     public void setLogging(boolean logging) {
         this.logging = logging;
+    }
+    /**
+     * @return Returns the logErrorAsInfo.
+     */
+    public boolean isLogErrorAsInfo() {
+        return logErrorAsInfo;
+    }
+    /**
+     * @param logErrorAsInfo The logErrorAsInfo to set.
+     */
+    public void setLogErrorAsInfo(boolean logErrorAsInfo) {
+        this.logErrorAsInfo = logErrorAsInfo;
+    }
+    /**
+     * @return Returns the closeWithoutPrompt.
+     */
+    public boolean isCloseWithoutPrompt() {
+        return closeWithoutPrompt;
+    }
+    /**
+     * @param closeWithoutPrompt The closeWithoutPrompt to set.
+     */
+    public void setCloseWithoutPrompt(boolean closeWithoutPrompt) {
+        this.closeWithoutPrompt = closeWithoutPrompt;
     }
 }

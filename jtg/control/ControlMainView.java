@@ -65,7 +65,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	private void checkStartVlc() {
 	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
 	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
-	        SerExternalProcessHandler.startProcess("vlc", execString, true);
+	        SerExternalProcessHandler.startProcess("vlc", execString, true, true, true);
 	    }
 	}
 	
