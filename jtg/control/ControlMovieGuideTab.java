@@ -1,7 +1,6 @@
 package control;
-
 /*
- * ControlAboutTab.java by Ralph Henneberger
+ * ControlMovieGuideTab by Ralph Henneberger
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -93,7 +92,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		String action = e.getActionCommand();
 		if (action == "download") {
 			try{
-				new SerMovieGuide2Xml("",2).run();
+				new SerMovieGuide2Xml(null, this.getMainView().getTabMovieGuide().getJProgressBarDownload()).start();
 			}catch (Exception ex){}			
 		}
 		if (action == "neuEinlesen") {
@@ -248,7 +247,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = fc.getSelectedFile().toString();		
 			try{
-				new SerMovieGuide2Xml(path,1).start();
+				new SerMovieGuide2Xml(path, this.getMainView().getTabMovieGuide().getJProgressBarDownload()).start();
 			}catch(Exception ex){}			
 		}
 	}
