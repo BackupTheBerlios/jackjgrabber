@@ -55,7 +55,7 @@ public class GuiSettingsTabPath extends GuiTab {
     
     protected void initialize() {
         FormLayout layout = new FormLayout(
-				  "pref, 10, f:pref:grow, pref",  		// columns 
+				  "pref, 10, f:pref:grow, 5, pref",  		// columns 
 				  "pref, pref, pref, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
@@ -63,16 +63,16 @@ public class GuiSettingsTabPath extends GuiTab {
 				
 				builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 1));
 				builder.add(this.getJTextFieldRecordSavePath(),																cc.xy	(3, 1));
-				builder.add(this.getJButtonRecordPathFileChooser(),														cc.xy	(4, 1));
+				builder.add(this.getJButtonRecordPathFileChooser(),														cc.xy	(5, 1));
 				builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),	cc.xy	(1, 2));
 				builder.add(this.getJTextFieldProjectXPath(),																			cc.xy	(3, 2));
-				builder.add(this.getJButtonProjectXPathFileChooser(),													cc.xy	(4, 2));
+				builder.add(this.getJButtonProjectXPathFileChooser(),													cc.xy	(5, 2));
 				builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),			cc.xy	(1, 3));
 				builder.add(this.getJTextFieldUdrecPath(),																				cc.xy	(3, 3));
-				builder.add(this.getJButtonUdrecPathFileChooser(),														cc.xy	(4, 3));
+				builder.add(this.getJButtonUdrecPathFileChooser(),														cc.xy	(5, 3));
 				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),					cc.xy	(1, 4));
 				builder.add(this.getJTextFieldVlcPath(),																						cc.xy	(3, 4));
-				builder.add(this.getJButtonVlcPathFileChooser(),																cc.xy	(4, 4));
+				builder.add(this.getJButtonVlcPathFileChooser(),																cc.xy	(5, 4));
     }
 	    	
 	

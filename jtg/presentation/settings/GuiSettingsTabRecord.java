@@ -49,24 +49,25 @@ public class GuiSettingsTabRecord extends GuiTab {
     private JPanel panelEngineSettings = null;
     private JPanel panelRecordSettings = null;
     private JPanel panelServerRecordSettings = null;
-		private JPanel panelQuickRecordSettings = null;
-		private JPanel panelRecordtimeSettings = null;	
-		private JComboBox jComboBoxStreamType = null;	
-		private JTextField jTextFieldUdrecOptions = null;
-		private JRadioButton jRadioButtonUdrec;
-		private JRadioButton jRadioButtonJGrabber;
-		private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
-		private JFormattedTextField tfServerPort = null;
-		private JCheckBox cbStartStreamingServer;
-		private JCheckBox cbRecordAllPids;
-		private JCheckBox cbStartPX;
-		private JCheckBox cbAC3ReplaceStereo;
-		private JCheckBox cbRecordVtxt;
-		private JSpinner recordMinsBefore, recordMinsAfter; 
-		
-		private JCheckBox cbStoreEPG;
-		private JCheckBox cbStoreLogAfterRecord;
-		private SerIconManager iconManager = SerIconManager.getInstance();
+    private JPanel panelQuickRecordSettings = null;
+	private JPanel panelRecordtimeSettings = null;	
+	private JPanel panelNorth = null;
+	private JComboBox jComboBoxStreamType = null;	
+	private JTextField jTextFieldUdrecOptions = null;
+	private JRadioButton jRadioButtonUdrec;
+	private JRadioButton jRadioButtonJGrabber;
+	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
+	private JFormattedTextField tfServerPort = null;
+	private JCheckBox cbStartStreamingServer;
+	private JCheckBox cbRecordAllPids;
+	private JCheckBox cbStartPX;
+	private JCheckBox cbAC3ReplaceStereo;
+	private JCheckBox cbRecordVtxt;
+	private JSpinner recordMinsBefore, recordMinsAfter; 
+	
+	private JCheckBox cbStoreEPG;
+	private JCheckBox cbStoreLogAfterRecord;
+	private SerIconManager iconManager = SerIconManager.getInstance();
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
 		super();
@@ -81,28 +82,45 @@ public class GuiSettingsTabRecord extends GuiTab {
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
-		
-				builder.add(this.getPanelRecordSettings(),		   				cc.xyw(1,1, 3));
-				builder.add(this.getPanelServerRecordSettings(),  		cc.xy(1,3));			
-				builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1,4));
-				builder.add(this.getPanelQuickRecordSettings(),	   		cc.xy(3,3));
-				builder.add(this.getPanelEngineSettings(),		   				cc.xyw(1,6, 3));
+				
+				builder.add(this.getPanelNorth(),						  		cc.xyw(1, 1, 3));
+				builder.add(this.getPanelServerRecordSettings(),  		cc.xy(1, 3));			
+				builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1, 4));
+				builder.add(this.getPanelQuickRecordSettings(),	   		cc.xy(3, 3));
     }
+    
+    private JPanel getPanelNorth() {
+        if (panelNorth == null) {
+            panelNorth = new JPanel();
+			FormLayout layout = new FormLayout(
+					"pref, 25, pref:grow",	 		//columns 
+			  		"t:pref");		//rows
+			PanelBuilder builder = new PanelBuilder(panelNorth, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.add(this.getPanelRecordSettings(),		   				cc.xy(1, 1));
+			builder.add(this.getPanelEngineSettings(),		   				cc.xy(3, 1));
+		}
+		return panelNorth;
+    }
+    
+
 	    	
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					"pref",	 		//columns 
-			  		"pref, pref, pref, pref, 5, pref");		//rows
+					"pref:grow",	 		//columns 
+			  		"pref, pref, pref, pref, 5, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),		cc.xy	(1, 1));
-			builder.add(this.getCbStartPX(),															cc.xy	(1, 2));
-			builder.add(this.getCbStoreEPG(),														cc.xy(1,3));
-			builder.add(this.getCbStoreLogAfterRecord(),						cc.xy(1,4));
-			builder.add(this.getCbRecordVtxt(),													cc.xy(1,6));
+			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),	cc.xy(1, 1));
+			builder.add(this.getCbStartPX(),														cc.xy(1, 2));
+			builder.add(this.getCbStoreEPG(),													cc.xy(1, 3));
+			builder.add(this.getCbStoreLogAfterRecord(),									cc.xy(1 ,4));
+			builder.add(this.getCbRecordVtxt(),													cc.xy(1 ,6));
+			builder.add(this.getCbAC3ReplaceStereo(),										cc.xy(1, 7));
 		}
 		return panelRecordSettings;
 	}
@@ -112,15 +130,14 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelServerRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					  "pref, 15, pref, 5, pref",	 		//columns 
-			  "pref, pref, pref");		//rows
+			  "pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelServerRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_serverRecordSettings"),		cc.xyw	(1, 1, 5));
-			builder.add(this.getCbStartStreamingServer(),																						cc.xy	(1, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  					cc.xy	(3, 2));
-			builder.add(this.getTfServerPort(),																													cc.xy	(5, 2));
-			builder.add(this.getCbAC3ReplaceStereo(),																								cc.xy	(1, 3));
+			builder.add(this.getCbStartStreamingServer(),												cc.xy	(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  				cc.xy	(3, 2));
+			builder.add(this.getTfServerPort(),																cc.xy	(5, 2));
 		}
 		return panelServerRecordSettings;
 	}
@@ -144,8 +161,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 		if (panelEngineSettings == null) {
 		    panelEngineSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-			        "pref, 5, pref, 30, pref:grow",	 		//columns 
-			  "pref:grow, pref, 10, pref:grow, pref");							//rows
+			        "pref, 5, pref, 30, 250:grow",	 		//columns 
+			  "pref, pref, 10, pref");							//rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -153,8 +170,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 			builder.add(this.getJRadioButtonJGrabber(),															cc.xy	(1, 2));
 			builder.add(this.getJRadioButtonUdrec(),																cc.xy	(3, 2));
 			builder.add(this.getJComboBoxStreamType(),														cc.xy	(5, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_udrecOptions")),	cc.xyw	(1, 5, 4));
-			builder.add(this.getJTextFieldUdrecOptions(),													cc.xy	(5, 5));
+			builder.add(new JLabel(ControlMain.getProperty("label_udrecOptions")),	cc.xyw	(1, 4, 4));
+			builder.add(this.getJTextFieldUdrecOptions(),													cc.xy	(5, 4));
 		}
 		return panelEngineSettings;
 	}
