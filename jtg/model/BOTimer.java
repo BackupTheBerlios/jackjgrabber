@@ -42,7 +42,6 @@ public class BOTimer extends java.lang.Object{
     }
 
     public void setEventTypeId(String eventType){
-		this.setModifiedId("modify");
         this.eventTypeId = eventType;
     }
 
@@ -51,7 +50,6 @@ public class BOTimer extends java.lang.Object{
     }
 
     public void setEventRepeatId(String eventRepeat){
-    	this.setModifiedId("modify");
         this.eventRepeatId = eventRepeat;
     }
 
@@ -64,7 +62,7 @@ public class BOTimer extends java.lang.Object{
     }
 
     public String getStartTime (){
-    	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy  HH:mm");
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
     	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
@@ -97,7 +95,6 @@ public class BOTimer extends java.lang.Object{
     }
 
     public void setSenderName(String sender){
-    	this.setModifiedId("modify");
         this.senderName = sender;
     }
     /**
@@ -111,7 +108,6 @@ public class BOTimer extends java.lang.Object{
 	 * Bei Setzen eines neuen Start-Datum, muss das Stop-Datum angepasst werden
 	 */
 	public void setUnformattedStartTime(long startMillis) {
-		this.setModifiedId("modify");
 		this.getUnformattedStartTime().setTimeInMillis(startMillis);
 		
 		int startDay = this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH);
