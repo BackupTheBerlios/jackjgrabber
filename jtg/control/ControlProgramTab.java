@@ -29,6 +29,7 @@ import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
 import presentation.GuiSenderTableModel;
 import service.SerAlertDialog;
+import service.SerFormatter;
 
 /**
  * @author Alexander Geist
@@ -275,7 +276,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return selectedEpg;
 	}
 	/**
-	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details
+	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details.
 	 * Durch die Sortierung geht die Objektidentität verloren
 	 * Passendes EPG durch Event-ID finden
 	 */
@@ -321,10 +322,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	private BOTimer buildTimer(BOEpg epg) {
 		BOTimer timer = new BOTimer();
 		timer.setChannelId(this.getSelectedSender().getChanId());
-		timer.setAnnounceTime(epg.getStartTime()); //Vorwarnzeit
-		timer.setStartTime(epg.getStartTime()); //TODO -1 Minute??
+		timer.setAnnounceTime(epg.getUnformattedStart()); //Vorwarnzeit
+		timer.setStartTime(epg.getUnformattedStart()); //TODO -1 Minute??
 		timer.setEventRepeat("0");
-		timer.setStopTime(epg.getEndTime());
+		timer.setStopTime(SerFormatter.getUnixEndTime(epg.getUnformattedStart(), epg.getUnformattedDuration()));
 		timer.setEventType("0");
 		return timer;
 	}
