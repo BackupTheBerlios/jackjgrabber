@@ -38,13 +38,14 @@ public class SerMovieGuide2Xml {
     }
     
     
-    public static void saveXMLFile(File path) throws IOException {
-    //	public static void saveXMLFile(Document doc) throws IOException {
+    //public static void saveXMLFile(File path) throws IOException {
+    	public static void saveXMLFile(Document doc) throws IOException {
         OutputFormat format = OutputFormat.createPrettyPrint();
     //    XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
-        XMLWriter writer = new XMLWriter(new FileWriter(path), format);
-        writer.write(ControlMovieGuideTab.getMovieGuideDocument());
-        //writer.write(doc);
+        //XMLWriter writer = new XMLWriter(new FileWriter(path), format);
+        XMLWriter writer = new XMLWriter(new FileWriter(ControlMovieGuideTab.movieGuideFileName), format);
+        //writer.write(ControlMovieGuideTab.getMovieGuideDocument());
+        writer.write(doc);
         writer.close();    
     }
           
@@ -148,8 +149,8 @@ public class SerMovieGuide2Xml {
         } catch (IOException e) {
             System.out.println("IOException: " + e);
         }
-        saveXMLFile(new File(ControlMovieGuideTab.movieGuideFileName));
-        //saveXMLFile(doc);
+        //saveXMLFile(new File(ControlMovieGuideTab.movieGuideFileName));
+        saveXMLFile(doc);
     }
     
     public ArrayList getGenryList(String value) throws Exception{    	            	
