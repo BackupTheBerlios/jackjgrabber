@@ -54,6 +54,8 @@
 		<copy file="libsystray4j.so" todir="${targetDir}"/>
 		<copy file="start.sh" todir="${targetDir}"/>
 		<copy file="start.bat" todir="${targetDir}"/>
+		<copy file="udrec.exe" todir="${targetDir}"/>
+		<copy file="jackTheJGrabber.ico" todir="${targetDir}"/>
 	</target>
 	
 	<!-- Zippen des Projekts -->
