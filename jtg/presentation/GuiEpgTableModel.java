@@ -109,7 +109,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 				}
 			}
 			BOEpg runningEpg = control.getRunnigEpg(this.getEpgList());
-			this.setIndexRunningEpg(this.getEpgList().indexOf(runningEpg));			
+			if (runningEpg != null) {
+			    this.setIndexRunningEpg(this.getEpgList().indexOf(runningEpg));    
+			}
 		}
 	}
 	
