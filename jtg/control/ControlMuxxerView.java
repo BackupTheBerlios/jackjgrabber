@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
-import javax.swing.SwingUtilities;
 
 import model.BOAfterRecordOptions;
+import model.BOExternalProcess;
 import presentation.muxxer.GuiMuxxerView;
 import service.SerExternalProcessHandler;
 import service.SerInputStreamListener;
@@ -41,8 +41,12 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
     SerProcessStopListener muxStopListener;
     ArrayList files;
     int mplexProgressMax=0;
+    
     boolean projectXStarted = false;
     boolean mplexStarted = false;
+    BOExternalProcess pxProcess;
+    BOExternalProcess mplexProcess;
+    
     File mplexOutputFile;
     
     /*
@@ -155,31 +159,31 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
         for (int i = 0; i < files.size(); i++) {
             param[i + 7] = ((File) files.get(i)).getAbsolutePath();
         }
-        SerExternalProcessHandler.startProcess(this, "mplex", param, true);
+        mplexProcess=SerExternalProcessHandler.startProcess(this, "mplex", param, true);
         this.mplexStarted=true;
         this.handleMplexProgress(files);
     }
     
     private void handleMplexProgress(ArrayList muxxFiles) {
         for (int i=0; i<muxxFiles.size(); i++) {
-            mplexProgressMax=mplexProgressMax+(int)((File)muxxFiles.get(i)).length();
+            mplexProgressMax=mplexProgressMax+(int)((File)muxxFiles.get(i)).length()/100;
         }
         this.getView().getProgressMplex().setMaximum(mplexProgressMax);
         
-        SwingUtilities.invokeLater(
-                new Runnable() {
-                    public void run() {
-                        while (mplexStarted) {
-                            if (mplexOutputFile.exists()) {
-                                int outSize=(int)mplexOutputFile.length();
-                                getView().getProgressMplex().setValue(outSize);
-                            }
-                            try {
-                                Thread.sleep(1500);
-                            } catch (InterruptedException e) {}
-                        }
+        Thread loopThread = new Thread() {
+            public void run() {
+                while (mplexStarted) {
+                    if (mplexOutputFile.exists()) {
+                        int outSize=(int)mplexOutputFile.length();
+                        getView().getProgressMplex().setValue(outSize/100);
                     }
-                });
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {}
+                }
+            } 
+        };
+        loopThread.start();
     }
     
     private String getMplexOutputFileName(File file) {
@@ -187,7 +191,7 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
         return mplexOutputFile.getAbsolutePath();
     }
     
-    public void startProjectX() {
+    private void startProjectX() {
         this.getView().getProgressPX().setValue(0);
         ArrayList params=new ArrayList();
         String[] param = new String[3 + files.size()];
@@ -204,7 +208,7 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
             param[i + 3] = ((File) files.get(i)).getAbsolutePath();
             params.add(((File) files.get(i)).getAbsolutePath());
         }
-        SerExternalProcessHandler.startProcess(this, this, "ProjectX", param, true);
+        pxProcess=SerExternalProcessHandler.startProcess(this, this, "ProjectX", param, true);
     }
     
     public void getInputStream (String inputLine) {
@@ -242,10 +246,10 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
             }
         }
         if (processName.equals("mplex")) {
+            this.mplexStarted=false;
             if (this.getMuxStopListener()!=null) {
                 this.getMuxStopListener().processStopped(exitCode, "muxxi");
             }
-            this.mplexStarted=false;
             this.getView().getProgressMplex().setValue(mplexProgressMax);
             this.getView().dispose();
         }
@@ -272,6 +276,27 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
         return pxFiles;
     }
 
+    public boolean isMuxing() {
+        return this.mplexStarted || this.projectXStarted;
+    }
+    
+    public void stopProjectXProcess() {
+        if (this.projectXStarted) {
+            this.pxProcess.getProcess().destroy();
+        }
+    }
+    
+    public void stopMplexProcess() {
+        if (this.mplexStarted) {
+            this.mplexProcess.getProcess().destroy();
+        }
+    }
+    
+    public void stopAllProcesses() {
+        this.stopProjectXProcess();
+        this.stopMplexProcess();
+    }
+    
 	/**
 	 * @return Returns the options.
 	 */
