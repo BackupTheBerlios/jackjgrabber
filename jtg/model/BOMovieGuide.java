@@ -422,6 +422,8 @@ public class BOMovieGuide {
     		value = true;
     	}else if(this.getRegie().toLowerCase().indexOf(search)>=0){
     		value = true;
+    	}else if(this.getTitel().toLowerCase().indexOf(search)>=0){
+    		value = true;
     	}
     	return value;
     }
