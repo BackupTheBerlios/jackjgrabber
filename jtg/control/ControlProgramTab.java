@@ -77,7 +77,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	Date dateChooserDate;
 	GuiMainView mainView;
 	RecordControl recordControl;
-	public static boolean tvMode;
 	boolean firstStart = true;
 
 	public ControlProgramTab(GuiMainView view) {
@@ -87,10 +86,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	public void run() {
 		try {
 			if (this.getBoxAccess().isTvMode()) {
-				this.setTvMode(true);
 				this.getMainView().getTabProgramm().getJRadioButtonTVMode().setSelected(true);
 			} else {
-				this.setTvMode(false);
 				this.getMainView().getTabProgramm().getJRadioButtonRadioMode().setSelected(true);
 			}
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
@@ -259,7 +256,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		try {
 			if (recordControl == null || !recordControl.isRunning) {
 				this.zapToSelectedSender();
-				if (this.isTvMode()) {
+				if (ControlMain.getBoxAccess().isTvMode()) {
 				    GuiQuickRecordOptionsDialog dialog = new GuiQuickRecordOptionsDialog(this.getPids());
 				    BOQuickRecordOptions options = dialog.startPidsQuestDialog();
 				    if (options != null && options.getPids().getPidCount()>0) {
@@ -348,14 +345,18 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	public void startRecord(BORecordArgs recordArgs) {
 		this.setRecordArgs(recordArgs);
-		recordControl = new RecordControl(recordArgs, this);
-		this.getMainView().getTabProgramm().startRecordModus();
-		this.getMainView().setSystrayRecordIcon();
+		try {
+            recordControl = new RecordControl(recordArgs, this);
+            this.getMainView().getTabProgramm().startRecordModus();
+            this.getMainView().setSystrayRecordIcon();
 
-		//      Starte Record auch im Infotab
-		startRecordInInfoTab(recordArgs);
+            //      Starte Record auch im Infotab
+            startRecordInInfoTab(recordArgs);
 
-		recordControl.start();
+            recordControl.start();
+        } catch (IOException e) {
+            SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+        }
 	}
 
 	/**
@@ -440,7 +441,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	    Logger.getLogger("ConrolProgramTab").info(ControlMain.getProperty("msg_zapTo")+this.getSelectedSender().getName());
 	    if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
 	        Logger.getLogger("ConrolProgramTab").info(ControlMain.getProperty("msg_getPids"));
-	        this.setPids(ControlMain.getBoxAccess().getPids(this.isTvMode()));
+	        this.setPids(ControlMain.getBoxAccess().getPids());
 	    }
 	}
 
@@ -853,21 +854,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	public void setRecordArgs(BORecordArgs recordArgs) {
 		this.recordArgs = recordArgs;
-	}
-
-	/**
-	 * @return Returns the tvMode.
-	 */
-	public boolean isTvMode() {
-		return tvMode;
-	}
-
-	/**
-	 * @param tvMode
-	 *            The tvMode to set.
-	 */
-	public void setTvMode(boolean mode) {
-		tvMode = mode;
 	}
 	
 	/** called by the gui class, when selected channel has been changed

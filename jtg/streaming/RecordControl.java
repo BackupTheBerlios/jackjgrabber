@@ -36,24 +36,26 @@ import control.ControlProgramTab;
 public class RecordControl extends Thread implements SerProcessStopListener {
 	Record record;
 	public boolean isRunning = true;
+	public boolean tvMode;
 	ControlProgramTab controlProgramTab;
 	BORecordArgs recordArgs;
 	String fileName;
 	File directory;
 	private static final String EPGFILENAME = "epg.txt";
 
-	public RecordControl(BORecordArgs args, ControlProgramTab control) {
+	public RecordControl(BORecordArgs args, ControlProgramTab control) throws IOException {
+	    tvMode = ControlMain.getBoxAccess().isTvMode();
 		recordArgs = args;
 		controlProgramTab = control;
 		this.detectRecord();
 	}
 
 	private boolean detectRecord() {
-		if (controlProgramTab.isTvMode() && recordArgs.getLocalTimer().getStreamingEngine() == 0) {
+		if (tvMode && recordArgs.getLocalTimer().getStreamingEngine() == 0) {
 			record = new UdpRecord(recordArgs, this);
 			return true;
 		}
-		if (controlProgramTab.isTvMode() && recordArgs.getLocalTimer().getStreamingEngine() == 1) {
+		if (tvMode && recordArgs.getLocalTimer().getStreamingEngine() == 1) {
 			record = new UdrecRecord(recordArgs, this);
 			return true;
 		} else {

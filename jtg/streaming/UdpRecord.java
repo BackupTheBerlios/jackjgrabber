@@ -128,7 +128,7 @@ public class UdpRecord  extends Record {
 		String avString = new String();
 		String pidString= new String();
 		BOPids pids = recordArgs.getPids();
-		if (recordControl.controlProgramTab.isTvMode()) {
+		if (recordControl.tvMode) {
 			cmd.append("VIDEO");
 		} else {
 			cmd.append("AUDIO");
