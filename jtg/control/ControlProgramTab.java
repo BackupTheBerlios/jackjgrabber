@@ -80,11 +80,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			String tableName = table.getName();
 			//Neuer Sender selektiert
 			if (tableName == "Sender") {  
-				if (me.getClickCount()==1) {
-					this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
-				}
-				if (me.getClickCount()==2) {
-					this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
+				this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
+				if (me.getClickCount()==2) { //Zapping
 					if (ControlMain.getBox().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
 						this.setPids(ControlMain.getBox().getPids());
 					}
@@ -92,11 +89,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}
 			//Neue Epg-Zeile selektiert
 			if (tableName == "Epg") {
-				if (me.getClickCount()==1) {
-					this.setSelectedEpg((BOEpg)this.getEpgTableModel().getEpgList().get(table.getSelectedRow()));
-				}
+				this.setSelectedEpg((BOEpg)this.getEpgTableModel().getEpgList().get(table.getSelectedRow()));
 				if (me.getClickCount()==2) {
-					this.setSelectedEpg((BOEpg)this.getEpgTableModel().getEpgList().get(table.getSelectedRow()));
+					//TODO add to TimerList
 				}
 			}
 		} catch (ConnectException e) {
