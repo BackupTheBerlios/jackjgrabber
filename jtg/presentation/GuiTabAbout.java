@@ -17,6 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+
+import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -26,7 +32,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlAboutTab;
 
-public class GuiTabAbout extends GuiTab {
+public class GuiTabAbout extends JPanel {
 
 	private ControlAboutTab control;
 	private JTextArea taVersion;
@@ -37,6 +43,8 @@ public class GuiTabAbout extends GuiTab {
 	private JScrollPane scrollPaneVersion;
 	private JScrollPane scrollPaneAuthors;
 	private JScrollPane scrollPaneOther;
+	private ImageIcon imageLogo;
+	private JLabel linkHomePage;
 
 	public GuiTabAbout(ControlAboutTab ctrl) {
 		super();
@@ -44,10 +52,10 @@ public class GuiTabAbout extends GuiTab {
 		initialize();
 	}
 
-	protected  void initialize() {
+	private  void initialize() {
 		FormLayout layout = new FormLayout(
-						  "150:grow, 8dlu, pref:grow, 8dlu, pref:grow, 8dlu,  pref:grow",  		// columns 
-						  "pref, 4dlu, f:50:grow, 4dlu, pref, 4dlu, f:330:grow"); 			// rows
+						  "pref:grow, 8dlu, 400:grow",  		// columns 
+						  "pref, 4dlu, f:50:grow, 4dlu, pref, 4dlu, f:300:grow, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
@@ -55,7 +63,9 @@ public class GuiTabAbout extends GuiTab {
 				builder.addSeparator("Version",					cc.xy	(1, 1));
 				builder.add(this.getScrollPaneVersion(),		cc.xy	(1, 3));
 				builder.addSeparator("Authors",					cc.xy	(1, 5));
-				builder.add(this.getScrollPaneAuthors(),		cc.xy	(1, 7));
+				builder.add(this.getScrollPaneAuthors(),		cc.xywh	(1, 7, 1, 2));
+				builder.add(new JLabel(this.getImageLogo()),	cc.xywh	(3, 1, 1, 7));
+				builder.add(this.getLinkHomePage(),				cc.xywh	(3, 8, 1, 1, CellConstraints.CENTER, CellConstraints.FILL ));
 	}
 	    
 	/**
@@ -159,7 +169,27 @@ public class GuiTabAbout extends GuiTab {
 		if (scrollPaneVersion == null) {
 			scrollPaneVersion = new JScrollPane();
 			scrollPaneVersion.setViewportView(this.getTaVersion());
+			scrollPaneVersion.setPreferredSize(new Dimension(250, 120));
 		}
 		return scrollPaneVersion;
+	}
+	
+	private ImageIcon getImageLogo() {
+		if (imageLogo == null) {
+			imageLogo = new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.png"));
+		}
+		return imageLogo;
+	}
+	
+	/**
+	 * @return Returns the linkHomePage.
+	 */
+	public JLabel getLinkHomePage() {
+		if (linkHomePage == null) {
+			linkHomePage = new JLabel("<HTML><font color=blue><u>www.jackthegrabber.de</u></font></HTML>");
+			linkHomePage.setName("www.jackthegrabber.de");
+			linkHomePage.addMouseListener(control);
+		}
+		return linkHomePage;
 	}
 }
