@@ -20,7 +20,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import model.BOBox;
 import presentation.about.GuiTabAbout;
 import presentation.movieguide.GuiTabMovieGuide;
 import presentation.program.GuiTabProgramm;
@@ -46,7 +45,6 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
 	private GuiTabRecordInfo tabRecordInfo;
-	public boolean firstIpSetted = false;
 	int index;
 	
 	public GuiMainTabPane(GuiMainView mainView) {
@@ -64,10 +62,6 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabProgramm == null) {
 		    ControlProgramTab control = new ControlProgramTab(this.getView());
 			tabProgramm = new GuiTabProgramm(control);
-		    if (firstIpSetted && ControlMain.getSettingsMain().getBoxList().size()>0) {
-		        ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
-		        firstIpSetted=false;
-		    } 
 			new Thread(control).start();
 		}
 		return tabProgramm;
@@ -76,12 +70,8 @@ public class GuiMainTabPane extends JTabbedPane {
 	 * Image-spezifische Timer-Gui		
 	 */    
 	public GuiTimerPanel getTabTimer() {
-		if (tabTimer == null) {
-			if (ControlMain.getBoxAccess() != null) {
-				tabTimer = GuiTimerPanel.getTimerPanel(ControlMain.getBoxAccess().getName(), this.getView());
-			} else {
-			    tabTimer = GuiTimerPanel.getTimerPanel("Default", this.getView());
-			}
+		if (tabTimer == null && ControlMain.getBoxAccess() != null) {
+			tabTimer = GuiTimerPanel.getTimerPanel(ControlMain.getBoxAccess().getName(), this.getView());
 		}
 		return tabTimer;
 	}
