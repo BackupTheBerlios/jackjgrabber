@@ -3,6 +3,7 @@ package model;
 import org.apache.log4j.Logger;
 
 import service.SerErrorStreamReadThread;
+import service.SerInputStreamListener;
 import service.SerInputStreamReadThread;
 import service.SerProcessStopListener;
 
@@ -29,17 +30,27 @@ public class BOExternalProcess extends Thread {
 	private String execString;
 	private String[] execStringArray;
 	private Process process;
-	private SerProcessStopListener listener;
+	private SerProcessStopListener stopListener;
+    SerInputStreamListener inputListener;
 	private boolean logging=false;
 	private boolean logErrorAsInfo=false;
 	private boolean closeWithoutPrompt=true;
 
-	public BOExternalProcess(SerProcessStopListener listener, String name, String[] execString, boolean logging) {
-	    this.setListener(listener);
+	public BOExternalProcess(SerProcessStopListener stopListener, String name, String[] execString, boolean logging) {
+	    this.setStopListener(stopListener);
 		this.setProgName(name);
 		this.setExecStringArray(execString);
 		this.setLogging(logging);
 	}
+    
+    public BOExternalProcess(SerProcessStopListener stopListener, SerInputStreamListener inputListener,
+            String name, String[] execString, boolean logging) {
+        this.setStopListener(stopListener);
+        this.setInputListener(inputListener);
+        this.setProgName(name);
+        this.setExecStringArray(execString);
+        this.setLogging(logging);
+    }
 	
 	public BOExternalProcess(String name, String execString, boolean logging) {
 		this.setProgName(name);
@@ -68,12 +79,12 @@ public class BOExternalProcess extends Thread {
 		    } else {
 		        this.setProcess(Runtime.getRuntime().exec(this.getExecString()));
 		    }
-		    new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
+		    new SerInputStreamReadThread(this.getInputListener(),this.isLogging(), this.getProcess().getInputStream()).start();
 		    new SerErrorStreamReadThread(this.isLogging(), this.isLogErrorAsInfo(), this.getProcess().getErrorStream()).start();
 		    
-		    if (this.getListener()!=null) {
+		    if (this.getStopListener()!=null) {
 		        int exitValue = this.getProcess().waitFor();
-		        this.getListener().processStopped(exitValue, this.progName);
+		        this.getStopListener().processStopped(exitValue, this.progName);
 		    }
 		} catch (Exception e) {
 		    Logger.getLogger("BOExternalProcess").error(e.getMessage());
@@ -177,15 +188,27 @@ public class BOExternalProcess extends Thread {
         this.closeWithoutPrompt = closeWithoutPrompt;
     }
     /**
-     * @return Returns the listener.
+     * @return Returns the stopListener.
      */
-    public SerProcessStopListener getListener() {
-        return listener;
+    public SerProcessStopListener getStopListener() {
+        return stopListener;
     }
     /**
-     * @param listener The listener to set.
+     * @param stopListener The stopListener to set.
      */
-    public void setListener(SerProcessStopListener listener) {
-        this.listener = listener;
+    public void setStopListener(SerProcessStopListener listener) {
+        this.stopListener = listener;
+    }
+    /**
+     * @return Returns the inputListener.
+     */
+    public SerInputStreamListener getInputListener() {
+        return inputListener;
+    }
+    /**
+     * @param inputListener The inputListener to set.
+     */
+    public void setInputListener(SerInputStreamListener inputListener) {
+        this.inputListener = inputListener;
     }
 }

@@ -29,6 +29,14 @@ public class SerExternalProcessHandler {
 		process.start();
 		return process;
 	}
+    
+    public static BOExternalProcess startProcess(SerProcessStopListener stopListener, SerInputStreamListener inputListener,
+            String name, String[] execString, boolean logging) {
+        BOExternalProcess process = new BOExternalProcess(stopListener, inputListener, name, execString, logging);
+        getProcessList().add(process);
+        process.start();
+        return process;
+    }
 
 	public static BOExternalProcess startProcess(String name, String execString, boolean logging) {
 		BOExternalProcess process = new BOExternalProcess(name, execString, logging);

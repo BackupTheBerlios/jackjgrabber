@@ -17,14 +17,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.Component;
+import java.io.File;
+
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import service.SerGUIUtils;
 
@@ -45,8 +52,11 @@ public class GuiMuxxerView extends JDialog{
 	JRadioButton rbSVCD;
 	JRadioButton rbDVD;
 	JRadioButton rbMPEG;
+    JProgressBar progressPX;
+    JProgressBar progressMplex;
 	JButton pbOk;
 	JPanel mainPanel;
+    JPanel panelProgress;
 	ButtonGroup buttonGroupMuxxType = new ButtonGroup();
 
 	public GuiMuxxerView(ControlMuxxerView control) {
@@ -67,13 +77,14 @@ public class GuiMuxxerView extends JDialog{
 		if (mainPanel == null) {
 			mainPanel = new JPanel();
 			FormLayout layout = new FormLayout("pref:grow, 25, pref", //columns
-					"pref, 15, pref, 5, pref, pref, pref, 10, pref"); //rows
+					"pref, 15, pref, 5, pref, pref, pref, 5, pref, 10, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(mainPanel, layout);
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 			
             if (control.getFiles()!=null && control.getFiles().size()>0) {
-                builder.add(new JScrollPane(this.getJListFiles()),                  cc.xywh(1,1,1, 9));   
+                builder.add(new JScrollPane(this.getJListFiles()),                  cc.xywh(1,1,1,7));
+                builder.add(this.getPanelProgress(),                  cc.xyw(1,9,3));
             }
             builder.add(this.getCbStartPX()                 ,                   cc.xy(3,1));
             builder.addSeparator("",                                            cc.xy(3,2));
@@ -82,10 +93,27 @@ public class GuiMuxxerView extends JDialog{
             builder.add(this.getRbSVCD(),                                       cc.xy(3,6));
             builder.add(this.getRbDVD(),                                        cc.xy(3,7));
             
-			builder.add(this.getPbOk(),  cc.xy(3, 9));
+			builder.add(this.getPbOk(),  cc.xy(3, 11));
 		}
 		return mainPanel;
 	}
+    
+    private JPanel getPanelProgress() {
+        if (panelProgress == null) {
+            panelProgress = new JPanel();
+            FormLayout layout = new FormLayout("pref, 10, pref:grow", //columns
+                    "pref, 5, pref"); //rows
+            PanelBuilder builder = new PanelBuilder(panelProgress, layout);
+            builder.setDefaultDialogBorder();
+            CellConstraints cc = new CellConstraints();
+            
+            builder.addLabel("ProjectX",                              cc.xy(1,1));
+            builder.add(this.getProgressPX(),                         cc.xy(3,1));
+            builder.addLabel("Mplex",                                 cc.xy(1,3));
+            builder.add(this.getProgressMplex(),                      cc.xy(3,3));
+        }
+        return panelProgress;
+    }
 
 	/**
 	 * @return Returns the control.
@@ -105,6 +133,14 @@ public class GuiMuxxerView extends JDialog{
 	public JList getJListFiles() {
 		if (jListFiles==null) {
 			jListFiles=new JList(control.getFiles().toArray());
+            jListFiles.setCellRenderer(new DefaultListCellRenderer() {
+                public Component getListCellRendererComponent(
+                        JList list, Object value, int index, boolean isSelected,boolean cellHasFocus) {
+                        Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                        File file = (File)value;
+                        return new JLabel(file.getName());
+                    }
+                });
 		}
 		return jListFiles;
 	}
@@ -189,5 +225,27 @@ public class GuiMuxxerView extends JDialog{
         this.getRbDVD().setEnabled(enable);
         this.getRbMPEG().setEnabled(enable);
         this.getRbSVCD().setEnabled(enable);
+    }
+    /**
+     * @return Returns the progressMplex.
+     */
+    public JProgressBar getProgressMplex() {
+        if (progressMplex == null){
+            progressMplex = new JProgressBar(SwingConstants.HORIZONTAL, 0, 0);
+            progressMplex.setStringPainted(true);            
+        }
+        return progressMplex;
+    }
+   
+    /**
+     * @return Returns the progressPX.
+     */
+    public JProgressBar getProgressPX() {
+        if (progressPX == null){
+            progressPX = new JProgressBar(SwingConstants.HORIZONTAL, 0, 0);
+            progressPX.setMaximum(100);
+            progressPX.setStringPainted(true);            
+        }
+        return progressPX;
     }
 }
