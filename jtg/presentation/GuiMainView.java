@@ -134,7 +134,7 @@ public class GuiMainView extends JFrame {
 			mainTabPane = new GuiMainTabPane(this);
 			mainTabPane.addChangeListener(control);
 
-			mainTabPane.addTab("Start", iconManager.getIcon("gohome_2.png"), mainTabPane.getTabStart());
+			mainTabPane.addTab("Start", iconManager.getIcon("gohome_2.png"), new JPanel());
 			ControlMain.splash.setProgress(20, ControlMain.getProperty("progress_start"));
 			mainTabPane.addTab(ControlMain.getProperty("tab_program"), iconManager.getIcon("main.png"), mainTabPane.getTabProgramm());
 			ControlMain.splash.setProgress(30, ControlMain.getProperty("progress_programm"));
