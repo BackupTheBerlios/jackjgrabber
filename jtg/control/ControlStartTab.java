@@ -40,9 +40,9 @@ public class ControlStartTab extends ControlTab {
 	    this.getMainView().getTabStart().getPaneVersion().setText(this.getVersion());
 	    this.getMainView().getTabStart().getPaneWarns().setText(this.checkWarns());
 	    this.getMainView().getTabStart().getLabelRunningSender().setText("Sender: "+getRunningSender());
-	    this.getMainView().getTabStart().getLabelNextRecord().setText(
-	            ControlMain.getProperty("label_nextTimer")+getNextTimerInfo());
 	    new SerNewsHandler(this.getMainView().getTabStart().getPaneNews()).start();
+        this.getMainView().getTabStart().getLabelNextRecord().setText(
+                ControlMain.getProperty("label_nextTimer")+getNextTimerInfo());
 	}
 	
 	public String getVersion() {
@@ -117,6 +117,9 @@ public class ControlStartTab extends ControlTab {
 	}
 	
 	public String getNextTimerInfo() {
+        try {
+            Thread.sleep(2000); //Wait till timerList was loaded by Timer-Tab
+        } catch (InterruptedException e) {}
 	    BOTimerList list = ControlMain.getBoxAccess().getTimerList(false);
 	    BOTimer timer = list.getFirstRecordTimer();
 	    if (timer!=null) {
