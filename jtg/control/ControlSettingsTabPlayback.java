@@ -19,17 +19,19 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 package control;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import javax.swing.JTextField;
+import javax.swing.JCheckBox;
 
+import model.BOPlaybackOption;
 import model.BOSettings;
 import presentation.GuiMainView;
 import presentation.GuiSettingsTabPlayback;
 import presentation.GuiTabSettings;
 
-public class ControlSettingsTabPlayback extends ControlTabSettings implements KeyListener{
+public class ControlSettingsTabPlayback extends ControlTabSettings implements ActionListener, ItemListener{
     
     GuiTabSettings settingsTab;
     
@@ -41,26 +43,41 @@ public class ControlSettingsTabPlayback extends ControlTabSettings implements Ke
      * @see control.ControlTab#initialize()
      */
     public void initialize() {
-        this.getTab().getJTextFieldPlaybackString().setText(this.getSettings().getPlaybackString());
-
+        this.getTab().getCbUseStandardOption().setSelected(this.getSettings().isAlwaysUseStandardPlayback());
     }
 
-    public void keyTyped(KeyEvent event) {}
-	
-	public void keyPressed(KeyEvent event) {}
-	
-	public void keyReleased(KeyEvent event) {
-		JTextField tf = (JTextField)event.getSource();
-		if (tf.getName().equals("playbackString")){
-			this.getSettings().setPlaybackString(tf.getText());
+    public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
+		if (action == "delete") {
+			this.actionRemoveOption();
+		}
+		if (action == "add") {
+			this.actionAddOption();
 		}
 	}
     
-    private void actionSetPlaybackString(ActionEvent event) {
-		JTextField tf = (JTextField)event.getSource();
-		this.getSettings().setPlaybackString(tf.getText());
+//  Change-Events der der Checkbox
+	public void itemStateChanged (ItemEvent event) {
+	    JCheckBox checkBox = (JCheckBox)event.getSource();
+		while (true) {				
+			if (checkBox.getName().equals("useStandard")) {
+				this.getSettings().setAlwaysUseStandardPlayback(checkBox.isSelected());
+				break;
+			}
+			break;
+		}	
 	}
+
     
+    private void actionAddOption() {
+		BOPlaybackOption option = new BOPlaybackOption();
+		this.getSettingsTab().getSettingsTabPlayback().getPlaybackSettingsTableModel().addRow(option);
+	}
+	private void actionRemoveOption() {
+		int selectedRow = this.getSettingsTab().getSettingsTabPlayback().getJTablePlaybackSettings().getSelectedRow();
+		this.getSettingsTab().getSettingsTabPlayback().getPlaybackSettingsTableModel().removeRow(selectedRow);
+	}
+ 
     public GuiMainView getMainView() {
         return this.getSettingsTab().getControl().getMainView();
     }
