@@ -74,7 +74,7 @@ public class SerBoxControlDefault extends SerBoxControl {
 	public ArrayList getTimer() throws IOException {
 		throw new IOException();
 	}
-	public String setTimer(BOTimer timer) throws IOException {
+	public String setTimer(String action, BOTimer timer) throws IOException {
 		throw new IOException();
 	}
 

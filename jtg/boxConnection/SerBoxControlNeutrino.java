@@ -96,15 +96,14 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}	 
 	
 	public String zapTo(String channelId) throws IOException {
-		String status = new String();
 		//BufferedReader input = SerBoxControl.getConnection("/fb/switch.dbox2?zapto="+channelId);
 		BufferedReader input = getConnection("/control/zapto?"+channelId);
 		
 		String line;
 		while((line=input.readLine())!=null) {
-			status = line;
+			return line;
 		}
-		return status;
+		return line;
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
@@ -192,13 +191,27 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));
 		    valueStop=st.nextToken(st.nextToken());
 		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
-            botimer.setSender(st.nextToken());  
+            botimer.setChannelId(st.nextToken());  
             timerList.add(botimer);  
 		}   	
 		return timerList;
 	}
 	
-	public String setTimer(BOTimer timer) throws IOException {
-		return new String();
+	public String setTimer(String action, BOTimer timer) throws IOException {
+		String alarm = timer.getStartTime();
+		String stop = timer.getStopTime();
+		String announce = timer.getAnnounceTime();
+		String type = timer.getEventType();
+		String repeat = timer.getEventRepeat();
+		String chanId = timer.getChannelId();
+
+		String requestString = "/control/timer?action="+action+"&alarm="+alarm+
+			"&stop="+stop+"&announce="+announce+"&type="+type+"&rep="+repeat+"&channel_id="+chanId;
+		BufferedReader input = getConnection(requestString);
+		String line;
+		while((line=input.readLine())!=null) {
+			return line;
+		}
+		return line;
 	}
 }

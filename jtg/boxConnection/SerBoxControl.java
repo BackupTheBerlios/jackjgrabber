@@ -74,6 +74,6 @@ public abstract class SerBoxControl {
     public abstract String standbyBox(String modus) throws IOException;
 	public abstract String shutdownBox() throws IOException;
 	public abstract ArrayList getTimer() throws IOException;
-	public abstract String setTimer(BOTimer timer) throws IOException;		
+	public abstract String setTimer(String action, BOTimer timer) throws IOException;		
 
 }
