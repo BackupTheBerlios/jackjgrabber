@@ -89,4 +89,11 @@ public class BOSender {
 		this.setEpg(epgList);
 		return epgList;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return getName();
+	}
 }
