@@ -28,6 +28,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import model.BOPid;
 import model.BOPids;
 
 import service.SerGUIUtils;
@@ -86,11 +87,12 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 			counter=1;
 			//Radiobuttons vor audiopids
 			for(int i = 0 ; i<pidList.getAPids().size(); i++){
-				jRadioButtonAPids[i] = new JRadioButton();			
-				jRadioButtonAPids[i].setText(pidList.getAPidNumber(i)+" "+pidList.getAPidDescription(i));
-				jRadioButtonAPids[i].setSelected(true);
-				builder.add(jRadioButtonAPids[i],cc.xy(1, counter+2));
-				counter++;
+			    BOPid pid = (BOPid)pidList.getAPids().get(i);
+			    jRadioButtonAPids[i] = new JRadioButton();			
+			    jRadioButtonAPids[i].setText(pid.getNumber()+" "+pid.getName());
+			    jRadioButtonAPids[i].setSelected(true);
+			    builder.add(jRadioButtonAPids[i],cc.xy(1, counter+2));
+			    counter++;
 			}
 			//Radiobutton for vtxt-pid
 			if (pidList.getVtxtPid() != null) {
