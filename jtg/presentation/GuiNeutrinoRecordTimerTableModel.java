@@ -19,15 +19,13 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import java.util.Calendar;
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
 
 import model.BOSender;
 import model.BOTimer;
+import service.SerFormatter;
 import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
 
@@ -74,22 +72,14 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			timer.setSenderName((String)value);
 		}
 		if (col == 1) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
-			try {
-				Date newDate = sdf.parse((String)value);
-				timer.setUnformattedStartTime(newDate.getTime());
-			} catch (ParseException e) {}
+			GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "dd.MM.yy   HH:mm");
+			timer.setUnformattedStartTime(newDate.getTimeInMillis());
 		}
 		if (col == 2) {
 			GregorianCalendar oldcal = timer.getUnformattedStopTime();
-			Calendar newcal = new GregorianCalendar();
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-			try {
-				Date newDate = sdf.parse((String)value);
-				newcal.setTime(newDate);
-				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
-				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
-			} catch (ParseException e) {}
+			GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "HH:mm");
+			oldcal.set(Calendar.HOUR_OF_DAY, newDate.get(Calendar.HOUR_OF_DAY));
+			oldcal.set(Calendar.MINUTE, newDate.get(Calendar.MINUTE));
 		}
 		if (col == 3) {
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));

@@ -199,7 +199,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 
 			startTime = SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
 			startDate = SerFormatter.formatUnixDate(valueStart);
-			duration = SerFormatter.formatedEndTime(valueDuration);
+			duration = SerFormatter.formatUnixTimeToDuration(valueDuration);
 			endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
 			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);                        
 			

@@ -1,11 +1,11 @@
 package presentation;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.table.TableModel;
+
+import service.SerFormatter;
 
 /**
  * @author alexg
@@ -42,16 +42,10 @@ public class GuiMovieGuideTimerTableSorter extends GuiTableSorter {
 	
 	public static final Comparator DATE_COMPARATOR = new Comparator() {
         public int compare(Object o1, Object o2) {
-        	try {
-				String firstString = (String)o1;
-				String secondString = (String)o2;
-				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
-				Date firstDate = sdf.parse(firstString);
-				Date secondDate = sdf.parse(secondString);
-				return firstDate.compareTo(secondDate);
-			} catch (ParseException e) {
-				return 0;
-			}
+            GregorianCalendar firstDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
+			GregorianCalendar secondDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
+			return firstDate.compareTo(secondDate);
+			
         }
     };
 }

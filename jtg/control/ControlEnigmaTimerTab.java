@@ -8,18 +8,14 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
-import org.apache.log4j.Logger;
-
-import model.BOEpg;
 import model.BOSender;
 import model.BOTimer;
 
+import org.apache.log4j.Logger;
 
 import presentation.GuiEnigmaTimerPanel;
 import presentation.GuiMainView;
@@ -331,8 +327,8 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		timer.setSenderName( defaultSender.getName() );
 		timer.setChannelId(defaultSender.getChanId());
 		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
-		timer.setUnformattedStartTime(SerFormatter.formatDate(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatDate(now)); 
+		timer.setUnformattedStartTime(SerFormatter.formatTimeInMillisToCal(now));  
+		timer.setUnformattedStopTime(SerFormatter.formatTimeInMillisToCal(now)); 
 		timer.setModifiedId("new");
 				
 		timer.setEventRepeatId("0");

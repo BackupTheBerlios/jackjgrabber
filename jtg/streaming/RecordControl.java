@@ -136,7 +136,6 @@ public class RecordControl extends Thread {
 				print.close();
 			}
 		}
-
 	}
 
 	private void waitForStop() {
@@ -193,15 +192,15 @@ public class RecordControl extends Thread {
 	public String getFileName() {
 		if (this.fileName == null) {
 			SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
-			Date now = new Date();
-			String date = f.format(now);
+			String date = f.format( new Date());
 
 			BORecordArgs args = this.recordArgs;
 			if (args.getEpgTitle() != null) {
-				fileName = date + " " + args.getSenderName() + " "
-						+ args.getEpgTitle();
+			    Object[] obj = {date, args.getSenderName(), args.getEpgTitle()};
+				MessageFormat form = new MessageFormat("{0}_{1}_{2}");
+				fileName=form.format(obj);
 			} else {
-				fileName = date + " " + args.getSenderName();
+				fileName = date + "_" + args.getSenderName();
 			}
 		}
 		return SerFormatter.ersetzeUmlaute(fileName.replace(' ', '_'));
@@ -210,8 +209,7 @@ public class RecordControl extends Thread {
 	public File getDirectory() {
 		if (directory == null) {
 			directory = new File(ControlMain.getSettings().getSavePath(),
-					SerFormatter
-							.ersetzeUmlaute(getFileName().replace(' ', '_')));
+					SerFormatter.ersetzeUmlaute(getFileName().replace(' ', '_')));
 			directory.mkdir();
 		}
 		return directory;

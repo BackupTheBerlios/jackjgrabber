@@ -235,7 +235,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
 		                valueStart=""+(startDate.getTimeInMillis()/1000);
 		                valueDuration = ""+((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
-		                duration=SerFormatter.formatedEndTime(valueDuration);
+		                duration=SerFormatter.formatUnixTimeToDuration(valueDuration);
 		                startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
 						startDate =	SerFormatter.formatUnixDate(valueStart);
 						endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) *1000  + Long.parseLong(valueDuration) * 1000);

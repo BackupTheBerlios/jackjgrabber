@@ -17,12 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
+
 import model.BOTimer;
+import service.SerFormatter;
 import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
 
@@ -63,11 +63,8 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 			timer.setEventTypeId(control.convertLongEventType((String)value));
 		}
 		if (col == 1) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
-			try {
-				Date newDate = sdf.parse((String)value);
-				timer.setUnformattedStartTime(newDate.getTime());
-			} catch (ParseException e) {}
+		    GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "dd.MM.yy   HH:mm");
+			timer.setUnformattedStartTime(newDate.getTimeInMillis());
 		}
 		if (col == 2) {
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
