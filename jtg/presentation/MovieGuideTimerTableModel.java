@@ -45,10 +45,6 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		return value;
 	}
 		
-	public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
-
 	public String getColumnName( int columnIndex ) {
 		String value = null;
 		try{
