@@ -290,14 +290,14 @@ public class SerXMLConverter {
 		recordArgs.setEpgInfo2(epgInfo2.getText());
 		recordArgs.setEpgId(epgid.getText());
 		recordArgs.setMode(mode.getText());
-		recordArgs.setVPid(videopid.getText());
+		recordArgs.setVPid(Integer.toHexString(Integer.parseInt(videopid.getText())));
 		recordArgs.setVideotextPid(vtxtpid.getText());
 		
 		ArrayList pidList = new ArrayList();
 		for( int i=0; i<aPidNodes.size(); i++ ) {
 			String[] pidInfo = new String[2];
 			Element aPid = (Element)aPidNodes.get(i);
-			pidInfo[0] = aPid.attributeValue("pid");
+			pidInfo[0] = Integer.toHexString(Integer.parseInt(aPid.attributeValue("pid")));
 			pidInfo[1] = aPid.attributeValue("name");
 			pidList.add(pidInfo);
 		}
