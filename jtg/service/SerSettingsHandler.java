@@ -759,28 +759,15 @@ public class SerSettingsHandler {
 
 	public static void saveAllSettings() throws Exception {
 
-		XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.settingsFilename)));
+		XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.getSettingsFilename())));
 		dec.writeObject(ControlMain.getSettings());
 		dec.flush();
 		dec.close();
-
-		/*savePathSettings();
-			saveRecordSettings();
-			saveMainSettings();
-			saveMovieGuideSettings();
-			savePlaybackSettings();
-			saveLayoutSettings();
-			SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
-		*/
-
 	}
 
-	/**
-	 * 
-	 */
 	public static void readSettings() {
 		try {
-			XMLDecoder dec = new XMLDecoder(new FileInputStream(ControlMain.settingsFilename),null,new ExceptionListener() {
+			XMLDecoder dec = new XMLDecoder(new FileInputStream(ControlMain.getSettingsFilename()),null,new ExceptionListener() {
 				public void exceptionThrown(Exception e) {
 					Logger.getLogger("ControlMain").error(e.getMessage());
 				}
@@ -795,7 +782,7 @@ public class SerSettingsHandler {
 			Logger.getLogger("ControlMain").info("read old settings");
 			// read old settings file
 			try {
-				File pathToXMLFile = new File(ControlMain.settingsFilename).getAbsoluteFile();
+				File pathToXMLFile = new File(ControlMain.getSettingsFilename());
 				if (pathToXMLFile.exists()) {
 					ControlMain.setSettingsDocument(SerXMLHandling.readDocument(pathToXMLFile));
 					Logger.getLogger("ControlMain").info("Settings found");

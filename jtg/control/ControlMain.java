@@ -19,6 +19,7 @@ package control;
  */
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
@@ -70,7 +71,7 @@ public class ControlMain {
 	public static GuiSplashScreen screen;
 	public static GuiLogWindow logWindow;
 
-	public static String settingsFilename = "settings.xml";
+	private static String settingsFilename;
 
 	public static String version[] = {"Jack the JGrabber 0.2.1", "05.12.2004", "User: " + System.getProperty("user.name")};
 
@@ -106,13 +107,11 @@ public class ControlMain {
 			}
 		} else {
 			control.getView().setVisible(true);
+			control.getView().requestFocus();
 		}
 
 	};
 
-	/**
-	 * 
-	 */
 	private static void initLogWindow() {
 		logWindow.setShouldBeVisible(ControlMain.getSettingsMain().isShowLogWindow());
 		Point logLoc = getSettings().getLayoutSettings().getLogLocation();
@@ -337,13 +336,24 @@ public class ControlMain {
 		System.exit(0);
 	}
 
-	/**
-	 *  
-	 */
 	private static void saveLogLayout() {
 		if (logWindow != null) {
 			getSettings().getLayoutSettings().setLogLocation(logWindow.getLocation());
 			getSettings().getLayoutSettings().setLogSize(logWindow.getSize());
 		}
 	}
+    /**
+     * @return Returns the settingsFilename.
+     */
+    public static String getSettingsFilename() {
+        if (settingsFilename==null) {
+            String sep = System.getProperty("file.separator");
+            File dir = new File(System.getProperty("user.home")+sep+".JtJG");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            settingsFilename = dir.getAbsolutePath()+sep+"settings.xml";    
+        }
+        return settingsFilename;
+    }
 }
