@@ -246,7 +246,7 @@ public class SerHelper {
 		} else if (patternToReplace.equals("%NAME%")) {
 			replaceWith = args.getEpgTitle();
 			if (replaceWith == null || replaceWith.length() == 0) {
-				replaceWith = args.getEpgInfo1();
+				replaceWith = "unavailable";
 			}
 		} else if (patternToReplace.equals("%SERIE%")) {
 			replaceWith = args.getEpgInfo1();
