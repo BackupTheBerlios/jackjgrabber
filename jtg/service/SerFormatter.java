@@ -44,21 +44,16 @@ public class SerFormatter {
 	    return ( i >= 10 ) ? Integer.toString(i) : "0"+i;
 	} 
 		
-        private static long formatLong(String date){
-            long a = 0L;
-	    try {
-	    a = Long.parseLong(date);       
-	    }catch (Exception ex){
-	        System.out.println(ex);
-	    }  
-	    return a * 1000;                 
-        }
+	private static long formatLong(String date){
+		long a = 0L;
+		return Long.parseLong(date) * 1000;                          
+	}
                         
-        public static String formatUnixTime(String date, String dauer){
-            return shortTime( (formatLong(date)+formatLong(dauer)) );
+	public static String formatUnixTime(String date, String dauer){
+		return shortTime( (formatLong(date)+formatLong(dauer)) );
 	}
 	public static String formatUnixTime(String date){
-            return shortTime(formatLong(date));
+		return shortTime(formatLong(date));
 	}
         
 	public static Date formatUnixDate(String date, String dauer){	    
