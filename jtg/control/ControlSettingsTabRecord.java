@@ -70,10 +70,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.getTab().getCbShutdownAfterRecord().setSelected(this.getSettings().isShutdownAfterRecord());
 		this.getTab().getFilePattern().setText(getSettings().getFilePattern());
 		this.getTab().getDirPattern().setText(getSettings().getDirPattern());
-		this.getTab().getCbOtherFile().setSelected(getSettings().isDifferentFilePattern());
-		if (this.getTab().getCbOtherFile().isSelected()) {
-			getTab().getFilePattern().setEditable(true);
-		}
 		this.initializeAudioSettings();
 		this.initializeStreamingEngine();
 	}
@@ -163,15 +159,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				this.getSettings().setStartStreamingServer(((JCheckBox) e.getSource()).isSelected());
 				break;
 			}
-			if (action.equals("fileDifferent")) {
-				boolean diff = ((JCheckBox) e.getSource()).isSelected();
-				this.getSettings().setDifferentFilePattern(diff);
-				getTab().getFilePattern().setEditable(diff);
-				if (!diff) {
-					getTab().getFilePattern().setText("");
-					getSettings().setFilePattern("");
-				}
-			}
 			if (action.equals("Tags")) {
 				openTagWindow();
 				break;
@@ -201,8 +188,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			JOptionPane.showMessageDialog(getTab(), pattern + " ------>\n " + result, ControlMain.getProperty("filep_directory"),
 					JOptionPane.INFORMATION_MESSAGE);
 
-			if (getTab().getCbOtherFile().isSelected()) {
-				pattern = getTab().getFilePattern().getText();
+			pattern = getTab().getFilePattern().getText();
+			if (pattern.length() > 0) {
 				result = SerFormatter.removeInvalidCharacters(SerHelper.createFileName(arg, pattern));
 				JOptionPane.showMessageDialog(getTab(), pattern + " ------>\n " + result, ControlMain.getProperty("filep_file"),
 						JOptionPane.INFORMATION_MESSAGE);
@@ -217,7 +204,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	 */
 	private void openTagWindow() {
 		if (tagFrame == null) {
-			tagFrame = new JFrame("Tags");
+			tagFrame = new JFrame(ControlMain.getProperty("filep_tagName"));
 			final JList list = new JList(BOPatternTag.getTags());
 			list.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
@@ -229,7 +216,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 							text += t.getName();
 							getTab().getDirPattern().setText(text);
 						}
-
 						getSettings().setDirPattern(getTab().getDirPattern().getText());
 					}
 				}

@@ -442,7 +442,7 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().setDirPattern(strText);
 		} else {
 			SerXMLHandling.setElementInElement(root, "directoryPattern", "");
-			settings.getRecordSettings().setDirPattern("");
+			settings.getRecordSettings().setDirPattern("%DATE YY-MM-DD% %TIME% %CHANNEL% %NAME%");
 		}
 
 		node = root.selectSingleNode("/settings/filePattern");
@@ -454,14 +454,6 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().setFilePattern("");
 		}
 
-		node = root.selectSingleNode("/settings/differentFilePattern");
-		if (node != null) {
-			String strText = node.getText();
-			settings.getRecordSettings().setDifferentFilePattern(strText.equals("true"));
-		} else {
-			SerXMLHandling.setElementInElement(root, "differentFilePattern", "false");
-			settings.getRecordSettings().setDifferentFilePattern(false);
-		}
 	}
 	
 	private static void getSettingsLayout(Element root, BOSettings settings) {
@@ -677,7 +669,6 @@ public class SerSettingsHandler {
 
 		Node dirPattern = settingsDocument.selectSingleNode("/settings/directoryPattern");
 		Node filePattern = settingsDocument.selectSingleNode("/settings/filePattern");
-		Node diffFilePattern = settingsDocument.selectSingleNode("/settings/differentFilePattern");
 
 		
 		shutdown.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isShutdownAfterRecord()));
@@ -699,7 +690,6 @@ public class SerSettingsHandler {
 		storeEPG.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreEPG()));
 		storeLogAfterRecord.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreLogAfterRecord()));
 		
-		diffFilePattern.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isDifferentFilePattern()));
 		filePattern.setText(ControlMain.getSettings().getRecordSettings().getFilePattern());
 		dirPattern.setText(ControlMain.getSettings().getRecordSettings().getDirPattern());
 		

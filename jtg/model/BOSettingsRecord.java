@@ -41,6 +41,10 @@ public class BOSettingsRecord {
 	public boolean storeEPG;
 	public boolean storeLogAfterRecord;
 	public boolean recordVtxt;
+	
+	public String dirPattern;
+	public String filePattern;
+
 
 	public BOSettingsRecord(BOSettings settings) {
 		this.setSettings(settings);
@@ -334,20 +338,6 @@ public class BOSettingsRecord {
 	public void setFilePattern(String filePattern) {
 		if (!filePattern.equals(this.filePattern)) {
 			this.filePattern = filePattern;
-			setSettingsChanged(true);
-		}
-	}
-	public String dirPattern;
-	public String filePattern;
-	public boolean differentFilePattern;
-
-	public boolean isDifferentFilePattern() {
-		return differentFilePattern;
-	}
-
-	public void setDifferentFilePattern(boolean differentFilePattern) {
-		if (this.differentFilePattern != differentFilePattern) {
-			this.differentFilePattern = differentFilePattern;
 			setSettingsChanged(true);
 		}
 	}
