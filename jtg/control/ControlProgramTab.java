@@ -423,6 +423,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	private BORecordArgs buildRecordArgs() {
 		BORecordArgs args = new BORecordArgs(true);
+		args.setStopTimeOfQuickRecord(this.getRecordStopTime().getTime());
 		args.setPids(this.getPids());
 		this.fillRecordArgsWithEpgData(args);
 		return args;
