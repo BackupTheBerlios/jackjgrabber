@@ -27,7 +27,7 @@ public class GuiEpgTableModel extends AbstractTableModel
 	}
 
 	public int getColumnCount() {
-		return 4;	
+		return 5;	
 	}	
 
 	public int getRowCount() {
@@ -38,12 +38,14 @@ public class GuiEpgTableModel extends AbstractTableModel
 		BOEpg epg = (BOEpg)this.getEpgList().get(rowIndex);
 
 		if (columnIndex == 0) {
-			return epg.getStartTime();
+			return epg.getEventId();
 		} if (columnIndex == 1) {
-			return epg.getEndTime();
+			return epg.getStartTime();
 		} if (columnIndex == 2) {
+			return epg.getEndTime();
+		} if (columnIndex == 3) {
 			return epg.getDuration();
-		}else {
+		} else {
 			return epg.getTitle();
 		}
 	}
@@ -53,10 +55,12 @@ public class GuiEpgTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Start"; 
+			return "Event-ID"; 
 		} if (columnIndex == 1) {
 			return "Ende";
 		} if (columnIndex == 2) {
+			return "Start";
+		} if (columnIndex == 3) {
 			return "Dauer";
 		} else {
 			return "Titel";
