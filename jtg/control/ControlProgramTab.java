@@ -97,11 +97,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
 			this.selectRunningSender();
 			this.getMainView().getTabProgramm().setConnectModus();
-			this.reInitStreamingServer();
 			this.setActiveBox();
 			this.firstStart = false;
-		} catch (IOException e) {
-		}
+		} catch (IOException e) {}
 	}
 
 	private void setActiveBox() {
@@ -229,7 +227,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void actionRefresh() {
-	    this.stopStreamingServer();
 		ControlMain.detectImage();
 		this.reInitialize();
 	}
@@ -737,7 +734,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		}
 	}
 
-	private void reInitStreamingServer() {
+	public void reInitStreamingServer() {
 		if (ControlMain.getSettings().getRecordSettings().isStartStreamingServer()) {
 			startStreamingSever();
 		}
