@@ -52,27 +52,36 @@ public class BOSettingsMovieGuide {
 		return mgDefault;
 	}
 	public void setMgDefault(int mgDefault) {
-		this.mgDefault = mgDefault;
+			if (this.mgDefault != mgDefault) {
+				setSettingsChanged(true);
+				this.mgDefault = mgDefault;
+			}
 	}
 	public int getMgLoadType() {
 		return mgLoadType;
 	}
 	public void setMgLoadType(int mgLoadType) {
-		this.mgLoadType = mgLoadType;
+			if (this.mgLoadType != mgLoadType) {
+				setSettingsChanged(true);
+				this.mgLoadType = mgLoadType;
+			}
 	}
 	public ArrayList getMgSelectedChannels() {
 		return mgSelectedChannels;
 	}
 	public void setMgSelectedChannels(ArrayList mgSelectedChannels) {
-		this.mgSelectedChannels = mgSelectedChannels;
+			if (mgSelectedChannels != null && !mgSelectedChannels.equals(this.mgSelectedChannels)) {
+				setSettingsChanged(true);
+				this.mgSelectedChannels = mgSelectedChannels;
+			}
 	}
 	public boolean isMgStoreOriginal() {
 		return mgStoreOriginal;
 	}
 	public void setMgStoreOriginal(boolean mgStoreOriginal) {
-	    if (this.mgStoreOriginal != mgStoreOriginal) {
-    			setSettingsChanged(true);
-    			this.mgStoreOriginal = mgStoreOriginal;
-    		}
+			if (this.mgStoreOriginal != mgStoreOriginal) {
+				setSettingsChanged(true);
+				this.mgStoreOriginal = mgStoreOriginal;
+			}
 	}
 }
