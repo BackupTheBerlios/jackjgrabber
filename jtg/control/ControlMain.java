@@ -59,8 +59,6 @@ public class ControlMain {
 	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static BOBox activeBox;
-	public static ControlRecordInfoTab recordInfo;
-	
 	
     private static Properties properties = new Properties();   
     private static Locale locale = new Locale("");
