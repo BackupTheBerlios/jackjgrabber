@@ -102,6 +102,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		if (action == "add to timer"){
 			this.actionAddToTimer();
 		}
+		if (action == "nhttpd reset"){
+			try{
+				SerBoxTelnet.runNhttpdReset();
+			}catch (Exception ex){}
+		}
+		if (action == "EPG Reset"){
+			try{
+				SerBoxTelnet.runSectiondReset();
+			}catch (Exception ex){}
+		}
 	}
 	/**
 	 * Klick-Events der Tables
