@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
 
 import boxConnection.SerBoxControl;
+import boxConnection.SerBoxTelnet;
 
 import model.BOBouquet;
 import model.BOBox;
@@ -93,9 +94,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}
 		}
 		if (action == "Box Reboot"){
-			try{
-				this.getBoxAccess().shutdownBox();
-			}catch (IOException ex){}
+		try{
+		//		this.getBoxAccess().shutdownBox();				
+				SerBoxTelnet.runReboot();					
+		}catch (Exception ex){}
 		}
 		if (action == "add to timer"){
 			this.actionAddToTimer();
