@@ -1,3 +1,4 @@
+package control;
 /*
 ControlSettingsTabPath.java by Geist Alexander 
 
@@ -16,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-package control;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,6 +50,8 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
         this.getTab().getJTextFieldUdrecPath().setText(this.getSettings().getUdrecPath());
         this.getTab().getJTextFieldVlcPath().setText(this.getSettings().getVlcPath());
         this.getTab().getJTextFieldShutdonwToolPath().setText(this.getSettings().getShutdownToolPath());
+        this.getTab().getJTextFieldBrowserPath().setText(this.getSettings().getBrowserPath());
+        this.getTab().getJTextFieldWorkDirectory().setText(this.getSettings().getWorkDirectory());
     }
 		
 	public void actionPerformed(ActionEvent e) {
@@ -73,6 +76,14 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		  			this.openShutdownToolPathFileChooser();
 		  			break;
 		  		}
+		  		if (action.equals("browserPath")) {
+		  			this.openBrowserPathFileChooser();
+		  			break;
+		  		}
+		  		if (action.equals("workDirPath")) {
+		  			this.openWorkDirFileChooser();
+		  			break;
+		  		}
 		  		break;
 		}
 	}
@@ -93,6 +104,14 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			}
 			if (tf.getName().equals("shutdownToolPath")){
 			    this.getSettings().setShutdownToolPath(tf.getText());
+			    break;
+			}
+			if (tf.getName().equals("browserPath")){
+			    this.getSettings().setBrowserPath(tf.getText());
+			    break;
+			}
+			if (tf.getName().equals("workDirPath")){
+			    this.getSettings().setWorkDirectory(tf.getText());
 			    break;
 			}
 			break;
@@ -203,6 +222,38 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		    String path = fc.getSelectedFile().toString();
 			this.getTab().getJTextFieldUdrecPath().setText(path);
 			this.getSettings().setUdrecPath(path);	
+		}
+	}
+	
+	private void openBrowserPathFileChooser() {
+	    JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseBrowser"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+		    String path = fc.getSelectedFile().toString();
+			this.getTab().getJTextFieldBrowserPath().setText(path);
+			this.getSettings().setBrowserPath(path);	
+		}
+	}
+	
+	private void openWorkDirFileChooser() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+			String path = fc.getSelectedFile().toString();
+			this.getTab().getJTextFieldWorkDirectory().setText(path);
+			this.getSettings().setWorkDirectory(path);
 		}
 	}
     

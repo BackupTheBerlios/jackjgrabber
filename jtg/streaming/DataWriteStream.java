@@ -70,7 +70,7 @@ public class DataWriteStream {
 	
 	private void createFileOutput () {
 	    try {
-	        String separator = ControlMain.separator;
+	        String separator = File.separator;
             fileNumber = fileList.size();
             String fullFileName = recordControl.getFileName()+"_"+streamNumber+"_"+fileNumber+fileNameExtension;
             currentFile = new File(recordControl.getDirectory().getAbsolutePath()+separator+fullFileName);

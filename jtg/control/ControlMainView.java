@@ -74,7 +74,9 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	public void actionPerformed(ActionEvent e) {
 	    GuiLogWindow.switchLogVisiblity();
 	}
-	
+	/*
+	 * Installiere das jgoodies l&f
+	 */
 	private void initLookAndFeel() {
 		try {
 		    PlasticLookAndFeel l2 = new PlasticLookAndFeel();
@@ -96,7 +98,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 			e1.printStackTrace();
 		}
 	}
-	
+
 	public void setLookAndFeel() {
 	    String lookAndFeel = ControlMain.getSettings().getMainSettings().getLookAndFeel();
 	    String current = UIManager.getLookAndFeel().getClass().getName();
@@ -106,7 +108,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	        this.setSkinLookAndFeel(lfChanged);
 	    } else {
 	        try {
-	            boolean themeChanged = this.isThemeChanged();
+	            boolean themeChanged = this.isPlasticThemeChanged();
 				if (themeChanged) {
 					PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
 							+ ControlMain.getSettings().getMainSettings().getPlasticTheme())).newInstance();
@@ -134,7 +136,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
             Skin aSkin = (Skin) skinLFThemesMap.get(ControlMain.getSettingsMain().getSkinLFTheme());
             Skin old = SkinLookAndFeel.getSkin();
             if (aSkin != null) {
-            	if(lfChanged || aSkin!=old) {
+            	if(lfChanged || aSkin!=old) { //Zeichne GUI neu, wenn L&F oder Theme geändert
             	    SkinLookAndFeel.setSkin(aSkin);
             	    UIManager.setLookAndFeel(ControlMain.getSettings().getMainSettings().getLookAndFeel());    
             	
@@ -148,6 +150,9 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
         } 
 	}
 	
+	/*
+	 * installiere das Skin-L&F
+	 */
 	private void initSkinLookAndFeel() {
 	    try {
 	        SkinLookAndFeel.loadThemePack(ClassLoader.getSystemResource("themepack.zip"));
@@ -173,14 +178,15 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 				skinLFThemesMap.put(shortName, aSkin);				
 			}
 
+			//Skin-L&F installieren, wenn Themes-Dateien vorhanden
             if(skinLFThemesMap.size()>0) {
                 SkinLookAndFeel lf = new SkinLookAndFeel();
     			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(lf.getName(), SkinLookAndFeel.class.getName());
     			UIManager.installLookAndFeel(info);    
             }
         } catch (Exception e) {
-            if (ControlMain.getSettingsMain().getLookAndFeel().indexOf("SkinLookAndFeel") >-1) {
-	            ControlMain.getSettingsMain().setPlasticTheme("ExperienceBlue");
+          //Bei Fehlern des Skin L&F auf das Plastic-L&F ausweichen
+            if (ControlMain.getSettingsMain().isSkinLookAndFeel()) { 
 	            ControlMain.getSettingsMain().setLookAndFeel(PlasticLookAndFeel.class.getName());
 	        }
             e.printStackTrace();
@@ -190,11 +196,12 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	private ArrayList getSkinLFFiles() {
 	    ArrayList themesDateien = new ArrayList();
         try {
-            File themesPath = new File(ControlMain.jtjgDirectory + File.separator + "themes");
+            File themesPath = new File(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"themes");
             if (!themesPath.exists()) {
                 themesPath.mkdir();
             }
             File[] themeFiles = themesPath.listFiles();
+            //checken ob gültige Theme-Datei
             for (int i = 0; i < themeFiles.length; i++) {
             	if (themeFiles[i].isFile() && themeFiles[i].getName().indexOf(".zip") != -1) {
             	    themesDateien.add(themeFiles[i].toURL());
@@ -206,8 +213,8 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
         return themesDateien;
 	}
 	
-	private boolean isThemeChanged() {
-        String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
+	private boolean isPlasticThemeChanged() {
+	    String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
 		currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
 		return !currentTheme.equals(ControlMain.getSettings().getMainSettings().getPlasticTheme());    
 	}

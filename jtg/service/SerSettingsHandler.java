@@ -99,6 +99,7 @@ public class SerSettingsHandler {
 		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
 		pathS.setShutdownToolPath("");
 		pathS.setSavePath( System.getProperty("user.home"));
+		pathS.setWorkDirectory(ControlMain.jtjgDirectory);
 		
 		rec.setStartStreamingServer(true);
 		rec.setStreamingServerPort("4000");

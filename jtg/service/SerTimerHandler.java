@@ -38,7 +38,7 @@ import control.ControlMain;
 public class SerTimerHandler {
     
     private static Document timerDocument;
-    private static String timerFile = ControlMain.jtjgDirectory+ControlMain.separator+"localTimer.xml";
+    private static String timerFile = ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"localTimer.xml";
     
     /**
      * @return LocalTimer

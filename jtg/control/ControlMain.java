@@ -68,8 +68,7 @@ public class ControlMain {
 	static BOBox activeBox;
 
 	private static Properties properties = new Properties();
-	public static String separator =  System.getProperty("file.separator");
-	public static String jtjgDirectory = System.getProperty("user.home")+separator+".JtJG";
+	public static String jtjgDirectory = System.getProperty("user.home")+File.separator+".JtJG";
 	private static Locale locale = new Locale("");
 	public static GuiSplashScreen screen;
 	public static GuiLogWindow logWindow;
@@ -388,7 +387,7 @@ public class ControlMain {
             if (!userHome.exists()) {
                 userHome.mkdir();
             }
-            settingsFilename = jtjgDirectory+separator+"settings.xml";    
+            settingsFilename = jtjgDirectory+File.separator+"settings.xml";    
         }
         return settingsFilename;
     }

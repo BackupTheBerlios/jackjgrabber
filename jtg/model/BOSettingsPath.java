@@ -1,4 +1,7 @@
 package model;
+
+import control.ControlMain;
+
 /*
 BOSettingsRecords.java by Geist Alexander 
 
@@ -25,6 +28,8 @@ public class BOSettingsPath {
 	public String projectXPath;
 	public String vlcPath;
 	public String shutdownToolPath;
+	public String workDirectory;
+	public String browserPath;
 
 	public BOSettingsPath(BOSettings settings) {
 		this.setSettings(settings);
@@ -45,6 +50,13 @@ public class BOSettingsPath {
 	 */
 	public void setSettings(BOSettings settings) {
 		this.settings = settings;
+	}
+	
+	public boolean hasValidBrowserPath() {
+	    if (this.getBrowserPath()== null ||this.getBrowserPath().equals("") ) {
+	        return false;
+	    }
+	    return true;
 	}
 	/**
      * @return Returns the vlcPath.
@@ -122,5 +134,32 @@ public class BOSettingsPath {
 			setSettingsChanged(true);
 			this.shutdownToolPath = shutdownToolPath;
 		}
+    }
+    /**
+     * @return Returns the browserPath.
+     */
+    public String getBrowserPath() {
+        return browserPath;
+    }
+    /**
+     * @param browserPath The browserPath to set.
+     */
+    public void setBrowserPath(String browserPath) {
+        this.browserPath = browserPath;
+    }
+    /**
+     * @return Returns the workDirectory.
+     */
+    public String getWorkDirectory() {
+        if (workDirectory==null) {
+            workDirectory=ControlMain.jtjgDirectory;
+        }
+        return workDirectory;
+    }
+    /**
+     * @param workDirectory The workDirectory to set.
+     */
+    public void setWorkDirectory(String workDirectory) {
+        this.workDirectory = workDirectory;
     }
 }

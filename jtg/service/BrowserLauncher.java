@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import control.ControlMain;
+
 /**
  * BrowserLauncher is a class that provides one static method, openURL, which opens the default
  * web browser for the current user of the system to the given URL.  It may support other
@@ -362,7 +364,7 @@ public class BrowserLauncher {
 	 *			open the default web browser.  In some cases, this will be a non-String object
 	 *			that provides the means of calling the default browser.
 	 */
-	private static Object locateBrowser() {
+	public static Object locateBrowser() {
 		if (browser != null) {
 			return browser;
 		}
@@ -470,122 +472,126 @@ public class BrowserLauncher {
 	 * @throws IOException If the web browser could not be located or does not run
 	 */
 	public static void openURL(String url) throws IOException {
-		if (!loadedWithoutErrors) {
-			throw new IOException("Exception in finding browser: " + errorMessage);
-		}
-		Object browser = locateBrowser();
-		if (browser == null) {
-			throw new IOException("Unable to locate browser: " + errorMessage);
-		}
+	    if (ControlMain.getSettingsPath().hasValidBrowserPath()) {
+	        Runtime.getRuntime().exec(new String[] { ControlMain.getSettingsPath().getBrowserPath(), url } );
+	    } else {
+	        if (!loadedWithoutErrors) {
+				throw new IOException("Exception in finding browser: " + errorMessage);
+			}
+			Object browser = locateBrowser();
+			if (browser == null) {
+				throw new IOException("Unable to locate browser: " + errorMessage);
+			}
 
-		switch (jvm) {
-			case MRJ_2_0:
-				Object aeDesc = null;
-				try {
-					aeDesc = aeDescConstructor.newInstance(new Object[] { url });
-					putParameter.invoke(browser, new Object[] { keyDirectObject, aeDesc });
-					sendNoReply.invoke(browser, new Object[] { });
-				} catch (InvocationTargetException ite) {
-					throw new IOException("InvocationTargetException while creating AEDesc: " + ite.getMessage());
-				} catch (IllegalAccessException iae) {
-					throw new IOException("IllegalAccessException while building AppleEvent: " + iae.getMessage());
-				} catch (InstantiationException ie) {
-					throw new IOException("InstantiationException while creating AEDesc: " + ie.getMessage());
-				} finally {
-					aeDesc = null;	// Encourage it to get disposed if it was created
-					browser = null;	// Ditto
-				}
-				break;
-			case MRJ_2_1:
-				Runtime.getRuntime().exec(new String[] { (String) browser, url } );
-				break;
-			case MRJ_3_0:
-				int[] instance = new int[1];
-				int result = ICStart(instance, 0);
-				if (result == 0) {
-					int[] selectionStart = new int[] { 0 };
-					byte[] urlBytes = url.getBytes();
-					int[] selectionEnd = new int[] { urlBytes.length };
-					result = ICLaunchURL(instance[0], new byte[] { 0 }, urlBytes,
-											urlBytes.length, selectionStart,
-											selectionEnd);
+			switch (jvm) {
+				case MRJ_2_0:
+					Object aeDesc = null;
+					try {
+						aeDesc = aeDescConstructor.newInstance(new Object[] { url });
+						putParameter.invoke(browser, new Object[] { keyDirectObject, aeDesc });
+						sendNoReply.invoke(browser, new Object[] { });
+					} catch (InvocationTargetException ite) {
+						throw new IOException("InvocationTargetException while creating AEDesc: " + ite.getMessage());
+					} catch (IllegalAccessException iae) {
+						throw new IOException("IllegalAccessException while building AppleEvent: " + iae.getMessage());
+					} catch (InstantiationException ie) {
+						throw new IOException("InstantiationException while creating AEDesc: " + ie.getMessage());
+					} finally {
+						aeDesc = null;	// Encourage it to get disposed if it was created
+						browser = null;	// Ditto
+					}
+					break;
+				case MRJ_2_1:
+					Runtime.getRuntime().exec(new String[] { (String) browser, url } );
+					break;
+				case MRJ_3_0:
+					int[] instance = new int[1];
+					int result = ICStart(instance, 0);
 					if (result == 0) {
-						// Ignore the return value; the URL was launched successfully
-						// regardless of what happens here.
-						ICStop(instance);
+						int[] selectionStart = new int[] { 0 };
+						byte[] urlBytes = url.getBytes();
+						int[] selectionEnd = new int[] { urlBytes.length };
+						result = ICLaunchURL(instance[0], new byte[] { 0 }, urlBytes,
+												urlBytes.length, selectionStart,
+												selectionEnd);
+						if (result == 0) {
+							// Ignore the return value; the URL was launched successfully
+							// regardless of what happens here.
+							ICStop(instance);
+						} else {
+							throw new IOException("Unable to launch URL: " + result);
+						}
 					} else {
-						throw new IOException("Unable to launch URL: " + result);
+						throw new IOException("Unable to create an Internet Config instance: " + result);
 					}
-				} else {
-					throw new IOException("Unable to create an Internet Config instance: " + result);
-				}
-				break;
-			case MRJ_3_1:
-				try {
-					openURL.invoke(null, new Object[] { url });
-				} catch (InvocationTargetException ite) {
-					throw new IOException("InvocationTargetException while calling openURL: " + ite.getMessage());
-				} catch (IllegalAccessException iae) {
-					throw new IOException("IllegalAccessException while calling openURL: " + iae.getMessage());
-				}
-				break;
-		    case WINDOWS_NT:
-		    	// Add quotes around the URL to allow ampersands and other special
-		    	// characters to work.
-				Process process = Runtime.getRuntime().exec(new String[] { (String) browser,
-																FIRST_WINDOWS_PARAMETER,
-																SECOND_WINDOWS_PARAMETER,
-																THIRD_WINDOWS_PARAMETER,
-																'"' + url + '"' });
-				// This avoids a memory leak on some versions of Java on Windows.
-				// That's hinted at in <http://developer.java.sun.com/developer/qow/archive/68/>.
-				try {
-					process.waitFor();
-					process.exitValue();
-				} catch (InterruptedException ie) {
-					throw new IOException("InterruptedException while launching browser: " + ie.getMessage());
-				}
-				break;
-		    case WINDOWS_9x:
-			// 2004-10-23 dvb.matt mod, Win98SE 'start' command seems not work with a 'title' string in the commandline chain
-		    	// Add quotes around the URL to allow ampersands and other special
-		    	// characters to work.
-				process = Runtime.getRuntime().exec(new String[] { (String) browser,
-																FIRST_WINDOWS_PARAMETER,
-																SECOND_WINDOWS_PARAMETER,
-																'"' + url + '"' });
-				// This avoids a memory leak on some versions of Java on Windows.
-				// That's hinted at in <http://developer.java.sun.com/developer/qow/archive/68/>.
-				try {
-					process.waitFor();
-					process.exitValue();
-				} catch (InterruptedException ie) {
-					throw new IOException("InterruptedException while launching browser: " + ie.getMessage());
-				}
-				break;
-			case OTHER:
-				// Assume that we're on Unix and that Netscape is installed
-				
-				// First, attempt to open the URL in a currently running session of Netscape
-				process = Runtime.getRuntime().exec(new String[] { (String) browser,
-													NETSCAPE_REMOTE_PARAMETER,
-													NETSCAPE_OPEN_PARAMETER_START +
-													url +
-													NETSCAPE_OPEN_PARAMETER_END });
-				try {
-					int exitCode = process.waitFor();
-					if (exitCode != 0) {	// if Netscape was not open
-						Runtime.getRuntime().exec(new String[] { (String) browser, url });
+					break;
+				case MRJ_3_1:
+					try {
+						openURL.invoke(null, new Object[] { url });
+					} catch (InvocationTargetException ite) {
+						throw new IOException("InvocationTargetException while calling openURL: " + ite.getMessage());
+					} catch (IllegalAccessException iae) {
+						throw new IOException("IllegalAccessException while calling openURL: " + iae.getMessage());
 					}
-				} catch (InterruptedException ie) {
-					throw new IOException("InterruptedException while launching browser: " + ie.getMessage());
-				}
-				break;
-			default:
-				// This should never occur, but if it does, we'll try the simplest thing possible
-				Runtime.getRuntime().exec(new String[] { (String) browser, url });
-				break;
-		}
+					break;
+			    case WINDOWS_NT:
+			    	// Add quotes around the URL to allow ampersands and other special
+			    	// characters to work.
+					Process process = Runtime.getRuntime().exec(new String[] { (String) browser,
+																	FIRST_WINDOWS_PARAMETER,
+																	SECOND_WINDOWS_PARAMETER,
+																	THIRD_WINDOWS_PARAMETER,
+																	'"' + url + '"' });
+					// This avoids a memory leak on some versions of Java on Windows.
+					// That's hinted at in <http://developer.java.sun.com/developer/qow/archive/68/>.
+					try {
+						process.waitFor();
+						process.exitValue();
+					} catch (InterruptedException ie) {
+						throw new IOException("InterruptedException while launching browser: " + ie.getMessage());
+					}
+					break;
+			    case WINDOWS_9x:
+				// 2004-10-23 dvb.matt mod, Win98SE 'start' command seems not work with a 'title' string in the commandline chain
+			    	// Add quotes around the URL to allow ampersands and other special
+			    	// characters to work.
+					process = Runtime.getRuntime().exec(new String[] { (String) browser,
+																	FIRST_WINDOWS_PARAMETER,
+																	SECOND_WINDOWS_PARAMETER,
+																	'"' + url + '"' });
+					// This avoids a memory leak on some versions of Java on Windows.
+					// That's hinted at in <http://developer.java.sun.com/developer/qow/archive/68/>.
+					try {
+						process.waitFor();
+						process.exitValue();
+					} catch (InterruptedException ie) {
+						throw new IOException("InterruptedException while launching browser: " + ie.getMessage());
+					}
+					break;
+				case OTHER:
+					// Assume that we're on Unix and that Netscape is installed
+					
+					// First, attempt to open the URL in a currently running session of Netscape
+					process = Runtime.getRuntime().exec(new String[] { (String) browser,
+														NETSCAPE_REMOTE_PARAMETER,
+														NETSCAPE_OPEN_PARAMETER_START +
+														url +
+														NETSCAPE_OPEN_PARAMETER_END });
+					try {
+						int exitCode = process.waitFor();
+						if (exitCode != 0) {	// if Netscape was not open
+							Runtime.getRuntime().exec(new String[] { (String) browser, url });
+						}
+					} catch (InterruptedException ie) {
+						throw new IOException("InterruptedException while launching browser: " + ie.getMessage());
+					}
+					break;
+				default:
+					// This should never occur, but if it does, we'll try the simplest thing possible
+					Runtime.getRuntime().exec(new String[] { (String) browser, url });
+					break;
+			}   
+	    }
 	}
 
 	/**

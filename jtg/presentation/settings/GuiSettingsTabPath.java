@@ -1,3 +1,4 @@
+package presentation.settings;
 /*
 GuiSettingsTabPath.java by Geist Alexander 
 
@@ -16,7 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-package presentation.settings;
 
 import java.awt.Dimension;
 
@@ -42,7 +42,11 @@ public class GuiSettingsTabPath extends GuiTab {
 	private JTextField jTextFieldProjectXPath;
 	private JTextField jTextFieldVlcPath;
 	private JTextField jTextFieldShutdonwToolPath;
+	private JTextField jTextFieldWorkDirectory;
+	private JTextField jTextFieldBrowserPath;
 	private JButton jButtonRecordPathFileChooser = null;
+	private JButton jButtonBrowserPathFileChooser = null;
+	private JButton jButtonWorkDirChooser = null;
 	private JButton jButtonUdrecPathFileChooser = null;
 	private JButton jButtonProjectXPathFileChooser = null;
 	private JButton jButtonVlcPathFileChooser = null;
@@ -58,26 +62,32 @@ public class GuiSettingsTabPath extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "pref, 10, f:pref:grow, 5, pref",  		// columns 
-				  "pref, pref, pref, pref, pref"); 			// rows
+				  "pref, 10, pref, pref, pref, pref, pref, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
 				
-				builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 1));
-				builder.add(this.getJTextFieldRecordSavePath(),								cc.xy	(3, 1));
-				builder.add(this.getJButtonRecordPathFileChooser(),							cc.xy	(5, 1));
-				builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),		cc.xy	(1, 2));
-				builder.add(this.getJTextFieldProjectXPath(),								cc.xy	(3, 2));
-				builder.add(this.getJButtonProjectXPathFileChooser(),						cc.xy	(5, 2));
-				builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),			cc.xy	(1, 3));
-				builder.add(this.getJTextFieldUdrecPath(),									cc.xy	(3, 3));
-				builder.add(this.getJButtonUdrecPathFileChooser(),							cc.xy	(5, 3));
-				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),			cc.xy	(1, 4));
-				builder.add(this.getJTextFieldVlcPath(),									cc.xy	(3, 4));
-				builder.add(this.getJButtonVlcPathFileChooser(),							cc.xy	(5, 4));
-				builder.add(new JLabel(ControlMain.getProperty("label_shutdownToolPath")),	cc.xy	(1, 5));
-				builder.add(this.getJTextFieldShutdonwToolPath(),							cc.xy	(3, 5));
-				builder.add(this.getJButtonShutdownToolPathFileChooser(),					cc.xy	(5, 5));
+				builder.add(new JLabel(ControlMain.getProperty("label_workDirPath")),		cc.xy	(1, 1));
+				builder.add(this.getJTextFieldWorkDirectory(),								cc.xy	(3, 1));
+				builder.add(this.getJButtonWorkDirChooser(),								cc.xy	(5, 1));
+				builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 3));
+				builder.add(this.getJTextFieldRecordSavePath(),								cc.xy	(3, 3));
+				builder.add(this.getJButtonRecordPathFileChooser(),							cc.xy	(5, 3));
+				builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),		cc.xy	(1, 4));
+				builder.add(this.getJTextFieldProjectXPath(),								cc.xy	(3, 4));
+				builder.add(this.getJButtonProjectXPathFileChooser(),						cc.xy	(5, 4));
+				builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),			cc.xy	(1, 5));
+				builder.add(this.getJTextFieldUdrecPath(),									cc.xy	(3, 5));
+				builder.add(this.getJButtonUdrecPathFileChooser(),							cc.xy	(5, 5));
+				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),			cc.xy	(1, 6));
+				builder.add(this.getJTextFieldVlcPath(),									cc.xy	(3, 6));
+				builder.add(this.getJButtonVlcPathFileChooser(),							cc.xy	(5, 6));
+				builder.add(new JLabel(ControlMain.getProperty("label_shutdownToolPath")),	cc.xy	(1, 7));
+				builder.add(this.getJTextFieldShutdonwToolPath(),							cc.xy	(3, 7));
+				builder.add(this.getJButtonShutdownToolPathFileChooser(),					cc.xy	(5, 7));
+				builder.add(new JLabel(ControlMain.getProperty("label_browserPath")),		cc.xy	(1, 8));
+				builder.add(this.getJTextFieldBrowserPath(),								cc.xy	(3, 8));
+				builder.add(this.getJButtonBrowserPathFileChooser(),						cc.xy	(5, 8));
     }
 	    	
 	
@@ -207,5 +217,52 @@ public class GuiSettingsTabPath extends GuiTab {
             jTextFieldShutdonwToolPath.setPreferredSize(new Dimension(340, 19));
 		}
         return jTextFieldShutdonwToolPath;
+    }
+    /**
+     * @return Returns the jButtonBrowserPathFileChooser.
+     */
+    public JButton getJButtonBrowserPathFileChooser() {
+        if (jButtonBrowserPathFileChooser == null) {
+            jButtonBrowserPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
+            jButtonBrowserPathFileChooser.setActionCommand("browserPath");
+            jButtonBrowserPathFileChooser.addActionListener(control);
+		}
+        return jButtonBrowserPathFileChooser;
+    }
+    /**
+     * @return Returns the jButtonWorkDirChooser.
+     */
+    public JButton getJButtonWorkDirChooser() {
+        if (jButtonWorkDirChooser == null) {
+            jButtonWorkDirChooser = new JButton(iconManager.getIcon("Open16.gif"));
+            jButtonWorkDirChooser.setActionCommand("workDirPath");
+            jButtonWorkDirChooser.addActionListener(control);
+		}
+        return jButtonWorkDirChooser;
+    }
+    /**
+     * @return Returns the jTextFieldBrowserPath.
+     */
+    public JTextField getJTextFieldBrowserPath() {
+        if (jTextFieldBrowserPath == null) {
+            jTextFieldBrowserPath = new JTextField();
+            jTextFieldBrowserPath.addKeyListener(control);
+            jTextFieldBrowserPath.setName("browserPath");
+            jTextFieldBrowserPath.setPreferredSize(new Dimension(340, 19));
+		}
+        return jTextFieldBrowserPath;
+    }
+    /**
+     * @return Returns the jTextFieldWorkDirectory.
+     */
+    public JTextField getJTextFieldWorkDirectory() {
+        if (jTextFieldWorkDirectory == null) {
+            jTextFieldWorkDirectory = new JTextField();
+            jTextFieldWorkDirectory.addKeyListener(control);
+            jTextFieldWorkDirectory.setName("workDirPath");
+            jTextFieldWorkDirectory.setEditable(false);
+            jTextFieldWorkDirectory.setPreferredSize(new Dimension(340, 19));
+		}
+        return jTextFieldWorkDirectory;
     }
 }
