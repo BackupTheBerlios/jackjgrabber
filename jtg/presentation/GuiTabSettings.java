@@ -3,6 +3,8 @@
  */
 package presentation;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -141,6 +143,7 @@ public class GuiTabSettings extends JPanel {
 	private JScrollPane getJScrollPaneBoxSettings() {
 		if (jScrollPaneBoxSettings == null) {
 			jScrollPaneBoxSettings = new JScrollPane();
+			jScrollPaneBoxSettings.setPreferredSize(new Dimension(350, 100));
 			jScrollPaneBoxSettings.setViewportView(getJTableBoxSettings());
 		}
 		return jScrollPaneBoxSettings;
