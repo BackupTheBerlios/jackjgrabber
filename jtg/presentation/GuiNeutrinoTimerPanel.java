@@ -2,13 +2,16 @@ package presentation;
 
 import java.awt.Dimension;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -54,11 +57,12 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JButton jButtonDeleteAll = null;
 	private ImageIcon imageIconNeutrino = null;
 	private ControlNeutrinoTimerTab control;
-	public GuiNeutrinoTimerTableModel timerTableModel;
+	public GuiNeutrinoRecordTimerTableModel timerTableModel;
 	private JTable jTableRecordTimer = null;
 	private JTable jTableSystemTimer = null;
 	private JScrollPane jScrollPaneRecordTimerTable = null;
 	private JScrollPane jScrollPaneSystemTimerTable = null;
+	private GuiNeutrinoTimerSenderComboModel senderComboModel = null;
 	
 
 	public GuiNeutrinoTimerPanel(ControlNeutrinoTimerTab control) {
@@ -101,23 +105,37 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	
 	private ImageIcon getImageIconNeutrino() {
 		if (imageIconNeutrino == null) {
-			imageIconNeutrino = new ImageIcon(ClassLoader.getSystemResource("ico/neutrino.gif"));
+			//imageIconNeutrino = new ImageIcon(ClassLoader.getSystemResource("ico/neutrino.gif"));
+			imageIconNeutrino = new ImageIcon(ClassLoader.getSystemResource("ico/neutrino-logo.jpg"));
 		}
 		return imageIconNeutrino;
 	}
  
 	public JTable getJTableRecordTimer() {
 		if (jTableRecordTimer == null) {
-			timerTableModel = new GuiNeutrinoTimerTableModel(control);
+			JComboBox comboBoxSender = new JComboBox(new GuiNeutrinoTimerSenderComboModel(control));
+			JComboBox comboBoxRepeat = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
+			
+			timerTableModel = new GuiNeutrinoRecordTimerTableModel(control);			
 			jTableRecordTimer = new JTable(timerTableModel);
+			jTableRecordTimer.setRowHeight(20);
+			jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(100);
+			jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(70);
+			jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(50);
+			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(50);
+			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(80);
+			
+			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);			
+			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
+			columnSender.setCellEditor(new DefaultCellEditor(comboBoxSender));
+			columnRepeat.setCellEditor(new DefaultCellEditor(comboBoxRepeat));
 		}
 		return jTableRecordTimer;
 	}
 	
 	public JTable getJTableSystemTimer() {
 		if (jTableSystemTimer == null) {
-			timerTableModel = new GuiNeutrinoTimerTableModel(control);
-			jTableSystemTimer = new JTable(timerTableModel);
+			return new JTable();
 		}
 		return jTableSystemTimer;
 	}
@@ -138,13 +156,13 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		return jScrollPaneSystemTimerTable;
 	}
   
-	public GuiNeutrinoTimerTableModel getTimerTableModel() {
+	public GuiNeutrinoRecordTimerTableModel getTimerTableModel() {
 		return timerTableModel;
 	}
 	/**
 	 * @param senderTableModel The senderTableModel to set.
 	 */
-	public void setTimerTableModel(GuiNeutrinoTimerTableModel TimerTableModel) {
+	public void setTimerTableModel(GuiNeutrinoRecordTimerTableModel TimerTableModel) {
 		this.timerTableModel = TimerTableModel;
 	}
 	
@@ -257,7 +275,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		if (jPanelDauerTimer == null) {
 			jPanelDauerTimer = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 1dlu, pref, 1dlu, pref, 1dlu, pref, 1dlu, pref, 1dlu, pref, 1dlu, pref",	 		//columna 
+				      "pref, 30, pref, 30, pref, 30, pref, 30, pref, 30, pref, 30, pref",	 		//columna 
 				      "pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer, layout);
 			CellConstraints cc = new CellConstraints();
@@ -432,6 +450,19 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			jButtonNewSystemtimer.addActionListener(control);
 		}
 		return jButtonNewSystemtimer;
+	}
+	/**
+	 * @return Returns the senderComboModel.
+	 */
+	public GuiNeutrinoTimerSenderComboModel getSenderComboModel() {
+		return senderComboModel;
+	}
+	/**
+	 * @param senderComboModel The senderComboModel to set.
+	 */
+	public void setSenderComboModel(
+			GuiNeutrinoTimerSenderComboModel senderComboModel) {
+		this.senderComboModel = senderComboModel;
 	}
 }
 

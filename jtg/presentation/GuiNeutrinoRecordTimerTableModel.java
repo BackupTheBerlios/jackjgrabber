@@ -1,26 +1,26 @@
 package presentation;
 
 
-
-
+import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 
-import boxConnection.SerBoxControl;
-
+import model.BOSender;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
 
-public class GuiNeutrinoTimerTableModel extends AbstractTableModel 
+/**
+ * @author Alexander Geist
+ */
+public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel 
 {
 	ControlNeutrinoTimerTab control;
-	SerBoxControl box;
 	
-	public GuiNeutrinoTimerTableModel(ControlNeutrinoTimerTab ctrl){
+	public GuiNeutrinoRecordTimerTableModel(ControlNeutrinoTimerTab ctrl){
 		this.setControl(ctrl);
 	}
 
 	public int getColumnCount() {
-		return 5;	
+		return 6;	
 	}	
 
 	public int getRowCount() {
@@ -44,6 +44,17 @@ public class GuiNeutrinoTimerTableModel extends AbstractTableModel
 			return timer.getDescription(); 
 		}
 	}
+	
+	public void setValueAt(Object value, int row, int col) {
+		if (col == 0) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList().get(row);
+			timer.setSenderName((String)value);
+			this.fireTableDataChanged();
+		}
+		
+        //data[row][col] = value;
+        //fireTableCellUpdated(row, col);
+    }
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
@@ -54,13 +65,16 @@ public class GuiNeutrinoTimerTableModel extends AbstractTableModel
 			return "Start";
 		} if (columnIndex == 3) {
 			return "Ende";
+		} if (columnIndex == 4) {
+			return "Wiederholung";
 		} else {
 			return "Titel";
 		}
 	}
 	
-	public boolean isCellEditable(int row, int col) {
-		return false;
+	public boolean isCellEditable (int row, int col) {
+	    Class columnClass = getColumnClass(col);
+	    return true;
 	}
 	
 	public ControlNeutrinoTimerTab getControl() {
@@ -71,4 +85,7 @@ public class GuiNeutrinoTimerTableModel extends AbstractTableModel
 		this.control = control;
 	}
 	
+	public Class getColumnClass(int c) {
+        return getValueAt(0, c).getClass();
+	}
 }
