@@ -561,7 +561,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(4, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
 			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(modelIndex, modelIndex);
-			BOEpg selEpg = (BOEpg) this.getSelectedSender().getEpg().get(modelIndex);
+			BOEpg selEpg = (BOEpg) this.getEpgTableModel().getEpgList().get(modelIndex);
 			//this.setSelectedEpg(selEpg);
 		} else {
 		    this.reInitEpgDetail();  
