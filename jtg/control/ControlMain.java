@@ -68,7 +68,7 @@ public class ControlMain {
     public static String movieGuideFileName ="movieguide.xml";
     
 	public static String version[] = { 
-		"Jack the JGrabber 0.1.2",
+		"Jack the JGrabber 0.1.3",
 		"26.10.2004",
 		"TEST PROJECT ONLY",
 		"User: "+System.getProperty("user.name")
@@ -97,7 +97,7 @@ public class ControlMain {
 	public static void main( String args[] ) {
 		startLogger();
 		readSettings();
-		checkMovieGuide();
+		//checkMovieGuide();
 		detectActiveBox();
 		control = new ControlMainView();
 	};
