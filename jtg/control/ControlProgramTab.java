@@ -35,12 +35,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.log4j.Logger;
-
-import boxConnection.SerBoxControl;
-import boxConnection.SerBoxTelnet;
-import boxConnection.SerStreamingServer;
-
 import model.BOBouquet;
 import model.BOBox;
 import model.BOEpg;
@@ -50,16 +44,20 @@ import model.BOPlaybackOption;
 import model.BORecordArgs;
 import model.BOSender;
 import model.BOTimer;
+
+import org.apache.log4j.Logger;
+
 import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
 import presentation.GuiPidsQuestionDialog;
 import presentation.GuiSenderTableModel;
 import presentation.GuiTabProgramm;
-import service.SerErrorStreamReadThread;
-import service.SerInputStreamReadThread;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import streaming.RecordControl;
+import boxConnection.SerBoxControl;
+import boxConnection.SerBoxTelnet;
+import boxConnection.SerStreamingServer;
 
 
 /**
@@ -261,8 +259,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
                 String execString = this.getPlaybackRequestString();
                 if (execString != null ) {
                     Process run = Runtime.getRuntime().exec(execString);
-        			new SerInputStreamReadThread(run.getInputStream()).start();
-        	        new SerErrorStreamReadThread(run.getErrorStream()).start();   
+        			//new SerInputStreamReadThread(run.getInputStream()).start();
+        	        //new SerErrorStreamReadThread(run.getErrorStream()).start();   
                 }
             } catch (IOException e) {
                 Logger.getLogger("ControlProgramTab").error(e.getMessage());
