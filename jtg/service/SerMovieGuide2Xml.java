@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import javax.swing.JProgressBar;
 
+import model.BOSettingsProxy;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -48,7 +50,7 @@ public class SerMovieGuide2Xml extends Thread{
     JProgressBar bar;
     FileWriter fw = null;    
     int xml ;
-    
+    BOSettingsProxy proxySettings = ControlMain.getSettingsProxy();
     public SerMovieGuide2Xml(String file, GuiMainView view) {   
     	mainView=view;
     	bar=view.getTabMovieGuide().getJProgressBarDownload();
@@ -114,7 +116,12 @@ public class SerMovieGuide2Xml extends Thread{
     URLConnection con;    
     if (path != null) {
         con = (new File(path).toURL()).openConnection(); 
-    } else {
+    } else {    	
+        if (proxySettings.isUse()) {
+            System.getProperties().put("proxyHost", proxySettings.getHost());
+            System.getProperties().put("proxyPort", proxySettings.getPort());
+        }
+    	
 	    URL url = null;
 	    if(!ControlMovieGuideTab.movieGuideFile.exists()){
 	    url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
@@ -125,8 +132,12 @@ public class SerMovieGuide2Xml extends Thread{
 	    }    
 	    if(ControlMain.getSettingsMovieGuide().isMgStoreOriginal()){                                    
 	        fw = new FileWriter(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+url.getFile().substring(18));      
-	    }
+	    }	    
 	    con =url.openConnection();
+	    if (proxySettings.isUse()) {
+            con.setRequestProperty("Proxy-Authorization",
+                                  "Basic " + proxySettings.getUserPass());
+        }
     }
     return con;
     }
@@ -163,7 +174,11 @@ public class SerMovieGuide2Xml extends Thread{
                         inhalt.setLength(0);
                     }
                 }               
-            }            
+            } 
+            if (proxySettings.isUse()) {
+                System.getProperties().remove("proxyHost");
+                System.getProperties().remove("proxyPort");
+            }
             bar.setValue(fileLength);
             if (xml == 0){
             	SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFile, doc);
