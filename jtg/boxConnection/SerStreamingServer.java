@@ -109,8 +109,6 @@ public class SerStreamingServer extends Thread {
 		    Logger.getLogger("SerStreamingServer").info("From DBox: Stop record");
 		}
 		if (recordArgs.getCommand().equals("record")) {
-		    recordArgs.setQuickRecord(false);
-			recordArgs.checkRecordPids();
 			recordArgs.checkTitle();		
 			ControlMain.getControl().getView().getTabProgramm().getControl().startRecord(recordArgs);
 			Logger.getLogger("SerStreamingServer").info("From DBox: Start record");

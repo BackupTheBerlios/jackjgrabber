@@ -62,7 +62,8 @@ public class ControlDefaultTimerTab extends ControlTabTimer {
 	
 	public void writeTimer(BOTimer timer) throws IOException {}
 
-	public void addRecordTimer(BOTimer timer) {}
+	public void refreshRecordTimerTable() {
+    }
 	/**
 	 * @return Returns the mainView.
 	 */

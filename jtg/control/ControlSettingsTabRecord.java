@@ -209,7 +209,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 
 		// test directory pattern
 		String pattern = getTab().getTfDirPattern().getText();
-		BORecordArgs arg = new BORecordArgs();
+		BORecordArgs arg = new BORecordArgs(true);
 		arg.setSenderName("RTL");
 		arg.setEpgTitle("JackTheMovie");
 		arg.setEpgInfo1("1.Teil");

@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import service.timer.SerTimerHandler;
+import service.SerTimerHandler;
 import control.ControlNeutrinoTimerTab;
 
 public class BOTimer extends java.lang.Object{

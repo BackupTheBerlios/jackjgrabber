@@ -222,14 +222,10 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		}
 	}
 	public void reReadTimerList(){
-	    try {
-            this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            this.setTimerList(ControlMain.getBoxAccess().getTimerList(true));
-            this.getTab().setCursor(Cursor.getDefaultCursor());
-            this.refreshTables();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        this.setTimerList(ControlMain.getBoxAccess().getTimerList(true));
+        this.getTab().setCursor(Cursor.getDefaultCursor());
+        this.refreshTables();
 	}
 	private void actionSend() {
 		//this.setChanId(this.getTimerList()[0]);
@@ -323,7 +319,8 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	    }
 	}
 	
-	public void addRecordTimer(BOTimer timer) {}
+	public void refreshRecordTimerTable() {
+    }
 	
 	private BOTimer buildRecordTimer() {
 	    BOTimer timer = new BOTimer();

@@ -50,6 +50,7 @@ import service.SerExternalProcessHandler;
 import service.SerIconManager;
 import service.SerLogAppender;
 import service.SerSettingsHandler;
+import streaming.LocalTimerRecordDaemon;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
@@ -96,6 +97,7 @@ public class ControlMain {
 		checkGuiSettings();
 		splash.setProgress(100, ControlMain.getProperty("msg_app_starting"));
 		splash.dispose();
+        new LocalTimerRecordDaemon().start();
 	}
 	
 	private static void startSplash() {

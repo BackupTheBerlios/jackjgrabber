@@ -50,7 +50,7 @@ import presentation.movieguide.GuiTabMovieGuide;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
-import service.timer.SerTimerHandler;
+import service.SerTimerHandler;
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener, Runnable, KeyListener {
 	
@@ -557,7 +557,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             botimer.setEventTypeId("5");
             botimer.setDescription(getBOMovieGuide4Timer().getTitel());
             
-            SerTimerHandler.saveTimer(botimer);
+            SerTimerHandler.saveTimer(botimer, true);
         } catch (IOException e) {            
             Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_sender"));
         }		

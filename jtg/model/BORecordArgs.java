@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import service.timer.SerTimerHandler;
+import service.SerTimerHandler;
 
 public class BORecordArgs {
 
@@ -32,7 +32,15 @@ public class BORecordArgs {
 	String command;
 	BOPids pids;
 	BOLocalTimer localTimer;
-	boolean quickRecord=true;
+	boolean quickRecord;
+    
+    public BORecordArgs(boolean quickRecord) {
+        this.setQuickRecord(quickRecord);
+    }
+    public BORecordArgs(BOLocalTimer timer, boolean qRecord) {
+        quickRecord=qRecord;
+        this.setLocalTimer(timer);
+    }
 	/**
 	 * @return Returns the aPids.
 	 */
@@ -155,7 +163,7 @@ public class BORecordArgs {
      * wenn es sich um eine Timer-Aufnahme handelt,
      * den zugehoerigen Local-Timer suchen
      */
-    public void setQuickRecord(boolean quickRecord) {
+    private void setQuickRecord(boolean quickRecord) {
         if (!quickRecord) {
             this.setLocalTimer(SerTimerHandler.getRunningLocalBoxTimer());
         }
@@ -183,7 +191,7 @@ public class BORecordArgs {
      * Setzen der richtigen Audiopids
      * Checken ob Videotext aufgenommen werden soll
      */
-    public void checkRecordPids() {
+    private void checkRecordPids() {
         if (this.getLocalTimer().isAc3ReplaceStereo()) {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
@@ -218,5 +226,6 @@ public class BORecordArgs {
      */
     public void setLocalTimer(BOLocalTimer localTimer) {
         this.localTimer = localTimer;
+        checkRecordPids();
     }
 }

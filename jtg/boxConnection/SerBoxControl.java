@@ -23,6 +23,7 @@ import java.util.GregorianCalendar;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOLocalTimer;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
@@ -30,21 +31,31 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
-import service.timer.SerTimerHandler;
+import service.SerTimerHandler;
 
 import control.ControlMain;
 
 public abstract class SerBoxControl {
         
     public boolean newTimerAdded=true;
-    public BOTimerList timerList;
+    public BOTimerList timerList=new BOTimerList();
+    public BOLocalTimer nextLocalRecordTimer;
     
-    public BOTimerList getTimerList(boolean newRead) throws IOException {
+    public void detectNextLocalRecordTimer() {
+        SerTimerHandler.deleteOldTimer();
+        nextLocalRecordTimer = timerList.getFirstLocalRecordTimer();
+    }
+    
+    public BOTimerList getTimerList(boolean newRead) {
         if (newRead || timerList==null || newTimerAdded) {
-            SerTimerHandler.deleteOldTimer();
-            reReadTimerList();
             SerTimerHandler.readLocalTimer(timerList);
+            try {
+                reReadTimerList();
+            } catch (IOException e) {
+                Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_read_timer"));
+            }
             newTimerAdded=false;
+            detectNextLocalRecordTimer();
         }
         return timerList;
     }

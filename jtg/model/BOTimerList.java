@@ -27,7 +27,7 @@ public class BOTimerList {
     private ArrayList recordTimerList = new ArrayList();
     private ArrayList systemTimerList = new ArrayList(); 
     
-    public BOLocalTimer getFirstLocalBoxTimer() {
+    public BOLocalTimer getFirstLocalBoxRecordTimer() {
         if (this.getRecordTimerList().size()>0) {
             BOTimer timer=null;
             
@@ -38,6 +38,30 @@ public class BOTimerList {
                 } else {
                     BOTimer compareTimer = (BOTimer)this.getRecordTimerList().get(i);
                     if (!compareTimer.getLocalTimer().isLocal()) {
+                        if (SerFormatter.compareDates(compareTimer.getUnformattedStartTime(), timer.getUnformattedStartTime())==-1) {
+                            timer=compareTimer;
+                        }   
+                    }
+                }
+            }
+            if (timer!=null) {
+                return timer.getLocalTimer();   
+            }
+        }
+        return null;
+    }
+    
+    public BOLocalTimer getFirstLocalRecordTimer() {
+        if (this.getRecordTimerList().size()>0) {
+            BOTimer timer=null;
+            
+            for (int i=1; i<this.getRecordTimerList().size(); i++) {
+                if (timer==null) {
+                    if (((BOTimer)this.getRecordTimerList().get(i)).getLocalTimer().isLocal())
+                    timer = (BOTimer)this.getRecordTimerList().get(i);
+                } else {
+                    BOTimer compareTimer = (BOTimer)this.getRecordTimerList().get(i);
+                    if (compareTimer.getLocalTimer().isLocal()) {
                         if (SerFormatter.compareDates(compareTimer.getUnformattedStartTime(), timer.getUnformattedStartTime())==-1) {
                             timer=compareTimer;
                         }   

@@ -1,4 +1,4 @@
-package service.timer;
+package service;
 /*
 SerTimerHandler.java by Geist Alexander 
 
@@ -49,17 +49,12 @@ public class SerTimerHandler {
      * vergleiche mit der Box-Zeit
      */
     public static BOLocalTimer getRunningLocalBoxTimer() {
-        try {
-            BOTimerList timerList = ControlMain.getBoxAccess().getTimerList(true);
-            BOLocalTimer timer = timerList.getFirstLocalBoxTimer();
-            if (isValidTimer(timer)) {
-                return timer;
-            }
-            return null;
-        } catch (IOException e) {
-            Logger.getLogger("SerTimerHandler").error(e.getMessage());
-            return null;
+        BOTimerList timerList = ControlMain.getBoxAccess().getTimerList(true);
+        BOLocalTimer timer = timerList.getFirstLocalBoxRecordTimer();
+        if (isValidTimer(timer)) {
+            return timer;
         }
+        return null;
     }
     
     private static boolean isValidTimer(BOLocalTimer timer) {
@@ -155,6 +150,7 @@ public class SerTimerHandler {
             mainTimer.addElement("senderName").addText(timer.getMainTimer().getSenderName());
 
             localTimer.add(mainTimer);
+            timer.getMainTimer().setModifiedId(null);
             ControlMain.getBoxAccess().newTimerAdded=true;
         }
         
@@ -199,7 +195,8 @@ public class SerTimerHandler {
             mainTimer.selectSingleNode("eventTypeId").setText(timer.getMainTimer().getEventTypeId());
             mainTimer.selectSingleNode("eventRepeatId").setText(timer.getMainTimer().getEventRepeatId());
             mainTimer.selectSingleNode("repeatCount").setText(timer.getMainTimer().getRepeatCount());
-            mainTimer.selectSingleNode("senderName").setText(timer.getMainTimer().getSenderName());  
+            mainTimer.selectSingleNode("senderName").setText(timer.getMainTimer().getSenderName());
+            timer.getMainTimer().setModifiedId(null);
         }
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
@@ -215,6 +212,7 @@ public class SerTimerHandler {
         }
         if (timer.getLocalTimer().getTimerNode()==null){
             saveNewTimer(timer.getLocalTimer());
+            ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
         } else {
             editOldTimer(timer.getLocalTimer());
         }
@@ -302,17 +300,26 @@ public class SerTimerHandler {
     /*
      * zentrale Methode um neue/geänderte Timer zu speichern
      */
-    public static void saveTimer(BOTimer timer) {
+    public static void saveTimer(BOTimer timer, boolean reloadList) {
         try {
             if (timer.getModifiedId() != null && timer.getModifiedId().equals("new") && timer.localTimer==null){
                 BOLocalTimer.getDefaultLocalTimer(timer);
             }
             //lokaler Teil muss immer gespeichert werden
             saveLocalTimer(timer); 
-            if (!timer.getLocalTimer().isLocal() && timer.getModifiedId()!=null ) {  //Box-Timer
-//          Box-Timer nur speichern, wenn er neu/modifiziert ist
-                ControlMain.getBoxAccess().writeTimer(timer); 
+            
+            if (!timer.getLocalTimer().isLocal() && timer.getModifiedId()!=null ) {  //Box-Timer nur speichern, wenn er neu/modifiziert ist
+                if (timer.getModifiedId().equals("new")) {
+                    ControlMain.getBoxAccess().writeTimer(timer);
+                    if (reloadList) {
+                        ControlMain.getBoxAccess().getTimerList(true);  
+                    }
+                } else {
+                    ControlMain.getBoxAccess().writeTimer(timer);
+                }
             }
+            //aktuellen Timer neu ermitteln
+            
         } catch (IOException e) {
             
         }   

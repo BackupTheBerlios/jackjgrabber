@@ -117,15 +117,11 @@ public class ControlStartTab extends ControlTab {
 	}
 	
 	public String getNextTimerInfo() {
-	    try {
-            BOTimerList list = ControlMain.getBoxAccess().getTimerList(false);
-            BOTimer timer = list.getFirstRecordTimer();
-            if (timer!=null) {
-                return timer.getStartTime()+"    Sender:"+timer.getSenderName();    
-            }
-        } catch (IOException e) {
-            return new String();
-        }
+	    BOTimerList list = ControlMain.getBoxAccess().getTimerList(false);
+	    BOTimer timer = list.getFirstRecordTimer();
+	    if (timer!=null) {
+	        return timer.getStartTime()+"    Sender:"+timer.getSenderName();    
+	    }
         return new String();
 	}
 	

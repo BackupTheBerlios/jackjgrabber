@@ -34,8 +34,8 @@ public abstract class ControlTabTimer implements Runnable {
 	public abstract String convertShortEventRepeat(String shortString);
 	public abstract String convertLongEventRepeat(String longString);
 	public abstract BOTimerList getTimerList();
-	public abstract void addRecordTimer (BOTimer timer);
 	public abstract void writeTimer (BOTimer timer) throws IOException;
 	public abstract GuiTimerPanel getTab();
+    public abstract void refreshRecordTimerTable();
 	
 }

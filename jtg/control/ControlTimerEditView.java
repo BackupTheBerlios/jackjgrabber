@@ -221,12 +221,11 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	
 	private void actionSaveRecordTimer() {
 	    try {
-	        if (timer.getMainTimer().getModifiedId()!=null) {
-	            if (timer.getMainTimer().getModifiedId().equals("new")) {
-	                this.getControlTimer().addRecordTimer(this.getTimer().getMainTimer());
-	            }
-	        }
-	        this.getControlTimer().writeTimer(this.getTimer().getMainTimer());
+            if (timer.getMainTimer().getModifiedId()!=null && (
+                    timer.getMainTimer().getModifiedId().equals("new") || timer.getMainTimer().getModifiedId().equals("modify"))) {
+                this.getControlTimer().writeTimer(this.getTimer().getMainTimer());
+                this.getControlTimer().refreshRecordTimerTable();
+            }
         } catch (IOException e) {
             SerAlertDialog.alertConnectionLost("ControlTimerEditView", this.getView());
         }
@@ -297,7 +296,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 
 		// test directory pattern
 		String pattern = getView().getJTextFieldDirPattern().getText();
-		BORecordArgs arg = new BORecordArgs();
+		BORecordArgs arg = new BORecordArgs(true);
 		arg.setSenderName("RTL");
 		arg.setEpgTitle("JackTheMovie");
 		arg.setEpgInfo1("1.Teil");

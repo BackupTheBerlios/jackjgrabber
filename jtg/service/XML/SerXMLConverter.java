@@ -37,7 +37,7 @@ public class SerXMLConverter {
 	 * @return BORecordArgs
 	 */
 	public static BORecordArgs parseRecordDocument(Document document) {
-		BORecordArgs recordArgs = new BORecordArgs();
+		BORecordArgs recordArgs = new BORecordArgs(false);
 		Element root = document.getRootElement();
 		recordArgs.setPids(new BOPids());
 		

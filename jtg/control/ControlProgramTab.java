@@ -59,7 +59,7 @@ import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
-import service.timer.SerTimerHandler;
+import service.SerTimerHandler;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
@@ -398,7 +398,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 * @return BORecordArgs Erstellen des Objektes BORecordArgs und Setzen der Pids
 	 */
 	private BORecordArgs buildRecordArgs() {
-		BORecordArgs args = new BORecordArgs();
+		BORecordArgs args = new BORecordArgs(true);
 		args.setPids(this.getPids());
 		this.fillRecordArgsWithEpgData(args);
 		return args;
@@ -478,7 +478,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			if (tableName == "Epg") {
 				if (me.getClickCount() == 2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
-					SerTimerHandler.saveTimer(timer);
+					SerTimerHandler.saveTimer(timer, true);
 				}
 			}
 		} catch (IOException e) {
@@ -688,7 +688,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
             int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(rows[i]);
             BOEpg epg = (BOEpg)this.getEpgTableModel().getEpgList().get(modelIndex);            
             BOTimer timer = this.buildTimer(epg);
-            SerTimerHandler.saveTimer(timer);
+            SerTimerHandler.saveTimer(timer, i+1==rows.length);
 		}
 	}
 	

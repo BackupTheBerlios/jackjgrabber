@@ -311,8 +311,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 
 	public BOTimerList readTimer() throws IOException {
-	    BOTimerList timerList = new BOTimerList();
-		
 		BufferedReader inputNhttpd = getConnection("/control/timer");
 		String line;
 		while ((line = inputNhttpd.readLine()) != null) {
