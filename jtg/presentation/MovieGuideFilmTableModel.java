@@ -18,14 +18,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import javax.swing.table.AbstractTableModel;
-import model.BOMovieGuide;
+
 import control.ControlMovieGuideTab;
 
 
-public class MovieGuideFilmTableModel extends AbstractTableModel 
-{
-	ControlMovieGuideTab control;	
-	BOMovieGuide mguide = new BOMovieGuide();    			
+public class MovieGuideFilmTableModel extends AbstractTableModel{
+	ControlMovieGuideTab control;			
 	
 	public MovieGuideFilmTableModel(ControlMovieGuideTab ctrl){
 		this.setControl(ctrl);			
@@ -36,17 +34,16 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
-		if (control.getFilmeList() == null) {
+		if (this.getControl().getTitelMap() == null) {
 			return 0;
-		} else {
-			//return control.getFilmeList().size();
-			return mguide.getTitelMap().size();			
+		} else {			
+			return this.getControl().getTitelMap().size();			
 		}
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		if (columnIndex == 0) {
-			return mguide.getTitelMap(new Integer(rowIndex));						
+			return this.getControl().getTitelMap().get(new Integer(rowIndex));						
 		}else{
 			return null;
 		}	

@@ -472,15 +472,15 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 
 	public JComboBox getComboBoxGenre(){
-		if (comboBoxGenre == null) {
-			SerMovieGuide2Xml guide = new SerMovieGuide2Xml();				
-			comboBoxGenre = new JComboBox(new BOMovieGuide().getGenreList().toArray());
+		if (comboBoxGenre == null) {			
+			comboBoxGenre = new JComboBox(this.getControl().getGenreArray().toArray());
 		}
 		return comboBoxGenre;
 	}
+	
 	public JComboBox getComboBoxDatum() {
-		if (comboBoxDatum == null) {	
-			comboBoxDatum = new JComboBox(new BOMovieGuide().getDatumList().toArray());			
+		if (comboBoxDatum == null) {					
+			comboBoxDatum = new JComboBox(this.getControl().getDateArray().toArray());
 		}
 		return comboBoxDatum;
 	}
