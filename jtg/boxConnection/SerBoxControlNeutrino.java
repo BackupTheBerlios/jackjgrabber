@@ -291,8 +291,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		}
 				
 		BufferedReader input = getConnection(buffer.toString());
+		System.out.println(buffer.toString());
 		String line;
 		while((line=input.readLine())!=null) {
+			timer.setModifiedId(null);
 			return line;
 		}
 		return line;
