@@ -35,9 +35,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		guiTerms.setVisible(true);
 	}
 	
-	private void runAfterTerms() {
-		ControlMain.startLogger();
-		ControlMain.readSettings();
+	private void runAfterTerms() {;
 		this.setView(new GuiMainView(this));
 		ControlMain.getLogAppender().setView(this.getView());
 		this.initialize();
@@ -110,10 +108,6 @@ public class ControlMainView implements ActionListener, ChangeListener {
 			ControlMain.detectImage();
 			pane.getTabProgramm().getControl().reInitialize();
 			ControlMain.getSettings().setBoxIpChanged(false);
-		}
-//		Change-Event beim Verlassen des ProjectX-Tabs
-		if (pane.getIndex()==2) {
-			X.inisave();
 		}
 		
 		//Change-Events bei betreten neuer Tabs
