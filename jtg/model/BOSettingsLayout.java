@@ -51,7 +51,7 @@ public class BOSettingsLayout {
 		return location;
 	}
 	public void setLocation(Point location) {
-		if (!location.equals(this.location)) {
+		if (location == null || !location.equals(this.location)) {
 			this.location = location;
 			setSettingsChanged(true);
 		}
@@ -70,7 +70,7 @@ public class BOSettingsLayout {
 		return size;
 	}
 	public void setSize(Dimension size) {
-		if (size != null && !size.equals(this.size)) {
+		if (size == null || !size.equals(this.size)) {
 			this.size = size;
 			setSettingsChanged(true);
 		}
