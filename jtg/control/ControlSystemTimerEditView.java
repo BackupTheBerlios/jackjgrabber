@@ -91,9 +91,19 @@ public class ControlSystemTimerEditView implements ActionListener, KeyListener, 
 	}
 
 	private void actionSaveRecordTimer() {
-		SerTimerHandler.saveSystemTimer(this.timer, true);
-		this.getControlTimer().refreshSystemTimerTable();
-
+		
+		if (getCurrentTimerType().equals("1000"))
+		{
+			this.timer.getLocalTimer().setLocal(true);
+			this.timer.getLocalTimer().setProcessToStart(view.getJTextFieldProcess().getText());
+			this.timer.getLocalTimer().setSystemTimer(true);
+			SerTimerHandler.saveTimer(timer,false,false);
+		}
+		else
+		{
+			SerTimerHandler.saveSystemTimer(this.timer, true);
+			this.getControlTimer().refreshSystemTimerTable();
+		}
 		this.getView().dispose();
 	}
 
@@ -141,6 +151,12 @@ public class ControlSystemTimerEditView implements ActionListener, KeyListener, 
 				enableWidgets(timerType);
 			}
 		}
+	}
+	
+	private String getCurrentTimerType()
+	{
+		String timerType = controlTimer.convertLongEventType((String) view.getJComboBoxTimerType().getSelectedItem());
+		return timerType;
 	}
 
 	/**
