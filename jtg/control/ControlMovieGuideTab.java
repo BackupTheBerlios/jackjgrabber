@@ -28,6 +28,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Iterator;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -56,6 +57,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 
 	static Hashtable titelList;
 	static Hashtable controlMap;
+	static Hashtable titelListAktuell;
 	
 	static ArrayList genreList = new ArrayList();
 	static ArrayList datumList = new ArrayList();
@@ -64,7 +66,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private static Document movieGuideDocument;
 
 	public static String movieGuideFileName = "movieguide.all";
-	
+	private static String SelectedItemJComboBox;
+	private static int SelectedItemJComboBoxSucheNach;
 
 	public ControlMovieGuideTab(GuiMainView view) {
 		this.setMainView(view);
@@ -107,11 +110,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (action == "select2Timer") {
 			//this.openFileChooser();
 		}
-		if (action == "suchen") {
-			//this.openFileChooser();
+		if (action == "suchen") {					
+			setSelectedItemJComboBox(this.getMainView().getTabMovieGuide().getTfSuche().getText());			
+			reInitFilmTable(getSelectedItemJComboBoxSucheNach());
 		}
 		if (action == "allDates") {
-			//this.openFileChooser();
+			setSelectedItemJComboBox("all");
+			reInitFilmTable(1);
 		}
 		if (action == "movieGuidePath") {
 			this.openFileChooser();
@@ -124,9 +129,57 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		String comp = event.getSource().getClass().getName();		
 		JComboBox comboBox = (JComboBox)event.getSource();
 		if (comboBox.getName().equals("jComboBoxDatum")) {			
-			
-		}			
+			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+			reInitFilmTable(1);		
+		}	
+		if (comboBox.getName().equals("jComboBoxGenre")) {		
+			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+			reInitFilmTable(2);		
+		}
+		if (comboBox.getName().equals("jComboBoxSucheNach")) {		
+			setSelectedItemJComboBoxSucheNach(comboBox.getSelectedItem().toString());					
+		}		
 	}
+	
+	private static void setSelectedItemJComboBoxSucheNach(String value){
+		if (value.equals("Titel")){
+			SelectedItemJComboBoxSucheNach=3;
+		}
+		if (value.equals("Darsteller")){
+			SelectedItemJComboBoxSucheNach=4;
+		}
+		if (value.equals("Episode")){
+			SelectedItemJComboBoxSucheNach=5;
+		}
+		if (value.equals("Bild")){
+			SelectedItemJComboBoxSucheNach=6;
+		}
+		if (value.equals("Ton")){
+			SelectedItemJComboBoxSucheNach=7;
+		}
+		if (value.equals("Produktionsland")){
+			SelectedItemJComboBoxSucheNach=8;
+		}
+		if (value.equals("Produktionsjahr")){
+			SelectedItemJComboBoxSucheNach=9;
+		}
+		if (value.equals("Regie")){
+			SelectedItemJComboBoxSucheNach=10;
+		}
+	}
+	
+	public int getSelectedItemJComboBoxSucheNach(){
+		return SelectedItemJComboBoxSucheNach;
+	}
+	
+	private static void setSelectedItemJComboBox(String value){
+		SelectedItemJComboBox = value;
+	}
+	
+	public String getSelectedItemJComboBox(){
+		return SelectedItemJComboBox;
+	}
+	
 	public Integer getSelectRowFilmTable(){		
 		if (this.getJTableFilm().getSelectedRow()<=0){
 			return new Integer(0);
@@ -136,10 +189,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	public void mousePressed(MouseEvent me) {
 		JTable table = (JTable) me.getSource();
-		String tableName = table.getName();		
-		Integer selectedRow = new Integer(table.getSelectedRow());
+		String tableName = table.getName();				
+		Integer selectedRow = new Integer(table.getSelectedRow());		
 		if (tableName == "filmTable") {	
-			BOMovieGuide bomovieguide = (BOMovieGuide)getTitelMap().get(selectedRow);
+			int modelIndex = this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(table.getSelectedRow());
+			BOMovieGuide bomovieguide = (BOMovieGuide)getTitelMap().get(new Integer(modelIndex));						
 			this.getMainView().getTabMovieGuide().getTaEpisode().setText("Episode:"+bomovieguide.getEpisode());			  		
 			this.getMainView().getTabMovieGuide().getTfGenre().setText("Genre: "+bomovieguide.getGenre());		
 			this.getMainView().getTabMovieGuide().getTaLand().setText("Produktion: "+bomovieguide.getLand()+" / "+bomovieguide.getJahr()+" / Regie: "+bomovieguide.getRegie());
@@ -255,10 +309,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     }
     
     public Hashtable getTitelMap(){
-    	return titelList;		
+    	return titelListAktuell;		
     }    	           
     
-    private static Hashtable getControlMap(){
+    public Hashtable getControlMap(){
     	return controlMap;
     }
     
@@ -268,15 +322,81 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	}
     }
     
+    public void setTitelMapSelected(String search,int value){
+    	titelListAktuell = new Hashtable();
+    	Iterator i = titelList.entrySet().iterator();
+    	int a = 0;
+    	while (i.hasNext()){
+    		Map.Entry entry = (Map.Entry)i.next();
+    		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();
+    		switch (value){
+    			case 1: //datum
+    				if(bomovieguide.getDatum().contains(search)){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 2: //genre
+    				if(bomovieguide.getGenre().contains(search)){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 3: //titel
+    				if(bomovieguide.getTitel().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 4: //darsteller
+    				if(bomovieguide.getDarsteller().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 5: // episode
+    				if(bomovieguide.getEpisode().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 6: // bild 
+    				if(bomovieguide.getBild().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break; 
+    			case 7: // ton
+    				if(bomovieguide.getTon().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 8: // Prodland
+    				if(bomovieguide.getLand().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 9: //Prodjahr
+    				if(bomovieguide.getJahr().indexOf(search)!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
+    			case 10: //regie
+    				if(bomovieguide.getRegie().toLowerCase().indexOf(search.toLowerCase())!=-1){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;	
+    		};    		
+    		if(search.equals("all")){
+    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    		}
+    	}    
+    }
+
     public static void setTitelMap() {				    	    
     	titelList = new Hashtable();
     	controlMap = new Hashtable();
+    	setGenreList("Genre...");
     	try {
 			int a = 0;			
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {
 				Element entry = (Element) i.next();		
 				setDatumList(entry.element("datum").getStringValue());
-				if(!getControlMap().containsKey(entry.element("titel").getStringValue())){
+				if(!controlMap.containsKey(entry.element("titel").getStringValue())){
 				BOMovieGuide bomovieguide = new BOMovieGuide(
 						entry.element("sender").getStringValue(), 
 						entry.element("datum").getStringValue(),
@@ -299,23 +419,39 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				setControlMap(bomovieguide.getTitel(),new Integer(a));
                 a++;               
 				}else{					 
-					 BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(getControlMap().get(entry.element("titel").getStringValue()));
+					 BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(controlMap.get(entry.element("titel").getStringValue()));
                      bomovieguide.setDatum(entry.element("datum").getStringValue());
                      bomovieguide.setStart(entry.element("start").getStringValue());
                      bomovieguide.setDauer(entry.element("dauer").getStringValue());
                      bomovieguide.setSender(entry.element("sender").getStringValue());                             
                      bomovieguide.setEnde(SerFormatter.getCorrectEndTime(entry.element("start").getStringValue(),entry.element("dauer").getStringValue()));
-                     titelList.put(getControlMap().get(bomovieguide.getTitel()),bomovieguide);
+                     titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
 			}
 		} catch (Exception ex) {System.out.println(ex);}				
+		titelListAktuell = new Hashtable();   // Table aufbauen für den Heutigen Tag
+    	Iterator i = titelList.entrySet().iterator();
+    	int a = 0;
+    	while (i.hasNext()){
+    		Map.Entry entry = (Map.Entry)i.next();
+    		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();
+    		if(bomovieguide.getDatum().contains(SerFormatter.getDatumToday())){
+    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    		}
+    	}    
 	}
 
-    private JTable getJTableFilm() {
+    public JTable getJTableFilm() {
 		return this.getMainView().getTabMovieGuide().getJTableFilm();
 	}
 	
 	private MovieGuideFilmTableModel getMovieGuideFilmTableModel() {
 		return this.getMainView().getTabMovieGuide().getMovieGuideFilmTableModel();
+	}
+	
+	public void reInitFilmTable(int value) {
+		if (this.getMainView().getMainTabPane().tabMovieGuide != null) { 
+			this.getMovieGuideFilmTableModel().fireTableDataChanged(value);
+		}
 	}
 }
