@@ -18,6 +18,8 @@
 package presentation.settings;
 
 import java.awt.Dimension;
+import java.net.InetAddress;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 
 import javax.swing.DefaultCellEditor;
@@ -58,7 +60,7 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JButton jButtonStartVlc = null;
-	private JTextField tfBoxIp = null;
+	private JFormattedTextField tfBoxIp = null;
 	private JFormattedTextField tfServerPort = null;	
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxLookAndFeel = null;
@@ -227,9 +229,9 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 		return jComboBoxLookAndFeel;
 	}
 
-	public JTextField getTfBoxIp() {
+	public JFormattedTextField getTfBoxIp() {
 		if (tfBoxIp == null) {
-				tfBoxIp = new JTextField();
+				tfBoxIp = new JFormattedTextField();
 		}
 		return tfBoxIp;
 	}
