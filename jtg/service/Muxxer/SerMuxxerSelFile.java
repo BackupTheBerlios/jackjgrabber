@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class SerMuxxerSelFile {
 
 
-	public void checkFilesToMux (ArrayList fileList) {
+	public static void checkFilesToMux (ArrayList fileList) {
 		
 	}
 
