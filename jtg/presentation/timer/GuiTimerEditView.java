@@ -159,7 +159,7 @@ public class GuiTimerEditView extends JFrame{
 		if (panelEngineSettings == null) {
 			panelEngineSettings = new JPanel();
 			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
-			"pref, pref, 10, pref"); //rows
+			"pref, pref, 10, pref, 20, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -169,6 +169,7 @@ public class GuiTimerEditView extends JFrame{
 			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 2));
 			builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 4, 1));
 			builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 4, 3));
+			builder.add(this.getCbShutdownAfterRecord(), cc.xyw(1, 6, 5));
 		}
 		return panelEngineSettings;
 	}
