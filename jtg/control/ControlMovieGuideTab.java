@@ -234,7 +234,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private void downloadMovieGuide(){
 		if(getMovieGuideFile().exists()){
 			if(SerMovieGuide2Xml.checkNewMovieGuide()){				
-				infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"));
+				if (movieGuideFileNext.exists()){
+					infoNewMovieGuide(ControlMain.getProperty("txt_mg_info3")+GET_AKTUELL_DATE_STRING_0+".\n"+ControlMain.getProperty("txt_mg_info3")+GET_AKTUELL_DATE_STRING_1);
+				}else{
+					infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"));
+				}
           	}else{          		
           		infoNewMovieGuide(ControlMain.getProperty("txt_mg_info3")+GET_AKTUELL_DATE_STRING_0+".\n"+ControlMain.getProperty("txt_mg_info4")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info5"));
           	}
