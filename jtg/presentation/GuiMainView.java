@@ -68,7 +68,7 @@ public class GuiMainView extends JFrame {
 		control = ctrl;
 		initialize();
 		setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
-				" "+ControlMain.version[2]+" "+ControlMain.version[3]);
+				" "+ControlMain.version[2]+", "+ControlMain.version[3]);
 		pack();
 		SerGUIUtils.center(this);
 		setVisible(true);	
@@ -100,6 +100,7 @@ public class GuiMainView extends JFrame {
 			mainTabPane.addTab("Timerliste", new JPanel());
 			mainTabPane.addTab("Project-X", new JPanel());
 			mainTabPane.addTab("Settings", new JPanel());
+			mainTabPane.addTab("About", new JPanel());
 		}
 		return mainTabPane;
 	}
@@ -116,8 +117,11 @@ public class GuiMainView extends JFrame {
 		return this.getMainTabPane().getTabSettings();
 	}
 	    
-	public GuiTabProjectX getTabProjectX() {
+	public JPanel getTabProjectX() {
 		return this.getMainTabPane().getTabProjectX();
+	}
+	public GuiTabAbout getTabAbout() {
+		return this.getMainTabPane().getTabAbout();
 	}
 	/**
 	 * @return Returns the control.
