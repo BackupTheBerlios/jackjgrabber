@@ -41,7 +41,7 @@ import control.ControlSettingsTabRecord;
 public class GuiSettingsTabRecord extends GuiTab {
     
     private ControlSettingsTabRecord control;
-	private JPanel panelPlaybackSettings = null;
+	private JPanel panelEngineSettings = null;
 	private JPanel panelRecordSettings = null;	
 	private JComboBox jComboBoxStreamType = null;	
 	private JTextField jTextFieldRecordSavePath;
@@ -66,58 +66,55 @@ public class GuiSettingsTabRecord extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "f:pref:grow",  		// columns 
-				  "f:pref"); 			// rows
+				  "f:pref, 15, f:pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
 		builder.add(this.getPanelRecordSettings(),		   		cc.xy(1,1));        
+		builder.add(this.getPanelEngineSettings(),		   		cc.xy(1,3));
     }
 	    	
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref, 5, pref, 10, pref:grow,  5, pref",	 		//columns 
-			  "pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref, 4, pref:grow");		//rows
+					  "pref, 5, pref, 10, pref:grow, pref:grow, 5, pref",	 		//columns 
+			  "pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 7, 1));
-			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 4, 1));
-			builder.add(new JLabel("Streamingserver-Port"),	  					cc.xywh	(5, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
-			builder.add(this.getTfServerPort(),									cc.xy	(7, 2));
+			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 8, 1));
+			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 5, 1));
+			builder.add(new JLabel("Streamingserver-Port"),	  					cc.xywh	(6, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
+			builder.add(this.getTfServerPort(),									cc.xy	(8, 2));
 			builder.add(this.getCbRecordAllPids(),								cc.xy	(1, 3));
 			builder.add(this.getCbStartPX(),									cc.xywh	(1, 5, 5, 1));
 			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),				cc.xy	(1, 6));
-			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(4, 6, 2, 1));
-			builder.add(this.getJButtonRecordPathFileChooser(),					cc.xy	(7, 6));
-			builder.addSeparator("TV-Aufname-Engine",							cc.xywh	(1, 7, 7, 1));	
-			builder.add(this.getJRadioButtonJGrabber(),							cc.xy	(1, 8));
-			builder.add(this.getJRadioButtonUdrec(),							cc.xy	(3, 8));
-			builder.add(this.getJComboBoxStreamType(),							cc.xywh	(5, 8, 2, 1));
-			builder.add(new JLabel("Pfad zur udrec.exe"),						cc.xy	(1, 10));
-			builder.add(this.getJTextFieldUdrecPath(),							cc.xywh	(4, 10, 2, 1));
-			builder.add(this.getJButtonUdrecPathFileChooser(),					cc.xy	(7, 10));
+			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(4, 6, 3, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(),					cc.xy	(8, 6));
 		}
 		return panelRecordSettings;
 	}
   
-	private JPanel getPanelPlaybackSettings() {
-		if (panelPlaybackSettings == null) {
-			panelPlaybackSettings = new JPanel();
+	private JPanel getPanelEngineSettings() {
+		if (panelEngineSettings == null) {
+		    panelEngineSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref, 10, pref",	 		//columna 
-			  "pref, pref, pref, pref, pref");	//rows
-			PanelBuilder builder = new PanelBuilder(panelPlaybackSettings, layout);
+			        "pref, 5, pref, 10, pref:grow,  5, pref",	 		//columns 
+			  "pref:grow, pref, 4, pref:grow");							//rows
+			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Playback-Settings",													cc.xywh	(1, 1, 3, 1));
-			builder.add(new JLabel("z.B. xine http://$ip:31339/$vPid,$aPid"),				cc.xywh	(1, 2, 3, 1));
-			builder.add(new JLabel("Execute"),					  											cc.xy	(1, 3));
-			builder.add(this.getJTextFieldPlaybackString(),											cc.xy	(3, 3));
+			builder.addSeparator("TV-Aufname-Engine",							cc.xywh	(1, 1, 7, 1));	
+			builder.add(this.getJRadioButtonJGrabber(),							cc.xy	(1, 2));
+			builder.add(this.getJRadioButtonUdrec(),							cc.xy	(3, 2));
+			builder.add(this.getJComboBoxStreamType(),							cc.xywh	(5, 2, 2, 1));
+			builder.add(new JLabel("Pfad zur udrec.exe"),						cc.xy	(1, 4));
+			builder.add(this.getJTextFieldUdrecPath(),							cc.xywh	(4, 4, 2, 1));
+			builder.add(this.getJButtonUdrecPathFileChooser(),					cc.xy	(7, 4));
 		}
-		return panelPlaybackSettings;
+		return panelEngineSettings;
 	}
 	
 	
