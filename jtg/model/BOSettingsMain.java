@@ -3,25 +3,20 @@ package model;
 import java.util.ArrayList;
 
 /*
-BOSettingsMain.java by Geist Alexander 
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-*/
+ * BOSettingsMain.java by Geist Alexander
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 public class BOSettingsMain {
-	
+
 	private BOSettings settings;
 	public String locale = "";
 	public String themeLayout;
@@ -33,14 +28,16 @@ public class BOSettingsMain {
 	public boolean startVlcAtStart;
 	public boolean showLogWindow;
 
+	public boolean startMinimized;
+
 	public BOSettingsMain(BOSettings settings) {
 		this.setSettings(settings);
 	}
-	
+
 	private void setSettingsChanged(boolean value) {
 		this.getSettings().setSettingsChanged(value);
 	}
-	
+
 	/**
 	 * @return Returns the settings.
 	 */
@@ -48,12 +45,13 @@ public class BOSettingsMain {
 		return settings;
 	}
 	/**
-	 * @param settings The settings to set.
+	 * @param settings
+	 *            The settings to set.
 	 */
 	public void setSettings(BOSettings settings) {
 		this.settings = settings;
 	}
-	
+
 	/**
 	 * @return Returns the themeLayout.
 	 */
@@ -70,7 +68,7 @@ public class BOSettingsMain {
 			this.themeLayout = layout;
 		}
 	}
-	
+
 	/**
 	 * @return Returns the locale.
 	 */
@@ -82,7 +80,7 @@ public class BOSettingsMain {
 	 *            The locale to set.
 	 */
 	public void setLocale(String locale) {
-		if (!this.locale.equals(locale)) {
+		if (this.locale == null || !this.locale.equals(locale)) {
 			setSettingsChanged(true);
 			this.locale = locale;
 		}
@@ -90,7 +88,7 @@ public class BOSettingsMain {
 	public String getShortLocale() {
 		return this.getLocale().substring(0, 2);
 	}
-	
+
 	/**
 	 * @return Returns the boxList.
 	 */
@@ -171,33 +169,45 @@ public class BOSettingsMain {
 		}
 	}
 	/**
-     * @return Returns the startVlcAtStart.
-     */
-    public boolean isStartVlcAtStart() {
-        return startVlcAtStart;
-    }
-    /**
-     * @param startVlcAtStart The startVlcAtStart to set.
-     */
-    public void setStartVlcAtStart(boolean startVlcAtStart) {
-        if (this.startVlcAtStart != startVlcAtStart) {
-  			setSettingsChanged(true);
-  			this.startVlcAtStart = startVlcAtStart;
-  		}
-    }
-    /**
-     * @return Returns the showLogWindow.
-     */
-    public boolean isShowLogWindow() {
-        return showLogWindow;
-    }
-    /**
-     * @param showLogWindow The showLogWindow to set.
-     */
-    public void setShowLogWindow(boolean showLogWindow) {
-        if (this.showLogWindow != showLogWindow) {
-  			setSettingsChanged(true);
-  			this.showLogWindow = showLogWindow;
-  		}
-    }
+	 * @return Returns the startVlcAtStart.
+	 */
+	public boolean isStartVlcAtStart() {
+		return startVlcAtStart;
+	}
+	/**
+	 * @param startVlcAtStart
+	 *            The startVlcAtStart to set.
+	 */
+	public void setStartVlcAtStart(boolean startVlcAtStart) {
+		if (this.startVlcAtStart != startVlcAtStart) {
+			setSettingsChanged(true);
+			this.startVlcAtStart = startVlcAtStart;
+		}
+	}
+	/**
+	 * @return Returns the showLogWindow.
+	 */
+	public boolean isShowLogWindow() {
+		return showLogWindow;
+	}
+	/**
+	 * @param showLogWindow
+	 *            The showLogWindow to set.
+	 */
+	public void setShowLogWindow(boolean showLogWindow) {
+		if (this.showLogWindow != showLogWindow) {
+			setSettingsChanged(true);
+			this.showLogWindow = showLogWindow;
+		}
+	}
+
+	public boolean isStartMinimized() {
+		return startMinimized;
+	}
+	public void setStartMinimized(boolean startMinimized) {
+		if (this.startMinimized != startMinimized) {
+			this.startMinimized = startMinimized;
+			setSettingsChanged(true);
+		}
+	}
 }

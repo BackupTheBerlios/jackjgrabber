@@ -57,7 +57,7 @@ public class BOSettingsPlayback {
 	 *            The playbackPlayer to set.
 	 */
 	public void setPlaybackString(String playbackString) {
-		if (!this.playbackString.equals(playbackString)) {
+		if (this.playbackString == null || !this.playbackString.equals(playbackString)) {
 			setSettingsChanged(true);
 			this.playbackString = playbackString;
 		}
