@@ -11,17 +11,13 @@ import projectX.X;
 import service.SerGUIUtils;
 import service.SerXMLConverter;
 
-import com.jgoodies.forms.builder.DefaultFormBuilder;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticTheme;
 
 import control.ControlMain;
 import control.ControlMainView;
-import control.ControlProgramTab;
+
 
 /*
  * Created on 31.08.2004

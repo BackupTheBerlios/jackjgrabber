@@ -57,7 +57,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JButton jButtonDeleteAll = null;
 	private ImageIcon imageIconNeutrino = null;
 	private ControlNeutrinoTimerTab control;
-	public GuiNeutrinoRecordTimerTableModel timerTableModel;
+	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
+	public GuiNeutrinoSystemTimerTableModel systemTimerTableModel;
 	private JTable jTableRecordTimer = null;
 	private JTable jTableSystemTimer = null;
 	private JScrollPane jScrollPaneRecordTimerTable = null;
@@ -76,23 +77,23 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "620:grow, 4dlu, 160",  							// columns 
+			      "f:330:grow, 110:grow, 160:grow, 4dlu, pref",  							// columns 
 			      "pref, t:220:grow, pref, 8dlu, pref, t:100, b:100, pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Aufnahme-Timer",					cc.xy (1, 1));
-		builder.add(this.getJScrollPaneRecordTimerTable(),   	cc.xy (1, 2));
-		builder.add(this.getJPanelDauerTimer(),	 				cc.xy (1, 3));
-		builder.addSeparator("Sytem-Timer",						cc.xy (1, 5));
+		builder.addSeparator("Aufnahme-Timer",					cc.xyw  (1, 1, 3));
+		builder.add(this.getJScrollPaneRecordTimerTable(),   	cc.xyw  (1, 2, 3));
+		builder.add(this.getJPanelDauerTimer(),	 				cc.xyw  (1, 3, 3));
+		builder.addSeparator("Sytem-Timer",						cc.xyw  (1, 5, 1));
 		builder.add(this.getJScrollPaneSystemTimerTable(),  	cc.xywh(1, 6, 1, 2));
-		builder.add(this.getJPanelDauerTimer2(), 				cc.xy (1, 8));
-		builder.addTitle("Aktionen Aufnahme-Timer",				cc.xy (3, 1));
-		builder.add(this.getJPanelButtonsProgramTimer(), 		cc.xy (3, 2));
-		builder.addTitle("Aktionen System-Timer",				cc.xy (3, 5));
-		builder.add(this.getJPanelButtonsSystemTimer(),			cc.xy (3, 6));
-		builder.add(this.getJPanelButtonsGui(),					cc.xywh (3, 7, 1, 2, CellConstraints.DEFAULT, CellConstraints.BOTTOM));
+		builder.add(this.getJPanelDauerTimer2(), 					cc.xywh(2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle("Aktionen Aufnahme-Timer",				cc.xy    (5, 1));
+		builder.add(this.getJPanelButtonsProgramTimer(), 		cc.xywh(5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle("Aktionen System-Timer",					cc.xy    (3, 5));
+		builder.add(this.getJPanelButtonsSystemTimer(),		cc.xy    (3, 6));
+		builder.add(this.getJPanelButtonsGui(),						cc.xywh(5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
 	public ControlTab getControl() {
@@ -116,14 +117,16 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			JComboBox comboBoxSender = new JComboBox(new GuiNeutrinoTimerSenderComboModel(control));
 			JComboBox comboBoxRepeat = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
 			
-			timerTableModel = new GuiNeutrinoRecordTimerTableModel(control);			
-			jTableRecordTimer = new JTable(timerTableModel);
+			recordTimerTableModel = new GuiNeutrinoRecordTimerTableModel(control);	
+			
+			jTableRecordTimer = new JTable(recordTimerTableModel);
 			jTableRecordTimer.setRowHeight(20);
 			jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(100);
 			jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(70);
 			jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(50);
 			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(50);
-			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(110);
+			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(100);
+
 			
 			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);			
 			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
@@ -135,7 +138,21 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	
 	public JTable getJTableSystemTimer() {
 		if (jTableSystemTimer == null) {
-			return new JTable();
+			JComboBox comboBoxEventType = new JComboBox(new GuiNeutrinoTimerEventTypeComboModel(control));
+			JComboBox comboBoxRepeat = new JComboBox(new GuiNeutrinoTimerRepeatComboModel(control));
+			
+			systemTimerTableModel = new GuiNeutrinoSystemTimerTableModel(control);
+			jTableSystemTimer = new JTable(systemTimerTableModel);
+			jTableSystemTimer.setRowHeight(20);
+			jTableSystemTimer.getColumnModel().getColumn(0).setMaxWidth(100);
+			jTableSystemTimer.getColumnModel().getColumn(1).setMaxWidth(70);
+			jTableSystemTimer.getColumnModel().getColumn(2).setMaxWidth(50);
+			
+			TableColumn columnEventType = jTableSystemTimer.getColumnModel().getColumn(0);
+			TableColumn columnRepeat = jTableSystemTimer.getColumnModel().getColumn(3);
+			
+			columnEventType.setCellEditor(new DefaultCellEditor(comboBoxEventType));
+			columnRepeat.setCellEditor(new DefaultCellEditor(comboBoxRepeat));
 		}
 		return jTableSystemTimer;
 	}
@@ -156,14 +173,14 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		return jScrollPaneSystemTimerTable;
 	}
   
-	public GuiNeutrinoRecordTimerTableModel getTimerTableModel() {
-		return timerTableModel;
+	public GuiNeutrinoRecordTimerTableModel getRecordTimerTableModel() {
+		return recordTimerTableModel;
 	}
 	/**
 	 * @param senderTableModel The senderTableModel to set.
 	 */
-	public void setTimerTableModel(GuiNeutrinoRecordTimerTableModel TimerTableModel) {
-		this.timerTableModel = TimerTableModel;
+	public void setRecordTimerTableModel(GuiNeutrinoRecordTimerTableModel TimerTableModel) {
+		this.recordTimerTableModel = TimerTableModel;
 	}
 	
 	private JRadioButton getJRadioButtonSon() {
@@ -275,7 +292,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		if (jPanelDauerTimer == null) {
 			jPanelDauerTimer = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 30, pref, 30, pref, 30, pref, 30, pref, 30, pref, 30, pref",	 		//columna 
+				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columna 
 				      "pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer, layout);
 			CellConstraints cc = new CellConstraints();
@@ -284,8 +301,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			builder.add(this.getJRadioButtonDie(),						cc.xy	(3, 1));
 			builder.add(this.getJRadioButtonMit(),						cc.xy	(5, 1));
 			builder.add(this.getJRadioButtonDon(),	 					cc.xy	(7, 1));
-			builder.add(this.getJRadioButtonFri(),  					cc.xy	(9, 1));
-			builder.add(this.getJRadioButtonSam(),	  					cc.xy	(11, 1));
+			builder.add(this.getJRadioButtonFri(),  						cc.xy	(9, 1));
+			builder.add(this.getJRadioButtonSam(),	  				cc.xy	(11, 1));
 			builder.add(this.getJRadioButtonSon(),	  					cc.xy	(13, 1));
 		}
 		return jPanelDauerTimer;
@@ -351,18 +368,18 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		if (jPanelDauerTimer2 == null) {
 			jPanelDauerTimer2 = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 1dlu, pref, 1dlu, pref, 1dlu, pref, 1dlu, pref, 1dlu, pref, 1dlu, pref",	 		//columna 
-				      "pref");	//rows
+					 "pref",	 		//columna 
+			  "pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer2, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(this.getJRadioButtonMon2(),  					cc.xy	(1, 1));
-			builder.add(this.getJRadioButtonDie2(),						cc.xy	(3, 1));
-			builder.add(this.getJRadioButtonMit2(),						cc.xy	(5, 1));
-			builder.add(this.getJRadioButtonDon2(), 					cc.xy	(7, 1));
-			builder.add(this.getJRadioButtonFri2(),  					cc.xy	(9, 1));
-			builder.add(this.getJRadioButtonSam2(),	  					cc.xy	(11, 1));
-			builder.add(this.getJRadioButtonSon2(),	  					cc.xy	(13, 1));
+			builder.add(this.getJRadioButtonDie2(),					cc.xy	(1, 3));
+			builder.add(this.getJRadioButtonMit2(),					cc.xy	(1, 5));
+			builder.add(this.getJRadioButtonDon2(),					cc.xy	(1, 7));
+			builder.add(this.getJRadioButtonFri2(),  					cc.xy	(1, 9));
+			builder.add(this.getJRadioButtonSam2(),	  				cc.xy	(1, 11));
+			builder.add(this.getJRadioButtonSon2(),					cc.xy	(1, 13));
 		}
 		return jPanelDauerTimer2;
 	}	
@@ -463,6 +480,12 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public void setSenderComboModel(
 			GuiNeutrinoTimerSenderComboModel senderComboModel) {
 		this.senderComboModel = senderComboModel;
+	}
+	/**
+	 * @return Returns the systemTimerTableModel.
+	 */
+	public GuiNeutrinoSystemTimerTableModel getSystemTimerTableModel() {
+		return systemTimerTableModel;
 	}
 }
 

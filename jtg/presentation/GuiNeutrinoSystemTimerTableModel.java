@@ -9,16 +9,16 @@ import control.ControlNeutrinoTimerTab;
 /**
  * @author Alexander Geist
  */
-public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel 
+public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel 
 {
 	ControlNeutrinoTimerTab control;
 	
-	public GuiNeutrinoRecordTimerTableModel(ControlNeutrinoTimerTab ctrl){
+	public GuiNeutrinoSystemTimerTableModel(ControlNeutrinoTimerTab ctrl){
 		this.setControl(ctrl);
 	}
 
 	public int getColumnCount() {
-		return 6;	
+		return 4;	
 	}	
 
 	public int getRowCount() {
@@ -31,27 +31,23 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getControl().getTimerList().get(rowIndex);
 		if (columnIndex == 0) {
-			return timer.getSenderName();
+			return timer.getEventType();
 		} if (columnIndex == 1) {
 			return timer.getStartDate();
 		} if (columnIndex == 2) {
 			return timer.getStartTime();
-		} if (columnIndex == 3) {
-			return timer.getStopTime();
-		} if (columnIndex == 4) {
-			return timer.getEventRepeat();
 		} else {
-			return timer.getDescription(); 
+			return timer.getEventRepeat();
 		}
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
 		if (col == 0) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList().get(row);
-			timer.setSenderName((String)value);
+			timer.setEventType((String)value);
 			this.fireTableDataChanged();
 		}
-		if (col == 4) {
+		if (col == 3) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList().get(row);
 			timer.setEventRepeat((String)value);
 			this.fireTableDataChanged();
@@ -60,17 +56,13 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Sender"; 
+			return "Timer-Typ"; 
 		} if (columnIndex == 1) {
 			return "Datum";
 		} if (columnIndex == 2) {
-			return "Start";
-		} if (columnIndex == 3) {
-			return "Ende";
-		} if (columnIndex == 4) {
-			return "Wiederholung";
+			return "Zeit";
 		} else {
-			return "Titel";
+			return "Wiederholung";
 		}
 	}
 	
