@@ -38,7 +38,6 @@ import javax.swing.event.ChangeListener;
 import model.BOBouquet;
 import model.BOBox;
 import model.BOEpg;
-import model.BOEpgDetails;
 import model.BOExternalProcess;
 import model.BOPid;
 import model.BOPids;
@@ -414,8 +413,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			BOEpg epg = getRunnigEpg(getEpgTableModel().getEpgList());
 			if (epg != null) {
 				args.setEpgTitle(epg.getTitle());
-				if (epg.getEpgGetail() != null) {
-					args.setEpgInfo1(epg.getEpgGetail().getText());
+				if (epg.getEpgDetail() != null) {
+					args.setEpgInfo1(epg.getEpgDetail().getText());
 				}
 			}
 		}
@@ -467,8 +466,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			//Neue Epg-Zeile selektiert
 			if (tableName == "Epg") {
 				if (me.getClickCount() == 2) {
-					BOTimer timer = this.buildTimer(this.getSelectedEpg());
-					SerTimerHandler.saveTimer(timer, true);
+					BOTimer timer = SerTimerHandler.buildTimer(this.getSelectedEpg());
+					SerTimerHandler.saveTimer(timer, true, true);
 				}
 			}
 		} catch (IOException e) {
@@ -586,13 +585,10 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	public void reInitEpgDetail() {
 		this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
 		if (getSelectedEpg() != null) {
-			try {
-				BOEpgDetails detail = this.getSelectedEpg().readEpgDetails();
-				this.getJTextAreaEPG().setText(detail.getText());
-				this.getJTextAreaEPG().setCaretPosition(0);
-			} catch (IOException e) {
-				SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
-			}
+		    if (this.getSelectedEpg().getEpgDetail()!=null) {
+                this.getJTextAreaEPG().setText(this.getSelectedEpg().getEpgDetail().getText());
+                this.getJTextAreaEPG().setCaretPosition(0);    
+            }
 		}
 	}
 
@@ -677,38 +673,11 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		for (int i = 0; i < rows.length; i++) {       //      Schleife über die selektierten epg-Zeilen
             int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(rows[i]);
             BOEpg epg = (BOEpg)this.getEpgTableModel().getEpgList().get(modelIndex);            
-            BOTimer timer = this.buildTimer(epg);
-            SerTimerHandler.saveTimer(timer, i+1==rows.length);
+            BOTimer timer = SerTimerHandler.buildTimer(epg);
+            SerTimerHandler.saveTimer(timer, true, i+1==rows.length);
 		}
 	}
 	
-	/**
-	 * @param epg
-	 * @return BOTimer Erstellein eines BOTimer-Objekts aus den EPG-Informationen
-	 */
-	private BOTimer buildTimer(BOEpg epg) {
-		BOTimer timer = new BOTimer();
-
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore()) * 60;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeAfter()) * 60;
-		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
-		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
-		long endtime = unformattedStart + unformattedDuration;
-		long announce = unformattedStart - (120 + timeBefore);
-
-		timer.setModifiedId("new");
-		timer.setChannelId(this.getSelectedSender().getChanId());
-		timer.setSenderName(this.getSelectedSender().getName());
-		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
-		timer.unformattedStartTime=SerFormatter.formatUnixDate(unformattedStart - timeBefore);
-		timer.unformattedStopTime=SerFormatter.formatUnixDate(endtime + timeAfter);
-
-		timer.setEventRepeatId("0");
-		timer.setEventTypeId("5");
-		timer.setDescription(epg.getTitle());
-		return timer;
-	}
-
 	private void startStreamingSever() {
 	    if (!SerStreamingServer.isRunning) {
             new SerStreamingServer().start();

@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import model.BOAfterRecordOptions;
+import model.BOEpg;
 import model.BOLocalTimer;
 import model.BOTimer;
 import model.BOTimerList;
@@ -326,84 +327,122 @@ public class SerTimerHandler {
         return timerDocument;
     }
 
-    /*
+    /**
+     * @param reqTimer
+     * @param validate
+     * @param reloadList
+     * 
      * zentrale Methode um neue/geänderte Timer zu speichern
+     * validate=true, wenn Timer auf Überschneidungen überprüft werden soll
+     * reloadList=true, wenn die TimerListe neu gelesen werden soll
      */
-    public static void saveTimer(BOTimer reqTimer, boolean reloadList) {
-    	BOTimer timer = validateTimer(reqTimer);
-        
-        if (timer!=null) {
+    public static boolean saveTimer(BOTimer reqTimer, boolean validate, boolean reloadList) {
+        //prüfen neuer und modifizerter Aufnahme-Timer auf Dubletten
+        if (reqTimer.getEventTypeId().equals("5") &&
+                (reqTimer.getModifiedId()!=null && !reqTimer.getModifiedId().equals("remove")) &&
+                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().contains(reqTimer) ) {
+            reqTimer.setModifiedId(null);
+            return false; //Timer ist eine Dublette, nicht speichern
+        }
+            
+        if (validate && reqTimer.isNewOrModified()) { 
+            validateTimer(reqTimer, reloadList);
+            return false;
+        } else {
             //lokaler Teil muss immer gespeichert werden
-            saveLocalTimer(timer); 
+            saveLocalTimer(reqTimer); 
               
-            if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
-                saveBoxTimer(timer, reloadList); 
+            if (reqTimer.getModifiedId()!=null && !reqTimer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
+                saveBoxTimer(reqTimer, reloadList); 
             }
 
-            if (timer.getModifiedId() != null) {
+            if (reqTimer.getModifiedId() != null) {
                 //nur bei lokalen Timern manuell erledigen, Box-Timer muessen automatisch nachgelesen werden
-                if (timer.getModifiedId().equals("new") && timer.getLocalTimer().isLocal()) {
-                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
-                } else if (timer.getModifiedId().equals("remove")) {
-                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
+                if (reqTimer.getModifiedId().equals("new") && reqTimer.getLocalTimer().isLocal()) {
+                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(reqTimer);
+                } else if (reqTimer.getModifiedId().equals("remove")) {
+                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(reqTimer);
                 }
             } 
-            timer.setModifiedId(null);
+            reqTimer.setModifiedId(null);
             //ermittle naechsten faelligen lokalen-RecordTimer neu
-            if (timer.getLocalTimer().isLocal()) {
+            if (reqTimer.getLocalTimer().isLocal()) {
                 ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);   
             }            
+            reqTimer.setModifiedId(null);
+            return true;
         }
-
     }
     
     /*
      * Überprüfe Timer auf Ueberschneidungen
-     * 
+     * Falls Überschneidungn vorhanden, starte Timer-Afrage-Dialog
      */
-    private static BOTimer validateTimer(BOTimer requestedTimer) {
-        if (requestedTimer.getModifiedId()!=null && requestedTimer.getModifiedId().equals("new") ) {
-            ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
-            
-            if (timerList.size()>0) {
-                ArrayList equalTimer = new ArrayList();
+    private static boolean validateTimer(BOTimer requestedTimer, boolean reloadList) {
+        ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
+        
+        if (timerList.size()>0) {
+            ArrayList equalTimer = new ArrayList();
 
-                for (int i=0; i<timerList.size(); i++) {
-                    BOTimer timer = (BOTimer)timerList.get(i);
-                    if (timer != requestedTimer && SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
-                        equalTimer.add(timer);
-                    }
+            for (int i=0; i<timerList.size(); i++) {
+                BOTimer timer = (BOTimer)timerList.get(i);
+                if (!timer.equals(requestedTimer) && SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
+                    equalTimer.add(timer);
                 }
-                if (equalTimer.size()>0) {
-                    equalTimer.add(0, requestedTimer);
-                    return startTimerQuestDialag(equalTimer);
-                }
-            }   
-        } 
-		return requestedTimer;
+            }
+            if (equalTimer.size()>0) {
+                equalTimer.add(0, requestedTimer);
+                startTimerQuestDialag(equalTimer);
+                return false;
+            } else {
+                saveTimer(requestedTimer, false, reloadList);
+                return true;
+            }
+        } else {
+            saveTimer(requestedTimer, false, reloadList);
+            return true;
+        }
 	}
     
-    private static BOTimer startTimerQuestDialag(ArrayList equalTimer) {
+    private static void startTimerQuestDialag(ArrayList equalTimer) {
     	JList list = new JList(equalTimer.toArray());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		int ret = JOptionPane.showConfirmDialog(ControlMain.getControl().getView(), new Object[]{
-				ControlMain.getProperty("msg_choosePlayback2"), 
-				new JScrollPane(list)}, 
-				ControlMain.getProperty("msg_choose"),
-				JOptionPane.OK_CANCEL_OPTION, 
-				JOptionPane.QUESTION_MESSAGE);
-		if (ret == JOptionPane.OK_OPTION) {
-			if (list.getSelectedIndex()==0) { //alternativer Timer gewählt
-                for (int i=1; i<equalTimer.size(); i++) {
+		int ret = JOptionPane.showOptionDialog(
+            ControlMain.getControl().getView(), 
+            new Object[]{
+                ControlMain.getProperty("msg_choosePlayback2"), 
+                new JScrollPane(list)
+            },
+            ControlMain.getProperty("msg_choose"),
+            0,
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            new String[]{
+                ControlMain.getProperty("button_cancel"),
+                ControlMain.getProperty("button_recordAll"),
+                ControlMain.getProperty("button_ok")
+            },
+            ControlMain.getProperty("button_ok")
+		);
+		if (ret == 2) { //speichern des selektierten Timers, löschen der restlichen Timer
+			if (list.getSelectedIndex()>=0) {
+                BOTimer selectedTimer = (BOTimer)list.getSelectedValue();
+                equalTimer.remove(list.getSelectedIndex());
+                for (int i=0; i<equalTimer.size(); i++) {
                     BOTimer timer = (BOTimer)equalTimer.get(i);
                     timer.setModifiedId("remove");
-                    saveTimer(timer, !timer.getLocalTimer().isLocal());
+                    saveTimer(timer, false, !timer.getLocalTimer().isLocal());
                 }
-                return (BOTimer)equalTimer.get(0);
+                saveTimer(selectedTimer, false, !selectedTimer.getLocalTimer().isLocal());
 			}
-		}
-		return null;
+		} else if (ret == 1) { //speichern aller Timer
+            for (int i=0; i<equalTimer.size(); i++) {
+                BOTimer timer = (BOTimer)equalTimer.get(i);
+                timer.setModifiedId("new");
+                saveTimer(timer, false, !timer.getLocalTimer().isLocal());
+            }
+        }
     }
 
     /*
@@ -477,4 +516,32 @@ public class SerTimerHandler {
 		}
 		timer.setModifiedId(null);
 	}
+    
+    /**
+     * @param epg
+     * @return BOTimer 
+     * Erstellen eines BOTimer-Objekts aus den EPG-Informationen
+     */
+    public static BOTimer buildTimer(BOEpg epg) {
+        BOTimer timer = new BOTimer();
+
+        int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore()) * 60;
+        int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getRecordTimeAfter()) * 60;
+        long unformattedStart = Long.parseLong(epg.getUnformattedStart());
+        long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
+        long endtime = unformattedStart + unformattedDuration;
+        long announce = unformattedStart - (120 + timeBefore);
+
+        timer.setModifiedId("new");
+        timer.setChannelId(epg.getSender().getChanId());
+        timer.setSenderName(epg.getSender().getName());
+        timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
+        timer.unformattedStartTime=SerFormatter.formatUnixDate(unformattedStart - timeBefore);
+        timer.unformattedStopTime=SerFormatter.formatUnixDate(endtime + timeAfter);
+
+        timer.setEventRepeatId("0");
+        timer.setEventTypeId("5");
+        timer.setDescription(epg.getTitle());
+        return timer;
+    }
 }

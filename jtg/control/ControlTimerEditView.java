@@ -261,7 +261,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	}
 
 	private void actionSaveRecordTimer() {
-		SerTimerHandler.saveTimer(this.getTimer().getMainTimer(), true);
+		SerTimerHandler.saveTimer(this.getTimer().getMainTimer(), true, true);
 		this.getControlTimer().refreshRecordTimerTable();
 		this.getView().dispose();
 	}

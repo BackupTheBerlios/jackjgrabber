@@ -189,7 +189,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
         BOTimer timer = getRecordArgs().getLocalTimer().getMainTimer();
         if (timer != null) {  //Lokal-Timer Aufnahme
             timer.setModifiedId("remove");
-            SerTimerHandler.saveTimer(timer, true);
+            SerTimerHandler.saveTimer(timer, false, true);
             LocalTimerRecordDaemon.running=false;   
         }
 

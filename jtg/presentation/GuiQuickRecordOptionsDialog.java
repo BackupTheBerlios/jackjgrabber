@@ -43,20 +43,20 @@ public class GuiQuickRecordOptionsDialog {
 
     public BOQuickRecordOptions startPidsQuestDialog() {
 		int res = JOptionPane.showOptionDialog(
-		        ControlMain.getControl().getView(), 
-					new Object[]{
-				        ControlMain.getProperty("label_selectPids"), 
-				        new JScrollPane(getPidList()),
-				        ControlMain.getProperty("msg_stopTime"), 
-				        getMinsSpinner()
-					}, 
-					"", 
-					0,
-					JOptionPane.QUESTION_MESSAGE, 
-					null, 
-					new String[]{ControlMain.getProperty("button_ok"), ControlMain.getProperty("button_cancel")},
-					ControlMain.getProperty("button_ok")
-				);
+	        ControlMain.getControl().getView(), 
+			new Object[]{
+		        ControlMain.getProperty("label_selectPids"), 
+		        new JScrollPane(getPidList()),
+		        ControlMain.getProperty("msg_stopTime"), 
+		        getMinsSpinner()
+			}, 
+			"", 
+			0,
+			JOptionPane.QUESTION_MESSAGE, 
+			null, 
+			new String[]{ControlMain.getProperty("button_ok"), ControlMain.getProperty("button_cancel")},
+			ControlMain.getProperty("button_ok")
+		);
 		if (res == 0) {
 		    return buildRecordOptions();
 		}

@@ -22,17 +22,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
-import javax.swing.table.*;
+import javax.swing.table.TableColumn;
 
-import model.*;
 import model.BOLocalTimer;
 import model.BOSender;
 import model.BOTimer;
@@ -261,7 +260,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	
 	private void deleteTimer(BOTimer timer) throws IOException {
 		timer.setModifiedId("remove");
-        SerTimerHandler.saveTimer(timer, false); 
+        SerTimerHandler.saveTimer(timer, false, false); 
 	}
 	
 	/**
@@ -274,7 +273,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	
 	private void writeAllTimer(ArrayList timerList) throws IOException {
 		for (int i=0; i<timerList.size(); i++) {
-            SerTimerHandler.saveTimer((BOTimer)timerList.get(i), true);
+            SerTimerHandler.saveTimer((BOTimer)timerList.get(i), true, true);
 		}
 	}
 	

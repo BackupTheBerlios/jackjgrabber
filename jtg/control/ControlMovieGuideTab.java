@@ -544,7 +544,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             botimer.setEventTypeId("5");
             botimer.setDescription(getBOMovieGuide4Timer().getTitel());
             
-            SerTimerHandler.saveTimer(botimer, true);
+            SerTimerHandler.saveTimer(botimer, true, true);
         } catch (IOException e) {            
             Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_sender"));
         }		
