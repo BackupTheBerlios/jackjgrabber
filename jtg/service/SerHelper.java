@@ -4,6 +4,11 @@ import java.io.File;
 import java.text.*;
 import java.util.ArrayList;
 
+import service.recordinfo.*;
+import control.*;
+
+import model.*;
+
 /*
 
 This program is free software; you can redistribute it and/or modify
@@ -138,6 +143,35 @@ public class SerHelper {
 
 		return calcSize(s, type, 1024);
 	}
+	
+	/** create a string which contains the info for a given file
+	 * used by recordinfo
+	 * @param info
+	 * @return
+	 */
+	public static String createFileInfo(File info)
+	{
+		
+		String file = info.getAbsolutePath();
+		StringBuffer fileInfo = new StringBuffer();
+
+		ScanFile scan = new ScanFile();
+		if (info.exists()) {
+			fileInfo.append(ControlMain.getProperty("label_size") + ":\t" + (info.length() / 1048576) + " MB (" + info.length()
+					+ " bytes)" + "\n");
+			String type = ControlMain.getProperty("label_type") + ":\t" + scan.Type(file) + "\n"; // must be first when scanning
+			fileInfo.append(ControlMain.getProperty("label_date") + ":\t" + scan.Date(file) + "\n");
+			fileInfo.append(type);
+			fileInfo.append("Video:\t" + scan.getVideo() + "\n");
+			fileInfo.append( "Audio:\t" + scan.getAudio() + "\n");
+			fileInfo.append("Text:\t" + scan.getText() + "\n");
+			fileInfo.append(ControlMain.getProperty("label_playtime") + ":\t" + scan.getPlaytime() + "\n");
+
+		} 
+		return fileInfo.toString();
+		 
+	}
+	
 
 
 }
