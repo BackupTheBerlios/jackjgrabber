@@ -60,7 +60,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		        return line.substring(startpos+4, endpos);
 		    }
 		}
-		return "ok";
+		return "error";
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
@@ -215,14 +215,16 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}	 
 
 	public String zapTo(String channelId) throws IOException {
-		String status = new String();
+		String status = "ok";
 		//BufferedReader input = SerBoxControl.getConnection("/fb/switch.dbox2?zapto="+channelId);
 		BufferedReader input = getConnection("/cgi-bin/zapTo?path="+channelId);
 		String line;
 		while((line=input.readLine())!=null) {
-			status = line;
+			if (line.equalsIgnoreCase("error")) {
+			    status="error";
+			}
 		}
-		return "ok";
+		return status;
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
@@ -556,12 +558,19 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	
 	public String setRadioTvMode(String mode) throws IOException {
 		String zapmode;
+		String status ="ok";
 		if (mode.equalsIgnoreCase("radio")) {
 		    zapmode="1";
 		} else {
 		    zapmode="0";
 		}
 	    BufferedReader input = getConnection("/body?mode=zap&zapmode="+zapmode+"&zapsubmode=4");
-		return "ok";
+	    String line;
+		while((line=input.readLine())!=null) {
+			if (line.equalsIgnoreCase("error")) {
+			    status="error";
+			}
+		}
+		return status;
 	}
 }
