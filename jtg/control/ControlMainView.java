@@ -60,7 +60,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.logSystemInfo();
 
 		ControlMain.detectImage();
-  	    ControlMain.loadHashTable();
+  	    //ControlMain.loadHashTable();
         ControlMain.setResourceBundle(ControlMain.getLocale());
 	}
 	private void logSystemInfo() {

@@ -46,7 +46,11 @@ public class ControlMain {
     static Hashtable ht_locale = new Hashtable();    
     private static Locale locale;
     public static final String[] localeSet = {"Deutsch", "Englisch","Finisch"};
-    
+    static{
+    	  ht_locale.put("Deutsch","de");
+          ht_locale.put("Englisch","en");
+          ht_locale.put("Finisch","fi");              
+    }
     public static String filename = "settings.xml";
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
@@ -263,12 +267,13 @@ public class ControlMain {
 	public static void setLogAppender(SerLogAppender logAppender) {
 		ControlMain.logAppender = logAppender;
 	}
+	/*
 	public static void loadHashTable(){             
         ht_locale.put("Deutsch","de");
         ht_locale.put("Englisch","en");
         ht_locale.put("Finisch","fi");
-}
-
+	}
+	*/
 	private static void setLocale(String sprache){       		
         if (!sprache.equals("de")){        	
                 locale = new Locale(ht_locale.get(sprache).toString());
@@ -276,9 +281,9 @@ public class ControlMain {
 	}
 
 	public static Locale getLocale(){           
-		if ( getSettings().getLocale().toLowerCase().equals("de")){
-			 getSettings().setLocale("Deutsch");
-		}		
+		//if ( getSettings().getLocale().toLowerCase().equals("de")){
+			// getSettings().setLocale("Deutsch");
+		//}		
 		setLocale((String)getSettings().getLocale());
         return locale;
 	}
