@@ -59,7 +59,7 @@ public class SerXMLConverter {
 	private static void getSettingsStartPX(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/startPX");
 		if (node != null) {
-			settings.startPX=Boolean.parseBoolean(node.getText());
+			settings.startPX=node.getText().equals("true");
 		} else {
 			SerXMLHandling.setElementInElement(root,"startPX", "true");
 			settings.setStartPX(true);
@@ -99,7 +99,7 @@ public class SerXMLConverter {
 	private static void getSettingsStartStreamingServer(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/startStreamingServer");
 		if (node != null) {
-			settings.startStreamingServer=Boolean.parseBoolean(node.getText());
+			settings.startStreamingServer=node.getText().equals("true");
 		} else {
 			SerXMLHandling.setElementInElement(root,"startStreamingServer", "true");
 			settings.setStartStreamingServer(true);
