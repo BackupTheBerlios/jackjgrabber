@@ -41,7 +41,8 @@ public class BOPid {
 	}
 	
 	public boolean isAc3() {
-	    if (this.isAudio() && this.getName().indexOf("AC3")>-1) {
+	    if (this.isAudio() && (this.getName().indexOf("AC3")>-1 || 
+	    		this.getName().indexOf("Dolby")>-1 || this.getName().indexOf("dolby")>-1 )) {
 	        return true;
 	    }
 	    return false;
