@@ -74,8 +74,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.getTab().getCbStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
 		this.getTab().getCbShutdownAfterRecord().setSelected(this.getSettings().isShutdownAfterRecord());
 		this.getTab().getCbStopPlaybackAtRecord().setSelected(this.getSettings().isStopPlaybackAtRecord());
-		this.getTab().getFilePattern().setText(getSettings().getFilePattern());
-		this.getTab().getDirPattern().setText(getSettings().getDirPattern());
+		this.getTab().getTfFilePattern().setText(getSettings().getFilePattern());
+		this.getTab().getTfDirPattern().setText(getSettings().getDirPattern());
 		this.initializeAudioSettings();
 		this.initializeStreamingEngine();
 	}
@@ -170,11 +170,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				break;
 			}
 			if (action.equals("Tags")) {
-				openTagWindow(getTab().getDirPattern());
+				openTagWindow(getTab().getTfDirPattern());
 				break;
 			}
 			if (action.equals("TagsFile")) {
-				openTagWindow(getTab().getFilePattern());
+				openTagWindow(getTab().getTfFilePattern());
 				break;
 			}
 			if (action.equals("Test")) {
@@ -189,7 +189,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	private void testPattern() {
 
 		// test directory pattern
-		String pattern = getTab().getDirPattern().getText();
+		String pattern = getTab().getTfDirPattern().getText();
 		BORecordArgs arg = new BORecordArgs();
 		arg.setSenderName("RTL");
 		arg.setEpgTitle("JackTheMovie");
@@ -200,7 +200,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			JOptionPane.showMessageDialog(getTab(), pattern + " ------>\n " + result, ControlMain.getProperty("filep_directory"),
 					JOptionPane.INFORMATION_MESSAGE);
 
-			pattern = getTab().getFilePattern().getText();
+			pattern = getTab().getTfFilePattern().getText();
 			if (pattern.length() > 0) {
 				result = SerFormatter.removeInvalidCharacters(SerHelper.createFileName(arg, pattern));
 				JOptionPane.showMessageDialog(getTab(), pattern + " ------>\n " + result, ControlMain.getProperty("filep_file"),
@@ -230,11 +230,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 							tagFrame.getField().setText(text);
 						}
 
-						if (tagFrame.getField() == getTab().getDirPattern())
+						if (tagFrame.getField() == getTab().getTfDirPattern())
 						{
 							getSettings().setDirPattern(tagFrame.getField().getText());
 						}
-						else if (tagFrame.getField() == getTab().getFilePattern())
+						else if (tagFrame.getField() == getTab().getTfFilePattern())
 						{
 							getSettings().setFilePattern(tagFrame.getField().getText());
 						}

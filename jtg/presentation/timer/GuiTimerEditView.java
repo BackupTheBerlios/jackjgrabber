@@ -86,7 +86,8 @@ public class GuiTimerEditView extends JFrame{
 	private JCheckBox cbStoreLogAfterRecord;
 	
 	private JButton jButtonTest;
-	private JButton jButtonTagOptions;
+	private JButton jButtonDirTag;
+	private JButton jButtonFileTag;
 	private JButton jButtonOk;
 	private JButton jButtonCancel;
 	private JButton jButtonRecordPathFileChooser;
@@ -102,6 +103,7 @@ public class GuiTimerEditView extends JFrame{
 		this.setControl(control);
 		initialize();
 		this.setResizable(false);
+		this.setTitle(control.getTimer().getMainTimer().getSenderName()+" "+control.getTimer().getMainTimer().getStartDate());
 		pack();
 	}
     
@@ -174,18 +176,19 @@ public class GuiTimerEditView extends JFrame{
 		if (panelFileNameSettings == null) {
 			panelFileNameSettings = new JPanel();
 			FormLayout layout = new FormLayout("pref,10,350:grow,10,pref,5,pref", //columns
-					"pref, 10, pref,pref,pref,pref"); //rows
+					"pref, pref,pref,pref,pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelFileNameSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("filep_filepattern"), cc.xyw(1, 1, 7));
-			builder.add(new JLabel(ControlMain.getProperty("filep_directory")), cc.xy(1, 3));
-			builder.add(getJTextFieldDirPattern(), cc.xy(3, 3));
-			builder.add(getJButtonTagOptions(), cc.xy(5, 3));
-			builder.add(getJButtonTest(), cc.xy(7, 3));
+			builder.add(new JLabel(ControlMain.getProperty("filep_directory")), cc.xy(1, 2));
+			builder.add(getJTextFieldDirPattern(), cc.xy(3, 2));
+			builder.add(getJButtonDirTag(), cc.xy(5, 2));
+			builder.add(getJButtonTest(), cc.xy(7, 2));
 
-			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 4));
-			builder.add(getJTextFieldFilePattern(), cc.xy(3, 4));
+			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 3));
+			builder.add(this.getJTextFieldFilePattern(), cc.xy(3, 3));
+			builder.add(getJButtonFileTag(), cc.xy(5, 3));
 
 		}
 		return panelFileNameSettings;
@@ -287,15 +290,24 @@ public class GuiTimerEditView extends JFrame{
 	}
 
 	/**
-	 * @return jButtonTagOptions
+	 * @return jButtonDirTag
 	 */
-	public JButton getJButtonTagOptions() {
-		if (jButtonTagOptions == null) {
-			jButtonTagOptions = new JButton(ControlMain.getProperty("filep_tagName"));
-			jButtonTagOptions.setActionCommand("Tags");
-			jButtonTagOptions.addActionListener(control);
+	public JButton getJButtonDirTag() {
+		if (jButtonDirTag == null) {
+			jButtonDirTag = new JButton(ControlMain.getProperty("filep_tagName"));
+			jButtonDirTag.setActionCommand("Tags");
+			jButtonDirTag.addActionListener(control);
 		}
-		return jButtonTagOptions;
+		return jButtonDirTag;
+	}
+	
+	public JButton getJButtonFileTag() {
+		if (jButtonFileTag == null) {
+			jButtonFileTag = new JButton(ControlMain.getProperty("filep_tagName"));
+			jButtonFileTag.setActionCommand("TagsFile");
+			jButtonFileTag.addActionListener(control);
+		}
+		return jButtonFileTag;
 	}
 	
 	/**

@@ -35,6 +35,7 @@ import model.BOTimer;
 import model.BOTimerList;
 import presentation.GuiMainView;
 import presentation.timer.GuiNeutrinoTimerPanel;
+import presentation.timer.GuiTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 
@@ -69,8 +70,8 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 				this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 				this.setTimerList(ControlMain.getBoxAccess().getTimerList());
 				this.refreshTables();
-				this.getTab().recordTimerSorter.setSortingStatus(1, 1);
-				this.getTab().systemTimerSorter.setSortingStatus(1, 1);
+				this.getView().recordTimerSorter.setSortingStatus(1, 1);
+				this.getView().systemTimerSorter.setSortingStatus(1, 1);
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}
@@ -129,19 +130,19 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	
 	public void addRecordTimer(BOTimer timer) {
 		this.getTimerList().getRecordTimerList().add(timer);
-		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
-		this.getTab().recordTimerSorter.fireTableDataChanged();
+		this.getView().getRecordTimerTableModel().fireTableDataChanged();
+		this.getView().recordTimerSorter.fireTableDataChanged();
 
 	}
 	
 	private void actionAddRecordTimer() {
-	    new ControlTimerEditView(this, BOLocalTimer.getDefaultLocaleTimer(this.buildRecordTimer()));
+	    new ControlTimerEditView(this, this.buildRecordTimer().getLocalTimer());
 	}
 	
 	private void actionAddSystemTimer() {
 		this.getTimerList().getSystemTimerList().add(this.buildSystemTimer());
-		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
-		this.getTab().systemTimerSorter.fireTableDataChanged();
+		this.getView().getSystemTimerTableModel().fireTableDataChanged();
+		this.getView().systemTimerSorter.fireTableDataChanged();
 	}
 	
 	/*
@@ -152,7 +153,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public void actionRecordTimerRepeatDaysChanged (ActionEvent event) {
 		JRadioButton radioButton = (JRadioButton)event.getSource();
 		BOTimer timer = this.getSelectedRecordTimer();
-		timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
+		timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage));
 		timer.setModifiedId("modify");
 	}
 	/*
@@ -163,7 +164,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public void actionSystemTimerRepeatDaysChanged (ActionEvent event) {
 		JRadioButton radioButton = (JRadioButton)event.getSource();
 		BOTimer timer = this.getSelectedSystemTimer();
-		timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage2));
+		timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage2));
 		timer.setModifiedId("modify");
 	}
 	/*
@@ -194,7 +195,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		try {
 			this.deleteAllTimer(this.getTimerList().getRecordTimerList());
 			this.getTimerList().setRecordTimerList(new ArrayList());
-			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			this.getView().getRecordTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
@@ -204,22 +205,22 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		try {
 			this.deleteAllTimer(this.getTimerList().getSystemTimerList());
 			this.getTimerList().setSystemTimerList(new ArrayList());
-			this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+			this.getView().getSystemTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
 	}
 	
 	private void actionDeleteSelectedRecordTimer() {
-		int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
+		int[] rows = this.getView().getJTableRecordTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList().getRecordTimerList();
 		for (int i=rows.length-1; 0<=i; i--) {
-		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
+		    int modelIndex = this.getView().recordTimerSorter.modelIndex(rows[i]);
 			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
 				timerList.remove(modelIndex);
-				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+				this.getView().getRecordTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}
@@ -227,15 +228,15 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	}
 	
 	private void actionDeleteSelectedSystemTimer() {
-		int[] rows = this.getTab().getJTableSystemTimer().getSelectedRows();
+		int[] rows = this.getView().getJTableSystemTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList().getSystemTimerList();
 		for (int i=rows.length-1; 0<=i; i--) {
-		    int modelIndex = this.getTab().systemTimerSorter.modelIndex(rows[i]);
+		    int modelIndex = this.getView().systemTimerSorter.modelIndex(rows[i]);
 			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
 				timerList.remove(modelIndex);
-				this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+				this.getView().getSystemTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}
@@ -321,7 +322,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 			if (me.getClickCount()==2) {
 			    new ControlTimerEditView(this, this.getSelectedRecordTimer().getLocalTimer());
 			}
-			selectRepeatDaysForRecordTimer(this.getSelectedRecordTimer(), this.getTab().jRadioButtonWhtage);
+			selectRepeatDaysForRecordTimer(this.getSelectedRecordTimer(), this.getView().jRadioButtonWhtage);
 		}
 		if (tableName == "systemTimerTable") {
 			this.selectRepeatDaysForSystemTimer(this.getSelectedSystemTimer());
@@ -447,31 +448,31 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public void selectRepeatDaysForSystemTimer(BOTimer timer) {
 		int result = Integer.parseInt((String)timer.getEventRepeatId());
 		if (result>5) {
-			this.getTab().enableSystemTimerWeekdays(true);
+			this.getView().enableSystemTimerWeekdays(true);
 			for (int i = 0; i<7; i++){
-				this.getTab().jRadioButtonWhtage2[i].setSelected((result&weekdays_value[i])==weekdays_value[i]);
+				this.getView().jRadioButtonWhtage2[i].setSelected((result&weekdays_value[i])==weekdays_value[i]);
 			}
 		} else {
-			this.getTab().enableSystemTimerWeekdays(false);
+			this.getView().enableSystemTimerWeekdays(false);
 		}
 	}
 		
 	private void refreshTables() {
-		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
-		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+		this.getView().getRecordTimerTableModel().fireTableDataChanged();
+		this.getView().getSystemTimerTableModel().fireTableDataChanged();
 	}
 	
 	public BOTimer getSelectedRecordTimer () {
-		JTable table = this.getTab().getJTableRecordTimer();
+		JTable table = this.getView().getJTableRecordTimer();
 		int selectedRow = table.getSelectedRow();
-		int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+		int modelIndex = this.getView().recordTimerSorter.modelIndex(selectedRow);
 		return (BOTimer)this.getTimerList().getRecordTimerList().get(modelIndex);
 	}
 	
 	public BOTimer getSelectedSystemTimer () {
-		JTable table = this.getTab().getJTableSystemTimer();
+		JTable table = this.getView().getJTableSystemTimer();
 		int selectedRow = table.getSelectedRow();
-		int modelIndex = this.getTab().systemTimerSorter.modelIndex(selectedRow);
+		int modelIndex = this.getView().systemTimerSorter.modelIndex(selectedRow);
 		return (BOTimer)this.getTimerList().getSystemTimerList().get(modelIndex);
 	}
 		
@@ -500,10 +501,14 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public void setTimerList(BOTimerList timerList) {
 		this.timerList = timerList;
 	}
+	public GuiNeutrinoTimerPanel getView() {
+	    return (GuiNeutrinoTimerPanel)this.getTab();
+	}
+	
 	/**
 	 * @return Returns the tab.
 	 */
-	public GuiNeutrinoTimerPanel getTab() {
+	public GuiTimerPanel getTab() {
 		return tab;
 	}
 	/**

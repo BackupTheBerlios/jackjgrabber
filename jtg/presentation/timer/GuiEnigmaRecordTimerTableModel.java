@@ -74,7 +74,7 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 	public void setValueAt(Object value, int row, int col) {
 	    BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(row);
 		if (col == 1) {
-			int senderIndex = this.getControl().getTab().getComboBoxSender().getSelectedIndex();
+			int senderIndex = this.getControl().getView().getComboBoxSender().getSelectedIndex();
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
 			timer.setChannelId(sender.getChanId());
 			timer.setSenderName((String)value);
@@ -95,7 +95,7 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 		if (col == 4) {
 		    timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			System.out.println (timer.getEventRepeatId());
-			control.getTab().selectRepeatDaysForRecordTimer(timer);
+			control.getView().selectRepeatDaysForRecordTimer(timer);
 			if (timer.getModifiedId() == null) {
 				timer.setModifiedId("modify");
 			}

@@ -175,11 +175,17 @@ public class BORecordArgs {
 	public void setPids(BOPids pids) {
 		this.pids = pids;
 	}
+	public void checkTitle() {
+	    if (!this.getLocalTimer().getDescription().equals("")) {
+	        this.setEpgTitle(this.getLocalTimer().getDescription());
+	    }
+	}
+	
 	/*
      * Setzen der richtigen Audiopids
      * Checken ob Videotext aufgenommen werden soll
      */
-    public void checkSettings() {
+    public void checkRecordPids() {
         if (this.getLocalTimer().isAc3ReplaceStereo()) {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);

@@ -75,7 +75,6 @@ public class BOLocalTimer {
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		timer.setStartTime(mainTimer.getUnformattedStartTime().getTimeInMillis());
-		mainTimer.setLocalTimer(timer);
 		return timer;
 	}
 

@@ -219,7 +219,7 @@ public class GuiTabProgramm extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(jPanelLog, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_logWindow"), 		cc.xyw(1, 1, 3));
+			builder.addSeparator(ControlMain.getProperty("label_logWindow")+" (Strg+L)", 		cc.xyw(1, 1, 3));
 			builder.add(this.getJButtonClearLogArea(), 								cc.xy(3, 3));
 			builder.add(this.getJButtonSwitchLog(), 								cc.xy(1, 3));
 		}

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import model.BOTimer;
 import model.BOTimerList;
+import presentation.timer.GuiTimerPanel;
 /*
  * Superklasse fuer die Timer-Controls
  */
@@ -35,5 +36,6 @@ public abstract class ControlTabTimer implements Runnable {
 	public abstract BOTimerList getTimerList();
 	public abstract void addRecordTimer (BOTimer timer);
 	public abstract void writeTimer (BOTimer timer) throws IOException;
+	public abstract GuiTimerPanel getTab();
 	
 }

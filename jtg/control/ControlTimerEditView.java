@@ -24,6 +24,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -33,7 +34,6 @@ import java.util.GregorianCalendar;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -47,6 +47,7 @@ import model.BORecordArgs;
 import model.BOSender;
 import model.BOTimer;
 import presentation.settings.GuiStreamTypeComboModel;
+import presentation.settings.GuiTagFrame;
 import presentation.timer.GuiTimerEditView;
 import service.SerAlertDialog;
 import service.SerFormatter;
@@ -59,7 +60,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	BOLocalTimer timer;
     GuiTimerEditView view;
     ControlTabTimer controlTimer;
-    private JFrame tagFrame;
+    private GuiTagFrame tagFrame;
     
     public ControlTimerEditView(ControlTabTimer controlTimer, BOLocalTimer timer) {
     	this.setControlTimer(controlTimer);
@@ -192,7 +193,11 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				break;
 			}
 			if (action.equals("Tags")) {
-				openTagWindow();
+				openTagWindow(this.getView().getJTextFieldDirPattern());
+				break;
+			}
+			if (action.equals("TagsFile")) {
+				openTagWindow(this.getView().getJTextFieldFilePattern());
 				break;
 			}
 			if (action.equals("Test")) {
@@ -246,16 +251,40 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		return Integer.toString(result);
 	}
 	
-	private void openTagWindow() {
+	/**
+	 * @param field
+	 *  
+	 */
+	private void openTagWindow(JTextField field) {
 		if (tagFrame == null) {
-			tagFrame = new JFrame(ControlMain.getProperty("filep_tagName"));
+			tagFrame = new GuiTagFrame(ControlMain.getProperty("filep_tagName"));
 			final JList list = new JList(BOPatternTag.getTags());
-			list.addMouseListener(this); 
+			list.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						Object[] val = list.getSelectedValues();
+						for (int i = 0; i < val.length; i++) {
+							BOPatternTag t = (BOPatternTag) val[i];
+							String text = tagFrame.getField().getText();
+							text += t.getName();
+							tagFrame.getField().setText(text);
+						}
+
+						if (tagFrame.getField() == getView().getJTextFieldDirPattern()) {
+						    getTimer().setDirPattern(tagFrame.getField().getText());
+						}
+						else if (tagFrame.getField() == getView().getJTextFieldFilePattern()) {
+						    getTimer().setFilePattern(tagFrame.getField().getText());
+						}
+					}
+				}
+			});
 			tagFrame.getContentPane().add(new JLabel(ControlMain.getProperty("filep_availableTags")), BorderLayout.NORTH);
 			tagFrame.getContentPane().add(new JScrollPane(list));
 			tagFrame.pack();
 			tagFrame.setLocationRelativeTo(getView());
 		}
+		tagFrame.setField(field);
 		tagFrame.setVisible(true);
 	}
 	

@@ -63,7 +63,6 @@ public class SerTimerHandler {
     private static boolean isValidTimer(BOLocalTimer timer) {
         try {
             GregorianCalendar boxTime = ControlMain.getBoxAccess().getBoxTime();
-            System.out.println(boxTime.getTimeInMillis()-timer.getStartTime());
             if (boxTime.getTimeInMillis()-timer.getStartTime()>0) {
                 return true;
             }

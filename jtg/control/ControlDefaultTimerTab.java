@@ -23,11 +23,16 @@ import java.util.ArrayList;
 import model.BOTimer;
 import model.BOTimerList;
 import presentation.GuiMainView;
+import presentation.timer.GuiTimerPanel;
 
 public class ControlDefaultTimerTab extends ControlTabTimer {
 	
 	GuiMainView mainView;
 
+	public GuiTimerPanel getTab() {
+	    return null;
+	}
+	
 	public void reReadTimerList() {}
 	
 	public ControlDefaultTimerTab(GuiMainView view) {

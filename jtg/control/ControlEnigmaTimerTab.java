@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
 import presentation.timer.GuiEnigmaTimerPanel;
+import presentation.timer.GuiTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 
@@ -88,7 +89,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		
 		if (action == "addProgramTimer") {
 			this.getTimerList().getRecordTimerList().add(this.buildRecordTimer());
-			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			this.getView().getRecordTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "cleanup") {
 		    this.actionCleanUpRecordTimer();
@@ -111,11 +112,11 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	public void itemStateChanged (ItemEvent event) {
 		JRadioButton radioButton = (JRadioButton)event.getSource();
 		if (radioButton.getName().equals("recordTimer")){
-			JTable table = this.getTab().getJTableRecordTimer();
+			JTable table = this.getView().getJTableRecordTimer();
 			int selectedRow = table.getSelectedRow();
-			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+			int modelIndex = this.getView().recordTimerSorter.modelIndex(selectedRow);
 			BOTimer timer = (BOTimer)this.getTimerList().getRecordTimerList().get(modelIndex);
-			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
+			timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage));
 		}
 	}
 	/*
@@ -135,7 +136,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		try {
 			this.deleteAllTimer();
 			this.getTimerList().setRecordTimerList(new ArrayList());
-			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			this.getView().getRecordTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
 		}
@@ -164,15 +165,15 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	}
 	
 	private void actionDeleteSelectedRecordTimer() {
-	    int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
+	    int[] rows = this.getView().getJTableRecordTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList().getRecordTimerList();
 		for (int i=rows.length-1; 0<=i; i--) {
-		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
+		    int modelIndex = this.getView().recordTimerSorter.modelIndex(rows[i]);
 			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
 				timerList.remove(modelIndex);
-				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+				this.getView().getRecordTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}
@@ -247,7 +248,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		String tableName = table.getName();
 		int selectedRow = table.getSelectedRow();		
 		if (tableName == "recordTimerTable") {
-			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+			int modelIndex = this.getView().recordTimerSorter.modelIndex(selectedRow);
 			BOTimer timer = (BOTimer)this.getTimerList().getRecordTimerList().get(modelIndex);
 			this.selectRepeatDaysForRecordTimer(timer);
 		}
@@ -345,17 +346,17 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
 		int result = Integer.parseInt((String)timer.getEventRepeatId());		
 		if (result>5) {
-			this.getTab().enableRecordTimerWeekdays();
+			this.getView().enableRecordTimerWeekdays();
 			for (int i = 0; i<7; i++){
-				this.getTab().jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+				this.getView().jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
 			}
 		} else {
-			this.getTab().disableRecordTimerWeekdays();
+			this.getView().disableRecordTimerWeekdays();
 		}
 	}
 		
 	private void refreshTables() {
-		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		this.getView().getRecordTimerTableModel().fireTableDataChanged();
 	}
 	
 	/**
@@ -383,10 +384,14 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	public void setTimerList(BOTimerList timerList) {
 		this.timerList = timerList;
 	}
+	public GuiEnigmaTimerPanel getView() {
+	    return (GuiEnigmaTimerPanel)this.getTab();
+	}
+	
 	/**
 	 * @return Returns the tab.
 	 */
-	public GuiEnigmaTimerPanel getTab() {
+	public GuiTimerPanel getTab() {
 		return tab;
 	}
 	/**

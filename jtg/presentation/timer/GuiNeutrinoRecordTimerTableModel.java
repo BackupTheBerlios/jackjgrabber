@@ -65,7 +65,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public void setValueAt(Object value, int row, int col) {
 		BOTimer timer = (BOTimer)control.getTimerList().getRecordTimerList().get(row);
 		if (col == 0) {
-			int senderIndex = this.getControl().getTab().getComboBoxSender().getSelectedIndex();
+			int senderIndex = this.getControl().getView().getComboBoxSender().getSelectedIndex();
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
 			timer.setChannelId(sender.getChanId());
 			timer.setSenderName((String)value);
@@ -80,7 +80,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		}
 		if (col == 3) {
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			ControlNeutrinoTimerTab.selectRepeatDaysForRecordTimer(timer, control.getTab().jRadioButtonWhtage);
+			ControlNeutrinoTimerTab.selectRepeatDaysForRecordTimer(timer, control.getView().jRadioButtonWhtage);
 		}
 		timer.setModifiedId("modify");
     }
@@ -121,6 +121,6 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	
 	public void fireTableDataChanged() {
 		super.fireTableDataChanged();
-		this.getControl().getTab().enableRecordTimerWeekdays(false);
+		this.getControl().getView().enableRecordTimerWeekdays(false);
 	}
 }

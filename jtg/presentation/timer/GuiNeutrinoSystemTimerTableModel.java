@@ -102,6 +102,6 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	
 	public void fireTableDataChanged() {
 		super.fireTableDataChanged();
-		this.getControl().getTab().enableSystemTimerWeekdays(false);
+		this.getControl().getView().enableSystemTimerWeekdays(false);
 	}
 }

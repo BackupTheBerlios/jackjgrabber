@@ -79,7 +79,8 @@ public class SerStreamingServer extends Thread {
 		}
 		if (recordArgs.getCommand().equals("record")) {
 		    recordArgs.setQuickRecord(false);
-			recordArgs.checkSettings();
+			recordArgs.checkRecordPids();
+			recordArgs.checkTitle();
 			controlProgramTab.startRecord(recordArgs);
 		}
 		server.close();  //server restart

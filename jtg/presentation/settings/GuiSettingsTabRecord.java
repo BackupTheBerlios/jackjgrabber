@@ -47,6 +47,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JPanel panelServerRecordSettings = null;
 	private JPanel panelQuickRecordSettings = null;
 	private JPanel panelRecordtimeSettings = null;
+	private JPanel panelFileNameSettings;
 	private JPanel panelNorth = null;
 	private JPanel panelSouth = null;
 	private JComboBox jComboBoxStreamType = null;
@@ -64,18 +65,18 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbRecordVtxt;
 	private JCheckBox cbShutdownAfterRecord;
 	private JCheckBox cbStopPlaybackAtRecord;
-	private JSpinner recordMinsBefore, recordMinsAfter;
-
 	private JCheckBox cbStoreEPG;
 	private JCheckBox cbStoreLogAfterRecord;
-	private SerIconManager iconManager = SerIconManager.getInstance();
-	private JButton testButton;
-	private JButton tagButton;
-	private JButton tagButtonFile;
+	private JSpinner recordMinsBefore, recordMinsAfter;
+
+	private JButton jButtonTest;
+	private JButton jButtonDirTag;
+	private JButton jButtonFileTag;
 	
-	private JTextField dirPattern;
-	private JTextField filePattern;
-	private JPanel panelFileNameSettings;
+	private JTextField tfDirPattern;
+	private JTextField tfFilePattern;
+	
+	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
 		super();
@@ -223,13 +224,13 @@ public class GuiSettingsTabRecord extends GuiTab {
 
 			builder.addSeparator(ControlMain.getProperty("filep_filepattern"), cc.xyw(1, 1, 7));
 			builder.add(new JLabel(ControlMain.getProperty("filep_directory")), cc.xy(1, 2));
-			builder.add(getDirPattern(), cc.xy(3, 2));
-			builder.add(getTagButton(), cc.xy(5, 2));
-			builder.add(getTestButton(), cc.xy(7, 2));
+			builder.add(getTfDirPattern(), cc.xy(3, 2));
+			builder.add(getJButtonDirTag(), cc.xy(5, 2));
+			builder.add(getJButtonTest(), cc.xy(7, 2));
 
 			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 3));
-			builder.add(getFilePattern(), cc.xy(3, 3));
-			builder.add(getTagButtonFile(), cc.xy(5, 3));
+			builder.add(getTfFilePattern(), cc.xy(3, 3));
+			builder.add(getJButtonFileTag(), cc.xy(5, 3));
 
 		}
 		return panelFileNameSettings;
@@ -238,63 +239,63 @@ public class GuiSettingsTabRecord extends GuiTab {
 	/**
 	 * @return
 	 */
-	public JButton getTestButton() {
-		if (testButton == null) {
-			testButton = new JButton("Test");
-			testButton.setName("TestPattern");
-			testButton.addActionListener(control);
+	public JButton getJButtonTest() {
+		if (jButtonTest == null) {
+			jButtonTest = new JButton("Test");
+			jButtonTest.setName("TestPattern");
+			jButtonTest.addActionListener(control);
 		}
-		return testButton;
+		return jButtonTest;
 	}
 
 	/**
 	 * @return
 	 */
-	public JButton getTagButton() {
-		if (tagButton == null) {
-			tagButton = new JButton(ControlMain.getProperty("filep_tagName"));
-			tagButton.setActionCommand("Tags");
-			tagButton.addActionListener(control);
+	public JButton getJButtonDirTag() {
+		if (jButtonDirTag == null) {
+			jButtonDirTag = new JButton(ControlMain.getProperty("filep_tagName"));
+			jButtonDirTag.setActionCommand("Tags");
+			jButtonDirTag.addActionListener(control);
 		}
-		return tagButton;
+		return jButtonDirTag;
 	}
 
 	/**
-	 * @return
+	 * @return jButtonFileTag
 	 */
-	public JButton getTagButtonFile() {
-		if (tagButtonFile == null) {
-			tagButtonFile = new JButton(ControlMain.getProperty("filep_tagName"));
-			tagButtonFile.setActionCommand("TagsFile");
-			tagButtonFile.addActionListener(control);
+	public JButton getJButtonFileTag() {
+		if (jButtonFileTag == null) {
+			jButtonFileTag = new JButton(ControlMain.getProperty("filep_tagName"));
+			jButtonFileTag.setActionCommand("TagsFile");
+			jButtonFileTag.addActionListener(control);
 		}
-		return tagButtonFile;
+		return jButtonFileTag;
 	}
 	
 	/**
-	 * @return
+	 * @return tfDirPattern
 	 */
-	public JTextField getDirPattern() {
+	public JTextField getTfDirPattern() {
 
-		if (dirPattern == null) {
-			dirPattern = new JTextField();
-			dirPattern.setName("dirPattern");
-			dirPattern.addKeyListener(control);
+		if (tfDirPattern == null) {
+			tfDirPattern = new JTextField();
+			tfDirPattern.setName("tfDirPattern");
+			tfDirPattern.addKeyListener(control);
 		}
-		return dirPattern;
+		return tfDirPattern;
 	}
 
 	/**
 	 * @return
 	 */
-	public JTextField getFilePattern() {
+	public JTextField getTfFilePattern() {
 
-		if (filePattern == null) {
-			filePattern = new JTextField();
-			filePattern.setName("filePattern");
-			filePattern.addKeyListener(control);
+		if (tfFilePattern == null) {
+			tfFilePattern = new JTextField();
+			tfFilePattern.setName("tfFilePattern");
+			tfFilePattern.addKeyListener(control);
 		}
-		return filePattern;
+		return tfFilePattern;
 	}
 
 	/**
