@@ -80,7 +80,7 @@ public class ControlMain {
 
 	private static String settingsFilename;
 
-	public static String version[] = {"XMediaGrabber 0.2.8", "30.01.2005", "User: " + System.getProperty("user.name")};
+	public static String version[] = {"XMediaGrabber 0.2.9", "06.02.2005", "User: " + System.getProperty("user.name")};
 
 	public static void main(String args[]) {
 	    startSplash();
