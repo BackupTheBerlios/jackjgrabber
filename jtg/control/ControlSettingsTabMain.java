@@ -23,20 +23,22 @@ import javax.swing.JComboBox;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-
 import model.BOBox;
+import model.BOLookAndFeelHolder;
 import model.BOSettings;
 import presentation.GuiMainView;
-import presentation.settings.GuiLookAndFeelHolder;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
+
+import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
+import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 
 public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener {
 
 	GuiTabSettings			settingsTab;
 	public final String[]	localeNames	= {"de,Deutsch", "en,Englisch", "fi,Finisch"};
-	public GuiLookAndFeelHolder[] lookAndFeels;
+	public BOLookAndFeelHolder[] lookAndFeels;
 	private int currentSelectedLookAndFeel = 0;
 
 	public ControlSettingsTabMain(GuiTabSettings tabSettings) {
@@ -58,14 +60,14 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		this.getTab().getJComboBoxLookAndFeel().setSelectedIndex(currentSelectedLookAndFeel);
 	}
 	
-	public GuiLookAndFeelHolder[] initLookAndFeels() {
+	public BOLookAndFeelHolder[] initLookAndFeels() {
 	    if (lookAndFeels==null) {
 			LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-			lookAndFeels = new GuiLookAndFeelHolder[looks.length];
+			lookAndFeels = new BOLookAndFeelHolder[looks.length];
 	
 			String currentSelLFClassName = ControlMain.getSettings().getLookAndFeel();
 			for (int i = 0; i < looks.length; i++) {
-				lookAndFeels[i] = new GuiLookAndFeelHolder(looks[i].getName(),looks[i].getClassName());
+				lookAndFeels[i] = new BOLookAndFeelHolder(looks[i].getName(),looks[i].getClassName());
 				if (lookAndFeels[i].getLookAndFeelClassName().equals(currentSelLFClassName)) {
 					currentSelectedLookAndFeel = i;
 				}
@@ -119,7 +121,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 						getSettings().setThemeLayout((String) comboBox.getSelectedItem());
 						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
 						{
-							ControlMain.getControl().getView().setLookAndFeel();
+							this.getMainView().getControl().setLookAndFeel();
 						}
 						break;
 					}
@@ -128,20 +130,26 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 						break;
 					}
 					if (comboBox.getName().equals("lookAndFeel")) {
-					    String lookAndFeel = ((GuiLookAndFeelHolder) this.getTab().getJComboBoxLookAndFeel().getSelectedItem()).getLookAndFeelClassName();
-						boolean enable = lookAndFeel.equals(PlasticLookAndFeel.class.getName());
+					    String lookAndFeel = ((BOLookAndFeelHolder) this.getTab().getJComboBoxLookAndFeel().getSelectedItem()).getLookAndFeelClassName();
+						boolean enable = this.enableThemeComboBox(lookAndFeel);
 						this.getTab().getJComboBoxTheme().setEnabled(enable);
 						getSettings().setLookAndFeel(lookAndFeel);
-						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
-						{
-							ControlMain.getControl().getView().setLookAndFeel();
-						}
+						this.getMainView().getControl().setLookAndFeel();
 						break;
 					}
 				}
 				break;
 			}
 		}
+	}
+	
+	/*
+	 * Theme-Auswahl nur fuer Plastic-L&F´s erlauben
+	 */
+	private boolean enableThemeComboBox(String lookAndFeel) {
+	    return (lookAndFeel.equals(PlasticLookAndFeel.class.getName()) || 
+	            lookAndFeel.equals(PlasticXPLookAndFeel.class.getName()) ||
+	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName()) );
 	}
 
 	private void actionAddBox() {

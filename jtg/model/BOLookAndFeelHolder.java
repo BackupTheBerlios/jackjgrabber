@@ -1,5 +1,4 @@
-
-package presentation.settings;
+package model;
 
 /**This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,7 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  * @version 24.11.2004
  *
  */
-public class GuiLookAndFeelHolder {
+public class BOLookAndFeelHolder {
 
 	private String lookAndFeelName;
 	
@@ -29,7 +28,7 @@ public class GuiLookAndFeelHolder {
 	/**
 	 * 
 	 */
-	public GuiLookAndFeelHolder() {
+	public BOLookAndFeelHolder() {
 		super();
 	}
 	
@@ -37,7 +36,7 @@ public class GuiLookAndFeelHolder {
 	 * @param name
 	 * @param className
 	 */
-	public GuiLookAndFeelHolder(String name, String className) {		
+	public BOLookAndFeelHolder(String name, String className) {		
 		super();
 		setLookAndFeelName(name);
 		setLookAndFeelClassName(className);

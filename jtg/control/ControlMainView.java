@@ -17,12 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.Font;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -30,40 +30,87 @@ import org.apache.log4j.Logger;
 
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
-import presentation.GuiTerms;
 import service.SerLogAppender;
 import snoozesoft.systray4j.SysTrayMenuEvent;
 import snoozesoft.systray4j.SysTrayMenuListener;
+
+import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
+import com.jgoodies.plaf.plastic.PlasticTheme;
+import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 
 
 /**
  * Control-Klasse des Haupt-Fensters, beinhaltet und verwaltet das MainTabPane
  * Klasse wird beim Start der Anwendung initialisiert und ist immer verfügbar
  */
-public class ControlMainView implements ActionListener, ChangeListener, SysTrayMenuListener {
+public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	
 	GuiMainView view;
-	GuiTerms guiTerms;
 	
-	public ControlMainView() {
-		//this.showTerms();
-		this.runAfterTerms();
-				
-	}
-	private void showTerms() {
-		guiTerms = new GuiTerms(this);
-		guiTerms.setVisible(true);
+	public ControlMainView() {				
 	}
 	
-	private void runAfterTerms() {;
-		this.setView(new GuiMainView(this));
+	public void initialize() {
+	    this.initPlasticLookAndFeel();
+	    this.setLookAndFeel();
+		this.setView(new GuiMainView(this));		
 		SerLogAppender.getTextAreas().add(this.getView().getTabProgramm().getJTextPaneAusgabe());
-		this.initialize();
+		this.logSystemInfo();
 		this.log(ControlMain.getProperty("msg_app_starting"));		
 	}
 	
-	private void initialize() {
-		this.logSystemInfo();
+	private void initPlasticLookAndFeel() {
+		try {
+			// Installiere das Plastic Look And Feel
+		    PlasticLookAndFeel l2 = new PlasticLookAndFeel();
+			UIManager.LookAndFeelInfo info2 = new UIManager.LookAndFeelInfo(l2.getName(), PlasticLookAndFeel.class.getName());
+			UIManager.installLookAndFeel(info2);
+			
+			Plastic3DLookAndFeel l3 = new Plastic3DLookAndFeel();
+			UIManager.LookAndFeelInfo info3 = new UIManager.LookAndFeelInfo(l3.getName(), Plastic3DLookAndFeel.class.getName());
+			UIManager.installLookAndFeel(info3);
+			
+			PlasticXPLookAndFeel l = new PlasticXPLookAndFeel();
+			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l.getName(), PlasticXPLookAndFeel.class.getName());
+			UIManager.installLookAndFeel(info);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public void setLookAndFeel() {
+		try {
+			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
+			String current = UIManager.getLookAndFeel().getClass().getName();
+			boolean lfChanged = !current.equals(lookAndFeel);
+			boolean themeChanged = this.isThemeChanged();
+			
+			if (themeChanged) {
+				PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
+						+ ControlMain.getSettings().getThemeLayout())).newInstance();
+				PlasticLookAndFeel.setMyCurrentTheme(inst);
+			}
+
+			if (lfChanged || themeChanged) {
+				UIManager.setLookAndFeel(lookAndFeel);
+				if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
+					Font f = (Font) UIManager.get("TextArea.font");
+					UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
+				}
+				if (this.getView()!=null) {
+				    this.getView().repaintGui();    
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private boolean isThemeChanged() {
+	    String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
+		currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
+		return !currentTheme.equals(ControlMain.getSettings().getThemeLayout());
 	}
 	
 	private void logSystemInfo() {
@@ -102,18 +149,6 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		Logger.getLogger("ControlMainView").info(logtext);
 	}
 	
-	public void actionPerformed(ActionEvent e)
-	{
-		String actName = e.getActionCommand();
-
-		if (actName.equals("I agree"))  {
-			guiTerms.close();
-			this.runAfterTerms();
-		} else if (actName.equals("I disagree (closing)")) {
-			System.exit(0);
-		}
-	}
-	
 	/**
 	 * Change-Events of the MainTabPane
 	 */
@@ -139,9 +174,6 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 			if (count == 3) { //Record Info
 				pane.setComponentAt(count, pane.getTabRecordInfo());
 			}
-			
-			
-			
 			if (count == 4) { //SettingsTab
 				pane.setComponentAt(count, pane.getTabSettings());
 				break;
@@ -187,19 +219,6 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 	        break;
 		}
     }
-		
-	/**
-	 * @return Returns the guiTerms.
-	 */
-	public GuiTerms getGuiTerms() {
-		return guiTerms;
-	}
-	/**
-	 * @param guiTerms The guiTerms to set.
-	 */
-	public void setGuiTerms(GuiTerms guiTerms) {
-		this.guiTerms = guiTerms;
-	}
 	/**
 	 * @return Returns the tabSettings.
 	 */

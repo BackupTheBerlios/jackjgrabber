@@ -93,6 +93,7 @@ public class ControlMain {
 		detectActiveBox();
 		detectImage();
 		control = new ControlMainView();
+		control.initialize();
 		if (screen != null) {
 			try {
 				Thread.sleep(1500);

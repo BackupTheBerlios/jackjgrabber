@@ -16,7 +16,6 @@ package presentation;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
@@ -25,7 +24,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import presentation.about.GuiTabAbout;
 import presentation.movieguide.GuiTabMovieGuide;
@@ -37,10 +35,6 @@ import service.SerIconManager;
 import snoozesoft.systray4j.SysTrayMenu;
 import snoozesoft.systray4j.SysTrayMenuIcon;
 import snoozesoft.systray4j.SysTrayMenuItem;
-
-import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-import com.jgoodies.plaf.plastic.PlasticTheme;
-
 import control.ControlMain;
 import control.ControlMainView;
 /*
@@ -67,9 +61,6 @@ public class GuiMainView extends JFrame {
 			}
 		});
 
-		initPlasticLookAndFeel();
-
-		setLookAndFeel();
 		control = ctrl;
 		initialize();
 		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2]);
@@ -81,59 +72,11 @@ public class GuiMainView extends JFrame {
 		}
 		setVisible(true);
 	}
-
-	/**
-	 *  
-	 */
-	private void initPlasticLookAndFeel() {
-		try {
-			// Installiere das Plastic Look And Feel
-			PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
-					+ ControlMain.getSettings().getThemeLayout())).newInstance();
-			PlasticLookAndFeel.setMyCurrentTheme(inst);
-			PlasticLookAndFeel l = new PlasticLookAndFeel();
-			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l.getName(), PlasticLookAndFeel.class.getName());
-			UIManager.installLookAndFeel(info);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
-
-	public void setLookAndFeel() {
-		try {
-
-			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
-
-			String current = UIManager.getLookAndFeel().getClass().getName();
-			String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
-			currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
-			boolean themeChanged = !currentTheme.equals(ControlMain.getSettings().getThemeLayout());
-			boolean lfChanged = !current.equals(lookAndFeel);
-
-			if (themeChanged) {
-				if (current.equals(PlasticLookAndFeel.class.getName())) {
-					PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
-							+ ControlMain.getSettings().getThemeLayout())).newInstance();
-					PlasticLookAndFeel.setMyCurrentTheme(inst);
-				}
-			}
-
-			if (lfChanged || themeChanged) {
-				UIManager.setLookAndFeel(lookAndFeel);
-				if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
-					Font f = (Font) UIManager.get("TextArea.font");
-					UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
-				}
-
-				dispose();
-				SwingUtilities.updateComponentTreeUI(this);
-				setVisible(true);
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
+	public void repaintGui() {
+	    dispose();
+		SwingUtilities.updateComponentTreeUI(this);
+		setVisible(true);
 	}
 
 	/**
@@ -191,9 +134,6 @@ public class GuiMainView extends JFrame {
 		menu.addItem(itemOpen);
 	}
 
-	/**
-	 *  
-	 */
 	private void registerTrayIconListener() {
 		sysTrayIcon[0].addSysTrayMenuListener(control);
 		sysTrayIcon[1].addSysTrayMenuListener(control);
@@ -210,7 +150,6 @@ public class GuiMainView extends JFrame {
 	public void checkTrayMenu(boolean useTray) {
 		if (useTray) {
 			if (menu == null) {
-
 				// Falls es noch kein Menü gibt, erzeuge es
 				createMenu();
 			} else {
@@ -218,7 +157,6 @@ public class GuiMainView extends JFrame {
 				menu.showIcon();
 			}
 		} else {
-
 			if (menu != null) {
 				// Verstecke Icon
 				menu.hideIcon();
