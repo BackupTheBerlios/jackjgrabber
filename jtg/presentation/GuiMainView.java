@@ -104,11 +104,11 @@ public class GuiMainView extends JFrame {
 		Dimension dim = ControlMain.getSettingsLayout().getSize();
 		if (dim != null) {
 			setSize(dim);
-			System.out.println("Validate Tree");
 			invalidate();
 			validateTree();
 			repaint();
 			doLayout();
+			setVisible(true);
 		}
 	}
 
