@@ -29,7 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
@@ -54,10 +53,10 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JPanel panelStartOptions = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
-	private JButton jButtonVlcPathFileChooser = null;
+	
 	private JButton jButtonStartVlc = null;
 	private JFormattedTextField tfBoxIp = null;
-	private JTextField jTextFieldVlcPath =null;
+	
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxLookAndFeel = null;
 	private JComboBox jComboBoxLocale = null;
@@ -136,43 +135,15 @@ public class GuiSettingsTabMain extends GuiTab {
 				CellConstraints cc = new CellConstraints();
 
 				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 6));
-				builder.add(this.getCbStartFullscreen(), 																					cc.xyw(1, 3, 6));
-				builder.add(this.getCbShowLogo(),																								cc.xyw(1, 4, 6));
-				builder.add(this.getCbUseSysTray(), 																							cc.xyw(1, 5, 6));
-				builder.add(this.getCbStartVlcAtStart(), 																				cc.xyw(1, 6, 3));
-				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),				cc.xy	(1, 7));
-				builder.add(this.getJTextFieldVlcPath(),																					cc.xy	(3, 7));
-				builder.add(this.getJButtonVlcPathFileChooser(),															cc.xy	(5, 7));
-				builder.add(this.getJButtonStartVlc(),																						cc.xy	(6, 7));
+				builder.add(this.getCbStartFullscreen(), 									cc.xyw(1, 3, 6));
+				builder.add(this.getCbShowLogo(),											cc.xyw(1, 4, 6));
+				builder.add(this.getCbUseSysTray(), 										cc.xyw(1, 5, 6));
+				builder.add(this.getCbStartVlcAtStart(), 									cc.xyw(1, 6, 3));
+				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),			cc.xy	(1, 7));
+				builder.add(this.getJButtonStartVlc(),										cc.xy	(6, 7));
 			}
 			return panelStartOptions;
 		}
-	
-	/**
-	 * @return Returns the jButtonVlcPathFileChooser.
-	 */
-	public JButton getJButtonVlcPathFileChooser() {
-		if (jButtonVlcPathFileChooser == null) {
-		    jButtonVlcPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
-		    jButtonVlcPathFileChooser.setActionCommand("vlcPath");
-		    jButtonVlcPathFileChooser.addActionListener(control);
-		}
-		return jButtonVlcPathFileChooser;
-	}
-
-	/**
-	 * @return Returns the jTextFieldVlcPath.
-	 */
-	public JTextField getJTextFieldVlcPath() {
-		if (jTextFieldVlcPath == null) {
-		    jTextFieldVlcPath = new JTextField();
-		    jTextFieldVlcPath.addKeyListener(control);
-		    jTextFieldVlcPath.setName("vlcPath");
-		    jTextFieldVlcPath.setPreferredSize(new Dimension(340, 19));
-		}
-		return jTextFieldVlcPath;
-	}
-
 	/**
 	 * This method initializes jComboBoxLocale
 	 * 

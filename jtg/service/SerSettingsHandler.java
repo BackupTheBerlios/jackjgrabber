@@ -17,10 +17,8 @@ package service;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.*;
 import java.io.*;
 import java.util.*;
-import java.util.List;
 
 import model.*;
 
@@ -89,11 +87,11 @@ public class SerSettingsHandler {
 	private static void getSettingsVlcPath(Element root, BOSettings settings) {
 			Node node = root.selectSingleNode("/settings/vlcPath");
 			if (node != null) {
-				settings.getMainSettings().vlcPath = node.getText();
+				settings.getPathSettings().vlcPath = node.getText();
 			} else {
 				String path = new File("vlc.exe").getAbsolutePath();
 				SerXMLHandling.setElementInElement(root, "vlcPath", path);
-				settings.getMainSettings().setVlcPath(path);
+				settings.getPathSettings().setVlcPath(path);
 			}
 		}
 
@@ -549,14 +547,12 @@ public class SerSettingsHandler {
 		Node theme = settingsDocument.selectSingleNode("/settings/theme");
 		Node lookAndFeel = settingsDocument.selectSingleNode("/settings/lookandfeel");
 		Node locale = settingsDocument.selectSingleNode("/settings/locale");
-		Node vlcPath = settingsDocument.selectSingleNode("/settings/vlcPath");
 		Node startVlc = settingsDocument.selectSingleNode("/settings/startVlc");
 		Node useSysTray = settingsDocument.selectSingleNode("/settings/useSysTray");
 		Node startFullscreen = settingsDocument.selectSingleNode("/settings/startFullscreen");
 		Node showLogo = settingsDocument.selectSingleNode("/settings/showLogo");
 		
 		startVlc.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isStartVlcAtStart()));
-		vlcPath.setText(ControlMain.getSettings().getMainSettings().getVlcPath());
 		useSysTray.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isUseSysTray()));
 		startFullscreen.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isStartFullscreen()));
 		showLogo.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isShowLogo()));
@@ -592,13 +588,10 @@ public class SerSettingsHandler {
 		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
 		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
 		Node startServer = settingsDocument.selectSingleNode("/settings/startStreamingServer");
-		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
 		Node jgrabberStreamType = settingsDocument.selectSingleNode("/settings/jgrabberStreamType");
 		Node udrecStreamType = settingsDocument.selectSingleNode("/settings/udrecStreamType");
 		Node startPx = settingsDocument.selectSingleNode("/settings/startPX");
 		Node engine = settingsDocument.selectSingleNode("/settings/engine");
-		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
-		Node projectXPath = settingsDocument.selectSingleNode("/settings/projectXPath");
 		Node recordAllPids = settingsDocument.selectSingleNode("/settings/recordAllPids");
 		Node recordTimeBefore = settingsDocument.selectSingleNode("/settings/recordTimeBefore");
 		Node recordTimeAfter = settingsDocument.selectSingleNode("/settings/recordTimeAfter");
@@ -609,22 +602,32 @@ public class SerSettingsHandler {
 		Node recordVtxt = settingsDocument.selectSingleNode("/settings/recordVtxt");
 		
 		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordVtxt()));
-		projectXPath.setText(ControlMain.getSettings().getRecordSettings().getProjectXPath());
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()));
 		udrecOptions.setText(ControlMain.getSettings().getRecordSettings().getUdrecOptions());
 		recordTimeBefore.setText(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore());
 		recordTimeAfter.setText(ControlMain.getSettings().getRecordSettings().getRecordTimeAfter());
 		recordAllPids.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordAllPids()));
 		engine.setText(Integer.toString(ControlMain.getSettings().getRecordSettings().getStreamingEngine()));
-		udrecPath.setText(ControlMain.getSettings().getRecordSettings().getUdrecPath());
 		startPx.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStartPX()));
 		jgrabberStreamType.setText(ControlMain.getSettings().getRecordSettings().getJgrabberStreamType());
 		udrecStreamType.setText(ControlMain.getSettings().getRecordSettings().getUdrecStreamType());
 		startServer.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStartStreamingServer()));
-		savePath.setText(ControlMain.getSettings().getRecordSettings().getSavePath());
 		serverPort.setText(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
 		storeEPG.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreEPG()));
 		storeLogAfterRecord.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreLogAfterRecord()));
+	}
+	
+	public static void savePathSettings() throws IOException {
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
+		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
+		Node projectXPath = settingsDocument.selectSingleNode("/settings/projectXPath");
+		Node vlcPath = settingsDocument.selectSingleNode("/settings/vlcPath");
+
+		projectXPath.setText(ControlMain.getSettings().getRecordSettings().getProjectXPath());
+		udrecPath.setText(ControlMain.getSettings().getRecordSettings().getUdrecPath());
+		savePath.setText(ControlMain.getSettings().getRecordSettings().getSavePath());
+		vlcPath.setText(ControlMain.getSettings().getPathSettings().getVlcPath());
 	}
 	
 	public static void saveMovieGuideSettings() throws IOException {
@@ -679,6 +682,7 @@ public class SerSettingsHandler {
 	}	
 
 	public static void saveAllSettings() throws IOException {
+		savePathSettings();
 		saveRecordSettings();
 		saveMainSettings();
 		saveMovieGuideSettings();

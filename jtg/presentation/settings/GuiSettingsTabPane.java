@@ -31,6 +31,7 @@ public class GuiSettingsTabPane extends JTabbedPane {
 	public GuiSettingsTabRecord tabSettingsRecord = null;
 	public GuiSettingsTabPlayback tabSettingsPlayback = null;
 	public GuiSettingsTabMovieGuide tabSettingsMovieguide = null;
+	public GuiSettingsTabTools tabSettingsTools = null;
 	
 	public GuiTabSettings tabSettings;
 	int index;
@@ -80,7 +81,17 @@ public class GuiSettingsTabPane extends JTabbedPane {
 		}
 		return tabSettingsMovieguide;
 	}	
-	
+	/**
+	 * @return Returns the tabSettingsTools.
+	 */
+	public GuiSettingsTabTools getTabSettingsTools() {
+		if (tabSettingsTools == null) {
+		    ControlSettingsTabTools control = new ControlSettingsTabTools(this.getTabSettings());
+		    tabSettingsTools = new GuiSettingsTabTools(control);
+			control.run();
+		}
+		return tabSettingsTools;
+	}
 	/**
 	 * @return Returns the tabSettings.
 	 */
