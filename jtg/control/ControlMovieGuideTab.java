@@ -86,8 +86,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		
 	String SelectedItemJComboBox;
 	int SelectedItemJComboBoxSucheNach;
-    int timerTableSize; 
-    int zaehler = 0;    
+    int timerTableSize;    
 	public ControlMovieGuideTab(GuiMainView view) {		
 		this.setMainView(view);						
 	}
@@ -106,7 +105,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         			}
         		}
           		if( (!movieGuideFile.exists())){
-          			
+          			SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"),this.getMainView());
         			try{
         				new SerMovieGuide2Xml(null, this.getMainView()).start();
         			}catch (Exception ex){
@@ -114,6 +113,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         			}
         		}
           	}
+          }
+          if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){
+          	SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"),this.getMainView());
           }
           if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
           	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
