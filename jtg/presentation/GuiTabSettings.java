@@ -46,9 +46,11 @@ import control.ControlSettingsTab;
 public class GuiTabSettings extends JPanel {
 
 	private JPanel panelBoxSettings = null;
+	private JPanel panelPlaybackSettings = null;
 	private JPanel panelLayoutSettings = null;
 	private JPanel panelRecordSettings = null;
 	private JComboBox jComboBoxTheme = null;
+	private JTextField jTextFieldPlaybackString = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JScrollPane jScrollPaneBoxSettings = null;
@@ -72,7 +74,7 @@ public class GuiTabSettings extends JPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
 						  "f:pref:grow, 20, f:200",  		// columns 
-						  "f:pref, 20, pref"); 			// rows
+						  "f:pref, 20, pref, 20, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
@@ -80,6 +82,7 @@ public class GuiTabSettings extends JPanel {
 				builder.add(this.getPanelBoxSettings(),		   		cc.xy(1,1));
 				builder.add(this.getPanelLayoutSettings(),			cc.xywh(3, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));				
 				builder.add(this.getPanelRecordSettings(),			cc.xywh(1, 3, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
+				builder.add(this.getPanelPlaybackSettings(),		cc.xywh(1, 5, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
 	}
 	    
 	private JPanel getPanelBoxSettings() {
@@ -91,9 +94,9 @@ public class GuiTabSettings extends JPanel {
 			PanelBuilder builder = new PanelBuilder(panelBoxSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Box-Settings",							cc.xywh	(1, 1, 3, 1));
+			builder.addSeparator("Box-Settings",						cc.xywh	(1, 1, 3, 1));
 			builder.add(this.getJScrollPaneBoxSettings(),	  			cc.xywh	(1, 2, 1, 3));
-			builder.add(this.getJButtonAnlegen(),							cc.xy	(3, 2));
+			builder.add(this.getJButtonAnlegen(),						cc.xy	(3, 2));
 			builder.add(this.getJButtonLoeschen(),						cc.xy	(3, 3));
 		}
 		return panelBoxSettings;
@@ -108,12 +111,12 @@ public class GuiTabSettings extends JPanel {
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 6, 1));
+			builder.addSeparator("Aufname-Settings",						cc.xywh	(1, 1, 6, 1));
 			builder.add(this.getCbStartStreamingServer(),					cc.xywh	(1, 2, 5, 1));
 			builder.add(new JLabel("Streamingserver-Port"),	  			cc.xy	(1, 3));
-			builder.add(this.getTfServerPort(),										cc.xy	(3, 3));
-			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),		cc.xy	(1, 4));
-			builder.add(this.getJTextFieldRecordSavePath(),					cc.xywh	(3, 4, 2, 1));
+			builder.add(this.getTfServerPort(),							cc.xy	(3, 3));
+			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),			cc.xy	(1, 4));
+			builder.add(this.getJTextFieldRecordSavePath(),				cc.xywh	(3, 4, 2, 1));
 			builder.add(this.getJButtonRecordPathFileChooser(),			cc.xy	(6, 4));
 		}
 		return panelRecordSettings;
@@ -135,6 +138,23 @@ public class GuiTabSettings extends JPanel {
 			builder.add(this.getJComboBoxLocale(),						cc.xy	(3, 4));
 		}
 		return panelLayoutSettings;
+	}
+	
+	private JPanel getPanelPlaybackSettings() {
+		if (panelPlaybackSettings == null) {
+			panelPlaybackSettings = new JPanel();
+			FormLayout layout = new FormLayout(
+					  "pref, 10, pref",	 		//columna 
+			  "pref, pref, pref, pref, pref");	//rows
+			PanelBuilder builder = new PanelBuilder(panelPlaybackSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator("Playback-Settings",													cc.xywh	(1, 1, 3, 1));
+			builder.add(new JLabel("z.B. xine http://$ip:31339/$vPid,$aPid"),				cc.xywh	(1, 2, 3, 1));
+			builder.add(new JLabel("Execute"),					  											cc.xy	(1, 3));
+			builder.add(this.getJTextFieldPlaybackString(),											cc.xy	(3, 3));
+		}
+		return panelPlaybackSettings;
 	}
 	
 	/**
@@ -311,9 +331,22 @@ public class GuiTabSettings extends JPanel {
 	public JTextField getJTextFieldRecordSavePath() {
 		if (jTextFieldRecordSavePath == null) {
 			jTextFieldRecordSavePath = new JTextField();
+			jTextFieldRecordSavePath.addActionListener(control);
 			jTextFieldRecordSavePath.setPreferredSize(new Dimension(340, 22));
 			jTextFieldRecordSavePath.setEditable(false);
 		}
 		return jTextFieldRecordSavePath;
+	}
+	/**
+	 * @return Returns the jTextFieldPlaybackString.
+	 */
+	public JTextField getJTextFieldPlaybackString() {
+		if (jTextFieldPlaybackString == null) {
+			jTextFieldPlaybackString = new JTextField();
+			jTextFieldPlaybackString.setActionCommand("playbackString");
+			jTextFieldPlaybackString.addActionListener(this.getControl());
+			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 22));
+		}
+		return jTextFieldPlaybackString;
 	}
 }
