@@ -1,4 +1,7 @@
 package model;
+
+import control.ControlMain;
+
 /*
 BOBox.java by Geist Alexander 
 
@@ -19,10 +22,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 public class BOBox {
 
-	private String dboxIp;
-	private String login="root"; //Defaultwert
-	private String password="dbox2"; //Defaultwert
-	private Boolean standard = Boolean.FALSE;
+	public String dboxIp="192.168.001.110"; //Defaultwert
+	public String login="root"; //Defaultwert
+	public String password="dbox2"; //Defaultwert
+	public Boolean standard = Boolean.FALSE;
 	private boolean selected;
 	
 	
@@ -41,7 +44,10 @@ public class BOBox {
 	 * @param dboxIp The dboxIp to set.
 	 */
 	public void setDboxIp(String dboxIp) {
-		this.dboxIp = dboxIp;
+	    if (this.dboxIp == null || !this.dboxIp.equals(dboxIp)) {
+	        this.dboxIp = dboxIp;
+	        this.setSettingsChanged(true);
+	    }
 	}
 	/**
 	 * @return Returns the login.
@@ -53,7 +59,10 @@ public class BOBox {
 	 * @param login The login to set.
 	 */
 	public void setLogin(String login) {
-		this.login = login;
+	    if (this.login == null || !this.login.equals(login)) {
+	        this.login = login;
+	        this.setSettingsChanged(true);
+	    }
 	}
 	/**
 	 * @return Returns the password.
@@ -65,7 +74,10 @@ public class BOBox {
 	 * @param password The password to set.
 	 */
 	public void setPassword(String password) {
-		this.password = password;
+	    if (this.password == null || !this.password.equals(password)) {
+	        this.password = password;
+	        this.setSettingsChanged(true);
+	    }
 	}
 	/**
 	 * @return Returns the standard.
@@ -77,7 +89,10 @@ public class BOBox {
 	 * @param standard The standard to set.
 	 */
 	public void setStandard(Boolean standard) {
-		this.standard = standard;
+	    if (this.standard.compareTo(standard) != 0) {
+	        this.standard = standard;
+	        this.setSettingsChanged(true);
+	    }
 	}
 	/**
 	 * @return Returns the selected.
@@ -90,5 +105,12 @@ public class BOBox {
 	 */
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+	
+	/**
+	 * @param settingsChanged The settingsChanged to set.
+	 */
+	public void setSettingsChanged(boolean settingsChanged) {
+		ControlMain.getSettings().setSettingsChanged(settingsChanged);
 	}
 }
