@@ -23,16 +23,18 @@ import projectX.X;
 public class ControlProjectXTab extends ControlTab {
 	
 	GuiMainView mainView;
+	String[] pxArgs;
 	
-	public ControlProjectXTab(GuiMainView view) {
+	public ControlProjectXTab(GuiMainView view,String[] args ) {
 		this.setMainView(view);
+		this.setPxArgs(args);
 	}
 	
 	/**
 	 * Start ProjectX 
 	 */
 	public void initialize() {
-		X.start(this.getMainView().getTabProjectX());
+		X.start(this.getMainView().getTabProjectX(), this.getPxArgs());
 	}
 	/**
 	 * @return Returns the mainView.
@@ -45,6 +47,21 @@ public class ControlProjectXTab extends ControlTab {
 	 */
 	public void setMainView(GuiMainView mainView) {
 		this.mainView = mainView;
+	}
+
+	/**
+	 * @return String[]
+	 */
+	public String[] getPxArgs() {
+		return pxArgs;
+	}
+
+	/**
+	 * Sets the pxArgs.
+	 * @param pxArgs The pxArgs to set
+	 */
+	public void setPxArgs(String[] pxArgs) {
+		this.pxArgs = pxArgs;
 	}
 
 }
