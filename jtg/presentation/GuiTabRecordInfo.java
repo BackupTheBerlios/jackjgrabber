@@ -57,7 +57,7 @@ public class GuiTabRecordInfo extends GuiTab {
 	private File currentDir;
 
 	private static final int REFRESH_TIME = 1000; // Refresh Zeit der Dateiinfos
-												  // in Millisekunden
+	// in Millisekunden
 
 	private String[] videoEndings = new String[]{"mpv", "mpg", "ts"};
 
@@ -91,7 +91,7 @@ public class GuiTabRecordInfo extends GuiTab {
 
 		recordTitle.setEditable(false);
 		recordTitle.setBorder(BorderFactory.createEtchedBorder());
-		
+
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("710:grow", // columns
 				"pref,10,pref"); // rows
@@ -123,8 +123,6 @@ public class GuiTabRecordInfo extends GuiTab {
 		start.setBorder(BorderFactory.createEtchedBorder());
 		end.setBorder(BorderFactory.createEtchedBorder());
 		engine.setBorder(BorderFactory.createEtchedBorder());
-
-		
 
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("pref, 20, 120, 20,30,20,100,20,50,pref,f:330:grow", // columns
@@ -426,21 +424,21 @@ public class GuiTabRecordInfo extends GuiTab {
 	}
 
 	/**
-	 * @return
+	 * @return Erzeugte Videofiles
 	 */
 	public String getVideo() {
 		return video.getText();
 	}
 
 	/**
-	 * @return
+	 * @return Erzeugte Audiofiles
 	 */
 	public String getAudio() {
 		return audio.getText();
 	}
 
 	/**
-	 * @return
+	 * @return Log für die aktuelle, bzw. beendete Aufnahme
 	 */
 	public String getLog() {
 
