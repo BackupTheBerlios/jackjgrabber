@@ -72,10 +72,16 @@ public class SerMovieGuide2Xml {
         htGenreMap.put(entry,entry);
     }
     
+    private static String getAktuellDateString(){
+        Calendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );
+        String monat = String.valueOf((cal.get(Calendar.MONTH)+1));
+        String jahr = String.valueOf((cal.get(Calendar.YEAR))).substring(2);
+        return "mguide_d_s_"+monat+"_"+jahr+".txt";                
+    }
     
     public static void getNewMovieGuideOnline(){
        try {
-            URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_10_04.txt");
+        URL url = new URL("http://www.premiere.de/content/download/"+getAktuellDateString());
             Reader is = new InputStreamReader( url.openStream() );
             BufferedReader in = new BufferedReader( is );
             for ( String s; ( s = in.readLine() ) != null; )
