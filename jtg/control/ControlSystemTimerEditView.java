@@ -91,7 +91,6 @@ public class ControlSystemTimerEditView implements ActionListener, KeyListener, 
 	}
 
 	private void actionSaveRecordTimer() {
-
 		SerTimerHandler.saveSystemTimer(this.timer, true);
 		this.getControlTimer().refreshSystemTimerTable();
 

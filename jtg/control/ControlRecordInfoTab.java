@@ -143,7 +143,13 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 	protected void refreshTime() {
 		Date now = new Date();
 		int time = (int) ((now.getTime() - currentStartBegin.getTime()) / 1000 / 60);
-		int remain = ( int)((currentRecArgs.getLocalTimer().getStopTime() - now.getTime()) / 60000) + 1;
+		
+		long stopTime = currentRecArgs.getLocalTimer().getStopTime();
+		if (stopTime == 0) 
+		{
+			stopTime = currentRecArgs.getStopTimeOfQuickRecord();
+		}
+		int remain = ( int)((stopTime - now.getTime()) / 60000) + 1;
 		
 		guiTabRecordInfo.setRecordText(currentStartBegin,time,remain);
 		

@@ -28,6 +28,7 @@ public class BORecordArgs {
 	BOPids pids;
 	BOLocalTimer localTimer;
 	boolean quickRecord;
+	private long stopTimeOfQuickRecord;
 
 	public BORecordArgs(boolean quickRecord) {
 		this.setQuickRecord(quickRecord);
@@ -193,7 +194,7 @@ public class BORecordArgs {
 		this.pids = pids;
 	}
 	public void checkTitle() {
-		if (this.getLocalTimer().getDescription().length()>0) {
+		if (this.getLocalTimer().getDescription().length() > 0) {
 			this.setEpgTitle(this.getLocalTimer().getDescription());
 		}
 	}
@@ -241,8 +242,17 @@ public class BORecordArgs {
 	public void setLocalTimer(BOLocalTimer localTimer) {
 		this.localTimer = localTimer;
 		if (localTimer != null) {
-			setEpgTitle(localTimer.getDescription());
+			if (localTimer.getDescription() != null && localTimer.getDescription().length() > 0) {
+				setEpgTitle(localTimer.getDescription());
+			}
 		}
 		checkRecordPids();
+	}
+
+	public long getStopTimeOfQuickRecord() {
+		return stopTimeOfQuickRecord;
+	}
+	public void setStopTimeOfQuickRecord(long stopTimeOfQuickRecord) {
+		this.stopTimeOfQuickRecord = stopTimeOfQuickRecord;
 	}
 }
