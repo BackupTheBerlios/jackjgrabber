@@ -20,13 +20,6 @@ package model;
 
 import java.util.ArrayList;
 
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-
-import control.ControlMain;
-
 public class BOPids {
 
     private BOPid vPid; //erste Position Pid, 2. Position Beschreibung
@@ -53,7 +46,7 @@ public class BOPids {
         return aPid[1];
     }
     
-    private ArrayList getAllPids() {
+    public ArrayList getAllPids() {
         ArrayList list = new ArrayList();
         list.add(this.getVPid());
         for (int i=0; i<this.getAPids().size(); i++) {
@@ -65,49 +58,14 @@ public class BOPids {
         return list;
     }
     
-    private int[] getIndices() {
+    public int[] getIndices() {
         int count = this.getPidCount();
         int[] ind = new int[count];
         for (int i=0; i<count; i++) {
             ind[i]=i;
         }
         return ind;
-    }
-    
-    public static BOPids startPidsQuestDialog(BOPids pids) {
-		JList list = new JList(pids.getAllPids().toArray());
-		list.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		list.setSelectedIndices(pids.getIndices());
-
-		int res = JOptionPane.showOptionDialog(
-				ControlMain.getControl().getView(), 
-				new Object[]{ControlMain.getProperty("label_selectPids"), new JScrollPane(list)}, 
-				"Pids", 
-				0,
-				JOptionPane.QUESTION_MESSAGE, 
-				null, 
-				new String[]{ControlMain.getProperty("button_ok"), ControlMain.getProperty("button_cancel")},
-				ControlMain.getProperty("button_ok"));
-		
-		if (res == 0) {
-		    Object[] pidArray = list.getSelectedValues();
-			BOPids newPidList = new BOPids();
-			for (int i=0; i<pidArray.length; i++) {
-			    BOPid pid = (BOPid)pidArray[i];
-				switch (pid.getId()) {
-					case 0: newPidList.setVPid(pid);
-					break;
-					case 1: newPidList.getAPids().add(pid);
-					break;
-					case 2: newPidList.setVtxtPid(pid);
-					break;
-				}
-			}
-			return newPidList;
-		}
-		return null;
-	}
-    
+    }    
     /**
      * @return Returns the vtxtPid.
      */

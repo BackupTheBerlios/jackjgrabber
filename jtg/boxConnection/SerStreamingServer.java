@@ -75,6 +75,7 @@ public class SerStreamingServer extends Thread {
 		
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		recordArgs.setQuickRecord(false);
+		recordArgs.checkSettings();
 		if (recordArgs.getCommand().equals("stop") ) {
 			controlProgramTab.stopRecord();
 		}

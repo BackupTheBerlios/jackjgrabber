@@ -170,25 +170,31 @@ public class BORecordArgs {
 		this.pids = pids;
 	}
 	/*
-     * Checken ob ein AC3-Stream den Streostrem ersetzen muss
+     * Setzen der richtigen Audiopids
      * Checken ob Videotext aufgenommen werden soll
      */
     public void checkSettings() {
-        if (ControlMain.getSettingsRecord().isRecordAllPids()) {
-	        if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
-	            for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
-	                BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
-	                if (aPid.getName().indexOf("AC3")>-1) {
-	                    ArrayList newList = new ArrayList();
-	                    newList.add(aPid);
-	                    this.getPids().setAPids(newList);
-	                    break;
-	                }
-	            }    
-	        }
-	        if (!ControlMain.getSettingsRecord().isRecordVtxt()) {
-			    this.getPids().setVtxtPid(null);
-			}
+        if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
+            for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
+                BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
+                if (aPid.getName().indexOf("AC3")>-1) {
+                    ArrayList newList = new ArrayList();
+                    newList.add(aPid);
+                    this.getPids().setAPids(newList);
+                    break;
+                }
+            }    
         }
+        if (ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()) {
+            for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
+                BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
+                if (aPid.getName().indexOf("AC3")>-1) {
+                    this.getPids().getAPids().remove(aPid);
+                }
+            }
+        }
+        if (!ControlMain.getSettingsRecord().isRecordVtxt()) {
+		    this.getPids().setVtxtPid(null);
+		}
     }
 }
