@@ -107,9 +107,9 @@ public class BOSender {
 				BOEpg epgObj = (BOEpg)this.getEpg().get(i);
 				long epgStart = Long.parseLong(epgObj.getUnformattedStart())*1000;
 				if (nowTime-epgStart<0) {
-					BOEpg neededEpg = (BOEpg)this.getEpg().get(i-1);
-					if (neededEpg != null) {
-						return neededEpg;
+					int indexOfBeforeEpg = i-1;
+					if (indexOfBeforeEpg>=0) {
+						return (BOEpg)this.getEpg().get(indexOfBeforeEpg);
 					}
 				}
 			}
