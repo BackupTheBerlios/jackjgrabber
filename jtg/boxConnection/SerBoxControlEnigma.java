@@ -492,7 +492,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    			botimer.announceTime=""; //vorwarnzeit
 	    			botimer.unformattedStartTime=startDate;  //startDatum
 	    			botimer.unformattedStopTime=endDate;
-	    			botimer.description=title.replaceAll("&quote;","\"");
+	    			botimer.description=title.replaceAll("&quot;","\"");
 	    			botimer.timerNumber=("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
 	    			botimer.getLocalTimer().setLocal(false);
 	    			if (((Long.parseLong(timerType) & 2) ==2) | ((Long.parseLong(timerType) & 65536) == 65536)) { //switch-Timer | System-Timer
@@ -536,7 +536,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    long alarm = (timer.getUnformattedStartTime().getTimeInMillis())/1000;
 			long stop = (timer.getUnformattedStopTime().getTimeInMillis())/1000;
 			title=title.replaceAll(" ","%20");
-			title=title.replaceAll("\"", "&quote;");
+			title=title.replaceAll("\"", "&quot;");
 			title=title.replaceAll("&","und");
 		    long duration=stop-alarm;
 		    long repeatId=Long.parseLong(repeat);
