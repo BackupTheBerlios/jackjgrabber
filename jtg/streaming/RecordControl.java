@@ -136,7 +136,6 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			Logger.getLogger("RecordControl").error(e);
 		} finally {
 			if (print != null) {

@@ -152,7 +152,7 @@ public class DataWriteStream {
 	    try {
             fileOut.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger("DataWriteStream").error(e.getMessage());
         }
 	}
 }

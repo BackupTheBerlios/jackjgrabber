@@ -27,6 +27,7 @@ import model.BOTimer;
 import model.BOTimerList;
 import model.BOUdrecOptions;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -56,7 +57,7 @@ public class SerTimerHandler {
             }
             return null;
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());
             return null;
         }
     }
@@ -110,7 +111,7 @@ public class SerTimerHandler {
                 getTimerDocument().getRootElement().remove(timer.getTimerNode());
                 SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.getLogger("SerTimerHandler").error(e.getMessage());
             }
         }
     }
@@ -141,7 +142,7 @@ public class SerTimerHandler {
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());
         }
     }
     
@@ -168,7 +169,7 @@ public class SerTimerHandler {
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
         } catch (IOException e) {
-            e.printStackTrace();    
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());    
         }
     }
     

@@ -41,7 +41,6 @@ public class UdpReceiver extends Thread {
             udpSocket = new DatagramSocket(record.udpPort);
         } catch (SocketException e) {
             Logger.getLogger("UdpReceiver").error(ControlMain.getProperty("err_udpSocket")+" "+record.udpPort);
-            e.printStackTrace();
             record.recordControl.controlProgramTab.stopRecord();
         }
 	}

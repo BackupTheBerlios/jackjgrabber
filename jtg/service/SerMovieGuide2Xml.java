@@ -28,6 +28,7 @@ import java.util.Hashtable;
 
 import javax.swing.JProgressBar;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -58,7 +59,7 @@ public class SerMovieGuide2Xml extends Thread{
 				createHashTable();
 				storeOrignalMG = ControlMain.getSettingsMovieGuide().isMgStoreOriginal();
     		} catch (IOException e) {
-				e.printStackTrace();
+    		    Logger.getLogger("SerMovieGuide2Xml").error(e.getMessage());
 			}
     }
           

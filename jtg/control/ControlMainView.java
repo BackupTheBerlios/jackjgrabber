@@ -95,7 +95,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 			UIManager.LookAndFeelInfo info4 = new UIManager.LookAndFeelInfo(l4.getName(), ExtWindowsLookAndFeel.class.getName());
 			UIManager.installLookAndFeel(info4);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+		    Logger.getLogger("ControlMainView").error(e1.getMessage());
 		}
 	}
 
@@ -126,7 +126,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 					}
 				}
 		    } catch (Exception e) {
-		        e.printStackTrace();
+		        Logger.getLogger("ControlMainView").error(e.getMessage());
 		    }    
 	    }
 	}
@@ -146,7 +146,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
             	}
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger("ControlMainView").error(e.getMessage());
         } 
 	}
 	
@@ -189,7 +189,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
             if (ControlMain.getSettingsMain().isSkinLookAndFeel()) { 
 	            ControlMain.getSettingsMain().setLookAndFeel(PlasticLookAndFeel.class.getName());
 	        }
-            e.printStackTrace();
+            Logger.getLogger("ControlMainView").error(e.getMessage());
         }
 	}
 	
@@ -208,7 +208,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
             	}
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Logger.getLogger("ControlMainView").error(e.getMessage());
         }
         return themesDateien;
 	}

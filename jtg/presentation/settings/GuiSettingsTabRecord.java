@@ -29,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.MaskFormatter;
 
+import org.apache.log4j.Logger;
+
 import presentation.GuiTab;
 import service.SerIconManager;
 
@@ -339,7 +341,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 				((MaskFormatter) tfServerPort.getFormatter()).setOverwriteMode(true);
 				tfServerPort.setPreferredSize(new java.awt.Dimension(40, 19));
 			} catch (ParseException e) {
-				e.printStackTrace();
+			    Logger.getLogger("GuiSettingsTabRecord").error(e.getMessage());
 			}
 		}
 		return tfServerPort;

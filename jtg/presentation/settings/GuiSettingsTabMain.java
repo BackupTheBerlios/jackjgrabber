@@ -32,6 +32,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
+import org.apache.log4j.Logger;
+
 import presentation.GuiTab;
 import presentation.program.GuiBoxSettingsTableCellRenderer;
 import service.SerIconManager;
@@ -207,8 +209,7 @@ public class GuiSettingsTabMain extends GuiTab {
 			try {
 				tfBoxIp = new JFormattedTextField(new MaskFormatter("###.###.###.###"));
 			} catch (ParseException e) {
-
-				e.printStackTrace();
+			    Logger.getLogger("GuiSettingsTabMain").error(e.getMessage());
 			}
 		}
 		return tfBoxIp;

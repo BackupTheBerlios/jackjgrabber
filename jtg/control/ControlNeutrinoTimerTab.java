@@ -29,6 +29,8 @@ import java.util.Hashtable;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import model.BOLocalTimer;
 import model.BOSender;
 import model.BOTimer;
@@ -278,7 +280,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
             this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
             this.refreshTables();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger("ControlNeutrinoTimerTab").error(e.getMessage());
         }
 	}
 	
