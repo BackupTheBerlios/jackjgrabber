@@ -20,6 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import model.BOBox;
+
 import presentation.about.GuiTabAbout;
 import presentation.movieguide.GuiTabMovieGuide;
 import presentation.program.GuiTabProgramm;
@@ -42,7 +44,7 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
 	private GuiTabRecordInfo tabRecordInfo;
-	
+	public boolean firstIpSetted = false;
 	int index;
 	
 
@@ -59,6 +61,10 @@ public class GuiMainTabPane extends JTabbedPane {
 	 */    
 	public GuiTabProgramm getTabProgramm() {
 		if (tabProgramm == null) {
+		    if (firstIpSetted && ControlMain.getSettingsMain().getBoxList().size()>0) {
+		        ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
+		        firstIpSetted=false;
+		    }
 			ControlProgramTab control = new ControlProgramTab(this.getView());
 			tabProgramm = new GuiTabProgramm(control);
 			new Thread(control).start();
