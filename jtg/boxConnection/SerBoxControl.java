@@ -23,7 +23,6 @@ import java.util.GregorianCalendar;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
-import model.BOLocalTimer;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
@@ -32,16 +31,19 @@ import model.BOTimerList;
 import org.apache.log4j.Logger;
 
 import service.SerTimerHandler;
-
 import control.ControlMain;
 
 public abstract class SerBoxControl {
         
     public boolean newTimerAdded=true;
     public BOTimerList timerList = new BOTimerList();
+    private BOTimer nextLocalRecordTimer;
     
-    public BOLocalTimer detectRunningLocalRecordTimer() {
-        return timerList.getRunningLocalRecordTimer();
+    public BOTimer detectNextLocalRecordTimer(boolean newRead) {
+        if (newRead || nextLocalRecordTimer==null ) {
+            nextLocalRecordTimer = timerList.getFirstLocalRecordTimer();
+        }
+        return nextLocalRecordTimer;
     }
     
     public BOTimerList getTimerList(boolean newRead) {
@@ -70,31 +72,43 @@ public abstract class SerBoxControl {
 		String inputLine;
 		Authenticator.setDefault(new SerBoxAuthenticator());
 
-		try {
-		    url=new URL("http://"+ConnectBoxIP+"/control/info");
-		    in = new BufferedReader(new InputStreamReader(url.openStream()));
-		    if (in.readLine().equals("Neutrino")){
-		        imageType=1;
-		        return imageType;
-		    }
-		    
-			url = new URL("http://" + ConnectBoxIP);
-			in = new BufferedReader(new InputStreamReader(url.openStream()));
-			
-			while ((inputLine = in.readLine()) != null) {
-				if  (inputLine.toLowerCase().indexOf("enigma") > 0) {
-					imageType = 2;
-					return imageType;
-				} 
-			}
-		} catch (IOException e) { //Box ist aus, Rückgabe des Defaultwertes
-			Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_connect"));
-			return (imageType);
-		} catch (IllegalArgumentException ex) {
-			Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_valid_ip"));
-		}
-		return imageType;
+	    if (isNeutrino(ConnectBoxIP)){
+	        imageType=1;
+	    } else if (isEnigma(ConnectBoxIP)) {
+	        imageType = 2;
+	    }
+	    return imageType;
+
 	}
+    
+    private static boolean isEnigma(String ConnectBoxIP) {
+        try {
+            URL url = new URL("http://" + ConnectBoxIP);
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                if  (inputLine.toLowerCase().indexOf("enigma") > 0) {
+                    return true;
+                } 
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+    
+    private static boolean isNeutrino(String ConnectBoxIP) {
+        try {
+            URL url=new URL("http://"+ConnectBoxIP+"/control/info");
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            if (in.readLine().equals("Neutrino")){
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
     
     public ArrayList senderList;
     public abstract ArrayList getAllSender() throws IOException;
