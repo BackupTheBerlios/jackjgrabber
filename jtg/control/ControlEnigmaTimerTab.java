@@ -334,8 +334,8 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		timer.setSenderName( defaultSender.getName() );
 		timer.setChannelId(defaultSender.getChanId());
 		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
-		timer.setUnformattedStartTime(SerFormatter.formatTimeInMillisToCal(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatTimeInMillisToCal(now)); 
+		timer.unformattedStartTime=SerFormatter.formatTimeInMillisToCal(now);  
+		timer.unformattedStopTime=SerFormatter.formatTimeInMillisToCal(now); 
 		timer.setModifiedId("new");
 				
 		timer.setEventRepeatId("0");

@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import service.SerFormatter;
 import service.SerTimerHandler;
 import control.ControlNeutrinoTimerTab;
 
@@ -90,6 +89,11 @@ public class BOTimer extends java.lang.Object{
         }
         this.announceTime = time;
     }
+    
+	public String getStartDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+		return sdf.format(this.getUnformattedStartTime().getTime());
+	}
 
     public String getStartTime (){
     	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
@@ -100,6 +104,11 @@ public class BOTimer extends java.lang.Object{
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	return sdf.format(this.getUnformattedStartTime().getTime());
     }
+    
+    public String getStopDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+		return sdf.format(this.getUnformattedStopTime().getTime());
+	}
 
     public String getStopTime(){
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -133,35 +142,6 @@ public class BOTimer extends java.lang.Object{
 	public GregorianCalendar getUnformattedStartTime() {
 		return unformattedStartTime;
 	}
-	/**
-	 * @param time in milliseconds
-	 * Bei Setzen eines neuen Start-Datum, muss das Stop-Datum angepasst werden
-	 */
-	public void setUnformattedStartTime(long startMillis) {
-		this.getUnformattedStartTime().setTimeInMillis(startMillis);
-		this.getLocalTimer().setStartTime(startMillis);
-		
-		int startDay = this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH);
-		this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay);
-		
-		long stopMillis = this.getUnformattedStopTime().getTimeInMillis();
-		if ((stopMillis-startMillis)<0) {
-			this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay+1);
-		}
-		this.setModifiedId("modify");
-	}
-	
-	/**
-	 * @param unformattedStartTime The unformattedStartTime to set.
-	 */
-	public void setUnformattedStartTime(GregorianCalendar date) {
-	    if(unformattedStartTime!=null && (SerFormatter.compareDates(date,unformattedStartTime)!=0)) {
-	        this.setModifiedId("modify");
-	    }
-	    this.unformattedStartTime = date;
-	    this.getLocalTimer().setStartTime(date.getTimeInMillis());
-		
-	}
 
 	/**
 	 * @return Returns the description.
@@ -184,26 +164,7 @@ public class BOTimer extends java.lang.Object{
 	public GregorianCalendar getUnformattedStopTime() {
 		return unformattedStopTime;
 	}
-	/**
-	 * @param unformattedStopTime The unformattedStopTime to set.
-	 */
-	public void setUnformattedStopTime(GregorianCalendar endDate) {
-	    GregorianCalendar stopCal = (GregorianCalendar)this.getUnformattedStartTime().clone();
-	    stopCal.set(Calendar.HOUR_OF_DAY, endDate.get(Calendar.HOUR_OF_DAY));
-        stopCal.set(Calendar.MINUTE, endDate.get(Calendar.MINUTE));
-	    if (this.getUnformattedStartTime().getTimeInMillis()-stopCal.getTimeInMillis()>0) {
-	        stopCal.set(Calendar.DAY_OF_MONTH, stopCal.get(Calendar.DAY_OF_MONTH)+1);
-	    } 
-		this.unformattedStopTime = stopCal;
-		this.setModifiedId("modify");
-	}
-	/**
-	 * @return Returns the startDate.
-	 */
-	public String getStartDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
-		return sdf.format(this.getUnformattedStartTime().getTime());
-	}
+
 	/**
 	 * @return Returns the modifiedId.
 	 */
@@ -261,4 +222,65 @@ public class BOTimer extends java.lang.Object{
     public void setSender(BOSender sender) {
         this.sender = sender; 
     }
+    
+    public void setUnformattedStartDate(GregorianCalendar date) {
+        this.setModifiedId("modify");
+        this.getUnformattedStartTime().set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+        this.getUnformattedStartTime().set(Calendar.MONTH, date.get(Calendar.MONTH));
+        this.getUnformattedStartTime().set(Calendar.YEAR, date.get(Calendar.YEAR));
+	    this.getLocalTimer().setStartTime((GregorianCalendar)this.getUnformattedStartTime());
+	    this.checkStopTime();
+    }
+    
+    /**
+	 * @param unformattedStartTime The unformattedStartTime to set.
+	 */
+	public void setUnformattedStartTime(GregorianCalendar date) {
+        this.setModifiedId("modify");
+        this.getUnformattedStartTime().set(Calendar.MINUTE, date.get(Calendar.MINUTE));
+        this.getUnformattedStartTime().set(Calendar.HOUR, date.get(Calendar.HOUR));
+	    this.getLocalTimer().setStartTime((GregorianCalendar)this.getUnformattedStartTime());
+	    this.checkStopTime();
+	}
+	
+	private void checkStopTime() {
+	    long startMillis = this.getUnformattedStartTime().getTimeInMillis();
+	    long stopMillis = this.getUnformattedStopTime().getTimeInMillis();
+	    
+	    while ((stopMillis-startMillis)<0) {
+	        stopMillis=stopMillis+86400000;
+	    }
+	    this.getUnformattedStopTime().setTimeInMillis(stopMillis);
+	}
+    
+    /**
+     * DEPRECATED
+	 * @param time in milliseconds
+	 * Bei Setzen eines neuen Start-Datum, muss das Stop-Datum angepasst werden
+	 */
+	public void setUnformattedStartTime(long startMillis) {
+		this.getUnformattedStartTime().setTimeInMillis(startMillis);
+		this.getLocalTimer().setStartTime(startMillis);
+		
+		int startDay = this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH);
+		this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay);
+		
+		long stopMillis = this.getUnformattedStopTime().getTimeInMillis();
+		if ((stopMillis-startMillis)<0) {
+			this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay+1);
+		}
+		this.setModifiedId("modify");
+	}
+
+	/**
+	 * @param unformattedStopTime The unformattedStopTime to set.
+	 */
+	public void setUnformattedStopTime(GregorianCalendar endDate) {
+	    GregorianCalendar stopCal = (GregorianCalendar)this.getUnformattedStartTime().clone();
+	    stopCal.set(Calendar.HOUR_OF_DAY, endDate.get(Calendar.HOUR_OF_DAY));
+        stopCal.set(Calendar.MINUTE, endDate.get(Calendar.MINUTE));
+		this.unformattedStopTime = stopCal;
+		this.checkStopTime();
+		this.setModifiedId("modify");
+	}
 }

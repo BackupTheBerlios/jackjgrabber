@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
 import org.dom4j.Node;
@@ -341,6 +342,9 @@ public class BOLocalTimer {
      */
     public void setStartTime(long startTime) {
         this.startTime = startTime;
+    }
+    public void setStartTime(GregorianCalendar startTime) {
+        this.startTime = startTime.getTimeInMillis();
     }
     /**
      * @return Returns the timerNode.

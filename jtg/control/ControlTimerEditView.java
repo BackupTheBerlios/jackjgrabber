@@ -87,8 +87,9 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		this.getView().getJTextFieldRecordSavePath().setText(timer.getSavePath());
 		this.getView().getJTextFieldDescription().setText(timer.getDescription());
 		this.getView().getJComboBoxBoxSender().setSelectedItem(timer.getMainTimer().getSenderName());
-		this.getView().getTfRecordTimerStartTime().setText(timer.getMainTimer().getStartTime());
-		this.getView().getTfRecordTimerEndTime().setText(timer.getMainTimer().getStopTime());
+		this.getView().getTfRecordTimerStartDate().setText(timer.getMainTimer().getStartDate());
+		this.getView().getTfRecordTimerStartTime().setText(timer.getMainTimer().getShortStartTime());
+		this.getView().getTfRecordTimerStopTime().setText(timer.getMainTimer().getStopTime());
 		this.getView().getJComboBoxRepeatRecordTimer().setSelectedItem(
 				controlTimer.convertShortEventRepeat(timer.getMainTimer().getEventRepeatId()));
 		this.initializeAudioSettings();
@@ -399,9 +400,14 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 			    this.getTimer().setDescription(tf.getText());
 			    break;
 			}
+		    if (tf.getName().equals("startDate")){
+		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "dd.MM.yy");
+				timer.getMainTimer().setUnformattedStartDate(newDate);
+			    break;
+			}
 		    if (tf.getName().equals("startTime")){
-		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "dd.MM.yy   HH:mm");
-				timer.getMainTimer().setUnformattedStartTime(newDate.getTimeInMillis());
+		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
+				timer.getMainTimer().setUnformattedStartTime(newDate);
 			    break;
 			}
 		    if (tf.getName().equals("stopTime")){

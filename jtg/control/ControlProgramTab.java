@@ -708,8 +708,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		timer.setChannelId(this.getSelectedSender().getChanId());
 		timer.setSenderName(this.getSelectedSender().getName());
 		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart - timeBefore));
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime + timeAfter));
+		timer.unformattedStartTime=SerFormatter.formatUnixDate(unformattedStart - timeBefore);
+		timer.unformattedStopTime=SerFormatter.formatUnixDate(endtime + timeAfter);
 
 		timer.setEventRepeatId("0");
 		timer.setEventTypeId("5");

@@ -343,8 +343,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             if (temp.length()>5) {
                 botimer.announceTime=temp;
             } else {
-                botimer.repeatCount=temp;
-                
+                botimer.repeatCount=temp; 
             }
 
 		    valueStart=st.nextToken();

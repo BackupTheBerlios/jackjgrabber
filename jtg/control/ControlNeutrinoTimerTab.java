@@ -416,8 +416,8 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		long now = new Date().getTime();
 		
 		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
-		timer.setUnformattedStartTime(SerFormatter.formatTimeInMillisToCal(now));  
-		timer.setUnformattedStopTime(SerFormatter.formatTimeInMillisToCal(now)); 
+		timer.unformattedStartTime=SerFormatter.formatTimeInMillisToCal(now);  
+		timer.unformattedStopTime=SerFormatter.formatTimeInMillisToCal(now); 
 		timer.setModifiedId("new");
 				
 		timer.setEventRepeatId("0");

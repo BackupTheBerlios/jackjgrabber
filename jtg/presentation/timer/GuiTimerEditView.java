@@ -65,8 +65,9 @@ public class GuiTimerEditView extends JFrame{
 	private JTextField jTextFieldFilePattern;
 	private JTextField jTextFieldDescription;
 	
+	private JFormattedTextField tfRecordTimerStartDate;
 	private JFormattedTextField tfRecordTimerStartTime;
-	private JFormattedTextField tfRecordTimerEndTime;
+	private JFormattedTextField tfRecordTimerStopTime;
 	
 	private JRadioButton jRadioButtonUdrec;
 	private JRadioButton jRadioButtonJGrabber;
@@ -215,21 +216,22 @@ public class GuiTimerEditView extends JFrame{
 	    if (panelMainOptions==null) {
 	    	panelMainOptions = new JPanel();
 	        FormLayout layout = new FormLayout(
-					  "100, 5, 100, 5, 60, 5, 90, 5, pref:grow",  		// columns 
+					  "100, 5, 60, 3, 40, 5, 40, 5, 90, 5, pref:grow",  		// columns 
 					  "pref, 5, pref"); 			// rows
 	        PanelBuilder builder = new PanelBuilder(panelMainOptions, layout);
 	        CellConstraints cc = new CellConstraints();
 					
 	        builder.add(new JLabel(ControlMain.getProperty("sender")),		cc.xy	(1, 1));
-	        builder.add(this.getJComboBoxBoxSender(),							cc.xy	(1, 3));
+	        builder.add(this.getJComboBoxBoxSender(),						cc.xy	(1, 3));
 	        builder.add(new JLabel(ControlMain.getProperty("start")),		cc.xy	(3, 1));
-	        builder.add(this.getTfRecordTimerStartTime(),					cc.xy	(3, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("end")),			cc.xy	(5, 1));
-	        builder.add(this.getTfRecordTimerEndTime(),						cc.xy	(5, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("repeat")),		cc.xy	(7, 1));
-	        builder.add(this.getJComboBoxRepeatRecordTimer(),				cc.xy	(7, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("title")),		cc.xy	(9, 1));
-	        builder.add(this.getJTextFieldDescription(),							cc.xy	(9, 3));
+	        builder.add(this.getTfRecordTimerStartDate(),					cc.xy	(3, 3));
+	        builder.add(this.getTfRecordTimerStartTime(),					cc.xy	(5, 3));
+	        builder.add(new JLabel(ControlMain.getProperty("end")),			cc.xy	(7, 1));
+	        builder.add(this.getTfRecordTimerStopTime(),					cc.xy	(7, 3));
+	        builder.add(new JLabel(ControlMain.getProperty("repeat")),		cc.xy	(9, 1));
+	        builder.add(this.getJComboBoxRepeatRecordTimer(),				cc.xy	(9, 3));
+	        builder.add(new JLabel(ControlMain.getProperty("title")),		cc.xy	(11, 1));
+	        builder.add(this.getJTextFieldDescription(),					cc.xy	(11, 3));
 	    }
 	    return panelMainOptions;
 	}
@@ -581,25 +583,37 @@ public class GuiTimerEditView extends JFrame{
 	 */
 	public JFormattedTextField getTfRecordTimerStartTime() {
 		if (tfRecordTimerStartTime == null) {
-			tfRecordTimerStartTime = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy   HH:mm"));
+			tfRecordTimerStartTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
 			tfRecordTimerStartTime.addKeyListener(control);
 			tfRecordTimerStartTime.setName("startTime");
 		}
 		return tfRecordTimerStartTime;
 	}
 	/**
-	 * @return Returns the tfRecordTimerEndTime.
+	 * @return Returns the tfRecordTimerStopTime.
 	 */
-	public JFormattedTextField getTfRecordTimerEndTime() {
-		if (tfRecordTimerEndTime == null) {
-			tfRecordTimerEndTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
-			tfRecordTimerEndTime.addKeyListener(control);
-			tfRecordTimerEndTime.setName("stopTime");
+	public JFormattedTextField getTfRecordTimerStopTime() {
+		if (tfRecordTimerStopTime == null) {
+			tfRecordTimerStopTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+			tfRecordTimerStopTime.addKeyListener(control);
+			tfRecordTimerStopTime.setName("stopTime");
 		}
-		return tfRecordTimerEndTime;
+		return tfRecordTimerStopTime;
 	}
 	/**
-	 * @return Returns the tfRecordTimerEndTime.
+     * @return Returns the tfRecordTimerStartDate.
+     */
+    public JFormattedTextField getTfRecordTimerStartDate() {
+        if (tfRecordTimerStartDate == null) {
+            tfRecordTimerStartDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
+            tfRecordTimerStartDate.addKeyListener(control);
+            tfRecordTimerStartDate.setName("startDate");
+		}
+        return tfRecordTimerStartDate;
+    }
+
+	/**
+	 * @return Returns the tfRecordTimerStopTime.
 	 */
 	public JTextField getJTextFieldDescription() {
 		if (jTextFieldDescription == null) {

@@ -20,10 +20,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,14 +42,13 @@ import model.BOMovieGuideContainer;
 import model.BOSender;
 import model.BOSettingsMovieGuide;
 import model.BOTimer;
-import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
-import presentation.movieguide.GuiTabMovieGuide;
 import presentation.movieguide.GuiMovieGuideFilmTableModel;
 import presentation.movieguide.GuiMovieGuideTimerTableModel;
+import presentation.movieguide.GuiTabMovieGuide;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
@@ -581,8 +580,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             botimer.setModifiedId("new");
             botimer.setChannelId(sender.getChanId());
             botimer.setSenderName(sender.getName());		
-            botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().get(modelIndexTimer),timeBefore));
-            botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().get(modelIndexTimer),timeAfter));			
+            botimer.unformattedStartTime=SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().get(modelIndexTimer),timeBefore);
+            botimer.unformattedStopTime=SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().get(modelIndexTimer),timeAfter);			
             botimer.setAnnounceTime( String.valueOf(new GregorianCalendar().getTimeInMillis()-timeAnnounce));
             botimer.setEventRepeatId("0");
             botimer.setEventTypeId("5");
