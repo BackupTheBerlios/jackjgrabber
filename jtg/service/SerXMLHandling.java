@@ -21,6 +21,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.*;
+
+import model.*;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -38,57 +41,7 @@ import control.ControlSettingsTabMovieGuide;
 
 public class SerXMLHandling {
 	
-	/**
-	 * Erstellen eines neuen XML-Settingsdokumentes mit Defaultwerten
-	 */
-	public static Document createStandardSettingsFile(File path) throws IOException {
-		Document doc = DocumentHelper.createDocument();
-		Element root = doc.addElement( "settings" );	
-		
-		setElementInElement(root,"playbackPlayer", "d: http://$ip:31339/$vPid,$aPid");
-		setElementInElement(root,"savePath", ControlMain.userHomeDirectory);
-		setElementInElement(root,"startStreamingServer", "true");
-		setElementInElement(root,"streamingServerPort", "4000");
-		setElementInElement(root,"theme", "ExperienceBlue");
-		setElementInElement(root,"locale", "DE");
-		setElementInElement(root,"jgrabberStreamType", "PES MPEG-Packetized Elementary");
-		setElementInElement(root,"udrecStreamType", "PES MPEG-Packetized Elementary");
-		setElementInElement(root,"startPX", "true");
-		setElementInElement(root,"shutdown", "false");
-		setElementInElement(root,"udrecPath", new File("udrec.exe").getAbsolutePath());
-		setElementInElement(root,"projectXPath", new File("ProjectX.jar").getAbsolutePath());
-		setElementInElement(root,"engine", "0");
-		setElementInElement(root,"recordAllPids", "true");
-		setElementInElement(root,"useStandardPlayback", "false");
-		setElementInElement(root,"showLogo", "true");
-		setElementInElement(root,"showLogWindow", "true");
-		setElementInElement(root,"useSysTray", "false");
-		setElementInElement(root,"startFullscreen", "false");
-		setElementInElement(root,"recordTimeBefore", "0");
-		setElementInElement(root,"recordTimeAfter", "0");
-		setElementInElement(root,"ac3ReplaceStereo", "false");
-		setElementInElement(root,"stereoReplaceAc3", "false");
-		setElementInElement(root,"udrecOptions", "");
-		setElementInElement(root,"recordVtxt", "false");
-		setElementInElement(root,"startVlc", "false");
-		setElementInElement(root,"vlcPath", new File("vlc.exe").getAbsolutePath());
-		setElementInElement(root,"shutdownTool", "");
-		setElementInElement(root, "lookandfeel", PlasticLookAndFeel.class.getName());
-		setElementInElement(root, "storeepg", "false");
-		setElementInElement(root, "storelogafterrecord", "false");
-		setElementInElement(root, "mgselectedchannels","13TH STREET|CLASSICA|DISNEY CHANNEL|FOX KIDS|HEIMATKANAL|HIT24|JUNIOR|" +
-				"MGM|PREMIERE 1|PREMIERE 2|PREMIERE 3|PREMIERE 4|PREMIERE 5|PREMIERE 6|PREMIERE 7|PREMIERE KRIMI|" +
-				"PREMIERE NOSTALGIE|PREMIERE SERIE|PREMIERE START|SCI FI");
-		
-		setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_ASK + "");
-		setElementInElement(root, "mgdefault", ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL + "");
-		setElementInElement(root, "mgstoreoriginal", "false");
-		root.addElement("boxList");
-		root.addElement("playbackList");
-		ControlMain.setSettingsDocument(doc);
-		saveXMLFile(path, doc);
-		return doc;
-	}
+	
 	
 	public static Document createEmptyTimerFile(File path) throws IOException {
 	    Document doc = DocumentHelper.createDocument();

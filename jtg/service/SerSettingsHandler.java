@@ -14,12 +14,15 @@ package service;
  */
 import java.beans.*;
 import java.io.*;
+import java.util.*;
 
 import javax.swing.*;
 
 import model.*;
 
 import org.apache.log4j.*;
+
+import com.jgoodies.plaf.plastic.*;
 
 import control.*;
 
@@ -46,9 +49,91 @@ public class SerSettingsHandler {
 			ControlMain.setSettings(settings);
 			Logger.getLogger("ControlMain").info("Settings found");
 
-		} catch (Exception ex) {
+		}catch(FileNotFoundException e)
+		{
+			try {
+				// create default settings
+				BOSettings set = createStandardSettingsFile(new File(ControlMain.getSettingsFilename()));
+				ControlMain.setSettings(set);
+				SerSettingsHandler.saveAllSettings();
+				
+				
+			} catch (Exception e1) {
+				Logger.getLogger("ControlMain").error("Cant create settings: " + e1.getMessage());
+			}
+		}
+		
+		catch (Exception ex) {
 			Logger.getLogger("ControlMain").info("old settings not longer supported");
 			JOptionPane.showMessageDialog(null,ControlMain.getProperty("msg_oldSettingsNotSupported"));
 		}
 	}
+	
+	/**
+	 * Erstellen eines neuen XML-Settingsdokumentes mit Defaultwerten
+	 */
+	public static BOSettings createStandardSettingsFile(File path) throws IOException {
+		BOSettings settings = new BOSettings();
+		BOSettingsLayout layout = new BOSettingsLayout(settings);
+		BOSettingsMain main = new BOSettingsMain(settings);
+		BOSettingsMovieGuide mg = new BOSettingsMovieGuide(settings);
+		BOSettingsPath pathS = new BOSettingsPath(settings);
+		BOSettingsPlayback play = new BOSettingsPlayback(settings);
+		BOSettingsRecord rec = new BOSettingsRecord(settings);
+		
+		settings.setLayoutSettings(layout);
+		settings.setMainSettings(main);
+		settings.setMovieGuideSettings(mg);
+		settings.setPathSettings(pathS);
+		settings.setPlaybackSettings(play);
+		settings.setRecordSettings(rec);
+		
+		
+		play.setPlaybackString("d: http://$ip:31339/$vPid,$aPid");
+		pathS.setSavePath( ControlMain.userHomeDirectory);
+		rec.setStartStreamingServer(true);
+		rec.setStreamingServerPort("4000");
+		main.setThemeLayout("ExperienceBlue");
+		main.setLocale("DE");
+		rec.setStreamType("PES MPEG-Packetized Elementary");
+		rec.setUdrecStreamType("PES MPEG-Packetized Elementary");
+		rec.setStartPX(true);
+		rec.setShutdownAfterRecord(false);
+		pathS.setUdrecPath( new File("udrec.exe").getAbsolutePath());
+		pathS.setProjectXPath(new File("ProjectX.jar").getAbsolutePath());
+		rec.setStreamingEngine(0);
+		rec.setRecordAllPids(true);
+		play.setAlwaysUseStandardPlayback(false);
+		main.setShowLogo(true);
+		main.setShowLogWindow(true);
+		main.setStartFullscreen(false);
+		main.setUseSysTray(false);
+		rec.setRecordTimeAfter("0");
+		rec.setRecordTimeBefore("0");
+		rec.setAc3ReplaceStereo(false);
+		rec.setStereoReplaceAc3(false);
+		rec.setUdrecOptions(new BOUdrecOptions());
+		rec.setRecordVtxt(false);
+		main.setStartVlcAtStart(false);
+		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
+		pathS.setShutdownToolPath("");
+		main.setLookAndFeel(PlasticLookAndFeel.class.getName());
+		rec.setStoreEPG(false);
+		rec.setStoreLogAfterRecord(false);
+		
+		ArrayList selChannels = new ArrayList();
+		String[] channels = new String[]{"13TH STREET", "CLASSICA", "DISNEY CHANNEL", "FOX KIDS", "HEIMATKANAL", "HIT24", "JUNIOR",
+				"MGM", "PREMIERE 1", "PREMIERE 2", "PREMIERE 3", "PREMIERE 4", "PREMIERE 5", "PREMIERE 6", "PREMIERE 7",
+				"PREMIERE KRIMI", "PREMIERE NOSTALGIE", "PREMIERE SERIE", "PREMIERE START", "SCI FI"};
+		selChannels.addAll(Arrays.asList(channels));
+		mg.setMgSelectedChannels(selChannels);
+
+		
+		mg.setMgLoadType(ControlSettingsTabMovieGuide.MGLOADTYPE_ASK);
+		mg.setMgDefault(ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL);
+		mg.setMgStoreOriginal(false);
+		main.setBoxList(new ArrayList());
+		play.setPlaybackOptions(new ArrayList());
+		return settings;
+	}	
 }
