@@ -82,7 +82,7 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
         
         view.setVisible(true);
     }
-
+    
 	private void initialize() {
         switch (this.getOptions().getMplexOption()) {
             case 3: this.getView().getRbMPEG().setSelected(true);
@@ -124,15 +124,21 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
             this.getView().dispose();
         } else {
             this.startMuxxing();
-        }
-        
+        }    
     }
     
     private void startMuxxing() {
+        //PX selected
         if(this.getView().getCbStartPX().isSelected()) {
             this.startProjectX(); 
-        } else if (this.getView().getCbStartMplex().isSelected()) {
+        } 
+        //mplex selected
+        else if (this.getView().getCbStartMplex().isSelected()) {
             this.startMplex(this.getFiles()); 
+        } 
+        //nothing selected
+        else {
+            this.getView().dispose();
         }
     }
     
@@ -221,6 +227,10 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
         }
     }
     
+    /*
+     * Wenn ProjectX-process finished, check for using mplex
+     * Close dialog when muxxing with mplex is finished
+     */
     public void processStopped(int exitCode, String processName) {
         if (processName.equals("ProjectX")) {
             projectXStarted=false;
