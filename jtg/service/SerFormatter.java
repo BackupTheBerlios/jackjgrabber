@@ -121,15 +121,11 @@ public class SerFormatter {
 
 	public static String getCorrectEndTime(String start, String ende) {
 		SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
-		GregorianCalendar cal = new GregorianCalendar(TimeZone
-				.getTimeZone("ECT"));
+		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
 		try {
 			cal.setTimeInMillis(formatter.parse(start).getTime());
-			cal.set(GregorianCalendar.HOUR_OF_DAY, cal
-					.get(GregorianCalendar.HOUR_OF_DAY)
-					+ Integer.parseInt(ende.substring(0, 2)));
-			cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)
-					+ Integer.parseInt(ende.substring(3, 5)));
+			cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
+			cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+ Integer.parseInt(ende.substring(3, 5)));
 		} catch (Exception ex) {
 		}
 		return out(cal.get(GregorianCalendar.HOUR_OF_DAY)) + ":"
@@ -226,6 +222,21 @@ public class SerFormatter {
         }        
         return cal;
     }
-
-
+    public static GregorianCalendar getString2Cal(String start,String ende) {
+        String value = (start+","+ende);	
+		SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd. MMMM yyyy,HH:mm");
+		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+		try {
+			cal.setTimeInMillis(formatter.parse(value).getTime());
+		} catch (Exception ex) {
+		}
+		return cal;
+    }
+    public static GregorianCalendar getGC(GregorianCalendar gc, int value){
+    	gc.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+ value);
+    	return gc;
+    }
+    public static String getGC2String(GregorianCalendar gc){
+    	return ( out(gc.get(GregorianCalendar.HOUR_OF_DAY))+":"+out(gc.get(GregorianCalendar.MINUTE)));
+    }
 }
