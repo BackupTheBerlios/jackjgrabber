@@ -314,29 +314,35 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader inputNhttpd = getConnection("/control/timer");
 		String line;
 		while ((line = inputNhttpd.readLine()) != null) {
+            int index=0;
 			String valueStart, valueStop, valueSenderName = new String();
 			BOTimer botimer = new BOTimer();
 						
-	        StringTokenizer st = new StringTokenizer(line);
+	        String[] result=line.split(" ");
 	        
-            botimer.timerNumber=st.nextToken();
-            botimer.eventTypeId=st.nextToken();
-            botimer.eventRepeatId=st.nextToken();
+            botimer.timerNumber=result[0];
+            botimer.eventTypeId=result[1];
+            botimer.eventRepeatId=result[2];
             //Abwärtskompatibilität gewährleisten. repeatCount erst in Images seit 12.2004 vorhanden
-            String temp = st.nextToken();
-            if (temp.length()>5 || (botimer.eventRepeatId.equals("0") && temp.equals("0"))) {
-                botimer.announceTime=temp;
-            } else {
-                botimer.repeatCount=temp;
-                botimer.announceTime=st.nextToken();
+            try {
+                long stop = SerFormatter.formatUnixDate(result[6]).getTimeInMillis();
+                long now = new GregorianCalendar().getTimeInMillis(); 
+                if (stop<now) {
+                    botimer.repeatCount=result[3];
+                    botimer.announceTime=result[4];
+                    index=1;
+                }
+            } catch (Exception ex) {
+                botimer.announceTime=result[3];
             }
-            valueStart=st.nextToken();
-		    valueStop=st.nextToken();
+            
+            valueStart=result[4+index];
+		    valueStop=result[5+index];
 		    if (!valueStop.equals("0")) {
-		    	while (st.hasMoreTokens()) {
-		    		valueSenderName += st.nextToken();
-		    		valueSenderName += " ";
-				}
+                for (int i=6+index; i<result.length; i++) {
+                    valueSenderName += result[i];
+                    valueSenderName += " ";
+                }
 		    	botimer.senderName=valueSenderName.trim();
 		    }
 
