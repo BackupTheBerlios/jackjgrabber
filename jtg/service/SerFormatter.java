@@ -192,7 +192,7 @@ public class SerFormatter {
 		return sdf.format(new Date(i));
 	}
 	public static long getStringToLong(String start) {
-		 GregorianCalendar cal = SerFormatter.getDateFromString(start, "hh:mm");
+		 GregorianCalendar cal = SerFormatter.getDateFromString(start, "EEEE, dd. MMMM yyyy");
 		 return cal.getTimeInMillis();
 	}
 	
