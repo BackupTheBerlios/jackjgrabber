@@ -118,7 +118,7 @@ public class BOMovieGuideContainer{
 
     	Collections.sort(getSenderList());		//alphabetisch geordnet 
         Collections.sort(getGenreList());		//alphabetisch geordnet
-        announceList = createAnnounceList(ControlMain.getSettingsMovieGuide().getMgDontForgetListe());
+       // announceList = createAnnounceList(ControlMain.getSettingsMovieGuide().getMgDontForgetListe());
 		return titelList.size();
 	}
 		

@@ -58,8 +58,7 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
      */
     public void run() {
        
-    	getTab().getStoreOriginal().setSelected(getSettings().isMgStoreOriginal());
-    	getTab().getDontForgetCheckBox().setSelected(getSettings().isMgInfoDontForget());
+    	getTab().getStoreOriginal().setSelected(getSettings().isMgStoreOriginal());    	
     	int down = getSettings().getMgLoadType();
     	if (down == MGLOADTYPE_AUTO)
     	{
@@ -115,13 +114,7 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
     	else if (action.equals("downloadQuestion"))
     	{
     		getSettings().setMgLoadType(MGLOADTYPE_ASK);
-    	}
-    	if (action == "addTitel") {
-  			this.startDontForgetDialog();
-  		}
-    	if (action == "deleteTitel") {
-  			this.actionDeleteDontForget();
-  		}
+    	}    	
 	}
     
 //  Change-Events der der Checkbox
@@ -129,10 +122,7 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
 		Component comp = (Component) event.getSource();
 		if (comp.getName().equals("saveOriginal")){
 			getSettings().setMgStoreOriginal(((JCheckBox)comp).isSelected());
-		}
-		if (comp.getName().equals("infoDontForget")){
-			getSettings().setMgInfoDontForget(((JCheckBox)comp).isSelected());			
-		}
+		}		
 	}
 	
 	/* (non-Javadoc)
@@ -175,16 +165,4 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
     private GuiSettingsTabMovieGuide getTab() {
         return this.getSettingsTab().getSettingsTabMovieGuide();
     }
-    
-    private void actionDeleteDontForget() {
-    	int index = this.getTab().getJListDontForget().getSelectedIndex();
-    	this.getTab().dontForgetListModel.remove(index);
-    }
-    private void startDontForgetDialog() {
-		String titel = JOptionPane.showInputDialog(this.getMainView(), "Bitte Filmtitel eingeben:");					
-		if (titel!=null) {						
-			getTab().dontForgetListModel.addElement(titel);			
-		}		
-	}
-	
 }
