@@ -64,11 +64,11 @@ public class ControlMain {
     private static Properties prop = new Properties();   
     private static Locale locale = new Locale("");    
     
-    public static String filename = "settings.xml";
+    public static String settingsFilename = "settings.xml";
     
 	public static String version[] = { 
-		"Jack the JGrabber 0.1.3",
-		"26.10.2004",
+		"Jack the JGrabber 0.1.4a",
+		"12.11.2004",
 		"TEST PROJECT ONLY",
 		"User: "+System.getProperty("user.name")
 	};
@@ -140,7 +140,7 @@ public class ControlMain {
 	 */
 	public static void readSettings() {
 			try {
-				File pathToXMLFile = new File(filename).getAbsoluteFile();
+				File pathToXMLFile = new File(settingsFilename).getAbsoluteFile();
 				if (pathToXMLFile.exists()) {
 					settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
 					Logger.getLogger("ControlMain").info("Settings found");
