@@ -97,6 +97,9 @@ public class TcpRecord extends Record{
 	    try {
 			socket.close();
 			Logger.getLogger("TcpRecord").info("TcpRecord stopped");
+			for (int i=0; i<writeStream.length; i++) {
+                writeStream[i].stop();
+            }
 		} catch (IOException e) {
 			Logger.getLogger("TcpRecord").error("Unable to stop Tcp-Socket");
 		} catch (NullPointerException e) {
