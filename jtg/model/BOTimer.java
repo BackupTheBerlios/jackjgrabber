@@ -1,4 +1,7 @@
 package model;
+
+import java.util.Date;
+
 /*
  * BOTimer.java
  *
@@ -10,20 +13,22 @@ package model;
  * @author  ralix
  */
 public class BOTimer extends java.lang.Object{
-    private String eventId, eventType, eventRepeat, announceTime, alarmTime, stopTime, sender;
+    private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, sender;
+    Date startDate, endDate;
     /** Creates a new instance of BOTimer */
     public BOTimer() {
     }
    
     public BOTimer(String eventId, String eventType, String eventRepeat, String announceTime, 
-                    String alarmTime, String stopTime, String sender){
-        this.eventId      = eventId;
-        this.eventType    = eventType;
-        this.eventRepeat  = eventRepeat;
-        this.announceTime = announceTime;
-        this.alarmTime    = alarmTime;
-        this.stopTime     = stopTime;
-        this.sender         = sender;               
+                    String startTime, String stopTime, String sender,Date startDate ){
+        this.setEventId(eventId);
+        this.setEventType(eventType);
+        this.setEventRepeat(eventRepeat);
+        this.setAnnounceTime(announceTime);
+        this.setStartTime(startTime);
+        this.setStopTime(stopTime);
+        this.setSender(sender);         
+        this.setStartDate(startDate);
     }
     
     public String getEventId (){
@@ -58,12 +63,12 @@ public class BOTimer extends java.lang.Object{
         this.announceTime = announceTime;
     }
     
-    public String getAlarmTime (){
-        return this.alarmTime;
+    public String getStartTime (){
+        return this.startTime;
     }
     
-    public void setAlarmTime(String alarmTime){
-        this.alarmTime = alarmTime;
+    public void setStartTime(String startTime){
+        this.startTime = startTime;
     }
     
     public String getStopTime(){
@@ -81,14 +86,17 @@ public class BOTimer extends java.lang.Object{
     public void setSender(String sender){
         this.sender = sender;
     }
- 
-    public void setAll(BOTimer botimer){       
-        this.eventId   = botimer.getEventId();
-        this.eventType   = botimer.getEventType();
-        this.eventRepeat   = botimer.getEventRepeat();
-        this.announceTime   = botimer.getAnnounceTime();
-        this.alarmTime   = botimer.getAlarmTime();
-        this.stopTime   = botimer.getStopTime();
-        this.sender   = botimer.getSender();
-    }
+    /**
+	 * @return Returns the startDate.
+	 */
+	public Date getStartDate() {
+		return startDate;
+	}
+	/**
+	 * @param startDate The startDate to set.
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+     
 }
