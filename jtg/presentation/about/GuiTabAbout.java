@@ -198,7 +198,7 @@ public class GuiTabAbout extends JPanel {
 	
 	private ImageIcon getImageLogo() {
 		if (imageLogo == null) {
-			imageLogo = new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.png"));
+			imageLogo = new ImageIcon(ClassLoader.getSystemResource("ico/grabber11.png"));
 		}
 		return imageLogo;
 	}
