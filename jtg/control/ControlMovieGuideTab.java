@@ -28,16 +28,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 
+import java.net.MalformedURLException;
 import model.BOMovieGuide;
 
 import presentation.GuiMainView;
-
+import service.SerXMLHandling;
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList filmeList = new ArrayList();
+	private static Document movieGuideDocument;
+	private static String movieGuideFileName ="movieguide.xml";
 	
 	public ControlMovieGuideTab(GuiMainView view ) {
 		this.setMainView(view);
@@ -107,4 +113,34 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 	public void setMainView(GuiMainView mainView) {
 		this.mainView = mainView;
 	}
+	/**
+	 * @return Returns the movieGuideDocument.
+	 */
+	public static Document getMovieGuideDocument() {
+		return movieGuideDocument;
+	}
+	/**
+	 * @param movieGuideDocument The movieGuideDocument to set.
+	 */
+	public static void setMovieGuideDocument(Document movieGuideDocument) {
+		ControlMovieGuideTab.movieGuideDocument = movieGuideDocument;
+	}
+	
+	public static void checkMovieGuide() {	
+		try {
+			File pathToXMLFile = new File(movieGuideFileName).getAbsoluteFile();
+			if (pathToXMLFile.exists()) {
+				ControlMovieGuideTab.movieGuideDocument = SerXMLHandling.readDocument(pathToXMLFile);				
+				Logger.getLogger("ControlMain").info("MovieGuide found");
+			} else {								
+				Logger.getLogger("ControlMain").info("MovieGuide not found");
+			}			
+		} catch (MalformedURLException e) {
+			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
+		} catch (DocumentException e) {
+			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
+		} catch (IOException e) {
+			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
+		}
+}
 }
