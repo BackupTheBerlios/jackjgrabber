@@ -157,7 +157,7 @@ public class BORecordArgs {
      */
     public void setQuickRecord(boolean quickRecord) {
         if (!quickRecord) {
-            this.setLocalTimer(SerTimerHandler.getRunningLocalTimer());
+            this.setLocalTimer(SerTimerHandler.getRunningLocalBoxTimer());
         }
         this.quickRecord = quickRecord;
     }

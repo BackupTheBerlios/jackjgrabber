@@ -51,7 +51,7 @@ public class BOTimerList {
         return null;
     }
     
-    public BOTimer getFirstBoxRecordTimer() {
+    public BOTimer getFirstRecordTimer() {
         if (this.getRecordTimerList().size()>0) {
             BOTimer timer = (BOTimer)this.getRecordTimerList().get(0);
             for (int i=1; i<this.getRecordTimerList().size(); i++) {

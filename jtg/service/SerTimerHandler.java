@@ -42,11 +42,10 @@ public class SerTimerHandler {
     
     /**
      * @return LocalTimer
-     * synchronisiere Box-Timer
-     * hole den ersten faelligen Timer
+     * hole den ersten faelligen lokalen Box-Timer
      * vergleiche mit der Box-Zeit
      */
-    public static BOLocalTimer getRunningLocalTimer() {
+    public static BOLocalTimer getRunningLocalBoxTimer() {
         try {
             BOTimerList timerList = ControlMain.getBoxAccess().getTimerList(true);
             BOLocalTimer timer = timerList.getFirstLocalBoxTimer();
@@ -72,6 +71,9 @@ public class SerTimerHandler {
         }
     }
     
+    /*
+     * entferne alle lokalen Timer deren Stopzeit kleiner Jetzt ist 
+     */
     public static void deleteOldTimer() {
         Element root = getTimerDocument().getRootElement();
         List nodes = SerXPathHandling.getNodes("/timerList/localTimer/stopTime", getTimerDocument());
@@ -107,6 +109,10 @@ public class SerTimerHandler {
         }
     }
     
+    /*
+     * speichere Timer lokal, lege Element "MainTimer" an
+     * wenn Timer ausschliesslick lokal gespeichert wird
+     */
     private static void saveNewTimer(BOLocalTimer timer) {
 		Element root = getTimerDocument().getRootElement();     
         
@@ -215,8 +221,8 @@ public class SerTimerHandler {
     /**
      * @param Main-Timer
      * @return Local-Timer
-     * sucht den passenden Local-Timer in XML-Datenbank
-     * wenn keiner gefunden Standard-Local-Timer zurückgeben
+     * sucht den passenden Lokalen BoxTimer in XML-Datenbank
+     * wenn keiner gefunden Standard-Lokal-Timer zurückgeben
      */
     public static BOLocalTimer findLocalTimer(BOTimer timer) {
         Node timerNode = findTimerNode(timer);

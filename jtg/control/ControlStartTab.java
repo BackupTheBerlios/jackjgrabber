@@ -119,7 +119,7 @@ public class ControlStartTab extends ControlTab {
 	public String getNextTimerInfo() {
 	    try {
             BOTimerList list = ControlMain.getBoxAccess().getTimerList(false);
-            BOTimer timer = list.getFirstBoxRecordTimer();
+            BOTimer timer = list.getFirstRecordTimer();
             if (timer!=null) {
                 return timer.getStartTime()+"    Sender:"+timer.getSenderName();    
             }
