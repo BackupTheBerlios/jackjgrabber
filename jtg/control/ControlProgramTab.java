@@ -49,10 +49,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	BOEpg selectedEpg;
 	BOBouquet selectedBouquet;
 	Date dateChooserDate;
-	GuiMainView mainView;
+	GuiMainView mainView;	
 	
 	public ControlProgramTab(GuiMainView view) {
-		this.setMainView(view);
+		this.setMainView(view);		
 	}
 	
 	/*
@@ -67,7 +67,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.getSelectedBouquet().readSender();		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		} catch (IOException e) {			
-			SerAlertDialog.alert(ControlMain.getProperty("no_connect"), this.getMainView());
+			SerAlertDialog.alert(ControlMainView.getProperty("no_connect"), this.getMainView());
 		}
 	}
 	
