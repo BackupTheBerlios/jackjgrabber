@@ -58,6 +58,7 @@ public class SerSettingsHandler {
 		getSettingsRecordtimeAfter(root, settings);
 		getSettingsAc3ReplaceStereo(root, settings);
 		getSettingsStereoReplaceAc3(root, settings);
+		getSettingsShutdown(root, settings);
 		getSettingsUdrecOptions(root, settings);
 		getSettingsProjectXPath(root, settings);
 		getSettingsStoreEPG(root, settings);
@@ -122,7 +123,7 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().stereoReplaceAc3 = node.getText().equals("true");
 		} else {
 			SerXMLHandling.setElementInElement(root, "stereoReplaceAc3", "false");
-			settings.getRecordSettings().setStereoReplacaAc3(false);
+			settings.getRecordSettings().setStereoReplaceAc3(false);
 		}
 	}
 
@@ -234,6 +235,16 @@ public class SerSettingsHandler {
 		} else {
 			SerXMLHandling.setElementInElement(root, "startPX", "true");
 			settings.getRecordSettings().setStartPX(true);
+		}
+	}
+	
+	private static void getSettingsShutdown(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/shutdown");
+		if (node != null) {
+			settings.getRecordSettings().shutdownAfterRecord = node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root, "shutdown", "false");
+			settings.getRecordSettings().setShutdownAfterRecord(false);
 		}
 	}
 
@@ -632,7 +643,9 @@ public class SerSettingsHandler {
 		Node storeEPG = settingsDocument.selectSingleNode("/settings/storeepg");
 		Node storeLogAfterRecord = settingsDocument.selectSingleNode("/settings/storelogafterrecord");
 		Node recordVtxt = settingsDocument.selectSingleNode("/settings/recordVtxt");
+		Node shutdown = settingsDocument.selectSingleNode("/settings/shutdown");
 
+		shutdown.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isShutdownAfterRecord()));
 		stereoReplaceAc3.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()));
 		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordVtxt()));
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()));

@@ -29,6 +29,7 @@ public class BOSettingsRecord {
 	public boolean recordAllPids;
 	public boolean ac3ReplaceStereo;
 	public boolean stereoReplaceAc3;
+	public boolean shutdownAfterRecord;
 	public String udrecOptions;
 	
 	public String jgrabberStreamType; //PES, TS, ES
@@ -194,7 +195,7 @@ public class BOSettingsRecord {
 	    recordAllPids = recordPids;
 		if (recordPids==true) {
 			this.setAc3ReplaceStereo(false);
-			this.setStereoReplacaAc3(false);
+			this.setStereoReplaceAc3(false);
 		}
 	}	
 	/**
@@ -206,7 +207,7 @@ public class BOSettingsRecord {
 	/**
 	 * @param ac3ReplaceStereo The ac3ReplaceStereo to set.
 	 */
-	public void setStereoReplacaAc3(boolean value) {
+	public void setStereoReplaceAc3(boolean value) {
 	    setSettingsChanged(true);
 	    stereoReplaceAc3 = value;
 		if (stereoReplaceAc3==true) {
@@ -261,7 +262,7 @@ public class BOSettingsRecord {
 	    setSettingsChanged(true);
 	    ac3ReplaceStereo = value;
 		if (ac3ReplaceStereo==true) {
-			this.setStereoReplacaAc3(false);
+			this.setStereoReplaceAc3(false);
 			this.setRecordAllPids(false);
 		}
 	}
@@ -314,4 +315,19 @@ public class BOSettingsRecord {
       		}
     }
 
+    /**
+     * @return Returns the shutdownAfterRecord.
+     */
+    public boolean isShutdownAfterRecord() {
+        return shutdownAfterRecord;
+    }
+    /**
+     * @param shutdownAfterRecord The shutdownAfterRecord to set.
+     */
+    public void setShutdownAfterRecord(boolean shutdownAfterRecord) {
+        if (this.shutdownAfterRecord != shutdownAfterRecord) {
+			setSettingsChanged(true);
+			this.shutdownAfterRecord = shutdownAfterRecord;
+		}
+    }
 }

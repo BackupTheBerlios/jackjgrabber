@@ -65,6 +65,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbStartStreamingServer;
 	private JCheckBox cbStartPX;
 	private JCheckBox cbRecordVtxt;
+	private JCheckBox cbShutdownAfterRecord;
 	private JSpinner recordMinsBefore, recordMinsAfter; 
 	
 	private JCheckBox cbStoreEPG;
@@ -80,15 +81,14 @@ public class GuiSettingsTabRecord extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "f:pref:grow, 10 f:pref:grow",  		// columns 
-				  "pref, 25, t:pref, pref, 25, pref"); 			// rows
+				  "pref, 25, t:pref, 25, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
 				
-				builder.add(this.getPanelNorth(),						  		cc.xyw(1, 1, 3));
+				builder.add(this.getPanelNorth(),						cc.xyw(1, 1, 3));
 				builder.add(this.getPanelServerRecordSettings(),  		cc.xy(1, 3));			
-				builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1, 4));
-				//builder.add(this.getPanelQuickRecordSettings(),	   		cc.xy(3, 3));
+				builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1, 5));
     }
     
     private JPanel getPanelNorth() {
@@ -132,14 +132,15 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelServerRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					  "pref, 15, pref, 5, pref",	 		//columns 
-			  "pref, pref");		//rows
+			  "pref, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelServerRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_serverRecordSettings"),		cc.xyw	(1, 1, 5));
-			builder.add(this.getCbStartStreamingServer(),												cc.xy	(1, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  				cc.xy	(3, 2));
-			builder.add(this.getTfServerPort(),																cc.xy	(5, 2));
+			builder.add(this.getCbStartStreamingServer(),									cc.xy	(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),			cc.xy	(3, 2));
+			builder.add(this.getTfServerPort(),												cc.xy	(5, 2));
+			builder.add(this.getCbShutdownAfterRecord(),									cc.xyw	(1, 3, 5));
 		}
 		return panelServerRecordSettings;
 	}
@@ -183,14 +184,15 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelRecordtimeSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 			        "pref, 5, pref",	 		//columns 
-			  "pref, pref");							//rows
+			  "pref, pref, pref");							//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordtimeSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getJSpinnerRecordMinsBefore(),										cc.xy	(1, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_RecordBefore")),		cc.xy	(3, 1));
-			builder.add(this.getJSpinnerRecordMinsAfter(),										cc.xy	(1, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_RecordAfter")),		cc.xy	(3, 2));			
+			builder.addSeparator(ControlMain.getProperty("label_timerSettings"),	cc.xyw(1, 1, 3));
+			builder.add(this.getJSpinnerRecordMinsBefore(),							cc.xy(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_RecordBefore")),	cc.xy(3, 2));
+			builder.add(this.getJSpinnerRecordMinsAfter(),							cc.xy(1, 3));
+			builder.add(new JLabel(ControlMain.getProperty("label_RecordAfter")),	cc.xy(3, 3));			
 		}
 		return panelRecordtimeSettings;
 	}
@@ -263,7 +265,18 @@ public class GuiSettingsTabRecord extends GuiTab {
 			cbStoreLogAfterRecord.addActionListener(control);
 		}
 		return cbStoreLogAfterRecord;
-	}		
+	}	
+	/**
+	 * @return Returns the cbShutdownAfterRecord.
+	 */
+	public JCheckBox getCbShutdownAfterRecord() {
+		if (cbShutdownAfterRecord == null) {
+		    cbShutdownAfterRecord = new JCheckBox(ControlMain.getProperty("cbShutdownAfterRecord"));
+		    cbShutdownAfterRecord.setActionCommand("shutdownAfterRecord");
+		    cbShutdownAfterRecord.addActionListener(control);
+		}
+		return cbShutdownAfterRecord;
+	}
 	/**
 	 * @return Returns the jTextFieldUdrecOptions.
 	 */

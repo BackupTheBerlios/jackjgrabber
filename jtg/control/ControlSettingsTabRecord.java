@@ -62,6 +62,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
         this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions());
         this.getTab().getCbStoreEPG().setSelected(this.getSettings().isStoreEPG());
         this.getTab().getCbStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
+        this.getTab().getCbShutdownAfterRecord().setSelected(this.getSettings().isShutdownAfterRecord());
         this.initializeAudioSettings();
 		this.initializeStreamingEngine();
     }
@@ -132,7 +133,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	  				break;
 		  		}
 		  		if (action.equals("rbStereoReplaceAc3")) {
-	  				this.getSettings().setStereoReplacaAc3(((JRadioButton)e.getSource()).isSelected());
+	  				this.getSettings().setStereoReplaceAc3(((JRadioButton)e.getSource()).isSelected());
 	  				break;
 		  		}
 		  		if (action.equals("recordVtxt")) {
@@ -143,6 +144,10 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		  				this.getSettings().setStartPX(((JCheckBox)e.getSource()).isSelected());
 		  				break;
 		  		}
+		  		if (action.equals("shutdownAfterRecord")) {
+	  				this.getSettings().setShutdownAfterRecord(((JCheckBox)e.getSource()).isSelected());
+	  				break;
+	  		}
 		  		if (action.equals("startStreamingServer")) {
 		  				this.getSettings().setStartStreamingServer(((JCheckBox)e.getSource()).isSelected());
 		  				break;
