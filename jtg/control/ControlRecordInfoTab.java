@@ -179,4 +179,12 @@ public class ControlRecordInfoTab extends ControlTab
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
