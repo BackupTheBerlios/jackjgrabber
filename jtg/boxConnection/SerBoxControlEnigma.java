@@ -555,4 +555,28 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		}
 		return status;
 	}
+
+	/* (non-Javadoc)
+	 * @see boxConnection.SerBoxControl#setRecordModusWithPlayback()
+	 */
+	public String setRecordModusWithPlayback() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see boxConnection.SerBoxControl#setRecordModus()
+	 */
+	public String setRecordModus() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see boxConnection.SerBoxControl#stopRecordModus()
+	 */
+	public String stopRecordModus() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

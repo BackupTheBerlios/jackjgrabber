@@ -98,4 +98,25 @@ public class SerBoxControlDefault extends SerBoxControl {
 		throw new IOException();
 	}
 
+	/* (non-Javadoc)
+	 * @see boxConnection.SerBoxControl#setRecordModusWithPlayback()
+	 */
+	public String setRecordModusWithPlayback() throws IOException {
+		throw new IOException();
+	}
+
+	/* (non-Javadoc)
+	 * @see boxConnection.SerBoxControl#setRecordModus()
+	 */
+	public String setRecordModus() throws IOException {
+		throw new IOException();
+	}
+
+	/* (non-Javadoc)
+	 * @see boxConnection.SerBoxControl#stopRecordModus()
+	 */
+	public String stopRecordModus() throws IOException {
+		throw new IOException();
+	}
+
 }
