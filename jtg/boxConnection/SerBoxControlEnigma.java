@@ -74,7 +74,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		if (tvMode) {
 		    String[] vPid = new String[1];
 		    line=input.readLine();
-		    System.out.println(line);
 		    if (line.length() > 5) {
 		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Zappen, bitte erneut versuchen!");
 		        return pids;
