@@ -370,8 +370,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return timerList;
 	}
 	public String setTimer(String action, BOTimer timer) throws IOException {
-		String alarm = timer.getStartTime();
-		String stop = timer.getStopTime();
+		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis());
+		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis());
 		String announce = timer.getAnnounceTime();
 		String type = timer.getEventType();
 		String repeat = timer.getEventRepeat();
