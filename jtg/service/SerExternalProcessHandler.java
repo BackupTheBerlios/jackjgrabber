@@ -52,24 +52,24 @@ public class SerExternalProcessHandler {
 	public static void closeAll() {
 	    ArrayList list = getProcessList();
 			for (int i=0; i<list.size(); i++) {
-				BOExternalProcess boProc = (BOExternalProcess)list.get(i);
-				Process proc = boProc.getProcess();
-		    try {
-		        if (proc.exitValue()==0) {} //Prozess beendet            
-		    } catch (IllegalThreadStateException e) {
-		        if (boProc.isCloseWithoutPrompt()) {
-		            proc.destroy(); 
-		        } else {
-		            int ret = JOptionPane.showConfirmDialog(
-				                ControlMain.getControl().getView(),
-				                ControlMain.getProperty("msg_closeProcess1")+boProc.getName()+" "+ControlMain.getProperty("msg_closeProcess2"),
-				                "",
-				                JOptionPane.OK_CANCEL_OPTION);
-				        if (ret==0) {
-				            proc.destroy();      
-				        }    
-		        }
-		    }		    
+			    BOExternalProcess boProc = (BOExternalProcess)list.get(i);
+			    Process proc = boProc.getProcess();
+			    try {
+			        if (proc.exitValue()==0) {} //Prozess beendet            
+			    } catch (IllegalThreadStateException e) {
+			        if (boProc.isCloseWithoutPrompt()) {
+			            proc.destroy(); 
+			        } else {
+			            int ret = JOptionPane.showConfirmDialog(
+			                    ControlMain.getControl().getView(),
+			                    ControlMain.getProperty("msg_closeProcess1")+boProc.getName()+" "+ControlMain.getProperty("msg_closeProcess2"),
+			                    "",
+			                    JOptionPane.YES_NO_OPTION);
+			            if (ret==0) {
+			                proc.destroy();      
+			            }    
+			        }
+			    }		    
 			}
 	}
 	/**
