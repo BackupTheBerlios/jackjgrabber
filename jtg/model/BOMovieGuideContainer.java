@@ -59,18 +59,13 @@ public class BOMovieGuideContainer{
 		//clear();
 		try {		
 			Calendar today = Calendar.getInstance();
-			today.set(Calendar.HOUR,0);
+			today.set(Calendar.HOUR_OF_DAY,0);
 			today.set(Calendar.MINUTE,0);
 			today.set(Calendar.SECOND,0);
 			today.set(Calendar.MILLISECOND,0);
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {				
 				Element entry = (Element) i.next();										
 				String datum = entry.element("datum").getStringValue();						
-				
-				if (datum.equals("Mittwoch, 22. Dezember 2004"))
-				{
-					int x = 0;
-				}
 				if(!SerFormatter.compareDates( datum,today)) continue;			
 				String sender = entry.element("sender").getStringValue();				
 				if( !(aboList.contains(sender)) && !aboList.isEmpty() ) continue;
