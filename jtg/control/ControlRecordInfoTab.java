@@ -518,14 +518,8 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 * @return
 	 */
 	private String getExecStringWithoutParam(String exec) {
-		String[] knownEnd = {".exe ", ".bin ", ".cmd ", ".bat "};
-		for (int i = 0; i < knownEnd.length; i++) {
-			int index = exec.indexOf(knownEnd[i]);
-			if (index > -1) {
-				exec = exec.substring(0, index + 5);
-			}
-		}
-		return exec;
+	    StringTokenizer tok = new StringTokenizer(exec);
+		return tok.nextToken().trim();
 	}
 
 	/*
