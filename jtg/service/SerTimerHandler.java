@@ -326,31 +326,30 @@ public class SerTimerHandler {
      */
     public static void saveTimer(BOTimer reqTimer, boolean reloadList) {
     	BOTimer timer = validateTimer(reqTimer);
-    	
-    	if (timer!=null) {
-    		//lokaler Teil muss immer gespeichert werden
-            saveLocalTimer(timer);
-
-    		//nur veraenderte Timer	speichern
-            if (timer.getModifiedId() != null) {
-    			if (!timer.getLocalTimer().isLocal()) {
-    	            saveBoxTimer(timer, reloadList);
-    			} else {
-    				//bei localen Timern manuell um die Konsistenz der Timer-List kümmern
-    				//bei Box-Timern wird komplett nachgelesen
-    				if (timer.getModifiedId().equals("new")) {
-    					ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
-    				} else if (timer.getModifiedId().equals("remove")) {
-    					ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
-    				}
-    			}
+        
+        if (timer!=null) {
+            //lokaler Teil muss immer gespeichert werden
+            saveLocalTimer(timer); 
+              
+            if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
+                saveBoxTimer(timer, reloadList); 
             }
+
+            if (timer.getModifiedId() != null) {
+                //nur bei lokalen Timern manuell erledigen, Box-Timer muessen automatisch nachgelesen werden
+                if (timer.getModifiedId().equals("new") && timer.getLocalTimer().isLocal()) {
+                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
+                } else if (timer.getModifiedId().equals("remove")) {
+                    ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
+                }
+            } 
             timer.setModifiedId(null);
             //ermittle naechsten faelligen lokalen-RecordTimer neu
             if (timer.getLocalTimer().isLocal()) {
-                ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
-            }	
-    	}
+                ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);   
+            }            
+        }
+
     }
     
     /*
@@ -358,22 +357,24 @@ public class SerTimerHandler {
      * 
      */
     private static BOTimer validateTimer(BOTimer requestedTimer) {
-		ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
-		
-		if (timerList.size()>0) {
-			ArrayList equalTimer = new ArrayList();
+        if (requestedTimer.getModifiedId()!=null && requestedTimer.getModifiedId().equals("new") ) {
+            ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
+            
+            if (timerList.size()>0) {
+                ArrayList equalTimer = new ArrayList();
 
-			for (int i=0; i<timerList.size(); i++) {
-				BOTimer timer = (BOTimer)timerList.get(i);
-                if (timer != requestedTimer && SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
-					equalTimer.add(timer);
-				}
-			}
-			if (equalTimer.size()>0) {
-				equalTimer.add(0, requestedTimer);
-				return startTimerQuestDialag(equalTimer);
-			}
-		} 
+                for (int i=0; i<timerList.size(); i++) {
+                    BOTimer timer = (BOTimer)timerList.get(i);
+                    if (timer != requestedTimer && SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
+                        equalTimer.add(timer);
+                    }
+                }
+                if (equalTimer.size()>0) {
+                    equalTimer.add(0, requestedTimer);
+                    return startTimerQuestDialag(equalTimer);
+                }
+            }   
+        } 
 		return requestedTimer;
 	}
     
