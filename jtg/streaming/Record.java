@@ -25,6 +25,7 @@ public abstract class Record {
     public abstract void start();
     public abstract void stop();
     public abstract DataWriteStream[] getWriteStream();
+    public String streamType;
     
     public ArrayList getFiles() {
     	ArrayList fileList = new ArrayList();

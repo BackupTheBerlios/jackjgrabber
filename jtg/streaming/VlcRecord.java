@@ -38,6 +38,7 @@ public class VlcRecord  extends Record {
 	public VlcRecord(BORecordArgs args, RecordControl control){
         recordControl = control;
         recordArgs = args;
+        streamType="TS";
         boxIp = ControlMain.getBoxIpOfActiveBox();
         recordFile=new File(recordControl.getDirectory(), recordControl.getFileName()+".mpg");
 	}

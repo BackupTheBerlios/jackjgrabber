@@ -457,6 +457,31 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		}
 		return buffer;
 	}
+    
+     public String getSptsStatus() {
+            try {
+                BufferedReader input = getConnection("/control/system?getAViAExtPlayBack");
+                
+                String status = input.readLine(); 
+                if (status.equals("0")) {
+                    return "pes";
+                } else if (status.equals("1")) {
+                    return "spts";
+                }
+                return new String();
+            } catch (IOException e) {
+                return new String();
+            }
+        }
+    public boolean setSptsStatus(String status) {
+        try {
+            BufferedReader input = getConnection("/control/system?setAViAExtPlayBack="+status);
+            return (input.readLine().equals("ok"));
+        } catch (IOException e) {
+            return false;
+        }  
+    }
+    
 	public String [] getRepeatOptions() throws IOException {
 		return new String [] {ControlMain.getProperty("once"), ControlMain.getProperty("dayly"), ControlMain.getProperty("weekly"), 
 			ControlMain.getProperty("2-weekly"), ControlMain.getProperty("4-weekly"), ControlMain.getProperty("weekdays")};

@@ -66,11 +66,13 @@ public abstract class SerBoxControl {
         }
         return timerList;
     }
-    
+
     public ArrayList senderList;
     public abstract ArrayList getAllSender() throws IOException;
 
 	public abstract String getName();
+    public abstract String getSptsStatus();
+    public abstract boolean setSptsStatus(String status);
 	protected abstract BOTimerList reReadTimerList() throws IOException;
 	public abstract GregorianCalendar getBoxTime() throws IOException;
 	public abstract BufferedReader getConnection(String request) throws IOException;

@@ -56,6 +56,7 @@ public class UdpRecord  extends Record {
 		try {
             recordControl = control;
             recordArgs = args;
+            streamType=recordArgs.getLocalTimer().getShortJGrabberStreamType();
             boxIp = ControlMain.getBoxIpOfActiveBox();
             tcpSocket = new Socket(boxIp,31340);
             udpReceiver = new UdpReceiver(this);
@@ -133,7 +134,7 @@ public class UdpRecord  extends Record {
 		} else {
 			cmd.append("AUDIO");
 		}
-		if (recordArgs.getLocalTimer().getShortJGrabberStreamType().equals("TS")) {
+		if (streamType.equals("TS")) {
 			cmd.append("TS");
 		}
 		Object[] args = {Integer.toString(udpPort), Integer.toString(spktBufNum)};
@@ -168,7 +169,7 @@ public class UdpRecord  extends Record {
 		int pidNum = Integer.parseInt(dboxArgs[2]);
 		if (pidNum + 3 > dboxArgs.length) return -3;
 
-		if (recordArgs.getLocalTimer().getShortJGrabberStreamType().equals("TS")) {
+		if (streamType.equals("TS")) {
 			writeStream = new DataWriteStream[1];
 			writeStream[0] = new DataWriteStream('t', 0, recordControl);
 		}  else {

@@ -41,6 +41,13 @@ import control.ControlTimerTab;
  */
 public class SerBoxControlDefault extends SerBoxControl {
     
+    public String getSptsStatus() {
+        return new String();
+    }
+    public boolean setSptsStatus(String status) {
+        return true;  
+    }
+    
     public GregorianCalendar getBoxTime() throws IOException {
         throw new IOException();
 	}

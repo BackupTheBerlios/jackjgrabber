@@ -41,12 +41,12 @@ public class UdrecRecord  extends Record {
 	public UdrecRecord(BORecordArgs args, RecordControl control){
         recordControl = control;
         recordArgs = args;
+        streamType=recordArgs.getLocalTimer().getShortUdrecStreamType();
         boxIp = ControlMain.getBoxIpOfActiveBox();
 	}
 	
 	private String[] getRequestArray() {
 	    ArrayList cmd = new ArrayList();
-        String streamType=recordArgs.getLocalTimer().getShortUdrecStreamType();
 	    BOPids pids = recordArgs.getPids();
 	    String cmdReturn[];
 	    if (ControlMain.getSettingsPath().getUdrecPath().substring(0,4).equalsIgnoreCase("mono")) {
@@ -91,8 +91,8 @@ public class UdrecRecord  extends Record {
 	public void stop() {
 	    if (run != null) {
 	        PrintWriter out = new PrintWriter(run.getProcess().getOutputStream());
-	    		out.write("\n");
-	    		out.flush();  
+	        out.write("\n");
+	    	out.flush();  
 	    }
 	}
 	/**

@@ -660,6 +660,13 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		}
 		return status;
 	}
+    
+    public String getSptsStatus() {
+        return new String();
+    }
+    public boolean setSptsStatus(String status) {
+        return true;  
+    }
 
 	/* (non-Javadoc)
 	 * @see boxConnection.SerBoxControl#setRecordModusWithPlayback()

@@ -47,6 +47,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 	BORecordArgs recordArgs;
 	String fileName;
 	File directory;
+    public String initSptsStatus;
 	private static final String EPGFILENAME = "epg.txt";
 
 	public RecordControl(BORecordArgs args, ControlProgramTab control) throws IOException {
@@ -54,25 +55,38 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		recordArgs = args;
 		controlProgramTab = control;
 		this.detectRecord();
+        this.initializeSptsStatus();
 	}
 
-	private boolean detectRecord() {
-		if (tvMode && recordArgs.getLocalTimer().getStreamingEngine() == 0) {
-			record = new UdpRecord(recordArgs, this);
-			return true;
-		}
-		if (tvMode && recordArgs.getLocalTimer().getStreamingEngine() == 1) {
-			record = new UdrecRecord(recordArgs, this);
-			return true;
-		}
-        if (tvMode && recordArgs.getLocalTimer().getStreamingEngine() == 2) {
-            record = new VlcRecord(recordArgs, this);
-            return true;
-        } 
-		record = new TcpRecord(recordArgs, this);
-		return true;
+	private void detectRecord() {
+		if (tvMode) {
+            if (recordArgs.getLocalTimer().getStreamingEngine() == 0) {
+                record = new UdpRecord(recordArgs, this);
+            } else if (recordArgs.getLocalTimer().getStreamingEngine() == 1) {
+                record = new UdrecRecord(recordArgs, this);
+            } else if (recordArgs.getLocalTimer().getStreamingEngine() == 2) {
+                record = new VlcRecord(recordArgs, this);
+            }
+		} else {
+            record = new TcpRecord(recordArgs, this); 
+        }
 	}
+    
+    private void initializeSptsStatus() {
+        initSptsStatus=ControlMain.getBoxAccess().getSptsStatus();
+        if (initSptsStatus.equals("pes") && record.streamType.equals("TS")) {
+            ControlMain.getBoxAccess().setSptsStatus("spts");
+        } else if (initSptsStatus.equals("spts") && record.streamType.equals("PES")) {
+            ControlMain.getBoxAccess().setSptsStatus("pes");
+        }
+    }
 
+    private void setOldSptsStatus() {
+        if (!initSptsStatus.equals(ControlMain.getBoxAccess().getSptsStatus())) {
+            ControlMain.getBoxAccess().setSptsStatus(initSptsStatus);
+        }
+    }
+    
 	/*
 	 * Kontrolle der Stopzeit einer Sofortaufnahme
 	 */
@@ -83,13 +97,11 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		}
 
 		try {
-
 			if (recordArgs.getLocalTimer().isStopPlaybackAtRecord()) {
 				ControlMain.getBoxAccess().setRecordModusWithPlayback();
 			} else {
 				ControlMain.getBoxAccess().setRecordModus();
 			}
-
 		} catch (IOException e) {
 			Logger.getLogger("RecordControl").error(e.getMessage());
 		}
@@ -189,6 +201,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		} catch (IOException e) {
 			Logger.getLogger("RecordControl").error(e.getMessage());
 		}
+        this.setOldSptsStatus();
 	}
 
 	private void checkForShutdown() {
@@ -217,15 +230,6 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 
 	public String getFileName() {
 		if (this.fileName == null) {
-
-			/*
-			 * SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm"); String date = f.format(new Date());
-			 * 
-			 * BORecordArgs args = this.recordArgs; if (args.getEpgTitle() != null) { Object[] obj = {date, args.getSenderName(),
-			 * args.getEpgTitle()}; MessageFormat form = new MessageFormat("{0}_{1}_{2}"); fileName = form.format(obj); } else { fileName =
-			 * date + "_" + args.getSenderName(); }
-			 */
-
 			String pattern = recordArgs.getLocalTimer().getFilePattern();
 
 			if (pattern == null || pattern.length() == 0) {

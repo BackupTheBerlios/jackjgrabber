@@ -14,7 +14,6 @@ package presentation.timer;
  */
 
 import java.awt.Dimension;
-import java.awt.event.*;
 import java.text.SimpleDateFormat;
 
 import javax.swing.ButtonGroup;

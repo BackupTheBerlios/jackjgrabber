@@ -48,6 +48,7 @@ public class TcpRecord extends Record{
 	public TcpRecord(BORecordArgs args, RecordControl control) {
 	    recordControl = control;
         recordArgs = args;
+        streamType="PES";
         boxIp = ControlMain.getBoxIpOfActiveBox();
         BOPid pid = (BOPid)recordArgs.getPids().getAPids().get(0);
         aPid = pid.getNumber();
