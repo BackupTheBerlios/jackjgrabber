@@ -69,7 +69,7 @@ public class ControlMain {
 	static BOBox activeBox;
 
 	private static Properties properties = new Properties();
-	public static String jtjgDirectory = System.getProperty("user.home")+File.separator+".JtJG";
+	public static String jtjgDirectory = System.getProperty("user.home")+File.separator+".jtjg";
 	private static Locale locale = new Locale("");
 	public static GuiSplashScreen splash = null;
 	public static GuiLogWindow logWindow;
