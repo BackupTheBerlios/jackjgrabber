@@ -104,9 +104,12 @@ public class UdrecRecord  extends Record {
 	
 	public ArrayList getFiles() {
 	    File[] files = recordControl.getDirectory().listFiles();
-	    ArrayList udrecFiles = new ArrayList(files.length);
-	    udrecFiles.add(SerHelper.getVideoFile(files));
-	    SerHelper.fillArrayWithAudioFiles(files, udrecFiles);
+        String name = recordControl.getDirectory().getName();
+        
+	    ArrayList udrecFiles = new ArrayList();
+        
+	    udrecFiles.add(SerHelper.getVideoFile(files, name));
+        udrecFiles.addAll(SerHelper.getAudioFiles(files, name));
 	    return udrecFiles;
 	}
 }

@@ -32,12 +32,12 @@ import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
-import service.SerExternalProcessHandler;
 import service.SerFormatter;
 import service.SerHelper;
 import service.SerProcessStopListener;
 import service.SerTimerHandler;
 import control.ControlMain;
+import control.ControlMuxxerView;
 import control.ControlProgramTab;
 
 public class RecordControl extends Thread implements SerProcessStopListener {
@@ -194,10 +194,12 @@ public class RecordControl extends Thread implements SerProcessStopListener {
         }
 
 		record.stop();
-        BOAfterRecordOptions option = recordArgs.getLocalTimer().getAfterRecordOptions(); 
-		if (option.isUseProjectX() && record.getFiles() != null && record.getFiles().size() > 0) {
-			Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
-			this.startProjectX();
+        BOAfterRecordOptions options = recordArgs.getLocalTimer().getAfterRecordOptions(); 
+		if (options.isUseProjectX() || options.isUseMplex()) {
+            ArrayList files = record.getFiles(); 
+            if (files != null && files.size() > 0) {
+                new ControlMuxxerView(options, this, files);
+            }			
 		} else {
 			this.checkForShutdown();
 		}
@@ -217,21 +219,6 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		if (!recordArgs.isQuickRecord() && recordArgs.getLocalTimer().isShutdownAfterRecord()) {
 			ControlMain.shutdownPC();
 		}
-	}
-
-	public void startProjectX() {
-		ArrayList files = record.getFiles();
-		String[] param = new String[3 + files.size()];
-		String separator = System.getProperty("file.separator");
-
-		param[0] = System.getProperty("java.home") + separator + "bin" + separator + "java";
-		param[1] = "-jar";
-		param[2] = ControlMain.getSettingsPath().getProjectXPath();
-
-		for (int i = 0; i < files.size(); i++) {
-			param[i + 3] = (String) files.get(i);
-		}
-		SerExternalProcessHandler.startProcess(this, "ProjectX", param, true);
 	}
 
 	public String getFileName() {

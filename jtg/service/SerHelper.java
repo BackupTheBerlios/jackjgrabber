@@ -85,10 +85,11 @@ public class SerHelper {
 	 * @param files
 	 * @return the first Video-File in the Array
 	 */
-	public static String getVideoFile(File[] files) {
+	public static File getVideoFile(File[] files, String reqName) {
 		for (int i = 0; i < files.length; i++) {
-			if (isVideo(files[i].getName())) {
-				return files[i].getAbsolutePath();
+            String name = files[i].getName();
+			if (name.indexOf(reqName)>=0 && isVideo(name)) {
+				return files[i];
 			}
 		}
 		return null;
@@ -99,13 +100,15 @@ public class SerHelper {
 	 *            fileList
 	 * @return the fileList filled with Audio-Files from files-Array
 	 */
-	public static ArrayList fillArrayWithAudioFiles(File[] files, ArrayList fileList) {
+	public static ArrayList getAudioFiles(File[] files, String reqName) {
+        ArrayList audiFiles = new ArrayList();
 		for (int i = 0; i < files.length; i++) {
-			if (isAudio(files[i].getName())) {
-				fileList.add(files[i].getAbsolutePath());
+            String name = files[i].getName();
+			if (name.indexOf(reqName)>=0 && isAudio(name)) {
+                audiFiles.add(files[i]);
 			}
 		}
-		return fileList;
+		return audiFiles;
 	}
 
 	/**

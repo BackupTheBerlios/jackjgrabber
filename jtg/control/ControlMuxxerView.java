@@ -28,12 +28,26 @@ import model.BOAfterRecordOptions;
 import presentation.muxxer.GuiMuxxerView;
 import service.SerExternalProcessHandler;
 import service.SerProcessStopListener;
+import streaming.RecordControl;
 
 public class ControlMuxxerView implements ActionListener, SerProcessStopListener{
 
 	GuiMuxxerView view;
 	BOAfterRecordOptions options;
+    RecordControl recControl;
     ArrayList files;
+    
+    public ControlMuxxerView(BOAfterRecordOptions options, RecordControl control, ArrayList files) {
+        this.setRecControl(control);
+        this.setOptions(options);
+        this.setFiles(files);
+        this.setView(new GuiMuxxerView(this));
+        this.getView().getPbOk().setVisible(false);
+        this.initialize();
+        
+        view.setVisible(true);
+        this.actionOk();
+    }
 
 	public ControlMuxxerView(BOAfterRecordOptions options, ArrayList files) {
         this.setOptions(options);
@@ -82,7 +96,9 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
             this.getOptions().setUseProjectX(((JCheckBox)e.getSource()).isSelected());
         }
 		if (action.equals("cbStartMplex")) {
-            this.getOptions().setUseMplex(((JCheckBox)e.getSource()).isSelected());
+            boolean selected = ((JCheckBox)e.getSource()).isSelected();
+            this.getView().checkMplexButtons(selected);
+            this.getOptions().setUseMplex(selected);
 		}
 	}
     
@@ -119,8 +135,7 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
     }
     
     private String getOutputFileName(File file) {
-        String name = file.getName();
-        File out = new File(name+".mpeg");
+        File out = new File(file.getAbsolutePath()+".mpeg");
         return out.getAbsolutePath();
     }
     
@@ -143,6 +158,9 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
           //mplex starten mit demuxten Files  
         }
         if (processName.equals("mplex")) {
+            if (this.getRecControl()!=null) {
+                this.getRecControl().processStopped(exitCode, "muxxi");
+            }
             this.getView().dispose();
         }
         
@@ -183,5 +201,17 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
      */
     public void setView(GuiMuxxerView view) {
         this.view = view;
+    }
+    /**
+     * @return Returns the recControl.
+     */
+    public RecordControl getRecControl() {
+        return recControl;
+    }
+    /**
+     * @param recControl The recControl to set.
+     */
+    public void setRecControl(RecordControl recControl) {
+        this.recControl = recControl;
     }
 }

@@ -83,7 +83,7 @@ public class VlcRecord  extends Record {
 	
 	public ArrayList getFiles() {
 	    ArrayList files = new ArrayList();
-        files.add(this.recordFile.getAbsolutePath());
+        files.add(this.recordFile);
         return files;
 	}
 }

@@ -147,9 +147,9 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 			builder.add(this.getCbStopPlaybackAtRecord(), cc.xyw(1, 4, 3));
 
 			builder.add(this.getCbRecordVtxt(), cc.xyw(1, 5, 3));
-			builder.add(this.getJRadioButtonRecordAllPids(), cc.xyw(1, 7, 3));
-			builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xyw(1, 8, 3));
-			builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xyw(1, 9, 3));
+			builder.add(this.getJRadioButtonRecordAllPids(), cc.xyw(1, 8, 3));
+			builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xyw(1, 9, 3));
+			builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xyw(1, 10, 3));
 			
 			builder.add(this.getCbShutdownAfterRecord(), cc.xyw(1, 12, 3));
             

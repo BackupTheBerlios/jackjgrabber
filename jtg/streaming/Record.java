@@ -32,7 +32,7 @@ public abstract class Record {
         for (int i=0; i<getWriteStream().length; i++) {
             ArrayList streamfileList = getWriteStream()[i].fileList;
             for (int i2=0; i2<streamfileList.size(); i2++) {
-            	fileList.add( ((File)streamfileList.get(i2)).getAbsolutePath());
+            	fileList.add( ((File)streamfileList.get(i2)));
             }
         }
         

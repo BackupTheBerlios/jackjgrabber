@@ -127,6 +127,9 @@ public class GuiMuxxerView extends JDialog{
 			rbDVD = new JRadioButton("DVD");
             rbDVD.addActionListener(control);
 			buttonGroupMuxxType.add(rbDVD);
+            if (!control.getOptions().isUseMplex()) {
+                rbDVD.setEnabled(false);
+            }
 		}
 		return rbDVD;
 	}
@@ -138,6 +141,9 @@ public class GuiMuxxerView extends JDialog{
 			rbMPEG = new JRadioButton("Mpeg");
             rbMPEG.addActionListener(control);
 			buttonGroupMuxxType.add(rbMPEG);
+            if (!control.getOptions().isUseMplex()) {
+                rbMPEG.setEnabled(false);
+            }
 		}
 		return rbMPEG;
 	}
@@ -149,6 +155,9 @@ public class GuiMuxxerView extends JDialog{
 			rbSVCD = new JRadioButton("SVCD");
             rbSVCD.addActionListener(control);
 			buttonGroupMuxxType.add(rbSVCD);
+            if (!control.getOptions().isUseMplex()) {
+                rbSVCD.setEnabled(false);
+            }
 		}
 		return rbSVCD;
 	}
@@ -174,5 +183,11 @@ public class GuiMuxxerView extends JDialog{
             cbStartMplex.addActionListener(control);
         }
         return cbStartMplex;
+    }
+    
+    public void checkMplexButtons(boolean enable) {
+        this.getRbDVD().setEnabled(enable);
+        this.getRbMPEG().setEnabled(enable);
+        this.getRbSVCD().setEnabled(enable);
     }
 }
