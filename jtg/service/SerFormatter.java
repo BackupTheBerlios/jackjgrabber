@@ -149,7 +149,7 @@ public class SerFormatter {
 	}
 
 	public static String getCorrectDate(String datum) {
-	    GregorianCalendar cal = SerFormatter.getDateFromString(datum, "hh:mm");
+	    GregorianCalendar cal = SerFormatter.getDateFromString(datum, "dd.MM./HH:mm");
 		DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
 		datum = formater2.format(cal.getTime()).toString();
 		return datum;
