@@ -3,25 +3,20 @@ package model;
 import java.util.StringTokenizer;
 
 /*
-BOSettingsRecords.java by Geist Alexander 
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-*/
+ * BOSettingsRecords.java by Geist Alexander
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 public class BOSettingsRecord {
-	
+
 	private BOSettings settings;
 	public String streamingServerPort;
 	public boolean startStreamingServer;
@@ -31,29 +26,29 @@ public class BOSettingsRecord {
 	public boolean stereoReplaceAc3;
 	public boolean shutdownAfterRecord;
 	public String udrecOptions;
-	
+
 	public String jgrabberStreamType; //PES, TS, ES
 	public String udrecStreamType; //PES, TS
 	public int streamingEngine; //0=JGrabber, 1=udrec
 	public String recordTimeBefore;
 	public String recordTimeAfter;
-	
+
 	public boolean storeEPG;
 	public boolean storeLogAfterRecord;
 	public boolean recordVtxt;
-	
+	public boolean stopPlaybackAtRecord;
+
 	public String dirPattern;
 	public String filePattern;
-
 
 	public BOSettingsRecord(BOSettings settings) {
 		this.setSettings(settings);
 	}
-	
+
 	private void setSettingsChanged(boolean value) {
 		this.getSettings().setSettingsChanged(value);
 	}
-	
+
 	/**
 	 * @return Returns the settings.
 	 */
@@ -61,12 +56,13 @@ public class BOSettingsRecord {
 		return settings;
 	}
 	/**
-	 * @param settings The settings to set.
+	 * @param settings
+	 *            The settings to set.
 	 */
 	public void setSettings(BOSettings settings) {
 		this.settings = settings;
 	}
-	
+
 	/**
 	 * @return Returns the streamingServerPort.
 	 */
@@ -113,8 +109,7 @@ public class BOSettingsRecord {
 	 *            The streamType to set
 	 */
 	public void setJgrabberStreamType(String streamType) {
-		if (this.jgrabberStreamType == null
-				|| !this.jgrabberStreamType.equals(streamType)) {
+		if (this.jgrabberStreamType == null || !this.jgrabberStreamType.equals(streamType)) {
 			setSettingsChanged(true);
 			this.jgrabberStreamType = streamType;
 		}
@@ -166,11 +161,10 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param udrecStreamType
-	 * The jUdrecStreamType to set.
+	 *            The jUdrecStreamType to set.
 	 */
 	public void setUdrecStreamType(String streamType) {
-		if (this.udrecStreamType == null
-				|| !this.udrecStreamType.equals(streamType)) {
+		if (this.udrecStreamType == null || !this.udrecStreamType.equals(streamType)) {
 			setSettingsChanged(true);
 			this.udrecStreamType = streamType;
 		}
@@ -192,16 +186,17 @@ public class BOSettingsRecord {
 		return recordAllPids;
 	}
 	/**
-	 * @param recordAllPids The recordAllPids to set.
+	 * @param recordAllPids
+	 *            The recordAllPids to set.
 	 */
 	public void setRecordAllPids(boolean recordPids) {
-	    setSettingsChanged(true);
-	    recordAllPids = recordPids;
-		if (recordPids==true) {
+		setSettingsChanged(true);
+		recordAllPids = recordPids;
+		if (recordPids == true) {
 			this.setAc3ReplaceStereo(false);
 			this.setStereoReplaceAc3(false);
 		}
-	}	
+	}
 	/**
 	 * @return Returns the ac3ReplaceStereo.
 	 */
@@ -209,12 +204,13 @@ public class BOSettingsRecord {
 		return stereoReplaceAc3;
 	}
 	/**
-	 * @param ac3ReplaceStereo The ac3ReplaceStereo to set.
+	 * @param ac3ReplaceStereo
+	 *            The ac3ReplaceStereo to set.
 	 */
 	public void setStereoReplaceAc3(boolean value) {
-	    setSettingsChanged(true);
-	    stereoReplaceAc3 = value;
-		if (stereoReplaceAc3==true) {
+		setSettingsChanged(true);
+		stereoReplaceAc3 = value;
+		if (stereoReplaceAc3 == true) {
 			this.setAc3ReplaceStereo(false);
 			this.setRecordAllPids(false);
 		}
@@ -226,11 +222,11 @@ public class BOSettingsRecord {
 		return recordTimeAfter;
 	}
 	/**
-	 * @param recordTimeAfter The recordTimeAfter to set.
+	 * @param recordTimeAfter
+	 *            The recordTimeAfter to set.
 	 */
 	public void setRecordTimeAfter(String recordTimeAfter) {
-		if (this.recordTimeAfter == null
-				|| !this.recordTimeAfter.equals(recordTimeAfter)) {
+		if (this.recordTimeAfter == null || !this.recordTimeAfter.equals(recordTimeAfter)) {
 			setSettingsChanged(true);
 			this.recordTimeAfter = recordTimeAfter;
 		}
@@ -243,11 +239,10 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param recordTimeBefore
-	 * The recordTimeBefore to set.
+	 *            The recordTimeBefore to set.
 	 */
 	public void setRecordTimeBefore(String recordTimeBefore) {
-		if (this.recordTimeBefore == null
-				|| !this.recordTimeBefore.equals(recordTimeBefore)) {
+		if (this.recordTimeBefore == null || !this.recordTimeBefore.equals(recordTimeBefore)) {
 			setSettingsChanged(true);
 			this.recordTimeBefore = recordTimeBefore;
 		}
@@ -260,12 +255,12 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param ac3ReplaceStereo
-	 * The ac3ReplaceStereo to set.
+	 *            The ac3ReplaceStereo to set.
 	 */
 	public void setAc3ReplaceStereo(boolean value) {
-	    setSettingsChanged(true);
-	    ac3ReplaceStereo = value;
-		if (ac3ReplaceStereo==true) {
+		setSettingsChanged(true);
+		ac3ReplaceStereo = value;
+		if (ac3ReplaceStereo == true) {
 			this.setStereoReplaceAc3(false);
 			this.setRecordAllPids(false);
 		}
@@ -281,11 +276,10 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param udrecOptions
-	 * The udrecOptions to set.
+	 *            The udrecOptions to set.
 	 */
 	public void setUdrecOptions(String udrecOptions) {
-		if (this.udrecOptions == null
-				|| !this.udrecOptions.equals(udrecOptions)) {
+		if (this.udrecOptions == null || !this.udrecOptions.equals(udrecOptions)) {
 			setSettingsChanged(true);
 			this.udrecOptions = udrecOptions;
 		}
@@ -302,38 +296,40 @@ public class BOSettingsRecord {
 	public void setStoreLogAfterRecord(boolean storeLogAfterRecord) {
 		this.storeLogAfterRecord = storeLogAfterRecord;
 	}
-	
-    /**
-     * @return Returns the recordVtxt.
-     */
-    public boolean isRecordVtxt() {
-        return recordVtxt;
-    }
-    /**
-     * @param recordVtxt The recordVtxt to set.
-     */
-    public void setRecordVtxt(boolean recordVtxt) {
-        if (this.recordVtxt != recordVtxt) {
-      			setSettingsChanged(true);
-      			this.recordVtxt = recordVtxt;
-      		}
-    }
 
-    /**
-     * @return Returns the shutdownAfterRecord.
-     */
-    public boolean isShutdownAfterRecord() {
-        return shutdownAfterRecord;
-    }
-    /**
-     * @param shutdownAfterRecord The shutdownAfterRecord to set.
-     */
-    public void setShutdownAfterRecord(boolean shutdownAfterRecord) {
-        if (this.shutdownAfterRecord != shutdownAfterRecord) {
+	/**
+	 * @return Returns the recordVtxt.
+	 */
+	public boolean isRecordVtxt() {
+		return recordVtxt;
+	}
+	/**
+	 * @param recordVtxt
+	 *            The recordVtxt to set.
+	 */
+	public void setRecordVtxt(boolean recordVtxt) {
+		if (this.recordVtxt != recordVtxt) {
+			setSettingsChanged(true);
+			this.recordVtxt = recordVtxt;
+		}
+	}
+
+	/**
+	 * @return Returns the shutdownAfterRecord.
+	 */
+	public boolean isShutdownAfterRecord() {
+		return shutdownAfterRecord;
+	}
+	/**
+	 * @param shutdownAfterRecord
+	 *            The shutdownAfterRecord to set.
+	 */
+	public void setShutdownAfterRecord(boolean shutdownAfterRecord) {
+		if (this.shutdownAfterRecord != shutdownAfterRecord) {
 			setSettingsChanged(true);
 			this.shutdownAfterRecord = shutdownAfterRecord;
 		}
-    }
+	}
 
 	public void setFilePattern(String filePattern) {
 		if (this.filePattern == null || !filePattern.equals(this.filePattern)) {
@@ -355,5 +351,15 @@ public class BOSettingsRecord {
 
 	public String getFilePattern() {
 		return filePattern;
+	}
+
+	public boolean isStopPlaybackAtRecord() {
+		return stopPlaybackAtRecord;
+	}
+	public void setStopPlaybackAtRecord(boolean stopPlaybackAtRecord) {
+		if (this.stopPlaybackAtRecord != stopPlaybackAtRecord) {
+			this.stopPlaybackAtRecord = stopPlaybackAtRecord;
+			setSettingsChanged(true);
+		}
 	}
 }

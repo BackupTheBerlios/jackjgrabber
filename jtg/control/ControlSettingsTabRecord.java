@@ -68,6 +68,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.getTab().getCbStoreEPG().setSelected(this.getSettings().isStoreEPG());
 		this.getTab().getCbStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
 		this.getTab().getCbShutdownAfterRecord().setSelected(this.getSettings().isShutdownAfterRecord());
+		this.getTab().getCbStopPlaybackAtRecord().setSelected(this.getSettings().isStopPlaybackAtRecord());
 		this.getTab().getFilePattern().setText(getSettings().getFilePattern());
 		this.getTab().getDirPattern().setText(getSettings().getDirPattern());
 		this.initializeAudioSettings();
@@ -141,6 +142,10 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			}
 			if (action.equals("rbStereoReplaceAc3")) {
 				this.getSettings().setStereoReplaceAc3(((JRadioButton) e.getSource()).isSelected());
+				break;
+			}
+			if (action.equals("cbStopPlaybackAtRecord")) {
+				this.getSettings().setStopPlaybackAtRecord(((JCheckBox) e.getSource()).isSelected());
 				break;
 			}
 			if (action.equals("recordVtxt")) {
