@@ -34,17 +34,17 @@ public class ControlMain {
 	static SerBoxControl box;
 	static int CurrentBox=0;
 	
-	static Logger mainLogger;
-	static SerLogAppender logAppender;
+	private Logger mainLogger;
+	private SerLogAppender logAppender;
 	
 	public static void main( String args[] ) {
 		ControlMain control = new ControlMain();
 		control.setView(new GuiMainView(control));
 		control.startLogger();
-		getLogAppender().setView(control.getView());
+		control.getLogAppender().setView(control.getView());
 		control.init();
 		control.initializeTabControls();
-		getMainLogger().info("Anwendung gestartet");
+		control.getMainLogger().info("Anwendung gestartet");
 	};
 	
 	private void init() {
@@ -79,7 +79,7 @@ public class ControlMain {
 		try {
 			setLogAppender(new SerLogAppender(layout));
 			getLogAppender().setMaxBackupIndex(3); //Number of max Backup-Files
-			getLogAppender().setMaximumFileSize(500);
+			getLogAppender().setMaxFileSize("500KB");
 			BasicConfigurator.configure(getLogAppender());
 		} catch (IOException e) {}
 	}
@@ -206,19 +206,19 @@ public class ControlMain {
 	/**
 	 * @return Returns the logger.
 	 */
-	public static Logger getMainLogger() {
+	private Logger getMainLogger() {
 		return mainLogger;
 	}
 	/**
 	 * @param logger The logger to set.
 	 */
-	public static void setMainLogger(Logger logger) {
-		ControlMain.mainLogger = logger;
+	private void setMainLogger(Logger logger) {
+		mainLogger = logger;
 	}
 	/**
 	 * @return SerLogAppender
 	 */
-	public static SerLogAppender getLogAppender() {
+	public SerLogAppender getLogAppender() {
 		return logAppender;
 	}
 
@@ -226,8 +226,8 @@ public class ControlMain {
 	 * Sets the logAppender.
 	 * @param logAppender The logAppender to set
 	 */
-	public static void setLogAppender(SerLogAppender logAppender) {
-		ControlMain.logAppender = logAppender;
+	public void setLogAppender(SerLogAppender appender) {
+		logAppender = appender;
 	}
 
 }
