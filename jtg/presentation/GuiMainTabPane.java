@@ -61,14 +61,13 @@ public class GuiMainTabPane extends JTabbedPane {
 	 */    
 	public GuiTabProgramm getTabProgramm() {
 		if (tabProgramm == null) {
+		    ControlProgramTab control = new ControlProgramTab(this.getView());
+			tabProgramm = new GuiTabProgramm(control);
 		    if (firstIpSetted && ControlMain.getSettingsMain().getBoxList().size()>0) {
 		        ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
 		        firstIpSetted=false;
-		    }
-			ControlProgramTab control = new ControlProgramTab(this.getView());
-			tabProgramm = new GuiTabProgramm(control);
+		    } 
 			new Thread(control).start();
-			control.reInitStreamingServer();
 		}
 		return tabProgramm;
 	}

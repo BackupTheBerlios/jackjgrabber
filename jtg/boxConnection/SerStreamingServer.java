@@ -31,24 +31,17 @@ import org.dom4j.io.SAXReader;
 
 import service.SerXMLConverter;
 import control.ControlMain;
-import control.ControlProgramTab;
 
 
 public class SerStreamingServer extends Thread {
 	
-	int port;
-	ServerSocket server;
-	public boolean isRunning = false;
-	ControlProgramTab controlProgramTab;
-	
-	public SerStreamingServer(int port, ControlProgramTab control) {
-		this.setPort(port);
-		controlProgramTab = control;
-	}
-	
+	private static ServerSocket server;
+	public static boolean isRunning = false;
+
 	public void run() {
+	    int port = Integer.parseInt(ControlMain.getSettingsRecord().getStreamingServerPort());
 		try {
-			server = new ServerSocket(this.getPort());
+			server = new ServerSocket(port);
 			isRunning=true;
 			Logger.getLogger("SerStreamingServer").info("Start Streaming-Server");
 			Socket socket = server.accept();
@@ -56,10 +49,9 @@ public class SerStreamingServer extends Thread {
 		} catch (IOException e) {
 			if (!isRunning) {
 			    isRunning=false;
-				Logger.getLogger("SerStreamingServer").error(ControlMain.getProperty("err_startServer")+port);
-				controlProgramTab.stopStreamingServer();
 			}	
 		} catch (DocumentException e) {
+		    isRunning=false;
 			Logger.getLogger("SerStreamingServer").error("Recording failed");	
 		}
 	}
@@ -75,33 +67,24 @@ public class SerStreamingServer extends Thread {
 		
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		if (recordArgs.getCommand().equals("stop") ) {
-			controlProgramTab.stopRecord();
+		    ControlMain.getControl().getView().getTabProgramm().stopStreamingServerModus();
+		    ControlMain.getControl().getView().getTabProgramm().getControl().stopRecord();
 		}
 		if (recordArgs.getCommand().equals("record")) {
 		    recordArgs.setQuickRecord(false);
 			recordArgs.checkRecordPids();
 			recordArgs.checkTitle();
-			controlProgramTab.startRecord(recordArgs);
+			ControlMain.getControl().getView().getTabProgramm().startStreamingServerModus();
+			ControlMain.getControl().getView().getTabProgramm().getControl().startRecord(recordArgs);
 		}
 		server.close();  //server restart
 		this.run();
 	}
-	
-	/**
-	 * @return Returns the port.
-	 */
-	public int getPort() {
-		return port;
-	}
-	/**
-	 * @param port The port to set.
-	 */
-	public void setPort(int port) {
-		this.port = port;
-	}
-	public boolean stopServer() {
+
+	public static boolean stopServer() {
 		try {
 			if (server != null && server.isBound()) {
+			    isRunning=false;
 				server.close();
 				Logger.getLogger("SerStreamingServer").info("StreamingServer stopped");	
 				return true;

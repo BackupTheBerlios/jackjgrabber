@@ -77,7 +77,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	Date dateChooserDate;
 	GuiMainView mainView;
 	RecordControl recordControl;
-	SerStreamingServer streamingServerThread;
 	public static boolean tvMode;
 	boolean firstStart = true;
 
@@ -327,7 +326,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		}
 		this.getMainView().getTabProgramm().stopRecordModus();
 		this.getMainView().setSystrayDefaultIcon();
-
+		ControlMain.startStreamingServer();
 		stopRecordInInfoTab();
 	}
 
@@ -718,33 +717,19 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void startStreamingSever() {
-	    if (this.getStreamingServerThread()==null) {
-	        int port = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
-	    		setStreamingServerThread(new SerStreamingServer(port, this));
-	    		getStreamingServerThread().start();
-	    		this.getMainView().getTabProgramm().startStreamingServerModus();  
-	    }
+	    ControlMain.startStreamingServer();
 	}
 
 	public void stopStreamingServer() {
-		if (streamingServerThread != null) {
-			streamingServerThread.stopServer();
-			this.getMainView().getTabProgramm().stopStreamingServerModus();
-			streamingServerThread = null;
-		}
-	}
-
-	public void reInitStreamingServer() {
-		if (ControlMain.getSettings().getRecordSettings().isStartStreamingServer()) {
-			startStreamingSever();
-		}
+	    SerStreamingServer.stopServer();
+	    this.getMainView().getTabProgramm().stopStreamingServerModus();
 	}
 
 	/*
 	 * Kontroller der 2 Zustaende Streamingserver on>off, off>on
 	 */
 	private void actionStreamingServer() {
-		if (streamingServerThread != null) {
+		if (SerStreamingServer.isRunning) {
 			this.stopStreamingServer();
 		} else {
 			this.startStreamingSever();
@@ -853,21 +838,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	public void setPids(BOPids pids) {
 		this.pids = pids;
-	}
-
-	/**
-	 * @return Returns the streamingServerThread.
-	 */
-	public SerStreamingServer getStreamingServerThread() {
-		return streamingServerThread;
-	}
-
-	/**
-	 * @param streamingServerThread
-	 *            The streamingServerThread to set.
-	 */
-	public void setStreamingServerThread(SerStreamingServer streamingServerThread) {
-		this.streamingServerThread = streamingServerThread;
 	}
 
 	/**

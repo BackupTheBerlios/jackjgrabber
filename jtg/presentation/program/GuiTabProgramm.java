@@ -40,6 +40,7 @@ import javax.swing.table.TableColumn;
 import presentation.GuiTab;
 import presentation.GuiTableSorter;
 import service.SerIconManager;
+import boxConnection.SerStreamingServer;
 import calendar.JDateChooser;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -488,6 +489,9 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonStartServer.setActionCommand("startServer");
 			jButtonStartServer.setToolTipText(ControlMain.getProperty("buttontt_startServer"));
 			jButtonStartServer.addActionListener(this.getControl());
+			if (SerStreamingServer.isRunning) {
+			    this.startStreamingServerModus();
+			}
 		}
 		return jButtonStartServer;
 	}
@@ -637,7 +641,6 @@ public class GuiTabProgramm extends GuiTab {
 		this.getJButtonAufnahme().setEnabled(false);
 		this.getJButtonReboot().setEnabled(false);
 		this.getJButtonSelectedToTimer().setEnabled(false);
-		this.getJButtonStartServer().setEnabled(false);
 		this.getJButtonPlayback().setEnabled(false);
 		this.getJButtonShutdown().setEnabled(false);
 	}
@@ -646,7 +649,6 @@ public class GuiTabProgramm extends GuiTab {
 		this.getJButtonAufnahme().setEnabled(true);
 		this.getJButtonReboot().setEnabled(true);
 		this.getJButtonSelectedToTimer().setEnabled(true);
-		this.getJButtonStartServer().setEnabled(true);
 		this.getJButtonPlayback().setEnabled(true);
 		this.getJButtonShutdown().setEnabled(true);
 	}

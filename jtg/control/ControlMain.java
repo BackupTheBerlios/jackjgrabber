@@ -53,6 +53,7 @@ import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
+import boxConnection.SerStreamingServer;
 
 /**
  * Startklasse, Start der Anwendung Deklaration der globalen Variablen
@@ -90,6 +91,7 @@ public class ControlMain {
 		setResourceBundle();
 		detectActiveBox();
 		detectImage();
+		startStreamingServer();
 		control = new ControlMainView();
 		control.initialize();
 		if (screen != null) {
@@ -99,8 +101,12 @@ public class ControlMain {
 			}
 			screen.dispose();
 		}
-
-		if (getSettings().getMainSettings().isStartMinimized()) {
+		checkGuiSettings();
+		
+	};
+	
+	private static void checkGuiSettings() {
+	    if (getSettings().getMainSettings().isStartMinimized()) {
 			if (getSettings().getMainSettings().isUseSysTray()) {
 				control.getView().setVisible(false);
 			} else {
@@ -112,8 +118,13 @@ public class ControlMain {
 			control.getView().setVisible(true);
 			control.getView().requestFocus();
 		}
-
-	};
+	}
+	
+	public static void startStreamingServer() {
+	    if (getSettingsRecord().isStartStreamingServer() && !SerStreamingServer.isRunning) {
+	        new SerStreamingServer().start();
+	    }
+	}
 	
 	private static void logSystemInfo() {
 		for (int i=0; i<ControlMain.version.length; i++) {
