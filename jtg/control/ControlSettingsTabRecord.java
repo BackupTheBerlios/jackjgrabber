@@ -274,11 +274,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				ControlMain.getSettingsPath().setUdrecPath(tf.getText());
 				break;
 			}
-			if (tf.getName().equals("filePattern")) {
+			if (tf.getName().equals("tfFilePattern")) {
 				this.getSettings().setFilePattern(tf.getText());
 				break;
 			}
-			if (tf.getName().equals("dirPattern")) {
+			if (tf.getName().equals("tfDirPattern")) {
 				this.getSettings().setDirPattern(tf.getText());
 				break;
 			}

@@ -91,36 +91,43 @@ public class SerSettingsHandler {
 		
 		
 		play.setPlaybackString("d: http://$ip:31339/$vPid,$aPid");
+		play.setAlwaysUseStandardPlayback(false);
+		play.setPlaybackOptions(new ArrayList());
+
+		pathS.setUdrecPath( new File("udrec.exe").getAbsolutePath());
+		pathS.setProjectXPath(new File("ProjectX.jar").getAbsolutePath());
+		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
+		pathS.setShutdownToolPath("");
 		pathS.setSavePath( System.getProperty("user.home"));
+		
 		rec.setStartStreamingServer(true);
 		rec.setStreamingServerPort("4000");
-		main.setThemeLayout("ExperienceBlue");
-		main.setLocale("DE");
 		rec.setStreamType("PES MPEG-Packetized Elementary");
 		rec.setUdrecStreamType("PES MPEG-Packetized Elementary");
 		rec.setStartPX(true);
 		rec.setShutdownAfterRecord(false);
-		pathS.setUdrecPath( new File("udrec.exe").getAbsolutePath());
-		pathS.setProjectXPath(new File("ProjectX.jar").getAbsolutePath());
 		rec.setStreamingEngine(0);
-		rec.setRecordAllPids(true);
-		play.setAlwaysUseStandardPlayback(false);
-		main.setShowLogo(true);
-		main.setShowLogWindow(true);
-		main.setStartFullscreen(false);
-		main.setUseSysTray(false);
 		rec.setRecordTimeAfter("0");
 		rec.setRecordTimeBefore("0");
 		rec.setAc3ReplaceStereo(false);
 		rec.setStereoReplaceAc3(false);
 		rec.setUdrecOptions(new BOUdrecOptions());
 		rec.setRecordVtxt(false);
-		main.setStartVlcAtStart(false);
-		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
-		pathS.setShutdownToolPath("");
-		main.setLookAndFeel(PlasticLookAndFeel.class.getName());
+		rec.setRecordAllPids(true);
 		rec.setStoreEPG(false);
 		rec.setStoreLogAfterRecord(false);
+		rec.setDirPattern("%DATE YY-MM-DD% %TIME% %CHANNEL% %NAME%");
+		rec.setFilePattern("");
+		
+		main.setThemeLayout("ExperienceBlue");
+		main.setLocale("DE");
+		main.setShowLogo(true);
+		main.setShowLogWindow(true);
+		main.setStartFullscreen(false);
+		main.setUseSysTray(false);
+		main.setStartVlcAtStart(false);
+		main.setLookAndFeel(PlasticLookAndFeel.class.getName());
+		main.setBoxList(new ArrayList());
 		
 		ArrayList selChannels = new ArrayList();
 		String[] channels = new String[]{"13TH STREET", "CLASSICA", "DISNEY CHANNEL", "FOX KIDS", "HEIMATKANAL", "HIT24", "JUNIOR",
@@ -128,13 +135,9 @@ public class SerSettingsHandler {
 				"PREMIERE KRIMI", "PREMIERE NOSTALGIE", "PREMIERE SERIE", "PREMIERE START", "SCI FI"};
 		selChannels.addAll(Arrays.asList(channels));
 		mg.setMgSelectedChannels(selChannels);
-
-		
 		mg.setMgLoadType(ControlSettingsTabMovieGuide.MGLOADTYPE_ASK);
 		mg.setMgDefault(ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL);
 		mg.setMgStoreOriginal(false);
-		main.setBoxList(new ArrayList());
-		play.setPlaybackOptions(new ArrayList());
 		return settings;
 	}	
 }
