@@ -262,7 +262,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonMovieGuideFileChooser.setIcon(icon);			
 			jButtonMovieGuideFileChooser.setText(ControlMain.getProperty("open"));
 			jButtonMovieGuideFileChooser.setToolTipText(ControlMain.getProperty("open_mg_local"));
-			jButtonMovieGuideFileChooser.setActionCommand(ControlMain.getProperty("open"));
+			jButtonMovieGuideFileChooser.setActionCommand("movieGuidePath");
 			jButtonMovieGuideFileChooser.addActionListener(this.getControl());
 		}
 		return jButtonMovieGuideFileChooser;
