@@ -102,7 +102,7 @@ public class GuiTabProgramm extends GuiTab {
 	}
 
 	protected void initialize() {
-		FormLayout layout = new FormLayout("f:pref, 10, f:pref, 10, f:360:grow", // columns
+		FormLayout layout = new FormLayout("f:pref, 10, f:pref, 10, f:340:grow", // columns
 				"f:310:grow, 10, f:pref, 5, pref"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
@@ -164,7 +164,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelButtonsAktionen() {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
-			FormLayout layout = new FormLayout("30, 150", //columna
+			FormLayout layout = new FormLayout("30, 170", //columna
 					"pref, 5, pref, 5, pref, 5, pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
@@ -214,7 +214,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelLog() {
 		if (jPanelLog == null) {
 		    jPanelLog = new JPanel();
-			FormLayout layout = new FormLayout("88, 4, 88", //columna
+			FormLayout layout = new FormLayout("98, 4, 98", //columna
 					"pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelLog, layout);
 			CellConstraints cc = new CellConstraints();
@@ -229,7 +229,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelChannels() {
 		if (jPanelChannel == null) {
 			jPanelChannel = new JPanel();
-			FormLayout layout = new FormLayout("90,90", //column
+			FormLayout layout = new FormLayout("100,100", //column
 					"pref, pref, 4, pref, pref, min:grow, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelChannel, layout);
 			CellConstraints cc = new CellConstraints();
