@@ -249,7 +249,7 @@ public class SerFormatter {
     		Pattern find = Pattern.compile(search, Pattern.CASE_INSENSITIVE);              
     		Matcher m = find.matcher(value);                           
     		while(m.find()) {                   
-    			value = value.replaceAll(m.group(0),"<HTML><font color=blue>"+m.group(0)+"</font><HTML>");
+    			value = value.replaceAll(m.group(0),"<HTML><font color=#FF0000><b>"+m.group(0)+"</b></font><HTML>");    			
     		}
     	}
         return value;
