@@ -139,7 +139,7 @@ public class GuiTabStart extends JPanel {
         if (panelNews == null) {
             panelNews = new JPanel();
 			FormLayout layout = new FormLayout("40, 10, 600", //columna
-					"pref, 5, 120"); //rows
+					"pref, 5, f:120"); //rows
 			PanelBuilder builder = new PanelBuilder(panelNews, layout);
 			CellConstraints cc = new CellConstraints();
 			
