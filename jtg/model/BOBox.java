@@ -17,7 +17,7 @@ import control.ControlMain;
  */
 public class BOBox {
 
-	public String dboxIp = "192.168.001.110"; //Defaultwert
+	public String dboxIp; //Defaultwert
 	public String login = "root"; //Defaultwert
 	public String password = "dbox2"; //Defaultwert
 	public boolean standard = false;
