@@ -180,11 +180,12 @@ public class GuiTabProgramm extends GuiTab {
 			jTableEPG = new JTable(sorter);
 			sorter.setTableHeader(jTableEPG.getTableHeader());
 			
-			//jTableEPG.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			
 			TableColumn eventIdColumnt = jTableEPG.getColumnModel().getColumn(0);
-			jTableEPG.getTableHeader().getColumnModel().removeColumn(eventIdColumnt); 
+			jTableEPG.getTableHeader().getColumnModel().removeColumn(eventIdColumnt); //eventId ausblenden 
 
+			jTableEPG.getColumnModel().getColumn(0).setMaxWidth(50);
+			jTableEPG.getColumnModel().getColumn(1).setMaxWidth(50);
+			jTableEPG.getColumnModel().getColumn(2).setMaxWidth(60);
 			jTableEPG.getColumnModel().getColumn(3).setPreferredWidth(280);
 			jTableEPG.addMouseListener(control);
 			jTableEPG.setName("Epg");
