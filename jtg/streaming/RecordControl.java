@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-import model.BOExternalProcess;
 import model.BORecordArgs;
 
 import org.apache.log4j.Logger;

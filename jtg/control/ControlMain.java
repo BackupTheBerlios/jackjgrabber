@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
 
-import javax.swing.JFrame;
-
 import model.BOBox;
 import model.BOSettings;
 import model.BOSettingsLayout;
@@ -45,9 +43,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
-import presentation.GuiStartFrame;
 import presentation.GuiLogWindow;
 import presentation.GuiSplashScreen;
+import presentation.GuiStartFrame;
 import service.SerExternalProcessHandler;
 import service.SerIconManager;
 import service.SerLogAppender;
