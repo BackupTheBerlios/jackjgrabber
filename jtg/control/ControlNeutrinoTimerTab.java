@@ -19,8 +19,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -30,8 +28,6 @@ import java.util.Hashtable;
 
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
-
-import org.apache.log4j.Logger;
 
 import model.BOSender;
 import model.BOTimer;
@@ -43,7 +39,7 @@ import service.SerAlertDialog;
 import service.SerFormatter;
 
 
-public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemListener, ActionListener, MouseListener {
+public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
@@ -75,67 +71,97 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "deleteAll") {
-			this.actionDeleteAll();
-		}
-		if (action == "deleteAllRecordTimer") {
-			this.actionDeleteAllRecordTimer();
-		}
-		if (action == "deleteAllSystemTimer") {
-			this.actionDeleteAllSystemTimer();
-		}
-		if (action == "deleteSelectedRecordTimer") {
-			this.actionDeleteSelectedRecordTimer();
-		}
-		if (action == "deleteSelectedSystemTimer") {
-			this.actionDeleteSelectedSystemTimer();
-		}
-		if (action == "addProgramTimer") {
-			this.getTimerList()[0].add(this.buildRecordTimer());
-			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
-		}
-		if (action == "addSystemTimer") {
-			this.getTimerList()[1].add(this.buildSystemTimer());
-			this.getTab().getSystemTimerTableModel().fireTableDataChanged();
-		}
-		if (action == "reload") {
-			this.actionReload();
-		}
-		if (action == "send") {
-			this.actionSend();
+		while (true) {
+			if (action == "deleteAll") {
+				this.actionDeleteAll();
+				break;
+			}
+			if (action == "deleteAllRecordTimer") {
+				this.actionDeleteAllRecordTimer();
+				break;
+			}
+			if (action == "deleteAllSystemTimer") {
+				this.actionDeleteAllSystemTimer();
+				break;
+			}
+			if (action == "deleteSelectedRecordTimer") {
+				this.actionDeleteSelectedRecordTimer();
+				break;
+			}
+			if (action == "deleteSelectedSystemTimer") {
+				this.actionDeleteSelectedSystemTimer();
+				break;
+			}
+			if (action == "addRecordTimer") {
+				this.actionAddRecordTimer();
+				break;
+			}
+			if (action == "addSystemTimer") {
+				this.actionAddSystemTimer();
+				break;
+			}
+			if (action == "reload") {
+				this.actionReload();
+				break;
+			}
+			if (action == "send") {
+				this.actionSend();
+				break;
+			}
+			if (action == "recordTimer") {
+				this.actionRecordTimerRepeatDaysChanged(e);
+				break;
+			}
+			if (action == "systemTimer") {
+				this.actionSystemTimerRepeatDaysChanged(e);
+				break;
+			}
+			break;
 		}
 	}
+	
+	private void actionAddRecordTimer() {
+		this.getTimerList()[0].add(this.buildRecordTimer());
+		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		this.getTab().recordTimerSorter.fireTableDataChanged();
+	}
+	
+	private void actionAddSystemTimer() {
+		this.getTimerList()[1].add(this.buildSystemTimer());
+		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+		this.getTab().systemTimerSorter.fireTableDataChanged();
+	}
+	
 	/*
 	 * wird aufgerufen wenn ein Wochentag selektiert wird.
-	 * Es wird die zugehoerige Table des Radiobuttons ermittelt
-	 * um den selektierten Timer zu bekommen.
 	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
 	 * Wochentage festgestellt und gesetzt
 	 */
-	public void itemStateChanged (ItemEvent event) {
+	public void actionRecordTimerRepeatDaysChanged (ActionEvent event) {
 		JRadioButton radioButton = (JRadioButton)event.getSource();
-		if (radioButton.getName().equals("recordTimer")){
-			JTable table = this.getTab().getJTableRecordTimer();
-			int selectedRow = table.getSelectedRow();
-			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
-			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
-		} else {
-			JTable table = this.getTab().getJTableSystemTimer();
-			int selectedRow = table.getSelectedRow();
-			int modelIndex = this.getTab().systemTimerSorter.modelIndex(selectedRow);
-			BOTimer timer = (BOTimer)this.getTimerList()[1].get(modelIndex);
-			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage2));
-		}
+		BOTimer timer = this.getSelectedRecordTimer();
+		timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
+		timer.setModifiedId("modify");
 	}
 	/*
-	 * Beim jeweiligen RadioButton ist als ActionCommand die RepeatId eingestellt
+	 * wird aufgerufen wenn ein Wochentag selektiert wird.
+	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
+	 * Wochentage festgestellt und gesetzt
+	 */
+	public void actionSystemTimerRepeatDaysChanged (ActionEvent event) {
+		JRadioButton radioButton = (JRadioButton)event.getSource();
+		BOTimer timer = this.getSelectedSystemTimer();
+		timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage2));
+		timer.setModifiedId("modify");
+	}
+	/*
+	 * Beim jeweiligen RadioButton ist als Name die RepeatId eingestellt
 	 */
 	private String getRepeatOptionValue(JRadioButton[] buttons) {
 		int result=0;
 		for (int i=0; i<buttons.length; i++) {
 			if (buttons[i].isSelected()) {
-				result+=Integer.parseInt(buttons[i].getActionCommand());
+				result+=Integer.parseInt(buttons[i].getName());
 			}
 		}
 		return Integer.toString(result);
@@ -246,12 +272,7 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 	}
 	
 	private void writeTimer(BOTimer timer) throws IOException {
-		if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
-			Logger.getLogger("ControlProgramTab").info("Timer uebertragen "+timer.getInfo());
-		} else {
-			Logger.getLogger("ControlProgramTab").error(timer.getInfo());
-			throw new IOException();
-		}
+		ControlMain.getBoxAccess().writeTimer(timer);
 	}
 	
 	private void writeAllTimer(ArrayList timerList) throws IOException {
@@ -288,17 +309,12 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 	 */
 	public void mousePressed(MouseEvent me) {
 		JTable table = (JTable)me.getSource();
-		String tableName = table.getName();
-		int selectedRow = table.getSelectedRow();		
+		String tableName = table.getName();		
 		if (tableName == "recordTimerTable") {
-			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
-			this.selectRepeatDaysForRecordTimer(timer);
+			this.selectRepeatDaysForRecordTimer(this.getSelectedRecordTimer());
 		}
 		if (tableName == "systemTimerTable") {
-			int modelIndex = this.getTab().systemTimerSorter.modelIndex(selectedRow);
-			BOTimer timer = (BOTimer)this.getTimerList()[1].get(modelIndex);
-			this.selectRepeatDaysForSystemTimer(timer);
+			this.selectRepeatDaysForSystemTimer(this.getSelectedSystemTimer());
 		}
 	}
 	
@@ -432,6 +448,20 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 	private void refreshTables() {
 		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+	}
+	
+	public BOTimer getSelectedRecordTimer () {
+		JTable table = this.getTab().getJTableRecordTimer();
+		int selectedRow = table.getSelectedRow();
+		int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+		return (BOTimer)this.getTimerList()[0].get(modelIndex);
+	}
+	
+	public BOTimer getSelectedSystemTimer () {
+		JTable table = this.getTab().getJTableSystemTimer();
+		int selectedRow = table.getSelectedRow();
+		int modelIndex = this.getTab().systemTimerSorter.modelIndex(selectedRow);
+		return (BOTimer)this.getTimerList()[1].get(modelIndex);
 	}
 		
 	/**
