@@ -382,6 +382,6 @@ public class SerSettingsHandler {
 		saveUserSettings();
 		saveBoxSettings();
 		savePlaybackSettings();
-		SerXMLHandling.saveSettingsFile(new File(ControlMain.settingsFilename));
+		SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
 	}
 }
