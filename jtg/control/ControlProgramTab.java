@@ -149,7 +149,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 						this.setSelectedBouquet(bouquet);
 						this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(i);
 						this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(i2, i2);
-						this.setSelectedSender(sender);
+						//this.setSelectedSender(sender);
 						break;
 					}
 				}
@@ -562,7 +562,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
 			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(modelIndex, modelIndex);
 			BOEpg selEpg = (BOEpg) this.getSelectedSender().getEpg().get(modelIndex);
-			this.setSelectedEpg(selEpg);
+			//this.setSelectedEpg(selEpg);
 		} else {
 		    this.reInitEpgDetail();  
 		}
