@@ -245,7 +245,7 @@ public class SerXMLConverter {
 		recordArgs.setCommand(command.attributeValue("command"));
 		recordArgs.setSenderName(channelname.getStringValue());
 		recordArgs.setEpgTitle(epgtitle.getText());
-		recordArgs.setChannelId(channelId.getText());
+		recordArgs.setEventId(channelId.getText());
 		recordArgs.setEpgInfo1(epgInfo1.getText());
 		recordArgs.setEpgInfo2(epgInfo2.getText());
 		recordArgs.setEpgId(epgid.getText());

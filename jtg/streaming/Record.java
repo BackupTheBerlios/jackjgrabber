@@ -50,7 +50,6 @@ public class Record {
 	TcpReceiver tcpReceiver;
 	Socket tcpSocket;
 	String boxIp;
-//	String fileName;
 	public String avString;
 	String[] dboxArgs;	
 	
@@ -131,7 +130,7 @@ public class Record {
 			}
 		} else { 
 		    cmd.append(recordArgs.getBouquetNr()+" ");
-			cmd.append(recordArgs.getChannelId()+" ");
+			cmd.append(recordArgs.getEventId()+" ");
 		}
 
 		cmd.append("\n");

@@ -90,7 +90,7 @@ public class Record {
 		cmd.append(" ");
 		cmd.append(this.getRecordArgs().getBouquetNr());
 		cmd.append(" ");
-		cmd.append(this.getRecordArgs().getChannelId());
+		cmd.append(this.getRecordArgs().getEventId());
 		cmd.append(" ");
 		cmd.append("\n");
 		return cmd.toString();
