@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Collections;
@@ -60,6 +60,24 @@ import service.SerMovieGuide2Xml;
 import service.SerXMLHandling;
 
 
+/**
+ * @author ralph
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+/**
+ * @author ralph
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+/**
+ * @author ralph
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener, Runnable, KeyListener {
 	
 	GuiMainView mainView;
@@ -67,9 +85,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	BOMovieGuide boMovieGuide4Timer;
 	boolean searchAbHeute = true;
 
-	Hashtable titelList;
-	Hashtable controlMap;
-	Hashtable titelListAktuell;
+	HashMap titelList;
+	HashMap controlMap;
+	HashMap titelListAktuell;
 	
 	ArrayList genreList = new ArrayList();
 	ArrayList datumList = new ArrayList();
@@ -116,6 +134,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
       }		
 	}
 	
+	
+	/** 
+	 * @param keine
+	 * Es wird mit setTitelMapSelected die titelListAktuell für den heutigen Tag gebaut,
+	 * es werden die Sender/Genre-ArrayListen mittel Collections alphabetisch sortiert.
+	 * Alle ComboBoxen auf das 1 Element gesetz, weiter hin wird bei der FilmTable die 
+	 * erste Row selectiert.
+	 */
 	private void beautifyGui(){
     	setTitelMapSelected(SerFormatter.getFormatGreCal(),1);  // TitelMap für den heutigen Tag          
         Collections.sort(getSenderList());		//alphabetisch geordnet 
@@ -126,12 +152,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         getJTableFilm().getSelectionModel().setSelectionInterval(0,0); //1 Row selected
     }
-	public void actionPerformed(ActionEvent e) {
+	
+	
+	public void actionPerformed(ActionEvent e) {	
 		String action = e.getActionCommand();
 		if (action == "download") {
 			try{
 				new SerMovieGuide2Xml(null, this.getMainView()).start();
-			}catch (Exception ex){System.out.println(ex);}			
+			}catch (Exception ex){
+				Logger.getLogger("ControlMovieGuideTab").error("MovieGuide konnte nicht runtergeladen werden");
+			}			
 		}
 		if (action == "neuEinlesen") {
 			//
@@ -153,11 +183,40 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
 			findAndReplaceGui(getSelectedItemJComboBox());
 		}
-		if (action == "allDates") {		
+		if (action == "allDates") {	
+			this.getTab().getTfSuche().setText("");
+			this.getTab().getComboBoxGenre().setSelectedIndex(0);          
+		    this.getTab().getComboBoxSender().setSelectedIndex(0); 
 			reInitFilmTable(13);
 		}
 		if (action == "movieGuidePath") {
 			this.openFileChooser();
+		}
+		if (action == "clickONDatumComboBox"){
+			this.getTab().getTfSuche().setText("");
+			this.getTab().getComboBoxGenre().setSelectedIndex(0);          
+		    this.getTab().getComboBoxSender().setSelectedIndex(0); 
+			setSelectedItemJComboBox(this.getTab().getComboBoxDatum().getSelectedItem().toString());
+			reInitFilmTable(1);						
+			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
+		}
+		if (action == "clickONGenreComboBox"){
+			JComboBox comboBox = this.getTab().getComboBoxGenre();
+			this.getTab().getTfSuche().setText("");
+			if(!comboBox.getSelectedItem().toString().equals(GENRE)){
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(11);		
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+			}
+		}
+		if (action == "clickONSenderComboBox"){
+			JComboBox comboBox = this.getTab().getComboBoxSender();
+			this.getTab().getTfSuche().setText("");
+			if(!comboBox.getSelectedItem().toString().equals(SENDER)){
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(12);
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+			}
 		}
 	}
 	
@@ -175,6 +234,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	public void stateChanged(ChangeEvent event) {	
 	}
 	
+	/**
+	 * Change-Events of the GuiTabMovieGuide
+	 */
 	public void itemStateChanged (ItemEvent event) {
 		String comp = event.getSource().getClass().getName();		
 		if (comp.equals("javax.swing.JCheckBox")) {
@@ -184,8 +246,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}
 		}else{	
 			JComboBox comboBox = (JComboBox)event.getSource();
-			this.getTab().getTfSuche().setText("");
-			if (comboBox.getName().equals("jComboBoxDatum")) {			
+			if (comboBox.getName().equals("jComboBoxDatum")) {	
+				this.getTab().getTfSuche().setText("");
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 				reInitFilmTable(1);						
 				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);								
@@ -212,18 +274,35 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 	}
 	
+	
+	/**
+	 * @return int
+	 * Gib den selectierten Eintrag der SucheNach-ComboBox zurück
+	 */
 	public int getSelectedItemJComboBoxSucheNach(){
 		return SelectedItemJComboBoxSucheNach;
 	}
 	
+	/**
+	 * @param value
+	 * Setz den selectierten Eintrag der SucheNach-ComboBox
+	 */
 	private void setSelectedItemJComboBox(String value){
 		this.SelectedItemJComboBox = value;
 	}
 	
+	/**
+	 * @return String 
+	 * Gibt das selectierte Element der ComboBox zurück
+	 */
 	public String getSelectedItemJComboBox(){
 		return SelectedItemJComboBox;
 	}
 	
+	/**
+	 * @return Selectierte Row der FilmTable
+	 * 
+	 */
 	public Integer getSelectRowFilmTable(){				
 		if (this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow())<=0){
 			return new Integer(0);
@@ -231,18 +310,34 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			return new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 		}
 	}
+	/**
+	 * @return Selectierte Row der TimerTable
+	 * 
+	 */
 	public int getSelectRowTimerTable(){		    
 		return this.getTab().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
 	}
 	
+	/**
+	 * @param bomovieguide
+	 * Setzt das aktuelle BOMovieGuide Object, das was in der FilmTable selectiert würde
+	 */
 	public void setBOMovieGuide4Timer(BOMovieGuide bomovieguide){
 		boMovieGuide4Timer = bomovieguide;
 	}
+	
+	/**
+	 * @return
+	 * Gibt aktuelle BOMovieGuide Object, das was in der FilmTable selectiert würde zurück
+	 */
 	public BOMovieGuide getBOMovieGuide4Timer(){
 		return boMovieGuide4Timer;
 	}
 	
-	public void mousePressed(MouseEvent me) {
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+	 */
+	public void mousePressed(MouseEvent me) {		
 		JTable table = (JTable) me.getSource();
 		String tableName = table.getName();								
 		if (tableName == "filmTable") {				
@@ -256,9 +351,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			if(me.getClickCount()>=2){ 						
 				getTimerTableSelectToTimer();
 		 	}
-		}
+		}		
 	}
 	
+	/**
+	 * @param modelIndex
+	 * Aktuallisiert die TimerTable und die entsprechen Textfelder (Inhalt, Genre...) für
+	 * die selectierte Row(Titel) der FilmTable
+	 */
 	private void reInitTable(Integer modelIndex){
 		setBOMovieGuide4Timer((BOMovieGuide)getTitelMap().get(modelIndex));			
 		this.getTab().getTaEpisode().setText(HTML_ON+"<u>Episode:</u> "+getBOMovieGuide4Timer().getEpisode()+HTML_OFF);					
@@ -273,6 +373,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		reInitTimerTable();
 	}
 
+	/**
+	 * @param senderName
+	 * @return BOSender
+	 * Gibts das aktuelle BOSender für den seletierter Timer zurück
+	 * @throws IOException
+	 */
 	private BOSender getSenderObject(String senderName) throws IOException{
 	    BOSender sender;
         ArrayList senderList = this.getBoxSenderList();
@@ -287,6 +393,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         throw new IOException();
 	}
 	
+	/**
+	 * Erzeugt einen neuen Timer (BOTimer) aus der Selectierten Row(Titel) der TimerTable
+	 */
 	private void getTimerTableSelectToTimer(){
 		try {
             int modelIndexTimer=getSelectRowTimerTable();
@@ -314,14 +423,22 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             }
         } catch (IOException e) {
             Logger.getLogger("ControlMovieGuideTab").error("Keinen passenden Sender in der Box gefunden");
-        }
-		
+        }		
 	}
 	
+    /**
+     * @param size
+     * Setzt die Größe für die TimerTable, die Größe kommt vom BOMovieGuide Object, wird bestimt
+     * durch die Anzahl der SendeDaten des Films der in der FilmTable selectiert wurde.
+     */
     private void setTimerTableSize(int size){
     	timerTableSize = size;
     }
     
+    /**
+     * @return
+     * Gibt die Größe zurück die Aktuallisierung der TimerTable gebraucht wird
+     */
     public int getTimerTableSize(){
     	return timerTableSize;
     }
@@ -361,91 +478,182 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			String path = fc.getSelectedFile().toString();		
 			try{
 				new SerMovieGuide2Xml(path, this.getMainView()).start();
-			}catch(Exception ex){System.out.println(ex);}			
+			}catch (Exception e) {
+		           Logger.getLogger("ControlMovieGuideTab").error("MovieGuide konnte nicht eingelesen werden.");	
+			}
 		}
 	}
 	
+	/**
+	 * @return
+	 * Gibt den Namen des aktuellen MovieGuides-Documents zurück.
+	 */
 	private File getMovieGuideFile(){
 		return movieGuideFile;
 	}
 	
+	/**
+	 * @param filename
+	 * Setzt den Namen des aktuellen MovieGuides-Documents
+	 */
 	private void setMovieGuideFile(File filename){
 		movieGuideFile = filename;		
 	}
 	
+	/**
+	 * @throws DocumentException
+	 * @throws MalformedURLException
+	 * Setzt das RootElement für die movieguide.xml
+	 */
 	private void setRootElement()throws DocumentException, MalformedURLException {
 		Document doc = SerXMLHandling.readDocument(getMovieGuideFile());
 		root = doc.getRootElement();
 	}
+	
+    /**
+     * @return
+     * @throws Exception
+     * Gibt das aktuelle RootElement des aktuellen movieguide.xml zurück
+     */
     private Element getRootElement() throws Exception{
     	return root;		
     }    
 	 
+    /**
+     * @return
+     * Gibt die ArrayList für die DatumComboBox zurück
+     */
     public ArrayList getDatumList(){    	
     	return datumList;
     }
     
+    /**
+     * @param value
+     * Setzt die ArrayList für die DatumComboBox, es wird geprüft ob das Datum schon in
+     * der ArrayList ist, damit keine doppelten Eintrage rein kommen
+     */
     private void setDatumList(String value){    	
     	if(!datumList.contains((String)value)){
     		datumList.add(value);    		
     	}    	
     }
-    
+    /**
+     * @return
+     * Gibt die ArrayList für die GenreComboBox zurück
+     */
     public ArrayList getGenreList(){
     	return genreList;	
     }
-    
+    /**
+     * @param value
+     * Setzt die ArrayList für die GenreComboBox, es wird geprüft ob das Genre schon in
+     * der ArrayList ist, damit keine doppelten Eintrage rein kommen
+     */
     private void setGenreList(String value){
     	if(!genreList.contains(value) && value.length()>0){
     		genreList.add(value);
     	}
     }
-    
+    /**
+     * @return
+     * Gibt die ArrayList für die SenderComboBox zurück
+     */
     public ArrayList getSenderList(){
     	return senderList;	
     }
-    
+    /**
+     * @param value
+     * Setzt die ArrayList für die SenderComboBox, es wird geprüft ob das Sender schon in
+     * der ArrayList ist, damit keine doppelten Eintrage rein kommen
+     */
     private void setSenderList(String value){
     	if(!senderList.contains(value) && value.length()>0){
     		senderList.add(value);
     	}
     }
     
-    public Hashtable getTitelMap(){
+    /**
+     * @return
+     * TitelListMap : Zähler, BOMovieGuide-Object
+     * Gibt die aktulle TitelListMap zurück, die enthält immer die daten die entweder gesucht,
+     * oder per DatumComboBox ausgewählt würden.
+     */
+    public HashMap getTitelMap(){
     	return titelListAktuell;		
     }    	           
-    
-    public Hashtable getControlMap(){
-    	return controlMap;
-    }
-    
+   
+    /**
+     * @param key
+     * @param value
+     * Setzt einen Zähler und als value den Titel der von movieguide.xml kommt, der wird
+     * zum Vergleich genutzt damit entschieden werden kann ob der Titel schon einmal gelesen
+     * würde, wenn der Titel vorhanden ist, werden nur die zusätzlichen daten, wie SendeTermin
+     * Uhrzeit usw. ins BOMovieGuide Objeckt geschrieben.
+     */
     private void setControlMap(String key, Integer value){
     	if(!controlMap.containsKey(key)){
     		controlMap.put(key,value);
     	}
     }
    
+    /**
+     * @param bomovieguide
+     * @param value
+     * @param search
+     * @param a
+     * @return   
+     * * Es wird die gelesene TitelMap(kompletter MovieGuide), nach dem aktuellen Suchkriterium
+     * durchsucht, und in die titelListAktuell (Übergabe an die Methode setEntryInTitelMap)geschrieben, 
+     * wenn das Suchkriteriem passt kommt das komplette BOMovieGuide Object in die Map. Es wird nur die Eigenschaft verglichen
+     * die ausgewählt wurde, zb Genre, Darsteller usw.
+     */
     private int doItSearch(BOMovieGuide bomovieguide ,String value, String search, int a){
-    	if(value.indexOf(search)!=-1){    	
+    	if(value.toLowerCase().indexOf(search.toLowerCase())!=-1){    	
     		a = setEntryInTitelMap(bomovieguide,a);      		
 		}		
     	return (a);
     }
+    
+    /**
+     * @param bomovieguide
+     * @param value
+     * @param search
+     * @param a
+     * @return
+     * * Es wird die gelesene TitelMap(kompletter MovieGuide), nach dem aktuellen Suchkriterium
+     * durchsucht, und in die titelListAktuell (Übergabe an die Methode setEntryInTitelMap)geschrieben, 
+     * wenn das Suchkriteriem passt kommt das komplette BOMovieGuide Object in die Map. Es wird nur die 
+     * Eigenschaft verglichen die ausgewählt würde , aber nur wenn es sich dabei um eine Eigenschaft 
+     * als AraryListe handelt, wie die SendeTermine Datum Startzeit usw.
+     */
     private int doItSearchArray(BOMovieGuide bomovieguide ,ArrayList value, String search, int a){
     	if(bomovieguide.isValueInArray(value,search.toLowerCase())){
     		a = setEntryInTitelMap(bomovieguide,a);        		
 		}
     	return (a);
     }
+    
+    /**
+     * @param bomovieguide
+     * @param a
+     * @return
+     * Die BOMovieGuide Objecte die zum Suchkriterium passen (die Objecte werden von den doIt-Methoden)
+     * übergeben. die werden hier in die TitelListAktuell geschrieben.
+     */
     private int setEntryInTitelMap(BOMovieGuide bomovieguide,int a){    	
 		titelListAktuell.put(new Integer(a++),bomovieguide);
     	return (a++);
     }
     
-    public void setTitelMapSelected(Object searchValue,int value){  //bauen der AnzeigeMap nach Suchkriterien    	
+    /**
+     * @param searchValue
+     * @param value
+     * bauen der AnzeigeMap nach Suchkriterien  
+     */
+    public void setTitelMapSelected(Object searchValue,int value){    	
     	String search = (String)searchValue;
     	GregorianCalendar searchGC = new GregorianCalendar();
-    	titelListAktuell = new Hashtable();    	
+    	titelListAktuell = new HashMap();    	
     	Iterator i = titelList.entrySet().iterator();
     	int a = 0;   
     	if(value==1){
@@ -504,10 +712,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	}    
     }
     
+    /**
+     * 
+     */
     public void setTitelMap() {				    	    // einlesen der xml datei in Hashtable (key,BOMovieGuide Object)
     	if(this.getTitelMap()==null){				          	            			
-    			titelList = new Hashtable();
-    			controlMap = new Hashtable();
+    			titelList = new HashMap();
+    			controlMap = new HashMap();
     	}    	
     	setGenreList(GENRE);
     	setSenderList(SENDER);
@@ -563,7 +774,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}
 				}
 			}
-		} catch (Exception ex) {System.out.println(ex);}				
+    	}catch (Exception e) {
+	           Logger.getLogger("ControlMovieGuideTab").error("MovieGuide konnte nicht eingelesen werden.");	
+		}			
 	}
     
     
@@ -571,6 +784,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		return this.getTab().getJTableFilm();
 	}
     
+    /**
+     * @return
+     */
     public JTable getJTableTimer() {
 		return this.getTab().getJTableTimer();
 	}
@@ -579,16 +795,25 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		return this.getTab().getGuiMovieGuideTimerTableModel();
 	}
     
+    /**
+     * 
+     */
     public void reInitTimerTable() {
 		if (this.getMainView().getMainTabPane().tabMovieGuide != null) { 
 			this.getMovieGuideTimerTableModel().fireTableDataChanged();
 		}
 	}
     
+	/**
+	 * @return
+	 */
 	private MovieGuideFilmTableModel getMovieGuideFilmTableModel() {
 		return this.getTab().getMovieGuideFilmTableModel();
 	}
 	
+	/**
+	 * @param value
+	 */
 	public void reInitFilmTable(int value) {
 		if (this.getMainView().getMainTabPane().tabMovieGuide != null) { 
 			this.getMovieGuideFilmTableModel().fireTableDataChanged(value);
@@ -613,11 +838,21 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         }
         return boxSenderList;
     }
+    
+    /**
+     * @param table
+     * Anzeige aktualisieren der Inhalte, wenn in der TimerTable mit der Tastutur selectiert wurde
+     */
     public void  timerTableChanged(JTable table) {
 		if (table.getSelectedRow() > -1){			
 			this.getTab().getTaAudioVideo().setText(HTML_ON+"<u>Audio:</u> "+getBOMovieGuide4Timer().getTon().get(getSelectRowTimerTable())+" / <u>Video:</u> "+getBOMovieGuide4Timer().getBild().get(getSelectRowTimerTable())+HTML_OFF);
 		}			
     }
+    
+    /**
+     * @param table
+     * Neu bauen der FilmTable bei Events neues Datum , Sorter usw.
+     */
     public void filmTableChanged(JTable table) {
 		if (table.getSelectedRow() > -1){
 			reInitTable(new Integer(this.getTab().mgFilmTableSorter.modelIndex(table.getSelectedRow())));
@@ -627,6 +862,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}			
 	}
     
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+     */
     public void keyPressed(KeyEvent ke){   
     	if(ke.getKeyCode()==KeyEvent.VK_ENTER){
     		setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
