@@ -29,8 +29,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JProgressBar; 
 
-import service.SerFormatter;
-
 import model.BOMovieGuide;
 
 import com.jgoodies.forms.builder.PanelBuilder;
