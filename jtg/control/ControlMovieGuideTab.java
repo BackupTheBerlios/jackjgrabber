@@ -93,7 +93,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		String action = e.getActionCommand();
 		if (action == "download") {
 			try{
-				SerMovieGuide2Xml.readGuide("",2);
+				new SerMovieGuide2Xml("",2).run();
 			}catch (Exception ex){}			
 		}
 		if (action == "neuEinlesen") {
@@ -248,7 +248,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = fc.getSelectedFile().toString();		
 			try{
-				SerMovieGuide2Xml.readGuide(path,1);
+				new SerMovieGuide2Xml(path,1).start();
 			}catch(Exception ex){}			
 		}
 	}

@@ -6,17 +6,21 @@
  */
 package service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Hashtable;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.dom4j.*;
-
-import java.util.*;
-import java.io.*;
-import java.net.*;
 
 import control.ControlMovieGuideTab;
 
@@ -26,17 +30,23 @@ import control.ControlMovieGuideTab;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class SerMovieGuide2Xml {
+public class SerMovieGuide2Xml extends Thread{
     static Hashtable htToken = new Hashtable();
     static Document doc;
     static Element root;
     static Element movie;
+    String datei;
+    int quelle;
+    
+    public SerMovieGuide2Xml(String file,int ident) {
+    	datei = file;
+    	quelle = ident;
+    }
     
     private static void buildEmptyXMLFile() throws IOException {
         doc = DocumentHelper.createDocument();
         root = doc.addElement("movieguide");
     }
-    
     
     //public static void saveXMLFile(File path) throws IOException {
     	public static void saveXMLFile(Document doc) throws IOException {
@@ -110,7 +120,7 @@ public class SerMovieGuide2Xml {
         return value;
     }
     
-    public static void readGuide(String datei,int quelle) throws FileNotFoundException, IOException {
+    public void run()  {
         BufferedReader in = (null);
         
         try {
@@ -145,13 +155,12 @@ public class SerMovieGuide2Xml {
                     }
                 }
             }
+            saveXMLFile(doc);
         } catch (MalformedURLException e) {
             System.out.println("MalformedURLException: " + e);
         } catch (IOException e) {
             System.out.println("IOException: " + e);
-        }
-        //saveXMLFile(new File(ControlMovieGuideTab.movieGuideFileName));
-        saveXMLFile(doc);
+        }        
     }
    
     /**
