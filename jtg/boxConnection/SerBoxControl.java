@@ -35,6 +35,7 @@ import presentation.timer.GuiRecordTimerTableModel;
 import presentation.timer.GuiSystemTimerTableModel;
 import service.SerTimerHandler;
 import control.ControlMain;
+import control.ControlTimerTab;
 
 public abstract class SerBoxControl {
         
@@ -143,8 +144,8 @@ public abstract class SerBoxControl {
 	public abstract String stopRecordModus() throws IOException;
 	public abstract String [] getRepeatOptions() throws IOException;
 	public abstract String [] getTimerType() throws IOException;
-	public abstract GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view);
-	public abstract GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view);
+	public abstract GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl);
+	public abstract GuiSystemTimerTableModel getSystemTimerTabelModel(ControlTimerTab ctrl);
 	public abstract String getIcon();
 
 }

@@ -24,6 +24,7 @@ import model.BOTimerList;
 import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
+import presentation.timer.GuiBoxTimerPanel;
 import presentation.timer.GuiEnigmaRecordTimerTableModel;
 import presentation.timer.GuiEnigmaSystemTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;
@@ -496,7 +497,11 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    			botimer.description=title;
 	    			botimer.timerNumber=("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
 	    			botimer.getLocalTimer().setLocal(false);
-	    			timerList.getRecordTimerList().add(botimer);
+	    			if (((Long.parseLong(timerType) & 2) ==2) | ((Long.parseLong(timerType) & 65536) == 65536)) { //switch-Timer | System-Timer
+	    				timerList.getSystemTimerList().add(botimer);
+	    			} else {
+	    				timerList.getRecordTimerList().add(botimer);
+	    			}
 	    			startpos=endpos;
 				} 
 			}
@@ -688,13 +693,11 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return new String [] { "Switch", "Sleeptimer" };
 	}
 	
-	public GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view) {
-		ControlTimerTab control = new ControlTimerTab(view);
-		return new GuiEnigmaRecordTimerTableModel(control);
+	public GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl) {
+		return new GuiEnigmaRecordTimerTableModel(ctrl);
 	}
-	public GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view) {
-		ControlTimerTab control = new ControlTimerTab(view);
-		return new GuiEnigmaSystemTimerTableModel(control);
+	public GuiSystemTimerTableModel getSystemTimerTabelModel(ControlTimerTab ctrl) {
+		return new GuiEnigmaSystemTimerTableModel(ctrl);
 	}
 	
 	public String getIcon() {

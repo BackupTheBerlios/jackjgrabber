@@ -152,13 +152,11 @@ public class SerBoxControlDefault extends SerBoxControl {
 		return new String [] {};
 	}
 	
-	public GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view) {
-		ControlTimerTab control = new ControlTimerTab(view);
-		return new GuiEnigmaRecordTimerTableModel(control);
+	public GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl) {
+		return new GuiEnigmaRecordTimerTableModel(ctrl);
 	}
-	public GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view) {
-		ControlTimerTab control = new ControlTimerTab(view);
-		return new GuiEnigmaSystemTimerTableModel(control);
+	public GuiSystemTimerTableModel getSystemTimerTabelModel(ControlTimerTab ctrl) {
+		return new GuiEnigmaSystemTimerTableModel(ctrl);
 	}
 	public String getIcon() {
 		return ("");	

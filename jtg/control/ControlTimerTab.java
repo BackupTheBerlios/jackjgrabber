@@ -292,7 +292,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	
 	public String convertShortEventRepeat(String shortString){
 		int number = Integer.parseInt(shortString);
-    	if (number >5) {
+    	if (number > (getRepeatOptions().length-1)) {
     		return ControlMain.getProperty("weekdays"); 
     	}
 		return getRepeatOptions()[number];

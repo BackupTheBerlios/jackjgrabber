@@ -138,7 +138,7 @@ public class GuiBoxTimerPanel extends JPanel {
 	public JTable getJTableRecordTimer() {
 		if (jTableRecordTimer == null) {
 			
-			recordTimerTableModel = ControlMain.getBoxAccess().getRecordTimerTabelModel(control.getMainView());
+			recordTimerTableModel = ControlMain.getBoxAccess().getRecordTimerTabelModel(control);
 			recordTimerSorter = new GuiTimerTableSorter(recordTimerTableModel);
 			jTableRecordTimer = new JTable(recordTimerSorter);
 			recordTimerSorter.setTableHeader(jTableRecordTimer.getTableHeader());
@@ -191,7 +191,7 @@ public class GuiBoxTimerPanel extends JPanel {
 
 	public JTable getJTableSystemTimer() {
 		if (jTableSystemTimer == null) {
-			systemTimerTableModel =  ControlMain.getBoxAccess().getSystemTimerTabelModel(control.getMainView());			
+			systemTimerTableModel =  ControlMain.getBoxAccess().getSystemTimerTabelModel(control);			
 			systemTimerSorter = new GuiTimerTableSorter(systemTimerTableModel);
 			jTableSystemTimer = new JTable(systemTimerSorter);
 			systemTimerSorter.setTableHeader(jTableSystemTimer.getTableHeader());

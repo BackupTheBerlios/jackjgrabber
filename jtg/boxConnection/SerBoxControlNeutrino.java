@@ -460,13 +460,11 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public String [] getTimerType() throws IOException {
 		return new String [] { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "RECORD", "REMIND", "SLEEPTIMER"};
 	}
-	public GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view) {
-		ControlTimerTab control = new ControlTimerTab(view);
-		return new GuiNeutrinoRecordTimerTableModel(control);
+	public GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl) {
+		return new GuiNeutrinoRecordTimerTableModel(ctrl);
 	}
-	public GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view) {
-		ControlTimerTab control = new ControlTimerTab(view);
-		return new GuiNeutrinoSystemTimerTableModel(control);
+	public GuiSystemTimerTableModel getSystemTimerTabelModel(ControlTimerTab ctrl) {
+		return new GuiNeutrinoSystemTimerTableModel(ctrl);
 	}
 	public String getIcon() {
 		return ("ico/neutrino-logo.jpg");	
