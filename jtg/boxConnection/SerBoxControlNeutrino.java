@@ -325,12 +325,14 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             botimer.eventRepeatId=result[2];
             //Abwärtskompatibilität gewährleisten. repeatCount erst in Images seit 12.2004 vorhanden
             try {
-                long stop = SerFormatter.formatUnixDate(result[6]).getTimeInMillis();
+                long stop = Long.parseLong(result[6])*1000;
                 long now = new GregorianCalendar().getTimeInMillis(); 
-                if (stop<now) {
+                if (stop>now) {
                     botimer.repeatCount=result[3];
                     botimer.announceTime=result[4];
                     index=1;
+                } else {
+                    botimer.announceTime=result[3];
                 }
             } catch (Exception ex) {
                 botimer.announceTime=result[3];
