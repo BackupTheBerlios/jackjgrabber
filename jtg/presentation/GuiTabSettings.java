@@ -310,7 +310,7 @@ public class GuiTabSettings extends JPanel {
 			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(140);
 			jTableBoxSettings.getColumnModel().getColumn(1).setPreferredWidth(100);
 			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(80);
-			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer( new GuiBoxTableCellRenderer(control));
+			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer( new GuiBoxSettingsTableCellRenderer(control));
 		}
 		return jTableBoxSettings;
 	}
