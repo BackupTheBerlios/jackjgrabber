@@ -24,6 +24,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	ArrayList senderList;
 	GuiNeutrinoTimerPanel tab;
 	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "wochentage" };
+	public String[] timerType = { "Shutdown", "Umschalten", "Standby", "Erinnerung", "Sleep-Timer"};
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -33,7 +34,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 		this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
 		try {
 			this.setTimerList(ControlMain.getBoxAccess().getTimer());
-			this.getTab().getTimerTableModel().fireTableDataChanged();
+			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
