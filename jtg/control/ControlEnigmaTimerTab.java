@@ -161,19 +161,21 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	}
 	
 	private void actionDeleteSelectedRecordTimer() {
-		int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
+	    int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList()[0];
 		for (int i=rows.length-1; 0<=i; i--) {
-			BOTimer timer = (BOTimer)timerList.get(rows[i]);
+		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
+			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
-				timerList.remove(i);
+				timerList.remove(modelIndex);
 				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
-				SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}
 		}
 	}
+	
 	
 	private void actionReload() {
 		try {
