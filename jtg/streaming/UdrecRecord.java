@@ -99,7 +99,7 @@ public class UdrecRecord  extends Record {
         return null;
     }
 	
-    public String[] getFiles() {
+    public Object[] getFiles() {
     	File[] files = recordControl.getDirectory().listFiles();
     	String[] fullPathFiles = new String[files.length];
     	for (int i=0; i<files.length; i++) {

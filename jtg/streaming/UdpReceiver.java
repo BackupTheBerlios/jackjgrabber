@@ -40,7 +40,7 @@ public class UdpReceiver extends Thread {
 		try {
             udpSocket = new DatagramSocket(record.udpPort);
         } catch (SocketException e) {
-            Logger.getLogger("UdpReceiver").error(ControlMain.getProperty("err_udpSocket"+record.udpPort));
+            Logger.getLogger("UdpReceiver").error(ControlMain.getProperty("err_udpSocket")+" "+record.udpPort);
             e.printStackTrace();
             record.recordControl.stopRecord();
         }
@@ -71,7 +71,7 @@ public class UdpReceiver extends Thread {
 	public boolean closeSocket() {
 		udpSocket.disconnect();
 		udpSocket.close();
-		Logger.getLogger("UdpReceiver").info(ControlMain.getProperty("msg_updStop"+record.udpPort));
+		Logger.getLogger("UdpReceiver").info(ControlMain.getProperty("msg_updStop"));
 		return true;
 	}
 }
