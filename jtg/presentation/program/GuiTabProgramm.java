@@ -13,7 +13,10 @@ package presentation.program;
  *  
  */
 
+import java.awt.*;
 import java.awt.Dimension;
+import java.text.*;
+import java.util.*;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -31,6 +34,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.*;
 import javax.swing.table.TableColumn;
 
 import presentation.GuiTab;
@@ -95,6 +99,9 @@ public class GuiTabProgramm extends GuiTab {
 	private SpinnerDateModel dateModelSpinnerStopTime;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
+	private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");;
+
+	
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
 		initialize();
@@ -130,9 +137,9 @@ public class GuiTabProgramm extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(jPanelEpgDetails, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getJButtonSelectedToTimer(), 						cc.xy(3, 1));
-			builder.addSeparator(ControlMain.getProperty("label_epgDetails"), 	cc.xy(1, 1, CellConstraints.FILL, CellConstraints.TOP ));
-			builder.add(this.getJScrollPaneEPGDetail(), 						cc.xyw(1, 3, 3));
+			builder.add(this.getJButtonSelectedToTimer(), cc.xy(3, 1));
+			builder.addSeparator(ControlMain.getProperty("label_epgDetails"), cc.xy(1, 1, CellConstraints.FILL, CellConstraints.TOP));
+			builder.add(this.getJScrollPaneEPGDetail(), cc.xyw(1, 3, 3));
 		}
 		return jPanelEpgDetails;
 	}
@@ -170,11 +177,11 @@ public class GuiTabProgramm extends GuiTab {
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_actions"), cc.xywh(1, 1, 2, 1));
-			builder.add(this.getJButtonPlayback(), 			cc.xyw(1, 3, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonRefresh(),			cc.xyw(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJComboBoxBoxIP(), 			cc.xyw(2, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.addSeparator(ControlMain.getProperty("label_sserver"), 		cc.xyw(1, 7, 2));
-			builder.add(this.getJButtonStartServer(), 		cc.xyw(1, 9, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonPlayback(), cc.xyw(1, 3, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonRefresh(), cc.xyw(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJComboBoxBoxIP(), cc.xyw(2, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.addSeparator(ControlMain.getProperty("label_sserver"), cc.xyw(1, 7, 2));
+			builder.add(this.getJButtonStartServer(), cc.xyw(1, 9, 2, CellConstraints.FILL, CellConstraints.FILL));
 		}
 		return jPanelButtonsAktionen;
 	}
@@ -187,41 +194,41 @@ public class GuiTabProgramm extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(jPanelRecordInfo, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_recordInfo"), 		cc.xy(1, 1));
-			builder.add(this.getJButtonAufnahme(), 									cc.xy(1, 3));
-			builder.add(new JLabel(ControlMain.getProperty("label_stopRecord")), 	cc.xy(1, 5));
-			builder.add(this.getJSpinnerRecordStopTime(), 							cc.xy(1, 7));
-			builder.add(this.getCbShutdownAfterRecord(), 							cc.xy(1, 9));
+			builder.addSeparator(ControlMain.getProperty("label_recordInfo"), cc.xy(1, 1));
+			builder.add(this.getJButtonAufnahme(), cc.xy(1, 3));
+			builder.add(new JLabel(ControlMain.getProperty("label_stopRecord")), cc.xy(1, 5));
+			builder.add(this.getJSpinnerRecordStopTime(), cc.xy(1, 7));
+			builder.add(this.getCbShutdownAfterRecord(), cc.xy(1, 9));
 		}
 		return jPanelRecordInfo;
 	}
-	
+
 	private JPanel getJPanelBoxActions() {
 		if (jPanelBoxActions == null) {
-		    jPanelBoxActions = new JPanel();
+			jPanelBoxActions = new JPanel();
 			FormLayout layout = new FormLayout("f:pref, 5, f:pref", //columna
 					"pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelBoxActions, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_boxActions"), 		cc.xyw(1, 1, 3));
-			builder.add(this.getJButtonReboot(), 									cc.xy(1, 3));
-			builder.add(this.getJButtonShutdown(), 									cc.xy(3, 3));
+			builder.addSeparator(ControlMain.getProperty("label_boxActions"), cc.xyw(1, 1, 3));
+			builder.add(this.getJButtonReboot(), cc.xy(1, 3));
+			builder.add(this.getJButtonShutdown(), cc.xy(3, 3));
 		}
 		return jPanelBoxActions;
 	}
-	
+
 	private JPanel getJPanelLog() {
 		if (jPanelLog == null) {
-		    jPanelLog = new JPanel();
+			jPanelLog = new JPanel();
 			FormLayout layout = new FormLayout("98, 4, 98", //columna
 					"pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelLog, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_logWindow")+" (Strg+L)", 		cc.xyw(1, 1, 3));
-			builder.add(this.getJButtonClearLogArea(), 								cc.xy(3, 3));
-			builder.add(this.getJButtonSwitchLog(), 								cc.xy(1, 3));
+			builder.addSeparator(ControlMain.getProperty("label_logWindow") + " (Strg+L)", cc.xyw(1, 1, 3));
+			builder.add(this.getJButtonClearLogArea(), cc.xy(3, 3));
+			builder.add(this.getJButtonSwitchLog(), cc.xy(1, 3));
 		}
 		return jPanelLog;
 	}
@@ -235,12 +242,12 @@ public class GuiTabProgramm extends GuiTab {
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_date"), cc.xyw(1, 1, 2));
-			builder.add(this.getJDateChooser(), 						cc.xyw(1, 2, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJDateChooser(), cc.xyw(1, 2, 2, CellConstraints.FILL, CellConstraints.FILL));
 			builder.addSeparator(ControlMain.getProperty("label_zapping"), cc.xyw(1, 4, 2));
-			builder.add(this.getJComboBoxBouquets(), 					cc.xyw(1, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJScrollPaneChannels(), 					cc.xyw(1, 6, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJRadioButtonTVMode(), 					cc.xy(1, 7));
-			builder.add(this.getJRadioButtonRadioMode(), 				cc.xy(2, 7));
+			builder.add(this.getJComboBoxBouquets(), cc.xyw(1, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJScrollPaneChannels(), cc.xyw(1, 6, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJRadioButtonTVMode(), cc.xy(1, 7));
+			builder.add(this.getJRadioButtonRadioMode(), cc.xy(2, 7));
 		}
 		return jPanelChannel;
 	}
@@ -277,6 +284,16 @@ public class GuiTabProgramm extends GuiTab {
 
 			TableColumn eventIdColumnt = jTableEPG.getColumnModel().getColumn(0);
 			jTableEPG.getTableHeader().getColumnModel().removeColumn(eventIdColumnt); //eventId ausblenden
+			jTableEPG.setDefaultRenderer(Date.class, new DefaultTableCellRenderer() {
+			
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
+						int column) {
+
+					JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					l.setText(timeFormat.format((Date) value));
+					return l;
+				}
+			});
 
 			jTableEPG.getColumnModel().getColumn(0).setMaxWidth(50);
 			jTableEPG.getColumnModel().getColumn(1).setMaxWidth(50);
@@ -383,11 +400,11 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JButton getJButtonClearLogArea() {
 		if (jButtonClearLogArea == null) {
-		    jButtonClearLogArea = new JButton();
-		    jButtonClearLogArea.setText(ControlMain.getProperty("button_clearLog"));
-		    jButtonClearLogArea.setActionCommand("clearLog");
-		    jButtonClearLogArea.setToolTipText(ControlMain.getProperty("buttontt_clearLog"));
-		    jButtonClearLogArea.addActionListener(this.getControl());
+			jButtonClearLogArea = new JButton();
+			jButtonClearLogArea.setText(ControlMain.getProperty("button_clearLog"));
+			jButtonClearLogArea.setActionCommand("clearLog");
+			jButtonClearLogArea.setToolTipText(ControlMain.getProperty("buttontt_clearLog"));
+			jButtonClearLogArea.addActionListener(this.getControl());
 		}
 		return jButtonClearLogArea;
 	}
@@ -414,19 +431,19 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JButton getJButtonSwitchLog() {
 		if (jButtonSwithLog == null) {
-		    jButtonSwithLog = new JButton();
-		    if (ControlMain.getSettingsMain().isShowLogWindow()) {
-		        jButtonSwithLog.setText(ControlMain.getProperty("button_off"));   
-		    } else {
-		        jButtonSwithLog.setText(ControlMain.getProperty("button_on"));
-		    }
-		    jButtonSwithLog.setActionCommand("switchLog");
-		    jButtonSwithLog.setToolTipText(ControlMain.getProperty("buttontt_log"));
-		    jButtonSwithLog.addActionListener(this.getControl());
+			jButtonSwithLog = new JButton();
+			if (ControlMain.getSettingsMain().isShowLogWindow()) {
+				jButtonSwithLog.setText(ControlMain.getProperty("button_off"));
+			} else {
+				jButtonSwithLog.setText(ControlMain.getProperty("button_on"));
+			}
+			jButtonSwithLog.setActionCommand("switchLog");
+			jButtonSwithLog.setToolTipText(ControlMain.getProperty("buttontt_log"));
+			jButtonSwithLog.addActionListener(this.getControl());
 		}
 		return jButtonSwithLog;
 	}
-	
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -479,13 +496,13 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JCheckBox getCbShutdownAfterRecord() {
 		if (cbShutdownAfterRecord == null) {
-		    cbShutdownAfterRecord = new JCheckBox(ControlMain.getProperty("cbShutdownAfterRecord"));
-		    cbShutdownAfterRecord.setActionCommand("shutdownAfterRecord");
-		    cbShutdownAfterRecord.addActionListener(control);
+			cbShutdownAfterRecord = new JCheckBox(ControlMain.getProperty("cbShutdownAfterRecord"));
+			cbShutdownAfterRecord.setActionCommand("shutdownAfterRecord");
+			cbShutdownAfterRecord.addActionListener(control);
 		}
 		return cbShutdownAfterRecord;
 	}
-	
+
 	/**
 	 * This method initializes jTextAreaEPG
 	 * 
