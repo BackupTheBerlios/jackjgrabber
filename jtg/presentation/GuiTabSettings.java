@@ -170,7 +170,7 @@ public class GuiTabSettings extends JPanel {
 			jComboBoxTheme = new JComboBox(ControlMain.themes);
 			jComboBoxTheme.addItemListener(control);
 			jComboBoxTheme.setName("theme");
-			jComboBoxTheme.setPreferredSize(new java.awt.Dimension(105,25));
+			jComboBoxTheme.setPreferredSize(new java.awt.Dimension(105,19));
 		}
 		return jComboBoxTheme;
 	}
@@ -185,7 +185,7 @@ public class GuiTabSettings extends JPanel {
 			jComboBoxStreamType = new JComboBox(ControlMain.streamTypes);
 			jComboBoxStreamType.addItemListener(control);
 			jComboBoxStreamType.setName("streamType");
-			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(50,25));
+			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(50,19));
 		}
 		return jComboBoxStreamType;
 	}
@@ -287,7 +287,7 @@ public class GuiTabSettings extends JPanel {
 			jComboBoxLocale = new JComboBox(new BOLocale().getLocaleList().toArray());
 			jComboBoxLocale.addItemListener(control);
 			jComboBoxLocale.setName("locale");
-			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,25));
+			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,19));
 		}
 		return jComboBoxLocale;
 	}
@@ -300,7 +300,7 @@ public class GuiTabSettings extends JPanel {
 				tfServerPort = new JFormattedTextField(new MaskFormatter("####"));
 				((MaskFormatter)tfServerPort.getFormatter()).setAllowsInvalid(false);
 				((MaskFormatter)tfServerPort.getFormatter()).setOverwriteMode(true);
-				tfServerPort.setPreferredSize(new java.awt.Dimension(40,22));
+				tfServerPort.setPreferredSize(new java.awt.Dimension(40,19));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -350,7 +350,7 @@ public class GuiTabSettings extends JPanel {
 		if (jTextFieldRecordSavePath == null) {
 			jTextFieldRecordSavePath = new JTextField();
 			jTextFieldRecordSavePath.addActionListener(control);
-			jTextFieldRecordSavePath.setPreferredSize(new Dimension(340, 22));
+			jTextFieldRecordSavePath.setPreferredSize(new Dimension(340, 19));
 			jTextFieldRecordSavePath.setEditable(false);
 		}
 		return jTextFieldRecordSavePath;
@@ -364,7 +364,7 @@ public class GuiTabSettings extends JPanel {
 			jTextFieldPlaybackString.setActionCommand("playbackString");
 			jTextFieldPlaybackString.addActionListener(this.getControl());
 			jTextFieldPlaybackString.addFocusListener(control);
-			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 22));
+			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 19));
 		}
 		return jTextFieldPlaybackString;
 	}
