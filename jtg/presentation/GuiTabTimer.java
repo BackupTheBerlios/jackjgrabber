@@ -8,7 +8,6 @@ package presentation;
 
 import javax.swing.JPanel;
 
-import control.ControlProgramTab;
 import control.ControlTimerTab;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -25,7 +24,7 @@ public class GuiTabTimer extends GuiTab {
 
 	private JPanel jPanelTimerListe = null;
 	private ControlTimerTab control;
-	public GuiTimerTableModel TimerTableModel;
+	public GuiTimerTableModel timerTableModel;
 	private JPanel jPanelAktionen = null;
 	private JTable jTableTimer = null;
 	private JScrollPane jScrollPaneTimerTable = null;
@@ -130,9 +129,10 @@ public class GuiTabTimer extends GuiTab {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */    
-	private JTable getJTableTimer() {
+	public JTable getJTableTimer() {
 		if (jTableTimer == null) {
-			jTableTimer = new JTable(TimerTableModel);
+			timerTableModel = new GuiTimerTableModel(control);
+			jTableTimer = new JTable(timerTableModel);
 		}
 		return jTableTimer;
 	}
@@ -221,12 +221,12 @@ public class GuiTabTimer extends GuiTab {
 		return jPanelPids;
 	}
 	public GuiTimerTableModel getTimerTableModel() {
-		return TimerTableModel;
+		return timerTableModel;
 	}
 	/**
 	 * @param senderTableModel The senderTableModel to set.
 	 */
 	public void setTimerTableModel(GuiTimerTableModel TimerTableModel) {
-		this.TimerTableModel = TimerTableModel;
+		this.timerTableModel = TimerTableModel;
 	}
        }
