@@ -56,6 +56,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
     public void initialize() {
         this.getTab().getTfServerPort().setText(this.getSettings().getStreamingServerPort());
         this.getTab().getJTextFieldRecordSavePath().setText(this.getSettings().getSavePath());
+        this.getTab().getJTextFieldProjectXPath().setText(this.getSettings().getProjectXPath());
         this.getTab().getCbStartStreamingServer().setSelected(this.getSettings().isStartStreamingServer());
         this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
         this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
@@ -109,6 +110,9 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		if (action == "udrec") {
 			this.getSettings().setStreamingEngine(1);
 			this.initializeUdrecEngine();
+		}
+		if (action == "projectxPath") {
+			this.openProjectXPathFileChooser();
 		}
 	}
 	public void keyTyped(KeyEvent event) {}
@@ -210,6 +214,30 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				ControlMain.getSettings().setSavePath(path);
 			}
 	}
+	
+	private void openProjectXPathFileChooser() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathProjectX"));
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		FileFilter filter = new FileFilter(){
+			public boolean accept(File f){
+				return (f.getName().endsWith("ProjectX.jar") || f.isDirectory() );
+			}
+			public String getDescription(){
+				return "ProjectX.jar";
+			}
+		};
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showSaveDialog( null ) ;
+	
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+			String path = chooser.getSelectedFile().toString();
+			this.getTab().getJTextFieldProjectXPath().setText(path);
+			ControlMain.getSettings().setProjectXPath(path);	
+		}
+	}
+	
 	
 	private void openUdrecPathFileChooser() {
 		JFileChooser chooser = new JFileChooser();

@@ -46,6 +46,7 @@ public class BOSettings {
 	public boolean ac3ReplaceStereo;
 	public String savePath;
 	public String udrecPath;
+	public String projectXPath;
 	public String udrecOptions;
 	public String playbackString;
 	public String jgrabberStreamType; //PES, TS, ES
@@ -530,6 +531,21 @@ public class BOSettings {
 		if (this.lookAndFeel == null || !this.lookAndFeel.equals(lookAndFeel)) {
 			setSettingsChanged(true);
 			this.lookAndFeel = lookAndFeel;
+		}
+	}
+	/**
+	 * @return Returns the projectXPath.
+	 */
+	public String getProjectXPath() {
+		return projectXPath;
+	}
+	/**
+	 * @param projectXPath The projectXPath to set.
+	 */
+	public void setProjectXPath(String projectXPath) {
+		if (this.projectXPath == null || !this.projectXPath.equals(projectXPath)) {
+			setSettingsChanged(true);
+			this.projectXPath = projectXPath;
 		}
 	}
 }

@@ -53,10 +53,12 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JComboBox jComboBoxStreamType = null;	
 	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldUdrecPath;
+	private JTextField jTextFieldProjectXPath;
 	private JTextField jTextFieldPlaybackString = null;
 	private JTextField jTextFieldUdrecOptions = null;
-	private JButton jButtonRecordPathFileChooser;
-	private JButton jButtonUdrecPathFileChooser;
+	private JButton jButtonRecordPathFileChooser = null;
+	private JButton jButtonUdrecPathFileChooser = null;
+	private JButton jButtonProjectXPathFileChooser = null;
 	private JRadioButton jRadioButtonUdrec;
 	private JRadioButton jRadioButtonJGrabber;
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
@@ -93,15 +95,19 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					"pref, 10, pref:grow, 5, pref",	 		//columns 
-			  		"pref, pref, pref");		//rows
+			  		"pref, pref, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),		cc.xywh	(1, 1, 5, 1));
 			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 2));
-			builder.add(this.getJTextFieldRecordSavePath(),								cc.xy	(3, 2));
-			builder.add(this.getJButtonRecordPathFileChooser(),							cc.xy	(5, 2));
-			builder.add(this.getCbStartPX(),											cc.xywh	(1, 3, 3, 1));
+			builder.add(this.getJTextFieldRecordSavePath(),									cc.xy	(3, 2));
+			builder.add(this.getJButtonRecordPathFileChooser(),								cc.xy	(5, 2));
+			builder.add(this.getCbStartPX(),															cc.xywh	(1, 3, 3, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),		cc.xy	(1, 4));
+			builder.add(this.getJTextFieldProjectXPath(),											cc.xy	(3, 4));
+			builder.add(this.getJButtonProjectXPathFileChooser(),								cc.xy	(5, 4));
+			
 		}
 		return panelRecordSettings;
 	}
@@ -248,6 +254,19 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return jButtonUdrecPathFileChooser;
 	}
+	
+	/**
+	 * @return Returns the jButtonProjectXPathFileChooser.
+	 */
+	public JButton getJButtonProjectXPathFileChooser() {
+		if (jButtonProjectXPathFileChooser == null) {
+			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
+			jButtonProjectXPathFileChooser = new JButton(icon);
+			jButtonProjectXPathFileChooser.setActionCommand("projectxPath");
+			jButtonProjectXPathFileChooser.addActionListener(control);
+		}
+		return jButtonProjectXPathFileChooser;
+	}
 	/**
 	 * @return Returns the jTextFieldRecordSavePath.
 	 */
@@ -271,6 +290,19 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return jTextFieldUdrecPath;
 	}
+	
+	/**
+	 * @return Returns the jTextFieldProjectXPath.
+	 */
+	public JTextField getJTextFieldProjectXPath() {
+		if (jTextFieldProjectXPath == null) {
+			jTextFieldProjectXPath = new JTextField();
+			jTextFieldProjectXPath.setPreferredSize(new Dimension(340, 19));
+			jTextFieldProjectXPath.setEditable(false);
+		}
+		return jTextFieldProjectXPath;
+	}
+	
 	/**
 	 * @return Returns the jTextFieldPlaybackString.
 	 */

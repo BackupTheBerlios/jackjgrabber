@@ -21,14 +21,13 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import model.BORecordArgs;
+
 import org.apache.log4j.Logger;
 
 import service.SerFormatter;
-
 import control.ControlMain;
 import control.ControlProgramTab;
-import control.ControlProjectXTab;
-import model.BORecordArgs;
 
 
 public class RecordControl extends Thread
@@ -99,8 +98,8 @@ public class RecordControl extends Thread
 	}
 	
 	public void startProjectX() {
-		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), record.getFiles());
-		control.initialize();
+//		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), record.getFiles());
+//		control.initialize();
 	}
 	
 	public String getFileName() {

@@ -22,10 +22,9 @@ import javax.swing.JTabbedPane;
 
 import control.ControlAboutTab;
 import control.ControlMain;
-import control.ControlProgramTab;
-import control.ControlProjectXTab;
-import control.ControlSettingsTab;
 import control.ControlMovieGuideTab;
+import control.ControlProgramTab;
+import control.ControlSettingsTab;
 
 public class GuiMainTabPane extends JTabbedPane {
 
@@ -33,7 +32,6 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiTabSettings tabSettings = null;
 	public GuiTabAbout tabAbout = null;
 	public GuiTimerPanel tabTimer=null;
-	public JPanel tabProjectX=null;
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
 	int index;
@@ -89,18 +87,6 @@ public class GuiMainTabPane extends JTabbedPane {
 	}
 	
 	/**
-	 * Aufbau des Tabs ProjectX	
-	 * Keine Parameter, da Start nicht nach einer Aufnahme
-	 */    
-	public JPanel getTabProjectX() {
-		if (tabProjectX == null) {
-			ControlProjectXTab control = new ControlProjectXTab(this.getView(), null);
-			control.initialize();
-		}
-		return tabProjectX;
-	}	
-
-	/**
 	 * @return Returns the tabAbout.
 	 */
 	public GuiTabAbout getTabAbout() {
@@ -143,13 +129,5 @@ public class GuiMainTabPane extends JTabbedPane {
 	 */
 	public void setIndex(int index) {
 		this.index = index;
-	}
-	/**
-	 * Sets the tabProjectX.
-	 * @param tabProjectX 
-	 * Tab wird nach Aufnahme (falls Muxen eingestellt) oder bei Betreten gesetzt 
-	 */
-	public void setTabProjectX(JPanel tabProjectX) {
-		this.tabProjectX = tabProjectX;
 	}
 }

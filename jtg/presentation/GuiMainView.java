@@ -160,7 +160,6 @@ public class GuiMainView extends JFrame {
 			mainTabPane.addTab(ControlMain.getProperty("tab_program"), mainTabPane.getTabProgramm());
 			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), new JPanel());
 			mainTabPane.addTab("MovieGuide", new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_projectx"), new JPanel());
 			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), new JPanel());
 			mainTabPane.addTab(ControlMain.getProperty("tab_about"), new JPanel());
 		}
@@ -241,10 +240,7 @@ public class GuiMainView extends JFrame {
 	public GuiTabSettings getTabSettings() {
 		return this.getMainTabPane().getTabSettings();
 	}
-	    
-	public JPanel getTabProjectX() {
-		return this.getMainTabPane().getTabProjectX();
-	}
+	   
 	public GuiTabAbout getTabAbout() {
 		return this.getMainTabPane().getTabAbout();
 	}

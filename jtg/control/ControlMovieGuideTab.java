@@ -235,12 +235,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	
 	private void getTimerTableSelectToTimer(){
 		int modelIndexTimer=getSelectRowTimerTable();
-		/*
+		
 		BOTimer botimer = new BOTimer();  //FIXME timer aufbauen			
 		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60*1000*-1;
 		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60*1000;
 		int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*60*1000*-1;
-		int modelIndexTimer=getSelectRowTimerTable();
+
 		
 		// timer
 			botimer.setModifiedId("new");
@@ -258,7 +258,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeAnnounce)));		
 		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore)));
 		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter)));
-		*/
+		
 		System.out.println(getBOMovieGuide4Timer().getTitel());
 		System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
 		System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);

@@ -52,6 +52,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"udrecStreamType", "PES MPEG-Packetized Elementary");
 		setElementInElement(root,"startPX", "true");
 		setElementInElement(root,"udrecPath", new File("udrec.exe").getAbsolutePath());
+		setElementInElement(root,"projectXPath", new File("ProjectX.jar").getAbsolutePath());
 		setElementInElement(root,"engine", "0");
 		setElementInElement(root,"recordAllPids", "true");
 		setElementInElement(root,"useStandardPlayback", "false");
