@@ -126,12 +126,15 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	/**
 	 * Select-Event der Bouquet-Combobox
-	 * Setzen des aktuellen Bouquets 
+	 * Setzen des aktuellen Bouquets, Selektion des 1. Senders
 	 */
 	public void itemStateChanged( ItemEvent e ) {
 		JComboBox selectedChoice = (JComboBox)e.getSource();
 		this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(selectedChoice.getSelectedIndex()));
 		this.reInitSender();
+		
+		this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(0,0);
+		this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(0));
       }
 	
 	/**
@@ -204,10 +207,15 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	}
 	/**
 	 * Setzen des aktuellen Senders, und zeigen des richtigen EPG
+	 * Setze die Selektion des EPG-Tables an die 1. Zeile
 	 */
 	public void setSelectedSender(BOSender selectedSender) {
 		this.selectedSender = selectedSender;
 		this.reInitEpg();
+		
+		this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(0,0);
+		BOEpg epg = (BOEpg)this.getSelectedSender().getEpg().get(0);
+		this.setSelectedEpg(epg.getEventId());
 	}
 	/**
 	 * @return Returns the box.
