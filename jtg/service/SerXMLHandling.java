@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.*;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -31,10 +30,10 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import com.jgoodies.plaf.plastic.*;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 
-import control.*;
 import control.ControlMain;
+import control.ControlSettingsTabMovieGuide;
 
 
 public class SerXMLHandling {
@@ -66,6 +65,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"recordTimeBefore", "0");
 		setElementInElement(root,"recordTimeAfter", "0");
 		setElementInElement(root,"ac3ReplaceStereo", "false");
+		setElementInElement(root,"stereoReplaceAc3", "false");
 		setElementInElement(root,"udrecOptions", "");
 		setElementInElement(root,"recordVtxt", "false");
 		setElementInElement(root,"startVlc", "false");

@@ -27,6 +27,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -55,19 +56,29 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
         this.getTab().getCbStartStreamingServer().setSelected(this.getSettings().isStartStreamingServer());
         this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
         this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
-        this.getTab().getCbRecordAllPids().setSelected(this.getSettings().isRecordAllPids());
         this.getTab().getCbRecordVtxt().setSelected(this.getSettings().isRecordVtxt());
         this.getTab().getJSpinnerRecordMinsBefore().setValue(Integer.valueOf(this.getSettings().getRecordTimeBefore()));
         this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
         this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions());
-        this.getTab().getCbAC3ReplaceStereo().setSelected(this.getSettings().isAc3ReplaceStereo());
         this.getTab().getCbStoreEPG().setSelected(this.getSettings().isStoreEPG());
         this.getTab().getCbStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
+        this.initializeAudioSettings();
 		this.initializeStreamingEngine();
+    }
+    
+    private void initializeAudioSettings() {
+        if (this.getSettings().isRecordAllPids()) {
+            this.getTab().getJRadioButtonRecordAllPids().setSelected(true);   
+        }
+        if (this.getSettings().isAc3ReplaceStereo()) {
+            this.getTab().getJRadioButtonAC3ReplaceStereo().setSelected(true);
+        }
+        if (this.getSettings().isStereoReplaceAc3()) {
+            this.getTab().getJRadioButtonStereoReplaceAc3().setSelected(true);
+        }
     }
 
     private void initializeStreamingEngine() {
-		String streamType;
 		if (this.getSettings().getStreamingEngine()==0) {
 			this.initializeJGrabberEngine();
 		} else {
@@ -112,13 +123,17 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		  			this.getSettings().setStoreLogAfterRecord(((JCheckBox)e.getSource()).isSelected());
 		  			break;
 		  		}
-		  		if (action.equals("cbAC3ReplaceStereo")) {
-		  				this.getSettings().setAc3ReplaceStereo(((JCheckBox)e.getSource()).isSelected());
-		  				break;
+		  		if (action.equals("rbRecordAllPids")) {
+	  				this.getSettings().setRecordAllPids(((JRadioButton)e.getSource()).isSelected());
+	  				break;
 		  		}
-		  		if (action.equals("recordAllPids")) {
-		  				this.getSettings().setRecordAllPids(((JCheckBox)e.getSource()).isSelected());
-		  				break;
+		  		if (action.equals("rbAC3ReplaceStereo")) {
+	  				this.getSettings().setAc3ReplaceStereo(((JRadioButton)e.getSource()).isSelected());
+	  				break;
+		  		}
+		  		if (action.equals("rbStereoReplaceAc3")) {
+	  				this.getSettings().setStereoReplacaAc3(((JRadioButton)e.getSource()).isSelected());
+	  				break;
 		  		}
 		  		if (action.equals("recordVtxt")) {
 		  				this.getSettings().setRecordVtxt(((JCheckBox)e.getSource()).isSelected());

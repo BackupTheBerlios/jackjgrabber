@@ -28,6 +28,7 @@ public class BOSettingsRecord {
 	public boolean startPX;
 	public boolean recordAllPids;
 	public boolean ac3ReplaceStereo;
+	public boolean stereoReplaceAc3;
 	public String udrecOptions;
 	
 	public String jgrabberStreamType; //PES, TS, ES
@@ -151,7 +152,6 @@ public class BOSettingsRecord {
 			setSettingsChanged(true);
 			this.streamingEngine = engine;
 		}
-
 	}
 	/**
 	 * @return Returns the jUdrecStreamType.
@@ -161,7 +161,7 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param udrecStreamType
-	 *            The jUdrecStreamType to set.
+	 * The jUdrecStreamType to set.
 	 */
 	public void setUdrecStreamType(String streamType) {
 		if (this.udrecStreamType == null
@@ -187,20 +187,33 @@ public class BOSettingsRecord {
 		return recordAllPids;
 	}
 	/**
-	 * @param recordAllPids
-	 *            The recordAllPids to set.
+	 * @param recordAllPids The recordAllPids to set.
 	 */
 	public void setRecordAllPids(boolean recordPids) {
-		if (this.recordAllPids != recordPids) {
-			setSettingsChanged(true);
-			this.recordAllPids = recordPids;
+	    setSettingsChanged(true);
+	    recordAllPids = recordPids;
+		if (recordPids==true) {
+			this.setAc3ReplaceStereo(false);
+			this.setStereoReplacaAc3(false);
+		}
+	}	
+	/**
+	 * @return Returns the ac3ReplaceStereo.
+	 */
+	public boolean isStereoReplaceAc3() {
+		return stereoReplaceAc3;
+	}
+	/**
+	 * @param ac3ReplaceStereo The ac3ReplaceStereo to set.
+	 */
+	public void setStereoReplacaAc3(boolean value) {
+	    setSettingsChanged(true);
+	    stereoReplaceAc3 = value;
+		if (stereoReplaceAc3==true) {
+			this.setAc3ReplaceStereo(false);
+			this.setRecordAllPids(false);
 		}
 	}
-	
-
-	
-	
-
 	/**
 	 * @return Returns the recordTimeAfter.
 	 */
@@ -208,8 +221,7 @@ public class BOSettingsRecord {
 		return recordTimeAfter;
 	}
 	/**
-	 * @param recordTimeAfter
-	 *            The recordTimeAfter to set.
+	 * @param recordTimeAfter The recordTimeAfter to set.
 	 */
 	public void setRecordTimeAfter(String recordTimeAfter) {
 		if (this.recordTimeAfter == null
@@ -226,7 +238,7 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param recordTimeBefore
-	 *            The recordTimeBefore to set.
+	 * The recordTimeBefore to set.
 	 */
 	public void setRecordTimeBefore(String recordTimeBefore) {
 		if (this.recordTimeBefore == null
@@ -243,12 +255,14 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param ac3ReplaceStereo
-	 *            The ac3ReplaceStereo to set.
+	 * The ac3ReplaceStereo to set.
 	 */
-	public void setAc3ReplaceStereo(boolean ac3ReplaceStereo) {
-		if (this.ac3ReplaceStereo != ac3ReplaceStereo) {
-			setSettingsChanged(true);
-			this.ac3ReplaceStereo = ac3ReplaceStereo;
+	public void setAc3ReplaceStereo(boolean value) {
+	    setSettingsChanged(true);
+	    ac3ReplaceStereo = value;
+		if (ac3ReplaceStereo==true) {
+			this.setStereoReplacaAc3(false);
+			this.setRecordAllPids(false);
 		}
 	}
 	/**
@@ -262,7 +276,7 @@ public class BOSettingsRecord {
 	}
 	/**
 	 * @param udrecOptions
-	 *            The udrecOptions to set.
+	 * The udrecOptions to set.
 	 */
 	public void setUdrecOptions(String udrecOptions) {
 		if (this.udrecOptions == null

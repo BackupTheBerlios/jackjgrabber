@@ -56,6 +56,7 @@ public class SerSettingsHandler {
 		getSettingsRecordtimeBefore(root, settings);
 		getSettingsRecordtimeAfter(root, settings);
 		getSettingsAc3ReplaceStereo(root, settings);
+		getSettingsStereoReplaceAc3(root, settings);
 		getSettingsUdrecOptions(root, settings);
 		getSettingsProjectXPath(root, settings);
 		getSettingsStoreEPG(root, settings);
@@ -99,7 +100,17 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().ac3ReplaceStereo = node.getText().equals("true");
 		} else {
 			SerXMLHandling.setElementInElement(root, "ac3ReplaceStereo", "false");
-			settings.getRecordSettings().setAc3ReplaceStereo(true);
+			settings.getRecordSettings().setAc3ReplaceStereo(false);
+		}
+	}
+	
+	private static void getSettingsStereoReplaceAc3(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/stereoReplaceAc3");
+		if (node != null) {
+			settings.getRecordSettings().stereoReplaceAc3 = node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root, "stereoReplaceAc3", "false");
+			settings.getRecordSettings().setStereoReplacaAc3(false);
 		}
 	}
 
@@ -589,6 +600,7 @@ public class SerSettingsHandler {
 		Node startPx = settingsDocument.selectSingleNode("/settings/startPX");
 		Node engine = settingsDocument.selectSingleNode("/settings/engine");
 		Node recordAllPids = settingsDocument.selectSingleNode("/settings/recordAllPids");
+		Node stereoReplaceAc3 = settingsDocument.selectSingleNode("/settings/stereoReplaceAc3");
 		Node recordTimeBefore = settingsDocument.selectSingleNode("/settings/recordTimeBefore");
 		Node recordTimeAfter = settingsDocument.selectSingleNode("/settings/recordTimeAfter");
 		Node ac3ReplaceStereo = settingsDocument.selectSingleNode("/settings/ac3ReplaceStereo");
@@ -597,6 +609,7 @@ public class SerSettingsHandler {
 		Node storeLogAfterRecord = settingsDocument.selectSingleNode("/settings/storelogafterrecord");
 		Node recordVtxt = settingsDocument.selectSingleNode("/settings/recordVtxt");
 
+		stereoReplaceAc3.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()));
 		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordVtxt()));
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()));
 		udrecOptions.setText(ControlMain.getSettings().getRecordSettings().getUdrecOptions());

@@ -56,12 +56,14 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JTextField jTextFieldUdrecOptions = null;
 	private JRadioButton jRadioButtonUdrec;
 	private JRadioButton jRadioButtonJGrabber;
+	private JRadioButton jRadioButtonRecordAllPids;
+	private JRadioButton jRadioButtonAC3ReplaceStereo;
+	private JRadioButton jRadioButtonStereoReplaceAc3;
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
+	private ButtonGroup buttonGroupAudioOptions = new ButtonGroup();
 	private JFormattedTextField tfServerPort = null;
 	private JCheckBox cbStartStreamingServer;
-	private JCheckBox cbRecordAllPids;
 	private JCheckBox cbStartPX;
-	private JCheckBox cbAC3ReplaceStereo;
 	private JCheckBox cbRecordVtxt;
 	private JSpinner recordMinsBefore, recordMinsAfter; 
 	
@@ -86,7 +88,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 				builder.add(this.getPanelNorth(),						  		cc.xyw(1, 1, 3));
 				builder.add(this.getPanelServerRecordSettings(),  		cc.xy(1, 3));			
 				builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1, 4));
-				builder.add(this.getPanelQuickRecordSettings(),	   		cc.xy(3, 3));
+				//builder.add(this.getPanelQuickRecordSettings(),	   		cc.xy(3, 3));
     }
     
     private JPanel getPanelNorth() {
@@ -103,24 +105,24 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return panelNorth;
     }
-    
-
 	    	
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					"pref:grow",	 		//columns 
-			  		"pref, pref, pref, pref, 5, pref, pref");		//rows
+			  		"pref, pref, pref, pref, 5, pref, 10, pref, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),	cc.xy(1, 1));
-			builder.add(this.getCbStartPX(),														cc.xy(1, 2));
-			builder.add(this.getCbStoreEPG(),													cc.xy(1, 3));
-			builder.add(this.getCbStoreLogAfterRecord(),									cc.xy(1 ,4));
-			builder.add(this.getCbRecordVtxt(),													cc.xy(1 ,6));
-			builder.add(this.getCbAC3ReplaceStereo(),										cc.xy(1, 7));
+			builder.add(this.getCbStartPX(),										cc.xy(1, 2));
+			builder.add(this.getCbStoreEPG(),										cc.xy(1, 3));
+			builder.add(this.getCbStoreLogAfterRecord(),							cc.xy(1, 4));
+			builder.add(this.getCbRecordVtxt(),										cc.xy(1, 6));
+			builder.add(this.getJRadioButtonRecordAllPids(),						cc.xy(1, 8));
+			builder.add(this.getJRadioButtonAC3ReplaceStereo(),						cc.xy(1, 9));
+			builder.add(this.getJRadioButtonStereoReplaceAc3(),						cc.xy(1, 10));			
 		}
 		return panelRecordSettings;
 	}
@@ -152,7 +154,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_quickRecordSettings"),		cc.xywh	(1, 1, 1, 1));
-			builder.add(this.getCbRecordAllPids(),													cc.xy	(1, 2));
+			builder.add(this.getJRadioButtonRecordAllPids(),													cc.xy	(1, 2));
 		}
 		return panelQuickRecordSettings;
 	}
@@ -307,30 +309,44 @@ public class GuiSettingsTabRecord extends GuiTab {
 		return cbStartPX;
 	}
 	/**
-	 * @return Returns the cbAC3ReplaceStereo.
+	 * @return Returns the jRadioButtonAC3ReplaceStereo.
 	 */
-	public JCheckBox getCbAC3ReplaceStereo() {
-		if (cbAC3ReplaceStereo == null) {
-			cbAC3ReplaceStereo = new JCheckBox(ControlMain.getProperty("cbAC3ReplaceStereo"));
-			cbAC3ReplaceStereo.setActionCommand("cbAC3ReplaceStereo");
-			cbAC3ReplaceStereo.addActionListener(control);
+	public JRadioButton getJRadioButtonAC3ReplaceStereo() {    
+		if (jRadioButtonAC3ReplaceStereo == null) {
+			jRadioButtonAC3ReplaceStereo = new JRadioButton(ControlMain.getProperty("rbAC3ReplaceStereo"));
+			jRadioButtonAC3ReplaceStereo.setActionCommand("rbAC3ReplaceStereo");
+			jRadioButtonAC3ReplaceStereo.addActionListener(control);
+			buttonGroupAudioOptions.add(jRadioButtonAC3ReplaceStereo);
 		}
-		return cbAC3ReplaceStereo;
+		return jRadioButtonAC3ReplaceStereo;
 	}
 	/**
-	 * @return Returns the cbRecordAllPids.
+	 * @return Returns the jRadioButtonStereoReplaceAc3.
 	 */
-	public JCheckBox getCbRecordAllPids() {
-		if (cbRecordAllPids == null) {
-			cbRecordAllPids = new JCheckBox(ControlMain.getProperty("cbRecordAllPids"));
-			cbRecordAllPids.setActionCommand("recordAllPids");
-			cbRecordAllPids.addActionListener(control);
+	public JRadioButton getJRadioButtonStereoReplaceAc3() {
+		if (jRadioButtonStereoReplaceAc3 == null) {
+		    jRadioButtonStereoReplaceAc3 = new JRadioButton(ControlMain.getProperty("rbStereoReplaceAc3"));
+		    jRadioButtonStereoReplaceAc3.setActionCommand("rbStereoReplaceAc3");
+		    jRadioButtonStereoReplaceAc3.addActionListener(control);
+			buttonGroupAudioOptions.add(jRadioButtonStereoReplaceAc3);
 		}
-		return cbRecordAllPids;
+		return jRadioButtonStereoReplaceAc3;
+	}
+	/**
+	 * @return Returns the jRadioButtonRecordAllPids.
+	 */
+	public JRadioButton getJRadioButtonRecordAllPids() {
+		if (jRadioButtonRecordAllPids == null) {
+			jRadioButtonRecordAllPids = new JRadioButton(ControlMain.getProperty("rbRecordAllPids"));
+			jRadioButtonRecordAllPids.setActionCommand("rbRecordAllPids");
+			jRadioButtonRecordAllPids.addActionListener(control);
+			buttonGroupAudioOptions.add(jRadioButtonRecordAllPids);
+		}
+		return jRadioButtonRecordAllPids;
 	}
 	
 	/**
-   * @return Returns the cbRecordAllPids.
+   * @return Returns the jRadioButtonRecordAllPids.
    */
   public JCheckBox getCbRecordVtxt() {
       if (cbRecordVtxt == null) {
