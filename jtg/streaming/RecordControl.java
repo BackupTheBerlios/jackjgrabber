@@ -30,17 +30,8 @@ public class RecordControl extends Thread
 	Record record;
 	ControlProgramTab controlProgramTab;
 
-	/*
-	 * Aufnahmestart über die GUI
-	 */
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
 		controlProgramTab = control;
-		record = new Record(args, this);
-	}
-	/*
-	 * Timer-Aufnahmestart
-	 */
-	public RecordControl(BORecordArgs args) {
 		record = new Record(args, this);
 	}
 	

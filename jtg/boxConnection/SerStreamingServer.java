@@ -29,6 +29,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
+import control.ControlMain;
+
 import service.SerXMLConverter;
 import streaming.RecordControl;
 
@@ -61,9 +63,10 @@ public class SerStreamingServer extends Thread {
 		
 		if (recordArgs.getCommand().equals("stop") && this.recordControl != null) {
 			recordControl.stopRecord();
+			ControlMain.getControl().getView().getTabProgramm().getControl().stopRecordModus();
 		}
 		if (recordArgs.getCommand().equals("record")) {
-			recordControl = new RecordControl(recordArgs);
+			recordControl = ControlMain.getControl().getView().getTabProgramm().getControl().startRecordModus(recordArgs);
 			recordControl.start();
 		}
 		server.close();  //server restart

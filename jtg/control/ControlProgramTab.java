@@ -150,7 +150,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	private void actionRecord() {
 		if (recordControl ==  null) {
-			this.startRecordModus();                           
+			this.startRecordModus(this.buildRecordArgs());                          
+			recordControl.start();
 		} else {
 			recordControl.stopRecord();
 			this.stopRecordModus();
@@ -163,11 +164,11 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufnahme starten");
 	}
 	
-	public void startRecordModus() {
-		recordControl = new RecordControl(this.buildRecordArgs(), this);
-		recordControl.start();
+	public RecordControl startRecordModus(BORecordArgs args) {
+		recordControl = new RecordControl(args, this);
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Stop");
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufname stoppen");
+		return recordControl;
 	}
 	
 	private BORecordArgs buildRecordArgs() {
