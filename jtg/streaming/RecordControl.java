@@ -75,9 +75,9 @@ public class RecordControl extends Thread implements SerProcessStopListener {
     
     private void initializeSptsStatus() {
         initSptsStatus=ControlMain.getBoxAccess().getSptsStatus();
-        if (initSptsStatus.equals("pes") && record.streamType.equals("TS")) {
+        if (initSptsStatus.equals("pes") && record.streamType.equalsIgnoreCase("TS")) {
             ControlMain.getBoxAccess().setSptsStatus("spts");
-        } else if (initSptsStatus.equals("spts") && record.streamType.equals("PES")) {
+        } else if (initSptsStatus.equals("spts") && record.streamType.equalsIgnoreCase("PES")) {
             ControlMain.getBoxAccess().setSptsStatus("pes");
         }
     }
