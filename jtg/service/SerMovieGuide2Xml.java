@@ -38,13 +38,13 @@ public class SerMovieGuide2Xml {
     }
     
     
-    public static void saveXMLFile(File path) throws IOException {
-    //	public static void saveXMLFile(Document doc) throws IOException {
+    //public static void saveXMLFile(File path) throws IOException {
+    	public static void saveXMLFile(Document doc) throws IOException {
         OutputFormat format = OutputFormat.createPrettyPrint();
-    //    XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
-        XMLWriter writer = new XMLWriter(new FileWriter(path), format);
-        writer.write(ControlMain.getMovieGuideDocument());
-        //writer.write(doc);
+        XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
+        //XMLWriter writer = new XMLWriter(new FileWriter(path), format);
+        //writer.write(ControlMain.getMovieGuideDocument());
+        writer.write(doc);
         writer.close();    
     }
           
@@ -148,8 +148,8 @@ public class SerMovieGuide2Xml {
         } catch (IOException e) {
             System.out.println("IOException: " + e);
         }
-        saveXMLFile(new File(ControlMain.movieGuideFileName));
-        //saveXMLFile(doc);
+        //saveXMLFile(new File(ControlMain.movieGuideFileName));
+        saveXMLFile(doc);
     }
     
     public ArrayList getGenryList(String value) throws Exception{    	            	
@@ -157,7 +157,8 @@ public class SerMovieGuide2Xml {
     	Element root = doc.getRootElement();                
         ArrayList al = new ArrayList();
         for ( Iterator i = root.elementIterator("entry"); i.hasNext(); ) {
-            Element entry = (Element) i.next();                     
+            Element entry = (Element) i.next();
+           //System.out.println(entry.element("genre").getStringValue());            
             al.add(entry.element(value).getStringValue());
         }
         return al;
