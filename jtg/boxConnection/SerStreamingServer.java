@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -58,19 +59,31 @@ public class SerStreamingServer extends Thread {
 	
 	public void record(Socket socket) throws IOException, DocumentException {
 	    
-//	    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+//	    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //	    String line;
 //	    while ((line=input.readLine())!=null) {
 //	        System.out.println(line);
 //	    }
-
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(socket.getInputStream());
-
+	    
 		//Pretty print the document to System.out
 //		OutputFormat format = OutputFormat.createPrettyPrint();
 //		XMLWriter writer = new XMLWriter( System.out, format );
 //		writer.write( document );
+	    
+	    byte[] message = new byte[10000];
+		int messageLength = 0;
+		
+		messageLength = socket.getInputStream().read(message);
+		// Umlaute filtern
+		for (int i = 0; i < messageLength; i++) {
+			if (message[i] > 0x7e || (message[i] < 0x20 && message[i] != '\t' && message[i] != '\n' && message[i] != '\r')) {
+			    message[i] = (byte)' ';
+			}
+		}
+
+		SAXReader reader = new SAXReader();
+		ByteArrayInputStream in = new ByteArrayInputStream(message, 0, messageLength);
+		Document document = reader.read(in);
 		
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		if (recordArgs.getCommand().equals("stop") ) {
