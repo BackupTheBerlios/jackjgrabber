@@ -171,19 +171,24 @@ public class BORecordArgs {
 	}
 	/*
      * Checken ob ein AC3-Stream den Streostrem ersetzen muss
+     * Checken ob Videotext aufgenommen werden soll
      */
     public void checkSettings() {
-        if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
-            for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
-                String[] aPid = (String[])this.getPids().getAPids().get(i);
-                String desc = aPid[1];
-                if (desc.indexOf("AC3")>-1) {
-                    ArrayList newList = new ArrayList();
-                    newList.add(aPid);
-                    this.getPids().setAPids(newList);
-                    break;
-                }
-            }    
+        if (ControlMain.getSettingsRecord().isRecordAllPids()) {
+	        if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
+	            for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
+	                BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
+	                if (aPid.getName().indexOf("AC3")>-1) {
+	                    ArrayList newList = new ArrayList();
+	                    newList.add(aPid);
+	                    this.getPids().setAPids(newList);
+	                    break;
+	                }
+	            }    
+	        }
+	        if (!ControlMain.getSettingsRecord().isRecordVtxt()) {
+			    this.getPids().setVtxtPid(null);
+			}
         }
     }
 }

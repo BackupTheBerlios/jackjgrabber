@@ -378,10 +378,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	private BORecordArgs buildRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
-		if (ControlMain.getSettingsRecord().isRecordAllPids() && !ControlMain.getSettingsRecord().isRecordVtxt()) {
-		    this.getPids().setVtxtPid(null);
-		}
 		args.setPids(this.getPids());
+		args.checkSettings();
 		this.fillRecordArgsWithEpgData(args);
 		return args;
 	}
