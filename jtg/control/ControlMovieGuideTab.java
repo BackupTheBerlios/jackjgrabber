@@ -150,8 +150,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			return new Integer(this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 		}
 	}
-	public int getSelectRowTimerTable(){		
-		if (this.getJTableTimer().getSelectedRow()<=0){
+	public int getSelectRowTimerTable(){				
+		if (this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow())<=0){
 			return 0;
 		}else{			
 			return this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
