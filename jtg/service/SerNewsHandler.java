@@ -33,8 +33,8 @@ public class SerNewsHandler extends Thread {
 	public void run() {
 		try {        
 	        String htmlText = SerWebsiteContentLoader.getWebsiteContent(
-					"http://www.ralix.de", 80,
-					"/news.htm");
+					"http://www.jackthegrabber.de", 80,
+					"/xmediagrabber/news.htm");
 		        
 			int pos = htmlText.toLowerCase().indexOf("<html>");
 			if (pos != -1) {
