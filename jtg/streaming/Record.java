@@ -17,7 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -167,20 +166,15 @@ public class Record {
 		int pidNum = Integer.parseInt(dboxArgs[2]);
 		if (pidNum + 3 > dboxArgs.length) return -3;
 
-		try {
-			if (ControlMain.getSettings().getStreamType().equals("TS")) {
-				writeStream = new PESWriteStream[1];
-				writeStream[0] = new PESWriteStream('t', 0, baseFileName, recordControl);
-			}  else {
-				writeStream = new PESWriteStream[pidNum];
-	            for (int i = 0; i < pidNum; i++) {
-	            	writeStream[i] = new PESWriteStream(avString.charAt(i), i, baseFileName, recordControl);
-	            }
-			}
-        } catch (FileNotFoundException e) {
-            Logger.getLogger("Record").error("Unable to create Output-Files");
-            recordControl.stopRecord();
-        }
+		if (ControlMain.getSettings().getStreamType().equals("TS")) {
+			writeStream = new PESWriteStream[1];
+			writeStream[0] = new PESWriteStream('t', 0, baseFileName, recordControl);
+		}  else {
+			writeStream = new PESWriteStream[pidNum];
+            for (int i = 0; i < pidNum; i++) {
+            	writeStream[i] = new PESWriteStream(avString.charAt(i), i, baseFileName, recordControl);
+            }
+		}
 		return pidNum;
 	}
 	

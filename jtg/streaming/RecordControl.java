@@ -34,7 +34,6 @@ public class RecordControl extends Thread
 	Record record;
 	public boolean isRunning = true;
 	ControlProgramTab controlProgramTab;
-	ArrayList recordFiles = new ArrayList();
 	BORecordArgs recordArgs;
 	public Date stopTime;
 
@@ -86,10 +85,19 @@ public class RecordControl extends Thread
 	}
 	
 	private String[] buildPXcommand() {
-		String[] args = new String[recordFiles.size()];
+	    ArrayList allFiles = new ArrayList();
+	    int streamCount = record.writeStream.length;
+		for (int i=0; i<streamCount; i++) {
+		    ArrayList fileList = record.writeStream[i].fileList;
+		    for (int i2=0; i2<fileList.size(); i2++) {
+		        File file = (File)fileList.get(i2);
+		        allFiles.add(file);
+		    }
+		}
+		String[] args = new String[allFiles.size()];
 		for (int i=0; i<args.length; i++) {
-			File file = (File)recordFiles.get(i);
-			args[i] = file.getAbsolutePath();
+		    File file = (File)allFiles.get(i);
+		    args[i] = file.getAbsolutePath();
 		}
 		return args;
 	}
