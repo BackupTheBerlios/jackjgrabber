@@ -65,7 +65,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public BOPids getPids(boolean tvMode) throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
-		String[] aPid = new String[1];
 	
 		BufferedReader input = getConnection("/control/zapto?getallpids");
 		if (tvMode) {
@@ -74,6 +73,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    pids.setVPid(vPid);
 		} 
 		while((line=input.readLine())!=null) {
+		    String[] aPid = new String[1];
 		    aPid[0]=Integer.toHexString(Integer.parseInt(line));
 			pids.getAPids().add(aPid);
 		}
