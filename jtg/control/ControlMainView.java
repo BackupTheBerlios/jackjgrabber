@@ -67,7 +67,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	private void checkStartVlc() {
 	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
 	        try {
-	            String execString=ControlMain.getSettings().getMainSettings().getVlcPath()+"  -I http"; 
+	            String execString=ControlMain.getSettingsPath().getVlcPath()+" --intf=telnet --extraintf=http";
 	  	        Logger.getLogger("ControlSettingsTabMain").info(execString);
 	  	        Process run = Runtime.getRuntime().exec(execString);
 	  	        new SerInputStreamReadThread(true, run.getInputStream()).start();
