@@ -19,7 +19,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import control.ControlMain;
 
@@ -71,52 +70,7 @@ public class BOSender {
 	public void setNummer(String nummer) {
 		this.nummer = nummer;
 	}
-	/*
-	 * Gibt das laufende EPG-Objekt zurück mit vorherigem Update
-	 * Die EPG's sind aufsteigend sortiert
-	 * Das 1. EPG vor dem 1. EPG mit negativer Zeit wird zurückgegeben 
-	 */
-	public BOEpg getRunnigEpgWithUpdate() throws IOException {
-			this.readEpg();
-			if (this.getEpg() != null) {
-				Date now = new Date();
-				long nowTime = now.getTime();
-				for (int i=0; i<this.getEpg().size(); i++) {
-					BOEpg epgObj = (BOEpg)this.getEpg().get(i);
-					long epgStart = Long.parseLong(epgObj.getUnformattedStart())*1000;
-					int epgIndex = i-1;
-					if (nowTime-epgStart<0 && epgIndex>-1) {
-						BOEpg neededEpg = (BOEpg)this.getEpg().get(i-1);
-						if (neededEpg != null) {
-							return neededEpg;
-						}
-					}
-				}
-			}
-		return null;
-	}
-	/*
-	 * Gibt das laufende EPG-Objekt zurück mit ohne vorherigen Update
-	 * Die EPG's sind aufsteigend sortiert
-	 * Das 1. EPG vor dem 1. EPG mit negativer Zeit wird zurückgegeben 
-	 */
-	public BOEpg getRunnigEpg() {
-		if (this.getEpg() != null) {
-			Date now = new Date();
-			long nowTime = now.getTime();
-			for (int i=0; i<this.getEpg().size(); i++) {
-				BOEpg epgObj = (BOEpg)this.getEpg().get(i);
-				long epgStart = Long.parseLong(epgObj.getUnformattedStart())*1000;
-				if (nowTime-epgStart<0) {
-					int indexOfBeforeEpg = i-1;
-					if (indexOfBeforeEpg>=0) {
-						return (BOEpg)this.getEpg().get(indexOfBeforeEpg);
-					}
-				}
-			}
-		}
-	return null;
-}
+
 	/**
 	 * @return Returns the epg.
 	 */

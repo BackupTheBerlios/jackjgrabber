@@ -97,7 +97,6 @@ public class GuiEpgTableModel extends AbstractTableModel
 		this.setIndexRunningEpg(-1);
 		this.setEpgList(new ArrayList());
 		if (control.getSelectedSender() != null && control.getSelectedSender().getEpg() != null ) {
-			BOEpg runningEpg = control.getSelectedSender().getRunnigEpg();
 			ArrayList fullList = control.getSelectedSender().getEpg();
 			GregorianCalendar chooserDate = new GregorianCalendar();
 			chooserDate.setTime(control.getDateChooserDate());
@@ -107,11 +106,10 @@ public class GuiEpgTableModel extends AbstractTableModel
 				if (epg.getStartdate().get(Calendar.DATE)==chooserDate.get(Calendar.DATE) && 
 					epg.getStartdate().get(Calendar.MONTH)==chooserDate.get(Calendar.MONTH)){
 						this.getEpgList().add(epg);
-						if (runningEpg != null && runningEpg.getEventId().equals(epg.getEventId())) {
-							this.setIndexRunningEpg(i);
-						}
 				}
 			}
+			BOEpg runningEpg = control.getRunnigEpg(this.getEpgList());
+			this.setIndexRunningEpg(this.getEpgList().indexOf(runningEpg));			
 		}
 	}
 	

@@ -350,10 +350,34 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	private void fillRecordArgsWithEpgData(BORecordArgs args) throws IOException {
 		args.setSenderName(this.getSelectedSender().getName());
-		BOEpg epg = this.getSelectedSender().getRunnigEpgWithUpdate();
+		BOEpg epg = this.getRunnigEpg(this.getEpgTableModel().getEpgList());
 		if (epg != null) {
 			args.setEpgTitle(epg.getTitle());
 		}
+	}
+	
+	/*
+	 * Gibt das laufende EPG-Objekt zurück 
+	 * Die EPG's sind aufsteigend sortiert
+	 * Das 1. EPG vor dem 1. EPG mit negativer Zeit wird zurückgegeben 
+	 */
+	public BOEpg getRunnigEpg(ArrayList epgList) {
+		if (epgList != null) {
+			Date now = new Date();
+			long nowTime = now.getTime();
+			for (int i=0; i<epgList.size(); i++) {
+				BOEpg epgObj = (BOEpg)epgList.get(i);
+				long epgStart = Long.parseLong(epgObj.getUnformattedStart())*1000;
+				int epgIndex = i-1;
+				if (nowTime-epgStart<0 && epgIndex>-1) {
+					BOEpg neededEpg = (BOEpg)epgList.get(i-1);
+					if (neededEpg != null) {
+						return neededEpg;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	/*
