@@ -114,8 +114,10 @@ public class BOSettings {
 	 * @param streamingServerPort The streamingServerPort to set.
 	 */
 	public void setStreamingServerPort(String streamingServerPort) {
-		setSettingsChanged(true);
-		this.streamingServerPort = streamingServerPort;
+		if (!this.streamingServerPort.equals(streamingServerPort)) {
+			setSettingsChanged(true);
+			this.streamingServerPort = streamingServerPort;
+		}
 	}
 	/**
 	 * @return Returns the startStreamingServer.
