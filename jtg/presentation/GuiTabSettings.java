@@ -71,13 +71,13 @@ public class GuiTabSettings extends JPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-						  "f:pref:grow, 20, f:200:grow",  		// columns 
+						  "f:pref:grow, 20, f:200",  		// columns 
 						  "f:pref, 20, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
 		
-				builder.add(this.getPanelBoxSettings(),		   		cc.xywh(1, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
+				builder.add(this.getPanelBoxSettings(),		   		cc.xy(1,1));
 				builder.add(this.getPanelLayoutSettings(),			cc.xywh(3, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));				
 				builder.add(this.getPanelRecordSettings(),			cc.xywh(1, 3, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
 	}
