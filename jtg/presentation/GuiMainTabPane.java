@@ -26,7 +26,7 @@ import presentation.program.GuiTabProgramm;
 import presentation.recordInfo.GuiTabRecordInfo;
 import presentation.settings.GuiTabSettings;
 import presentation.start.GuiTabStart;
-import presentation.timer.GuiTimerPanel;
+import presentation.timer.GuiBoxTimerPanel;
 import control.ControlAboutTab;
 import control.ControlMain;
 import control.ControlMovieGuideTab;
@@ -34,13 +34,14 @@ import control.ControlProgramTab;
 import control.ControlRecordInfoTab;
 import control.ControlSettingsTab;
 import control.ControlStartTab;
+import control.ControlTimerTab;
 
 public class GuiMainTabPane extends JTabbedPane {
 
 	public GuiTabProgramm tabProgramm = null;
 	public GuiTabSettings tabSettings = null;
 	public GuiTabAbout tabAbout = null;
-	public GuiTimerPanel tabTimer=null;
+	public GuiBoxTimerPanel tabTimer=null;
 	public GuiTabStart tabStart=null;
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
@@ -69,9 +70,10 @@ public class GuiMainTabPane extends JTabbedPane {
 	/**
 	 * Image-spezifische Timer-Gui		
 	 */    
-	public GuiTimerPanel getTabTimer() {
+	public GuiBoxTimerPanel getTabTimer() {
 		if (tabTimer == null && ControlMain.getBoxAccess() != null) {
-			tabTimer = GuiTimerPanel.getTimerPanel(ControlMain.getBoxAccess().getName(), this.getView());
+            ControlTimerTab control = new ControlTimerTab(view);
+            tabTimer = new GuiBoxTimerPanel(control);
 		}
 		return tabTimer;
 	}

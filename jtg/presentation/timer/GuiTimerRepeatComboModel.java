@@ -18,13 +18,14 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import javax.swing.DefaultComboBoxModel;
-import control.ControlTabTimer;
+
+import control.ControlTimerTab;
 
 public class GuiTimerRepeatComboModel extends DefaultComboBoxModel { //implements ComboBoxModel {
 	
-	ControlTabTimer control;
+    ControlTimerTab control;
 	
-	public GuiTimerRepeatComboModel(ControlTabTimer ctrl) {
+	public GuiTimerRepeatComboModel(ControlTimerTab ctrl) {
 		this.setControl(ctrl);
 	}
 	
@@ -39,13 +40,13 @@ public class GuiTimerRepeatComboModel extends DefaultComboBoxModel { //implement
 	/**
 	 * @return Returns the control.
 	 */
-	public ControlTabTimer getControl() {
+	public ControlTimerTab getControl() {
 		return control;
 	}
 	/**
 	 * @param control The control to set.
 	 */
-	public void setControl(ControlTabTimer control) {
+	public void setControl(ControlTimerTab control) {
 		this.control = control;
 	}
 }

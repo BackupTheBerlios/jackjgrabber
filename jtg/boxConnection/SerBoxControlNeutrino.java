@@ -42,7 +42,6 @@ import presentation.timer.GuiNeutrinoRecordTimerTableModel;
 import presentation.timer.GuiNeutrinoSystemTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;
 import presentation.timer.GuiSystemTimerTableModel;
-
 import service.SerFormatter;
 import control.ControlMain;
 import control.ControlTimerTab;

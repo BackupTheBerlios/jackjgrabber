@@ -35,6 +35,7 @@ import presentation.program.GuiTabProgramm;
 import presentation.recordInfo.GuiTabRecordInfo;
 import presentation.settings.GuiTabSettings;
 import presentation.start.GuiTabStart;
+import presentation.timer.GuiBoxTimerPanel;
 import service.SerIconManager;
 import snoozesoft.systray4j.SysTrayMenu;
 import snoozesoft.systray4j.SysTrayMenuIcon;
@@ -212,7 +213,7 @@ public class GuiMainView extends JFrame {
 		return this.getMainTabPane().getTabProgramm();
 	}
 
-	public JPanel getTabTimer() {
+	public GuiBoxTimerPanel getTabTimer() {
 		return this.getMainTabPane().getTabTimer();
 	}
 

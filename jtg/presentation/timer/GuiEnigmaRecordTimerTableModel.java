@@ -2,14 +2,7 @@ package presentation.timer;
 
 
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import javax.swing.table.AbstractTableModel;
-
-import model.BOSender;
 import model.BOTimer;
-import service.SerFormatter;
 import control.ControlMain;
 import control.ControlTimerTab;
 

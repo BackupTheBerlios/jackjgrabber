@@ -22,15 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import presentation.GuiMainView;
-import presentation.timer.GuiEnigmaRecordTimerTableModel;
-import presentation.timer.GuiEnigmaSystemTimerTableModel;
-import presentation.timer.GuiRecordTimerTableModel;
-import presentation.timer.GuiSystemTimerTableModel;
-
-import control.ControlMain;
-import control.ControlTimerTab;
-
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -38,6 +29,12 @@ import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
 import model.BOTimerList;
+import presentation.GuiMainView;
+import presentation.timer.GuiEnigmaRecordTimerTableModel;
+import presentation.timer.GuiEnigmaSystemTimerTableModel;
+import presentation.timer.GuiRecordTimerTableModel;
+import presentation.timer.GuiSystemTimerTableModel;
+import control.ControlTimerTab;
 
 /**
  * Default-Schnittstellen-Definition

@@ -38,13 +38,12 @@ import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
 import presentation.timer.GuiBoxTimerPanel;
-import presentation.timer.GuiTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerTimerHandler;
 
 
-public class ControlTimerTab extends ControlTabTimer implements ActionListener, MouseListener {
+public class ControlTimerTab extends Thread implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList senderList;
@@ -71,7 +70,7 @@ public class ControlTimerTab extends ControlTabTimer implements ActionListener, 
 	}
 	
 	public void run() {
-		this.setTab((GuiBoxTimerPanel)this.getMainView().getTabTimer());
+		this.setTab(this.getMainView().getTabTimer());
 	    this.refreshTables();
 	}
 	
@@ -466,7 +465,7 @@ public class ControlTimerTab extends ControlTabTimer implements ActionListener, 
 	/**
 	 * @return Returns the tab.
 	 */
-	public GuiTimerPanel getTab() {
+	public GuiBoxTimerPanel getTab() {
 		return tab;
 	}
 	/**

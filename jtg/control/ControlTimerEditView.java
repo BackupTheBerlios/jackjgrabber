@@ -59,10 +59,10 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
     
 	BOLocalTimer timer;
     GuiTimerEditView view;
-    ControlTabTimer controlTimer;
+    ControlTimerTab controlTimer;
     private GuiTagFrame tagFrame;
     
-    public ControlTimerEditView(ControlTabTimer controlTimer, BOLocalTimer timer) {
+    public ControlTimerEditView(ControlTimerTab controlTimer, BOLocalTimer timer) {
     	this.setControlTimer(controlTimer);
         this.setTimer(timer);
         view = new GuiTimerEditView(this);
@@ -471,13 +471,13 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	/**
 	 * @return Returns the controlTimer.
 	 */
-	public ControlTabTimer getControlTimer() {
+	public ControlTimerTab getControlTimer() {
 		return controlTimer;
 	}
 	/**
 	 * @param controlTimer The controlTimer to set.
 	 */
-	public void setControlTimer(ControlTabTimer controlTimer) {
+	public void setControlTimer(ControlTimerTab controlTimer) {
 		this.controlTimer = controlTimer;
 	}
 	public String[] getTimerType() {

@@ -30,12 +30,11 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
-import service.SerTimerHandler;
-import control.ControlMain;
-
 import presentation.GuiMainView;
 import presentation.timer.GuiRecordTimerTableModel;
 import presentation.timer.GuiSystemTimerTableModel;
+import service.SerTimerHandler;
+import control.ControlMain;
 
 public abstract class SerBoxControl {
         

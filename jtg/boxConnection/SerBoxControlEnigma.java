@@ -26,10 +26,8 @@ import org.apache.log4j.Logger;
 import presentation.GuiMainView;
 import presentation.timer.GuiEnigmaRecordTimerTableModel;
 import presentation.timer.GuiEnigmaSystemTimerTableModel;
-import presentation.timer.GuiNeutrinoRecordTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;
 import presentation.timer.GuiSystemTimerTableModel;
-
 import service.SerFormatter;
 import control.ControlMain;
 import control.ControlTimerTab;

@@ -37,7 +37,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 
 import model.BOTimer;
-
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -45,11 +44,9 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
-import control.ControlMainView;
 import control.ControlTimerTab;
-import control.ControlTabTimer;
 
-public class GuiBoxTimerPanel extends GuiTimerPanel {
+public class GuiBoxTimerPanel extends JPanel {
 	
 	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
 	public JRadioButton[] jRadioButtonWhtage2 = new JRadioButton[7];
@@ -122,7 +119,7 @@ public class GuiBoxTimerPanel extends GuiTimerPanel {
 		builder.add(this.getJPanelButtonsGui(),													cc.xywh (6, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
-	public ControlTabTimer getControl() {
+	public ControlTimerTab getControl() {
 		return control;
 	}
 
