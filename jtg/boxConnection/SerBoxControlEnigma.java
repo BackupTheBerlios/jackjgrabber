@@ -196,7 +196,15 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
 		ArrayList epgList=new ArrayList();
-		BufferedReader input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
+		BufferedReader input;
+		input=null;
+		try {
+		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
+		}
+		 catch (IOException e) {}
+		if (input==null) {
+		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
+		}
 		int startEpgInfo;
 		int endEpgInfo;
 		Date startDate=new Date(), endDate=new Date();
@@ -230,7 +238,15 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public BOEpgDetails getEpgDetail(BOEpg epg) throws IOException {
 		BOEpgDetails epgDetail = new BOEpgDetails();
 		BOSender sender=epg.getSender();
-		BufferedReader input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
+		BufferedReader input;
+		input=null;
+		try {
+		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
+		}
+		 catch (IOException e) {}
+		if (input==null) {
+		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
+		}
 		String text = new String();
 		String line;
 		String eventId=epg.getEventId();		
