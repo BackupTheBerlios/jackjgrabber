@@ -10,6 +10,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
+
+import org.apache.log4j.Logger;
+
 import control.ControlMain;
 import model.BOBouquet;
 import model.BOEpg;
@@ -235,21 +239,133 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		epg.setEpgDetail(epgDetail);
 		return epgDetail;
 	}
+	private String sendCommand (String message) throws IOException {
+        String line;          
+        BufferedReader input = getConnection("/cgi-bin/admin?command="+message);          
+        while ((line = input.readLine()) != null) {  
+          StringTokenizer st = new StringTokenizer(line);    
+              message = (st.nextToken());
+        }         
+       return message;  
+	}
+	
 	public String sendMessage(String message) throws IOException {
         throw new IOException();
 	}
    
 	public String shutdownBox() throws IOException {
-        throw new IOException();
+		Logger.getLogger("SerBoxControlEnigma").info("Ihre Dbox wird in den StandbyModus gebracht.");
+		return sendCommand("shutdown");
 	}
    
 	public String standbyBox(String modus) throws IOException {
-        throw new IOException();
+		Logger.getLogger("SerBoxControlEnigma").info("Ihre Dbox wird in den StandbyModus gebracht.");
+		return sendCommand("standby");
 	}
 	public ArrayList getTimer() throws IOException {
-        throw new IOException();
+		ArrayList timerList = new ArrayList();
+		BufferedReader input=getConnection("/body?mode=controlTimerList");
+		boolean recurring = false;
+		boolean onetimer=false;
+		Date startDate=new Date(), endDate=new Date();
+		String line, channelID=new String(), eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String(), channel=new String();
+		String valueStart, valueDuration, timerType;
+		int startpos, endpos;
+		while ((line = input.readLine()) != null) {
+			if ((line.indexOf("Recurring Timer Events")>0)|(line.indexOf("Repeating Timer Events")>0)) {
+				recurring=true;
+				onetimer=false;
+			}
+			if ((line.indexOf("One-time Timer Events")>0)|(line.indexOf("One-Time Timer Events")>0)) {
+				recurring=false;
+				onetimer=true;
+			}
+			if (line.indexOf("javascript:editTimerEvent")>0) {
+				startpos=0;
+				while (line.indexOf("javascript:editTimerEvent", startpos)>0) {
+					endpos=line.indexOf("javascript:editTimerEvent", startpos);
+					startpos=line.indexOf("(\'ref=",endpos);
+					endpos=line.indexOf("&start=", startpos);
+					channelID=line.substring(startpos+6,endpos);
+					startpos=endpos;
+					endpos=line.indexOf("&duration=", startpos);
+					valueStart=line.substring(startpos+7,endpos);
+					startpos=endpos;
+					endpos=line.indexOf("&channel=", startpos);
+					duration=line.substring(startpos+10,endpos);
+					valueDuration=duration;
+					startpos=endpos;
+					endpos=line.indexOf("&descr=", startpos);
+					channel=line.substring(startpos+9,endpos);
+					startpos=endpos;
+					endpos=line.indexOf("&type=", startpos);
+					title=line.substring(startpos+7,endpos);
+					startpos=endpos;
+					endpos=line.indexOf("\')", startpos);
+					timerType=line.substring(startpos+6,endpos);
+					startTime=SerFormatter.formatUnixTime(valueStart);
+					startDate =	SerFormatter.formatUnixDate(valueStart);
+					endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
+					endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);
+					BOTimer botimer = new BOTimer();
+					if (timerType.equalsIgnoreCase("44")) {
+						botimer.setEventType("offen");
+					}
+					else if (timerType.equalsIgnoreCase("256")) {
+						botimer.setEventType("erfolgreich");
+					}
+					else if (timerType.equalsIgnoreCase("76")) {
+						botimer.setEventType("Aufnahme läuft");
+					}
+					else {
+						botimer.setEventType("Fehler");
+					}
+					botimer.setEventId("");
+					botimer.setEventRepeat("");
+	    			botimer.setSenderName(channel);
+	    			botimer.setAnnounceTime(""); //vorwarnzeit
+	    			botimer.setStartTime(startTime); //startZeit
+	    			botimer.setStartDate(startDate);  //startDatum
+	    			botimer.setStopTime(endTime); //ende
+	    			botimer.setEndDate(endDate);
+	    			botimer.setDescription(title);
+	    			timerList.add(botimer);
+	    			startpos=endpos;
+				} 
+			}
+			
+		}
+		return timerList;
 	}
 	public String setTimer(String action, BOTimer timer) throws IOException {
-		return new String();
+		String alarm = timer.getStartTime();
+		String stop = timer.getStopTime();
+		String announce = timer.getAnnounceTime();
+		String type = timer.getEventType();
+		String repeat = timer.getEventRepeat();
+		String chanId = timer.getSenderName();
+		String title = timer.getDescription();
+		int startpos;
+		if (title==null) {
+			title="";
+		}
+		String line;
+		while ((startpos=title.indexOf(" ",0))>0) {
+			title=title.substring(0, startpos)+"%20"+title.substring(startpos+1);
+		}
+		String success;
+		int a=Integer.parseInt(stop)-Integer.parseInt(alarm);
+		success="failed";
+		if (action.equalsIgnoreCase("new")) {
+			String requestString = "/addTimerEvent?timer=regular&ref="+chanId+"&start="+alarm+"&duration="+a+"&descr="+title;
+			System.out.println(requestString);
+			BufferedReader input = getConnection(requestString);
+			while((line=input.readLine())!=null) {
+				if ((line.indexOf("success")>0)^(line.indexOf("erfolgreich")>0)) {
+					success="ok";
+				}
+			}
+		}
+		return success;
 	}
 }
