@@ -1,22 +1,17 @@
 package model;
 /*
-BOLocalTimer.java by Geist Alexander 
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-*/ 
+ * BOLocalTimer.java by Geist Alexander
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
@@ -26,8 +21,8 @@ import service.SerHelper;
 import control.ControlMain;
 
 public class BOLocalTimer {
-	
-    private boolean local;
+
+	private boolean local;
 	private boolean startPX;
 	private boolean recordAllPids;
 	private boolean ac3ReplaceStereo;
@@ -46,16 +41,15 @@ public class BOLocalTimer {
 	private String dirPattern;
 	private String filePattern;
 	private long startTime;
-    private long stopTime;
+	private long stopTime;
 	private Node timerNode;
-	
-	
+
 	private BOTimer mainTimer;
-	
+
 	private BOLocalTimer() {
-	    
+
 	}
-	
+
 	public BOLocalTimer(BOTimer mainTimer) {
 		this.setMainTimer(mainTimer);
 		mainTimer.setLocalTimer(this);
@@ -77,16 +71,16 @@ public class BOLocalTimer {
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
 		timer.setStoreLogAfterRecord(ControlMain.getSettingsRecord().isStoreLogAfterRecord());
 		timer.setStreamingEngine(ControlMain.getSettingsRecord().getStreamingEngine());
-		timer.setUdrecOptions((BOUdrecOptions)SerHelper.serialClone(ControlMain.getSettingsRecord().getUdrecOptions()));
+		timer.setUdrecOptions((BOUdrecOptions) SerHelper.serialClone(ControlMain.getSettingsRecord().getUdrecOptions()));
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		timer.setStartTime(mainTimer.getUnformattedStartTime().getTimeInMillis());
-        timer.setStopTime(mainTimer.getUnformattedStopTime().getTimeInMillis());
+		timer.setStopTime(mainTimer.getUnformattedStopTime().getTimeInMillis());
 		timer.setDescription(mainTimer.getDescription());
 		return timer;
 	}
 	/*
-	 * Objekt dient fuer Streamingserver-Aufnahmen ohne Timer!!! 
+	 * Objekt dient fuer Streamingserver-Aufnahmen ohne Timer!!!
 	 */
 	public static BOLocalTimer getDefaultLocalTimer() {
 		BOLocalTimer timer = new BOLocalTimer();
@@ -103,22 +97,22 @@ public class BOLocalTimer {
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
 		timer.setStoreLogAfterRecord(ControlMain.getSettingsRecord().isStoreLogAfterRecord());
 		timer.setStreamingEngine(ControlMain.getSettingsRecord().getStreamingEngine());
-		timer.setUdrecOptions((BOUdrecOptions)SerHelper.serialClone(ControlMain.getSettingsRecord().getUdrecOptions()));
+		timer.setUdrecOptions((BOUdrecOptions) SerHelper.serialClone(ControlMain.getSettingsRecord().getUdrecOptions()));
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		return timer;
 	}
-	
+
 	public String getShortJGrabberStreamType() {
 		StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
 		return st.nextToken();
 	}
-	
+
 	public String getShortUdrecStreamType() {
 		StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
 		return st.nextToken().toLowerCase();
 	}
-	
+
 	/**
 	 * @return Returns the ac3ReplaceStereo.
 	 */
@@ -126,10 +120,16 @@ public class BOLocalTimer {
 		return ac3ReplaceStereo;
 	}
 	/**
-	 * @param ac3ReplaceStereo The ac3ReplaceStereo to set.
+	 * @param ac3ReplaceStereo
+	 *            The ac3ReplaceStereo to set.
 	 */
 	public void setAc3ReplaceStereo(boolean ac3ReplaceStereo) {
 		this.ac3ReplaceStereo = ac3ReplaceStereo;
+		if (ac3ReplaceStereo) {
+			setRecordAllPids(false);
+			setStereoReplaceAc3(false);
+
+		}
 	}
 	/**
 	 * @return Returns the dirPattern.
@@ -138,7 +138,8 @@ public class BOLocalTimer {
 		return dirPattern;
 	}
 	/**
-	 * @param dirPattern The dirPattern to set.
+	 * @param dirPattern
+	 *            The dirPattern to set.
 	 */
 	public void setDirPattern(String dirPattern) {
 		this.dirPattern = dirPattern;
@@ -150,7 +151,8 @@ public class BOLocalTimer {
 		return filePattern;
 	}
 	/**
-	 * @param filePattern The filePattern to set.
+	 * @param filePattern
+	 *            The filePattern to set.
 	 */
 	public void setFilePattern(String filePattern) {
 		this.filePattern = filePattern;
@@ -162,7 +164,8 @@ public class BOLocalTimer {
 		return jgrabberStreamType;
 	}
 	/**
-	 * @param jgrabberStreamType The jgrabberStreamType to set.
+	 * @param jgrabberStreamType
+	 *            The jgrabberStreamType to set.
 	 */
 	public void setJgrabberStreamType(String jgrabberStreamType) {
 		this.jgrabberStreamType = jgrabberStreamType;
@@ -174,10 +177,15 @@ public class BOLocalTimer {
 		return recordAllPids;
 	}
 	/**
-	 * @param recordAllPids The recordAllPids to set.
+	 * @param recordAllPids
+	 *            The recordAllPids to set.
 	 */
 	public void setRecordAllPids(boolean recordAllPids) {
 		this.recordAllPids = recordAllPids;
+		if (recordAllPids) {
+			setAc3ReplaceStereo(false);
+			setStereoReplaceAc3(false);
+		}
 	}
 	/**
 	 * @return Returns the recordVtxt.
@@ -186,7 +194,8 @@ public class BOLocalTimer {
 		return recordVtxt;
 	}
 	/**
-	 * @param recordVtxt The recordVtxt to set.
+	 * @param recordVtxt
+	 *            The recordVtxt to set.
 	 */
 	public void setRecordVtxt(boolean recordVtxt) {
 		this.recordVtxt = recordVtxt;
@@ -198,7 +207,8 @@ public class BOLocalTimer {
 		return savePath;
 	}
 	/**
-	 * @param savePath The savePath to set.
+	 * @param savePath
+	 *            The savePath to set.
 	 */
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
@@ -210,7 +220,8 @@ public class BOLocalTimer {
 		return shutdownAfterRecord;
 	}
 	/**
-	 * @param shutdownAfterRecord The shutdownAfterRecord to set.
+	 * @param shutdownAfterRecord
+	 *            The shutdownAfterRecord to set.
 	 */
 	public void setShutdownAfterRecord(boolean shutdownAfterRecord) {
 		this.shutdownAfterRecord = shutdownAfterRecord;
@@ -222,7 +233,8 @@ public class BOLocalTimer {
 		return startPX;
 	}
 	/**
-	 * @param startPX The startPX to set.
+	 * @param startPX
+	 *            The startPX to set.
 	 */
 	public void setStartPX(boolean startPX) {
 		this.startPX = startPX;
@@ -234,10 +246,17 @@ public class BOLocalTimer {
 		return stereoReplaceAc3;
 	}
 	/**
-	 * @param stereoReplaceAc3 The stereoReplaceAc3 to set.
+	 * @param stereoReplaceAc3
+	 *            The stereoReplaceAc3 to set.
 	 */
 	public void setStereoReplaceAc3(boolean stereoReplaceAc3) {
 		this.stereoReplaceAc3 = stereoReplaceAc3;
+		if (stereoReplaceAc3)
+		{
+			setRecordAllPids(false);
+			setAc3ReplaceStereo(false);
+
+		}
 	}
 	/**
 	 * @return Returns the stopPlaybackAtRecord.
@@ -246,7 +265,8 @@ public class BOLocalTimer {
 		return stopPlaybackAtRecord;
 	}
 	/**
-	 * @param stopPlaybackAtRecord The stopPlaybackAtRecord to set.
+	 * @param stopPlaybackAtRecord
+	 *            The stopPlaybackAtRecord to set.
 	 */
 	public void setStopPlaybackAtRecord(boolean stopPlaybackAtRecord) {
 		this.stopPlaybackAtRecord = stopPlaybackAtRecord;
@@ -258,7 +278,8 @@ public class BOLocalTimer {
 		return storeEPG;
 	}
 	/**
-	 * @param storeEPG The storeEPG to set.
+	 * @param storeEPG
+	 *            The storeEPG to set.
 	 */
 	public void setStoreEPG(boolean storeEPG) {
 		this.storeEPG = storeEPG;
@@ -270,7 +291,8 @@ public class BOLocalTimer {
 		return storeLogAfterRecord;
 	}
 	/**
-	 * @param storeLogAfterRecord The storeLogAfterRecord to set.
+	 * @param storeLogAfterRecord
+	 *            The storeLogAfterRecord to set.
 	 */
 	public void setStoreLogAfterRecord(boolean storeLogAfterRecord) {
 		this.storeLogAfterRecord = storeLogAfterRecord;
@@ -282,7 +304,8 @@ public class BOLocalTimer {
 		return streamingEngine;
 	}
 	/**
-	 * @param streamingEngine The streamingEngine to set.
+	 * @param streamingEngine
+	 *            The streamingEngine to set.
 	 */
 	public void setStreamingEngine(int streamingEngine) {
 		this.streamingEngine = streamingEngine;
@@ -294,7 +317,8 @@ public class BOLocalTimer {
 		return udrecOptions;
 	}
 	/**
-	 * @param udrecOptions The udrecOptions to set.
+	 * @param udrecOptions
+	 *            The udrecOptions to set.
 	 */
 	public void setUdrecOptions(BOUdrecOptions udrecOptions) {
 		this.udrecOptions = udrecOptions;
@@ -306,7 +330,8 @@ public class BOLocalTimer {
 		return udrecStreamType;
 	}
 	/**
-	 * @param udrecStreamType The udrecStreamType to set.
+	 * @param udrecStreamType
+	 *            The udrecStreamType to set.
 	 */
 	public void setUdrecStreamType(String udrecStreamType) {
 		this.udrecStreamType = udrecStreamType;
@@ -315,13 +340,14 @@ public class BOLocalTimer {
 	 * @return Returns the description.
 	 */
 	public String getDescription() {
-	    if (description==null) {
-	        description="";
-	    }
+		if (description == null) {
+			description = "";
+		}
 		return description;
 	}
 	/**
-	 * @param description The description to set.
+	 * @param description
+	 *            The description to set.
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -333,63 +359,68 @@ public class BOLocalTimer {
 		return mainTimer;
 	}
 	/**
-	 * @param mainTimer The mainTimer to set.
+	 * @param mainTimer
+	 *            The mainTimer to set.
 	 */
 	public void setMainTimer(BOTimer mainTimer) {
 		this.mainTimer = mainTimer;
 	}
-    /**
-     * @return Returns the startTime.
-     */
-    public long getStartTime() {
-        return startTime;
-    }
-    /**
-     * @param startTime The startTime to set.
-     */
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
-    public void setStartTime(GregorianCalendar startTime) {
-        this.startTime = startTime.getTimeInMillis();
-    }
-    /**
-     * @return Returns the startTime.
-     */
-    public long getStopTime() {
-        return stopTime;
-    }
-    /**
-     * @param startTime The startTime to set.
-     */
-    public void setStopTime(long stopTime) {
-        this.stopTime = stopTime;
-    }
-    public void setStopTime(GregorianCalendar stopTime) {
-        this.stopTime = stopTime.getTimeInMillis();
-    }
-    /**
-     * @return Returns the timerNode.
-     */
-    public Node getTimerNode() {
-        return timerNode;
-    }
-    /**
-     * @param timerNode The timerNode to set.
-     */
-    public void setTimerNode(Node timerNode) {
-        this.timerNode = timerNode;
-    }
-    /**
-     * @return Returns the local.
-     */
-    public boolean isLocal() {
-        return local;
-    }
-    /**
-     * @param local The local to set.
-     */
-    public void setLocal(boolean local) {
-        this.local = local;
-    }
+	/**
+	 * @return Returns the startTime.
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+	/**
+	 * @param startTime
+	 *            The startTime to set.
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+	public void setStartTime(GregorianCalendar startTime) {
+		this.startTime = startTime.getTimeInMillis();
+	}
+	/**
+	 * @return Returns the startTime.
+	 */
+	public long getStopTime() {
+		return stopTime;
+	}
+	/**
+	 * @param startTime
+	 *            The startTime to set.
+	 */
+	public void setStopTime(long stopTime) {
+		this.stopTime = stopTime;
+	}
+	public void setStopTime(GregorianCalendar stopTime) {
+		this.stopTime = stopTime.getTimeInMillis();
+	}
+	/**
+	 * @return Returns the timerNode.
+	 */
+	public Node getTimerNode() {
+		return timerNode;
+	}
+	/**
+	 * @param timerNode
+	 *            The timerNode to set.
+	 */
+	public void setTimerNode(Node timerNode) {
+		this.timerNode = timerNode;
+	}
+	/**
+	 * @return Returns the local.
+	 */
+	public boolean isLocal() {
+		return local;
+	}
+	/**
+	 * @param local
+	 *            The local to set.
+	 */
+	public void setLocal(boolean local) {
+		this.local = local;
+	}
 }
