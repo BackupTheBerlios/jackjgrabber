@@ -35,6 +35,10 @@ public class BOSettings {
 	private BOSettingsLayout layoutSettings;
 	private boolean settingsChanged = false;
 	
+	public BOSettings()
+	{
+	}	
+	
 	/**
 	 * @return Returns the settingsChanged.
 	 */

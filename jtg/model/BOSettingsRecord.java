@@ -78,7 +78,7 @@ public class BOSettingsRecord {
 	 *            The streamingServerPort to set.
 	 */
 	public void setStreamingServerPort(String streamingServerPort) {
-		if (!this.streamingServerPort.equals(streamingServerPort)) {
+		if (this.streamingServerPort == null || !this.streamingServerPort.equals(streamingServerPort)) {
 			setSettingsChanged(true);
 			this.streamingServerPort = streamingServerPort;
 		}

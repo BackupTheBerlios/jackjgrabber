@@ -23,7 +23,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 public class BOSettingsMain {
 	
 	private BOSettings settings;
-	public String locale;
+	public String locale = "";
 	public String themeLayout;
 	public ArrayList boxList;
 	public String lookAndFeel;
@@ -65,7 +65,7 @@ public class BOSettingsMain {
 	 *            The themeLayout to set.
 	 */
 	public void setThemeLayout(String layout) {
-		if (!this.themeLayout.equals(layout)) {
+		if (themeLayout == null || !this.themeLayout.equals(layout)) {
 			setSettingsChanged(true);
 			this.themeLayout = layout;
 		}

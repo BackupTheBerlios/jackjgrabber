@@ -15,6 +15,7 @@ package service;
  */
 import java.awt.Dimension;
 import java.awt.Point;
+import java.beans.*;
 import java.io.*;
 import java.util.*;
 
@@ -755,13 +756,19 @@ public class SerSettingsHandler {
 		recordInfoDirectorySplitPos.setText("" + recordInfoDirectorySplitPosValue);
 	}
 
-	public static void saveAllSettings() throws IOException {
-		savePathSettings();
+	public static void saveAllSettings() throws Exception {
+/*		savePathSettings();
 		saveRecordSettings();
 		saveMainSettings();
 		saveMovieGuideSettings();
 		savePlaybackSettings();
 		saveLayoutSettings();
 		SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
+		*/
+		
+		XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.settingsFilename)));
+		dec.writeObject(ControlMain.getSettings());
+		dec.flush();
+		dec.close();
 	}
 }

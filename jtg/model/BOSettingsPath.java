@@ -72,7 +72,7 @@ public class BOSettingsPath {
 	 *            The savePath to set.
 	 */
 	public void setSavePath(String savePath) {
-		if (!this.savePath.equals(savePath)) {
+		if (this.savePath == null || !this.savePath.equals(savePath)) {
 			setSettingsChanged(true);
 			this.savePath = savePath;
 		}

@@ -17,42 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Properties;
+import java.beans.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import model.BOBox;
-import model.BOSettings;
-import model.BOSettingsLayout;
-import model.BOSettingsMain;
-import model.BOSettingsMovieGuide;
-import model.BOSettingsPath;
-import model.BOSettingsPlayback;
-import model.BOSettingsRecord;
+import model.*;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
+import org.apache.log4j.*;
+import org.dom4j.*;
 
-import presentation.GuiLogWindow;
-import presentation.GuiSplashScreen;
-import service.SerExternalProcessHandler;
-import service.SerLogAppender;
-import service.SerSettingsHandler;
-import service.SerXMLHandling;
-import boxConnection.SerBoxControl;
-import boxConnection.SerBoxControlDefault;
-import boxConnection.SerBoxControlEnigma;
-import boxConnection.SerBoxControlNeutrino;
+import presentation.*;
+import service.*;
+import boxConnection.*;
 
 /**
  * Startklasse, Start der Anwendung
@@ -101,6 +78,8 @@ public class ControlMain {
 			screen.dispose();
 		}
 		control.getView().setVisible(true);
+		
+		
 	};
 	
 	public static void startLogger() {
@@ -140,6 +119,15 @@ public class ControlMain {
 	 * Dokument wird immer gebraucht, falls neue Settings gespeichert werden.
 	 */
 	public static void readSettings() {
+		try
+		{
+			XMLDecoder dec = new XMLDecoder(new FileInputStream(settingsFilename));
+			BOSettings settings = (BOSettings) dec.readObject();
+			setSettings(settings);
+		}
+		catch (Exception ex)
+		{
+			// read old settings file
 			try {
 				File pathToXMLFile = new File(settingsFilename).getAbsoluteFile();
 				if (pathToXMLFile.exists()) {
@@ -157,6 +145,9 @@ public class ControlMain {
 			} catch (IOException e) {
 				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
 			}
+			
+		}
+		
 	}	
 
 	public static String getBoxIpOfActiveBox() {
@@ -320,7 +311,7 @@ public class ControlMain {
 	            SerSettingsHandler.saveAllSettings();
 	            Logger.getLogger("ControlMainView").info("Settings saved");
 	        }
-	    } catch (IOException e1) {
+	    } catch (Exception e1) {
 	        Logger.getLogger("ControlMainView").error("Error while save Settings");
 	    }
 	    System.exit(0); 
