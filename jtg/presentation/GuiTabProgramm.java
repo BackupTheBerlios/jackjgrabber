@@ -27,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableColumn;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -305,10 +306,11 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */    
-	private JSpinner getJSpinner() {
+	public JSpinner getJSpinner() {
 		if (jSpinnerRecMin == null) {
-			jSpinnerRecMin = new JSpinner();
-			jSpinnerRecMin.setToolTipText("Sofortaufnahme beenden nach...");
+			SpinnerNumberModel jspinnermodel = new SpinnerNumberModel(0, 0, 500, 10);
+			jSpinnerRecMin = new JSpinner(jspinnermodel);
+			jSpinnerRecMin.setToolTipText("Sofortaufnahme beenden nach...");		
 		}
 		return jSpinnerRecMin;
 	}
