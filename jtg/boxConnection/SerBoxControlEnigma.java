@@ -8,9 +8,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
@@ -195,75 +199,80 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
 	    ArrayList epgList=new ArrayList();
-		BufferedReader input;
-		input=null;
-		try {
-		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
-		}
-		 catch (IOException e) {}
-		if (input==null) {
-		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
-		}
-		int startEpgInfo;
-		int endEpgInfo;
+	    BufferedReader input = getConnection("/getcurrentepg?ref="+sender.getChanId());
+	    int startEpgInfo;
+		int endEpgInfo, startpos, endpos;
+		long durationlong;
 		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
-		String line, eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String() ;
-		String valueStart, valueDuration;
+		String line, line2, eventId=new String(), startTime=new String(), endTime=new String(), title=new String() ;
+		String valueStart, valueEnd, valueDuration,startDateString,endDateString,duration;
 		while((line=input.readLine())!=null) {
-			if ((startEpgInfo=line.indexOf("<span class=\"time\">"))>0) {
-				endEpgInfo=line.indexOf("</span>",startEpgInfo);
-				//eventId=sender.getChanId()+line.substring(startEpgInfo+19,endEpgInfo-1);
-				eventId=line.substring(startEpgInfo+19,endEpgInfo-1);
-				startEpgInfo=line.indexOf("&start=")+7;
-				endEpgInfo=line.indexOf("&duration=",startEpgInfo);
-				valueStart=line.substring(startEpgInfo,endEpgInfo);
-				startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
-				startDate =	SerFormatter.formatUnixDate(valueStart);
-				startEpgInfo=endEpgInfo+10;
-				endEpgInfo=line.indexOf("&descr=",startEpgInfo);
-				valueDuration=line.substring(startEpgInfo,endEpgInfo);
-				duration=SerFormatter.formatedEndTime(valueDuration);
-				startEpgInfo=line.indexOf("<span class=\"event\">")+20;
-				endEpgInfo=line.indexOf("</span>",startEpgInfo);
-				endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
-				endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);    
-				title=line.substring(startEpgInfo,endEpgInfo);
-				epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));
-			}
+		    startpos=line.indexOf("ID: ");
+		    if (startpos > 0){
+		        while ((line2=input.readLine())!=null) {
+		            if (line2.indexOf("ID: ")>0) {
+		                startpos+=4;
+		                endpos=line.indexOf(" ", startpos+1);
+		                eventId=line.substring(startpos, endpos);
+		                startpos=line.indexOf("<span class=\"epg\">")+18;
+		                endpos=line.indexOf(" ", startpos+1);
+		                startDateString=line.substring(startpos, endpos)+".";
+		                startpos=endpos+3;
+		                endpos=line.indexOf(" ", startpos+1);
+		                startTime=line.substring(startpos, endpos);
+		                startpos=endpos+1;
+		                endpos=line.indexOf("</span", startpos);
+		                title=line.substring(startpos, endpos);
+		                startpos=line2.indexOf("<span class=\"epg\">")+18;
+		                endpos=line2.indexOf(" ", startpos+1);
+		                endDateString=line2.substring(startpos, endpos)+".";
+		                startpos=endpos+3;
+		                endpos=line2.indexOf(" ", startpos+1);
+		                endTime=line2.substring(startpos, endpos);
+		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime);
+		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime);
+		                valueStart=""+(startDate.getTimeInMillis()/1000);
+		                valueDuration = ""+((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
+		                duration=SerFormatter.formatedEndTime(valueDuration);
+		                startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
+						startDate =	SerFormatter.formatUnixDate(valueStart);
+						endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) *1000  + Long.parseLong(valueDuration) * 1000);
+						endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);    
+						epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));
+		                line=line2;
+		            }
+		        }
+		    }
 		}
+	    
 		return epgList;
 	}
 	
 	public BOEpgDetails getEpgDetail(BOEpg epg) throws IOException {
 	    BOEpgDetails epgDetail = new BOEpgDetails();
 		BOSender sender=epg.getSender();
-		BufferedReader input;
-		input=null;
-		try {
-		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
-		}
-		 catch (IOException e) {}
-		if (input==null) {
-		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
-		}
-		String text = new String();
-		String line;
-		String eventId=epg.getEventId();		
+		String text = "";
+		String line, line2;
+		String eventId=epg.getEventId();	
+		BufferedReader input = getConnection("/EPGDetails?ID="+eventId+"&ref="+sender.getChanId());
+		System.out.println("/EPGDetails?&ID="+eventId+"&ref="+sender.getChanId());
 		while((line=input.readLine())!=null) {
-			int startEpgInfo;
-			int endEpgInfo;
-			if (line.indexOf("<span class=\"time\">"+eventId)>0) {
-				startEpgInfo=line.indexOf("<span class=\"description\">")+26;
-				endEpgInfo=line.indexOf("</span>",startEpgInfo);
-				if (endEpgInfo<startEpgInfo) {
-					text+=line.substring(startEpgInfo)+"\n";
-					if ((line=input.readLine())!=null) {
-						startEpgInfo=0;
-						endEpgInfo=line.indexOf("</span>",startEpgInfo);
-					}
-				}
-				text+=line.substring(startEpgInfo,endEpgInfo)+"\n";
-			}
+		    if (line.indexOf("</h1") > 0) {
+		        while((line2=input.readLine())!=null) {
+		            if (line2.indexOf("body") < 1) {
+		                if (text.length() >0) {
+		                    text+="\n";
+		                }
+		                text+=line2.trim();
+		                System.out.println(text);
+		            } else {
+		                epgDetail.setText(text);
+		        		epg.setEpgDetail(epgDetail);
+		                return epgDetail;
+		            }
+		        }
+		    }
+		            
 		}
 		epgDetail.setText(text);
 		epg.setEpgDetail(epgDetail);
