@@ -207,12 +207,14 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 
 	private void actionStartVlc() {
 	    try {
-            Process run = Runtime.getRuntime().exec(ControlMain.getSettings().getVlcPath()+" --extraintf=http");
-            new SerInputStreamReadThread(true, run.getInputStream()).start();
-            new SerErrorStreamReadThread(true, run.getErrorStream()).start();
-        } catch (IOException e) {
-            Logger.getLogger("ControlSettingsTabMain").error(e.getMessage());
-        }
+	        String execString=ControlMain.getSettings().getVlcPath()+" --intf=telnet --extraintf=http";
+	        Logger.getLogger("ControlSettingsTabMain").info(execString);
+	        Process run = Runtime.getRuntime().exec(execString);
+	        new SerInputStreamReadThread(true, run.getInputStream()).start();
+	        new SerErrorStreamReadThread(true, run.getErrorStream()).start();
+	    } catch (IOException e) {
+	        Logger.getLogger("ControlSettingsTabMain").error(e.getMessage());
+	    }
 	}
 	
 	private void actionAddBox() {
