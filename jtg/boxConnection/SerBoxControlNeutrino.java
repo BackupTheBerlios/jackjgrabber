@@ -78,9 +78,13 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		  	String[] pid = new String[2];
 		  	
 		  	 pid[0] = Integer.toHexString(Integer.parseInt(st.nextToken()));
-		  	 pid[1] = st.nextToken();
+		  	 pid[1] = new String();
+		  	 while (st.hasMoreElements()) {
+		  	     pid[1] += " "+st.nextToken();    
+		  	 }
+		  	 pid[1]=pid[1].trim();
 		  	 
-		  	if (pid[1].equals("vtxt")) {
+		  	if (pid[1]!= null && pid[1].equals("vtxt")) {
 		  	    pids.setVtxtPid(pid);
 		  	} else {
 		  	    pids.getAPids().add(pid);  
