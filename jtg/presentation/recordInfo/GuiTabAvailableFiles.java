@@ -1,7 +1,5 @@
 package presentation.recordInfo;
 /*
- * 
- * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2, or (at your option) any later version.
@@ -13,8 +11,7 @@ package presentation.recordInfo;
  * 
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 675 Mass
- * Ave, Cambridge, MA 02139, USA.
- *  
+ * Ave, Cambridge, MA 02139, USA. 
  */
 
 /**
@@ -72,7 +69,9 @@ public class GuiTabAvailableFiles extends GuiTab {
 		fileInfo = new JTextArea();
 		fileInfo.setEditable(false);
 
-		splitFilesInfos.setTopComponent(new JScrollPane(getFileTable()));
+		JScrollPane p = new JScrollPane(getFileTable());
+		p.getViewport().setBackground(Color.white);
+		splitFilesInfos.setTopComponent(p);
 		splitFilesInfos.setBottomComponent(new JScrollPane(fileInfo));
 		fileTree.getSelectionModel().addTreeSelectionListener(fileTableModel);
 		split.setDividerLocation(ControlMain.getSettingsLayout().getRecordInfoDirectorySplitPos());
@@ -93,6 +92,8 @@ public class GuiTabAvailableFiles extends GuiTab {
 		if (fileTable == null) {
 
 			fileTable = new JTable();
+			fileTable.setShowHorizontalLines(false);
+			fileTable.setShowVerticalLines(false);
 			fileTableModel = new GuiFileTableModel(fileTable);
 			GuiTableSorter sorter = new GuiTableSorter(fileTableModel);
 			fileTable.setModel(sorter);
