@@ -19,8 +19,11 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.IOException;
 import java.text.MessageFormat;
-import control.ControlMain;
+
 import model.BORecordArgs;
+import service.ErrorStreamReadThread;
+import service.InputStreamReadThread;
+import control.ControlMain;
 
 
 public class UdrecRecord  extends Record {
@@ -65,8 +68,8 @@ public class UdrecRecord  extends Record {
 	public void start() {
 	    try {
             Process run = Runtime.getRuntime().exec(requestString);
-            new UdrecInputStreamThread(run.getInputStream()).start();
-            new UdrecErrorStreamThread(run.getErrorStream()).start();
+            new InputStreamReadThread(run.getInputStream()).start();
+            new ErrorStreamReadThread(run.getErrorStream()).start();
             UdrecOutputStreamThread outputStream = new UdrecOutputStreamThread(run.getOutputStream());
         } catch (IOException e) {
             // TODO Auto-generated catch block
