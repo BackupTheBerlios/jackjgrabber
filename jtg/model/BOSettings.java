@@ -32,6 +32,7 @@ public class BOSettings {
 	private BOSettingsPath pathSettings;
 	private BOSettingsLayout layoutSettings;
 	private boolean settingsChanged = false;
+	public boolean standardSettings = false;
 
 	public BOSettings() {
 	}

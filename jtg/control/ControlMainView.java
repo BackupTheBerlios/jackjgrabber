@@ -57,7 +57,9 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    this.initPlasticLookAndFeel();
 	    this.setLookAndFeel();
 	    this.setView(new GuiMainView(this));		
-	   
+	    if (ControlMain.getSettings().standardSettings==true) { //First start, go to Settings-Tab
+	        this.getView().getMainTabPane().setSelectedIndex(4);
+	    }
 	    this.checkStartVlc();
 	    Logger.getLogger("ControlMainView").info(ControlMain.getProperty("msg_app_starting"));
 	}

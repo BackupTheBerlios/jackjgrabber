@@ -87,6 +87,7 @@ public class SerSettingsHandler {
 		settings.setPathSettings(pathS);
 		settings.setPlaybackSettings(play);
 		settings.setRecordSettings(rec);
+		settings.standardSettings=true;
 		
 		
 		play.setPlaybackString("d: http://$ip:31339/$vPid,$aPid");
