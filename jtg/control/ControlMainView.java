@@ -23,7 +23,7 @@ import service.SerLogAppender;
 
 
 /**
- * @author alexg
+ * @author Alexander Geist
  *
  * Control-Klasse der Main-Gui
  */
@@ -134,6 +134,14 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		int count = pane.getSelectedIndex(); //number of selected Tab
 		JPanel comp = (JPanel)pane.getComponent(count);
 		
+		//Change-Event beim Verlassen des Setting-Tabs
+		if (pane.getIndex()==3 && ControlMain.getSettings().isBoxIpChanged()) {
+			ControlMain.detectImage();
+			pane.getTabProgramm().getControl().reInitialize();
+			ControlMain.getSettings().setBoxIpChanged(false);
+		}
+		
+		//Change-Events bei betreten neuer Tabs
 		if (count == 0) { //ProgrammTab
 			try {
 				comp.getComponent(0);
@@ -162,6 +170,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 				comp.add(pane.getTabSettings());
 			}
 		}
+		pane.setIndex(count);
 	}
 		
 	/**
