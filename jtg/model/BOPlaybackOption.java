@@ -18,11 +18,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package model;
 
-import java.util.*;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import service.SerAlertDialog;
 import control.ControlMain;
@@ -131,15 +132,16 @@ public class BOPlaybackOption {
 	    JList list = new JList(options.toArray());
 	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    BOPlaybackOption def = getPlaybackSettings().getStandardPlaybackOption();
-	    if (def != null)
-	    {
+	    if (def != null) {
 	    	list.setSelectedValue(def,true);
 	    }
-	    
-	    
-	    int ret = JOptionPane.showConfirmDialog(ControlMain.getControl().getView(),new Object[] {ControlMain.getProperty("msg_choosePlayback2"),new JScrollPane(list)},
-                ControlMain.getProperty("msg_choose"),JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
-
+	    int ret = JOptionPane.showConfirmDialog(
+	            ControlMain.getControl().getView(),
+	            new Object[] {ControlMain.getProperty("msg_choosePlayback2"),new JScrollPane(list)},
+                ControlMain.getProperty("msg_choose"),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+	    );
 	    if (ret == JOptionPane.OK_OPTION) {
 	        BOPlaybackOption opt = (BOPlaybackOption)list.getSelectedValue();
 	        return opt;
