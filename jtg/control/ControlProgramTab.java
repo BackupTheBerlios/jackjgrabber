@@ -50,6 +50,7 @@ import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
+import presentation.GuiLogWindow;
 import presentation.GuiMainView;
 import presentation.GuiQuickRecordOptionsDialog;
 import presentation.program.GuiEpgTableModel;
@@ -209,25 +210,13 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			    break;
 			}
 			if (action == "switchLog") {
-			    this.actionSwithLogVisiblity();
+			    GuiLogWindow.switchLogVisiblity();
 			    break;
 				}
 			break;
 		}
 	}
-	
-	private void actionSwithLogVisiblity() {
-	    if (ControlMain.logWindow.isVisible()) {
-	        this.getMainView().getTabProgramm().getJButtonSwitchLog().setText(ControlMain.getProperty("button_on"));
-	        ControlMain.logWindow.setVisible(false);
-	        ControlMain.logWindow.setShouldBeVisible(false);
-	    } else {
-	        this.getMainView().getTabProgramm().getJButtonSwitchLog().setText(ControlMain.getProperty("button_off"));
-	        ControlMain.logWindow.setShouldBeVisible(true);
-	        ControlMain.logWindow.setVisible(true);
-	    }
-	}
-	
+
 	private void actionClearLog() {
 	    ControlMain.logWindow.getLogArea().setText(null);
 	}
