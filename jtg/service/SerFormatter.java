@@ -233,7 +233,7 @@ public class SerFormatter {
 		return cal;
     }
     public static GregorianCalendar getGC(GregorianCalendar gc, int value){
-    	gc.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+ value);
+    	gc.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
     	return gc;
     }
     public static String getGC2String(GregorianCalendar gc){
