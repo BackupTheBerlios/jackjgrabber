@@ -41,6 +41,7 @@ import model.BOBouquet;
 import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPids;
 import model.BORecordArgs;
 import model.BOSender;
 import model.BOTimer;
@@ -49,6 +50,8 @@ import presentation.GuiMainView;
 import presentation.GuiPidsQuestionDialog;
 import presentation.GuiSenderTableModel;
 import presentation.GuiTabProgramm;
+import service.ErrorStreamReadThread;
+import service.InputStreamReadThread;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import streaming.RecordControl;
@@ -60,7 +63,7 @@ import streaming.RecordControl;
 public class ControlProgramTab extends ControlTab implements ActionListener, MouseListener, ItemListener, ChangeListener {
 	
 	ArrayList bouquetList = new ArrayList();
-	ArrayList pids;
+	BOPids pids;
 	BOSender selectedSender;
 	BOEpg selectedEpg;
 	BORecordArgs recordArgs;
@@ -218,7 +221,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
 					new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
-					if (this.getPids().size()>0) {
+					if (this.getPids().getVPid()!=null || this.getPids().getAPids().size()>0) {
 					    this.startRecord(this.buildTVRecordArgs());
 					}
 				} else {
@@ -237,8 +240,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	private void actionPlayback() {
 		try {
 			this.zapToSelectedSender();
-			String vPid = "0x"+(String)this.getPids().get(0);
-			String aPid = "0x"+(String)this.getPids().get(1);
+			String vPid = "0x"+(String)this.getPids().getVPid()[0];
+			String[] aPids = (String[])this.getPids().getAPids().get(0);
+			String aPid = "0x"+aPids[0];
 			String ip = ControlMain.getBoxIpOfActiveBox();
 			String execString =  ControlMain.getSettings().getPlaybackString();
 			
@@ -246,7 +250,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			execString = SerFormatter.replace(execString, "$vPid", vPid);
 			execString = SerFormatter.replace(execString, "$aPid", aPid);
 			
-			Process p = Runtime.getRuntime().exec(execString);
+			Process run = Runtime.getRuntime().exec(execString);
+			new InputStreamReadThread(run.getInputStream()).start();
+            new ErrorStreamReadThread(run.getErrorStream()).start();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -280,14 +286,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	private BORecordArgs buildRadioRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
-		ArrayList pidList = new ArrayList();
-			
-		String[] aPids = new String[this.getPids().size()-1];
-		for (int i=0; i<this.getPids().size()-1; i++) {
-			aPids[i]=(String)this.getPids().get(i+1);
-		}
-		pidList.add(aPids);
-		args.setAPids(pidList);
+		args.setAPids(this.getPids().getAPids());
 			
 		this.fillRecordArgsWithEpgData(args);
 		return args;
@@ -295,17 +294,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	private BORecordArgs buildTVRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
-		args.setVPid((String)this.getPids().get(0));
-		
-		ArrayList pidList = new ArrayList();
-		
-		for (int i=0; i<this.getPids().size()-1; i++) {
-			String[] pidInfo = new String[1];
-			pidInfo[0]=(String)this.getPids().get(i+1);
-			pidList.add(pidInfo);
+		if (this.getPids().getVPid() != null) {
+		    args.setVPid(this.getPids().getVPid()[0]);  
 		}
-		args.setAPids(pidList);
-
+		args.setAPids(this.getPids().getAPids());
 		this.fillRecordArgsWithEpgData(args);
 		return args;
 	}
@@ -323,7 +315,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	private void zapToSelectedSender() throws IOException{
 		if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
-			this.setPids(ControlMain.getBoxAccess().getPids());
+			this.setPids(ControlMain.getBoxAccess().getPids(this.isTvMode()));
 		}
 	}
 	
@@ -694,13 +686,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	/**
 	 * @return Returns the pids.
 	 */
-	public ArrayList getPids() {
+	public BOPids getPids() {
 		return pids;
 	}
 	/**
 	 * @param pids The pids to set.
 	 */
-	public void setPids(ArrayList pids) {
+	public void setPids(BOPids pids) {
 		this.pids = pids;
 	}
 	/**
