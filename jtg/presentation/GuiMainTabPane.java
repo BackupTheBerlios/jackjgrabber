@@ -86,10 +86,11 @@ public class GuiMainTabPane extends JTabbedPane {
 	
 	/**
 	 * Aufbau des Tabs ProjectX	
+	 * Keine Parameter, da Start nicht nach einer Aufnahme
 	 */    
 	public GuiTabProjectX getTabProjectX() {
 		if (tabProjectX == null) {
-			ControlProjectXTab control = new ControlProjectXTab(this.getView());
+			ControlProjectXTab control = new ControlProjectXTab(this.getView(), null);
 			tabProjectX = new GuiTabProjectX(control);
 			control.initialize();
 		}
@@ -120,4 +121,13 @@ public class GuiMainTabPane extends JTabbedPane {
 	public void setIndex(int index) {
 		this.index = index;
 	}
+	/**
+	 * Sets the tabProjectX.
+	 * @param tabProjectX 
+	 * Tab wird nach Aufnahme gesetzt 
+	 */
+	public void setTabProjectX(GuiTabProjectX tabProjectX) {
+		this.tabProjectX = tabProjectX;
+	}
+
 }
