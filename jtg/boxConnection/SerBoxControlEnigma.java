@@ -187,12 +187,17 @@ public class SerBoxControlEnigma extends SerBoxControl {
 
 	public String zapTo(String channelId) throws IOException {
 		String status = "ok";
-		BufferedReader input = getConnection("/cgi-bin/zapTo?path="+channelId);
-		String line;
-		while((line=input.readLine())!=null) {
-			if (line.equalsIgnoreCase("error")) {
-			    status="error";
-			}
+		if (isRecording()) {
+		    Logger.getLogger("SerBoxControlEnigma").error(ControlMain.getProperty("err_zappingRecord"));
+		    status="error";
+		} else {
+		    BufferedReader input = getConnection("/cgi-bin/zapTo?path="+channelId);
+		    String line;
+		    while((line=input.readLine())!=null) {
+		        if (line.equalsIgnoreCase("error")) {
+		            status="error";
+		        }
+		    }
 		}
 		return status;
 	}
@@ -506,6 +511,28 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		            tvMode=false;
 		        }
 		        return tvMode;
+		    }
+			
+		}
+		return true;
+	}
+	
+	public boolean isRecording() throws IOException{
+		BufferedReader input = getConnection("/cgi-bin/status");
+		String line;
+		String zapmode;
+		boolean Recording=true;
+		int startpos;
+		while((line=input.readLine())!=null) {
+		    if (line.indexOf("Recording:</td><td>")>0) {
+		        startpos=(line.indexOf("Recording:</td><td>")+19);
+		        zapmode=line.substring(startpos,startpos+2);
+		        if (zapmode.equals("ON")) {
+		            Recording=true;
+		        } else {
+		            Recording=false;
+		        }
+		        return Recording;
 		    }
 			
 		}
