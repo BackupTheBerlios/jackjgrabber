@@ -29,15 +29,15 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
-import javax.swing.event.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.tree.DefaultTreeModel;
 
 import model.BOFileWrapper;
 import presentation.GuiTab;
 import presentation.GuiTableSorter;
-import control.*;
 import control.ControlMain;
-import control.ControlRecordInfoTab;
+import control.ControlRecordEditTab;
 
 public class GuiTabRecordEdit extends GuiTab {
 
@@ -47,6 +47,7 @@ public class GuiTabRecordEdit extends GuiTab {
 
 	private JTable fileTable;
 	private GuiFileTableModel fileTableModel;
+    public GuiTableSorter fileTableSorter;
 
 	private JTextArea fileInfo;
 
@@ -126,9 +127,9 @@ public class GuiTabRecordEdit extends GuiTab {
 			fileTable.setShowHorizontalLines(false);
 			fileTable.setShowVerticalLines(false);
 			fileTableModel = new GuiFileTableModel(fileTable);
-			GuiTableSorter sorter = new GuiTableSorter(fileTableModel);
-			fileTable.setModel(sorter);
-			sorter.setTableHeader(fileTable.getTableHeader());
+			fileTableSorter = new GuiTableSorter(fileTableModel);
+			fileTable.setModel(fileTableSorter);
+			fileTableSorter.setTableHeader(fileTable.getTableHeader());
 			fileTable.addMouseListener(control);
 			fileTable.getSelectionModel().addListSelectionListener(control);
 		}

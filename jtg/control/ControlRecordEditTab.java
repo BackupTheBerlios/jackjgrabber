@@ -454,7 +454,9 @@ public class ControlRecordEditTab extends ControlTab implements MouseListener, L
 					ArrayList l = new ArrayList();
 					int[] aiSel = table.getSelectedRows();
 					for (int i = 0; i < aiSel.length; i++) {
-						File file = (File) guiTabRecordEdit.getTableModel().getValueAt(aiSel[i], 2);
+                        int fileIndex = guiTabRecordEdit.fileTableSorter.modelIndex(aiSel[i]);
+                        
+						File file = (File) guiTabRecordEdit.getTableModel().getValueAt(fileIndex, 2);
 						l.add(file);
 					}
 					
