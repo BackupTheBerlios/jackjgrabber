@@ -60,7 +60,10 @@ public class SerSettingsHandler {
 		getSettingsAc3ReplaceStereo(root, settings);
 		getSettingsUdrecOptions(root, settings);
 		getSettingsProjectXPath(root, settings);
-
+		getSettingsStoreEPG(root,settings);
+		getSettingsStoreLogAfterRecord(root,settings);
+		getSettingsMovieguide(root,settings);
+		
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
 		return settings;
@@ -236,7 +239,28 @@ public class SerSettingsHandler {
 			settings.setLookAndFeel(PlasticLookAndFeel.class.getName());
 		}
 	}
+	
+	private static void getSettingsStoreEPG(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/storeepg");
+		if (node != null) {
+			settings.setStoreEPG(node.getText().equals("true"));
+		} else {
+			SerXMLHandling.setElementInElement(root, "storeepg", "false");
+			settings.setStoreEPG(false);
+		}
+	}	
 
+	private static void getSettingsStoreLogAfterRecord(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/storelogafterrecord");
+		if (node != null) {
+			settings.setStoreLogAfterRecord(node.getText().equals("true"));
+		} else {
+			SerXMLHandling.setElementInElement(root, "storelogafterrecord", "false");
+			settings.setStoreLogAfterRecord(false);
+		}
+	}	
+
+	
 	private static void getSettingsStreamingServerPort(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/streamingServerPort");
 		if (node != null) {
@@ -287,6 +311,48 @@ public class SerSettingsHandler {
 			settings.setPlaybackString("vlc");
 		}
 	}
+	
+	private static void getSettingsMovieguide(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/mgselectedchannels");
+		if (node != null) {
+			ArrayList list = new ArrayList();
+			StringTokenizer tok = new StringTokenizer(node.getText(),"|");
+			while(tok.hasMoreTokens())
+			{
+				list.add(tok.nextToken());
+			}
+			settings.setMgSelectedChannels(list);
+		} else {
+			SerXMLHandling.setElementInElement(root, "mgselectedchannels", "");
+			settings.setMgSelectedChannels(null);
+		}
+		
+		node = root.selectSingleNode("/settings/mgloadtype");
+		if (node != null) {
+			settings.setMgLoadType(Integer.parseInt(node.getText()));
+		} else {
+			SerXMLHandling.setElementInElement(root, "mgloadtype", ControlSettingsTabMovieguide.MGLOADTYPE_AUTO + "");
+			settings.setMgLoadType(ControlSettingsTabMovieguide.MGLOADTYPE_AUTO);
+		}
+		
+		node = root.selectSingleNode("/settings/mgdefault");
+		if (node != null) {
+			settings.setMgDefault(Integer.parseInt(node.getText()));
+		} else {
+			SerXMLHandling.setElementInElement(root, "mgdefault", ControlSettingsTabMovieguide.MGDEFAULTDATE_ALL + "");
+			settings.setMgDefault(ControlSettingsTabMovieguide.MGDEFAULTDATE_ALL);
+		}
+		
+		node = root.selectSingleNode("/settings/mgstoreoriginal");
+		if (node != null) {
+			settings.setMgStoreOriginal(node.getText().equals("true"));
+		} else {
+			SerXMLHandling.setElementInElement(root, "mgstoreoriginal", "false");
+			settings.setMgStoreOriginal(false);
+		}
+		
+		
+	}	
 
 	/**
 	 * @param rootElement of the Settings-Document
@@ -442,6 +508,13 @@ public class SerSettingsHandler {
 		Node recordTimeAfter = settingsDocument.selectSingleNode("/settings/recordTimeAfter");
 		Node ac3ReplaceStereo = settingsDocument.selectSingleNode("/settings/ac3ReplaceStereo");
 		Node udrecOptions = settingsDocument.selectSingleNode("/settings/udrecOptions");
+		Node storeEPG = settingsDocument.selectSingleNode("/settings/storeepg");
+		Node storeLogAfterRecord = settingsDocument.selectSingleNode("/settings/storelogafterrecord");
+
+		Node mgSelectedChannels = settingsDocument.selectSingleNode("/settings/mgselectedchannels");
+		Node mgLoadType = settingsDocument.selectSingleNode("/settings/mgloadtype");
+		Node mgDefault = settingsDocument.selectSingleNode("/settings/mgdefault");
+		Node mgStoreOriginal = settingsDocument.selectSingleNode("/settings/mgstoreoriginal");
 		
 		projectXPath.setText(ControlMain.getSettings().getProjectXPath());
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().isAc3ReplaceStereo()));
@@ -465,6 +538,28 @@ public class SerSettingsHandler {
 		theme.setText(ControlMain.getSettings().getThemeLayout());
 		lookAndFeel.setText(ControlMain.getSettings().getLookAndFeel());
 		locale.setText(ControlMain.getSettings().getLocale());
+		storeEPG.setText(Boolean.toString(ControlMain.getSettings().isStoreEPG()));
+		storeLogAfterRecord.setText(Boolean.toString(ControlMain.getSettings().isStoreLogAfterRecord()));
+
+		ArrayList l = ControlMain.getSettings().getMgSelectedChannels();
+		StringBuffer channelList = new StringBuffer();
+		if (l != null)
+		{
+			Iterator it = l.iterator();
+			while(it.hasNext()) {
+				channelList.append(it.next());
+				if (it.hasNext())
+				{
+					channelList.append("|");
+				}
+			}
+		}
+		
+		mgSelectedChannels.setText(channelList.toString());
+		mgLoadType.setText(ControlMain.getSettings().getMgLoadType() + "");
+		mgDefault.setText(ControlMain.getSettings().getMgDefault() + "");
+		mgStoreOriginal.setText(ControlMain.getSettings().isMgStoreOriginal() + "");
+		
 	}
 
 	public static void saveAllSettings() throws IOException {
