@@ -22,6 +22,10 @@ import java.net.Authenticator;
  */
 public class SerBoxControlEnigma extends SerBoxControl {
 	
+	public String getName() {
+		return "Enigma";
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
 		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIp()+request).openStream()));
 	}

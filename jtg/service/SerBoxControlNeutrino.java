@@ -21,6 +21,10 @@ import control.ControlMain;
  */
 public class SerBoxControlNeutrino extends SerBoxControl{
 	
+	public String getName() {
+		return "Neutrino";
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
 		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIp()+request).openStream()));
 	}

@@ -23,6 +23,11 @@ import model.BOSender;
  * Rückgabe von Defaultwerten
  */
 public class SerBoxControlDefault extends SerBoxControl {
+	
+	public String getName() {
+		return "Default";
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
 		return new BufferedReader(new InputStreamReader(new URL("http://nobox").openStream()));
 	}
