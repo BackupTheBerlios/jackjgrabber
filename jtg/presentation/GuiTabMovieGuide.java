@@ -54,7 +54,8 @@ public class GuiTabMovieGuide extends JPanel {
 	private JTextArea taEpisode;
 	private JTextArea taLand;
 	private JTextArea taAudioVideo;
-			
+	private JTextArea taGenre;
+	
 	private JComboBox comboBoxGenre = null;
 	private JComboBox comboBoxDatum = null;
 	private JComboBox comboBoxSender = null;
@@ -70,10 +71,10 @@ public class GuiTabMovieGuide extends JPanel {
 	private JScrollPane jScrollPaneEpisode = null;
 	private JScrollPane jScrollPaneLand = null;
 	private JScrollPane jScrollPaneAudioVideo;
-	private JScrollPane jPaneTitel= null;			
+	private JScrollPane jPaneTitel= null;
+	private JScrollPane jScrollPaneGenre= null;
 	
 	private JTextField tfSuche;
-	private JTextField tfGenre;	
 	
 	private JCheckBox  jCheckBoxAbAktuell;
 	
@@ -145,7 +146,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"f:140px:grow, f:90px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
+						"f:135px:grow, f:90px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
 					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
@@ -154,7 +155,7 @@ public class GuiTabMovieGuide extends JPanel {
 			builder.add(this.getJScrollPaneDarsteller(), 	cc.xy	(1, 3));
 			builder.add(this.getJScrollPaneEpisode(), 		cc.xy	(1, 4));
 			builder.add(this.getJScrollPaneLand(), 			cc.xy	(1, 5));				
-			builder.add(this.getTfGenre(),					cc.xy	(1, 6));
+			builder.add(this.getJScrollPaneGenre(),			cc.xy	(1, 6));
 			builder.add(this.getJScrollPaneAudioVideo(),	cc.xy	(1, 7));
 		}
 		return jPanelInfo;
@@ -370,6 +371,14 @@ public class GuiTabMovieGuide extends JPanel {
 		return jScrollPaneAudioVideo;
 	}	
 	
+	private JScrollPane getJScrollPaneGenre() {
+		if (jScrollPaneGenre == null) {
+			jScrollPaneGenre = new JScrollPane();
+			jScrollPaneGenre.setViewportView(getTaGenre());
+		}
+		return jScrollPaneGenre;
+	}	
+	
 	public MovieGuideTimerTableModel getGuiMovieGuideTimerTableModel() {
 		return mgTimerTableModel;
 	}
@@ -421,15 +430,17 @@ public class GuiTabMovieGuide extends JPanel {
 		return tfSuche;
 	}
 
-	public JTextField getTfGenre() {
-		if (tfGenre == null) {
-			tfGenre = new JTextField();
-			tfGenre.setEditable(true);			
-			tfGenre.setAutoscrolls(true);
-			tfGenre.setText("Genre: ");
+	public JTextArea getTaGenre() {
+		if (taGenre == null) {
+			taGenre = new JTextArea();
+			taGenre.setEditable(false);
+			taGenre.setLineWrap(true);
+			taGenre.setWrapStyleWord(true);
+			taGenre.setAutoscrolls(true);
+			taGenre.setText("Genre: ");
 		}
-		return tfGenre;
-	}	
+		return taGenre;
+	}
 	
 	public JTextArea getTaBeschreibung() {
 		if (taBeschreibung == null) {
