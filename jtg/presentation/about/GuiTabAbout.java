@@ -42,7 +42,7 @@ public class GuiTabAbout extends JPanel {
 
 	private ControlAboutTab control;
 	private JTextArea taVersion;
-	private JTextArea taAuthors;;
+	private JTextArea taAuthors;
 	private JTextArea taLicense;
 	private JTextArea taOther;
 	private JScrollPane scrollPaneLicense;
