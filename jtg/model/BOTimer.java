@@ -13,7 +13,7 @@ import java.util.Date;
  * @author  ralix
  */
 public class BOTimer extends java.lang.Object{
-    private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, channelId, description;
+    private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, senderName, description;
     Date startDate, endDate;
     /** Creates a new instance of BOTimer */
     public BOTimer() {
@@ -27,7 +27,7 @@ public class BOTimer extends java.lang.Object{
         this.setAnnounceTime(announceTime);
         this.setStartTime(startTime);
         this.setStopTime(stopTime);
-        this.setChannelId(sender);         
+        this.setSenderName(sender);         
         this.setStartDate(startDate);
     }
     
@@ -79,12 +79,12 @@ public class BOTimer extends java.lang.Object{
         this.stopTime = stopTime;
     }
     
-    public String getChannelId (){
-        return this.channelId;
+    public String getSenderName (){
+        return this.senderName;
     }
     
-    public void setChannelId(String sender){
-        this.channelId = sender;
+    public void setSenderName(String sender){
+        this.senderName = sender;
     }
     /**
 	 * @return Returns the startDate.
