@@ -105,7 +105,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public ArrayList getAllSender() throws IOException {
-		ArrayList senderList = new ArrayList();
+	    Logger.getLogger("SerBoxControlEnigma").info("Lese Sender");
+	    ArrayList senderList = new ArrayList();
 		String line;
 		String line2="";
 		int channelStart=0;
@@ -114,6 +115,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		ArrayList readEChannels= new ArrayList();
 		ArrayList readEChannelsRef= new ArrayList();
 		BufferedReader in = getConnection("/body");
+		Logger.getLogger("SerBoxControlEnigma").info("Sender geladen");
 		while ((line = in.readLine()) != null) {
 			if (line.indexOf("channels[0]")>0) {
    		 		channelStart=0;
@@ -143,6 +145,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
     			senderList.add(new BOSender(""+(i+1),(String)readEChannelsRef.get(i),(String)readEChannels.get(i)));
     		}
     	}
+		Logger.getLogger("SerBoxControlEnigma").info("Sender verarbeitet");
         return senderList;
 	}
 	
@@ -313,8 +316,9 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		ArrayList[] timerList = new ArrayList[2];
 		timerList[0] = new ArrayList();
 		timerList[1] = new ArrayList();
-		
+		Logger.getLogger("SerBoxControlEnigma").info("Lese Timer-Liste");
 		BufferedReader input=getConnection("/body?mode=controlTimerList");
+		Logger.getLogger("SerBoxControlEnigma").info("Timer-Liste gelesen");
 		boolean recurring = false;
 		boolean onetimer=false;
 		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
@@ -426,8 +430,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    			startpos=endpos;
 				} 
 			}
-			
 		}
+		Logger.getLogger("SerBoxControlEnigma").info("Timer-Liste verarbeitet");
 		return timerList;
 	}
 	public String writeTimer(BOTimer timer) throws IOException {
@@ -510,5 +514,40 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			}
 		}
 		return success;
+	}
+	
+	public boolean isTvMode() throws IOException{
+		BufferedReader input = getConnection("/body");
+		String line;
+		String zapmode;
+		boolean tvMode;
+		int startpos;
+		while((line=input.readLine())!=null) {
+		    if (line.indexOf("zapMode")>0) {
+		        startpos=(line.indexOf("zapMode")+10);
+		        zapmode=line.substring(startpos,startpos+1);
+		        System.out.println(zapmode);
+		        if (zapmode.equals("0")) {
+		            tvMode=true;
+		        } else {
+		            tvMode=false;
+		        }
+		        return tvMode;
+		    }
+			
+		}
+		return true;
+	}
+	
+	public String setRadioTvMode(String mode) throws IOException {
+		System.out.println(mode);
+		String zapmode;
+		if (mode.equalsIgnoreCase("radio")) {
+		    zapmode="1";
+		} else {
+		    zapmode="0";
+		}
+	    BufferedReader input = getConnection("/body?mode=zap&zapmode="+zapmode+"&zapsubmode=4");
+		return "ok";
 	}
 }
