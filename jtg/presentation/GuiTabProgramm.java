@@ -63,7 +63,7 @@ public class GuiTabProgramm extends GuiTab {
 	public GuiBoquetsComboModel boquetsComboModel;
 	public GuiEpgTableModel epgTableModel;
 	private JScrollPane jScrollPane = null;
-	public JTable jTableChannels = null;
+	private JTable jTableChannels = null;
 	private ControlProgramTab control;
 	private JComboBox JComboBoxBouquets = null;
 	private JDateChooser jDateChooser = null;
@@ -551,7 +551,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JList	
 	 */    
-	private JTable getJTableChannels() {
+	public JTable getJTableChannels() {
 		if (jTableChannels == null) {
 			senderTableModel = new GuiSenderTableModel(control);
 			jTableChannels = new JTable(senderTableModel);
