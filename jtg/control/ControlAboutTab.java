@@ -23,12 +23,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.swing.JLabel;
 
 import presentation.GuiMainView;
-import service.SerAlertDialog;
 import service.BrowserLauncher;
+import service.SerAlertDialog;
 
 
 public class ControlAboutTab extends ControlTab implements MouseListener {
@@ -53,7 +54,7 @@ public class ControlAboutTab extends ControlTab implements MouseListener {
 	}
 	private void showAuthors() {
 		try {
-			BufferedReader input = new BufferedReader(new FileReader( new File("Authors")));
+			BufferedReader input = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResource("Authors").openStream()));
 			String line;
 			while ( (line = input.readLine()) != null) {
 				this.getMainView().getTabAbout().getTaAuthors().append(line+"\n");
