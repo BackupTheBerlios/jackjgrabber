@@ -98,7 +98,7 @@ public class SerSettingsHandler {
 			settings.getPathSettings().setVlcPath(path);
 		}
 	}
-	
+
 	private static void getSettingsShutdownTool(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/shutdownTool");
 		if (node != null) {
@@ -118,7 +118,7 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().setAc3ReplaceStereo(false);
 		}
 	}
-	
+
 	private static void getSettingsStereoReplaceAc3(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/stereoReplaceAc3");
 		if (node != null) {
@@ -167,7 +167,7 @@ public class SerSettingsHandler {
 			settings.getMainSettings().setShowLogo(true);
 		}
 	}
-	
+
 	private static void getSettingsShowLogWindow(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/showLogWindow");
 		if (node != null) {
@@ -239,7 +239,7 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().setStartPX(true);
 		}
 	}
-	
+
 	private static void getSettingsShutdown(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/shutdown");
 		if (node != null) {
@@ -456,7 +456,7 @@ public class SerSettingsHandler {
 		}
 
 	}
-	
+
 	private static void getSettingsLayout(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/screensize");
 		if (node != null) {
@@ -671,7 +671,6 @@ public class SerSettingsHandler {
 		Node dirPattern = settingsDocument.selectSingleNode("/settings/directoryPattern");
 		Node filePattern = settingsDocument.selectSingleNode("/settings/filePattern");
 
-		
 		shutdown.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isShutdownAfterRecord()));
 		stereoReplaceAc3.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()));
 		shutdown.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isShutdownAfterRecord()));
@@ -690,10 +689,10 @@ public class SerSettingsHandler {
 		serverPort.setText(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
 		storeEPG.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreEPG()));
 		storeLogAfterRecord.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreLogAfterRecord()));
-		
+
 		filePattern.setText(ControlMain.getSettings().getRecordSettings().getFilePattern());
 		dirPattern.setText(ControlMain.getSettings().getRecordSettings().getDirPattern());
-		
+
 	}
 
 	public static void savePathSettings() throws IOException {
@@ -757,18 +756,22 @@ public class SerSettingsHandler {
 	}
 
 	public static void saveAllSettings() throws Exception {
-/*		savePathSettings();
-		saveRecordSettings();
-		saveMainSettings();
-		saveMovieGuideSettings();
-		savePlaybackSettings();
-		saveLayoutSettings();
-		SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
-		*/
-		
-		XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.settingsFilename)));
-		dec.writeObject(ControlMain.getSettings());
-		dec.flush();
-		dec.close();
+
+		if (ControlMain.flagNewSettings) {
+			XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.settingsFilename + "n")));
+			dec.writeObject(ControlMain.getSettings());
+			dec.flush();
+			dec.close();
+
+		} else {
+			savePathSettings();
+			saveRecordSettings();
+			saveMainSettings();
+			saveMovieGuideSettings();
+			savePlaybackSettings();
+			saveLayoutSettings();
+			SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
+		}
+
 	}
 }

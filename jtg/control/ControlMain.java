@@ -37,6 +37,9 @@ import boxConnection.*;
  */
 public class ControlMain {
 	
+	public static boolean flagNewSettings = true;
+	
+	
 	static BOSettings settings;
 	static Document settingsDocument;
 	static Document movieGuideDocument;
@@ -119,15 +122,40 @@ public class ControlMain {
 	 * Dokument wird immer gebraucht, falls neue Settings gespeichert werden.
 	 */
 	public static void readSettings() {
-		try
+		
+		
+		if (flagNewSettings)
 		{
-			XMLDecoder dec = new XMLDecoder(new FileInputStream(settingsFilename));
-			BOSettings settings = (BOSettings) dec.readObject();
-			setSettings(settings);
+			try
+			{
+				XMLDecoder dec = new XMLDecoder(new FileInputStream(settingsFilename + "n"));
+				BOSettings settings = (BOSettings) dec.readObject();
+				setSettings(settings);
+			}
+			catch (Exception ex)
+			{
+				// read old settings file
+				try {
+					File pathToXMLFile = new File(settingsFilename).getAbsoluteFile();
+					if (pathToXMLFile.exists()) {
+						settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
+						Logger.getLogger("ControlMain").info("Settings found");
+					} else {
+						settingsDocument = SerXMLHandling.createStandardSettingsFile(pathToXMLFile);
+						Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_settingsNotFound"));
+					}
+					setSettings(SerSettingsHandler.buildSettings(getSettingsDocument()));
+				} catch (MalformedURLException e) {
+					Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
+				} catch (DocumentException e) {
+					Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
+				} catch (IOException e) {
+					Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
+				}				
+			}
 		}
-		catch (Exception ex)
+		else
 		{
-			// read old settings file
 			try {
 				File pathToXMLFile = new File(settingsFilename).getAbsoluteFile();
 				if (pathToXMLFile.exists()) {
@@ -144,8 +172,7 @@ public class ControlMain {
 				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
 			} catch (IOException e) {
 				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
-			}
-			
+			}			
 		}
 		
 	}	
