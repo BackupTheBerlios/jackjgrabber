@@ -37,6 +37,15 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		this.setMainView(view);
 	}
 	
+	/*
+	 *  (non-Javadoc)
+	 * @see control.ControlTab#initialize()
+	 */
+	public void initialize() {
+		this.getMainView().getTabSettings().getTfBoxIp().setText(ControlMain.getBoxIp());
+		this.getMainView().getTabSettings().getTfVlcPath().setText(ControlMain.getSettings().getVlcPath());
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action == "save") {

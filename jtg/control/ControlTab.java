@@ -17,4 +17,8 @@ public abstract class ControlTab {
 
 	public abstract GuiMainView getMainView();
 	public abstract void setMainView(GuiMainView view);
+	/**
+	 * Mit dieser Methode wird der zugehörige TAB mit Daten versorgt 
+	 */
+	public abstract void initialize();
 }

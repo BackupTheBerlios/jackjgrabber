@@ -21,6 +21,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 
+import org.apache.log4j.Logger;
+
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -48,11 +50,15 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	Date dateChooserDate;
 	GuiMainView mainView;
 	
-	/**
-	 * lesen beim Start die Bouquets, sowie die Sender des 1. Bouquets 
-	 */
 	public ControlProgramTab(GuiMainView view) {
 		this.setMainView(view);
+	}
+	
+	/*
+	 *  (non-Javadoc)
+	 * @see control.ControlTab#initialize()
+	 */
+	public void initialize() {
 		try {
 			this.setBox(ControlMain.getBox());
 			this.setBouquetList(this.getBox().getBouquetList());
@@ -62,13 +68,14 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			SerAlertDialog.alert("Not connected to Box", this.getMainView());
 		}
 	}
+	
 	/**
 	 * Klick-Events der Buttons
 	 */
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "") {
-			
+		if (action == "Aufnahme") {
+			Logger.getLogger("ControlProgrammTab").info("bla bla");
 		}
 	}
 	/**

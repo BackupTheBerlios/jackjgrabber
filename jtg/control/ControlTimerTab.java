@@ -21,6 +21,10 @@ public class ControlTimerTab extends ControlTab {
 	public ControlTimerTab(GuiMainView view) {
 		this.setMainView(view);
 	}
+	
+	public void initialize() {
+		
+	}
 	/**
 	 * @return Returns the mainView.
 	 */
