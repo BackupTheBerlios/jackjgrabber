@@ -61,7 +61,7 @@ public class GuiTabAvailableFiles extends GuiTab {
 		splitFilesInfos.setDividerLocation(350);
 		add(split, BorderLayout.CENTER);
 
-		treeModel = new DefaultTreeModel(new BaseTreeNode(ControlMain.getSettingsRecord().getSavePath()));
+		treeModel = new DefaultTreeModel(new BaseTreeNode(ControlMain.getSettingsPath().getSavePath()));
 
 		fileTree = new JTree(treeModel);
 		fileTree.addMouseListener(control);
