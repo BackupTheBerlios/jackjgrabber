@@ -79,12 +79,11 @@ public class GuiSplashScreen extends JWindow
    }
 
    /**
-    * zeichnet den Titel doppelt so gro  wie den Anzeige-Text
     * @see java.awt.Component#paint(Graphics)
     */
    public void paint(Graphics g) {
      final Font oldFont=g.getFont();
-     final Font newFont=new Font(oldFont.getName(), Font.BOLD,oldFont.getSize()*2);
+     final Font newFont=new Font(oldFont.getName(), Font.BOLD,oldFont.getSize());
      g.setFont(newFont);
 
      FontMetrics fm=g.getFontMetrics();
