@@ -193,19 +193,15 @@ public class SerFormatter {
 		DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
 		return formater2.format(cal.getTime()).toString();
 	}
+	
 	public static String getShortDate(long i) {
 		SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MMM.yy");
 		return sdf.format(new Date(i));
 	}
+	
 	public static long getStringToLong(String start) {
 		 GregorianCalendar cal = SerFormatter.getDateFromString(start, "EEEE, dd. MMMM yyyy");
 		 return cal.getTimeInMillis();
-	}
-	
-	public static long getStringToLongWithTime(String start, long time) {
-		GregorianCalendar cal = SerFormatter.getDateFromString(start, "EEEE, dd. MMMM yyyy,HH:mm");
-		cal.setTimeInMillis(cal.getTimeInMillis() + time);
-		return cal.getTimeInMillis();
 	}
 	
     public static GregorianCalendar getDateFromString (String date, String format) {
