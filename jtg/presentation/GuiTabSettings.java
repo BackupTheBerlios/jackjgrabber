@@ -299,6 +299,8 @@ public class GuiTabSettings extends JPanel {
 		if (tfServerPort == null) {
 			try {
 				tfServerPort = new JFormattedTextField(new MaskFormatter("####"));
+				tfServerPort.setName("serverPort");
+				tfServerPort.addKeyListener(control);
 				((MaskFormatter)tfServerPort.getFormatter()).setAllowsInvalid(false);
 				((MaskFormatter)tfServerPort.getFormatter()).setOverwriteMode(true);
 				tfServerPort.setPreferredSize(new java.awt.Dimension(40,19));
@@ -363,9 +365,8 @@ public class GuiTabSettings extends JPanel {
 	public JTextField getJTextFieldPlaybackString() {
 		if (jTextFieldPlaybackString == null) {
 			jTextFieldPlaybackString = new JTextField();
-			jTextFieldPlaybackString.setActionCommand("playbackString");
-			jTextFieldPlaybackString.addActionListener(this.getControl());
-			jTextFieldPlaybackString.addFocusListener(control);
+			jTextFieldPlaybackString.addKeyListener(control);
+			jTextFieldPlaybackString.setName("playbackString");
 			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 19));
 		}
 		return jTextFieldPlaybackString;
