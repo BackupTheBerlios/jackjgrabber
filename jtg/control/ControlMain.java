@@ -1,6 +1,7 @@
 package control;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -40,11 +41,11 @@ public class ControlMain {
 	static ControlMainView control;
 	static int CurrentBox=0;
 	
-	private static final String _MESSAGE_BUNDLE = "/locale/messages";
 	static Locale locale = new Locale("de","DE");
     private static Properties prop = new Properties();
     
     public static String filename = "settings.xml";
+    public static String _MESSAGE_BUNDLE = "locale/messages_"+locale.getLanguage()+".properties.";
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
 		"18.09.2004",
@@ -224,8 +225,9 @@ public class ControlMain {
 
     public static void setResourceBundle(Locale loc){
         ControlMain.locale=loc;
-        try{    	                       
-        	InputStream is=new String().getClass().getResourceAsStream(_MESSAGE_BUNDLE+"_"+locale.getLanguage()+".properties");                    	        	
+        try{    	                 	
+        	File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();        	
+        	InputStream is = new FileInputStream(f);
         	prop.load(is);                    	
         }catch (IOException ex){}       	        
     }    
