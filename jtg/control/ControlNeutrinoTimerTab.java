@@ -281,7 +281,10 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	}
 	
 	public void writeTimer(BOTimer timer) throws IOException {
-	    ControlMain.getBoxAccess().writeTimer(timer);
+	    if (timer.getModifiedId()!=null) {
+	        ControlMain.getBoxAccess().writeTimer(timer);    
+	        reReadTimerList();
+	    }
 	}
 	
 	private void writeAllTimer(ArrayList timerList) throws IOException {
