@@ -209,11 +209,23 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			    break;
 			}
 			if (action == "switchLog") {
-			    ControlMain.logWindow.switchVisiblity();
+			    this.actionSwithLogVisiblity();
 			    break;
 				}
 			break;
 		}
+	}
+	
+	private void actionSwithLogVisiblity() {
+	    if (ControlMain.logWindow.isVisible()) {
+	        this.getMainView().getTabProgramm().getJButtonSwitchLog().setText(ControlMain.getProperty("button_on"));
+	        ControlMain.logWindow.setVisible(false);
+	        ControlMain.logWindow.setShouldBeVisible(false);
+	    } else {
+	        this.getMainView().getTabProgramm().getJButtonSwitchLog().setText(ControlMain.getProperty("button_off"));
+	        ControlMain.logWindow.setShouldBeVisible(true);
+	        ControlMain.logWindow.setVisible(true);
+	    }
 	}
 	
 	private void actionClearLog() {
