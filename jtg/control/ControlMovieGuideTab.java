@@ -22,16 +22,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.io.File;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
+
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -39,9 +37,7 @@ import javax.swing.event.ChangeListener;
 import model.BOMovieGuide;
 import model.BOTimer;
 
-import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import presentation.GuiMainView;
@@ -55,27 +51,26 @@ import service.SerXMLHandling;
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener  {
 	
 	GuiMainView mainView;
+	BOMovieGuide boMovieGuide4Timer;
 	boolean initialized = false;
 
-	static Hashtable titelList;
-	static Hashtable controlMap;
-	static Hashtable titelListAktuell;
+	Hashtable titelList;
+	Hashtable controlMap;
+	Hashtable titelListAktuell;
 	
-	static ArrayList genreList = new ArrayList();
-	static ArrayList datumList = new ArrayList();
-	static ArrayList senderList = new ArrayList();
+	ArrayList genreList = new ArrayList();
+	ArrayList datumList = new ArrayList();
+	ArrayList senderList = new ArrayList();
 	
-	private static Element root;
-	private static Document movieGuideDocument;
+	Element root;
 
 	public static File movieGuideFileName = new File("movieguide.xml");
-	private static String SelectedItemJComboBox;
-	private static int SelectedItemJComboBoxSucheNach;
-    public static int timerTableSize;
-    private static BOMovieGuide boMovieGuide4Timer; 
+	String SelectedItemJComboBox;
+	int SelectedItemJComboBoxSucheNach;
+    int timerTableSize; 
     
 	public ControlMovieGuideTab(GuiMainView view) {
-		this.setMainView(view);			
+		this.setMainView(view);		
 	}
 
 	public void initialize() {
@@ -92,7 +87,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		String action = e.getActionCommand();
 		if (action == "download") {
 			try{
-				new SerMovieGuide2Xml(null, this.getMainView().getTabMovieGuide().getJProgressBarDownload()).start();
+				new SerMovieGuide2Xml(null, this.getMainView()).start();
 			}catch (Exception ex){}			
 		}
 		if (action == "neuEinlesen") {
@@ -155,8 +150,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			return new Integer(this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 		}
 	}
-	public int getSelectRowTimerTable(){				
-			if (this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow())<=0){
+	public int getSelectRowTimerTable(){		
+		if (this.getJTableTimer().getSelectedRow()<=0){
 			return 0;
 		}else{			
 			return this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
@@ -238,7 +233,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 
 	private void openFileChooser() {
-		JFileChooser fc = new JFileChooser(new File("movieguide.xml"));
+		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc.setDialogType(JFileChooser.OPEN_DIALOG);
 		fc.setApproveButtonText("Auswählen");
@@ -247,51 +242,24 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = fc.getSelectedFile().toString();		
 			try{
-				new SerMovieGuide2Xml(path, this.getMainView().getTabMovieGuide().getJProgressBarDownload()).start();
+				new SerMovieGuide2Xml(path, this.getMainView()).start();
 			}catch(Exception ex){}			
 		}
 	}
-
-	public static void checkMovieGuide() {
-		try {
-			File pathToXMLFile = movieGuideFileName.getAbsoluteFile();
-			if (pathToXMLFile.exists()) {
-				movieGuideDocument = SerXMLHandling.readDocument(pathToXMLFile);
-				Logger.getLogger("ControlMovieGuide").info("MovieGuide found");
-			} else {
-				Logger.getLogger("ControlMovieGuide").info(
-						"MovieGuide not found");
-			}
-		} catch (MalformedURLException e) {
-			Logger.getLogger("ControlMovieGuide").error(
-					"Fehler beim lesen des MovieGuide!");
-		} catch (DocumentException e) {
-			Logger.getLogger("ControlMovieGuide").error(
-					"Fehler beim lesen des MovieGuide!");
-		}
-	}
 	
-	private static File getMovieGuideFileName(){
+	private File getMovieGuideFileName(){
 		return movieGuideFileName;
 	}
 	
-	private static void setMovieGuideFileName(File filename){
+	private void setMovieGuideFileName(File filename){
 		movieGuideFileName = filename;		
 	}
 	
-	public static Document getMovieGuideDocument() {
-		return movieGuideDocument;
-	}
-
-	public static void setMovieGuideDocument(Document movieGuideDocument) {
-		ControlMovieGuideTab.movieGuideDocument = movieGuideDocument;
-	}
-	
-	private static void setRootElement() throws Exception{
+	private void setRootElement() throws Exception{
 		Document doc = SerXMLHandling.readDocument(getMovieGuideFileName());
 		root = doc.getRootElement();
 	}
-    private static Element getRootElement() throws Exception{
+    private Element getRootElement() throws Exception{
     	return root;		
     }    
 	 
@@ -299,7 +267,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	return datumList;
     }
     
-    private static void setDatumList(String value){    	
+    private void setDatumList(String value){    	
     	if(!datumList.contains((String)value)){
     		datumList.add(value);    		
     	}    	
@@ -309,7 +277,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	return genreList;	
     }
     
-    private static void setGenreList(String value){
+    private void setGenreList(String value){
     	if(!genreList.contains(value) && value.length()>0){
     		genreList.add(value);
     	}
@@ -319,7 +287,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	return senderList;	
     }
     
-    private static void setSenderList(String value){
+    private void setSenderList(String value){
     	if(!senderList.contains(value) && value.length()>0){
     		senderList.add(value);
     	}
@@ -333,7 +301,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	return controlMap;
     }
     
-    private static void setControlMap(String key, Integer value){
+    private void setControlMap(String key, Integer value){
     	if(!controlMap.containsKey(key)){
     		controlMap.put(key,value);
     	}
@@ -397,7 +365,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;
-    			case 11: //all
+    			case 11:
 					if(bomovieguide.getIfStringInObject(search.toLowerCase())){
 						titelListAktuell.put(new Integer(a++),bomovieguide);
 					}
@@ -414,7 +382,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	}    
     }
     
-    public static void setTitelMap() {				    	    
+    public void setTitelMap() {				    	    
     	titelList = new Hashtable();
     	controlMap = new Hashtable();
     	setGenreList("Genre...");
