@@ -25,6 +25,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -41,6 +43,7 @@ import presentation.program.GuiIpListComboModel;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
 import presentation.settings.GuiThemesComboModel;
+import service.SerAlertDialog;
 import service.SerExternalProcessHandler;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
@@ -248,11 +251,16 @@ public class ControlSettingsTabMain extends ControlTabSettings implements KeyLis
 	}
 	
 	private BOBox startBoxIpDialog() {
-		String ip = JOptionPane.showInputDialog(this.getMainView(), "Bitte die IP der Box angeben");
+		String ip = JOptionPane.showInputDialog(this.getMainView(), ControlMain.getProperty("msg_enterIp"));
 		if (ip!=null) {
-			BOBox box = new BOBox();
-			box.setDboxIp(ip);
-			return box;
+            try {
+                String validIp=InetAddress.getByName(ip).getHostAddress();
+                BOBox box = new BOBox();
+                box.setDboxIp(validIp);
+                return box;
+            } catch (UnknownHostException e) {
+                SerAlertDialog.alert(ControlMain.getProperty("err_valid_ip"), this.getMainView());
+            }
 		}
 		return null;
 	}
