@@ -18,8 +18,6 @@
 package presentation.settings;
 
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.text.ParseException;
 
 import javax.swing.DefaultCellEditor;
@@ -31,8 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
@@ -70,8 +66,6 @@ public class GuiSettingsTabMain extends GuiTab {
 
 	public final String[] themes = {"Silver", "BrownSugar", "DarkStar",
 			"DesertBlue", "ExperienceBlue", "SkyBluerTahoma"};
-
-	public GuiLookAndFeelHolder[] lookAndFeels;
 
 	public GuiSettingsTabMain(ControlSettingsTabMain ctrl) {
 		super();
@@ -206,40 +200,9 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JComboBox getJComboBoxLookAndFeel() {
 		if (jComboBoxLookAndFeel == null) {
-
-			LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-			lookAndFeels = new GuiLookAndFeelHolder[looks.length];
-
-			int currentSelectedLookAndFeel = 0;
-			String currentSelLFClassName = ControlMain.getSettings()
-					.getLookAndFeel();
-			for (int i = 0; i < looks.length; i++) {
-				lookAndFeels[i] = new GuiLookAndFeelHolder(looks[i].getName(),
-						looks[i].getClassName());
-				if (lookAndFeels[i].getLookAndFeelClassName().equals(
-						currentSelLFClassName)) {
-					currentSelectedLookAndFeel = i;
-				}
-			}
-
-			jComboBoxLookAndFeel = new JComboBox(lookAndFeels);
+			jComboBoxLookAndFeel = new JComboBox(this.getControl().initLookAndFeels());
 			jComboBoxLookAndFeel.addItemListener(control);
 			jComboBoxLookAndFeel.setName("lookAndFeel");
-			jComboBoxLookAndFeel.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent arg0) {
-					if (jComboBoxTheme != null) {
-						String lookAndFeel = ((GuiLookAndFeelHolder) jComboBoxLookAndFeel
-								.getSelectedItem()).getLookAndFeelClassName();
-						boolean enable = lookAndFeel
-								.equals(PlasticLookAndFeel.class.getName());
-						jComboBoxTheme.setEnabled(enable);
-					}
-				}
-
-			});
-
-			jComboBoxLookAndFeel.setSelectedIndex(currentSelectedLookAndFeel);
-
 		}
 		return jComboBoxLookAndFeel;
 	}

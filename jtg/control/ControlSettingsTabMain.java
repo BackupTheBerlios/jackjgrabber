@@ -20,6 +20,10 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 
 import model.BOBox;
 import model.BOSettings;
@@ -32,6 +36,8 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 
 	GuiTabSettings			settingsTab;
 	public final String[]	localeNames	= {"de,Deutsch", "en,Englisch", "fi,Finisch"};
+	public GuiLookAndFeelHolder[] lookAndFeels;
+	private int currentSelectedLookAndFeel = 0;
 
 	public ControlSettingsTabMain(GuiTabSettings tabSettings) {
 		this.setSettingsTab(tabSettings);
@@ -48,6 +54,24 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
 		this.getTab().getCbUseSysTray().setSelected(this.getSettings().isUseSysTray());
+		this.initLookAndFeels();
+		this.getTab().getJComboBoxLookAndFeel().setSelectedIndex(currentSelectedLookAndFeel);
+	}
+	
+	public GuiLookAndFeelHolder[] initLookAndFeels() {
+	    if (lookAndFeels==null) {
+			LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
+			lookAndFeels = new GuiLookAndFeelHolder[looks.length];
+	
+			String currentSelLFClassName = ControlMain.getSettings().getLookAndFeel();
+			for (int i = 0; i < looks.length; i++) {
+				lookAndFeels[i] = new GuiLookAndFeelHolder(looks[i].getName(),looks[i].getClassName());
+				if (lookAndFeels[i].getLookAndFeelClassName().equals(currentSelLFClassName)) {
+					currentSelectedLookAndFeel = i;
+				}
+			}
+	    }
+	    return lookAndFeels;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -104,7 +128,9 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 						break;
 					}
 					if (comboBox.getName().equals("lookAndFeel")) {
-						String lookAndFeel = ((GuiLookAndFeelHolder)comboBox.getSelectedItem()).getLookAndFeelClassName();
+					    String lookAndFeel = ((GuiLookAndFeelHolder) this.getTab().getJComboBoxLookAndFeel().getSelectedItem()).getLookAndFeelClassName();
+						boolean enable = lookAndFeel.equals(PlasticLookAndFeel.class.getName());
+						this.getTab().getJComboBoxTheme().setEnabled(enable);
 						getSettings().setLookAndFeel(lookAndFeel);
 						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
 						{
