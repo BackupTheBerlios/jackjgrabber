@@ -49,7 +49,9 @@ public class SerFormatter {
 	}
 	
 	public static String getUnixEndTime(String start, String dauer){ 	
-		return new Long((formatLong(start) + formatLong(dauer))).toString();
+		int startInt = Integer.parseInt(start);
+		int dauerInt = Integer.parseInt(dauer);
+		return Integer.toString(startInt+dauerInt); 
     }
                         
 	public static String formatUnixTime(String date, String dauer){
