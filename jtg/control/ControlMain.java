@@ -69,7 +69,7 @@ public class ControlMain {
 
 	private static Properties properties = new Properties();
 	public static String separator =  System.getProperty("file.separator");
-	public static String userHomeDirectory = System.getProperty("user.home")+separator+".JtJG";
+	public static String jtjgDirectory = System.getProperty("user.home")+separator+".JtJG";
 	private static Locale locale = new Locale("");
 	public static GuiSplashScreen screen;
 	public static GuiLogWindow logWindow;
@@ -91,9 +91,10 @@ public class ControlMain {
 		setResourceBundle();
 		detectActiveBox();
 		detectImage();
-		startStreamingServer();
+		initStreamingServer();
 		control = new ControlMainView();
 		control.initialize();
+		checkStartVlc();
 		if (screen != null) {
 			try {
 				Thread.sleep(1500);
@@ -120,7 +121,14 @@ public class ControlMain {
 		}
 	}
 	
-	public static void startStreamingServer() {
+	private static void checkStartVlc() {
+	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
+	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
+	        SerExternalProcessHandler.startProcess("vlc", execString, true, true);
+	    }
+	}
+	
+	public static void initStreamingServer() {
 	    if (getSettingsRecord().isStartStreamingServer() && !SerStreamingServer.isRunning) {
 	        new SerStreamingServer().start();
 	    }
@@ -376,11 +384,11 @@ public class ControlMain {
      */
     public static String getSettingsFilename() {
         if (settingsFilename==null) {
-            File userHome = new File(userHomeDirectory);
+            File userHome = new File(jtjgDirectory);
             if (!userHome.exists()) {
                 userHome.mkdir();
             }
-            settingsFilename = userHomeDirectory+separator+"settings.xml";    
+            settingsFilename = jtjgDirectory+separator+"settings.xml";    
         }
         return settingsFilename;
     }

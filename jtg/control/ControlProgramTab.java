@@ -326,7 +326,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		}
 		this.getMainView().getTabProgramm().stopRecordModus();
 		this.getMainView().setSystrayDefaultIcon();
-		ControlMain.startStreamingServer();
+		ControlMain.initStreamingServer();
 		stopRecordInInfoTab();
 	}
 
@@ -717,7 +717,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void startStreamingSever() {
-	    ControlMain.startStreamingServer();
+	    ControlMain.initStreamingServer();
 	}
 
 	public void stopStreamingServer() {

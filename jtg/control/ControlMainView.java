@@ -32,7 +32,6 @@ import org.apache.log4j.Logger;
 import presentation.GuiLogWindow;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
-import service.SerExternalProcessHandler;
 import snoozesoft.systray4j.SysTrayMenuEvent;
 import snoozesoft.systray4j.SysTrayMenuListener;
 
@@ -50,9 +49,6 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	
 	GuiMainView view;
 	
-	public ControlMainView() {				
-	}
-	
 	public void initialize() {
 	    this.initPlasticLookAndFeel();
 	    this.setLookAndFeel();
@@ -60,19 +56,11 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    if (ControlMain.getSettings().standardSettings==true) { //First start, go to Settings-Tab
 	        this.getView().getMainTabPane().setSelectedIndex(4);
 	    }
-	    this.checkStartVlc();
 	    Logger.getLogger("ControlMainView").info(ControlMain.getProperty("msg_app_starting"));
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 	    GuiLogWindow.switchLogVisiblity();
-	}
-	
-	private void checkStartVlc() {
-	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
-	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
-	        SerExternalProcessHandler.startProcess("vlc", execString, true, true);
-	    }
 	}
 	
 	private void initPlasticLookAndFeel() {
