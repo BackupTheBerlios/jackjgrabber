@@ -159,7 +159,7 @@ public class SerMovieGuide2Xml extends Thread{
                 }
             }
             bar.setValue(fileLength);
-            SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFileName, doc);
+            SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFile, doc);
             mainView.getTabMovieGuide().getControl().initialize();
         } catch (MalformedURLException e) {
             System.out.println("MalformedURLException: " + e.getMessage());
