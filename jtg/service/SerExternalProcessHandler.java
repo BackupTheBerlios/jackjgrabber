@@ -1,9 +1,4 @@
 package service;
-
-import java.util.ArrayList;
-
-import model.BOExternalProcess;
-
 /*
  * SerExternalProcessHandler.java by Geist Alexander
  * 
@@ -21,31 +16,43 @@ import model.BOExternalProcess;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
+import model.BOExternalProcess;
+import control.ControlMain;
+
+
 public class SerExternalProcessHandler {
 	
 	private static ArrayList processList;
-
-	public SerExternalProcessHandler() {
-		
-	}
 	
-	public static void startProcess(String name, String execString) {
-		BOExternalProcess process = new BOExternalProcess(name, execString);
+	public static void startProcess(String name, String execString, boolean logging) {
+		BOExternalProcess process = new BOExternalProcess(name, execString, logging);
 		getProcessList().add(process);
 		process.start();
 	}
 
-	public void closeAll() {
-		ArrayList list = getProcessList();
-		if (list.size()>0) {
+	public static void closeAll() {
+	    ArrayList list = getProcessList();
 			for (int i=0; i<list.size(); i++) {
 				BOExternalProcess boProc = (BOExternalProcess)list.get(i);
 				Process proc = boProc.getProcess();
-				if (proc.exitValue()>0) {
-					proc.destroy();
-				}
+		    try {
+		        if (proc.exitValue()==0) {} //Prozess beendet
+		            
+		    } catch (IllegalThreadStateException e) {
+		        int ret = JOptionPane.showConfirmDialog(
+		                ControlMain.getControl().getView(),
+		                ControlMain.getProperty("msg_closeProcess1")+boProc.getName()+" "+ControlMain.getProperty("msg_closeProcess2"),
+		                "",
+		                JOptionPane.OK_CANCEL_OPTION);
+		        if (ret==0) {
+		            proc.destroy();      
+		        }
+		    }		    
 			}
-		}
 	}
 	/**
 	 * @return Returns the processList.

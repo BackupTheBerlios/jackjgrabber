@@ -40,6 +40,7 @@ import model.BOBouquet;
 import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPid;
 import model.BOPids;
 import model.BOPlaybackOption;
 import model.BORecordArgs;
@@ -49,15 +50,12 @@ import model.BOTimer;
 import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
-import presentation.GuiPidsQuestionDialog;
 import presentation.program.GuiEpgTableModel;
 import presentation.program.GuiSenderTableModel;
 import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
-import service.SerErrorStreamReadThread;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
-import service.SerInputStreamReadThread;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
@@ -286,11 +284,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.zapToSelectedSender();
 				String execString = this.getPlaybackRequestString(option);
 				if (execString != null) {
-					SerExternalProcessHandler.startProcess(option.getName(), execString);
-					Process run = Runtime.getRuntime().exec(execString);
-					Logger.getLogger("ControlProgramTab").info(execString);
-					new SerInputStreamReadThread(option.isLogOutput().booleanValue(), run.getInputStream()).start();
-					new SerErrorStreamReadThread(option.isLogOutput().booleanValue(), run.getErrorStream()).start();
+					SerExternalProcessHandler.startProcess(option.getName(), execString, option.isLogOutput().booleanValue());
 				}
 			} catch (IOException e) {
 				Logger.getLogger("ControlProgramTab").error(e.getMessage());
@@ -308,7 +302,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		try {
 			if (aPidStringIndex > 0) {
 				int pidIndex = Integer.parseInt(execString.substring(aPidStringIndex + 4));
-				String aPid = "0x" + ((String[]) this.getPids().getAPids().get(pidIndex - 1))[0];
+				String aPid = "0x" + ((BOPid) this.getPids().getAPids().get(pidIndex - 1)).getNumber();
 				execString = SerFormatter.replace(execString, "$aPid" + Integer.toString(pidIndex), aPid);
 			}
 		} catch (IndexOutOfBoundsException e) {

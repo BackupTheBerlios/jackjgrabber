@@ -17,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -27,14 +26,10 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import model.BOBox;
 import model.BOLookAndFeelHolder;
 import model.BOSettingsMain;
-
-import org.apache.log4j.Logger;
-
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
-import service.SerErrorStreamReadThread;
-import service.SerInputStreamReadThread;
+import service.SerExternalProcessHandler;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
@@ -159,15 +154,8 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	}
 
 	private void actionStartVlc() {
-	    try {
-	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
-	        Logger.getLogger("ControlSettingsTabMain").info(execString);
-	        Process run = Runtime.getRuntime().exec(execString);
-	        new SerInputStreamReadThread(true, run.getInputStream()).start();
-	        new SerErrorStreamReadThread(run.getErrorStream(), true).start();
-	    } catch (IOException e) {
-	        Logger.getLogger("ControlSettingsTabMain").error(e.getMessage());
-	    }
+	    String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
+      SerExternalProcessHandler.startProcess("vlc", execString, true);
 	}
 	
 	private void actionAddBox() {

@@ -77,6 +77,7 @@ public class BOPids {
 				ControlMain.getProperty("button_ok"));
 		
 		if (res == 0) {
+		    Object[] test = list.getSelectedValues();
 			BOPid[] pidArray = (BOPid[]) list.getSelectedValues();
 			BOPids newPidList = new BOPids();
 			for (int i=0; i<pidArray.length; i++) {

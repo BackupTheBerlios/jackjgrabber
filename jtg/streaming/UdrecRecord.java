@@ -18,7 +18,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -26,12 +25,8 @@ import java.util.ArrayList;
 import model.BOPid;
 import model.BOPids;
 import model.BORecordArgs;
-
-import org.apache.log4j.Logger;
-
-import service.SerErrorStreamReadThread;
+import service.SerExternalProcessHandler;
 import service.SerHelper;
-import service.SerInputStreamReadThread;
 import control.ControlMain;
 
 
@@ -77,16 +72,7 @@ public class UdrecRecord  extends Record {
 	}
 	
 	public void start() {
-	    try {
-	    	String requestString = this.getRequestString();
-	    	Logger.getLogger("UdrecRecord").info("to DBox: "+requestString);
-            run = Runtime.getRuntime().exec(requestString);
-            new SerInputStreamReadThread(true, run.getInputStream()).start();
-            new SerErrorStreamReadThread(true, run.getErrorStream()).start();
-        } catch (IOException e) {
-            Logger.getLogger("UdrecRecord").error(ControlMain.getProperty("err_udrec")+e.getLocalizedMessage());
-            recordControl.controlProgramTab.stopRecord();
-        }
+	    SerExternalProcessHandler.startProcess("vlc",  this.getRequestString(), true);
 	}	
 	
 	public void stop() {

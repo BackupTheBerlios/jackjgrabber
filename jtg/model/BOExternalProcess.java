@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import service.SerErrorStreamReadThread;
+import service.SerInputStreamReadThread;
+
 /*
  * BOExternalProcess.java by Geist Alexander
  * 
@@ -26,15 +29,20 @@ public class BOExternalProcess {
 	private String name;
 	private String execString;
 	private Process process;
+	private boolean logging;
 
-	public BOExternalProcess(String name, String execString) {
+	public BOExternalProcess(String name, String execString, boolean logging) {
 		this.setName(name);
 		this.setExecString(execString);
+		this.setLogging(logging);
 	}
 	
 	public void start() {
 		try {
 			this.setProcess(Runtime.getRuntime().exec(this.getExecString()));
+			new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
+			new SerErrorStreamReadThread(this.isLogging(), this.getProcess().getErrorStream()).start();
+			Logger.getLogger("BOExternalProcess").info(this.getExecString());
 		} catch (IOException e) {
 			Logger.getLogger("BOExternalProcess").error(e.getMessage());
 		}
@@ -76,4 +84,16 @@ public class BOExternalProcess {
 	public void setProcess(Process process) {
 		this.process = process;
 	}
+    /**
+     * @return Returns the logging.
+     */
+    public boolean isLogging() {
+        return logging;
+    }
+    /**
+     * @param logging The logging to set.
+     */
+    public void setLogging(boolean logging) {
+        this.logging = logging;
+    }
 }

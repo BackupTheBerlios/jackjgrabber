@@ -44,6 +44,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
 import presentation.GuiSplashScreen;
+import service.SerExternalProcessHandler;
 import service.SerLogAppender;
 import service.SerSettingsHandler;
 import service.SerXMLHandling;
@@ -321,19 +322,16 @@ public class ControlMain {
 		ControlMain.activeBox = activeBox;
 	}
 
-	/**
-	 * 
-	 */
 	public static void endProgram() {
-		try {
-			if (ControlMain.getSettings().isSettingsChanged()) {
-				SerSettingsHandler.saveAllSettings();
-				Logger.getLogger("ControlMainView").info("Settings saved");
-			}
-		} catch (IOException e1) {
-			Logger.getLogger("ControlMainView").error("Error while save Settings");
-		}
-		System.exit(0); 
-		
+	    SerExternalProcessHandler.closeAll();
+	    try {
+	        if (ControlMain.getSettings().isSettingsChanged()) {
+	            SerSettingsHandler.saveAllSettings();
+	            Logger.getLogger("ControlMainView").info("Settings saved");
+	        }
+	    } catch (IOException e1) {
+	        Logger.getLogger("ControlMainView").error("Error while save Settings");
+	    }
+	    System.exit(0); 
 	}
 }

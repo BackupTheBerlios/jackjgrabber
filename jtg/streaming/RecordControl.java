@@ -17,20 +17,21 @@ package streaming;
  *  
  */
 
-import java.io.*;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import model.BORecordArgs;
 
 import org.apache.log4j.Logger;
 
-import service.SerErrorStreamReadThread;
+import service.SerExternalProcessHandler;
 import service.SerFormatter;
-import service.SerInputStreamReadThread;
 import control.ControlMain;
 import control.ControlProgramTab;
 
@@ -166,21 +167,13 @@ public class RecordControl extends Thread {
 		for (int i = 0; i < files.size(); i++) {
 			fileString += ((String) files.get(i)) + " ";
 		}
-		try {
-			Object[] args = {System.getProperty("java.home") + separator + "bin" + separator + "java -jar",
+
+		Object[] args = {System.getProperty("java.home") + separator + "bin" + separator + "java -jar",
 					ControlMain.getSettingsPath().getProjectXPath(),
 					//"-g",
 					fileString};
-			MessageFormat form = new MessageFormat("{0} {1} {2}");
-			Logger.getLogger("RecordControl").info(form.format(args));
-			Process run = Runtime.getRuntime().exec(form.format(args));
-
-			new SerInputStreamReadThread(true, run.getInputStream()).start();
-			new SerErrorStreamReadThread(true, run.getErrorStream()).start();
-		} catch (IOException e) {
-			e.printStackTrace();
-			Logger.getLogger("RecordControl").error(ControlMain.getProperty("err_startPX") + e.getMessage());
-		}
+		MessageFormat form = new MessageFormat("{0} {1} {2}");
+		SerExternalProcessHandler.startProcess("ProjectX", form.format(args), true);
 	}
 
 	public String getFileName() {

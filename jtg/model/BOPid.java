@@ -55,7 +55,7 @@ public class BOPid {
 	}
 	
 	public String toString() {
-          return getName();
+          return getNumber()+" "+getName();
 	}
 	/**
 	 * @return Returns the id.

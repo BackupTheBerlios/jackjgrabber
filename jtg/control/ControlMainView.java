@@ -19,7 +19,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.awt.Font;
 import java.awt.Frame;
-import java.io.IOException;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -31,8 +30,7 @@ import org.apache.log4j.Logger;
 
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
-import service.SerErrorStreamReadThread;
-import service.SerInputStreamReadThread;
+import service.SerExternalProcessHandler;
 import service.SerLogAppender;
 import snoozesoft.systray4j.SysTrayMenuEvent;
 import snoozesoft.systray4j.SysTrayMenuListener;
@@ -66,15 +64,8 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	
 	private void checkStartVlc() {
 	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
-	        try {
-	            String execString=ControlMain.getSettingsPath().getVlcPath()+" --intf=telnet --extraintf=http";
-	  	        Logger.getLogger("ControlSettingsTabMain").info(execString);
-	  	        Process run = Runtime.getRuntime().exec(execString);
-	  	        new SerInputStreamReadThread(true, run.getInputStream()).start();
-	  	        new SerErrorStreamReadThread(run.getErrorStream(), true).start();
-            } catch (IOException e) {
-                Logger.getLogger("ControlMainView").error(e.getMessage());
-            }
+	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
+	        SerExternalProcessHandler.startProcess("vlc", execString, true);
 	    }
 	}
 	
