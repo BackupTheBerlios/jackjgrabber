@@ -1,23 +1,19 @@
 package control;
 /*
-ControlTimerEditView.java by Geist Alexander 
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-*/
+ * ControlTimerEditView.java by Geist Alexander
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 import java.awt.BorderLayout;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -53,26 +49,28 @@ import presentation.timer.GuiTimerEditView;
 import service.SerFormatter;
 import service.SerHelper;
 import service.SerTimerHandler;
- 
 
-public class ControlTimerEditView implements ActionListener, KeyListener, ItemListener, MouseListener{
-    
+public class ControlTimerEditView implements ActionListener, KeyListener, ItemListener, MouseListener {
+
 	BOLocalTimer timer;
-    GuiTimerEditView view;
-    ControlTimerTab controlTimer;
-    private GuiTagFrame tagFrame;
-    
-    public ControlTimerEditView(ControlTimerTab controlTimer, BOLocalTimer timer) {
-    	this.setControlTimer(controlTimer);
-        this.setTimer(timer);
-        view = new GuiTimerEditView(this);
-        view.setVisible(true);
-        this.initialize();
-    }
-    
-    public void run() {}
-    
-    private void initialize() {
+	GuiTimerEditView view;
+	ControlTimerTab controlTimer;
+	private GuiTagFrame tagFrame;
+
+	public ControlTimerEditView(ControlTimerTab controlTimer, BOLocalTimer timer) {
+		this.setControlTimer(controlTimer);
+		this.setTimer(timer);
+		timer.setLocked(true);
+		view = new GuiTimerEditView(this);
+
+		view.setVisible(true);
+		this.initialize();
+	}
+
+	public void run() {
+	}
+
+	private void initialize() {
 		this.getView().getJComboBoxStreamType().setSelectedItem(timer.getJgrabberStreamType());
 		this.getView().getCbStartPX().setSelected(timer.isStartPX());
 		this.getView().getCbRecordVtxt().setSelected(timer.isRecordVtxt());
@@ -93,9 +91,19 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				controlTimer.convertShortEventRepeat(timer.getMainTimer().getEventRepeatId()));
 		this.initializeAudioSettings();
 		this.initializeStreamingEngine();
-    }
-    
-    private void initializeAudioSettings() {
+
+		view.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				timer.setLocked(false);
+			}
+
+			public void windowClosed(WindowEvent e) {
+				timer.setLocked(false);
+			}
+		});
+	}
+
+	private void initializeAudioSettings() {
 		if (timer.isRecordAllPids()) {
 			this.getView().getJRadioButtonRecordAllPids().setSelected(true);
 		}
@@ -114,7 +122,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 			this.initializeUdrecEngine();
 		}
 	}
-	
+
 	private void initializeJGrabberEngine() {
 		this.getView().getJRadioButtonJGrabber().setSelected(true);
 		GuiStreamTypeComboModel streamTypeComboModel = new GuiStreamTypeComboModel(ControlSettingsTabRecord.streamTypesJGrabber);
@@ -130,22 +138,24 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		this.getView().getJComboBoxStreamType().setModel(streamTypeComboModel);
 		this.getView().getStreamTypeComboModel().setSelectedItem(streamType);
 	}
-    
+
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		while (true) {
-		    if (action.equals("ok")) {
-		        this.actionSaveRecordTimer();
-	  			break;
-	  		}
-		    if (action.equals("cancel")) {
-		        this.getView().dispose();
-	  			break;
-	  		}
-		    if (action.equals("recordPath")) {
-	  			this.openRecordPathFileChooser();
-	  			break;
-	  		}
+			if (action.equals("ok")) {
+
+				this.actionSaveRecordTimer();
+				break;
+			}
+			if (action.equals("cancel")) {
+				this.getView().dispose();
+
+				break;
+			}
+			if (action.equals("recordPath")) {
+				this.openRecordPathFileChooser();
+				break;
+			}
 			if (action.equals("jgrabber")) {
 				this.getTimer().setStreamingEngine(0);
 				this.initializeJGrabberEngine();
@@ -214,40 +224,39 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 			break;
 		}
 	}
-	
+
 	private void openUdrecOptions() {
 		new GuiUdrecOptionsDialog(this.getTimer().getUdrecOptions(), this.getView().getJTextFieldUdrecOptions());
 	}
-	
+
 	private void actionSaveRecordTimer() {
-	    SerTimerHandler.saveTimer(this.getTimer().getMainTimer(), true);
-	    this.getControlTimer().refreshRecordTimerTable();
+		SerTimerHandler.saveTimer(this.getTimer().getMainTimer(), true);
+		this.getControlTimer().refreshRecordTimerTable();
 		this.getView().dispose();
 	}
-	
+
 	/*
-	 * wird aufgerufen wenn ein Wochentag selektiert wird.
-	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
-	 * Wochentage festgestellt und gesetzt
+	 * wird aufgerufen wenn ein Wochentag selektiert wird. Der neue RepeatId-Wert wird dann aufgrund der selektierten Wochentage
+	 * festgestellt und gesetzt
 	 */
-	public void actionRecordTimerRepeatDaysChanged (ActionEvent event) {
+	public void actionRecordTimerRepeatDaysChanged(ActionEvent event) {
 		timer.getMainTimer().setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage));
 		timer.getMainTimer().setModifiedId("modify");
 	}
-	
+
 	/*
 	 * Beim jeweiligen RadioButton ist als Name die RepeatId eingestellt
 	 */
 	private String getRepeatOptionValue(JRadioButton[] buttons) {
-		int result=0;
-		for (int i=0; i<buttons.length; i++) {
+		int result = 0;
+		for (int i = 0; i < buttons.length; i++) {
 			if (buttons[i].isSelected()) {
-				result+=Integer.parseInt(buttons[i].getName());
+				result += Integer.parseInt(buttons[i].getName());
 			}
 		}
 		return Integer.toString(result);
 	}
-	
+
 	/**
 	 * @param field
 	 *  
@@ -268,10 +277,9 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 						}
 
 						if (tagFrame.getField() == getView().getJTextFieldDirPattern()) {
-						    getTimer().setDirPattern(tagFrame.getField().getText());
-						}
-						else if (tagFrame.getField() == getView().getJTextFieldFilePattern()) {
-						    getTimer().setFilePattern(tagFrame.getField().getText());
+							getTimer().setDirPattern(tagFrame.getField().getText());
+						} else if (tagFrame.getField() == getView().getJTextFieldFilePattern()) {
+							getTimer().setFilePattern(tagFrame.getField().getText());
 						}
 					}
 				}
@@ -284,7 +292,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		tagFrame.setField(field);
 		tagFrame.setVisible(true);
 	}
-	
+
 	private void testPattern() {
 
 		// test directory pattern
@@ -310,47 +318,46 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		}
 	}
 
-    
-    public void itemStateChanged(ItemEvent event) {
-        JComboBox comboBox = (JComboBox) event.getSource();
+	public void itemStateChanged(ItemEvent event) {
+		JComboBox comboBox = (JComboBox) event.getSource();
 		if (event.getStateChange() == 1) {
 			if (comboBox.getName().equals("streamType")) {
-			    if (this.getTimer().getStreamingEngine() == 0) {
-			        this.getTimer().setJgrabberStreamType((String) comboBox.getSelectedItem());
+				if (this.getTimer().getStreamingEngine() == 0) {
+					this.getTimer().setJgrabberStreamType((String) comboBox.getSelectedItem());
 				} else {
-				    this.getTimer().setUdrecStreamType((String) comboBox.getSelectedItem());
+					this.getTimer().setUdrecStreamType((String) comboBox.getSelectedItem());
 				}
 			}
 			if (comboBox.getName().equals("sender")) {
-			    int senderIndex = comboBox.getSelectedIndex();
-				BOSender sender = (BOSender)this.getControlTimer().getSenderList().get(senderIndex);
+				int senderIndex = comboBox.getSelectedIndex();
+				BOSender sender = (BOSender) this.getControlTimer().getSenderList().get(senderIndex);
 				timer.getMainTimer().setChannelId(sender.getChanId());
 				timer.getMainTimer().setSenderName(sender.getName());
 			}
 			if (comboBox.getName().equals("repeat")) {
-			    this.setEventRepeatId((String)comboBox.getSelectedItem());
+				this.setEventRepeatId((String) comboBox.getSelectedItem());
 			}
 		}
 	}
-    
-    private void setEventRepeatId(String repeatOption) {
-        if (repeatOption.equals(ControlMain.getProperty("weekdays"))) {
-            this.selectRepeatDaysForRecordTimer(timer.getMainTimer());
-            this.getView().enableRecordTimerWeekdays(true);
-        } else {
-            timer.getMainTimer().setEventRepeatId(this.getControlTimer().convertLongEventRepeat(repeatOption));
-            this.getView().enableRecordTimerWeekdays(false);
-        }
-    }
-    
+
+	private void setEventRepeatId(String repeatOption) {
+		if (repeatOption.equals(ControlMain.getProperty("weekdays"))) {
+			this.selectRepeatDaysForRecordTimer(timer.getMainTimer());
+			this.getView().enableRecordTimerWeekdays(true);
+		} else {
+			timer.getMainTimer().setEventRepeatId(this.getControlTimer().convertLongEventRepeat(repeatOption));
+			this.getView().enableRecordTimerWeekdays(false);
+		}
+	}
+
 	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
-		ControlTimerTab.selectRepeatDaysForRecordTimer(timer,this.getView().jRadioButtonWhtage);
+		ControlTimerTab.selectRepeatDaysForRecordTimer(timer, this.getView().jRadioButtonWhtage);
 
 	}
 
 	public void mousePressed(MouseEvent e) {
-	    if (e.getClickCount() == 2) {
-			Object[] val = ((JList)e.getComponent()).getSelectedValues();
+		if (e.getClickCount() == 2) {
+			Object[] val = ((JList) e.getComponent()).getSelectedValues();
 			for (int i = 0; i < val.length; i++) {
 				BOPatternTag t = (BOPatternTag) val[i];
 				String text = getView().getJTextFieldDirPattern().getText();
@@ -372,8 +379,8 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 
 	public void mouseEntered(MouseEvent me) {
 	}
-    
-    public void keyTyped(KeyEvent event) {
+
+	public void keyTyped(KeyEvent event) {
 	}
 
 	public void keyPressed(KeyEvent event) {
@@ -382,33 +389,33 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	public void keyReleased(KeyEvent event) {
 		JTextField tf = (JTextField) event.getSource();
 		while (true) {
-		    if (tf.getName().equals("description")){
-			    this.getTimer().setDescription(tf.getText());
-			    break;
+			if (tf.getName().equals("description")) {
+				this.getTimer().setDescription(tf.getText());
+				break;
 			}
-		    if (tf.getName().equals("startDate")){
-		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "dd.MM.yy");
+			if (tf.getName().equals("startDate")) {
+				GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "dd.MM.yy");
 				timer.getMainTimer().setUnformattedStartDate(newDate);
-			    break;
+				break;
 			}
-		    if (tf.getName().equals("startTime")){
-		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
-				newDate.set(Calendar.SECOND,0);
-		        timer.getMainTimer().setUnformattedStartTime(newDate);
-			    break;
+			if (tf.getName().equals("startTime")) {
+				GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
+				newDate.set(Calendar.SECOND, 0);
+				timer.getMainTimer().setUnformattedStartTime(newDate);
+				break;
 			}
-		    if (tf.getName().equals("stopTime")){
-		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
-		        newDate.set(Calendar.SECOND,0);
-		        timer.getMainTimer().setUnformattedStopTime(newDate);
-			    break;
+			if (tf.getName().equals("stopTime")) {
+				GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
+				newDate.set(Calendar.SECOND, 0);
+				timer.getMainTimer().setUnformattedStopTime(newDate);
+				break;
 			}
 			if (tf.getName().equals("jTextFieldFilePattern")) {
-			    this.getTimer().setFilePattern(tf.getText());
+				this.getTimer().setFilePattern(tf.getText());
 				break;
 			}
 			if (tf.getName().equals("jTextFieldDirPattern")) {
-			    this.getTimer().setDirPattern(tf.getText());
+				this.getTimer().setDirPattern(tf.getText());
 				break;
 			}
 			break;
@@ -420,40 +427,42 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
 		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
-		int returnVal = fc.showSaveDialog( null ) ;
+		fc.setApproveButtonToolTipText(ControlMain.getProperty("msg_chooseDirectory"));
+		int returnVal = fc.showSaveDialog(null);
 
-		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = fc.getSelectedFile().toString();
 			this.getView().getJTextFieldRecordSavePath().setText(path);
 			this.getTimer().setSavePath(path);
 		}
 	}
-	
-    /**
-     * @return Returns the timer.
-     */
-    public BOLocalTimer getTimer() {
-        return timer;
-    }
-    /**
-     * @param timer The timer to set.
-     */
-    public void setTimer(BOLocalTimer timer) {
-        this.timer = timer;
-    }
-    /**
-     * @return Returns the view.
-     */
-    public GuiTimerEditView getView() {
-        return view;
-    }
-    /**
-     * @param view The view to set.
-     */
-    public void setView(GuiTimerEditView view) {
-        this.view = view;
-    }
+
+	/**
+	 * @return Returns the timer.
+	 */
+	public BOLocalTimer getTimer() {
+		return timer;
+	}
+	/**
+	 * @param timer
+	 *            The timer to set.
+	 */
+	public void setTimer(BOLocalTimer timer) {
+		this.timer = timer;
+	}
+	/**
+	 * @return Returns the view.
+	 */
+	public GuiTimerEditView getView() {
+		return view;
+	}
+	/**
+	 * @param view
+	 *            The view to set.
+	 */
+	public void setView(GuiTimerEditView view) {
+		this.view = view;
+	}
 	/**
 	 * @return Returns the senderList.
 	 */
@@ -473,7 +482,8 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		return controlTimer;
 	}
 	/**
-	 * @param controlTimer The controlTimer to set.
+	 * @param controlTimer
+	 *            The controlTimer to set.
 	 */
 	public void setControlTimer(ControlTimerTab controlTimer) {
 		this.controlTimer = controlTimer;
