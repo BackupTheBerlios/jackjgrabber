@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -199,7 +200,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private void reInitTable(Integer modelIndex){
 		setBOMovieGuide4Timer((BOMovieGuide)getTitelMap().get(modelIndex));			
 		this.getTab().getTaEpisode().setText("Episode: "+getBOMovieGuide4Timer().getEpisode());			  		
-		this.getTab().getTfGenre().setText("Genre: "+getBOMovieGuide4Timer().getGenre());		
+		this.getTab().getTaGenre().setText("Genre: "+getBOMovieGuide4Timer().getGenre());		
 		this.getTab().getTaAudioVideo().setText("Audio: / Video: ");
 		this.getTab().getTaLand().setText("Produktion: "+getBOMovieGuide4Timer().getLand()+" / "+getBOMovieGuide4Timer().getJahr()+" / Regie: "+getBOMovieGuide4Timer().getRegie());													
 		this.getTab().getTaDarsteller().setText("Darsteller: "+getBOMovieGuide4Timer().getDarsteller());
@@ -237,28 +238,21 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		int modelIndexTimer=getSelectRowTimerTable();
 		
 		BOTimer botimer = new BOTimer();  //FIXME timer aufbauen			
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60*1000*-1;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60*1000;
-		int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*60*1000*-1;
-
-		
+		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*-1;
+		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter());
+		int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*-1;
 		// timer
 			botimer.setModifiedId("new");
 		//	botimer.setChannelId(this.getSelectedSender().getChanId());
-		//	botimer.setSenderName(this.getSelectedSender().getName());
-			botimer.setAnnounceTime(Long.toString(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeAnnounce))); //Vorwarnzeit
-			botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore)));
-			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter)));
+		//	botimer.setSenderName(this.getSelectedSender().getName());		
+			botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore));
+			botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter));			
+			botimer.setAnnounceTime( String.valueOf((SerFormatter.getGC(botimer.getUnformattedStartTime(),2)).getTimeInMillis()) );
 			botimer.setEventRepeatId("0");
 			botimer.setEventTypeId("5");
 			botimer.setDescription(getBOMovieGuide4Timer().getTitel());
-	
 		//
 
-		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeAnnounce)));		
-		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore)));
-		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter)));
-		
 		System.out.println(getBOMovieGuide4Timer().getTitel());
 		System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
 		System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);
@@ -469,11 +463,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				setDatumList(entry.element("datum").getStringValue());	
 				setSenderList(entry.element("sender").getStringValue());
 				if(!controlMap.containsKey(entry.element("titel").getStringValue())){ //prüfen ob titel schon vorhanden ist, wenn ja nur neue Daten hinzugügen
-				BOMovieGuide bomovieguide = new BOMovieGuide(
+				String datum = entry.element("datum").getStringValue();
+				String start = entry.element("start").getStringValue();
+					BOMovieGuide bomovieguide = new BOMovieGuide(
 						entry.element("sender").getStringValue(), 
-						String.valueOf(SerFormatter.getStringToLong(entry.element("datum").getStringValue())),
-						entry.element("start").getStringValue(),
-						SerFormatter.getCorrectEndTime(entry.element("start").getStringValue(),entry.element("dauer").getStringValue()),
+						String.valueOf(SerFormatter.getStringToLong(datum)),
+						SerFormatter.getString2Cal(datum,start),
+						SerFormatter.getString2Cal(datum,SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue())),					
 						entry.element("titel").getStringValue(),
 						entry.element("episode").getStringValue(),
 						entry.element("genre").getStringValue(),
@@ -490,15 +486,17 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				titelList.put(new Integer(a),bomovieguide);		
 				setControlMap(bomovieguide.getTitel(),new Integer(a));
                 a++;               
-				}else{					 
+				}else{	
+					 String datum = entry.element("datum").getStringValue();
+				     String start = entry.element("start").getStringValue();
 					 BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(controlMap.get(entry.element("titel").getStringValue()));
-                     bomovieguide.setDatum(String.valueOf(SerFormatter.getStringToLong(entry.element("datum").getStringValue())));
-                     bomovieguide.setStart(entry.element("start").getStringValue());
+                     bomovieguide.setDatum(String.valueOf(SerFormatter.getStringToLong(datum)));
+                     bomovieguide.setStart(SerFormatter.getString2Cal(datum,start));
                      bomovieguide.setDauer(entry.element("dauer").getStringValue());
                      bomovieguide.setSender(entry.element("sender").getStringValue());                             
                      bomovieguide.setBild(entry.element("bild").getStringValue());
                      bomovieguide.setTon(entry.element("ton").getStringValue());
-                     bomovieguide.setEnde(SerFormatter.getCorrectEndTime(entry.element("start").getStringValue(),entry.element("dauer").getStringValue()));
+                     bomovieguide.setEnde(SerFormatter.getString2Cal(datum,SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue())));
                      titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
 			}
