@@ -80,7 +80,6 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
     
     private void actionAddBox() {
 		BOBox box = new BOBox();
-		box.setDboxIp("192.168.001.110"); //defaultwert
 		this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);
 	}
 	private void actionRemoveBox() {
