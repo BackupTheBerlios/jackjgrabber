@@ -55,13 +55,21 @@ public class Record {
 	String[] dboxArgs;	
 	
 	public Record(BORecordArgs args, RecordControl control) {
-		recordControl = control;
-	    recordArgs = args;
-	    boxIp = ControlMain.getBoxIpOfActiveBox();
+		try {
+            recordControl = control;
+            recordArgs = args;
+            boxIp = ControlMain.getBoxIpOfActiveBox();
+            tcpSocket = new Socket(boxIp,31340);
+            udpReceiver = new UdpReceiver(this);
+            tcpReceiver = new TcpReceiver(this);
+            Logger.getLogger("Record").info("Connection to box established");
+        } catch (IOException e) {
+            SerAlertDialog.alertConnectionLost("Record", ControlMain.getControl().getView());
+            control.stopRecord();
+        }
 	}
 	
 	public void start() {
-	    Logger.getLogger("Record").info("Start Recording, please wait...");
 	    if (sendRequest()) {
 	        startRecord();
 	    }
@@ -69,9 +77,6 @@ public class Record {
 	
 	private boolean sendRequest() {
 		try {
-		    tcpSocket = new Socket(boxIp,31340);
-	        udpReceiver = new UdpReceiver(this);
-	        tcpReceiver = new TcpReceiver(this);
             outputStream = new PrintWriter(tcpSocket.getOutputStream());
             
             String requestString = this.getRequestString();

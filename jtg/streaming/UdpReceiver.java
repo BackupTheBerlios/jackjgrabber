@@ -27,10 +27,7 @@ import org.apache.log4j.Logger;
 import service.SerAlertDialog;
 import control.ControlMain;
 
-/**
- * @author Geist Alexander
- *
- */
+
 public class UdpReceiver extends Thread {
 	
 	public long packetCount = 0;
@@ -44,6 +41,7 @@ public class UdpReceiver extends Thread {
             udpSocket = new DatagramSocket(31341);
         } catch (SocketException e) {
             Logger.getLogger("UdpReceiver").error("Unable to create Udp-Socket");
+            e.printStackTrace();
             record.recordControl.stopRecord();
         }
 	}

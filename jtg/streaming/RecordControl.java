@@ -72,7 +72,7 @@ public class RecordControl extends Thread
 	public void stopRecord() {
 	    record.stop();
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
-    	if (ControlMain.getSettings().isStartPX()) {
+    	if (ControlMain.getSettings().isStartPX() && record.writeStream!=null) {
     		this.startProjectX();
     		Logger.getLogger("RecordControl").info("Start ProjectX for demuxing");
     	}
@@ -85,20 +85,20 @@ public class RecordControl extends Thread
 	}
 	
 	private String[] buildPXcommand() {
-	    ArrayList allFiles = new ArrayList();
-	    int streamCount = record.writeStream.length;
-		for (int i=0; i<streamCount; i++) {
-		    ArrayList fileList = record.writeStream[i].fileList;
-		    for (int i2=0; i2<fileList.size(); i2++) {
-		        File file = (File)fileList.get(i2);
-		        allFiles.add(file);
-		    }
-		}
-		String[] args = new String[allFiles.size()];
-		for (int i=0; i<args.length; i++) {
-		    File file = (File)allFiles.get(i);
-		    args[i] = file.getAbsolutePath();
-		}
-		return args;
+        ArrayList allFiles = new ArrayList();
+        int streamCount = record.writeStream.length;
+        for (int i=0; i<streamCount; i++) {
+            ArrayList fileList = record.writeStream[i].fileList;
+            for (int i2=0; i2<fileList.size(); i2++) {
+                File file = (File)fileList.get(i2);
+                allFiles.add(file);
+            }
+        }
+        String[] args = new String[allFiles.size()];
+        for (int i=0; i<args.length; i++) {
+            File file = (File)allFiles.get(i);
+            args[i] = file.getAbsolutePath();
+        }
+        return args;
 	}
 }
