@@ -60,7 +60,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		        return line.substring(startpos+4, endpos);
 		    }
 		}
-		return line;
+		return "ok";
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
@@ -70,8 +70,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public BOPids getPids(boolean tvMode) throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
-	
-		BufferedReader input = getConnection("/control/zapto?getallpids");
+		System.out.println("hallo");
+		BufferedReader input = getConnection("/control/zapto?getpids");
 		if (tvMode) {
 		    String[] vPid = new String[1];
 		    vPid[0]=Integer.toHexString(Integer.parseInt(input.readLine()));
@@ -217,7 +217,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		while((line=input.readLine())!=null) {
 			status = line;
 		}
-		return status;
+		return "ok";
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
