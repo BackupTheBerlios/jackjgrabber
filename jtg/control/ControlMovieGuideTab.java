@@ -107,7 +107,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
       	    }              	
       	}
       	this.buildMG();
-      	if ( (movieList.getAnnounceList().size()> 0) && (getSettings().mgInfoDontForget) ){
+      	if ( (movieList.getAnnounceList().size()> 0) && (getSettings().isMgInfoDontForget()) ){      		
 	    	infoNewMovieGuide("Es kommen Filme aus deiner Liste.\n Zur Auswahl auf den RecordListeButton drücken.");
 	    }	  	 
 	}
