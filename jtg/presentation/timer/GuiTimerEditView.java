@@ -18,7 +18,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 
@@ -32,12 +31,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
 
 import presentation.settings.GuiStreamTypeComboModel;
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -94,8 +93,7 @@ public class GuiTimerEditView extends JFrame{
 	private JButton jButtonUdrecOptions;
 	
 	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
-	private JToolBar toolBar;
-	
+
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	
 	
@@ -109,8 +107,7 @@ public class GuiTimerEditView extends JFrame{
 	}
     
     public void initialize() {
-    	this.getContentPane().add(this.getToolBar(), BorderLayout.NORTH);
-        this.getContentPane().add(this.getMainPanel(), BorderLayout.SOUTH);
+        this.getContentPane().add(this.getMainPanel());
     }
     
     
@@ -118,17 +115,18 @@ public class GuiTimerEditView extends JFrame{
 		if (mainPanel == null) {
 			mainPanel = new JPanel();
 			FormLayout layout = new FormLayout("pref, 25, pref:grow", //columns
-					"pref, 10, pref, 15, t:pref, 15, pref, 15, pref"); //rows
+					"pref, 10, pref, 15, t:pref, 15, pref, 15, pref, 15, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(mainPanel, layout);
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 
 			builder.add(this.getPanelMainOptions(),			cc.xyw(1, 1, 3));
-			builder.add(this.getPanelDauerTimer(),			cc.xyw(1, 3, 3));
+			builder.add(this.getPanelDauerTimer(),				cc.xyw(1, 3, 3));
 			builder.add(this.getPanelRecordSettings(), 		cc.xy(1, 5));
 			builder.add(this.getPanelEngineSettings(),		cc.xy(3, 5));
 			builder.add(this.getPanelRecordPath(), 			cc.xyw(1, 7, 3));
 			builder.add(this.getPanelFileNameSettings(), 	cc.xyw(1, 9, 3));
+			builder.add(ButtonBarFactory.buildOKCancelBar(this.getJButtonCancel(), this.getJButtonOk()),  cc.xyw(1, 11, 3));
 		}
 		return mainPanel;
 	}
@@ -268,15 +266,6 @@ public class GuiTimerEditView extends JFrame{
 		}
 	}
 	
-	private JToolBar getToolBar() {
-		if (toolBar==null) {
-			toolBar = new JToolBar();
-			toolBar.putClientProperty("JToolBar.isRollover", Boolean.TRUE);
-			toolBar.add( this.getJButtonOk() );
-			toolBar.add( this.getJButtonCancel() );
-		}
-		return toolBar;
-	}
 	/**
 	 * @return jButtonFileTag
 	 */

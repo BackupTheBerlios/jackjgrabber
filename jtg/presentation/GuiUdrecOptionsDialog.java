@@ -18,7 +18,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -33,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.MaskFormatter;
@@ -42,6 +40,7 @@ import model.BOUdrecOptions;
 import service.SerGUIUtils;
 
 import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -60,7 +59,6 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
     private JFormattedTextField jTextFieldUdp;
     private JFormattedTextField jTextFieldTcp;
     private JTextField optionsField;
-    private JToolBar toolBar;
     private JButton jButtonOk;
 	private JButton jButtonCancel;
     private String[] allOptions = {"-idd", "-rm", "-gtc", "-log" };
@@ -78,15 +76,14 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
     }
     
     public void initialize() {
-    	this.getContentPane().add(this.getToolBar(), BorderLayout.NORTH);
-        this.getContentPane().add(this.getPanelMain(), BorderLayout.SOUTH);
+        this.getContentPane().add(this.getPanelMain());
     }
     
     private JPanel getPanelMain() {
 		if (panelMain == null) {
 			panelMain = new JPanel();
 			FormLayout layout = new FormLayout("pref, 10, pref", //columns
-					"pref, 5, pref"); //rows
+					"pref, 5, pref, 15, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelMain, layout);
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
@@ -94,6 +91,7 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
 			builder.add(this.getPanel1(),			cc.xy(1, 1));
 			builder.add(this.getPanel2(),			cc.xywh(3, 1, 1, 3));
 			builder.add(this.getPanel3(),			cc.xy(1, 3));
+			builder.add(ButtonBarFactory.buildOKCancelBar(this.getJButtonCancel(), this.getJButtonOk()),  cc.xyw(1, 5, 3));
 			
 
 		}
@@ -176,16 +174,6 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
 			this.dispose();
 		}
     }
-    
-    private JToolBar getToolBar() {
-		if (toolBar==null) {
-			toolBar = new JToolBar();
-			toolBar.putClientProperty("JToolBar.isRollover", Boolean.TRUE);
-			toolBar.add( this.getJButtonOk() );
-			toolBar.add( this.getJButtonCancel() );
-		}
-		return toolBar;
-	}
     
 	/**
 	 * @return jButtonOk
