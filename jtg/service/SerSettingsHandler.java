@@ -443,7 +443,7 @@ public class SerSettingsHandler {
 		Node ac3ReplaceStereo = settingsDocument.selectSingleNode("/settings/ac3ReplaceStereo");
 		Node udrecOptions = settingsDocument.selectSingleNode("/settings/udrecOptions");
 		
-		projectXPath.setText(ControlMain.getSettings().getUdrecPath());
+		projectXPath.setText(ControlMain.getSettings().getProjectXPath());
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().isAc3ReplaceStereo()));
 		udrecOptions.setText(ControlMain.getSettings().getUdrecOptions());
 		recordTimeBefore.setText(ControlMain.getSettings().getRecordTimeBefore());
