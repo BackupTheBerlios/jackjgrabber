@@ -61,7 +61,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 			return box.getPassword();
 		}
 		//
-		else return box.isStandard();
+		else return new Boolean(box.isStandard());
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -81,11 +81,11 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 				ArrayList boxList = ControlMain.getSettingsMain().getBoxList();
 				for (int i=0; i<boxList.size(); i++) { 
 					BOBox boxx = (BOBox)boxList.get(i);
-					boxx.setStandard(Boolean.FALSE);
+					boxx.setStandard(false);
 					this.fireTableDataChanged();
 				}
 			}
-			box.setStandard((Boolean)aValue);
+			box.setStandard(((Boolean)aValue).booleanValue());
 		}
 	}
 
@@ -109,7 +109,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	 */
 	public void addRow(BOBox box) {
 		if (ControlMain.getSettingsMain().getBoxList().size()==0) {
-			box.setStandard(Boolean.TRUE);
+			box.setStandard(true);
 		}
 		ControlMain.getSettingsMain().addBox(box);
 		fireTableDataChanged();

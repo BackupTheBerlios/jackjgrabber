@@ -20,7 +20,7 @@ public class BOBox {
 	public String dboxIp = "192.168.001.110"; //Defaultwert
 	public String login = "root"; //Defaultwert
 	public String password = "dbox2"; //Defaultwert
-	public Boolean standard = Boolean.FALSE;
+	public boolean standard = false;
 	private boolean selected;
 
 	public BOBox() {
@@ -80,15 +80,15 @@ public class BOBox {
 	/**
 	 * @return Returns the standard.
 	 */
-	public Boolean isStandard() {
+	public boolean isStandard() {
 		return standard;
 	}
 	/**
 	 * @param standard
 	 *            The standard to set.
 	 */
-	public void setStandard(Boolean standard) {
-		if (this.standard.booleanValue() != standard.booleanValue()) {
+	public void setStandard(boolean standard) {
+		if (this.standard != standard) {
 			this.standard = standard;
 			this.setSettingsChanged(true);
 		}

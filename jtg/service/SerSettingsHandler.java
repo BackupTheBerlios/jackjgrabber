@@ -13,12 +13,12 @@ package service;
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 import java.beans.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.List;
 
 import model.*;
 
@@ -525,11 +525,11 @@ public class SerSettingsHandler {
 						box.password = (value.getText());
 						break;
 					case 3 :
-						box.standard = (Boolean.valueOf(value.getText()));
+						box.standard = (Boolean.valueOf(value.getText()).booleanValue());
 						break;
 				}
 			}
-			if ((box.isStandard().booleanValue())) {
+			if ((box.isStandard())) {
 				box.setSelected(true);
 			}
 			boxList.add(box);
@@ -645,7 +645,7 @@ public class SerSettingsHandler {
 			boxElement.addElement("boxIp").addText(box.getDboxIp());
 			boxElement.addElement("login").addText(box.getLogin());
 			boxElement.addElement("password").addText(box.getPassword());
-			boxElement.addElement("standard").addText(box.isStandard().toString());
+			boxElement.addElement("standard").addText(box.isStandard() + "");
 			newBoxListRoot.add(boxElement);
 		}
 		settingsDocument.add(newBoxListRoot);

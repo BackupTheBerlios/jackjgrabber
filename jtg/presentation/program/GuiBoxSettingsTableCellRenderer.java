@@ -45,7 +45,7 @@ public class GuiBoxSettingsTableCellRenderer extends DefaultTableCellRenderer {
 			BOBox box = (BOBox)ControlMain.getSettingsMain().getBoxList().get(row);
 			JCheckBox checkbox = new JCheckBox();
 			checkbox.setHorizontalAlignment(SwingConstants.CENTER);
-			checkbox.setSelected(box.isStandard().booleanValue());
+			checkbox.setSelected(box.isStandard());
 			return checkbox;
 		}
 }

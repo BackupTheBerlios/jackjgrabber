@@ -165,7 +165,7 @@ public class ControlMain {
 		}
 		for (int i = 0; boxList.size() > i; i++) {
 			box = (BOBox) boxList.get(i);
-			if (box.isStandard().booleanValue()) { //mehrer Boxen vorhanden, die Standardbox zurückgeben
+			if (box.isStandard()) { //mehrer Boxen vorhanden, die Standardbox zurückgeben
 				box.setSelected(true);
 				setActiveBox(box);
 				return true;
