@@ -20,36 +20,20 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
+import control.ControlMain;
+
 public class BOPids {
 
-    String[] vPid; //erste Position Pid, 2. Position Beschreibung
-    ArrayList aPids = new ArrayList(); //ArrayList von String[] Objekten, erste Position Pid, 2. Position Beschreibung
-    String[] vtxtPid;
+    private BOPid vPid; //erste Position Pid, 2. Position Beschreibung
+    private ArrayList aPids = new ArrayList(); //ArrayList von String[] Objekten, erste Position Pid, 2. Position Beschreibung
+    private BOPid vtxtPid;
    
-    /**
-     * @return Returns the aPids.
-     */
-    public ArrayList getAPids() {
-        return aPids;
-    }
-    /**
-     * @param pids The aPids to set.
-     */
-    public void setAPids(ArrayList pids) {
-        aPids = pids;
-    }
-    /**
-     * @return Returns the vPid.
-     */
-    public String[] getVPid() {
-        return vPid;
-    }
-    /**
-     * @param pid The vPid to set.
-     */
-    public void setVPid(String[] pid) {
-        vPid = pid;
-    }
     public int getPidCount() {
         int count = 0;
         if (this.getVPid()!= null) {
@@ -70,16 +54,80 @@ public class BOPids {
         return aPid[1];
     }
     
+    public static BOPids startPidsQuestDialog(BOPids pids) {
+		DefaultListModel m = new DefaultListModel();
+		JList list = new JList(m);
+		list.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
+		m.addElement(pids.getVPid());
+		for (int i = 0; i < pids.getAPids().size(); i++) {
+			BOPid pid = (BOPid) pids.getAPids().get(i);
+			m.addElement(pid);
+		}
+		m.addElement(pids.getVtxtPid());
+
+		int res = JOptionPane.showOptionDialog(
+				ControlMain.getControl().getView(), 
+				new Object[]{ControlMain.getProperty("label_selectPids"), new JScrollPane(list)}, 
+				"Pids", 
+				0,
+				JOptionPane.QUESTION_MESSAGE, 
+				null, 
+				new String[]{ControlMain.getProperty("button_ok"), ControlMain.getProperty("button_cancel")},
+				ControlMain.getProperty("button_ok"));
+		
+		if (res == 0) {
+			BOPid[] pidArray = (BOPid[]) list.getSelectedValues();
+			BOPids newPidList = new BOPids();
+			for (int i=0; i<pidArray.length; i++) {
+				switch (pidArray[i].getId()) {
+					case 0: newPidList.setVPid(pidArray[i]);
+					break;
+					case 1: newPidList.getAPids().add(pidArray[i]);
+					break;
+					case 2: newPidList.setVtxtPid(pidArray[i]);
+					break;
+				}
+			}
+			return newPidList;
+		}
+		return null;
+	}
+    
     /**
      * @return Returns the vtxtPid.
      */
-    public String[] getVtxtPid() {
+    public BOPid getVtxtPid() {
         return vtxtPid;
     }
     /**
      * @param vtxtPid The vtxtPid to set.
      */
-    public void setVtxtPid(String[] vtxtPid) {
+    public void setVtxtPid(BOPid vtxtPid) {
         this.vtxtPid = vtxtPid;
+    }
+    /**
+     * @return Returns the aPids.
+     */
+    public ArrayList getAPids() {
+        return aPids;
+    }
+    /**
+     * @param pids The aPids to set.
+     */
+    public void setAPids(ArrayList pids) {
+        aPids = pids;
+    }
+    /**
+     * @return Returns the vPid.
+     */
+    public BOPid getVPid() {
+        return vPid;
+    }
+    /**
+     * @param pid The vPid to set.
+     */
+    public void setVPid(BOPid pid) {
+        vPid = pid;
     }
 }

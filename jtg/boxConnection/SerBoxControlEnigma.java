@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPid;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
@@ -68,25 +69,20 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		String line;
 		BufferedReader input = getConnection("/control/zapto?getpids");
 		if (tvMode) {
-		    String[] vPid = new String[1];
 		    line=input.readLine();
 		    if (line.length() > 5) {
 		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("err_zapping"));
 		        return pids;
 		    }
-		    vPid[0]=Integer.toHexString(Integer.parseInt(line));
-		    pids.setVPid(vPid);
+		    pids.setVPid(new BOPid(Integer.toHexString(Integer.parseInt(line)),"", 0));
 		} 
 		while((line=input.readLine())!=null) {
-		    String[] aPid = new String[1];
 		    if (line.length() > 5) {
 		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("err_zapping"));
 		        return pids;
 		    }
-		    aPid[0]=Integer.toHexString(Integer.parseInt(line));
-			pids.getAPids().add(aPid);
+			pids.getAPids().add(new BOPid(Integer.toHexString(Integer.parseInt(line)),"", 1));
 		}
-
 		return pids;
 	}	 
 	

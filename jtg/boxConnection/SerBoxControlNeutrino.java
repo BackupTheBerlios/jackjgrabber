@@ -26,16 +26,17 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
-import service.SerFormatter;
-
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPid;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
+
+import org.apache.log4j.Logger;
+
+import service.SerFormatter;
 import control.ControlMain;
 import control.ControlProgramTab;
 
@@ -68,29 +69,24 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	
 		BufferedReader input = getConnection("/control/zapto?getallpids");
 
-	    String[] vPid = new String[2];
-	    vPid[0]=Integer.toHexString(Integer.parseInt(input.readLine()));
-	    vPid[1]="video";
-	    pids.setVPid(vPid);
+	    pids.setVPid(new BOPid(Integer.toHexString(Integer.parseInt(input.readLine())), "video", 0));
  
 		while((line=input.readLine())!=null) {
-		  	StringTokenizer st = new StringTokenizer(line);
-		  	String[] pid = new String[2];
+			StringTokenizer st = new StringTokenizer(line);
 		  	
-		  	 pid[0] = Integer.toHexString(Integer.parseInt(st.nextToken()));
-		  	 pid[1] = new String();
-		  	 while (st.hasMoreElements()) {
-		  	     pid[1] += " "+st.nextToken();    
-		  	 }
-		  	 pid[1]=pid[1].trim();
+			String number = Integer.toHexString(Integer.parseInt(st.nextToken()));
+			String name = new String();
+			while (st.hasMoreElements()) {
+		  	 	name += " "+st.nextToken();    
+			}
+			name=name.trim();
 		  	 
-		  	if (pid[1]!= null && pid[1].equals("vtxt")) {
-		  	    pids.setVtxtPid(pid);
+			if (name!= null && name.equals("vtxt")) {
+		  	 	pids.setVtxtPid(new BOPid(number, name, 2));
 		  	} else {
-		  	    pids.getAPids().add(pid);  
+			    pids.getAPids().add(new BOPid(number, name, 1));  
 		  	}
 		}
-
 		return pids;
 	}	 
 	
