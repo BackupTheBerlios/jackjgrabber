@@ -34,7 +34,7 @@ import model.BORecordArgs;
 public class UdpRecord  extends Record {
 
 	BORecordArgs recordArgs;
-	int TcpPort = 31340;
+	int tcpPort = 31340;
 	int udpPort = 31341;
 	int spktBufNum = 16;
 
@@ -58,7 +58,7 @@ public class UdpRecord  extends Record {
             tcpSocket = new Socket(boxIp,31340);
             udpReceiver = new UdpReceiver(this);
             tcpReceiver = new TcpReceiver(this);
-            Logger.getLogger("UdpRecord").info("Connection to box established");
+            Logger.getLogger("UdpRecord").info(ControlMain.getProperty("msg_con"));
         } catch (IOException e) {
             SerAlertDialog.alertConnectionLost("UdpRecord", ControlMain.getControl().getView());
             control.stopRecord();

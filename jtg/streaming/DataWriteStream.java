@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import control.ControlMain;
+
 
 public class DataWriteStream {
 
@@ -72,7 +74,7 @@ public class DataWriteStream {
             fileOut = new BufferedOutputStream(new FileOutputStream(currentFile));
             fileList.add(fileNumber, currentFile);
         } catch (FileNotFoundException e) {
-            Logger.getLogger("UdpRecord").error("Unable to create Output-Files");
+            Logger.getLogger("UdpRecord").error(ControlMain.getProperty("err_createFiles"));
             recordControl.stopRecord();
         }
 	}
@@ -127,7 +129,7 @@ public class DataWriteStream {
 	        try {
 	            fileOut.write(udpPacket.buffer, udpPacket.dataOffset, udpPacket.UsedLength - udpPacket.dataOffset);
 	        } catch (IOException e) {
-	            Logger.getLogger("DataWriteStream").error("unable to write Data");
+	            Logger.getLogger("DataWriteStream").error(ControlMain.getProperty("err_writeOutput"));
 	            recordControl.stopRecord();
 	        }
 	    }
@@ -137,7 +139,7 @@ public class DataWriteStream {
 	    try {
             fileOut.write(data);
         } catch (IOException e) {
-            Logger.getLogger("DataWriteStream").error("unable to write Data");
+            Logger.getLogger("DataWriteStream").error(ControlMain.getProperty("err_writeOutput"));
             recordControl.stopRecord();
         }
 	}

@@ -90,7 +90,7 @@ public class RecordControl extends Thread
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
     	if (ControlMain.getSettings().isStartPX() && record.getFiles()!=null) {
     		this.startProjectX();
-    		Logger.getLogger("RecordControl").info("Start ProjectX for demuxing");
+    		Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
     	}
     	isRunning = false;
 	}

@@ -78,7 +78,7 @@ public class UdrecRecord  extends Record {
             new SerInputStreamReadThread(run.getInputStream()).start();
             new SerErrorStreamReadThread(run.getErrorStream()).start();
         } catch (IOException e) {
-            Logger.getLogger("UdrecRecord").error("Unable to Start udrec"+e.getLocalizedMessage());
+            Logger.getLogger("UdrecRecord").error(ControlMain.getProperty("err_udrec")+e.getLocalizedMessage());
         }
 	}	
 	

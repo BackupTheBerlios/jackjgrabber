@@ -59,7 +59,7 @@ public class TcpRecord extends Record{
 		PrintWriter out;
 		try {
 			socket = new Socket(boxIp,port);
-			Logger.getLogger("TcpRecord").info("TCP-Connection established");
+			Logger.getLogger("TcpRecord").info(ControlMain.getProperty("msg_tcpStart"));
 			out = new PrintWriter(socket.getOutputStream());
 			
 			String requestString = "GET /0x"+aPid+" HTTP/1.1\r\n\r\n";
@@ -97,12 +97,12 @@ public class TcpRecord extends Record{
 	    running = false;
 	    try {
 			socket.close();
-			Logger.getLogger("TcpRecord").info("TcpRecord stopped");
+			Logger.getLogger("TcpRecord").info(ControlMain.getProperty("msg_tcpStop"));
 			for (int i=0; i<writeStream.length; i++) {
                 writeStream[i].stop();
             }
 		} catch (IOException e) {
-			Logger.getLogger("TcpRecord").error("Unable to stop Tcp-Socket");
+			Logger.getLogger("TcpRecord").error(ControlMain.getProperty("err_tcpStop"));
 		} catch (NullPointerException e) {
             //doNothing Aufnahmeabbruch vor dem Start
         }   

@@ -68,9 +68,9 @@ public class TcpReceiver extends Thread {
 	public void closeSocket() {
 		try {
 			tcpSocket.close();
-			Logger.getLogger("TcpReceiver").info("TcpReceiver stopped");
+			Logger.getLogger("TcpReceiver").info(ControlMain.getProperty("msg_tcpStop"));
 		} catch (IOException e) {
-			Logger.getLogger("TcpReceiver").error("Unable to stop Tcp-Socket");
+			Logger.getLogger("TcpReceiver").error(ControlMain.getProperty("err_tcpStop"));
 		}
 	}
 
