@@ -80,24 +80,7 @@ public class SerMovieGuide2Xml {
 		String jahr = String.valueOf((cal.get(Calendar.YEAR))).substring(2);
 		return "mguide_d_s_" + monat + "_" + jahr + ".txt";
 	}
-
-	public static void getNewMovieGuideOnline() {
-		try {
-			URL url = new URL("http://www.premiere.de/content/download/"
-					+ getAktuellDateString());
-			Reader is = new InputStreamReader(url.openStream());
-			BufferedReader in = new BufferedReader(is);
-			for (String s; (s = in.readLine()) != null;)
-				System.out.println(s);
-
-			in.close();
-		} catch (MalformedURLException e) {
-			System.out.println("MalformedURLException: " + e);
-		} catch (IOException e) {
-			System.out.println("IOException: " + e);
-		}
-	}
-
+	
 	private static void createHashTable() {
 		htToken.put((String) "Titel", new Integer(1));
 		htToken.put((String) "Episode", new Integer(2));
@@ -162,9 +145,20 @@ public class SerMovieGuide2Xml {
 		return ((Integer) htToken.get((String) input.substring(0, input.indexOf(":")))).intValue();
 	}
 
-	public static void readGuide(String datei) throws FileNotFoundException, IOException {
+	public static void readGuide(String datei,int quelle) throws FileNotFoundException, IOException {		
+		BufferedReader in = (null);
+		try {
+		switch (quelle){
+		case 1:
+		    in = new BufferedReader(new FileReader(datei));
+		    break;
+		case 2:    	
+			URL url = new URL("http://www.premiere.de/content/download/"+ getAktuellDateString());
+			Reader is = new InputStreamReader(url.openStream());
+			in = new BufferedReader(is);
+			break;
+		}
 		String input = new String();
-		BufferedReader in = new BufferedReader(new FileReader(datei));
 		String inhalt = "";
 		createHashTable();
 		boolean[] lineCounter = new boolean[2];
@@ -208,7 +202,11 @@ public class SerMovieGuide2Xml {
 				System.out.println("7 " + inhalt);
 			}
 		}
-		//System.out.println(htGenreMap.size());
+		} catch (MalformedURLException e) {
+			System.out.println("MalformedURLException: " + e);
+		} catch (IOException e) {
+			System.out.println("IOException: " + e);
+		}
 	}
 
 	/**
@@ -217,9 +215,8 @@ public class SerMovieGuide2Xml {
 	 */
 	public static void main(String[] args) {
 		try {
-			//buildEmptyXMLFile();
-			//readGuide("/tmp/1.txt");
-			readGuide("/tmp/mguide_d_s_10_04.txt");
+			//buildEmptyXMLFile();		
+			readGuide("/tmp/1.txt",2);
 
 		} catch (Exception e) {
 		}
