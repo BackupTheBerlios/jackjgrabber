@@ -59,10 +59,32 @@ public class SerSettingsHandler {
 		getSettingsShowLogo(root, settings);
 		getSettingsStartFullscreen(root, settings);
 		getSettingsUseSysTray(root, settings);
+		getSettingsRecordtimeBefore(root, settings);
+		getSettingsRecordtimeAfter(root, settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
 		return settings;
+	}
+	
+	private static void getSettingsRecordtimeBefore(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/recordTimeBefore");
+		if (node != null) {
+			settings.recordTimeBefore=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root, "recordTimeBefore", "0");
+			settings.setRecordTimeBefore("0");
+		}
+	}
+	
+	private static void getSettingsRecordtimeAfter(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/recordTimeAfter");
+		if (node != null) {
+			settings.recordTimeAfter=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root, "recordTimeAfter", "0");
+			settings.setRecordTimeAfter("0");
+		}
 	}
 	
 	private static void getSettingsShowLogo(Element root, BOSettings settings) {
@@ -359,7 +381,11 @@ public class SerSettingsHandler {
 		Node useSysTray = settingsDocument.selectSingleNode("/settings/useSysTray");
 		Node startFullscreen = settingsDocument.selectSingleNode("/settings/startFullscreen");
 		Node showLogo = settingsDocument.selectSingleNode("/settings/showLogo");
+		Node recordTimeBefore = settingsDocument.selectSingleNode("/settings/recordTimeBefore");
+		Node recordTimeAfter = settingsDocument.selectSingleNode("/settings/recordTimeAfter");
 
+		recordTimeBefore.setText(ControlMain.getSettings().getRecordTimeBefore());
+		recordTimeAfter.setText(ControlMain.getSettings().getRecordTimeAfter());
 		useSysTray.setText(Boolean.toString(ControlMain.getSettings().isUseSysTray()));
 		startFullscreen.setText(Boolean.toString(ControlMain.getSettings().isStartFullscreen()));
 		showLogo.setText(Boolean.toString(ControlMain.getSettings().isShowLogo()));

@@ -29,7 +29,9 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.text.MaskFormatter;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -43,7 +45,8 @@ public class GuiSettingsTabRecord extends GuiTab {
     
     private ControlSettingsTabRecord control;
 	private JPanel panelEngineSettings = null;
-	private JPanel panelRecordSettings = null;	
+	private JPanel panelRecordSettings = null;
+	private JPanel panelRecordtimeSettings = null;	
 	private JComboBox jComboBoxStreamType = null;	
 	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldUdrecPath;
@@ -57,6 +60,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbStartStreamingServer;
 	private JCheckBox cbRecordAllPids;
 	private JCheckBox cbStartPX;
+	private JSpinner recordMinsBefore, recordMinsAfter; 
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
 		super();
@@ -67,13 +71,14 @@ public class GuiSettingsTabRecord extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "f:pref:grow",  		// columns 
-				  "f:pref, 15, f:pref"); 			// rows
+				  "f:pref, pref, 15, f:pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
 		builder.add(this.getPanelRecordSettings(),		   		cc.xy(1,1));        
-		builder.add(this.getPanelEngineSettings(),		   		cc.xy(1,3));
+		builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1,2));
+		builder.add(this.getPanelEngineSettings(),		   		cc.xy(1,4));
     }
 	    	
 	private JPanel getPanelRecordSettings() {
@@ -85,15 +90,14 @@ public class GuiSettingsTabRecord extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),							cc.xywh	(1, 1, 8, 1));
-			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 5, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  					cc.xywh	(6, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
-			builder.add(this.getTfServerPort(),									cc.xy	(8, 2));
-			builder.add(this.getCbRecordAllPids(),								cc.xy	(1, 3));
-			builder.add(this.getCbStartPX(),									cc.xywh	(1, 5, 5, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),				cc.xy	(1, 6));
-			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(4, 6, 3, 1));
-			builder.add(this.getJButtonRecordPathFileChooser(),					cc.xy	(8, 6));
+			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),		cc.xywh	(1, 1, 8, 1));
+			builder.add(this.getCbStartStreamingServer(),										cc.xywh	(1, 2, 5, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  		cc.xywh	(6, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
+			builder.add(this.getTfServerPort(),														cc.xy	(8, 2));
+			builder.add(this.getCbRecordAllPids(),													cc.xy	(1, 3));
+			builder.add(this.getCbStartPX(),															cc.xywh	(1, 5, 5, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 6));
+			builder.add(this.getJTextFieldRecordSavePath(),									cc.xywh	(4, 6, 3, 1));
 		}
 		return panelRecordSettings;
 	}
@@ -107,18 +111,33 @@ public class GuiSettingsTabRecord extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_engine"),							cc.xywh	(1, 1, 7, 1));	
-			builder.add(this.getJRadioButtonJGrabber(),							cc.xy	(1, 2));
-			builder.add(this.getJRadioButtonUdrec(),							cc.xy	(3, 2));
-			builder.add(this.getJComboBoxStreamType(),							cc.xywh	(5, 2, 2, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),						cc.xy	(1, 4));
-			builder.add(this.getJTextFieldUdrecPath(),							cc.xywh	(4, 4, 2, 1));
-			builder.add(this.getJButtonUdrecPathFileChooser(),					cc.xy	(7, 4));
+			builder.addSeparator(ControlMain.getProperty("label_engine"),			cc.xywh	(1, 1, 7, 1));	
+			builder.add(this.getJRadioButtonJGrabber(),									cc.xy	(1, 2));
+			builder.add(this.getJRadioButtonUdrec(),										cc.xy	(3, 2));
+			builder.add(this.getJComboBoxStreamType(),									cc.xywh	(5, 2, 2, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),	cc.xy	(1, 4));
+			builder.add(this.getJTextFieldUdrecPath(),									cc.xywh	(4, 4, 2, 1));
+			builder.add(this.getJButtonUdrecPathFileChooser(),						cc.xy	(7, 4));
 		}
 		return panelEngineSettings;
 	}
 	
-	
+	private JPanel getPanelRecordtimeSettings() {
+		if (panelRecordtimeSettings == null) {
+			panelRecordtimeSettings = new JPanel();
+			FormLayout layout = new FormLayout(
+			        "pref, 5, pref",	 		//columns 
+			  "pref, pref");							//rows
+			PanelBuilder builder = new PanelBuilder(panelRecordtimeSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.add(this.getJSpinnerRecordMinsBefore(),										cc.xy	(1, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_RecordBefore")),		cc.xy	(3, 1));
+			builder.add(this.getJSpinnerRecordMinsAfter(),										cc.xy	(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_RecordAfter")),		cc.xy	(3, 2));
+		}
+		return panelRecordtimeSettings;
+	}
 	
 	/**
 	 * This method initializes jComboBoxStreamType	
@@ -148,7 +167,6 @@ public class GuiSettingsTabRecord extends GuiTab {
 				((MaskFormatter)tfServerPort.getFormatter()).setOverwriteMode(true);
 				tfServerPort.setPreferredSize(new java.awt.Dimension(40,19));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -223,6 +241,26 @@ public class GuiSettingsTabRecord extends GuiTab {
 			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 19));
 		}
 		return jTextFieldPlaybackString;
+	}
+	public JSpinner getJSpinnerRecordMinsBefore() {
+		if (recordMinsBefore == null) {
+			SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 60, 1);
+			recordMinsBefore = new JSpinner(model);			
+			recordMinsBefore.setToolTipText(ControlMain.getProperty("buttonRecordBefore"));
+			recordMinsBefore.setName("recordBefore");
+			recordMinsBefore.addChangeListener(control);
+		}
+		return recordMinsBefore;
+	}
+	public JSpinner getJSpinnerRecordMinsAfter() {
+		if (recordMinsAfter == null) {
+			SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 60, 1);
+			recordMinsAfter = new JSpinner(model);			
+			recordMinsAfter.setToolTipText(ControlMain.getProperty("buttonRecordAfter"));
+			recordMinsAfter.setName("recordAfter");
+			recordMinsAfter.addChangeListener(control);
+		}
+		return recordMinsAfter;
 	}
 	/**
 	 * @return Returns the cbStartPX.

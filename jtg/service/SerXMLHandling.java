@@ -58,6 +58,8 @@ public class SerXMLHandling {
 		setElementInElement(root,"showLogo", "true");
 		setElementInElement(root,"useSysTray", "false");
 		setElementInElement(root,"startFullscreen", "false");
+		setElementInElement(root,"recordTimeBefore", "0");
+		setElementInElement(root,"recordTimeAfter", "0");
 
 		root.addElement("boxList");
 		root.addElement("playbackList");

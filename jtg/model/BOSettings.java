@@ -49,6 +49,8 @@ public class BOSettings {
     public String jgrabberStreamType;	//PES, TS, ES
     public String udrecStreamType;		//PES, TS
     public int streamingEngine; //0=JGrabber, 1=udrec
+    public String recordTimeBefore; 
+    public String recordTimeAfter; 
     
     public void removeBox(int number) {
     	setSettingsChanged(true);
@@ -421,4 +423,34 @@ public class BOSettings {
     public String getShortLocale() {
     	return this.getLocale().substring(0,2);
     }
+	/**
+	 * @return Returns the recordTimeAfter.
+	 */
+	public String getRecordTimeAfter() {
+		return recordTimeAfter;
+	}
+	/**
+	 * @param recordTimeAfter The recordTimeAfter to set.
+	 */
+	public void setRecordTimeAfter(String recordTimeAfter) {
+		if(this.recordTimeAfter==null ||!this.recordTimeAfter.equals(recordTimeAfter)) {
+			setSettingsChanged(true);
+			this.recordTimeAfter = recordTimeAfter;
+		}
+	}
+	/**
+	 * @return Returns the recordTimeBefore.
+	 */
+	public String getRecordTimeBefore() {
+		return recordTimeBefore;
+	}
+	/**
+	 * @param recordTimeBefore The recordTimeBefore to set.
+	 */
+	public void setRecordTimeBefore(String recordTimeBefore) {
+		if(this.recordTimeBefore==null ||!this.recordTimeBefore.equals(recordTimeBefore)) {
+			setSettingsChanged(true);
+			this.recordTimeBefore = recordTimeBefore;
+		}
+	}
 }

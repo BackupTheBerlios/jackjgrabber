@@ -29,7 +29,10 @@ import java.io.File;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 
 import model.BOSettings;
@@ -37,7 +40,7 @@ import presentation.GuiSettingsTabRecord;
 import presentation.GuiStreamTypeComboModel;
 import presentation.GuiTabSettings;
 
-public class ControlSettingsTabRecord extends ControlTabSettings implements KeyListener, ActionListener, ItemListener {
+public class ControlSettingsTabRecord extends ControlTabSettings implements KeyListener, ActionListener, ItemListener, ChangeListener {
 
     GuiTabSettings settingsTab;
     public final String[] streamTypesJGrabber = { "PES MPEG-Packetized Elementary", "TS MPEG-Transport"	};
@@ -58,6 +61,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
         this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
         this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
         this.getTab().getCbRecordAllPids().setSelected(this.getSettings().isRecordAllPids());
+        this.getTab().getJSpinnerRecordMinsBefore().setValue(Integer.valueOf(this.getSettings().getRecordTimeBefore()));
+        this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
 		this.initializeStreamingEngine();
 
     }
@@ -128,6 +133,19 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	private void actionSetServerPort(ActionEvent event) {
 		JTextField tf = (JTextField)event.getSource();
 		this.getSettings().setStreamingServerPort(tf.getText());
+	}
+	
+	/*
+	 * ChangeEvent der Spinner
+	 */
+	public void stateChanged(ChangeEvent event) {
+		JSpinner spinner = (JSpinner)event.getSource();
+		if (spinner.getName().equals("recordBefore")) {
+			this.getSettings().setRecordTimeBefore(spinner.getValue().toString());
+		}
+		if (spinner.getName().equals("recordAfter")) {
+			this.getSettings().setRecordTimeAfter(spinner.getValue().toString());
+		}
 	}
 
 	//Change-Events der Combos und der Checkbox
