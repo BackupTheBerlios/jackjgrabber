@@ -94,6 +94,7 @@ public class BOTimerList {
     public ArrayList getRecordTimerList() {
         return recordTimerList;
     }
+
     /**
      * @param recordTimerList The recordTimerList to set.
      */

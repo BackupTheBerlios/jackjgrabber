@@ -38,7 +38,7 @@ import control.ControlMain;
 public abstract class SerBoxControl {
         
     public boolean newTimerAdded=true;
-    public BOTimerList timerList=new BOTimerList();
+    public BOTimerList timerList;
     public BOLocalTimer nextLocalRecordTimer;
     
     public void detectNextLocalRecordTimer() {
@@ -48,14 +48,15 @@ public abstract class SerBoxControl {
     
     public BOTimerList getTimerList(boolean newRead) {
         if (newRead || timerList==null || newTimerAdded) {
+            timerList = new BOTimerList();
             SerTimerHandler.readLocalTimer(timerList);
+            detectNextLocalRecordTimer();
             try {
                 reReadTimerList();
             } catch (IOException e) {
                 Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_read_timer"));
             }
             newTimerAdded=false;
-            detectNextLocalRecordTimer();
         }
         return timerList;
     }

@@ -150,7 +150,6 @@ public class SerTimerHandler {
             mainTimer.addElement("senderName").addText(timer.getMainTimer().getSenderName());
 
             localTimer.add(mainTimer);
-            timer.getMainTimer().setModifiedId(null);
             ControlMain.getBoxAccess().newTimerAdded=true;
         }
         
@@ -196,7 +195,6 @@ public class SerTimerHandler {
             mainTimer.selectSingleNode("eventRepeatId").setText(timer.getMainTimer().getEventRepeatId());
             mainTimer.selectSingleNode("repeatCount").setText(timer.getMainTimer().getRepeatCount());
             mainTimer.selectSingleNode("senderName").setText(timer.getMainTimer().getSenderName());
-            timer.getMainTimer().setModifiedId(null);
         }
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
@@ -207,12 +205,18 @@ public class SerTimerHandler {
     
     private static int saveLocalTimer(BOTimer timer) {
         if (timer.getModifiedId() !=null && timer.getModifiedId().equals("remove")) {
+            if (timer.localTimer==null) {
+                return 0;
+            }
             deleteLocalTimer(timer.getLocalTimer());
             return 0;
         }
+        
+        if (timer.localTimer==null) {
+            BOLocalTimer.getDefaultLocalTimer(timer);
+        }
         if (timer.getLocalTimer().getTimerNode()==null){
             saveNewTimer(timer.getLocalTimer());
-            ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
         } else {
             editOldTimer(timer.getLocalTimer());
         }
@@ -302,24 +306,21 @@ public class SerTimerHandler {
      */
     public static void saveTimer(BOTimer timer, boolean reloadList) {
         try {
-            if (timer.getModifiedId() != null && timer.getModifiedId().equals("new") && timer.localTimer==null){
-                BOLocalTimer.getDefaultLocalTimer(timer);
-            }
             //lokaler Teil muss immer gespeichert werden
             saveLocalTimer(timer); 
             
-            if (!timer.getLocalTimer().isLocal() && timer.getModifiedId()!=null ) {  //Box-Timer nur speichern, wenn er neu/modifiziert ist
+            if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue/modifizierte timer bearbeiten
                 if (timer.getModifiedId().equals("new")) {
                     ControlMain.getBoxAccess().writeTimer(timer);
-                    if (reloadList) {
+                    if (reloadList) { //nur bei neuen timern neu laden
                         ControlMain.getBoxAccess().getTimerList(true);  
                     }
                 } else {
                     ControlMain.getBoxAccess().writeTimer(timer);
-                }
-            }
-            //aktuellen Timer neu ermitteln
-            
+                } 
+            } 
+            timer.setModifiedId(null);
+            ControlMain.getBoxAccess().detectNextLocalRecordTimer();
         } catch (IOException e) {
             
         }   

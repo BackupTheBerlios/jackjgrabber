@@ -1,14 +1,4 @@
 package streaming;
-
-import java.io.IOException;
-import java.util.GregorianCalendar;
-
-import model.BOLocalTimer;
-import model.BOPids;
-import model.BORecordArgs;
-import control.ControlMain;
-import control.ControlProgramTab;
-
 /*
 LocalTimerRecordDaemon.java by Geist Alexander 
 
@@ -27,6 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.io.IOException;
+import java.util.GregorianCalendar;
+
+import model.BOLocalTimer;
+import model.BOPids;
+import model.BORecordArgs;
+import control.ControlMain;
+import control.ControlProgramTab;
+
+
 public class LocalTimerRecordDaemon extends Thread {
     
     boolean running = false;
@@ -42,8 +42,8 @@ public class LocalTimerRecordDaemon extends Thread {
                 long now = new GregorianCalendar().getTimeInMillis();
                 if (now>timer.getStartTime() && now<timer.getStopTime()) {
                     this.startRecord(timer);
-                    this.waitForStop(timer);
                     running = true;
+                    this.waitForStop(timer);
                 }
             }
         }
