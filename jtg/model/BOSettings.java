@@ -13,6 +13,7 @@ public class BOSettings {
     private ArrayList boxList;
     private boolean boxIpChanged = false;
     private boolean settingsChanged = false;
+    private String streamingServerPort;
     
     public BOSettings() {
     }
@@ -93,5 +94,17 @@ public class BOSettings {
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+	/**
+	 * @return Returns the streamingServerPort.
+	 */
+	public String getStreamingServerPort() {
+		return streamingServerPort;
+	}
+	/**
+	 * @param streamingServerPort The streamingServerPort to set.
+	 */
+	public void setStreamingServerPort(String streamingServerPort) {
+		this.streamingServerPort = streamingServerPort;
 	}
 }

@@ -4,13 +4,17 @@
 package presentation;
 
 import java.awt.Dimension;
+import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 
 import model.BOLocale;
 
@@ -28,6 +32,7 @@ public class GuiTabSettings extends JPanel {
 
 	private JPanel panelBoxSettings = null;
 	private JPanel panelLayoutSettings = null;
+	private JPanel panelRecordSettings = null;
 	private JComboBox jComboBoxTheme = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
@@ -37,6 +42,7 @@ public class GuiTabSettings extends JPanel {
 	private GuiBoxSettingsTableModel modelBoxTable;
 	private JLabel jLabel1 = null;
 	private JComboBox jComboBoxLocale = null;
+	private JFormattedTextField tfServerPort = null;
 
 	public GuiTabSettings(ControlSettingsTab ctrl) {
 		super();
@@ -47,13 +53,14 @@ public class GuiTabSettings extends JPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
 						  "f:pref:grow, 20, f:200:grow",  		// columns 
-						  "pref"); 			// rows
+						  "pref, 20, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
 		
 				builder.add(this.getPanelBoxSettings(),		   		cc.xywh(1, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
 				builder.add(this.getPanelLayoutSettings(),			cc.xywh(3, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));				
+				builder.add(this.getPanelRecordSettings(),			cc.xywh(1, 3, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
 	}
 	    
 	private JPanel getPanelBoxSettings() {
@@ -71,6 +78,22 @@ public class GuiTabSettings extends JPanel {
 			builder.add(this.getJButtonLoeschen(),						cc.xy	(3, 3));
 		}
 		return panelBoxSettings;
+	}
+	
+	private JPanel getPanelRecordSettings() {
+		if (panelRecordSettings == null) {
+			panelRecordSettings = new JPanel();
+			FormLayout layout = new FormLayout(
+					  "pref:grow, 5, pref",	 		//columna 
+			  "pref:grow, pref:grow, pref:grow, 40:grow");				//rows
+			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator("Aufname-Settings",					cc.xywh	(1, 1, 3, 1));
+			builder.add(new JLabel("Streamingserver-Port"),	  			cc.xy	(1, 2));
+			builder.add(this.getTfServerPort(),							cc.xy	(3, 2));
+		}
+		return panelRecordSettings;
 	}
   
 	private JPanel getPanelLayoutSettings() {
@@ -203,5 +226,22 @@ public class GuiTabSettings extends JPanel {
 			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,25));
 		}
 		return jComboBoxLocale;
+	}
+	/**
+	 * @return Returns the tfServerPort.
+	 */
+	public JFormattedTextField getTfServerPort() {
+		if (tfServerPort == null) {
+			try {
+				tfServerPort = new JFormattedTextField(new MaskFormatter("####"));
+				((MaskFormatter)tfServerPort.getFormatter()).setAllowsInvalid(false);
+				((MaskFormatter)tfServerPort.getFormatter()).setOverwriteMode(true);
+				tfServerPort.setPreferredSize(new java.awt.Dimension(40,22));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return tfServerPort;
 	}
 }

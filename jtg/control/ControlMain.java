@@ -18,6 +18,7 @@ import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
+import boxConnection.SerStreamingServer;
 import service.SerLogAppender;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
@@ -40,6 +41,7 @@ public class ControlMain {
 	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static BOLocale bolocale = new BOLocale();
+	static SerStreamingServer streamingServerThread;
 	
 	
     private static Properties prop = new Properties();   
@@ -73,6 +75,7 @@ public class ControlMain {
 		startLogger();
 		readSettings();
 		control = new ControlMainView();
+		startStreamingSever();
 	};
 	
 	public static void startLogger() {
@@ -87,6 +90,13 @@ public class ControlMain {
 			ControlMain.getLogAppender().setMaxFileSize("100KB");
 			BasicConfigurator.configure(ControlMain.getLogAppender());
 		} catch (IOException e) {}
+	}
+	
+	public static void startStreamingSever() {
+		int port = Integer.parseInt(getSettings().getStreamingServerPort());
+		Logger.getLogger("ControlMail").info("Start Streaming-Server");
+		setStreamingServerThread(new SerStreamingServer(port));
+		getStreamingServerThread().start();	
 	}
 		
 	public static void detectImage() {
@@ -277,4 +287,17 @@ public class ControlMain {
         prop.load(is);                          
 		}catch (IOException ex){}                       
 	}    
+	/**
+	 * @return Returns the streamingServerThread.
+	 */
+	public static SerStreamingServer getStreamingServerThread() {
+		return streamingServerThread;
+	}
+	/**
+	 * @param streamingServerThread The streamingServerThread to set.
+	 */
+	public static void setStreamingServerThread(
+			SerStreamingServer streamingServerThread) {
+		ControlMain.streamingServerThread = streamingServerThread;
+	}
 }

@@ -29,8 +29,12 @@ public class SerXMLHandling {
 		Element theme = DocumentHelper.createElement("theme");
 		theme.setText("Silver");
 		
+		Element serverPort = DocumentHelper.createElement("streamingServerPort");
+		serverPort.setText("4000");
+		
 		root.add(locale);
 		root.add(theme);
+		root.add(serverPort);
 		
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);

@@ -37,6 +37,7 @@ public class SerXMLConverter {
 		
 		//Auswertung der User-Settings
 		settings.setThemeLayout(root.selectSingleNode("/settings/theme").getText());
+		settings.setStreamingServerPort(root.selectSingleNode("/settings/streamingServerPort").getText());
 		settings.setLocale(root.selectSingleNode("/settings/locale").getText());
 		
 		//Auswertund der Box-Settings
@@ -95,11 +96,13 @@ public class SerXMLConverter {
 	
 	public static void saveUserSettings() throws IOException {
 		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
-		Node themeNode = settingsDocument.selectSingleNode("/settings/theme");
-		Node themeLocale = settingsDocument.selectSingleNode("/settings/locale");
+		Node theme = settingsDocument.selectSingleNode("/settings/theme");
+		Node locale = settingsDocument.selectSingleNode("/settings/locale");
+		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
 		
-		themeNode.setText(ControlMain.getSettings().getThemeLayout());
-		themeLocale.setText(ControlMain.getSettings().getLocale());
+		serverPort.setText(ControlMain.getSettings().getStreamingServerPort());
+		theme.setText(ControlMain.getSettings().getThemeLayout());
+		locale.setText(ControlMain.getSettings().getLocale());
 		
 		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
 	}
@@ -108,11 +111,13 @@ public class SerXMLConverter {
 		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
 		
 		//Aufbereitung der User-Settings
-		Node themeNode = settingsDocument.selectSingleNode("/settings/theme");
-		Node themeLocale = settingsDocument.selectSingleNode("/settings/locale");
+		Node theme = settingsDocument.selectSingleNode("/settings/theme");
+		Node locale = settingsDocument.selectSingleNode("/settings/locale");
+		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
 		
-		themeNode.setText(ControlMain.getSettings().getThemeLayout());
-		themeLocale.setText(ControlMain.getSettings().getLocale());
+		serverPort.setText(ControlMain.getSettings().getStreamingServerPort());
+		theme.setText(ControlMain.getSettings().getThemeLayout());
+		locale.setText(ControlMain.getSettings().getLocale());
 		
 		
 		//Aufbereitung der Box-Settings
