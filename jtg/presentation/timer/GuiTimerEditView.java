@@ -441,7 +441,7 @@ public class GuiTimerEditView extends JFrame{
 		if (jTextFieldUdrecOptions == null) {
 			jTextFieldUdrecOptions = new JTextField();
 			jTextFieldUdrecOptions.addKeyListener(control);
-			jTextFieldUdrecOptions.setEnabled(false);
+			jTextFieldUdrecOptions.setEditable(false);
 			jTextFieldUdrecOptions.setName("udrecOptions");
 			jTextFieldUdrecOptions.setPreferredSize(new Dimension(340, 19));
 		}
