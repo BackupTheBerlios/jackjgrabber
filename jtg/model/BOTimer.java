@@ -2,40 +2,38 @@ package model;
 
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import service.SerFormatter;
 
 /**
  * @author  Alexander Geist
  */
 public class BOTimer extends java.lang.Object{
-    private String eventId, eventType, eventRepeat, announceTime, senderName, description;;
+    private String channelId, timerNumber, modifiedId, eventTypeId, eventRepeatId, announceTime, senderName, description;
     private GregorianCalendar unformattedStartTime, unformattedStopTime;
     
-    public String getEventId (){
-        return this.eventId;
+    public String getTimerNumber (){
+        return this.timerNumber;
     }
     
-    public void setEventId(String eventId){
-        this.eventId = eventId;
+    public void setTimerNumber(String eventId){
+        this.timerNumber = eventId;
     }
     
-    public String getEventType(){	
-    	return eventType;
+    public String getEventTypeId(){	
+    	return eventTypeId;
     }
     
-    public void setEventType(String eventType){
-        this.eventType = eventType;
+    public void setEventTypeId(String eventType){
+        this.eventTypeId = eventType;
     }
     
-    public String getEventRepeat (){
-        return this.eventRepeat;
+    public String getEventRepeatId (){
+        return this.eventRepeatId;
     }
     
-    public void setEventRepeat(String eventRepeat){
-        this.eventRepeat = eventRepeat;
+    public void setEventRepeatId(String eventRepeat){
+        this.eventRepeatId = eventRepeat;
     }
     
     public String getAnnounceTime (){
@@ -55,6 +53,11 @@ public class BOTimer extends java.lang.Object{
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	return sdf.format(this.getUnformattedStopTime().getTime());
     }
+    
+	
+	public String getInfo() {
+		return this.getStartTime()+" "+this.getSenderName()+" "+this.getDescription();
+	}
     
     public String getSenderName (){
         return this.senderName;
@@ -106,5 +109,29 @@ public class BOTimer extends java.lang.Object{
 	public String getStartDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
 		return sdf.format(this.getUnformattedStartTime().getTime());
+	}
+	/**
+	 * @return Returns the modifiedId.
+	 */
+	public String getModifiedId() {
+		return modifiedId;
+	}
+	/**
+	 * @param modifiedId The modifiedId to set.
+	 */
+	public void setModifiedId(String timerId) {
+		this.modifiedId = timerId;
+	}
+	/**
+	 * @return Returns the channelId.
+	 */
+	public String getChannelId() {
+		return channelId;
+	}
+	/**
+	 * @param channelId The channelId to set.
+	 */
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
 	}
 }
