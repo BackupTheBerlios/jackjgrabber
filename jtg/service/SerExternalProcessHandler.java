@@ -33,6 +33,12 @@ public class SerExternalProcessHandler {
 		getProcessList().add(process);
 		process.start();
 	}
+	
+	public static void startProcess(String name, String[] execStringArray, boolean logging) {
+		BOExternalProcess process = new BOExternalProcess(name, execStringArray, logging);
+		getProcessList().add(process);
+		process.startArray();
+	}
 
 	public static void closeAll() {
 	    ArrayList list = getProcessList();
