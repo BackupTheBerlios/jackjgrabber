@@ -238,7 +238,7 @@ public class BOTimer extends java.lang.Object{
 	public void setUnformattedStartTime(GregorianCalendar date) {
         this.setModifiedId("modify");
         this.getUnformattedStartTime().set(Calendar.MINUTE, date.get(Calendar.MINUTE));
-        this.getUnformattedStartTime().set(Calendar.HOUR, date.get(Calendar.HOUR));
+        this.getUnformattedStartTime().set(Calendar.HOUR_OF_DAY, date.get(Calendar.HOUR_OF_DAY));
 	    this.getLocalTimer().setStartTime((GregorianCalendar)this.getUnformattedStartTime());
 	    this.checkStopTime();
 	}
