@@ -50,8 +50,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,
 
 	GuiMainView mainView;
 	static Hashtable objectList = new Hashtable();	
-	ArrayList filmeList = new ArrayList();	
-	private static Element root;
+	static Hashtable titelList = new Hashtable();
+
+	static ArrayList dateArray = new ArrayList();
+    static ArrayList genreArray = new ArrayList();
+	
+    private static Element root;
 	private static Document movieGuideDocument;
 
 	public static String movieGuideFileName = "movieguide.xml";
@@ -61,6 +65,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,
 		this.setMainView(view);		
 		try{
 			setRootElement();
+			setTitelMap();
 		}catch (Exception ex){}
 	}
 
@@ -116,21 +121,6 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,
 	}
 
 	public void mouseEntered(MouseEvent me) {
-	}
-
-	/**
-	 * @return Returns the mainView.
-	 */
-	public ArrayList getFilmeList() {
-		return filmeList;
-	}
-
-	/**
-	 * @param bouquetList
-	 *            The bouquetList to set.
-	 */
-	public void setFilmeList(ArrayList filmeList) {
-		this.filmeList = filmeList;
 	}
 
 	public GuiMainView getMainView() {
@@ -202,53 +192,52 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,
     private static Element getRootElement() throws Exception{
     	return root;		
     }    
-	
-    public static ArrayList getGenryList(String find) throws Exception {					
-    	ArrayList al = new ArrayList();
-		for (Iterator i = root.elementIterator("entry"); i.hasNext();) {
-			Element entry = (Element) i.next();
-			String value = entry.element(find).getStringValue();
-			if(!al.contains(value)){ 							
-				al.add(value);
-			}						
-		}
-		return al;
-	}
+    
+    public ArrayList getDateArray(){
+    	return dateArray;
+    }
+    
+    public ArrayList getGenreArray(){
+    	return genreArray;
+    }
+    
+    private static void setDateArray(String value){
+    	if(!dateArray.contains(value)){ 		    	
+    		dateArray.add(value);    
+		}	
+    }    
+    private static void setGenreArray(String value){
+    	if(!genreArray.contains(value)){ 							
+    		genreArray.add(value);
+		}	
+    }
 
-	public static Hashtable getTitelMap() {
-		Hashtable titelList = new Hashtable();
-		try {
-			Document doc = SerXMLHandling.readDocument(new File(ControlMovieGuideTab.movieGuideFileName));
-			Element root = doc.getRootElement();			
+    public Hashtable getTitelMap(){
+    	return titelList;
+    }
+    
+    private static final String[] elem = {"datum", "titel","genre", "episode","land","jahr","regie","ton","bild","darsteller","inhalt"};
+	
+    public static void setTitelMap() {
+		try {			
 			int a = 0;			
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {
 				Element entry = (Element) i.next();
-				String value = entry.element("titel").getStringValue();				
-				if(!titelList.containsValue(value)){  //jeder Titel nur 1x in die Hashtable
+				setDateArray(entry.element(elem[0]).getStringValue());				
+				setGenreArray(entry.element(elem[1]).getStringValue());
+				String value = entry.element(elem[1]).getStringValue();	
+				if(!titelList.containsValue(value)){ 
 					titelList.put(new Integer(a), (String)value);
-						StringBuffer objectValue = new StringBuffer();										
-						objectValue.append(entry.element("episode").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("genre").getStringValue());
+					StringBuffer objectValue = new StringBuffer();	
+					for(int z=2;z<=10;z++){
+						objectValue.append(entry.element(elem[z]).getStringValue());
 						objectValue.append(" |");						
-						objectValue.append(entry.element("land").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("jahr").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("regie").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("ton").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("bild").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("darsteller").getStringValue());
-						objectValue.append(" |");
-						objectValue.append(entry.element("inhalt").getStringValue());
-						objectList.put(new Integer(a),objectValue);
-						a++;
-				}												
+					}
+					objectList.put(new Integer(a),objectValue);
+					a++;
+				}			
 			}
-		} catch (Exception ex) {}		
-		return titelList;
+		} catch (Exception ex) {}			
 	}
+   
 }
