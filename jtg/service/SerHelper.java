@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 /*
-GuiTabProgramm.java  
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
