@@ -135,16 +135,24 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 				pane.setComponentAt(count, pane.getTabMovieGuide());
 				break;
 			}
-			if (count == 3) { //SettingsTab
+			if (count == 3) { //Record Info
+				pane.setComponentAt(count, pane.getTabRecordInfo());
+			}
+			
+			
+			
+			if (count == 4) { //SettingsTab
 				pane.setComponentAt(count, pane.getTabSettings());
 				break;
 			}
-			if (count == 4) { //AboutTab
+			if (count == 5) { //AboutTab
 				pane.setComponentAt(count, pane.getTabAbout());
 				break;
 			}
 			break;
 		}
+
+
 		pane.setIndex(count);
 	}
 	public void iconLeftDoubleClicked( SysTrayMenuEvent e ) {}
