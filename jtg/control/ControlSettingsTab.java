@@ -1,9 +1,3 @@
-/*
- * Created on 11.09.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package control;
 
 import java.awt.event.ActionEvent;
@@ -16,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileFilter;
@@ -25,16 +20,13 @@ import model.BOBox;
 import presentation.GuiMainView;
 import service.SerAlertDialog;
 import service.SerXMLConverter;
-import service.SerXMLHandling;
 
 
 /**
- * @author AlexG
+ * @author Alexander Geist
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ControlSettingsTab extends ControlTab implements ActionListener, MouseListener{
+public class ControlSettingsTab extends ControlTab implements ActionListener, MouseListener, ItemListener {
 
 	GuiMainView mainView;
 	
@@ -47,8 +39,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	 * @see control.ControlTab#initialize()
 	 */
 	public void initialize() {
-		//this.getMainView().getTabSettings().getTfBoxIp().setText(ControlMain.getBoxIp());
-		//this.getMainView().getTabSettings().getTfVlcPath().setText(ControlMain.getSettings().getVlcPath());
+		this.getMainView().getTabSettings().getJComboBoxTheme().setSelectedItem(ControlMain.getSettings().getThemeLayout());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -64,6 +55,17 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		}
 	}
 
+	//Change-Events der Combos
+	public void itemStateChanged (ItemEvent event) {
+		JComboBox comboBox = (JComboBox)event.getSource();
+		if (comboBox.getName().equals("theme")) {
+			ControlMain.getSettings().setThemeLayout((String)comboBox.getSelectedItem());
+		}
+		if (comboBox.getName().equals("theme")) {
+			ControlMain.getSettings().setLocale((String)comboBox.getSelectedItem());
+		}
+	}
+		
 	public void mousePressed(MouseEvent me) {
 		JTable table = (JTable)me.getSource();
 		String tableName = table.getName();
@@ -92,7 +94,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 
 	private void actionSpeichern() {	
 		try {
-			SerXMLConverter.saveBoxSettings();
+			SerXMLConverter.saveAllSettings();
 		} catch (IOException e) {
 			SerAlertDialog.alert("Fehler beim Speichern der Settings", this.getMainView());
 		}

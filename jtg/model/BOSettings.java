@@ -1,26 +1,19 @@
 package model;
 
 import java.util.ArrayList;
-
-/*
- * BOSettings.java
- *
- * Created on 11. September 2004, 08:56
- */
-
 /**
  *
- * @author  ralix
+ * @author Alexander Geist
  */
 public class BOSettings {
     
+	private String locale;
 	private String themeLayout;
     private String vlcPath;
     private ArrayList boxList;
     private boolean boxIpChanged = false;
     private boolean settingsChanged = false;
     
-    /** Creates a new instance of BOSettings */
     public BOSettings() {
     }
     
@@ -88,5 +81,17 @@ public class BOSettings {
 	 */
 	public void setSettingsChanged(boolean settingsChanged) {
 		this.settingsChanged = settingsChanged;
+	}
+	/**
+	 * @return Returns the locale.
+	 */
+	public String getLocale() {
+		return locale;
+	}
+	/**
+	 * @param locale The locale to set.
+	 */
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 }

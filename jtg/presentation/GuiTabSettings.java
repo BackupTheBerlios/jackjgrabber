@@ -8,12 +8,12 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
-import java.awt.GridLayout;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
+import control.ControlMain;
 import control.ControlSettingsTab;
 /**
  * @author Geist Alexander
@@ -36,6 +36,9 @@ public class GuiTabSettings extends JPanel {
 	private JLabel jLabel = null;
 	private ControlSettingsTab control;
 	private GuiBoxSettingsTableModel modelBoxTable;
+	private JLabel jLabel1 = null;
+	private JComboBox jComboBoxLocale = null;
+	private JPanel jPanel1 = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -117,6 +120,10 @@ public class GuiTabSettings extends JPanel {
 	 */    
 	private JPanel getPanelLayoutSettings() {
 		if (panelLayoutSettings == null) {
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			jLabel1 = new JLabel();
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			jLabel = new JLabel();
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
@@ -126,17 +133,31 @@ public class GuiTabSettings extends JPanel {
 			panelLayoutSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			gridBagConstraints7.gridx = 1;
 			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.NONE;
-			gridBagConstraints7.ipadx = 253;
-			gridBagConstraints7.ipady = -3;
-			gridBagConstraints7.insets = new java.awt.Insets(0,0,68,0);
+			gridBagConstraints7.weightx = 2.0;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.NORTH;
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
+			gridBagConstraints8.weightx = 1.0;
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.NORTH;
 			jLabel.setText("Theme");
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.gridy = 2;
+			jLabel1.setText("locale");
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridy = 2;
+			gridBagConstraints2.weightx = 1.0;
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints2.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints31.gridx = 1;
+			gridBagConstraints31.gridy = 3;
+			gridBagConstraints31.weightx = 3.0D;
+			gridBagConstraints31.weighty = 3.0D;
 			panelLayoutSettings.add(getJComboBoxTheme(), gridBagConstraints7);
 			panelLayoutSettings.add(jLabel, gridBagConstraints8);
+			panelLayoutSettings.add(jLabel1, gridBagConstraints11);
+			panelLayoutSettings.add(getJComboBoxLocale(), gridBagConstraints2);
+			panelLayoutSettings.add(getJPanel1(), gridBagConstraints31);
 		}
 		return panelLayoutSettings;
 	}
@@ -227,13 +248,15 @@ public class GuiTabSettings extends JPanel {
 		return jButtonSpeichern;
 	}
 	/**
-	 * This method initializes jComboBox	
+	 * This method initializes jComboBoxLocale	
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */    
-	private JComboBox getJComboBoxTheme() {
+	public JComboBox getJComboBoxTheme() {
 		if (jComboBoxTheme == null) {
-			jComboBoxTheme = new JComboBox();
+			jComboBoxTheme = new JComboBox(ControlMain.themes);
+			jComboBoxTheme.addItemListener(control);
+			jComboBoxTheme.setName("theme");
 			jComboBoxTheme.setPreferredSize(new java.awt.Dimension(105,25));
 		}
 		return jComboBoxTheme;
@@ -321,4 +344,29 @@ public class GuiTabSettings extends JPanel {
 	public void setModelBoxTable(GuiBoxSettingsTableModel modelBoxTable) {
 		this.modelBoxTable = modelBoxTable;
 	}
-      }
+	/**
+	 * This method initializes jComboBoxLocale	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	public JComboBox getJComboBoxLocale() {
+		if (jComboBoxLocale == null) {
+			jComboBoxLocale = new JComboBox();
+			jComboBoxLocale.addItemListener(control);
+			jComboBoxLocale.setName("locale");
+			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,25));
+		}
+		return jComboBoxLocale;
+	}
+	/**
+	 * This method initializes jPanel1	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getJPanel1() {
+		if (jPanel1 == null) {
+			jPanel1 = new JPanel();
+		}
+		return jPanel1;
+	}
+        }

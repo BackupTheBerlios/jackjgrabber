@@ -2,11 +2,8 @@ package control;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Properties;
+
 
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -38,8 +35,9 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	}
 	
 	private void runAfterTerms() {
-		this.setView(new GuiMainView(this));
 		ControlMain.startLogger();
+		ControlMain.readSettings();
+		this.setView(new GuiMainView(this));
 		ControlMain.getLogAppender().setView(this.getView());
 		this.initialize();
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
@@ -48,25 +46,24 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	
 	private void initialize() {
 		this.logSystemInfo();
-		ControlMain.readSettings();
+
 		ControlMain.detectImage();
 		ControlMain.setResourceBundle(ControlMain.locale);
 	}
 	private void logSystemInfo() {
-		Logger mainLogger = Logger.getLogger("ControlMainView");
-		mainLogger.info(ControlMain.version[0]+"/"+ControlMain.version[1]+" "
+		this.log(ControlMain.version[0]+"/"+ControlMain.version[1]+" "
 				+ControlMain.version[2]+" "+ControlMain.version[3]);
-		mainLogger.info("java.version\t"+System.getProperty("java.version"));
-		mainLogger.info("java.vendor\t"+System.getProperty("java.vendor"));
-		mainLogger.info("java.home\t"+System.getProperty("java.home"));
-		mainLogger.info("java.vm.version\t"+System.getProperty("java.vm.version"));
-		mainLogger.info("java.vm.vendor\t"+System.getProperty("java.vm.vendor"));
-		mainLogger.info("java.vm.name\t"+System.getProperty("java.vm.name"));
-		mainLogger.info("java.class.vers\t"+System.getProperty("java.class.version"));
-		mainLogger.info("java.class.path\t"+System.getProperty("java.class.path"));
+		this.log("java.version\t"+System.getProperty("java.version"));
+		this.log("java.vendor\t"+System.getProperty("java.vendor"));
+		this.log("java.home\t"+System.getProperty("java.home"));
+		this.log("java.vm.version\t"+System.getProperty("java.vm.version"));
+		this.log("java.vm.vendor\t"+System.getProperty("java.vm.vendor"));
+		this.log("java.vm.name\t"+System.getProperty("java.vm.name"));
+		this.log("java.class.vers\t"+System.getProperty("java.class.version"));
+		this.log("java.class.path\t"+System.getProperty("java.class.path"));
 	}
-	
-	public void javaEV() {
+		
+	public void logSysteminfo2() {
 		this.log("  "+java.text.DateFormat.getTimeInstance(java.text.DateFormat.FULL).format(new Date()));
 		this.log("\njava.version\t"+System.getProperty("java.version"));
 		this.log("\njava.vendor\t"+System.getProperty("java.vendor"));

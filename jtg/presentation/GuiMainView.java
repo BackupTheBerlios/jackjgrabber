@@ -2,12 +2,11 @@ package presentation;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-
 import service.SerGUIUtils;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-import com.jgoodies.plaf.plastic.theme.Silver;
+import com.jgoodies.plaf.plastic.PlasticTheme;
 
 import control.ControlMain;
 import control.ControlMainView;
@@ -24,16 +23,21 @@ public class GuiMainView extends JFrame {
 	
 	public GuiMainView(ControlMainView ctrl) {
 		super();
-		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
-		try {
-			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-		} catch (Exception e) {}
+		setLookAndFeel();
 		control = ctrl;
 		initialize();
 		SerGUIUtils.center(this);
-		setVisible(true);
-		
+		setVisible(true);	
 	}
+	
+	private void setLookAndFeel() {
+		try {
+			PlasticTheme inst = (PlasticTheme)(Class.forName("com.jgoodies.plaf.plastic.theme."+ControlMain.getSettings().getThemeLayout())).newInstance();
+			PlasticLookAndFeel.setMyCurrentTheme(inst);
+			UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
 	/**
 	 * This method initializes this
 	 */

@@ -35,6 +35,12 @@ public class SerXMLConverter {
 	public static BOSettings buildSettings(Document document) {	
 		BOSettings settings = new BOSettings();	
 		Element root = document.getRootElement();
+		
+		//Auswertung der User-Settings
+		settings.setThemeLayout(root.selectSingleNode("/settings/theme").getText());
+		settings.setLocale(root.selectSingleNode("/settings/locale").getText());
+		
+		//Auswertund der Box-Settings
 		List boxListNodes = root.selectNodes("//box"); //All Box-Nodes
 		ArrayList boxList = new ArrayList(boxListNodes.size());
 
@@ -67,6 +73,49 @@ public class SerXMLConverter {
 		Node boxListRoot = settingsDocument.selectSingleNode("/settings/boxList");
 		settingsDocument.remove(boxListRoot);
 		
+		//Aufbereitung der Box-Settings
+		Element newBoxListRoot = DocumentHelper.createElement("boxList");
+		ArrayList boxList = ControlMain.getSettings().getBoxList();
+	
+		for (int i=0; i<boxList.size(); i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			Element boxElement = DocumentHelper.createElement("box");
+			boxElement.addElement("boxIp").addText(box.getDboxIp());
+			boxElement.addElement("login").addText(box.getLogin());
+			boxElement.addElement("password").addText(box.getPassword());
+			boxElement.addElement("standard").addText(box.isStandard().toString());
+			newBoxListRoot.add(boxElement);
+		}
+		settingsDocument.add(newBoxListRoot);
+		
+		SerXMLHandling.saveXMLFile(new File(ControlMain.filename), ControlMain.getSettingsDocument());
+	}
+	
+	public static void saveUserSettings() throws IOException {
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		Node themeNode = settingsDocument.selectSingleNode("/settings/theme");
+		Node themeLocale = settingsDocument.selectSingleNode("/settings/locale");
+		
+		themeNode.setText(ControlMain.getSettings().getThemeLayout());
+		themeLocale.setText(ControlMain.getSettings().getLocale());
+		
+		SerXMLHandling.saveXMLFile(new File(ControlMain.filename), ControlMain.getSettingsDocument());
+	}
+	
+	public static void saveAllSettings() throws IOException {
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		
+		//Aufbereitung der User-Settings
+		Node themeNode = settingsDocument.selectSingleNode("/settings/theme");
+		Node themeLocale = settingsDocument.selectSingleNode("/settings/locale");
+		
+		themeNode.setText(ControlMain.getSettings().getThemeLayout());
+		themeLocale.setText(ControlMain.getSettings().getLocale());
+		
+		
+		//Aufbereitung der Box-Settings
+		Node boxListRoot = settingsDocument.selectSingleNode("/settings/boxList");
+		settingsDocument.remove(boxListRoot);
 		Element newBoxListRoot = DocumentHelper.createElement("boxList");
 		ArrayList boxList = ControlMain.getSettings().getBoxList();
 	
