@@ -39,6 +39,7 @@ public class BOMovieGuideContainer{
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
+	private static final String TIME = "HH:mm";
 	
 	public int importXML(File file, ArrayList aboList){		
 		Document doc = null;
@@ -174,6 +175,15 @@ public class BOMovieGuideContainer{
     	}
     	return retVal;
     }
+	public boolean isTimeInArray(ArrayList value,GregorianCalendar search){
+    	boolean retVal = false;
+    	for (Iterator i = value.iterator(); i.hasNext();) {   			
+    			if( ((GregorianCalendar)i.next()).getTimeInMillis() >= search.getTimeInMillis()){
+    				retVal = true;
+    			}
+    	}
+    	return retVal;
+    }
 	
 	public boolean getIfStringInObject(BOMovieGuide bomovieguide, String search){
     	boolean value = false;
@@ -205,9 +215,14 @@ public class BOMovieGuideContainer{
 		returnList.clear();
 		String search = (String)searchValue;
     	GregorianCalendar searchGC = new GregorianCalendar();	    	 
+    	GregorianCalendar searchGCTime = new GregorianCalendar();
     	if(value==1){
     		searchGC = SerFormatter.convString2GreCal(search,DATE_FULL);
-    	} 
+    	}
+    	if(value==14){
+    		searchGC = SerFormatter.convString2GreCal(SerFormatter.getFormatGreCal(),DATE_FULL);
+    		searchGCTime = SerFormatter.convString2GreCal(search,TIME);
+    	}
 		Iterator i = titelList.entrySet().iterator();
 		while(i.hasNext()){
 			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
@@ -275,8 +290,15 @@ public class BOMovieGuideContainer{
 				case 13:
 					returnList.add(bomovieguide);
 					break;							
+				case 14:						
+					if(bomovieguide.getDatum().contains(searchGC)){
+						if(isTimeInArray(bomovieguide.getStart(),searchGCTime)){
+							returnList.add(bomovieguide);
+						}
+					}
+					break;	
 			}
 		}
 		return returnList;
-	}
+	}	
 }
