@@ -1,9 +1,5 @@
 package presentation;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,6 +11,10 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import calendar.JDateChooser;
 
@@ -30,7 +30,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JTabbedPane jControlTab = null;
 	private JPanel tabProgramm = null;
 	private JPanel jPanelProgramm = null;
-	private JPanel jPanelAktionen = null;
+	private JPanel jPanelButtonsAktionen = null;
 	private JPanel jPanelButtonsProgrammInfo = null;
 	private JPanel jPanelProgrammInfo = null;
 	private JPanel jPanelAusgabe = null;
@@ -38,6 +38,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel jPanelEPGTable = null;
 	private JComboBox jComboChooseDate = null;
 	private JTable jTableEPG = null;
+	private JButton jButtonOfflineEpg = null;
 	private JScrollPane jScrollPaneEPG = null;
 	private JButton jButtonQuickRecord = null;
 	private JButton jButtonReboot = null;
@@ -64,237 +65,94 @@ public class GuiTabProgramm extends GuiTab {
 	private JScrollPane jScrollPaneAusgabe = null;
 	public GuiEpgTableSorter sorter = null;
 	
-	private JButton jButtonOfflineEpg = null;
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
 		initialize();
 	}
 	
-	private void initialize(){
-		this.setLayout(new GridBagLayout());
-		
-		java.awt.GridBagConstraints gridBagConstraintsAusgabe = new GridBagConstraints();
-		java.awt.GridBagConstraints gridBagConstraintsButtonsAktionen = new GridBagConstraints();
-		java.awt.GridBagConstraints gridBagConstraintsButtonsInfo = new GridBagConstraints();
-		java.awt.GridBagConstraints gridBagConstraintsProgram = new GridBagConstraints();
-		java.awt.GridBagConstraints gridBagConstraintsProgramInfo = new GridBagConstraints();
-		gridBagConstraintsProgram.gridx = 0;
-		gridBagConstraintsProgram.gridy = 0;
-		gridBagConstraintsProgram.anchor = java.awt.GridBagConstraints.CENTER;
-		gridBagConstraintsProgram.fill = java.awt.GridBagConstraints.HORIZONTAL;
-		gridBagConstraintsProgram.gridwidth = 6;
-		gridBagConstraintsButtonsAktionen.gridx = 0;
-		gridBagConstraintsButtonsAktionen.gridy = 3;
-		gridBagConstraintsButtonsInfo.gridx = 1;
-		gridBagConstraintsButtonsInfo.gridy = 3;
-		gridBagConstraintsProgramInfo.gridx = 2;
-		gridBagConstraintsProgramInfo.gridy = 3;
-		gridBagConstraintsProgramInfo.gridheight = 2;
-		gridBagConstraintsProgramInfo.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraintsAusgabe.gridx = 0;
-		gridBagConstraintsAusgabe.gridy = 4;
-		gridBagConstraintsAusgabe.gridwidth = 2;
-		gridBagConstraintsAusgabe.fill = java.awt.GridBagConstraints.BOTH;
-		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
-		this.add(getJPanelProgramm(), gridBagConstraintsProgram);
-		this.add(getJPanelAktionen(), gridBagConstraintsButtonsAktionen);
-		this.add(getJPanelButtonsInformationen(), gridBagConstraintsButtonsInfo);
-		this.add(getJPanelProgramInfo(), gridBagConstraintsProgramInfo);
-		this.add(getJPanelAusgabe(), gridBagConstraintsAusgabe);
+	private  void initialize() {
+		FormLayout layout = new FormLayout(
+			      "pref, 8dlu, pref, 8dlu, 340px:grow",  							// columns 
+			      "pref, 263px:grow, 8dlu, pref, pref, 3dlu, pref, 100px:grow");	// rows
+		PanelBuilder builder = new PanelBuilder(this, layout);
+		builder.setDefaultDialogBorder();
+		CellConstraints cc = new CellConstraints();
+	
+		builder.addSeparator("Datum",		   					cc.xywh	(1, 1, 1, 1));
+		builder.add(this.getJPanelChannels(),  					cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator("EPG",			   					cc.xywh	(3, 1, 3, 1));
+		builder.add(this.getJScrollPaneEPG(),					cc.xywh	(3, 2, 3, 1));
+		builder.addSeparator("Aktionen",						cc.xywh	(1, 4, 1, 1));
+		builder.addSeparator("Infomationen",					cc.xywh	(3, 4, 1, 1));
+		builder.addSeparator("EPG-Details",						cc.xywh	(5, 4, 1, 1));
+		builder.add(this.getJPanelButtonsAktionen(),  			cc.xywh	(1, 5, 1, 1));
+		builder.add(this.getJPanelButtonsInformationen(),     	cc.xywh	(3, 5, 1, 1));
+		builder.add(this.getJScrollPaneEPGDetail(),	 			cc.xywh	(5, 5, 1, 4));
+		builder.addSeparator("Ausgabe",							cc.xywh	(1, 7, 3, 1));
+		builder.add(this.getJScrollPaneAusgabe(), 	 			cc.xywh	(1, 8, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
 	}
 	
-	private JPanel getJPanelProgramm() {
-		if (jPanelProgramm == null) {
-			java.awt.GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			jPanelProgramm = new JPanel();
-			jPanelProgramm.setLayout(new GridBagLayout());
-			jPanelProgramm.setPreferredSize(new java.awt.Dimension(770,275));
-			jPanelProgramm.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED)));
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.gridy = 0;
-			gridBagConstraints13.fill = java.awt.GridBagConstraints.VERTICAL;
-			gridBagConstraints1.gridx = 1;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.anchor = java.awt.GridBagConstraints.CENTER;
-			jPanelProgramm.add(getJPanelChannels(), gridBagConstraints13);
-			jPanelProgramm.add(getJPanelEPG(), gridBagConstraints1);
-			
-		}
-		return jPanelProgramm;
-	}
 	/**
-	 * This method initializes jPanelAktionen	
+	 * This method initializes jPanelButtonsAktionen	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */    
-	private JPanel getJPanelAktionen() {
-		if (jPanelAktionen == null) {
-			java.awt.GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			javax.swing.JLabel jLabel = new JLabel();
-			java.awt.GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints131 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints101 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			jPanelAktionen = new JPanel();
-			jPanelAktionen.setLayout(new GridBagLayout());
-			jPanelAktionen.setPreferredSize(new java.awt.Dimension(225,110));
-			jPanelAktionen.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Aktionen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.insets = new java.awt.Insets(0,0,0,0);
-			gridBagConstraints91.gridx = 0;
-			gridBagConstraints91.gridy = 1;
-			gridBagConstraints91.insets = new java.awt.Insets(0,0,0,0);
-			gridBagConstraints101.gridx = 0;
-			gridBagConstraints101.gridy = 2;
-			gridBagConstraints131.gridx = 1;
-			gridBagConstraints131.gridy = 1;
-			gridBagConstraints131.gridwidth = 3;
-			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.gridy = 2;
-			gridBagConstraints14.gridwidth = 3;
-			gridBagConstraints15.gridx = 1;
-			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.insets = new java.awt.Insets(0,5,0,5);
-			gridBagConstraints17.gridx = 3;
-			gridBagConstraints17.gridy = 0;
-			gridBagConstraints17.insets = new java.awt.Insets(0,0,0,5);
-			jLabel.setText("Min");
-			jPanelAktionen.add(getJButtonAufnahme(), gridBagConstraints8);
-			jPanelAktionen.add(getJButtonReboot(), gridBagConstraints131);
-			jPanelAktionen.add(getJButtonNhttpdReset(), gridBagConstraints91);
-			jPanelAktionen.add(getJButtonEpgReset(), gridBagConstraints14);
-			jPanelAktionen.add(getJSpinner(), gridBagConstraints15);
-			jPanelAktionen.add(jLabel, gridBagConstraints17);
-			jPanelAktionen.add(getJButtonVLC(), gridBagConstraints101);
+	private JPanel getJPanelButtonsAktionen() {
+		if (jPanelButtonsAktionen == null) {
+			jPanelButtonsAktionen = new JPanel();
+			FormLayout layout = new FormLayout(
+				      "pref, 1dlu, 85px, 20px",	 		//columna 
+				      "pref, 1dlu, pref, 1dlu, pref");	//rows
+			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
+			CellConstraints cc = new CellConstraints();
+			
+			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonNhttpdReset(),  					cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonVLC(),		  					cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJSpinner(),			  					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(new JLabel("Min"),			  					cc.xyw	(4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonReboot(), 	 					cc.xyw	(3, 3, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonEpgReset(),	  					cc.xyw	(3, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
 		}
-		return jPanelAktionen;
+		return jPanelButtonsAktionen;
 	}
 	
 	private JPanel getJPanelButtonsInformationen() {
 		if (jPanelButtonsProgrammInfo == null) {
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints131 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints101 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			jPanelButtonsProgrammInfo = new JPanel();
-			jPanelButtonsProgrammInfo.setLayout(new GridBagLayout());
-			jPanelButtonsProgrammInfo.setPreferredSize(new java.awt.Dimension(225,110));
-			jPanelButtonsProgrammInfo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Informationen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints91.gridx = 3;
-			gridBagConstraints91.gridy = 0;
-			gridBagConstraints91.gridwidth = 3;
-			gridBagConstraints91.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints101.gridx = 0;
-			gridBagConstraints101.gridy = 2;
-			gridBagConstraints101.gridwidth = 3;
-			gridBagConstraints15.gridx = 1;
-			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.gridwidth = 2;
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints131.gridx = 3;
-			gridBagConstraints131.gridy = 1;
-			gridBagConstraints131.gridwidth = 3;
-			gridBagConstraints131.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.gridy = 1;
-			gridBagConstraints14.gridwidth = 3;
-			gridBagConstraints2.gridx = 5;
-			gridBagConstraints2.gridy = 2;
-			jPanelButtonsProgrammInfo.add(getJButtonReadEPG(), gridBagConstraints131);
-			jPanelButtonsProgrammInfo.add(getJButtonClickfinder(), gridBagConstraints91);
+			FormLayout layout = new FormLayout(
+				      "pref, 1dlu, pref",				//columna 
+				      "pref, 1dlu, pref, 1dlu, pref");	//rows
+			PanelBuilder builder = new PanelBuilder(jPanelButtonsProgrammInfo, layout);
+			CellConstraints cc = new CellConstraints();
 			
-			jPanelButtonsProgrammInfo.add(getJButtonSelectedToTimer(), gridBagConstraints14);
-			jPanelButtonsProgrammInfo.add(getJComboBoxBoxIP(), gridBagConstraints15);
-			jPanelButtonsProgrammInfo.add(getJButtonStartServer(), gridBagConstraints101);
-			jPanelButtonsProgrammInfo.add(getJButtonOfflineEpg(), gridBagConstraints2);
+			builder.add(this.getJComboBoxBoxIP(),	  					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonSelectedToTimer(),				cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonStartServer(),					cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonClickfinder(),  					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonReadEPG(), 	 					cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonOfflineEpg(),  					cc.xyw	(3, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
 		}
 		return jPanelButtonsProgrammInfo;
 	}
 	
-	private JPanel getJPanelAusgabe() {
-		if (jPanelAusgabe == null) {
-			jPanelAusgabe = new JPanel();
-			jPanelAusgabe.setLayout(new GridLayout(1,1));
-			jPanelAusgabe.setPreferredSize(new java.awt.Dimension(200,110));
-			jPanelAusgabe.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Ausgabe", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			jPanelAusgabe.add(getJScrollPaneAusgabe());
-		}
-		return jPanelAusgabe;
-	}
-
 	private JPanel getJPanelChannels() {
 		if (jPanelChannel == null) {
-			java.awt.GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			java.awt.GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			jPanelChannel = new JPanel();
-			jPanelChannel.setLayout(new GridBagLayout());
-			jPanelChannel.setPreferredSize(new java.awt.Dimension(250,263));
-			jPanelChannel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Sender, Doppelklick Zapping", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.gridy = 3;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.weighty = 1.0;
-			gridBagConstraints16.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints16.gridwidth = 4;
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.gridy = 1;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridwidth = 4;
-			gridBagConstraints12.gridx = 3;
-			gridBagConstraints12.gridy = 0;
-			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
-			jPanelChannel.add(getJScrollPaneChannels(), gridBagConstraints16);
-			jPanelChannel.add(getJComboBoxBouquets(), gridBagConstraints7);
-			jPanelChannel.add(getJDateChooser(), gridBagConstraints12);
+			FormLayout layout = new FormLayout(
+				      "210px",									//column 
+				      "pref, 4px, pref, pref, min:grow");		//rows
+			PanelBuilder builder = new PanelBuilder(jPanelChannel, layout);
+			CellConstraints cc = new CellConstraints();
+			
+			builder.add(this.getJDateChooser(),		  					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.addSeparator("Sender, Doppelklick Zapping",			cc.xy	(1, 3));
+			builder.add(this.getJComboBoxBouquets(), 					cc.xyw	(1, 4, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJScrollPaneChannels(), 					cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
 		}
 		return jPanelChannel;
 	}
 	
-	private JPanel getJPanelEPG() {
-		if (jPanelEPGTable == null) {
-			java.awt.GridBagConstraints gridBagConstraints71 = new GridBagConstraints();
-			jPanelEPGTable = new JPanel();
-			jPanelEPGTable.setLayout(new GridBagLayout());
-			jPanelEPGTable.setPreferredSize(new java.awt.Dimension(505,245));
-			jPanelEPGTable.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Programm, Doppelklick zu Timer", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints71.gridx = 0;
-			gridBagConstraints71.gridy = 0;
-			gridBagConstraints71.weightx = 1.0;
-			gridBagConstraints71.weighty = 1.0;
-			gridBagConstraints71.fill = java.awt.GridBagConstraints.BOTH;
-			jPanelEPGTable.add(getJScrollPaneEPG(), gridBagConstraints71);
-		}
-		return jPanelEPGTable;
-	}
-	
-	private JPanel getJPanelProgramInfo() {
-		if (jPanelProgrammInfo == null) {
-			java.awt.GridBagConstraints gridBagConstraints92 = new GridBagConstraints();	
-			jPanelProgrammInfo = new JPanel();		
-			jPanelProgrammInfo.setLayout(new GridBagLayout());
-			jPanelProgrammInfo.setPreferredSize(new java.awt.Dimension(320,100));
-			jPanelProgrammInfo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Programm-Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints92.gridx = 0;
-			gridBagConstraints92.gridy = 0;
-			gridBagConstraints92.weightx = 1.0;
-			gridBagConstraints92.weighty = 1.0;
-			gridBagConstraints92.fill = java.awt.GridBagConstraints.BOTH;
-			jPanelProgrammInfo.add(this.getJScrollPaneEPGDetail(), gridBagConstraints92);
-		}
-		return jPanelProgrammInfo;
-	}
 	/**
 	 * This method initializes jComboBoxBoxIP	
 	 * 	
@@ -306,7 +164,6 @@ public class GuiTabProgramm extends GuiTab {
 			jComboBoxBoxIP.setEditable(true);
 			jComboBoxBoxIP.setModel(new GuiIpListComboModel(control));
 			jComboBoxBoxIP.addItemListener(control);
-			jComboBoxBoxIP.setPreferredSize(new java.awt.Dimension(105,24));
 			jComboBoxBoxIP.setName("ipList");
 		}
 		return jComboBoxBoxIP;
@@ -343,7 +200,6 @@ public class GuiTabProgramm extends GuiTab {
 		if (jScrollPaneEPG == null) {
 			jScrollPaneEPG = new JScrollPane();
 			jScrollPaneEPG.setViewportView(getJTableEPG());
-			jScrollPaneEPG.setAutoscrolls(true);
 		}
 		return jScrollPaneEPG;
 	}
@@ -537,11 +393,7 @@ public class GuiTabProgramm extends GuiTab {
 		}
 		return jTextPaneAusgabe;
 	}
-	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */    
+
 	private JScrollPane getJScrollPaneChannels() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
@@ -559,19 +411,14 @@ public class GuiTabProgramm extends GuiTab {
 			senderTableModel = new GuiSenderTableModel(control);
 			jTableChannels = new JTable(senderTableModel);
 			jTableChannels.getColumnModel().getColumn(0).setPreferredWidth(40);
-			jTableChannels.getColumnModel().getColumn(1).setPreferredWidth(200);
+			jTableChannels.getColumnModel().getColumn(1).setPreferredWidth(185);
 			jTableChannels.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jTableChannels.addMouseListener(control);
 			jTableChannels.setName("Sender");
 		}
 		return jTableChannels;
 	}
-	
-	/**
-	 * This method initializes jComboBox	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	   
 	public JComboBox getJComboBoxBouquets() {
 	      if (JComboBoxBouquets == null) {
 	         boquetsComboModel = new GuiBoquetsComboModel(control);

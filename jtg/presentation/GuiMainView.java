@@ -11,12 +11,17 @@ import projectX.X;
 import service.SerGUIUtils;
 import service.SerXMLConverter;
 
+import com.jgoodies.forms.builder.DefaultFormBuilder;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticTheme;
 
 import control.ControlMain;
 import control.ControlMainView;
+import control.ControlProgramTab;
 
 /*
  * Created on 31.08.2004
@@ -29,8 +34,8 @@ public class GuiMainView extends JFrame {
 	private ControlMainView control;    
 	
 	public GuiMainView(ControlMainView ctrl) {
-		super();
-		this.addWindowListener (new WindowAdapter() { 
+		super("FormLayout");
+		addWindowListener (new WindowAdapter() { 
 			public void windowClosing(WindowEvent e) { 
 				try {
 					SerXMLConverter.saveAllSettings();
@@ -45,7 +50,8 @@ public class GuiMainView extends JFrame {
 		setLookAndFeel();
 		control = ctrl;
 		initialize();
-		setResizable(false);
+		setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
+				" "+ControlMain.version[2]+" "+ControlMain.version[3]);
 		pack();
 		SerGUIUtils.center(this);
 		setVisible(true);	
@@ -63,10 +69,7 @@ public class GuiMainView extends JFrame {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setForeground(java.awt.SystemColor.windowText);
-		this.setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
-				" "+ControlMain.version[2]+" "+ControlMain.version[3]);
-		this.setContentPane(getMainTabPane());
+		this.getContentPane().add(this.getMainTabPane());
 	}
 	/**
 	 * Haupt-TabPane. Neue Tabs werden hier angemeldet.
@@ -75,15 +78,11 @@ public class GuiMainView extends JFrame {
 		if (mainTabPane == null) {
 			mainTabPane = new GuiMainTabPane(this);
 			mainTabPane.addChangeListener(control);
-			mainTabPane.setBackground(new java.awt.Color(204,204,204));
-			mainTabPane.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
-			mainTabPane.setForeground(java.awt.Color.black);
-			mainTabPane.setDoubleBuffered(true);
 			
-			mainTabPane.addTab("Programm", null, new JPanel(), null);
-			mainTabPane.addTab("Timerliste", null, new JPanel(), null);
-			mainTabPane.addTab("Project-X", null, new JPanel(), null);
-			mainTabPane.addTab("Settings", null, new JPanel(), null);
+			mainTabPane.addTab("Programm", mainTabPane.getTabProgramm());
+			mainTabPane.addTab("Timerliste", new JPanel());
+			mainTabPane.addTab("Project-X", new JPanel());
+			mainTabPane.addTab("Settings", new JPanel());
 		}
 		return mainTabPane;
 	}
