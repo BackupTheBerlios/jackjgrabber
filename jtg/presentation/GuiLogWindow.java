@@ -62,6 +62,17 @@ public class GuiLogWindow extends JFrame {
         };
         final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK, true);
 		getRootPane().registerKeyboardAction(listener, keyStroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		addWindowListener(new WindowAdapter()
+				{
+					public void windowClosing(WindowEvent e) {
+						JButton switchButton = ControlMain.getControl().getView().getTabProgramm().getJButtonSwitchLog();
+			            switchButton.setText(ControlMain.getProperty("button_on"));
+					    ControlMain.logWindow.setVisible(false);
+					    ControlMain.logWindow.setShouldBeVisible(false);
+
+					}
+				});
     }
     
     /**
