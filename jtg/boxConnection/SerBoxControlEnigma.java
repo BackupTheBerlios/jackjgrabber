@@ -65,6 +65,15 @@ public class SerBoxControlEnigma extends SerBoxControl {
         return timerList;
     }
     
+    public ArrayList getBoxVersion() throws IOException {
+        //FIXME
+        throw new IOException();
+    }
+    
+    public BOSender getRunningSender() throws IOException {
+        //FIXME
+        throw new IOException();
+	}
 	
 	public String getName() {
 		return "Enigma";
@@ -83,11 +92,11 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"UTF-8"));
 	}
 		
-	public BOPids getPids(boolean tvMode) throws IOException {
+	public BOPids getPids() throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
 		BufferedReader input = getConnection("/control/zapto?getpids");
-		if (tvMode) {
+		if (isTvMode()) {
 		    line=input.readLine();
 		    if (line.length() > 5) {
 		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("err_zapping"));

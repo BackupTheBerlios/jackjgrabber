@@ -37,16 +37,22 @@ import model.BOTimerList;
 public class SerBoxControlDefault extends SerBoxControl {
     
     public GregorianCalendar getBoxTime() throws IOException {
-	    return null;
+        throw new IOException();
 	}
 	
+    public BOSender getRunningSender() throws IOException {
+        throw new IOException();
+	}
+    
     public BOTimerList getTimerList() throws IOException{
         throw new IOException();
     }
     public BOTimerList reReadTimerList() throws IOException{
         throw new IOException();
     }
-    
+    public ArrayList getBoxVersion() throws IOException {
+        throw new IOException();
+    }
     
 	public String getName() {
 		return "Default";
@@ -64,7 +70,7 @@ public class SerBoxControlDefault extends SerBoxControl {
 		throw new IOException();
 	}
 		
-	public BOPids getPids(boolean tvMode) throws IOException {
+	public BOPids getPids() throws IOException {
 		throw new IOException();
 	}	 
 	

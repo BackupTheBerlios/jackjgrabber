@@ -39,7 +39,6 @@ import org.apache.log4j.Logger;
 
 import service.SerFormatter;
 import control.ControlMain;
-import control.ControlProgramTab;
 
 /**
  * Schnittstelle zum NeutrinoImage
@@ -64,6 +63,17 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return "Neutrino";
 	}
 	
+	public ArrayList getBoxVersion() throws IOException {
+	    ArrayList version = new ArrayList();
+	    BufferedReader input = getConnection("/control/info?version");
+		
+		String line;
+		while((line=input.readLine())!=null) {
+		    version.add(line);
+		}
+		return version;
+	}
+	
 	public String getChanIdOfRunningSender() throws IOException {
 		BufferedReader input = getConnection("/control/zapto");
 		
@@ -74,11 +84,29 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return line;
 	}
 	
+	public BOSender getRunningSender() throws IOException {
+	    String runningChanId = getChanIdOfRunningSender();
+	    ArrayList bouquetList = getBouquetList();
+	    for (int i = 0; i < bouquetList.size(); i++) { //Schleife ueber die Bouquets
+			BOBouquet bouquet = (BOBouquet) bouquetList.get(i);
+			bouquet.readSender();
+			int senderSize = bouquet.getSender().size();
+			for (int i2 = 0; i2 < senderSize; i2++) { //Schleife ueber die
+				// Sender im Bouquet
+				BOSender sender = (BOSender) bouquet.getSender().get(i2);
+				if (sender.getChanId().equals(runningChanId)) {
+				    return sender;
+				}
+			}
+		}
+	    return null;
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
 		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"ISO-8859-1"));
 	}
 		
-	public BOPids getPids(boolean tvMode) throws IOException {
+	public BOPids getPids() throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
 	
@@ -157,7 +185,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		ArrayList senderList = new ArrayList();
 		String line;
 		String mode;
-		if (ControlProgramTab.tvMode) {
+		if (isTvMode()) {
 		    mode = "TV";
 		} else {
 		    mode = "RADIO";

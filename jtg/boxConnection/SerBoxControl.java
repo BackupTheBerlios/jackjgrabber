@@ -75,7 +75,7 @@ public abstract class SerBoxControl {
 	public abstract String getName();
 	public abstract GregorianCalendar getBoxTime() throws IOException;
 	public abstract BufferedReader getConnection(String request) throws IOException;
-	public abstract BOPids getPids(boolean tvMode) throws IOException;
+	public abstract BOPids getPids() throws IOException;
 	public abstract ArrayList getBouquetList() throws IOException;
 	public abstract ArrayList getAllSender() throws IOException;
 	public abstract ArrayList getSender(BOBouquet bouquet) throws IOException;
@@ -90,6 +90,8 @@ public abstract class SerBoxControl {
 	public abstract String getChanIdOfRunningSender() throws IOException;
 	public abstract boolean isTvMode() throws IOException;
 	public abstract String setRadioTvMode(String mode) throws IOException;
+	public abstract ArrayList getBoxVersion() throws IOException;
+	public abstract BOSender getRunningSender() throws IOException;
 
 	public abstract String setRecordModusWithPlayback() throws IOException;
 	public abstract String setRecordModus() throws IOException;
