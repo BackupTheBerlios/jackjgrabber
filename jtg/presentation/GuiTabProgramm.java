@@ -55,8 +55,10 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel jPanelProgrammInfo = null;
 	private JPanel jPanelAusgabe = null;
 	private JPanel jPanelChannel = null;
-	private JPanel jPanelEPGTable = null;
+	private JPanel jPanelEpg = null;
+	private JPanel jPanelEpgDetails=null;
 	private JPanel jPanelRecordInfo = null;
+	private JPanel jPanelOutput = null;
 	private JComboBox jComboChooseDate = null;
 	private JTable jTableEPG = null;
 	private JScrollPane jScrollPaneEPG = null;
@@ -95,24 +97,78 @@ public class GuiTabProgramm extends GuiTab {
 	
 	protected  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  							// columns 
-			      "pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow");	// rows
+			      "f:pref, 10, f:160, 10, f:pref, 10, f:250:grow",  							// columns 
+			      "f:290:grow, 10, f:pref, 5, f:120:grow");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 	
-		builder.addSeparator(ControlMain.getProperty("label_date"),			cc.xywh	(1, 1, 1, 1));
-		builder.add(this.getJPanelChannels(),  								cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.addSeparator(ControlMain.getProperty("label_epg"),			cc.xywh	(3, 1, 7, 1));
-		builder.add(this.getJScrollPaneEPG(),								cc.xywh	(3, 2, 7, 1));
-		builder.addSeparator(ControlMain.getProperty("label_actions"),		cc.xywh	(1, 4, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.add(this.getJPanelButtonsAktionen(),  						cc.xywh	(1, 5, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.addSeparator(ControlMain.getProperty("label_recordInfo"),	cc.xywh	(7, 4, 1, 1));
-		builder.add(this.getJPanelRecordInfo(), 				    		cc.xywh	(7, 5, 1, 1));
-		builder.addSeparator(ControlMain.getProperty("label_epgDetails"),	cc.xywh	(9, 4, 1, 1));
-		builder.add(this.getJScrollPaneEPGDetail(),							cc.xywh	(9, 5, 1, 4));
-		builder.addSeparator(ControlMain.getProperty("label_output"),		cc.xywh	(1, 7, 7, 1));
-		builder.add(this.getJScrollPaneAusgabe(), 	 						cc.xywh	(1, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.add(this.getJPanelChannels(),  										cc.xy		(1, 1));
+		builder.add(this.getJPanelEpg(),												cc.xywh	(3, 1, 5, 1));
+		builder.add(this.getJPanelButtonsAktionen(),  							cc.xywh	(1, 3, 3, 1));
+		builder.add(this.getJPanelRecordInfo(), 						    		cc.xywh	(5, 3, 1, 1));
+		builder.add(this.getJPanelEpgDetails(),										cc.xywh	(7, 3, 1, 3));
+		builder.add(this.getJPanelOutput(), 	 										cc.xywh	(1, 5, 5, 1));
+	}
+	
+	/**
+	 * This method initializes jPanelOutput	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getJPanelOutput() {
+		if (jPanelOutput == null) {
+			jPanelOutput = new JPanel();
+			FormLayout layout = new FormLayout(
+				      "d",	 		//columna 
+				      "f:pref, d");	//rows
+			PanelBuilder builder = new PanelBuilder(jPanelOutput, layout);
+			CellConstraints cc = new CellConstraints();
+			
+			builder.addSeparator(ControlMain.getProperty("label_output"),			cc.xy	(1, 1));
+			builder.add(this.getJScrollPaneAusgabe(),										cc.xy	(1, 2));
+		}
+		return jPanelOutput;
+	}
+	
+	/**
+	 * This method initializes jPanelEpgDetails	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getJPanelEpgDetails() {
+		if (jPanelEpgDetails == null) {
+			jPanelEpgDetails = new JPanel();
+			FormLayout layout = new FormLayout(
+				      	"f:d:grow",	 		//columns 
+						"f:pref, f:d:grow");	//rows
+			PanelBuilder builder = new PanelBuilder(jPanelEpgDetails, layout);
+			CellConstraints cc = new CellConstraints();
+			
+			builder.addSeparator(ControlMain.getProperty("label_epgDetails"),			cc.xy	(1, 1));
+			builder.add(this.getJScrollPaneEPGDetail(),										cc.xy	(1, 2));
+		}
+		return jPanelEpgDetails;
+	}
+	
+	/**
+	 * This method initializes jPanelEpg	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getJPanelEpg() {
+		if (jPanelEpg == null) {
+			jPanelEpg = new JPanel();
+			FormLayout layout = new FormLayout(
+				      "f:d:grow",	 		//columns 
+				      "f:pref, f:d:grow");	//rows
+			PanelBuilder builder = new PanelBuilder(jPanelEpg, layout);
+			CellConstraints cc = new CellConstraints();
+			
+			builder.addSeparator(ControlMain.getProperty("label_epg"),			cc.xy	(1, 1));
+			builder.add(this.getJScrollPaneEPG(),										cc.xy	(1, 2));
+		}
+		return jPanelEpg;
 	}
 	
 	/**
@@ -124,20 +180,19 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 2, 95, 2, 110, 2, 90",	 		//columna 
-				      "pref, 1dlu, pref");	//rows
+				      "f:pref, 2, f:95, 2, f:110, 2, f:90",	 		//columna 
+				      "pref, pref, 2, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
 			
-			builder.add(this.getJRadioButtonTVMode(),					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonStartServer(),					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonPlayback(),		  				cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(7, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJRadioButtonRadioMode(),				cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonReboot(), 	 					cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonShutdown(),  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-
-			
+			builder.addSeparator(ControlMain.getProperty("label_actions"),		cc.xywh	(1, 1, 7, 1));
+			builder.add(this.getJRadioButtonTVMode(),								cc.xy	(1, 2));
+			builder.add(this.getJButtonStartServer(),									cc.xy	(3, 2));
+			builder.add(this.getJButtonPlayback(),		  								cc.xy	(5, 2));
+			builder.add(this.getJButtonAufnahme(),	  								cc.xy	(7, 2));
+			builder.add(this.getJRadioButtonRadioMode(),							cc.xy	(1, 4));
+			builder.add(this.getJButtonReboot(), 	 									cc.xy	(3, 4));
+			builder.add(this.getJButtonShutdown(),  									cc.xy	(5, 4));		
 		}
 		return jPanelButtonsAktionen;
 	}
@@ -147,12 +202,13 @@ public class GuiTabProgramm extends GuiTab {
 			jPanelRecordInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "pref",	 		//columna 
-				      "pref, 1dlu, 25");	//rows
+				      "pref, pref, 2, 25");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelRecordInfo, layout);
 			CellConstraints cc = new CellConstraints();
 			
-			builder.add(new JLabel(ControlMain.getProperty("label_stopRecord")),	  	cc.xy(1, 1));		
-			builder.add(this.getJSpinnerRecordStopTime(),	 			cc.xy(1, 3));
+			builder.addSeparator(ControlMain.getProperty("label_recordInfo"),				cc.xy(1, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_stopRecord")),	  	cc.xy(1, 2));		
+			builder.add(this.getJSpinnerRecordStopTime(),	 									cc.xy(1, 4));
 		}
 		return jPanelRecordInfo;
 	}
@@ -162,17 +218,18 @@ public class GuiTabProgramm extends GuiTab {
 			jPanelChannel = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "30, 150",									//column 
-				      "pref, 4px, pref, pref, min:grow, pref, pref");		//rows
+				      "pref, pref, 4, pref, pref, min:grow, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(jPanelChannel, layout);
 			CellConstraints cc = new CellConstraints();
 			
-			builder.add(this.getJDateChooser(),		  						cc.xyw	(1, 1, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.addSeparator(ControlMain.getProperty("label_zapping"),				cc.xyw	(1, 3, 2));
-			builder.add(this.getJComboBoxBouquets(), 						cc.xyw	(1, 4, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJScrollPaneChannels(), 						cc.xyw	(1, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonRefresh(), 							cc.xyw	(1, 6, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJComboBoxBoxIP(), 							cc.xyw	(2, 6, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonSelectedToTimer(), 					cc.xyw	(1, 7, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.addSeparator(ControlMain.getProperty("label_date"),			cc.xywh	(1, 1, 2, 1));
+			builder.add(this.getJDateChooser(),					  						cc.xyw	(1, 2, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.addSeparator(ControlMain.getProperty("label_zapping"),		cc.xyw	(1, 4, 2));
+			builder.add(this.getJComboBoxBouquets(), 								cc.xyw	(1, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJScrollPaneChannels(), 								cc.xyw	(1, 6, 2, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonRefresh(), 										cc.xyw	(1, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJComboBoxBoxIP(), 									cc.xyw	(2, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonSelectedToTimer(), 							cc.xyw	(1, 8, 2, CellConstraints.FILL, CellConstraints.FILL));
 		}
 		return jPanelChannel;
 	}
