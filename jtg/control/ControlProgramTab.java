@@ -55,6 +55,7 @@ import presentation.program.GuiSenderTableModel;
 import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerErrorStreamReadThread;
+import service.SerExternalProcessHandler;
 import service.SerFormatter;
 import service.SerInputStreamReadThread;
 import streaming.RecordControl;
@@ -261,7 +262,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
 					if (!ControlMain.getSettings().getRecordSettings().isRecordAllPids()) {
-						new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
+						this.setPids(BOPids.startPidsQuestDialog(this.getPids()));
 					}
 				}
 				if (this.getPids().getPidCount() > 0) {
@@ -285,6 +286,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.zapToSelectedSender();
 				String execString = this.getPlaybackRequestString(option);
 				if (execString != null) {
+					SerExternalProcessHandler.startProcess(option.getName(), execString);
 					Process run = Runtime.getRuntime().exec(execString);
 					Logger.getLogger("ControlProgramTab").info(execString);
 					new SerInputStreamReadThread(option.isLogOutput().booleanValue(), run.getInputStream()).start();
@@ -298,7 +300,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	private String getPlaybackRequestString(BOPlaybackOption option) {
 		String execString = option.getExecString();
-		String vPid = "0x" + this.getPids().getVPid()[0];
+		String vPid = "0x" + this.getPids().getVPid().getNumber();
 		String ip = ControlMain.getBoxIpOfActiveBox();
 		execString = SerFormatter.replace(execString, "$ip", ip);
 		execString = SerFormatter.replace(execString, "$vPid", vPid);
@@ -382,14 +384,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	private BORecordArgs buildRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
-		if (this.getPids().getVPid() != null) {
-			args.setVPid(this.getPids().getVPid()[0]);
-		}
-		args.setAPids(this.getPids().getAPids());
-		
-		if (ControlMain.getSettings().getRecordSettings().isRecordVtxt() && this.getPids().getVtxtPid()!=null) {
-		    args.setVideotextPid(this.getPids().getVtxtPid()[0]);  
-		}
+		args.setPids(this.getPids());
 		this.fillRecordArgsWithEpgData(args);
 		return args;
 	}
