@@ -50,7 +50,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		//erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
 		//manuell erfolgen
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
-		BOBox box = ControlMain.getSelecteddBox();
+		BOBox box = ControlMain.getSelectedBox();
 		this.getView().getMainTabPane().getTabProgramm().getControl().setSelectedBox(box);
 		int index = ControlMain.getIndexOfSelecteddBox();
 		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
