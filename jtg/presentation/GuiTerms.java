@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import control.ControlMain;
+import control.ControlMainView;
 
 /**
  * @author Alexander Geist
@@ -16,9 +17,9 @@ public class GuiTerms extends JFrame  {
 	boolean agreement = false;
 	JRadioButton disagree;
 	JRadioButton agree;
-	ControlMain listener;
+	ControlMainView listener;
 
-	public GuiTerms(ControlMain list) {
+	public GuiTerms(ControlMainView list) {
 		this.setListener(list);
 		open("Jack the JGrabber");
 	}
@@ -87,13 +88,13 @@ public class GuiTerms extends JFrame  {
 	/**
 	 * @return Returns the listener.
 	 */
-	public ControlMain getListener() {
+	public ControlMainView getListener() {
 		return listener;
 	}
 	/**
 	 * @param listener The listener to set.
 	 */
-	public void setListener(ControlMain listener) {
+	public void setListener(ControlMainView listener) {
 		this.listener = listener;
 	}
 }

@@ -10,6 +10,7 @@ import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.theme.Silver;
 
 import control.ControlMain;
+import control.ControlMainView;
 
 /*
  * Created on 31.08.2004
@@ -19,9 +20,9 @@ public class GuiMainView extends JFrame {
 
 	
 	private GuiMainTabPane mainTabPane = null;
-	private ControlMain control;    
+	private ControlMainView control;    
 	
-	public GuiMainView(ControlMain ctrl) {
+	public GuiMainView(ControlMainView ctrl) {
 		super();
 		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
 		try {
@@ -84,13 +85,13 @@ public class GuiMainView extends JFrame {
 	/**
 	 * @return Returns the control.
 	 */
-	public ControlMain getControl() {
+	public ControlMainView getControl() {
 		return control;
 	}
 	/**
 	 * @param control The control to set.
 	 */
-	public void setControl(ControlMain control) {
+	public void setControl(ControlMainView control) {
 		this.control = control;
 	}
 }
