@@ -95,23 +95,23 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "f:320:grow, 110:grow, 160:grow, 7, pref",							// columns
-			      "pref, t:220:grow, pref, 10, pref, t:100, b:100, pref");				// rows
+			      "f:320:grow, 10, 100:grow, 160:grow, 7, pref",							// columns
+			      "pref, t:220:grow, pref, 10, pref, t:100, b:100:grow, pref");				// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
-		builder.addSeparator(ControlMain.getProperty("label_recordTimer"),						cc.xyw  (1, 1, 3));
-		builder.add(this.getJScrollPaneRecordTimerTable(),   											cc.xyw  (1, 2, 3));
-		builder.add(this.getJPanelDauerTimer(),	 														cc.xyw  (1, 3, 3));
-		builder.addSeparator(ControlMain.getProperty("label_systemTimer"),						cc.xyw  (1, 5, 1));
+		builder.addSeparator(ControlMain.getProperty("label_recordTimer"),						cc.xyw  (1, 1, 4));
+		builder.add(this.getJScrollPaneRecordTimerTable(),   											cc.xyw  (1, 2, 4));
+		builder.add(this.getJPanelDauerTimer(),	 														cc.xyw  (1, 3, 4, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addSeparator(ControlMain.getProperty("label_systemTimer"),						cc.xyw  (1, 5, 3));
 		builder.add(this.getJScrollPaneSystemTimerTable(),  											cc.xywh (1, 6, 1, 2));
-		builder.add(this.getJPanelDauerTimer2(), 															cc.xywh (2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),								cc.xy   (5, 1));
-		builder.add(this.getJPanelButtonsRecordTimer(), 												cc.xywh (5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),								cc.xy  (5, 5, CellConstraints.CENTER, CellConstraints.DEFAULT));
-		builder.add(this.getJPanelButtonsSystemTimer(),												cc.xywh (5, 6, 1, 1, CellConstraints.CENTER, CellConstraints.TOP));
-		builder.add(this.getJPanelButtonsGui(),																cc.xywh (5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
+		builder.add(this.getJPanelDauerTimer2(), 															cc.xywh (3, 6, 1, 2, CellConstraints.LEFT, CellConstraints.TOP));
+		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),								cc.xy     (6, 1));
+		builder.add(this.getJPanelButtonsRecordTimer(), 												cc.xywh (6, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),								cc.xy   (6, 5, CellConstraints.CENTER, CellConstraints.DEFAULT));
+		builder.add(this.getJPanelButtonsSystemTimer(),												cc.xywh (6, 6, 1, 1, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.add(this.getJPanelButtonsGui(),																cc.xywh (6, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
 	public ControlTab getControl() {
