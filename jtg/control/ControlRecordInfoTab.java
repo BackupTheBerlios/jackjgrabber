@@ -480,7 +480,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 						exec += " " + file.getAbsolutePath();
 					}
 
-					SerExternalProcessHandler.startProcess(play.getName(), exec, true);
+					SerExternalProcessHandler.startProcess(play.getName(), exec, play.isLogOutput().booleanValue());
 				}
 			}
 
