@@ -1,9 +1,13 @@
 package control;
 
 import java.io.File;
+import java.io.IOException;
 
 import model.BOSettings;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
 import presentation.GuiMainView;
@@ -12,6 +16,7 @@ import service.SerBoxControl;
 import service.SerBoxControlDefault;
 import service.SerBoxControlEnigma;
 import service.SerBoxControlNeutrino;
+import service.SerLogAppender;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
 
@@ -24,6 +29,7 @@ public class ControlMain {
 	
 	GuiMainView view;
 	ControlMain control;
+	static Logger logger;
 	static BOSettings settings;
 	static Document settingsDocument;
 	static SerBoxControl box;
@@ -32,8 +38,9 @@ public class ControlMain {
 	public static void main( String args[] ) {
 		ControlMain control = new ControlMain();
 		control.init();
-		
 		control.setView(new GuiMainView(control));
+		control.startLogger();
+		getLogger().info("Anwendung gestartet");
 	};
 	
 	private void init() {
@@ -42,6 +49,20 @@ public class ControlMain {
 		//Aufbereitung des Settings-XML-Dokuments
 		setSettings((SerXMLConverter.buildSettings(getSettingsDocument())));
 		this.detectImage();
+	}
+	
+	private void startLogger() {
+		PatternLayout layout = new PatternLayout();
+		//http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html
+		layout.setConversionPattern("%d{HH:mm:ss,SSS} %m%n");
+		
+		logger = Logger.getLogger("Logging");
+		SerLogAppender logApp;
+		try {
+			logApp = new SerLogAppender(layout);
+			logApp.setView(this.getView());
+			BasicConfigurator.configure(logApp);
+		} catch (IOException e) {}
 	}
 	
 	private void detectImage() {
@@ -160,5 +181,17 @@ public class ControlMain {
 	 */
 	public static void setBox(SerBoxControl box) {
 		ControlMain.box = box;
+	}
+	/**
+	 * @return Returns the logger.
+	 */
+	public static Logger getLogger() {
+		return logger;
+	}
+	/**
+	 * @param logger The logger to set.
+	 */
+	public static void setLogger(Logger logger) {
+		ControlMain.logger = logger;
 	}
 }
