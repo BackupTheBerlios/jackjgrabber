@@ -90,15 +90,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			this.getTab().getComboBoxSender().setSelectedIndex(0);
 			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
 			this.getTab().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet
-		}catch (Exception ex){System.out.println(ex);}	
-		/*
-		if(this.getTitelMap()!=null){
-			this.getTab().getComboBoxGenre().setSelectedIndex(0);
-			this.getTab().getComboBoxSender().setSelectedIndex(0);
-			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
-			this.getTab().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet
-		}
-		*/
+		}catch (Exception ex){System.out.println(ex);}			
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -380,8 +372,34 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     		controlMap.put(key,value);
     	}
     }
-  
-    public void setTitelMapSelected(String search,int value){
+    private boolean checkSearchToday(BOMovieGuide bomovieguide){ //prüfen ob Datum > als Heute in BOMovieGuide-Object
+    	return (bomovieguide.booleanArrayDate(bomovieguide.getDatum(),String.valueOf(SerFormatter.getStringToLong(SerFormatter.getDatumToday()))));
+    }
+    
+    private int doItSearch(BOMovieGuide bomovieguide ,String value, String search, int a){
+    	if(value.indexOf(search)!=-1){    	
+    		a = searchValue(bomovieguide,a);    		
+		}
+		
+    	return (a);
+    }
+    private int doItSearchArray(BOMovieGuide bomovieguide ,ArrayList value, String search, int a){
+    	if(bomovieguide.booleanArrayTest(value,search.toLowerCase())){
+    		a = searchValue(bomovieguide,a);    	
+		}
+    	return (a);
+    }
+    private int searchValue(BOMovieGuide bomovieguide,int a){
+    	if(searchAbHeute){
+			if(checkSearchToday(bomovieguide)){
+				titelListAktuell.put(new Integer(a++),bomovieguide);
+			}
+		}else{
+			titelListAktuell.put(new Integer(a++),bomovieguide);
+		}
+    	return (a++);
+    }
+    public void setTitelMapSelected(String search,int value){  //bauen der AnzeigeMap nach Suchkriterien
     	titelListAktuell = new Hashtable();    	
     	Iterator i = titelList.entrySet().iterator();
     	int a = 0;
@@ -389,65 +407,47 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     		Map.Entry entry = (Map.Entry)i.next();
     		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();
     		switch (value){
-    			case 1: //datum
-    				if(bomovieguide.getDatum().contains(search)){ 
+    			case 1: //datum    				
+    				if(bomovieguide.getDatum().contains(String.valueOf(SerFormatter.getStringToLong(search)))){ 
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;
     			case 2: //genre
-    				if(bomovieguide.getGenre().indexOf(search)!=-1){    	    		
-    	    				titelListAktuell.put(new Integer(a++),bomovieguide);    	    			
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getGenre(),search,a);    				
     				break;
     			case 3: //titel
-    				if(bomovieguide.getTitel().toLowerCase().indexOf(search.toLowerCase())!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getTitel(),search,a);    				
     				break;
     			case 4: //darsteller
-    				if(bomovieguide.getDarsteller().toLowerCase().indexOf(search.toLowerCase())!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getDarsteller(),search,a);    				
     				break;
     			case 5: // episode
-    				if(bomovieguide.getEpisode().toLowerCase().indexOf(search.toLowerCase())!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getEpisode(),search,a);    				
     				break;
-    			case 6: // bild 
-    				if(bomovieguide.booleanArrayTest(bomovieguide.getBild(),search.toLowerCase())){
-    					titelListAktuell.put(new Integer(a++),bomovieguide);
-    				}
+    			case 6: // bild    			
+    				a = doItSearchArray(bomovieguide, bomovieguide.getBild(),search,a);    				
     				break; 
     			case 7: // ton
-    				if(bomovieguide.booleanArrayTest(bomovieguide.getTon(),search.toLowerCase())){
-    					titelListAktuell.put(new Integer(a++),bomovieguide);
-    				}
+    				a = doItSearchArray(bomovieguide, bomovieguide.getTon(),search,a);    				
     				break;
     			case 8: // Prodland
-    				if(bomovieguide.getLand().toLowerCase().indexOf(search.toLowerCase())!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getLand(),search,a);    				
     				break;
     			case 9: //Prodjahr
-    				if(bomovieguide.getJahr().indexOf(search)!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getJahr(),search,a);    				
     				break;
     			case 10: //regie
-    				if(bomovieguide.getRegie().toLowerCase().indexOf(search)!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				a = doItSearch(bomovieguide,bomovieguide.getRegie(),search,a);    				
     				break;
     			case 11:
 					if(bomovieguide.getIfStringInObject(search.toLowerCase())){
-						titelListAktuell.put(new Integer(a++),bomovieguide);
+						a = searchValue(bomovieguide,a);						
 					}
 					break;
     			case 12: //sender    			
     				if(bomovieguide.getSender().contains(search)){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    					a = searchValue(bomovieguide,a);    					
+    	    		}    	    		
     				break;     								
     		};    		
     		if(search.equals("all")){
@@ -456,7 +456,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	}    
     }
     
-    public void setTitelMap() {				    	    
+    public void setTitelMap() {				    	    // einlesen der xml datei in Hashtable (key,BOMovieGuide Object)
     	titelList = new Hashtable();
     	controlMap = new Hashtable();
     	setGenreList("Genre...");
@@ -467,10 +467,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				Element entry = (Element) i.next();		
 				setDatumList(entry.element("datum").getStringValue());	
 				setSenderList(entry.element("sender").getStringValue());
-				if(!controlMap.containsKey(entry.element("titel").getStringValue())){
+				if(!controlMap.containsKey(entry.element("titel").getStringValue())){ //prüfen ob titel schon vorhanden ist, wenn ja nur neue Daten hinzugügen
 				BOMovieGuide bomovieguide = new BOMovieGuide(
 						entry.element("sender").getStringValue(), 
-						entry.element("datum").getStringValue(),
+						String.valueOf(SerFormatter.getStringToLong(entry.element("datum").getStringValue())),
 						entry.element("start").getStringValue(),
 						SerFormatter.getCorrectEndTime(entry.element("start").getStringValue(),entry.element("dauer").getStringValue()),
 						entry.element("titel").getStringValue(),
@@ -491,7 +491,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
                 a++;               
 				}else{					 
 					 BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(controlMap.get(entry.element("titel").getStringValue()));
-                     bomovieguide.setDatum(entry.element("datum").getStringValue());
+                     bomovieguide.setDatum(String.valueOf(SerFormatter.getStringToLong(entry.element("datum").getStringValue())));
                      bomovieguide.setStart(entry.element("start").getStringValue());
                      bomovieguide.setDauer(entry.element("dauer").getStringValue());
                      bomovieguide.setSender(entry.element("sender").getStringValue());                             
