@@ -271,8 +271,10 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				        this.setPids(options.getPids());
 				        this.setRecordStopTime(options.getStopTime());
 				        this.startRecord(this.buildRecordArgs());
-				    }
-				}
+				    } 
+				} else {
+			        this.startRecord(this.buildRecordArgs());
+			    }
 			} else {
 				this.stopRecord();
 			}
