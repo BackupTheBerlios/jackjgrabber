@@ -218,6 +218,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				newSelectedBox.setSelected(true);
 				ControlMain.detectImage();
 				this.reInitialize();
+				this.getMainView().getMainTabPane().reInitTimerPanel(); //Bei IP-Wechsel refreshen, da evtl anderes Box-Image
 			}
 		}
 		if (comboBox.getName().equals("bouquets")) {
