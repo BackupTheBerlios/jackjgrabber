@@ -78,6 +78,8 @@ public class ControlMain {
 		SerLogAppender logApp;
 		try {
 			setLogAppender(new SerLogAppender(layout));
+			getLogAppender().setMaxBackupIndex(3); //Number of max Backup-Files
+			getLogAppender().setMaximumFileSize(500);
 			BasicConfigurator.configure(getLogAppender());
 		} catch (IOException e) {}
 	}
