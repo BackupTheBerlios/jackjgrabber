@@ -347,7 +347,10 @@ public class BOMovieGuide {
     	setValueList("titel");
     	return genreList;
     }
-    
+    public ArrayList getSenderList(){
+    	setValueList("sender");
+    	return genreList;
+    }
     public void  setValueList(String value){
     	try{
     		this.genreList = guide.getGenryList(value);
