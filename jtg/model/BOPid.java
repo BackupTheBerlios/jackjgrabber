@@ -27,7 +27,25 @@ public class BOPid {
 		this.setNumber(number);
 		this.setId(id); 
 	}
-	public BOPid() {}
+	
+	public boolean isVideo() {
+	    return this.getId()==0;
+	}
+	
+	public boolean isAudio() {
+	    return this.getId()==1;
+	}
+	
+	public boolean isTeletext() {
+	    return this.getId()==2;
+	}
+	
+	public boolean isAc3() {
+	    if (this.isAudio() && this.getName().indexOf("AC3")>-1) {
+	        return true;
+	    }
+	    return false;
+	}
 
 	/**
 	 * @return Returns the name.

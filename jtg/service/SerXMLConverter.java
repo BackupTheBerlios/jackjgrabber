@@ -71,10 +71,9 @@ public class SerXMLConverter {
 		ArrayList pidList = new ArrayList();
 		for( int i=0; i<aPidNodes.size(); i++ ) {
 			Element aPid = (Element)aPidNodes.get(i);
-			BOPid pid = new BOPid();
-			pid.setId(1);
-			pid.setNumber(Integer.toHexString(Integer.parseInt(aPid.attributeValue("pid"))));
-			pid.setName(aPid.attributeValue("name"));
+			String number = Integer.toHexString(Integer.parseInt(aPid.attributeValue("pid")));
+			String name = aPid.attributeValue("name");
+			BOPid pid = new BOPid(number, name, 1);
 			pidList.add(pid);
 		}
 		recordArgs.getPids().setAPids(pidList);
