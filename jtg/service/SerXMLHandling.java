@@ -37,6 +37,7 @@ public class SerXMLHandling {
 	
 	public static Document createEmptyTimerFile(File path) throws IOException {
 	    Document doc = DocumentHelper.createDocument();
+	    Element root = doc.addElement( "timerList" );
 		saveXMLFile(path, doc);
 		return doc;
 	}
