@@ -46,6 +46,8 @@ public class GuiSettingsTabRecord extends GuiTab {
     private ControlSettingsTabRecord control;
 	private JPanel panelEngineSettings = null;
 	private JPanel panelRecordSettings = null;
+	private JPanel panelServerRecordSettings = null;
+	private JPanel panelQuickRecordSettings = null;
 	private JPanel panelRecordtimeSettings = null;	
 	private JComboBox jComboBoxStreamType = null;	
 	private JTextField jTextFieldRecordSavePath;
@@ -71,36 +73,66 @@ public class GuiSettingsTabRecord extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "f:pref:grow",  		// columns 
-				  "f:pref, pref, 15, f:pref"); 			// rows
+				  "f:pref, 15, pref, 15,  pref, pref, 15, f:pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
-		builder.add(this.getPanelRecordSettings(),		   		cc.xy(1,1));        
-		builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1,2));
-		builder.add(this.getPanelEngineSettings(),		   		cc.xy(1,4));
+		builder.add(this.getPanelRecordSettings(),		   		cc.xy(1,1));
+		builder.add(this.getPanelQuickRecordSettings(),	   		cc.xy(1,3));
+		builder.add(this.getPanelServerRecordSettings(),  		cc.xy(1,5));
+		builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1,6));
+		builder.add(this.getPanelEngineSettings(),		   		cc.xy(1,8));
     }
 	    	
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref, 5, pref, 10, pref:grow, pref:grow, 5, pref",	 		//columns 
-			  "pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow");		//rows
+					"pref, 10, pref:grow, 5, pref",	 		//columns 
+			  		"pref, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),		cc.xywh	(1, 1, 8, 1));
-			builder.add(this.getCbStartStreamingServer(),										cc.xywh	(1, 2, 5, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  		cc.xywh	(6, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
-			builder.add(this.getTfServerPort(),														cc.xy	(8, 2));
-			builder.add(this.getCbRecordAllPids(),													cc.xy	(1, 3));
-			builder.add(this.getCbStartPX(),															cc.xywh	(1, 5, 5, 1));
-			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 6));
-			builder.add(this.getJTextFieldRecordSavePath(),									cc.xywh	(4, 6, 3, 1));
-			builder.add(this.getJButtonRecordPathFileChooser(),								cc.xy	(8, 6));
+			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),		cc.xywh	(1, 1, 5, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 2));
+			builder.add(this.getJTextFieldRecordSavePath(),									cc.xy	(3, 2));
+			builder.add(this.getJButtonRecordPathFileChooser(),								cc.xy	(5, 2));
+			builder.add(this.getCbStartPX(),															cc.xywh	(1, 3, 3, 1));
 		}
 		return panelRecordSettings;
+	}
+	
+	private JPanel getPanelServerRecordSettings() {
+		if (panelServerRecordSettings == null) {
+			panelServerRecordSettings = new JPanel();
+			FormLayout layout = new FormLayout(
+					  "pref, 10,  pref:grow, 5, pref",	 		//columns 
+			  "pref:grow, pref:grow");		//rows
+			PanelBuilder builder = new PanelBuilder(panelServerRecordSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator(ControlMain.getProperty("label_serverRecordSettings"),		cc.xyw	(1, 1, 5));
+			builder.add(this.getCbStartStreamingServer(),										cc.xyw	(1, 2, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  		cc.xyw	(3, 2, 1, CellConstraints.RIGHT, CellConstraints.FILL));
+			builder.add(this.getTfServerPort(),														cc.xy	(5, 2));
+		}
+		return panelServerRecordSettings;
+	}
+	
+	private JPanel getPanelQuickRecordSettings() {
+		if (panelQuickRecordSettings == null) {
+			panelQuickRecordSettings = new JPanel();
+			FormLayout layout = new FormLayout(
+					  "pref:grow",	 		//columns 
+			  "pref, pref");		//rows
+			PanelBuilder builder = new PanelBuilder(panelQuickRecordSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator(ControlMain.getProperty("label_quickRecordSettings"),		cc.xywh	(1, 1, 1, 1));
+			builder.add(this.getCbRecordAllPids(),													cc.xy	(1, 2));
+		}
+		return panelQuickRecordSettings;
 	}
   
 	private JPanel getPanelEngineSettings() {
