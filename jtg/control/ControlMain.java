@@ -21,7 +21,7 @@ import service.SerXMLConverter;
 import service.SerXMLHandling;
 
 /**
- * @author AlexG
+ * @author Alexander Geist
  *
  *Startklasse, hier wird die Anwendung initialisiert und gestartet
  */
@@ -29,18 +29,22 @@ public class ControlMain {
 	
 	GuiMainView view;
 	ControlMain control;
-	static Logger logger;
 	static BOSettings settings;
 	static Document settingsDocument;
 	static SerBoxControl box;
 	static int CurrentBox=0;
 	
+	static Logger mainLogger;
+	static SerLogAppender logAppender;
+	
 	public static void main( String args[] ) {
 		ControlMain control = new ControlMain();
-		control.init();
 		control.setView(new GuiMainView(control));
 		control.startLogger();
-		getLogger().info("Anwendung gestartet");
+		getLogAppender().setView(control.getView());
+		control.init();
+		control.initializeTabControls();
+		getMainLogger().info("Anwendung gestartet");
 	};
 	
 	private void init() {
@@ -48,20 +52,33 @@ public class ControlMain {
 		this.readSettings();
 		//Aufbereitung des Settings-XML-Dokuments
 		setSettings((SerXMLConverter.buildSettings(getSettingsDocument())));
+//		detect the type of the box-image
+		mainLogger.info("Searching Box-Image");
 		this.detectImage();
+		mainLogger.info(getBox().getName()+"-Access loaded");
 	}
 	
-	private void startLogger() {
+	/**
+	 * Initialisierung der Controls,
+	 * Anzeige der ermittelten Daten
+	 */
+	private void initializeTabControls() {
+		this.getView().getTabSettings().getControl().initialize();
+		this.getView().getTabProgramm().getControl().initialize();
+
+	}
+	
+	public void startLogger() {
 		PatternLayout layout = new PatternLayout();
-		//http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html
-		layout.setConversionPattern("%d{HH:mm:ss,SSS} %m%n");
 		
-		logger = Logger.getLogger("Logging");
+		//http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html
+		layout.setConversionPattern("%d{HH:mm:ss} %-5p %c - %m%n");
+		
+		mainLogger = Logger.getLogger("ControlMain");
 		SerLogAppender logApp;
 		try {
-			logApp = new SerLogAppender(layout);
-			logApp.setView(this.getView());
-			BasicConfigurator.configure(logApp);
+			setLogAppender(new SerLogAppender(layout));
+			BasicConfigurator.configure(getLogAppender());
 		} catch (IOException e) {}
 	}
 	
@@ -89,8 +106,10 @@ public class ControlMain {
 				File pathToXMLFile = new File("settings.xml").getAbsoluteFile();
 				if (pathToXMLFile.exists()) {
 					settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
+					mainLogger.info("Settings found");
 				} else {
 					settingsDocument = SerXMLHandling.buildEmptyXMLFile(pathToXMLFile);
+					mainLogger.info("Settings not found, created empty document");
 				}
 		} catch (Exception ex) { SerAlertDialog.alert("Fehler beim Zugriff auf die settings.xml Datei", this.getView());}
 	}
@@ -185,13 +204,28 @@ public class ControlMain {
 	/**
 	 * @return Returns the logger.
 	 */
-	public static Logger getLogger() {
-		return logger;
+	public static Logger getMainLogger() {
+		return mainLogger;
 	}
 	/**
 	 * @param logger The logger to set.
 	 */
-	public static void setLogger(Logger logger) {
-		ControlMain.logger = logger;
+	public static void setMainLogger(Logger logger) {
+		ControlMain.mainLogger = logger;
 	}
+	/**
+	 * @return SerLogAppender
+	 */
+	public static SerLogAppender getLogAppender() {
+		return logAppender;
+	}
+
+	/**
+	 * Sets the logAppender.
+	 * @param logAppender The logAppender to set
+	 */
+	public static void setLogAppender(SerLogAppender logAppender) {
+		ControlMain.logAppender = logAppender;
+	}
+
 }
