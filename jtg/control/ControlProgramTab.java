@@ -24,6 +24,7 @@ import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOSender;
+import model.BOTimer;
 import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
 import presentation.GuiSenderTableModel;
@@ -58,7 +59,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		} catch (IOException e) {			
-			SerAlertDialog.alert(ControlMain.getProperty("no_connect"), this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 	
@@ -79,12 +80,24 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action == "Aufnahme") {
-			Logger.getLogger("ControlProgrammTab").info("bla bla");
+			try {
+				ArrayList list = ControlMain.getBoxAccess().getTimer();
+				for (int i=0; i<list.size(); i++) { 	
+					BOTimer timer = (BOTimer)list.get(i);
+					System.out.println(timer.getStartTime());
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if (action == "Box Reboot"){
 			try{
 				this.getBoxAccess().shutdownBox();
 			}catch (IOException ex){}
+		}
+		if (action == "add to timer"){
+			this.actionAddToTimer();
 		}
 	}
 	/**
@@ -108,13 +121,18 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				String eventId = (String)this.getMainView().getTabProgramm().sorter.getValueAt(table.getSelectedRow(), 0);
 				this.setSelectedEpg(eventId); 
 				if (me.getClickCount()==2) {
-					//TODO add to TimerList
+					BOTimer timer = this.buildTimer(this.getSelectedEpg());
+					if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
+						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+this.getSelectedEpg().getText());
+					} else {
+						Logger.getLogger("ControlProgramTab").error(this.getSelectedEpg().getText());
+					}
 				}
 			}
 		} catch (ConnectException e) {
-			SerAlertDialog.alert("Not connected to box", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		} catch (IOException e) {
-			SerAlertDialog.alert("Not connected to box", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 	
@@ -183,7 +201,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.getSenderTableModel().fireTableDataChanged();
 			}
 		} catch (IOException e) {
-			SerAlertDialog.alert("Fehler beim Lesen des EPG", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 	/**
@@ -196,7 +214,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.getJTextAreaEPG().setText(detail.getText());
 			this.getJTextAreaEPG().setCaretPosition(0);
 		} catch (IOException e) {
-			SerAlertDialog.alert("Fehler beim Leser der Epg-Details", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 	/**
@@ -239,7 +257,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			try {
 				selectedSender.readEpg();
 			} catch (IOException e) {
-				SerAlertDialog.alert("Fehler beim Lesen des EPG", this.getMainView());
+				SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 			}
 		}
 		this.reInitEpg();
@@ -271,6 +289,44 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				break;
 			}
 		}
+	}
+	
+	private void actionAddToTimer() {
+		ArrayList list = this.getEpgTableModel().getEpgList();
+		int[] rows = this.getMainView().getTabProgramm().getJTableEPG().getSelectedRows(); //Selektierter EPG´s
+		
+//		Schleife über die selektierten epg-Zeilen
+		for (int i=0; i<rows.length; i++) { 	
+			String eventId = (String)this.getMainView().getTabProgramm().sorter.getValueAt(rows[i], 0);
+			
+//			Schleife über die EPG-Liste um das passende EPG zur epg-event-id zu ermitteln
+			for (int i2 = 0; i2<list.size(); i2++) {
+				BOEpg epg = (BOEpg)list.get(i2);
+				if (epg.getEventId().equals(eventId)) {
+					BOTimer timer = this.buildTimer(epg);
+					try {
+						if (ControlMain.getBoxAccess().setTimer("new", timer).equals("ok")) {
+							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+epg.getText());
+						} else {
+							Logger.getLogger("ControlProgramTab").error(epg.getText());
+						}
+					} catch (IOException e) {
+						SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+					}
+				}
+			}
+		}
+	}
+		
+	private BOTimer buildTimer(BOEpg epg) {
+		BOTimer timer = new BOTimer();
+		timer.setChannelId(this.getSelectedSender().getChanId());
+		timer.setAnnounceTime(epg.getStartTime()); //Vorwarnzeit
+		timer.setStartTime(epg.getStartTime()); //TODO -1 Minute??
+		timer.setEventRepeat("0");
+		timer.setStopTime(epg.getEndTime());
+		timer.setEventType("0");
+		return timer;
 	}
 	/**
 	 * @return Returns the pids.
@@ -330,6 +386,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	private JTextArea getJTextAreaEPG() {
 		return this.getMainView().getTabProgramm().getJTextAreaEPG();
+	}
+	
+	private JTable getJTableEPG() {
+		return this.getMainView().getTabProgramm().getJTableEPG();
 	}
 	/**
 	 * @return Returns the selectedBox.
