@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
- * Klasse referenziert die Settings Settings werden beim Start gelesen und beim
- * Beenden gespeichert Sind keine Änderungen an den Settings vorgenommen worden,
- * werden diese nicht gespeichert Werden settings geaendert muss die Variable
- * "settingsChanged" auf true gesetzt werden. Dies geschieht in den
- * Setter-Methoden der einzelnen Settings-Optionen
+ * Klasse referenziert die Settings Settings werden beim Start gelesen und beim Beenden gespeichert Sind keine Änderungen an den Settings
+ * vorgenommen worden, werden diese nicht gespeichert Werden settings geaendert muss die Variable "settingsChanged" auf true gesetzt werden.
+ * Dies geschieht in den Setter-Methoden der einzelnen Settings-Optionen
  */
 public class BOSettings {
 
@@ -43,7 +41,7 @@ public class BOSettings {
 	public boolean startPX;
 	public boolean recordAllPids;
 	public boolean ac3ReplaceStereo;
-	public String savePath;
+	public String savePath = "";
 	public String udrecPath;
 	public String vlcPath;
 	public String projectXPath;
@@ -59,15 +57,12 @@ public class BOSettings {
 	public boolean storeLogAfterRecord;
 	public boolean recordVtxt;
 	public boolean startVlcAtStart;
-	
+
 	// Movieguide Settings
 	public ArrayList mgSelectedChannels;
 	public int mgLoadType;
 	public int mgDefault;
 	public boolean mgStoreOriginal;
-	
-	
-	
 
 	public void removeBox(int number) {
 		setSettingsChanged(true);
@@ -228,8 +223,7 @@ public class BOSettings {
 	 *            The streamType to set
 	 */
 	public void setJgrabberStreamType(String streamType) {
-		if (this.jgrabberStreamType == null
-				|| !this.jgrabberStreamType.equals(streamType)) {
+		if (this.jgrabberStreamType == null || !this.jgrabberStreamType.equals(streamType)) {
 			setSettingsChanged(true);
 			this.jgrabberStreamType = streamType;
 		}
@@ -301,8 +295,7 @@ public class BOSettings {
 	 *            The jUdrecStreamType to set.
 	 */
 	public void setUdrecStreamType(String streamType) {
-		if (this.udrecStreamType == null
-				|| !this.udrecStreamType.equals(streamType)) {
+		if (this.udrecStreamType == null || !this.udrecStreamType.equals(streamType)) {
 			setSettingsChanged(true);
 			this.udrecStreamType = streamType;
 		}
@@ -364,17 +357,14 @@ public class BOSettings {
 	}
 
 	/**
-	 * if more Options available, return the standard-option if no
-	 * standard-option declared, return 1st Option
+	 * if more Options available, return the standard-option if no standard-option declared, return 1st Option
 	 */
 	public BOPlaybackOption getStandardPlaybackOption() {
-		if (this.getPlaybackOptions() == null
-				|| this.getPlaybackOptions().size() == 0) {
+		if (this.getPlaybackOptions() == null || this.getPlaybackOptions().size() == 0) {
 			return null;
 		}
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
-			BOPlaybackOption option = (BOPlaybackOption) this
-					.getPlaybackOptions().get(i);
+			BOPlaybackOption option = (BOPlaybackOption) this.getPlaybackOptions().get(i);
 			if (option.isStandard().booleanValue()) {
 				return option;
 			}
@@ -385,16 +375,14 @@ public class BOSettings {
 	public Object[] getPlaybackOptionNames() {
 		String[] names = new String[this.getPlaybackOptions().size()];
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
-			names[i] = ((BOPlaybackOption) this.getPlaybackOptions().get(i))
-					.getName();
+			names[i] = ((BOPlaybackOption) this.getPlaybackOptions().get(i)).getName();
 		}
 		return names;
 	}
 
 	public BOPlaybackOption getPlaybackOption(String searchName) {
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
-			BOPlaybackOption option = (BOPlaybackOption) this
-					.getPlaybackOptions().get(i);
+			BOPlaybackOption option = (BOPlaybackOption) this.getPlaybackOptions().get(i);
 			if (option.getName().equals(searchName)) {
 				return option;
 			}
@@ -465,8 +453,7 @@ public class BOSettings {
 	 *            The recordTimeAfter to set.
 	 */
 	public void setRecordTimeAfter(String recordTimeAfter) {
-		if (this.recordTimeAfter == null
-				|| !this.recordTimeAfter.equals(recordTimeAfter)) {
+		if (this.recordTimeAfter == null || !this.recordTimeAfter.equals(recordTimeAfter)) {
 			setSettingsChanged(true);
 			this.recordTimeAfter = recordTimeAfter;
 		}
@@ -482,8 +469,7 @@ public class BOSettings {
 	 *            The recordTimeBefore to set.
 	 */
 	public void setRecordTimeBefore(String recordTimeBefore) {
-		if (this.recordTimeBefore == null
-				|| !this.recordTimeBefore.equals(recordTimeBefore)) {
+		if (this.recordTimeBefore == null || !this.recordTimeBefore.equals(recordTimeBefore)) {
 			setSettingsChanged(true);
 			this.recordTimeBefore = recordTimeBefore;
 		}
@@ -518,8 +504,7 @@ public class BOSettings {
 	 *            The udrecOptions to set.
 	 */
 	public void setUdrecOptions(String udrecOptions) {
-		if (this.udrecOptions == null
-				|| !this.udrecOptions.equals(udrecOptions)) {
+		if (this.udrecOptions == null || !this.udrecOptions.equals(udrecOptions)) {
 			setSettingsChanged(true);
 			this.udrecOptions = udrecOptions;
 		}
@@ -540,7 +525,8 @@ public class BOSettings {
 		return projectXPath;
 	}
 	/**
-	 * @param projectXPath The projectXPath to set.
+	 * @param projectXPath
+	 *            The projectXPath to set.
 	 */
 	public void setProjectXPath(String projectXPath) {
 		if (this.projectXPath == null || !this.projectXPath.equals(projectXPath)) {
@@ -552,84 +538,107 @@ public class BOSettings {
 		return storeEPG;
 	}
 	public void setStoreEPG(boolean storeEPG) {
-		this.storeEPG = storeEPG;
+		if (this.storeEPG != storeEPG) {
+			setSettingsChanged(true);
+			this.storeEPG = storeEPG;
+		}
+
 	}
 	public boolean isStoreLogAfterRecord() {
 		return storeLogAfterRecord;
 	}
 	public void setStoreLogAfterRecord(boolean storeLogAfterRecord) {
-		this.storeLogAfterRecord = storeLogAfterRecord;
+		if (this.storeLogAfterRecord != storeLogAfterRecord) {
+			setSettingsChanged(true);
+			this.storeLogAfterRecord = storeLogAfterRecord;
+		}
+
 	}
 	public int getMgDefault() {
 		return mgDefault;
 	}
 	public void setMgDefault(int mgDefault) {
-		this.mgDefault = mgDefault;
+		if (this.mgDefault != mgDefault) {
+			setSettingsChanged(true);
+			this.mgDefault = mgDefault;
+		}
+
 	}
 	public int getMgLoadType() {
 		return mgLoadType;
 	}
 	public void setMgLoadType(int mgLoadType) {
-		this.mgLoadType = mgLoadType;
+		if (this.mgLoadType != mgLoadType) {
+			setSettingsChanged(true);
+			this.mgLoadType = mgLoadType;
+		}
+
 	}
 	public ArrayList getMgSelectedChannels() {
 		return mgSelectedChannels;
 	}
 	public void setMgSelectedChannels(ArrayList mgSelectedChannels) {
-		this.mgSelectedChannels = mgSelectedChannels;
+		if (mgSelectedChannels != null && !mgSelectedChannels.equals(this.mgSelectedChannels)) {
+			setSettingsChanged(true);
+			this.mgSelectedChannels = mgSelectedChannels;
+		}
+
 	}
 	public boolean isMgStoreOriginal() {
 		return mgStoreOriginal;
 	}
 	public void setMgStoreOriginal(boolean mgStoreOriginal) {
-	    if (this.mgStoreOriginal != mgStoreOriginal) {
-    			setSettingsChanged(true);
-    			this.mgStoreOriginal = mgStoreOriginal;
-    		}
+		if (this.mgStoreOriginal != mgStoreOriginal) {
+			setSettingsChanged(true);
+			this.mgStoreOriginal = mgStoreOriginal;
+		}
 	}
-    /**
-     * @return Returns the recordVtxt.
-     */
-    public boolean isRecordVtxt() {
-        return recordVtxt;
-    }
-    /**
-     * @param recordVtxt The recordVtxt to set.
-     */
-    public void setRecordVtxt(boolean recordVtxt) {
-        if (this.recordVtxt != recordVtxt) {
-      			setSettingsChanged(true);
-      			this.recordVtxt = recordVtxt;
-      		}
-    }
-    /**
-     * @return Returns the startVlcAtStart.
-     */
-    public boolean isStartVlcAtStart() {
-        return startVlcAtStart;
-    }
-    /**
-     * @param startVlcAtStart The startVlcAtStart to set.
-     */
-    public void setStartVlcAtStart(boolean startVlcAtStart) {
-        if (this.startVlcAtStart != startVlcAtStart) {
-      			setSettingsChanged(true);
-      			this.startVlcAtStart = startVlcAtStart;
-      		}
-    }
-    /**
-     * @return Returns the vlcPath.
-     */
-    public String getVlcPath() {
-        return vlcPath;
-    }
-    /**
-     * @param vlcPath The vlcPath to set.
-     */
-    public void setVlcPath(String vlcPath) {
-        if (this.vlcPath == null || !this.vlcPath.equals(vlcPath)) {
-      			setSettingsChanged(true);
-      			this.vlcPath = vlcPath;
-      		}
-    }
+	/**
+	 * @return Returns the recordVtxt.
+	 */
+	public boolean isRecordVtxt() {
+		return recordVtxt;
+	}
+	/**
+	 * @param recordVtxt
+	 *            The recordVtxt to set.
+	 */
+	public void setRecordVtxt(boolean recordVtxt) {
+		if (this.recordVtxt != recordVtxt) {
+			setSettingsChanged(true);
+			this.recordVtxt = recordVtxt;
+		}
+	}
+	/**
+	 * @return Returns the startVlcAtStart.
+	 */
+	public boolean isStartVlcAtStart() {
+		return startVlcAtStart;
+	}
+	/**
+	 * @param startVlcAtStart
+	 *            The startVlcAtStart to set.
+	 */
+	public void setStartVlcAtStart(boolean startVlcAtStart) {
+		if (this.startVlcAtStart != startVlcAtStart) {
+			setSettingsChanged(true);
+			this.startVlcAtStart = startVlcAtStart;
+		}
+	}
+	/**
+	 * @return Returns the vlcPath.
+	 */
+	public String getVlcPath() {
+		return vlcPath;
+	}
+	/**
+	 * @param vlcPath
+	 *            The vlcPath to set.
+	 */
+	public void setVlcPath(String vlcPath) {
+		if (this.vlcPath == null || !this.vlcPath.equals(vlcPath)) {
+			setSettingsChanged(true);
+			this.vlcPath = vlcPath;
+		}
+	}
 }
