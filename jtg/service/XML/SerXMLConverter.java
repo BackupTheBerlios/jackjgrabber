@@ -77,6 +77,8 @@ public class SerXMLConverter {
 			pidList.add(pid);
 		}
 		recordArgs.getPids().setAPids(pidList);
+		
+		recordArgs.loadLocalTimer();
 		return recordArgs;
 	}
 }
