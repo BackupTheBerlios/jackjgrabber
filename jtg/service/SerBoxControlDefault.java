@@ -59,4 +59,16 @@ public class SerBoxControlDefault extends SerBoxControl {
 	public BOEpgDetails getEpgDetail(BOEpg epg) throws IOException {
 		throw new IOException();
 	}
+	public String sendMessage(String message) throws IOException {
+        throw new IOException();
+}
+
+	public String shutdownBox() throws IOException {
+        throw new IOException();
+	}
+
+	public String standbyBox(String modus) throws IOException {
+        throw new IOException();
+	}        
+
 }
