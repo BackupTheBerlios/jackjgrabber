@@ -229,7 +229,7 @@ public class GuiTabProgramm extends GuiTab {
 			java.awt.GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			jPanelChannel = new JPanel();
 			jPanelChannel.setLayout(new GridBagLayout());
-			jPanelChannel.setPreferredSize(new java.awt.Dimension(250,245));
+			jPanelChannel.setPreferredSize(new java.awt.Dimension(250,263));
 			jPanelChannel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Sender, Doppelklick Zapping", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			gridBagConstraints16.gridx = 0;
 			gridBagConstraints16.gridy = 3;
@@ -257,7 +257,7 @@ public class GuiTabProgramm extends GuiTab {
 			java.awt.GridBagConstraints gridBagConstraints71 = new GridBagConstraints();
 			jPanelEPGTable = new JPanel();
 			jPanelEPGTable.setLayout(new GridBagLayout());
-			jPanelEPGTable.setPreferredSize(new java.awt.Dimension(500,245));
+			jPanelEPGTable.setPreferredSize(new java.awt.Dimension(505,245));
 			jPanelEPGTable.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Programm, Doppelklick zu Timer", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			gridBagConstraints71.gridx = 0;
 			gridBagConstraints71.gridy = 0;
