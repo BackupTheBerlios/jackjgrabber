@@ -33,7 +33,7 @@ public class GuiTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getControl().getTimerList().get(rowIndex);
 		if (columnIndex == 0) {
-			return timer.getChannelId();
+			return timer.getSenderName();
 		} if (columnIndex == 1) {
 			return timer.getStartDate();
 		} if (columnIndex == 2) {
@@ -41,7 +41,7 @@ public class GuiTimerTableModel extends AbstractTableModel
 		} if (columnIndex == 3) {
 			return timer.getStopTime();
 		} else {
-			return timer.getEventType(); //FIXME: Sendungsnamen auslesen , noch Dummywert
+			return timer.getDescription(); 
 		}
 	}
 
