@@ -28,6 +28,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
@@ -56,6 +57,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	GuiTabMovieGuide tab;
 	BOMovieGuide boMovieGuide4Timer;
 	boolean initialized = false;
+	boolean searchAbHeute = true;
 
 	Hashtable titelList;
 	Hashtable controlMap;
@@ -84,13 +86,19 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			if(this.getTitelMap()==null){				
 				setTitelMap();
 			}
-		}catch (Exception ex){}	
+			this.getTab().getComboBoxGenre().setSelectedIndex(0);
+			this.getTab().getComboBoxSender().setSelectedIndex(0);
+			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
+			this.getTab().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet
+		}catch (Exception ex){System.out.println(ex);}	
+		/*
 		if(this.getTitelMap()!=null){
 			this.getTab().getComboBoxGenre().setSelectedIndex(0);
 			this.getTab().getComboBoxSender().setSelectedIndex(0);
 			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
 			this.getTab().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet
 		}
+		*/
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -98,7 +106,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (action == "download") {
 			try{
 				new SerMovieGuide2Xml(null, this.getMainView()).start();
-			}catch (Exception ex){}			
+			}catch (Exception ex){System.out.println(ex);}			
 		}
 		if (action == "neuEinlesen") {
 			//
@@ -123,21 +131,28 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	public void itemStateChanged (ItemEvent event) {
 		String comp = event.getSource().getClass().getName();		
-		JComboBox comboBox = (JComboBox)event.getSource();
-		if (comboBox.getName().equals("jComboBoxDatum")) {			
-			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-			reInitFilmTable(1);				
-		}	
-		if (comboBox.getName().equals("jComboBoxGenre")) {		
-			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-			reInitFilmTable(2);		
-		}
-		if (comboBox.getName().equals("jComboBoxSucheNach")) {		
-			SelectedItemJComboBoxSucheNach = (comboBox.getSelectedIndex()+2);			
-		}
-		if (comboBox.getName().equals("jComboBoxSender")) {		
-			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-			reInitFilmTable(12);		
+		if (comp.equals("javax.swing.JCheckBox")) {
+			JCheckBox checkBox = (JCheckBox)event.getSource();
+			if (checkBox.getName().equals("showAbHeute")) {
+				searchAbHeute = checkBox.isSelected();		
+			}
+		}else{	
+			JComboBox comboBox = (JComboBox)event.getSource();
+			if (comboBox.getName().equals("jComboBoxDatum")) {			
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(1);				
+			}	
+			if (comboBox.getName().equals("jComboBoxGenre")) {		
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(2);		
+			}
+			if (comboBox.getName().equals("jComboBoxSucheNach")) {		
+				SelectedItemJComboBoxSucheNach = (comboBox.getSelectedIndex()+2);			
+			}
+			if (comboBox.getName().equals("jComboBoxSender")) {		
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(12);		
+			}
 		}
 	}
 	
@@ -181,7 +196,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (tableName == "filmTable") {				
 			reInitTable(new Integer(this.getTab().mgFilmTableSorter.modelIndex(table.getSelectedRow())));			
 		}
-		if (tableName == "timerTable") {		
+		if (tableName == "timerTable") {				
+			this.getTab().getTaAudioVideo().setText("Audio: "+getBOMovieGuide4Timer().getTon().toArray()[getSelectRowTimerTable()]+" / Video: "+getBOMovieGuide4Timer().getBild().toArray()[getSelectRowTimerTable()]);
 			if(me.getClickCount()>=2){ 						
 				getTimerTableSelectToTimer();
 		 	}
@@ -192,8 +208,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		setBOMovieGuide4Timer((BOMovieGuide)getTitelMap().get(modelIndex));			
 		this.getTab().getTaEpisode().setText("Episode: "+getBOMovieGuide4Timer().getEpisode());			  		
 		this.getTab().getTfGenre().setText("Genre: "+getBOMovieGuide4Timer().getGenre());		
-		this.getTab().getTaLand().setText("Produktion: "+getBOMovieGuide4Timer().getLand()+" / "+getBOMovieGuide4Timer().getJahr()+" / Regie: "+getBOMovieGuide4Timer().getRegie());
-		this.getTab().getTaAudioVideo().setText("Audio: "+getBOMovieGuide4Timer().getTon()+" / Video: "+getBOMovieGuide4Timer().getBild());											
+		this.getTab().getTaAudioVideo().setText("Audio: / Video: ");
+		this.getTab().getTaLand().setText("Produktion: "+getBOMovieGuide4Timer().getLand()+" / "+getBOMovieGuide4Timer().getJahr()+" / Regie: "+getBOMovieGuide4Timer().getRegie());													
 		this.getTab().getTaDarsteller().setText("Darsteller: "+getBOMovieGuide4Timer().getDarsteller());
 		this.getTab().getTaDarsteller().setCaretPosition(0);
 		this.getTab().getTaBeschreibung().setText("Inhalt: "+getBOMovieGuide4Timer().getInhalt());
@@ -301,7 +317,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			String path = fc.getSelectedFile().toString();		
 			try{
 				new SerMovieGuide2Xml(path, this.getMainView()).start();
-			}catch(Exception ex){}			
+			}catch(Exception ex){System.out.println(ex);}			
 		}
 	}
 	
@@ -379,8 +395,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	    		}
     				break;
     			case 2: //genre
-    				if(bomovieguide.getGenre().indexOf(search)!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    				if(bomovieguide.getGenre().indexOf(search)!=-1){    	    		
+    	    				titelListAktuell.put(new Integer(a++),bomovieguide);    	    			
     	    		}
     				break;
     			case 3: //titel
@@ -399,14 +415,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	    		}
     				break;
     			case 6: // bild 
-    				if(bomovieguide.getBild().indexOf(search)!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				if(bomovieguide.booleanArrayTest(bomovieguide.getBild(),search.toLowerCase())){
+    					titelListAktuell.put(new Integer(a++),bomovieguide);
+    				}
     				break; 
     			case 7: // ton
-    				if(bomovieguide.getTon().toLowerCase().indexOf(search.toLowerCase())!=-1){
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
+    				if(bomovieguide.booleanArrayTest(bomovieguide.getTon(),search.toLowerCase())){
+    					titelListAktuell.put(new Integer(a++),bomovieguide);
+    				}
     				break;
     			case 8: // Prodland
     				if(bomovieguide.getLand().toLowerCase().indexOf(search.toLowerCase())!=-1){
@@ -479,6 +495,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
                      bomovieguide.setStart(entry.element("start").getStringValue());
                      bomovieguide.setDauer(entry.element("dauer").getStringValue());
                      bomovieguide.setSender(entry.element("sender").getStringValue());                             
+                     bomovieguide.setBild(entry.element("bild").getStringValue());
+                     bomovieguide.setTon(entry.element("ton").getStringValue());
                      bomovieguide.setEnde(SerFormatter.getCorrectEndTime(entry.element("start").getStringValue(),entry.element("dauer").getStringValue()));
                      titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
