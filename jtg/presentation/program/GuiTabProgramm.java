@@ -137,8 +137,6 @@ public class GuiTabProgramm extends GuiTab {
 		}
 		return jPanelSouth;
 	}
-	
-	
 
 	/**
 	 * This method initializes jPanelEpgDetails
@@ -148,15 +146,13 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelEpgDetails() {
 		if (jPanelEpgDetails == null) {
 			jPanelEpgDetails = new JPanel();
-			FormLayout layout = new FormLayout("f:d:grow, 20, pref, 5, pref", //columns
+			FormLayout layout = new FormLayout("f:d:grow", //columns
 					"pref, 5, f:d:grow"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelEpgDetails, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getJButtonBroadcastList(), cc.xy(3, 1));
-			builder.add(this.getJButtonSelectedToTimer(), cc.xy(5, 1));
 			builder.addSeparator(ControlMain.getProperty("label_epgDetails"), cc.xy(1, 1, CellConstraints.FILL, CellConstraints.TOP));
-			builder.add(this.getJScrollPaneEPGDetail(), cc.xyw(1, 3, 5));
+			builder.add(this.getJScrollPaneEPGDetail(), cc.xy(1, 3));
 		}
 		return jPanelEpgDetails;
 	}
@@ -169,13 +165,15 @@ public class GuiTabProgramm extends GuiTab {
 	private JPanel getJPanelEpg() {
 		if (jPanelEpg == null) {
 			jPanelEpg = new JPanel();
-			FormLayout layout = new FormLayout("f:d:grow", //columns
-					"f:pref, f:d:grow"); //rows
+			FormLayout layout = new FormLayout("f:d:grow, pref, 5, pref", //columns
+					"f:pref, f:d:grow, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelEpg, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_epg"), cc.xy(1, 1));
-			builder.add(this.getJScrollPaneEPG(), cc.xy(1, 2));
+			builder.addSeparator(ControlMain.getProperty("label_epg"), cc.xyw(1, 1, 4));
+			builder.add(this.getJScrollPaneEPG(), cc.xyw(1, 2, 4));
+            builder.add(this.getJButtonBroadcastList(), cc.xy(2, 4));
+            builder.add(this.getJButtonSelectedToTimer(), cc.xy(4, 4));
 		}
 		return jPanelEpg;
 	}
@@ -251,7 +249,7 @@ public class GuiTabProgramm extends GuiTab {
 			jComboBoxBoxIP.setModel(new GuiIpListComboModel());
 			jComboBoxBoxIP.addItemListener(control);
 			jComboBoxBoxIP.setRenderer(new GuiIpComboCellRenderer());
-			jComboBoxBoxIP.setPreferredSize(new Dimension(100, 22));
+			jComboBoxBoxIP.setPreferredSize(new Dimension(80, 22));
 			jComboBoxBoxIP.setEditable(false);
 			jComboBoxBoxIP.setName("ipList");
 		}
