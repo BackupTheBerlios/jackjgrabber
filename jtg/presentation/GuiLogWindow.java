@@ -21,6 +21,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -31,6 +32,8 @@ import service.SerLogAppender;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import control.ControlMain;
 
 public class GuiLogWindow extends JFrame {
     
@@ -72,6 +75,7 @@ public class GuiLogWindow extends JFrame {
 	public JTextArea getLogArea() {
 		if (logArea == null) {
 		    logArea = new JTextArea();
+		    logArea.setEditable(false);
 		    SerLogAppender.getTextAreas().add(logArea);
 		}
 		return logArea;
@@ -104,8 +108,18 @@ public class GuiLogWindow extends JFrame {
             super.setVisible(value);   
         }
     }
-    
-   public void switchVisiblity() {
-       this.setVisible(!this.isVisible());
-   }
+    public static void switchLogVisiblity() {
+        JButton switchButton = ControlMain.getControl().getView().getTabProgramm().getJButtonSwitchLog();
+        if (ControlMain.logWindow.isVisible()) {
+            switchButton.setText(ControlMain.getProperty("button_on"));
+		    ControlMain.logWindow.setVisible(false);
+		    ControlMain.logWindow.setShouldBeVisible(false);
+		} else {
+		    switchButton.setText(ControlMain.getProperty("button_off"));
+		    ControlMain.logWindow.setShouldBeVisible(true);
+		    ControlMain.logWindow.setVisible(true);
+		}
+    }
 }
+        
+
