@@ -31,21 +31,21 @@ public class SerMovieGuide2Xml {
     static Document doc;
     static Element root;
     
-    public static void buildEmptyXMLFile() throws IOException {
+    private static void buildEmptyXMLFile() throws IOException {
         doc = DocumentHelper.createDocument();
         root = doc.addElement("movieguide");
     }
     
-    public static void addElement(BOMovieGuide guide){
+    private static void addElement(BOMovieGuide guide){
         Element movie = root.addElement("entry");
         movie.addAttribute("sender",guide.getSender());
-        movie.addAttribute("Datum",guide.getDatum());
+        movie.addAttribute("datum",guide.getDatum());
         movie.addAttribute("start",guide.getStart());
         movie.addAttribute("titel",guide.getTitel());
         movie.addAttribute("episode",guide.getEpisode());
         movie.addAttribute("genre",guide.getGenre());
         movie.addAttribute("dauer",guide.getDauer());
-        movie.addAttribute("+land",guide.getLand());
+        movie.addAttribute("land",guide.getLand());
         movie.addAttribute("jahr",guide.getJahr());
         movie.addAttribute("regie",guide.getRegie());
         movie.addAttribute("bild",guide.getBild());
@@ -56,7 +56,7 @@ public class SerMovieGuide2Xml {
     
     public static void saveXMLFile(Document doc) throws IOException {
         OutputFormat format = OutputFormat.createPrettyPrint();
-        XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"),	format);
+        XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
         writer.write(doc);
         writer.close();
     }
@@ -115,7 +115,7 @@ public class SerMovieGuide2Xml {
         return value;
     }
     
-    public static boolean[] getLineCounter(String input) {
+    private static boolean[] getLineCounter(String input) {
         boolean[] value = new boolean[2];
         try {
             value[0] = false;
@@ -128,14 +128,13 @@ public class SerMovieGuide2Xml {
         return value;
     }
     
-    public static int getNumber(String input) {
+    private static int getNumber(String input) {
         int value = 0;
         try{
             value = ((Integer) htToken.get((String) input.substring(0, input.indexOf(":")))).intValue();
         } catch (Exception ex) {}
         return value;
     }
-    
     
     public static void readGuide(String datei,int quelle) throws FileNotFoundException, IOException {
         BufferedReader in = (null);
@@ -161,46 +160,47 @@ public class SerMovieGuide2Xml {
                 lineCounter = getLineCounter(input);
                 if (lineCounter[0]) {
                     out = createElement(0, input);
-                    bomovie = new BOMovieGuide();                    
+                    bomovie = new BOMovieGuide();
                     bomovie.setSender(out[0]);
                     bomovie.setDatum(out[1]);
                     bomovie.setStart(out[2]);
                 } else if (lineCounter[1]) {
                     number = getNumber(input);
-                    out = createElement(number, input);
                     switch (number) {
                         case 1:
-                            bomovie.setTitel(out[0]);
+                            bomovie.setTitel(createElement(number, input)[0]);
                             break;
                         case 2:
+                            out = createElement(number, input);
                             bomovie.setEpisode(out[0]);
                             bomovie.setGenre(out[1]);
                             bomovie.setDauer(out[2]);
                             break;
                         case 3:
+                            out = createElement(number, input);
                             bomovie.setLand(out[0]);
                             bomovie.setJahr(out[1]);
                             bomovie.setRegie(out[2]);
                             break;
                         case 4:
+                            out = createElement(number, input);
                             bomovie.setBild(out[0]);
                             bomovie.setTon(out[1]);
                         case 5:
-                            bomovie.setDarsteller(out[0]);
+                            bomovie.setDarsteller(createElement(number, input)[0]);
                             break;
                     }
-                } else if ((lineCounter[0] && lineCounter[1]) == false && (input.length() > 0)) {
+                } else if ((lineCounter[0] && lineCounter[1]) == false){
+                    if(input.length() > 0){
                         if( bomovie.getInhalt() != null){
-                            bomovie.setInhalt(bomovie.getInhalt() + input);                            
+                            bomovie.setInhalt(bomovie.getInhalt() + input);
                         }else{
-                            bomovie.setInhalt(input);                           
-                        }                                                
-                       // bomovie.toOut();                        
-                        //addElement(bomovie);
-                    }
-                else if ((lineCounter[0] && lineCounter[1]) == false && (input.length() == 0)){
-                        bomovie.toOut();                        
+                            bomovie.setInhalt(input);
+                        }
+                    }else{
+                        //bomovie.toOut();
                         addElement(bomovie);
+                    }
                 }
             }
         } catch (MalformedURLException e) {
@@ -218,7 +218,6 @@ public class SerMovieGuide2Xml {
     public static void main(String[] args) {
         try {
             readGuide("/tmp/1.txt",1);
-            
         } catch (Exception e) {
         }
     }
