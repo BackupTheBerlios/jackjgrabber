@@ -272,7 +272,7 @@ public class SerXMLConverter {
 	public static void saveAllSettings() throws IOException {
 		saveUserSettings();
 		saveBoxSettings();
-		SerXMLHandling.saveSettingsFile(new File(ControlMain.filename));
+		SerXMLHandling.saveSettingsFile(new File(ControlMain.settingsFilename));
 	}
 	/**
 	 * @param XML-Document der BOX
