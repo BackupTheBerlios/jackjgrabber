@@ -38,6 +38,7 @@ public class BOMovieGuideContainer{
 	ArrayList genreList = new ArrayList();
 	ArrayList datumList = new ArrayList();
 	ArrayList senderList = new ArrayList();
+	ArrayList announceList = new ArrayList();
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
@@ -117,7 +118,56 @@ public class BOMovieGuideContainer{
 
     	Collections.sort(getSenderList());		//alphabetisch geordnet 
         Collections.sort(getGenreList());		//alphabetisch geordnet
+        announceList = createAnnounceList();
 		return titelList.size();
+	}
+	
+	public int getAnnounceListSize(){
+		return announceList.size();
+	}
+	
+	public ArrayList getAnnounceList(){
+		return announceList;
+	}
+	
+	public void toOut(){
+		ArrayList out = getAnnounceList();
+		StringBuffer tmp = new StringBuffer();
+		int a = 0;
+		while(a <= out.size()-1){
+			BOMovieGuide bomovieguide = (BOMovieGuide)out.get(a++);
+			tmp.append(bomovieguide.getTitel());
+         	tmp.append(" ");             
+        	int c = 0;
+        	while(c <= bomovieguide.getDatum().size()-1){
+        		tmp.append(SerFormatter.getFormatGreCal((GregorianCalendar)bomovieguide.getDatum().get(c),"EEEE, dd.MMM.yy"));
+         		tmp.append(" ");
+         		tmp.append(SerFormatter.getFormatGreCal((GregorianCalendar)bomovieguide.getStart().get(c),"HH:mm"));
+         		tmp.append(" ");
+         		tmp.append(SerFormatter.getFormatGreCal((GregorianCalendar)bomovieguide.getEnde().get(c),"HH:mm"));
+         		tmp.append(" ");
+         		tmp.append(bomovieguide.getSender().get(c));
+         		c++;         		         		        
+         		System.out.println(c+" "+tmp.toString());
+         		tmp.setLength(0);
+        	}
+		}
+	}
+	private ArrayList createAnnounceList(){
+		ArrayList searchList = new ArrayList();		
+		ArrayList retVal = new ArrayList();
+		ArrayList recordList = new ArrayList();
+		recordList.add("Scarface");
+		recordList.add("September");
+		int a = 0;
+		 while(a <= recordList.size()-1){
+            searchList=(search(recordList.get(a++),3));        
+            int b = 0;
+            while (b <= searchList.size() -1){
+            	retVal.add((BOMovieGuide)searchList.get(b++));            	
+            }            
+        }		
+		return retVal;
 	}
 	
 	/**
