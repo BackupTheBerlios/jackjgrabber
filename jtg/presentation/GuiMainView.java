@@ -51,7 +51,10 @@ public class GuiMainView extends JFrame {
 	
 	private GuiMainTabPane mainTabPane = null;
 	private ControlMainView control;
-	private SysTrayMenuIcon sysTrayIcon = new SysTrayMenuIcon( "ico/jgrabber" );
+	private SysTrayMenuIcon[] sysTrayIcon = { 
+	        new SysTrayMenuIcon( "ico/jgrabber1" ),
+	        new SysTrayMenuIcon( "ico/jgrabber2" )
+	};
 	private SysTrayMenu menu;
 
 	
@@ -108,7 +111,8 @@ public class GuiMainView extends JFrame {
 		this.getContentPane().add(this.getMainTabPane());
 		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
-		    this.getSysTrayIcon().addSysTrayMenuListener( control );
+		    sysTrayIcon[0].addSysTrayMenuListener( control );
+		    sysTrayIcon[1].addSysTrayMenuListener( control );
 			createMenu();   
 		}
 	}
@@ -145,7 +149,7 @@ public class GuiMainView extends JFrame {
         itemAbout.addSysTrayMenuListener( control );
 
         // create the main menu
-        menu = new SysTrayMenu( this.getSysTrayIcon(), ControlMain.version[0] );
+        menu = new SysTrayMenu( sysTrayIcon[0], ControlMain.version[0] );
 
         // insert items
         menu.addItem( itemExit );
@@ -176,6 +180,12 @@ public class GuiMainView extends JFrame {
 	public GuiTabMovieGuide getTabMovieGuide() {
 		return this.getMainTabPane().getTabMovieGuide();
 	}
+	public void setSystrayRecordIcon() {
+	    menu.setIcon( sysTrayIcon[0] );
+	}
+	public void setSystrayDefaultIcon() {
+	    menu.setIcon( sysTrayIcon[1] );
+	}
 	/**
 	 * @return Returns the control.
 	 */
@@ -188,10 +198,4 @@ public class GuiMainView extends JFrame {
 	public void setControl(ControlMainView control) {
 		this.control = control;
 	}
-    /**
-     * @return Returns the sysTrayIcon.
-     */
-    public SysTrayMenuIcon getSysTrayIcon() {
-        return sysTrayIcon;
-    }
 }

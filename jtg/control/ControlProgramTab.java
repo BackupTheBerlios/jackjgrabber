@@ -318,6 +318,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			recordControl.stopRecord();
 		}
 		this.getMainView().getTabProgramm().stopRecordModus();
+		this.getMainView().setSystrayDefaultIcon();
 	}
 	
 	/**
@@ -328,6 +329,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.setRecordArgs(recordArgs);
 		recordControl = new RecordControl(recordArgs, this);
 		this.getMainView().getTabProgramm().startRecordModus();
+		this.getMainView().setSystrayRecordIcon();
 		recordControl.start();
 	}
 

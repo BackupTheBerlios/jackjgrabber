@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -167,15 +168,30 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 	    if( this.getView().isVisible() ) {
 	        this.getView().setVisible(false);
 	    } else {
+	    	this.getView().setState(Frame.NORMAL);
 	        this.getView().setVisible(true);    
+	        this.getView().toFront();
 	    }
 	}
 	
 	public void menuItemSelected( SysTrayMenuEvent e ) {
-        if( e.getActionCommand().equals( "exit" ) ) System.exit( 0 );
-        else if( e.getActionCommand().equals( "about" ) ) {
-            JOptionPane.showMessageDialog( this.getView(), ControlMain.version[0] );
-        }
+		while (true) {
+			if( e.getActionCommand().equals( "exit" ) ) {
+	        	System.exit( 0 );
+	        	break;
+	        }
+	        if( e.getActionCommand().equals( "about" ) ) {
+	            JOptionPane.showMessageDialog( this.getView(), ControlMain.version[0] );
+	            break;
+	        }
+	        if( e.getActionCommand().equals( "open" ) ) {
+	        	this.getView().setState(Frame.NORMAL);
+		        this.getView().setVisible(true);    
+		        this.getView().toFront();
+		        break;
+	        }	
+	        break;
+		}
     }
 		
 	/**
