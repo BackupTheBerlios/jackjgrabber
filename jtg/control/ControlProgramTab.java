@@ -123,6 +123,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		this.getEpgTableModel().fireTableDataChanged();
 		this.getMainView().getTabProgramm().getBoquetsComboModel().setSelectedItem(null);
 		this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
+		//Timer-Tab refreshen, da evtl anderes Box-Image
+		this.getMainView().getMainTabPane().reInitTimerPanel();
 		this.run();
 	}
 
@@ -511,8 +513,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			newSelectedBox.setSelected(true);
 			ControlMain.detectImage();
 			this.reInitialize();
-			//          Bei IP-Wechsel refreshen, da evtl anderes Box-Image
-			this.getMainView().getMainTabPane().reInitTimerPanel();
 		}
 	}
 
