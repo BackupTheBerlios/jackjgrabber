@@ -77,6 +77,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	RecordControl recordControl;
 	SerStreamingServer streamingServerThread;
 	public static boolean tvMode;
+	boolean firstStart = true;
 	
 	public ControlProgramTab(GuiMainView view) {
 		this.setMainView(view);		
@@ -95,6 +96,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.selectRunningSender();
 			this.getMainView().getTabProgramm().setConnectModus();
 			this.reInitStreamingServer();
+			this.firstStart=false;
 		} catch (IOException e) {
 //			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -105,6 +107,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * und initialisiere diesen neu
 	 */
 	public void reInitialize() {
+		firstStart = true;
 		this.setBouquetList(new ArrayList());
 		this.setSelectedBouquet(null);
 		this.getSenderTableModel().fireTableDataChanged();
@@ -469,7 +472,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		if (this.getBouquetList().size()>0) {
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(bouquetsComboBox.getSelectedIndex()));
 			this.reInitSender();
-			this.showFirstSender();
+			if (!this.firstStart) {
+				this.showFirstSender(); //nur dann anzeigen, wenn bouquets nach dem ersten start gewechselt werden	
+			}
 		}
 	}
 	
