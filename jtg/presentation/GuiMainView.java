@@ -17,21 +17,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
-import org.apache.log4j.*;
+import service.SerGUIUtils;
+import snoozesoft.systray4j.SysTrayMenu;
+import snoozesoft.systray4j.SysTrayMenuIcon;
+import snoozesoft.systray4j.SysTrayMenuItem;
 
-import projectX.common.*;
-import service.*;
-import snoozesoft.systray4j.*;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
+import com.jgoodies.plaf.plastic.PlasticTheme;
 
-import com.jgoodies.plaf.plastic.*;
-
-import control.*;
+import control.ControlMain;
+import control.ControlMainView;
 /*
  * Haupt-Gui, hier werden die einzelnen Tabs verwaltet
  */
@@ -41,8 +47,8 @@ public class GuiMainView extends JFrame {
 	private GuiMainTabPane mainTabPane = null;
 	private ControlMainView control;
 	private SysTrayMenuIcon[] sysTrayIcon = { 
-	        new SysTrayMenuIcon( "ico/grabber1" ),
-	        new SysTrayMenuIcon( "ico/grabber2" )
+	        new SysTrayMenuIcon(ClassLoader.getSystemResource( "ico/grabber1") ),
+	        new SysTrayMenuIcon(ClassLoader.getSystemResource( "ico/grabber2") )
 	};
 	private SysTrayMenu menu;
 
