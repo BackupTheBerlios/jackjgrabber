@@ -278,7 +278,7 @@ public class GuiTabSettings extends JPanel {
 	private JButton getJButtonLoeschen() {
 		if (jButtonLoeschen == null) {
 			jButtonLoeschen = new JButton();
-			jButtonLoeschen.setText("Lï¿½schen");
+			jButtonLoeschen.setText("Löschen");
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);
 			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
@@ -307,9 +307,9 @@ public class GuiTabSettings extends JPanel {
 			modelBoxTable = new GuiBoxSettingsTableModel(control);
 			jTableBoxSettings = new JTable(modelBoxTable);
 			jTableBoxSettings.setName("BoxSettings");
-			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(120);
+			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(140);
 			jTableBoxSettings.getColumnModel().getColumn(1).setPreferredWidth(100);
-			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(100);
+			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(80);
 			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer( new GuiBoxTableCellRenderer(control));
 		}
 		return jTableBoxSettings;
