@@ -46,15 +46,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import java.util.Arrays.*;
-import java.beans.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.tree.*;
-import javax.swing.filechooser.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
+import presentation.GuiMainView;
 
-import presentation.GuiTabProjectX;
 
 
 import java.awt.dnd.*;
@@ -4460,11 +4455,9 @@ public static void loadIDs(String nIDs) {  //DM28112003 081.5++
 	return;
 }
 
-public static JPanel start(GuiTabProjectX tab, String[] args) {
+public static JPanel start(GuiMainView mainView, String[] args) {
 
-	guiTabProjectX = tab;
-	X panel = new X();
-
+	X panel = new X();	
 	comchange=false;
 
 	boolean iniLoaded=false;
@@ -4568,23 +4561,6 @@ public static JPanel start(GuiTabProjectX tab, String[] args) {
 			doitButton.doClick();
 	}
 
-
-	/***** loading GUI ******/
-
-	guiTabProjectX.addComponentListener(new ComponentListener() {
-		public void componentHidden(ComponentEvent e) {} 
-		public void componentMoved(ComponentEvent e) {} 
-		public void componentShown(ComponentEvent e) {} 
-		public void componentResized(ComponentEvent e) {
-			Component c = e.getComponent();
-			Dimension preferred = new Dimension(714, 460), current = c.getSize();  //DM26032004 081.6 int18 changed
-			double newHeight = (preferred.getHeight() > current.getHeight()) ? preferred.getHeight() : current.getHeight();
-			double newWidth = (preferred.getWidth() > current.getWidth()) ? preferred.getWidth() : current.getWidth();
-			c.setSize(new Dimension((int)newWidth, (int)newHeight));
-		}
-	});
-
-	guiTabProjectX.add(panel);
 	if (!iniLoaded)
 		panel.iniload();
 

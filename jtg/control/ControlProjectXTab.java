@@ -17,6 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import javax.swing.JPanel;
+
 import presentation.GuiMainView;
 import projectX.X;
 
@@ -29,12 +31,13 @@ public class ControlProjectXTab extends ControlTab {
 		this.setMainView(view);
 		this.setPxArgs(args);
 	}
-	
+
 	/**
 	 * Start ProjectX 
 	 */
 	public void initialize() {
-		X.start(this.getMainView().getTabProjectX(), this.getPxArgs());
+		JPanel pxPanel = X.start(this.getMainView(), this.getPxArgs());
+		this.getMainView().getMainTabPane().setTabProjectX(pxPanel);
 	}
 	/**
 	 * @return Returns the mainView.

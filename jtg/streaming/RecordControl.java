@@ -21,12 +21,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
-import presentation.GuiTabProgramm;
-import presentation.GuiTabProjectX;
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
-import model.BOEpg;
 import model.BORecordArgs;
 
 
@@ -61,9 +58,6 @@ public class RecordControl extends Thread
 	private void waitForStop() {
 		boolean running = true;
 		while (running) {
-			long a = new Date().getTime(); 
-			long b = stopTime.getTime();
-			long c = a-b;
 			if (new Date().getTime()-stopTime.getTime()>0) {
 				running=false;
 			}
@@ -82,7 +76,6 @@ public class RecordControl extends Thread
 	
 	public void startProjectX() {
 		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), this.buildPXcommand());
-		controlProgramTab.getMainView().getMainTabPane().setTabProjectX( new GuiTabProjectX(control));
 		control.initialize();
 	}
 	
