@@ -180,17 +180,15 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	public String[] getValidThemes() {
 	    if (getSettings().isSkinLookAndFeel()) {
 	        return ControlMainView.skinLFThemes;
-	    } else {
-	        return ControlMainView.themes;
-	    }
+	    } 
+	    return ControlMainView.themes;
 	}
 	
 	public String getValidTheme() {
 	    if (getSettings().isSkinLookAndFeel()) {
 	        return ControlMain.getSettingsMain().getSkinLFTheme();
-	    } else {
-	        return ControlMain.getSettingsMain().getPlasticTheme();
 	    }
+	    return ControlMain.getSettingsMain().getPlasticTheme();
 	}
 
 	private void actionStartVlc() {

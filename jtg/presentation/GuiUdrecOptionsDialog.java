@@ -215,7 +215,7 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
     	ArrayList ind = new ArrayList();
     	for (int i=0; i<allOptions.length; i++) {
     		for (int i2=0; i2<this.getUdrecOptions().getOptionList().length; i2++) {
-    		    String option = (String)this.getUdrecOptions().getOptionList()[i2];
+    		    String option = this.getUdrecOptions().getOptionList()[i2];
     		    if (option.indexOf(allOptions[i])>-1) {
     		        ind.add(new Integer(i));
     		    }

@@ -80,7 +80,7 @@ public class BOSender {
 	/**
 	 * @param epg The epg to set.
 	 */
-	public void setEpg(ArrayList value) throws IOException {
+	public void setEpg(ArrayList value) {
 		epg=value;
 	}
 	

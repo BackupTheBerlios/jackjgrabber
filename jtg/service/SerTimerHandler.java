@@ -29,7 +29,6 @@ import model.BOUdrecOptions;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -102,7 +101,9 @@ public class SerTimerHandler {
 		}
         try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());
+        }
     }
     
     public static void deleteLocalTimer(BOLocalTimer timer) {
@@ -191,10 +192,8 @@ public class SerTimerHandler {
         Node timerNode = findTimerNode(timer);
         if (timerNode != null) {
             return buildLocalTimer(timerNode, new BOLocalTimer(timer));    
-        } else {
-            return BOLocalTimer.getDefaultLocalTimer(timer);
-        }
-        
+        } 
+        return BOLocalTimer.getDefaultLocalTimer(timer);      
     }
     
     /**
@@ -245,7 +244,7 @@ public class SerTimerHandler {
      */
     private static Document getTimerDocument() {
         try {
-            if (timerDocument==null) {;
+            if (timerDocument==null) {
                 File listFile = new File(timerFile);
                 if (!listFile.exists()) {
                     timerDocument=SerXMLHandling.createEmptyTimerFile(listFile);
@@ -253,8 +252,9 @@ public class SerTimerHandler {
                     timerDocument=SerXMLHandling.readDocument(new File(timerFile));    
                 }
             }
-        } catch (DocumentException e) {
-        } catch (IOException e) {} 
+        } catch (Exception e) {
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());
+        } 
         return timerDocument;
     }
 }

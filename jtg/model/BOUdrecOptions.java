@@ -42,7 +42,7 @@ public class BOUdrecOptions implements Serializable {
 			} else if (options[i].equals("-buf")) {
 				this.setBuffer(options[++i]);
 			}
-		};
+		}
 		this.setOptionList(new String[options.length-10]);
 		System.arraycopy(options, 10, this.getOptionList(), 0, this.getOptionList().length);
 	}

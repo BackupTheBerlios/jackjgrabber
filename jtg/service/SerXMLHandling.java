@@ -21,9 +21,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.*;
-
-import model.*;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -33,11 +30,6 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-
-import control.ControlMain;
-import control.ControlSettingsTabMovieGuide;
-
 
 public class SerXMLHandling {
 	
@@ -45,12 +37,11 @@ public class SerXMLHandling {
 	
 	public static Document createEmptyTimerFile(File path) throws IOException {
 	    Document doc = DocumentHelper.createDocument();
-		Element root = doc.addElement( "timerList" );
 		saveXMLFile(path, doc);
 		return doc;
 	}
 	
-	public static Document createEmptyMovieguideFile() throws IOException {
+	public static Document createEmptyMovieguideFile() {
         Document doc = DocumentHelper.createDocument();
         doc.addElement("movieguide");
         return doc;

@@ -18,12 +18,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -51,8 +51,6 @@ public class GuiLogWindow extends JFrame {
     public GuiLogWindow() {
         super("Log Jack the JGrabber");
     	setContentPane(getJPanelOutput()); 
-        
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(600 , 150);
         
         final ActionListener listener = new ActionListener() {

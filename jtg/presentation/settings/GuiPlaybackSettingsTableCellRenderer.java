@@ -48,9 +48,8 @@ public class GuiPlaybackSettingsTableCellRenderer extends DefaultTableCellRender
 			if (column==3) {
 				checkbox.setSelected(playbackOption.isStandard());
 				return checkbox;
-			} else {
-				checkbox.setSelected(playbackOption.isLogOutput());
-				return checkbox;
-			}
+			} 
+			checkbox.setSelected(playbackOption.isLogOutput());
+			return checkbox;
 		}
 }

@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 public abstract class SerWebsiteContentLoader {
 
     public static String getWebsiteContent(String website, int port, String pfadAndparameters) {
-        Logger logger = Logger.getLogger(SerWebsiteContentLoader.class);
         StringBuffer htmlContent = new StringBuffer();
         try {
             String tmpUrl = website + ":" + port + pfadAndparameters;
@@ -59,10 +58,10 @@ public abstract class SerWebsiteContentLoader {
 //            }
         }
         catch (IOException e) {
-           
+            Logger.getLogger("SerWebsiteContentLoader").error(e.getMessage()); 
         }
         catch (Exception e) {
-           
+            Logger.getLogger("SerWebsiteContentLoader").error(e.getMessage());
         }
         return htmlContent.toString();
     }

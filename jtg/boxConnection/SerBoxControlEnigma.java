@@ -147,8 +147,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:4:0:0:0:0:0:0:&listContent=true");
 		}
 		while ((line = in.readLine()) != null) {
-		    if (line.substring(0,4).equals("4097")) {
-		    } else {
+		    if (!line.substring(0,4).equals("4097")) {
 		        seperator=line.indexOf(";");
 		        if (seperator>0) {
 		            countChannels++;
@@ -259,12 +258,10 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
 		                valueStart=""+(startDate.getTimeInMillis()/1000);
 		                valueDuration = ""+((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
-		                duration=SerFormatter.formatUnixTimeToDuration(valueDuration);
-		                startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
+		                duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
 						startDate =	SerFormatter.formatUnixDate(valueStart);
-						endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) *1000  + Long.parseLong(valueDuration) * 1000);
 						endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);    
-						epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));
+						epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
 		                line=line2;
 		                startpos=line2.indexOf("ID: ");
 		            }

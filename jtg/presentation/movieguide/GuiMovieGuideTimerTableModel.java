@@ -26,14 +26,12 @@ public class GuiMovieGuideTimerTableModel extends AbstractTableModel
 	public int getRowCount() {
 		if (this.getControl().getTimerTableSize() <= 0) {
 			return 0;
-		} else {						
-			return this.getControl().getTimerTableSize();			
-		}
+		} 			
+		return this.getControl().getTimerTableSize();			
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		Object value = null;
-		try{
 		int selectRow = this.getControl().getSelectRowFilmTable().intValue();				
 		if (columnIndex == 0) {		
 			value = SerFormatter.getFormatGreCal((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().get(rowIndex),DATE_SHORT);
@@ -46,15 +44,12 @@ public class GuiMovieGuideTimerTableModel extends AbstractTableModel
 		}else if (columnIndex == 4) {
 			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getSender().get(rowIndex);
 		} 
-		}catch(Exception ex){}
 		return value;
 	}
 		
 	public String getColumnName( int columnIndex ) {
 		String value = null;
-		try{
-			value = COLUMN_NAME[columnIndex];
-		}catch(Exception ex){}
+		value = COLUMN_NAME[columnIndex];
 		return value;		
 	}
 	

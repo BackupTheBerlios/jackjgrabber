@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -95,7 +96,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.getMainView().getTabProgramm().setConnectModus();
 			this.setActiveBox();
 			this.firstStart = false;
-		} catch (IOException e) {}
+		} catch (IOException e) {
+            Logger.getLogger("ControlProgramTab").error(e.getMessage());
+        }
 	}
 
 	private void setActiveBox() {
@@ -171,6 +174,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				try {
 					SerBoxTelnet.runReboot();
 				} catch (Exception ex) {
+                    Logger.getLogger("ControlProgramTab").error(ex.getMessage());
 				}
 				break;
 			}
@@ -382,7 +386,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	/**
 	 * @return BORecordArgs Erstellen des Objektes BORecordArgs und Setzen der Pids
 	 */
-	private BORecordArgs buildRecordArgs() throws IOException {
+	private BORecordArgs buildRecordArgs() {
 		BORecordArgs args = new BORecordArgs();
 		args.setPids(this.getPids());
 		this.fillRecordArgsWithEpgData(args);
@@ -392,7 +396,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	/*
 	 * Füllen der RecordArgs mit EPG- und Sender-Informationen
 	 */
-	private void fillRecordArgsWithEpgData(BORecordArgs args) throws IOException {
+	private void fillRecordArgsWithEpgData(BORecordArgs args) {
 		args.setSenderName(this.getSelectedSender().getName());
 
 		if (args.getEpgTitle() == null) {
@@ -418,7 +422,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	            BOEpg epgObj = (BOEpg) epgList.get(i);
 	            long epgStart = Long.parseLong(epgObj.getUnformattedStart()) * 1000;
 	            int epgIndex = i - 1;
-	            if (now.get(GregorianCalendar.DATE) == epgObj.getStartdate().get(GregorianCalendar.DATE)) {
+	            if (now.get(Calendar.DATE) == epgObj.getStartdate().get(Calendar.DATE)) {
 	                if (nowTime - epgStart < 0 && epgIndex > -1 ) {
 	                    BOEpg neededEpg = (BOEpg) epgList.get(epgIndex);
 	                    if (neededEpg != null) {
@@ -560,8 +564,6 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(4, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
 			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(modelIndex, modelIndex);
-			BOEpg selEpg = (BOEpg) this.getEpgTableModel().getEpgList().get(modelIndex);
-			//this.setSelectedEpg(selEpg);
 		} else {
 		    this.reInitEpgDetail();  
 		}

@@ -243,7 +243,6 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	 * Wochentage festgestellt und gesetzt
 	 */
 	public void actionRecordTimerRepeatDaysChanged (ActionEvent event) {
-		JRadioButton radioButton = (JRadioButton)event.getSource();
 		timer.getMainTimer().setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage));
 		timer.getMainTimer().setModifiedId("modify");
 	}
@@ -357,7 +356,6 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
     }
     
 	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
-		int result = Integer.parseInt((String)timer.getEventRepeatId());		
 		ControlNeutrinoTimerTab.selectRepeatDaysForRecordTimer(timer,this.getView().jRadioButtonWhtage);
 
 	}

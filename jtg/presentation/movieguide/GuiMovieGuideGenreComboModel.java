@@ -53,7 +53,4 @@ public class GuiMovieGuideGenreComboModel extends DefaultComboBoxModel { //imple
 	public void setControl(ControlMovieGuideTab control) {
 		this.control = control;
 	}
-	public void fireContentsChanged() {
-		
-	}
 }

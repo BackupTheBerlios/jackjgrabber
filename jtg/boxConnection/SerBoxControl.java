@@ -41,7 +41,7 @@ public abstract class SerBoxControl {
 	 * Detect the Image of the Box Rückgabe von 0 (default), 1 (Neutrino), 2 (Enigma), 3 (Sonstige)
 	 */
 	public static int ConnectBox(String ConnectBoxIP) {
-		int imageType = 0; //Defaultwert!!!
+		int imageType = 3; //Defaultwert!!!
 		URL url;
 		Authenticator.setDefault(new SerBoxAuthenticator());
 
@@ -53,14 +53,9 @@ public abstract class SerBoxControl {
 			while ((inputLine = in.readLine()) != null) {
 				if (inputLine.toLowerCase().indexOf("neutrino") > 0) {
 					imageType = 1;
-					return (imageType);
-				}
-				if (inputLine.toLowerCase().indexOf("enigma") > 0) {
+				} else if  (inputLine.toLowerCase().indexOf("enigma") > 0) {
 					imageType = 2;
-					return (imageType);
-				} else {
-					imageType = 3;
-				}
+				} 
 			}
 			in.close();
 		} catch (IOException e) { //Box ist aus, Rückgabe des Defaultwertes

@@ -94,7 +94,7 @@ public class ControlStartTab extends ControlTab {
 	}
 	
 	public String getHtmlString(String string, String color) {
-	    return "<font color="+color+">"+string+"<font><br>";
+	    return "<font color="+color+">"+string+"</font><br>";
 	}
 	
 	public String getRunningSender() {

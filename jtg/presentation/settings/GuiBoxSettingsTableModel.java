@@ -51,15 +51,12 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		BOBox box = (BOBox)ControlMain.getSettingsMain().getBoxList().get(rowIndex);
 		if (columnIndex == 0) {
 			return box.getDboxIp();
-		}
-		if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return box.getLogin();
-		}
-		if (columnIndex == 2) {
+		} else if (columnIndex == 2) {
 			return box.getPassword();
 		}
-		//
-		else return new Boolean(box.isStandard());
+		return new Boolean(box.isStandard());
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -90,16 +87,12 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
 			return "Box-IP"; 
-		}
-		if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return "Login";
-		}
-		if (columnIndex == 2) {
+		} else if (columnIndex == 2) {
 			return "Passwort";
 		}
-		else {
-			return "Standard";
-		}
+		return "Standard";
 	}
 	
 	/*
@@ -133,11 +126,10 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 			ControlMain.getSettingsMain().removeBox(rowNumber);
 			fireTableDataChanged();
 			this.refreshIpComboBox();
-		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());};
+		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());}
 	}
 	
 	public boolean isCellEditable (int row, int col) {
-	    Class columnClass = getColumnClass(col);
 	    return true;
 	}
 

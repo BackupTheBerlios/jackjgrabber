@@ -115,11 +115,10 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		try {
 			ControlMain.getSettingsPlayback().removePlaybackOption(rowNumber);
 			fireTableDataChanged();
-		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());};
+		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());}
 	}
 	
 	public boolean isCellEditable (int row, int col) {
-	    Class columnClass = getColumnClass(col);
 	    return true;
 	}
 

@@ -42,7 +42,7 @@ import service.*;
 /**
  * Controlklasse des Programmtabs.
  */
-public class ControlRecordInfoTab extends ControlTab implements ActionListener, MouseListener, ListSelectionListener {
+public class ControlRecordInfoTab extends ControlTab implements MouseListener, ListSelectionListener {
 
 	GuiMainView mainView;
 
@@ -178,7 +178,6 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 */
 	private void createStructure(DefaultMutableTreeNode parent, File f) {
 		File[] files = f.listFiles();
-		DateFormat format = SimpleDateFormat.getDateTimeInstance();
 
 		for (int i = 0; i < files.length; i++) {
 
@@ -224,7 +223,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		t.start();
 
 		//		register refresh key
-		KeyStroke stroke = (KeyStroke) KeyStroke.getAWTKeyStroke(KeyEvent.VK_F5, 0);
+		KeyStroke stroke = (KeyStroke) AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_F5, 0);
 
 		guiTabRecordInfo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "F5");
 		guiTabRecordInfo.getActionMap().put("F5", refreshAction);
@@ -249,7 +248,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		} else {
 			title = ControlMain.getProperty("label_recordDirect") + ": " + title;
 		}
-		guiTabRecordInfo.startRecord(title, engine, directory, timer);
+		guiTabRecordInfo.startRecord(title, engine);
 
 		//		 Erzeuge Timer der periodisch die Dateiinfos aktualisiert
 		if (fileInfoTimer == null) {
@@ -291,8 +290,8 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		Date now = new Date();
 		long minutes = (now.getTime() - currentStartBegin.getTime()) / 1000 / 60;
 
-		String text = ControlMain.getProperty("label_recordStopped") + " (" + SimpleDateFormat.getTimeInstance().format(currentStartBegin);
-		text += " - " + SimpleDateFormat.getTimeInstance().format(new Date()) + " Dauer: " + minutes + " min)";
+		String text = ControlMain.getProperty("label_recordStopped") + " (" + DateFormat.getTimeInstance().format(currentStartBegin);
+		text += " - " + DateFormat.getTimeInstance().format(new Date()) + " Dauer: " + minutes + " min)";
 
 		currentStartForBitrate = null;
 		currentStartBegin = null;
@@ -429,14 +428,6 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 */
 	public void run() {
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
 	}
 
 	/*

@@ -52,7 +52,6 @@ public class TcpRecord extends Record{
         BOPid pid = (BOPid)recordArgs.getPids().getAPids().get(0);
         aPid = pid.getNumber();
         Logger.getLogger("TcpRecord").info(ControlMain.getProperty("msg_recordPid")+aPid);
-        String baseFileName = recordControl.getFileName();
         writeStream[0] = new DataWriteStream(recordControl, ".mp2");
 	}
 	

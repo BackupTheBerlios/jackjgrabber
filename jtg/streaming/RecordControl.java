@@ -58,10 +58,9 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		if (tvMode && recordArgs.getLocalTimer().getStreamingEngine() == 1) {
 			record = new UdrecRecord(recordArgs, this);
 			return true;
-		} else {
-			record = new TcpRecord(recordArgs, this);
-			return true;
-		}
+		} 
+		record = new TcpRecord(recordArgs, this);
+		return true;
 	}
 
 	/*
@@ -125,9 +124,6 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 			}
 
 			String file = getDirectory().toString() + File.separatorChar + EPGFILENAME;
-
-			File f = new File(file);
-
 			print = new PrintStream(new FileOutputStream(file));
 
 			StringTokenizer tok = new StringTokenizer(epg.toString(), "\n");
@@ -199,8 +195,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		for (int i = 0; i < files.size(); i++) {
 			param[i + 3] = (String) files.get(i);
 		}
-
-		BOExternalProcess proc = SerExternalProcessHandler.startProcess(this, "ProjectX", param, true);
+		SerExternalProcessHandler.startProcess(this, "ProjectX", param, true);
 	}
 
 	public String getFileName() {

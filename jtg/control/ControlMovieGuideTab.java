@@ -53,15 +53,7 @@ import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
 
-
-
-/**
- * @author ralph
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener, Runnable, KeyListener {
+public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener, Runnable, KeyListener {
 	
 	GuiMainView mainView;
 	GuiTabMovieGuide tab;
@@ -94,7 +86,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	public void run() {
-          this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());     
+          this.setTab(this.getMainView().getTabMovieGuide());     
           this.getTab().getComboBoxDatum().setEnabled(false);
           this.getTab().getComboBoxGenre().setEnabled(false);
           this.getTab().getComboBoxSender().setEnabled(false);
@@ -380,9 +372,6 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 	}
 	
-	public void stateChanged(ChangeEvent event) {	
-	}
-	
 	/**
 	 * Change-Events of the GuiTabMovieGuide
 	 */
@@ -462,9 +451,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	public Integer getSelectRowFilmTable(){				
 		if (this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow())<=0){
 			return new Integer(0);
-		}else{			
-			return new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
-		}
+		}			
+		return new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 	}
 	/**
 	 * @return Selectierte Row der TimerTable
@@ -829,9 +817,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     public String getSearchString(){
     	return searchString;
     }
-    private void clearTextFields(){
-    	
-    }
+
     public static String getHomePath() {
         if (homePath==null) {
             String sep = System.getProperty("file.separator");

@@ -53,7 +53,4 @@ public class GuiMovieGuideSenderComboModel extends DefaultComboBoxModel { //impl
 	public void setControl(ControlMovieGuideTab control) {
 		this.control = control;
 	}
-	public void fireContentsChanged() {
-		
-	}
 }

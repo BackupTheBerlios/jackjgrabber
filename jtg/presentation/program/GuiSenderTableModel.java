@@ -41,26 +41,23 @@ public class GuiSenderTableModel extends AbstractTableModel
 	public int getRowCount() {
 		if (control.getSelectedBouquet() == null || control.getSelectedBouquet().getSender() == null ) {
 			return 0;
-		} else {
-			return control.getSelectedBouquet().getSender().size();
-		}
+		} 
+		return control.getSelectedBouquet().getSender().size();
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOSender sender = (BOSender)control.getSelectedBouquet().getSender().get(rowIndex);
 		if (columnIndex == 0) {
 			return sender.getNummer();
-		} else {
-			return sender.getName();
-		}
+		} 
+		return sender.getName();
 	}
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
 			return ControlMain.getProperty("nr"); 
-		} else {
-			return ControlMain.getProperty("sender"); 
-		}
+		} 
+		return ControlMain.getProperty("sender"); 
 	}
 	
 	

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 import presentation.GuiMainView;
 
@@ -43,9 +44,7 @@ public class ControlAboutTab extends ControlTab {
 		this.getMainView().getTabAbout().getTaVersion().append(ControlMain.version[0]+"\n");
 		this.getMainView().getTabAbout().getTaVersion().append(ControlMain.version[1]+"\n");
 	}
-	private void showOther() {
-		
-	}
+
 	private void showAuthors() {
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResource("Authors").openStream()));
@@ -53,7 +52,9 @@ public class ControlAboutTab extends ControlTab {
 			while ( (line = input.readLine()) != null) {
 				this.getMainView().getTabAbout().getTaAuthors().append(line+"\n");
 			}
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		    Logger.getLogger("ControlAboutTab").info(e.getMessage());
+        }
 	}
 	private void showLicense() {
 		try {
@@ -62,7 +63,9 @@ public class ControlAboutTab extends ControlTab {
 			while ( (line = input.readLine()) != null) {
 				this.getMainView().getTabAbout().getTaLicense().append(line+"\n");
 			}
-		} catch (IOException e) {}
+		} catch (IOException e) {
+            Logger.getLogger("ControlAboutTab").info(e.getMessage());      
+        }
 	}
 	
 	/**

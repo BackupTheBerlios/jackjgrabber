@@ -25,23 +25,22 @@ import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.JComboBox;
-import javax.swing.JTable;
-
-import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
-import javax.swing.JProgressBar; 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
 
-import service.SerFormatter;
-
 import model.BOMovieGuide;
+import service.SerFormatter;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -275,7 +274,7 @@ public class GuiTabMovieGuide extends JPanel {
 
 	public JProgressBar getJProgressBarDownload(){
 		if (jProgressBarDownload == null){
-			jProgressBarDownload = new JProgressBar(JProgressBar.HORIZONTAL, 0, 0);
+			jProgressBarDownload = new JProgressBar(SwingConstants.HORIZONTAL, 0, 0);
 			jProgressBarDownload.setStringPainted(true);			
 		}
 		return jProgressBarDownload;

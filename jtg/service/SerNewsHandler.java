@@ -20,6 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 
 public class SerNewsHandler extends Thread {
 	private JTextPane nachrichten;
@@ -54,7 +56,7 @@ public class SerNewsHandler extends Thread {
 				}
 			});
 		} catch (Exception e) {
-			
+			Logger.getLogger("SerNewsHandler").error(e.getMessage());
 		}
 	}
 

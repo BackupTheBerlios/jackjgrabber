@@ -36,17 +36,13 @@ public abstract class GuiTimerPanel extends JPanel {
 			ControlEnigmaTimerTab control = new ControlEnigmaTimerTab(view);
 			GuiEnigmaTimerPanel panel = new GuiEnigmaTimerPanel(control);
 			return panel;
-		}
-		if (boxName.equals("Neutrino")) {
+		} else if (boxName.equals("Neutrino")) {
 			ControlNeutrinoTimerTab control = new ControlNeutrinoTimerTab(view);
 			GuiNeutrinoTimerPanel panel = new GuiNeutrinoTimerPanel(control);
 			return panel;
-		} else {
+		} 
 			ControlDefaultTimerTab control = new ControlDefaultTimerTab(view);
 			return new GuiDafaultTimerPanel(control);
-		}
-		
-			
 	}
 	
 	public abstract ControlTabTimer getControl();

@@ -118,7 +118,6 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 				if (lfChanged || themeChanged) {
 					UIManager.setLookAndFeel(lookAndFeel);
 					if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
-						Font f = (Font) UIManager.get("TextArea.font");
 						UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
 					}
 					if (this.getView()!=null) {

@@ -48,6 +48,8 @@ public class SerErrorStreamReadThread extends Thread {
                 }
                 line=null;
             }
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Logger.getLogger("SerErrorStreamReadThread").error(e.getMessage());
+        }
     }
 }

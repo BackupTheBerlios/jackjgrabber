@@ -43,6 +43,7 @@ public class SerInputStreamReadThread extends Thread {
             	line=null;
             }
         } catch (IOException e) {
+            Logger.getLogger("SerInputStreamReadThread").error(e.getMessage());
         }
     }
 }

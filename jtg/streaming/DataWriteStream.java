@@ -37,7 +37,7 @@ public class DataWriteStream {
     BufferedOutputStream fileOut;
     int streamNumber;
     
-	String fileNameExtension;;
+	String fileNameExtension;
 	int fileNumber;
 	File currentFile;
 	ArrayList fileList = new ArrayList();

@@ -29,7 +29,7 @@ import org.apache.log4j.spi.LoggingEvent;
 public class SerLogAppender extends RollingFileAppender {
 	
 	static ArrayList textAreas = new ArrayList();
-	static PatternLayout areaOutpuLayout = new PatternLayout();;
+	static PatternLayout areaOutpuLayout = new PatternLayout();
 	
 	public SerLogAppender(PatternLayout layout) throws IOException {
 		super(layout, "jackLog.log");

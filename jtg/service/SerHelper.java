@@ -199,7 +199,6 @@ public class SerHelper {
 		if (pattern == null || pattern.length() == 0) {
 
 			// default pattern
-
 			SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd_HH-mm");
 			String date = f.format(new Date());
 
@@ -207,20 +206,18 @@ public class SerHelper {
 				Object[] obj = {date, args.getSenderName(), args.getEpgTitle()};
 				MessageFormat form = new MessageFormat("{0}_{1}_{2}");
 				return form.format(obj);
-			} else {
-				return date + "_" + args.getSenderName();
-			}
-		} else {
-			String[] availablePattern = {"%CHANNEL%", "%TIME%", "%NAME%","%SERIE%", "%DATE%", "%DATE "};
-			for (int i = 0; i < availablePattern.length; i++) {
-				int index = pattern.indexOf(availablePattern[i]);
-				if (index > -1) {
-					// pattern found, replace
-					pattern = replacePattern(availablePattern[i], pattern, args);
-				}
-			}
-			return pattern;
+			} 
+			return date + "_" + args.getSenderName();
 		}
+		String[] availablePattern = {"%CHANNEL%", "%TIME%", "%NAME%","%SERIE%", "%DATE%", "%DATE "};
+		for (int i = 0; i < availablePattern.length; i++) {
+			int index = pattern.indexOf(availablePattern[i]);
+			if (index > -1) {
+				// pattern found, replace
+				pattern = replacePattern(availablePattern[i], pattern, args);
+			}
+		}
+		return pattern;
 	}
 
 	/**
@@ -256,7 +253,7 @@ public class SerHelper {
 			}
 		} else if (patternToReplace.equals("%DATE%")) {
 			Date d = new Date();
-			String date = SimpleDateFormat.getDateInstance().format(d);
+			String date = DateFormat.getDateInstance().format(d);
 			date = SerFormatter.replace(date,".", "-");
 			replaceWith = date;
 		} else if (patternToReplace.startsWith("%DATE")) {

@@ -18,6 +18,7 @@ package control;
 
  */
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
@@ -97,7 +98,7 @@ public class ControlMain {
 		checkGuiSettings();
 		splash.setProgress(100, ControlMain.getProperty("msg_app_starting"));
 		splash.dispose();
-	};
+	}
 	
 	private static void startSplash() {
 	    GuiStartFrame connectFrame = new GuiStartFrame();
@@ -112,8 +113,8 @@ public class ControlMain {
 				control.getView().setVisible(false);
 			} else {
 				control.getView().setVisible(true);
-				control.getView().setExtendedState(JFrame.ICONIFIED);
-				logWindow.setExtendedState(JFrame.ICONIFIED);
+				control.getView().setExtendedState(Frame.ICONIFIED);
+				logWindow.setExtendedState(Frame.ICONIFIED);
 			}
 		} else {
 			control.getView().setVisible(true);

@@ -51,15 +51,14 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
 		if (columnIndex == 0) {
 			return timer.getSenderName();
-		} if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return timer.getStartTime();
-		} if (columnIndex == 2) {
+		} else if (columnIndex == 2) {
 			return timer.getStopTime();
-		} if (columnIndex == 3) {
+		} else if (columnIndex == 3) {
 			return control.convertShortEventRepeat(timer.getEventRepeatId());
-		} else {
-			return timer.getDescription();
-		}
+		} 
+		return timer.getDescription();
 	}
 
 	public void setValueAt(Object value, int row, int col) {
@@ -88,19 +87,17 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
 			return ControlMain.getProperty("sender");
-		} if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return ControlMain.getProperty("start");
-		} if (columnIndex == 2) {
+		} else if (columnIndex == 2) {
 			return ControlMain.getProperty("end");
-		} if (columnIndex == 3) {
+		} else if (columnIndex == 3) {
 			return ControlMain.getProperty("repeat");
-		} else {
-			return ControlMain.getProperty("title");
-		}
+		} 
+		return ControlMain.getProperty("title");
 	}
 
 	public boolean isCellEditable (int row, int col) {
-	    Class columnClass = getColumnClass(col);
 //	    if (col==4) {
 //	    	return false;
 //	    }

@@ -34,9 +34,6 @@ public class BOSettings {
 	private boolean settingsChanged = false;
 	public boolean standardSettings = false;
 
-	public BOSettings() {
-	}
-
 	/**
 	 * @return Returns the settingsChanged.
 	 */

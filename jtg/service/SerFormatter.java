@@ -12,6 +12,8 @@ import javax.swing.text.*;
 import java.awt.Color;
 
 import javax.swing.ImageIcon;
+
+import org.apache.log4j.Logger;
 /**
  * @author ralix
  */
@@ -122,20 +124,6 @@ public class SerFormatter {
 	}
 
 	/**
-	 * @param unixTime
-	 * @return duration-string hours:minutes
-	 */
-	public static String formatUnixTimeToDuration(String unixTime) {
-		int dauer = Integer.parseInt(unixTime);
-		int sekunden = dauer % 60;
-		dauer /= 60;
-		int minuten = dauer % 60;
-		dauer /= 60;
-		int stunden = dauer;
-		return out(stunden) + ":" + out(minuten);
-	}
-
-	/**
 	 * @param sourcestring
 	 * @param stringToReplace
 	 * @param newString
@@ -151,14 +139,14 @@ public class SerFormatter {
 
 	public static Date setCorrectYear(Date datum) {
 		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-		int i = cal.get(GregorianCalendar.YEAR);
+		int i = cal.get(Calendar.YEAR);
 		cal.setTimeInMillis(datum.getTime());		
 		GregorianCalendar caltoday = new GregorianCalendar(TimeZone.getTimeZone("ECT"));		
-		if (cal.get(GregorianCalendar.MONTH) <  caltoday.get(GregorianCalendar.MONTH)){
+		if (cal.get(Calendar.MONTH) <  caltoday.get(Calendar.MONTH)){
 			i = i + 1;
-			cal.set(GregorianCalendar.YEAR, i);
+			cal.set(Calendar.YEAR, i);
 		}else{					
-			cal.set(GregorianCalendar.YEAR, i);
+			cal.set(Calendar.YEAR, i);
 		}
 		return cal.getTime();
 	}
@@ -173,13 +161,13 @@ public class SerFormatter {
 			*/
 	public static String getCorrectEndTime(String start, String ende) {
 	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, TIME,true);
-		int hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
-		int min = cal.get(GregorianCalendar.MINUTE);
-	    cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
-		cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+ Integer.parseInt(ende.substring(3, 5)));
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int min = cal.get(Calendar.MINUTE);
+	    cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
+		cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE)+ Integer.parseInt(ende.substring(3, 5)));
 		String val = getFormatGreCal(cal, TIME);
-	    cal.set(GregorianCalendar.HOUR_OF_DAY, hour);
-		cal.set(GregorianCalendar.MINUTE, min);
+	    cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, min);
 		return val;
 	}
 
@@ -208,7 +196,7 @@ public class SerFormatter {
 		
 	public static String getAktuellDateString(int monat,String format) {
 		GregorianCalendar calmg = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-		calmg.set(GregorianCalendar.MONTH, (calmg.get(GregorianCalendar.MONTH)+monat));
+		calmg.set(Calendar.MONTH, (calmg.get(Calendar.MONTH)+monat));
 		return getFormatGreCal(calmg,format);			
 	}
 
@@ -248,6 +236,7 @@ public class SerFormatter {
 		            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(date)).getTime());
 		            calCache.put(date + "|" + format,cal);
 		        }catch(ParseException pex){
+                    Logger.getLogger("SerFormatter").error(pex.getMessage());
 		        }
 	    	}
     	}
@@ -258,6 +247,7 @@ public class SerFormatter {
 	        try {
 	            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(date)).getTime());
 	        }catch(ParseException pex){
+                Logger.getLogger("SerFormatter").error(pex.getMessage());
 	        }
     	}
         return cal;
@@ -270,15 +260,13 @@ public class SerFormatter {
     
     public static GregorianCalendar getGC(GregorianCalendar gc, int value){
         GregorianCalendar newCal = (GregorianCalendar)gc.clone();
-        newCal.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
+        newCal.set(Calendar.MINUTE, gc.get(Calendar.MINUTE)+value);
     	return newCal;
     }
     public static GregorianCalendar convTime2GreCal (String time) {	        
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-        try {
-            cal.set(GregorianCalendar.HOUR_OF_DAY,Integer.parseInt(time.substring(0,time.indexOf(":"))));
-            cal.set(GregorianCalendar.MINUTE,Integer.parseInt(time.substring(time.indexOf(":")+1)));
-        }catch(Exception pex){}        
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.substring(0,time.indexOf(":"))));
+        cal.set(Calendar.MINUTE,Integer.parseInt(time.substring(time.indexOf(":")+1)));        
         return cal;
     }
     
@@ -310,9 +298,8 @@ public class SerFormatter {
         }
         if (date1<date2) {
             return -1;
-        } else {
-            return 1;
-        }
+        } 
+        return 1;
     }
     public static void insertPicture(JTextComponent textComp,String path) {
         try {
@@ -320,7 +307,9 @@ public class SerFormatter {
          Style style = doc.addStyle("StyleName", null);
          StyleConstants.setIcon(style, new ImageIcon(path));
          doc.insertString(doc.getLength(), " ", style);
-        } catch (BadLocationException e) {}
+        } catch (BadLocationException e) {
+            Logger.getLogger("SerFormatter").error(e.getMessage());
+        }
     }
     
     public static void underScore(JTextComponent textComp, String pattern, boolean value, int pos) {                      	
@@ -330,7 +319,9 @@ public class SerFormatter {
         try {                                    
             	doc.insertString(pos, pattern, style);            	
             	StyleConstants.setUnderline(style, false);
-        } catch (BadLocationException e) {}    
+        } catch (BadLocationException e) {
+            Logger.getLogger("SerFormatter").error(e.getMessage());
+        }    
     }
     
     public static void highlight(JTextComponent textComp, String pattern) {
@@ -343,6 +334,7 @@ public class SerFormatter {
                 hilite.addHighlight(m.start(0), m.start(0)+pattern.length(), myHighlightPainter);        
     	    }              
         } catch (BadLocationException e) {
+            Logger.getLogger("SerFormatter").error(e.getMessage());
         }
     }
     public static void removeHighlights(JTextComponent textComp) {

@@ -40,9 +40,8 @@ public class GuiFileTableModel extends DefaultTableModel implements TreeSelectio
 	public int getRowCount() {
 		if (files != null) {
 			return files.size();
-		} else {
-			return 0;
-		}
+		} 
+		return 0;
 	}
 
 	/*

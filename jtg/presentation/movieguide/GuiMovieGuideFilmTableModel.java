@@ -22,36 +22,29 @@ public class GuiMovieGuideFilmTableModel extends AbstractTableModel
 
 	public int getRowCount() {
 		int value = 0;
-		try{
 		if (this.getControl().getTitelMap() == null) {
 			value = 0;
 		}else {
 			value =  this.getControl().getTitelMap().size();
 		}
-		}catch (Exception ex){}
 		return value;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		Object value = null;
-		try{
 		if (columnIndex == 0) {					
 				value= ((BOMovieGuide)this.getControl().getTitelMap().get(rowIndex)).getTitel();
 		}
-		}catch (Exception ex){}
 		return value;	
 	}
 	
 	public String getColumnName( int columnIndex ) {				
 		String value = null;
-		try{
-			value = COLUMN_NAME[columnIndex];
-		}catch(Exception ex){}
+		value = COLUMN_NAME[columnIndex];
 		return value;	
 	}
 	
 	public boolean isCellEditable (int row, int col) {
-	    Class columnClass = getColumnClass(col);
 	    return false;
 	}
 	

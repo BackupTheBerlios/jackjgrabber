@@ -83,9 +83,8 @@ public class UdpRecord  extends Record {
                 outputStream.flush();
             	Logger.getLogger("UdpRecord").info("to DBox: "+requestString);
             	return true;
-            } else {
-                return false;
-            }
+            } 
+            return false;
         } catch (IOException e) {
             SerAlertDialog.alertConnectionLost("UdpRecord", ControlMain.getControl().getView());
             return false;
@@ -109,7 +108,7 @@ public class UdpRecord  extends Record {
             			recordControl.controlProgramTab.stopRecord();
             		}
             		Logger.getLogger("UdpRecord").info("from DBox: "+s);
-            		if (0 < this.parseDBoxReply(s, spktBufNum)) isPid = true;
+            		if (0 < this.parseDBoxReply(s)) isPid = true;
             	}
             } while(!isPid);
             if (running) {
@@ -158,13 +157,12 @@ public class UdpRecord  extends Record {
 		return cmd.toString();
 	}
 	
-	public int parseDBoxReply(String dboxReply, int spktBufNum)
+	public int parseDBoxReply(String dboxReply)
 	{
 		dboxArgs = dboxReply.split(" ");
 
 		if (dboxArgs[0].equals("INFO:")) return 0;
 		if (!dboxArgs[0].equals("PID")) return -1;  // "EXIT" ist moeglich
-		String baseFileName = recordControl.getFileName();
 		if (dboxArgs.length < 4) return -2;
 	  	avString = dboxArgs[1];
 		int pidNum = Integer.parseInt(dboxArgs[2]);

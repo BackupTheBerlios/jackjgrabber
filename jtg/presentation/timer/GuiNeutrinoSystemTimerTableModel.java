@@ -50,11 +50,10 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		BOTimer timer = (BOTimer)this.getControl().getTimerList().getSystemTimerList().get(rowIndex);
 		if (columnIndex == 0) {
 			return control.convertShortEventType(timer.getEventTypeId());
-		} if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return timer.getStartTime();
-		} else {
-			return control.convertShortEventRepeat(timer.getEventRepeatId());
 		}
+		return control.convertShortEventRepeat(timer.getEventRepeatId());
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
@@ -65,8 +64,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		if (col == 1) {
 		    GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "dd.MM.yy   HH:mm");
 			timer.setUnformattedStartTime(newDate.getTimeInMillis());
-		}
-		if (col == 2) {
+		} else if (col == 2) {
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.selectRepeatDaysForSystemTimer(timer);
 		}
@@ -76,15 +74,13 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
 			return ControlMain.getProperty("timerType");
-		} if (columnIndex == 1) {
+		} else if (columnIndex == 1) {
 			return ControlMain.getProperty("nextStart");
-		} else {
-			return ControlMain.getProperty("repeat");
-		}
+		} 
+		return ControlMain.getProperty("repeat");
 	}
 	
 	public boolean isCellEditable (int row, int col) {
-	    Class columnClass = getColumnClass(col);
 	    BOTimer timer = (BOTimer)control.getTimerList().getSystemTimerList().get(row);
 	    if (col==0 && timer.getModifiedId()==null) {
 	    	return false;

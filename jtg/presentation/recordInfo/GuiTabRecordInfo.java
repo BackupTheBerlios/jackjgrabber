@@ -27,8 +27,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.io.File;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -117,7 +116,6 @@ public class GuiTabRecordInfo extends GuiTab {
 
 		recordTitle.setEditable(false);
 		recordTitle.setBorder(BorderFactory.createEtchedBorder());
-		Border etchedBorder = BorderFactory.createEtchedBorder();
 
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("710:grow", // columns
@@ -272,11 +270,11 @@ public class GuiTabRecordInfo extends GuiTab {
 	 * @param timer
 	 *            true, wenn es eine Timeraufnahme ist
 	 */
-	public void startRecord(String title, String engine, File directory, boolean timer) {
+	public void startRecord(String title, String engine) {
 
 		clear();
 		((JLabel) recordState.getComponent(0)).setText(ControlMain.getProperty("label_recordInProgress") + " "
-				+ SimpleDateFormat.getTimeInstance().format(new Date()));
+				+ DateFormat.getTimeInstance().format(new Date()));
 
 		recordState.getComponent(0).setForeground(Color.red);
 		recordState.getComponent(0).setFont(recordState.getComponent(0).getFont().deriveFont(Font.BOLD));

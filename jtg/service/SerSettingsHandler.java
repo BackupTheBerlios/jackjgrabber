@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -71,7 +70,7 @@ public class SerSettingsHandler {
 		{
 			try {
 				// create default settings
-				BOSettings set = createStandardSettingsFile(new File(ControlMain.getSettingsFilename()));
+				BOSettings set = createStandardSettingsFile();
 				ControlMain.setSettings(set);
 				SerSettingsHandler.saveAllSettings();
 				
@@ -90,7 +89,7 @@ public class SerSettingsHandler {
 	/**
 	 * Erstellen eines neuen XML-Settingsdokumentes mit Defaultwerten
 	 */
-	public static BOSettings createStandardSettingsFile(File path) throws IOException {
+	public static BOSettings createStandardSettingsFile() {
 		BOSettings settings = new BOSettings();
 		BOSettingsLayout layout = new BOSettingsLayout(settings);
 		BOSettingsMain main = new BOSettingsMain(settings);

@@ -65,8 +65,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		this.setMainView(view);
 	}
 	
-	public void initialize() {}
-	
 	public void run() {
 	    this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
 			try {
@@ -120,11 +118,11 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 				break;
 			}
 			if (action == "recordTimer") {
-				this.actionRecordTimerRepeatDaysChanged(e);
+				this.actionRecordTimerRepeatDaysChanged();
 				break;
 			}
 			if (action == "systemTimer") {
-				this.actionSystemTimerRepeatDaysChanged(e);
+				this.actionSystemTimerRepeatDaysChanged();
 				break;
 			}
 			break;
@@ -153,8 +151,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
 	 * Wochentage festgestellt und gesetzt
 	 */
-	public void actionRecordTimerRepeatDaysChanged (ActionEvent event) {
-		JRadioButton radioButton = (JRadioButton)event.getSource();
+	public void actionRecordTimerRepeatDaysChanged () {
 		BOTimer timer = this.getSelectedRecordTimer();
 		timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage));
 		timer.setModifiedId("modify");
@@ -164,8 +161,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
 	 * Wochentage festgestellt und gesetzt
 	 */
-	public void actionSystemTimerRepeatDaysChanged (ActionEvent event) {
-		JRadioButton radioButton = (JRadioButton)event.getSource();
+	public void actionSystemTimerRepeatDaysChanged () {
 		BOTimer timer = this.getSelectedSystemTimer();
 		timer.setEventRepeatId(this.getRepeatOptionValue(this.getView().jRadioButtonWhtage2));
 		timer.setModifiedId("modify");
@@ -413,8 +409,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	
 	private BOTimer buildSystemTimer() {
 		BOTimer timer = new BOTimer();
-		
-		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
 		long now = new Date().getTime();
 		
 		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
@@ -437,7 +431,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	 * 32768 = Sonntags
 	 */
 	public static void selectRepeatDaysForRecordTimer(BOTimer timer, JRadioButton[] jRadioButtonWhtage) {
-		int result = Integer.parseInt((String)timer.getEventRepeatId());		
+		int result = Integer.parseInt(timer.getEventRepeatId());		
 		if (result>5) {
 			for (int i = 0; i<7; i++){
 				jRadioButtonWhtage[i].setSelected((result&weekdays_value[i])==weekdays_value[i]);
@@ -450,7 +444,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	}
 
 	public void selectRepeatDaysForSystemTimer(BOTimer timer) {
-		int result = Integer.parseInt((String)timer.getEventRepeatId());
+		int result = Integer.parseInt(timer.getEventRepeatId());
 		if (result>5) {
 			this.getView().enableSystemTimerWeekdays(true);
 			for (int i = 0; i<7; i++){
