@@ -23,6 +23,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -39,11 +40,12 @@ import javax.swing.event.ChangeListener;
 import model.BOMovieGuide;
 import model.BOTimer;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import presentation.GuiMainView;
-
 import presentation.GuiTabMovieGuide;
 import presentation.MovieGuideFilmTableModel;
 import presentation.MovieGuideTimerTableModel;
@@ -80,18 +82,22 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 
 	public void initialize() {
-		try{			
-			initialized = true;
-			this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
-			setRootElement();
-			if(this.getTitelMap()==null){				
-				setTitelMap();
-			}
-			this.getTab().getComboBoxGenre().setSelectedIndex(0);
-			this.getTab().getComboBoxSender().setSelectedIndex(0);
-			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
-			this.getTab().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet
-		}catch (Exception ex){System.out.println(ex);}			
+		try {
+            initialized = true;
+            this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
+            setRootElement();
+            if(this.getTitelMap()==null){				
+            	setTitelMap();
+            }
+            this.getTab().getComboBoxGenre().setSelectedIndex(0);
+            this.getTab().getComboBoxSender().setSelectedIndex(0);
+            this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
+            this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
+        } catch (MalformedURLException e) {
+            Logger.getLogger("ControlMovieGuideTab").error(movieGuideFileName.getName()+" not found");
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -317,7 +323,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		movieGuideFileName = filename;		
 	}
 	
-	private void setRootElement() throws Exception{
+	private void setRootElement()throws DocumentException, MalformedURLException {
 		Document doc = SerXMLHandling.readDocument(getMovieGuideFileName());
 		root = doc.getRootElement();
 	}
