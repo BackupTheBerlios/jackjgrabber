@@ -69,7 +69,9 @@ public class RecordControl extends Thread {
 	 */
 	public void run() {
 
-		saveEPGInfos();
+		if (ControlMain.getSettings().isStoreEPG()) {
+			saveEPGInfos();
+		}
 		record.start();
 
 		if (recordArgs.isQuickRecord()) {
@@ -206,5 +208,4 @@ public class RecordControl extends Thread {
 		}
 		return directory;
 	}
-
 }
