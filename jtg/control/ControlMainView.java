@@ -243,6 +243,7 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 			}
 			if (count == 3) { //MovieGuideTab
 				pane.setComponentAt(count, pane.getTabMovieGuide());
+				pane.getTabMovieGuide().getControl().askToDownloadMG();
 				break;
 			}
 			if (count == 4) { //Record Info

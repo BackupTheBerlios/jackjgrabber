@@ -84,112 +84,68 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	public void run() {
-          this.setTab(this.getMainView().getTabMovieGuide());     
-          this.getTab().getComboBoxDatum().setEnabled(false);
-          this.getTab().getComboBoxGenre().setEnabled(false);
-          this.getTab().getComboBoxSender().setEnabled(false);
-          this.getTab().getComboBoxSucheNach().setEnabled(false);          
-          /*
-          if(getSettings().getMgLoadType()==0){          	
-          	
-          	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){          		
-          		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info2"))){
-              		try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}
-              	}
-          	}else{
-          		if( (SerMovieGuide2Xml.checkNewMovieGuide()) && (!movieGuideFileNext.exists())){
-        			try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}
-        		}
-          		if( (!movieGuideFile.exists())){          			          			
-          			infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"));
-        			try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}
-        		}
-          	}
-          }
-          if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){          	
-          	if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"))){
+      this.setTab(this.getMainView().getTabMovieGuide());     
+      this.getTab().getComboBoxDatum().setEnabled(false);
+      this.getTab().getComboBoxGenre().setEnabled(false);
+      this.getTab().getComboBoxSender().setEnabled(false);
+      this.getTab().getComboBoxSucheNach().setEnabled(false);          
+  
+      if(getSettings().getMgLoadType()==0 && (!movieGuideFile.exists())){       
+          try{
+              new SerMovieGuide2Xml(null, this.getMainView()).start();
+          }catch (Exception ex){
+              Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+          }              	
+      	}
+      	if(getSettings().getMgLoadType()==0 && (!movieGuideFileNext.exists()) && (SerMovieGuide2Xml.checkNewMovieGuide()) && (movieGuideFile.exists())){       
+      	    try{
+      	        new SerMovieGuide2Xml(null, this.getMainView()).start();
+      	    }catch (Exception ex){
+      	        Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+      	    }              	
+      	}
+      	this.buildMG();
+          	 
+	}
+	
+	public void askToDownloadMG() {
+	    if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){                 		
+      		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"))){
           		try{
     				new SerMovieGuide2Xml(null, this.getMainView()).start();
     			}catch (Exception ex){
     				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
     			}
           	}
-          }
-          if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
-          	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
-          	beautifyGui(); 
-          }           
-          if(movieGuideFileNext.exists()){          	
-          	setMovieGuideFile(movieGuideFileNext);          	
-          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());
-          	beautifyGui(); 
-          } */
-          	
-          
-          	if(getSettings().getMgLoadType()==0 && (!movieGuideFile.exists())){       
-          		//infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"));
-              		try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}              	
+      	}     
+      	if(getSettings().getMgLoadType()==1 && (!movieGuideFileNext.exists()) && (SerMovieGuide2Xml.checkNewMovieGuide()) && (movieGuideFile.exists())){                 		
+      		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info2"))){
+          		try{
+    				new SerMovieGuide2Xml(null, this.getMainView()).start();
+    			}catch (Exception ex){
+    				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+    			}
+          	}else{
+          		movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	
+          		beautifyGui(); 
           	}
-          	if(getSettings().getMgLoadType()==0 && (!movieGuideFileNext.exists()) && (SerMovieGuide2Xml.checkNewMovieGuide()) && (movieGuideFile.exists())){       
-          		//infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"));
-              		try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}              	
-          	}
-          	if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){                 		
-          		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"))){
-              		try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}
-              	}
-          	}     
-          	if(getSettings().getMgLoadType()==1 && (!movieGuideFileNext.exists()) && (SerMovieGuide2Xml.checkNewMovieGuide()) && (movieGuideFile.exists())){                 		
-          		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info2"))){
-              		try{
-        				new SerMovieGuide2Xml(null, this.getMainView()).start();
-        			}catch (Exception ex){
-        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
-        			}
-              	}else{
-              		movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	
-              		beautifyGui(); 
-              	}
-          	}  
-          
-          	 if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
-              	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
-              	if(!movieGuideFileNext.exists() && (!SerMovieGuide2Xml.checkNewMovieGuide())){
-              		beautifyGui(); 
-              	}
-              }           
-              if(movieGuideFileNext.exists() && (movieGuideFile.exists())){			
-              	setMovieGuideFile(movieGuideFileNext);                  
-              	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());                            	
-              	beautifyGui(); 
-              }
-              //beautifyGui();
+      	}  
+      	this.buildMG();
 	}
 	
+	private void buildMG() {
+	    if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
+          	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
+          	if(!movieGuideFileNext.exists() && (!SerMovieGuide2Xml.checkNewMovieGuide())){
+          		beautifyGui(); 
+          	}
+	    }           
+	    if(movieGuideFileNext.exists() && (movieGuideFile.exists())){			
+          	setMovieGuideFile(movieGuideFileNext);                  
+          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());                            	
+          	beautifyGui(); 
+	    }
+	}
 	
 	/** 
 	 * @param keine
