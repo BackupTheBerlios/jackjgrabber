@@ -61,6 +61,9 @@ public class SerXMLConverter {
 					break;										
 				}				
 			}
+			if ((box.isStandard().booleanValue())) {
+				box.setSelected(true);
+			}
 			boxList.add(box);
 		}
 		settings.setBoxList(boxList);

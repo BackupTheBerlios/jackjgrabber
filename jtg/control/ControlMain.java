@@ -35,7 +35,7 @@ public class ControlMain {
 	
 	static BOSettings settings;
 	static Document settingsDocument;
-	static SerBoxControl box;
+	static SerBoxControl boxAccess;
 	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static int CurrentBox=0;
@@ -90,20 +90,20 @@ public class ControlMain {
 		
 	public static void detectImage() {
 		Logger.getLogger("ControlMain").info("Searching Box-Image");
-		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIp());
+		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIpOfSelectedBox());
 		if (image==0) {
-			box=new SerBoxControlDefault();
+			boxAccess=new SerBoxControlDefault();
 		}
 		if (image==3) {
-			box=new SerBoxControlDefault();
+			boxAccess=new SerBoxControlDefault();
 		}
 		if (image==1) {
-			box = new SerBoxControlNeutrino();
+			boxAccess = new SerBoxControlNeutrino();
 		}
 		else if (image==2) {
-			box = new SerBoxControlEnigma();
+			boxAccess = new SerBoxControlEnigma();
 		}
-		Logger.getLogger("ControlMain").info(ControlMain.getBox().getName()+"-Access loaded");
+		Logger.getLogger("ControlMain").info(ControlMain.getBoxAccess().getName()+"-Access loaded");
 	}
 	
 	/**
@@ -124,17 +124,61 @@ public class ControlMain {
 		} catch (Exception ex) {Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");}
 	}
 	
-	public static String getBoxIp() {
-		String boxIp = new String();
+	public static String getBoxIpOfSelectedBox() {
+		ArrayList boxList = getSettings().getBoxList();
+		for (int i=0; boxList.size()>i; i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			if (box.isSelected()) {
+				return box.getDboxIp();
+			}
+		}
+		return new String();
+	}
+	
+	public static BOBox getStandardBox() {
 		ArrayList boxList = getSettings().getBoxList();
 		for (int i=0; boxList.size()>i; i++) {
 			BOBox box = (BOBox)boxList.get(i);
 			if (box.isStandard().booleanValue()) {
-				boxIp = box.getDboxIp();
+				return box;
 			}
 		}
-		return boxIp;
+		return new BOBox();
 	}
+	
+	public static BOBox getSelecteddBox() {
+		ArrayList boxList = getSettings().getBoxList();
+		for (int i=0; boxList.size()>i; i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			if (box.isSelected()) {
+				return box;
+			}
+		}
+		return new BOBox();
+	}
+	
+	public static int getIndexOfStandardBox() {
+		ArrayList boxList = getSettings().getBoxList();
+		for (int i=0; boxList.size()>i; i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			if (box.isStandard().booleanValue()) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	public static int getIndexOfSelecteddBox() {
+		ArrayList boxList = getSettings().getBoxList();
+		for (int i=0; boxList.size()>i; i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			if (box.isSelected()) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	
 	public static String getVlcPath() {
 		return (String)getSettings().getVlcPath();
 	}	
@@ -183,14 +227,14 @@ public class ControlMain {
 	/**
 	 * @return Returns the box.
 	 */
-	public static SerBoxControl getBox() {
-		return box;
+	public static SerBoxControl getBoxAccess() {
+		return boxAccess;
 	}
 	/**
 	 * @param box The box to set.
 	 */
-	public static void setBox(SerBoxControl box) {
-		ControlMain.box = box;
+	public static void setBoxAccess(SerBoxControl box) {
+		ControlMain.boxAccess = box;
 	}
 	/**
 	 * @return Returns the terms.

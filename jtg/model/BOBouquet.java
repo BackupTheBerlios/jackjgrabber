@@ -64,7 +64,7 @@ public class BOBouquet extends java.lang.Object {
 	}
 	
 	public void readSender() throws IOException {
-		this.setSender(ControlMain.getBox().getSender(this));
+		this.setSender(ControlMain.getBoxAccess().getSender(this));
 	}
 
 }

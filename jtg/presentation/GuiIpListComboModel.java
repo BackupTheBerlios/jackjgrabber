@@ -3,28 +3,29 @@ package presentation;
 
 import javax.swing.DefaultComboBoxModel;
 
-import model.BOBouquet;
+import model.BOBox;
+import control.ControlMain;
 import control.ControlProgramTab;
 
 /**
  * @author Alexander Geist
- * Combobox-Model der Bouqetsauswahl im Programm-Tab
+ * ComboBoxModel der JCombobox IP-Auswahl im Programm-Tab
  */
-public class GuiBoquetsComboModel extends DefaultComboBoxModel { //implements ComboBoxModel {
+public class GuiIpListComboModel extends DefaultComboBoxModel { //implements ComboBoxModel {
 	
 	ControlProgramTab control;
 	
-	public GuiBoquetsComboModel(ControlProgramTab ctrl) {
+	public GuiIpListComboModel(ControlProgramTab ctrl) {
 		this.setControl(ctrl);
 	}
 	
 	public Object getElementAt(int index) {
-		BOBouquet bouquet = (BOBouquet)this.getControl().getBouquetList().get(index);
-		return bouquet.getBouquetName();
+		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(index);
+		return box.getDboxIp();
 	}
 
 	public int getSize() {
-		return this.getControl().getBouquetList().size();
+		return ControlMain.getSettings().getBoxList().size();
 	}
 	
 	/**

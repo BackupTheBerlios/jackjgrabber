@@ -13,6 +13,7 @@ public class BOBox {
 	private String login;
 	private String password;
 	private Boolean standard = Boolean.FALSE;
+	private boolean selected;
 	
 	
 	public BOBox() {}
@@ -69,5 +70,17 @@ public class BOBox {
 	 */
 	public void setStandard(Boolean standard) {
 		this.standard = standard;
+	}
+	/**
+	 * @return Returns the selected.
+	 */
+	public boolean isSelected() {
+		return selected;
+	}
+	/**
+	 * @param selected The selected to set.
+	 */
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }

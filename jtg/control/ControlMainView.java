@@ -9,10 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import model.BOBox;
+
 import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
+
 
 /**
  * @author Alexander Geist
@@ -38,8 +41,19 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.setView(new GuiMainView(this));
 		ControlMain.getLogAppender().setView(this.getView());
 		this.initialize();
-		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
+		
+		this.startProgramControl();		
 		this.log("Anwendung gestartet");		
+	}
+	
+	private void startProgramControl() {
+		//erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
+		//manuell erfolgen
+		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
+		BOBox box = ControlMain.getSelecteddBox();
+		this.getView().getMainTabPane().getTabProgramm().getControl().setSelectedBox(box);
+		int index = ControlMain.getIndexOfSelecteddBox();
+		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
 	}
 	
 	private void initialize() {
@@ -101,15 +115,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		GuiMainTabPane pane = (GuiMainTabPane)event.getSource();
 		int count = pane.getSelectedIndex(); //number of selected Tab
 		JPanel comp = (JPanel)pane.getComponent(count);
-		
-		//Change-Event beim Verlassen des Setting-Tabs
-		if (pane.getIndex()==3 && ControlMain.getSettings().isBoxIpChanged()) {
-			ControlMain.detectImage();
-			this.log("Standard-Box changed to"+ControlMain.getBoxIp());
-			pane.getTabProgramm().getControl().reInitialize();
-			ControlMain.getSettings().setBoxIpChanged(false);
-		}
-		
+				
 		//Change-Events bei betreten neuer Tabs
 		if (count == 0) { //ProgrammTab
 			try {

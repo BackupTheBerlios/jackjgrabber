@@ -85,8 +85,7 @@ public class GuiEpgTableModel extends AbstractTableModel
 			
 			for (int i=0; i<fullList.size(); i++) {
 				BOEpg epg = (BOEpg)fullList.get(i);                                
-                                if (SerFormatter.shortDate(epg.getStartdate().getTime()).equalsIgnoreCase(SerFormatter.shortDate(dateChooserDate.getTime()))){                              
-				//if (epg.getStartdate().compareTo(dateChooserDate) == 0) {
+				if (SerFormatter.shortDate(epg.getStartdate().getTime()).equalsIgnoreCase(SerFormatter.shortDate(dateChooserDate.getTime()))){                              
 					this.getEpgList().add(epg);
 				}
 			}

@@ -80,7 +80,7 @@ public class BOSender {
 	}
 	
 	public ArrayList readEpg() throws IOException {
-		ArrayList epgList = ControlMain.getBox().getEpg(this);
+		ArrayList epgList = ControlMain.getBoxAccess().getEpg(this);
 		this.setEpg(epgList);
 		return epgList;
 	}

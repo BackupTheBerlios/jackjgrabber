@@ -1,9 +1,3 @@
-/*
- * Created on 11.09.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package control;
 
 import java.awt.event.ActionEvent;
@@ -26,6 +20,7 @@ import org.apache.log4j.Logger;
 import boxConnection.SerBoxControl;
 
 import model.BOBouquet;
+import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOSender;
@@ -42,8 +37,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	ArrayList bouquetList = new ArrayList();
 	ArrayList pids;
-	SerBoxControl box;
 	BOSender selectedSender;
+	BOBox selectedBox;
 	BOEpg selectedEpg;
 	BOBouquet selectedBouquet;
 	Date dateChooserDate;
@@ -59,8 +54,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void initialize() {
 		try {
-			this.setBox(ControlMain.getBox());
-			this.setBouquetList(this.getBox().getBouquetList());
+			this.setBouquetList(this.getBoxAccess().getBouquetList());
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		} catch (IOException e) {			
@@ -72,7 +66,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.setBouquetList(new ArrayList());
 		this.setSelectedBouquet(null);
 		this.getSenderTableModel().fireTableDataChanged();
-		this.getEpgTableModel().setEpgList(null);
+		selectedSender=null;
+		this.getEpgTableModel().fireTableDataChanged();
 		this.getMainView().getTabProgramm().getBoquetsComboModel().setSelectedItem(null);
 		this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
 		this.initialize();
@@ -88,7 +83,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		}
 		if (action == "Box Reboot"){
 			try{
-				box.shutdownBox();
+				this.getBoxAccess().shutdownBox();
 			}catch (IOException ex){}
 		}
 	}
@@ -103,8 +98,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			if (tableName == "Sender") {  
 				this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
 				if (me.getClickCount()==2) { //Zapping
-					if (ControlMain.getBox().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
-						this.setPids(ControlMain.getBox().getPids());
+					if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
+						this.setPids(ControlMain.getBoxAccess().getPids());
 					}
 				}
 			}
@@ -133,14 +128,26 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	{}
 	
 	/**
-	 * Select-Event der Bouquet-Combobox
-	 * Setzen des aktuellen Bouquets, Selektion des 1. Senders
+	 * Select-Events der Combobox
 	 */
 	public void itemStateChanged( ItemEvent e ) {
 		JComboBox comboBox = (JComboBox)e.getSource();
-		this.reInitBouquetList(comboBox);
+		if (comboBox.getName().equals("ipList")) {
+			BOBox newSelectedBox = (BOBox)ControlMain.getSettings().getBoxList().get(comboBox.getSelectedIndex());
+			if (this.getSelectedBox().isSelected() != newSelectedBox.isSelected()) {
+				this.getSelectedBox().setSelected(false); //alte Box zurücksetzen!	
+				this.setSelectedBox(newSelectedBox);
+				newSelectedBox.setSelected(true);
+				ControlMain.detectImage();
+				this.reInitialize();
+			}
+		}
+		if (comboBox.getName().equals("bouquets")) {
+			this.reInitBouquetList(comboBox);
+		}
 	}
 	
+	//Setzen des aktuellen Bouquets, Selektion des 1. Senders
 	public void reInitBouquetList(JComboBox  comboBox) {
 		if (this.getBouquetList().size()>0) {
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(comboBox.getSelectedIndex()));
@@ -240,14 +247,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	/**
 	 * @return Returns the box.
 	 */
-	public SerBoxControl getBox() {
-		return box;
-	}
-	/**
-	 * @param box The box to set.
-	 */
-	public void setBox(SerBoxControl box) {
-		this.box = box;
+	public SerBoxControl getBoxAccess() {
+		return ControlMain.getBoxAccess();
 	}
 	/**
 	 * @return Returns the selectedEpg.
@@ -329,5 +330,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	private JTextArea getJTextAreaEPG() {
 		return this.getMainView().getTabProgramm().getJTextAreaEPG();
+	}
+	/**
+	 * @return Returns the selectedBox.
+	 */
+	public BOBox getSelectedBox() {
+		return selectedBox;
+	}
+	/**
+	 * @param selectedBox The selectedBox to set.
+	 */
+	public void setSelectedBox(BOBox selectedBox) {
+		this.selectedBox = selectedBox;
 	}
 }

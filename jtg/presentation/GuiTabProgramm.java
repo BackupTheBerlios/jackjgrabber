@@ -1,9 +1,3 @@
-/*
- * Created on 11.09.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package presentation;
 
 import java.awt.GridBagConstraints;
@@ -28,9 +22,8 @@ import control.ControlProgramTab;
 
 /**
  * @author Alexander Geist
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ * Gui des Programm-Tabs
  */
 public class GuiTabProgramm extends GuiTab {
 	
@@ -297,12 +290,14 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */    
-	private JComboBox getJComboBoxBoxIP() {
+	public JComboBox getJComboBoxBoxIP() {
 		if (jComboBoxBoxIP == null) {
 			jComboBoxBoxIP = new JComboBox();
-			jComboBoxBoxIP.setMaximumSize(new java.awt.Dimension(105,24));
 			jComboBoxBoxIP.setEditable(true);
+			jComboBoxBoxIP.setModel(new GuiIpListComboModel(control));
+			jComboBoxBoxIP.addItemListener(control);
 			jComboBoxBoxIP.setPreferredSize(new java.awt.Dimension(105,24));
+			jComboBoxBoxIP.setName("ipList");
 		}
 		return jComboBoxBoxIP;
 	}
@@ -574,9 +569,7 @@ public class GuiTabProgramm extends GuiTab {
 	         boquetsComboModel = new GuiBoquetsComboModel(control);
 	         JComboBoxBouquets = new JComboBox(boquetsComboModel);
 	         JComboBoxBouquets.addItemListener(control);
-	         if (this.getControl().getBouquetList().size()>0) {
-	            JComboBoxBouquets.setSelectedIndex(0);
-	         }
+	         JComboBoxBouquets.setName("bouquets");
 	      }
 	      return JComboBoxBouquets;
 	   }

@@ -29,7 +29,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
-		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIp()+request).openStream()));
+		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfSelectedBox()+request).openStream()));
 	}
 		
 	public ArrayList getPids() throws IOException {

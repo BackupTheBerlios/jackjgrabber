@@ -120,7 +120,7 @@ public class BOEpg {
 	}
 	
 	public BOEpgDetails readEpgDetails() throws IOException {
-		BOEpgDetails detail = ControlMain.getBox().getEpgDetail(this);
+		BOEpgDetails detail = ControlMain.getBoxAccess().getEpgDetail(this);
 		this.setEpgDetail(detail);
 		return detail;
 	}
