@@ -88,7 +88,7 @@ public class GuiMainTabPane extends JTabbedPane {
 	
 	public void reInitTimerPanel() {
 		this.tabTimer=null;
-		JPanel panel = (JPanel)this.getComponent(1);
+		JPanel panel = (JPanel)this.getComponent(2);
 		panel.removeAll();
 	}
 	
