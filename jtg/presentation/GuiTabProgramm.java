@@ -63,8 +63,6 @@ public class GuiTabProgramm extends GuiTab {
 	private JButton jButtonQuickRecord = null;
 	private JButton jButtonReboot = null;
 	private JButton jButtonPlayback = null;
-	private JButton jButtonNhttpdReset = null;
-	private JButton jButtonEPGReset = null;
 	private JButton jButtonToTimer = null;
 	private JButton jButtonStartServer = null;
 	private JButton jButtonRefresh = null;
@@ -132,12 +130,11 @@ public class GuiTabProgramm extends GuiTab {
 			
 			builder.add(this.getJRadioButtonTVMode(),					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJButtonStartServer(),					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonPlayback(),		  					cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(7, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonReboot(), 	 						cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJRadioButtonRadioMode(),			cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonReboot(), 	 						cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonNhttpdReset(),  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonEpgReset(),	  					cc.xyw	(7, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonPlayback(),		  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			
 		}
 		return jPanelButtonsAktionen;
 	}
@@ -300,37 +297,7 @@ public class GuiTabProgramm extends GuiTab {
 		}
 		return jButtonPlayback;
 	}
-	/**
-	 * This method initializes jButtonNhttpdReset	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
-	public JButton getJButtonNhttpdReset() {
-		if (jButtonNhttpdReset == null) {
-			jButtonNhttpdReset = new JButton();
-			jButtonNhttpdReset.setText(ControlMain.getProperty("button_nhttpdReset"));
-			jButtonNhttpdReset.setActionCommand("nhttpdReset");
-			jButtonNhttpdReset.setToolTipText(ControlMain.getProperty("buttontt_nhttpdReset"));
-			jButtonNhttpdReset.addActionListener(this.getControl());
-		}
-		return jButtonNhttpdReset;
-	}
-	/**
-	 * This method initializes jButtonToTimer	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
-	public JButton getJButtonEpgReset() {
-		if (jButtonEPGReset == null) {
-			jButtonEPGReset = new JButton();
-			jButtonEPGReset.setPreferredSize(new java.awt.Dimension(100,25));
-			jButtonEPGReset.setText(ControlMain.getProperty("button_epgReset"));
-			jButtonEPGReset.setActionCommand("epgReset");
-			jButtonEPGReset.setToolTipText(ControlMain.getProperty("buttontt_epgReset"));
-			jButtonEPGReset.addActionListener(this.getControl());
-		}
-		return jButtonEPGReset;
-	}
+
 	/**
 	 * This method initializes jTextField	
 	 * 	
@@ -518,8 +485,6 @@ public class GuiTabProgramm extends GuiTab {
 	}
 	public void setDisconnectModus() {
 		this.getJButtonAufnahme().setEnabled(false);
-		this.getJButtonEpgReset().setEnabled(false);
-		this.getJButtonNhttpdReset().setEnabled(false);
 		this.getJButtonReboot().setEnabled(false);
 		this.getJButtonSelectedToTimer().setEnabled(false);
 		this.getJButtonStartServer().setEnabled(false);
@@ -528,8 +493,6 @@ public class GuiTabProgramm extends GuiTab {
 	
 	public void setConnectModus() {
 		this.getJButtonAufnahme().setEnabled(true);
-		this.getJButtonEpgReset().setEnabled(true);
-		this.getJButtonNhttpdReset().setEnabled(true);
 		this.getJButtonReboot().setEnabled(true);
 		this.getJButtonSelectedToTimer().setEnabled(true);
 		this.getJButtonStartServer().setEnabled(true);
