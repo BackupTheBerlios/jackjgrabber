@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -40,7 +41,12 @@ public class RecordControl extends Thread
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
 		recordArgs = args;
 		controlProgramTab = control;
-		record = new Record(args, this);
+		if (control.isTvMode()) {
+		    record = new UdpRecord(args, this);
+		} else {
+		    record = new TcpRecord(args, this);
+		}
+		
 	}
 	
 	/*
@@ -48,7 +54,7 @@ public class RecordControl extends Thread
 	 */
 	public void run() {
 		record.start();
-		if (recordArgs.getBouquetNr() != null) { //Timer-Record hat keine bouquetNr 
+		if (recordArgs.getBouquetNr() != null) { //Timer-UdpRecord hat keine bouquetNr 
 			long millis = new Date().getTime();
 			stopTime = new Date(millis+1500000);
 			controlProgramTab.setRecordStoptTime(stopTime);
@@ -72,7 +78,7 @@ public class RecordControl extends Thread
 	public void stopRecord() {
 	    record.stop();
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
-    	if (ControlMain.getSettings().isStartPX() && record.writeStream!=null) {
+    	if (ControlMain.getSettings().isStartPX() && record.getWriteStream()!=null) {
     		this.startProjectX();
     		Logger.getLogger("RecordControl").info("Start ProjectX for demuxing");
     	}
@@ -86,9 +92,9 @@ public class RecordControl extends Thread
 	
 	private String[] buildPXcommand() {
         ArrayList allFiles = new ArrayList();
-        int streamCount = record.writeStream.length;
+        int streamCount = record.getWriteStream().length;
         for (int i=0; i<streamCount; i++) {
-            ArrayList fileList = record.writeStream[i].fileList;
+            ArrayList fileList = record.getWriteStream()[i].fileList;
             for (int i2=0; i2<fileList.size(); i2++) {
                 File file = (File)fileList.get(i2);
                 allFiles.add(file);
@@ -100,5 +106,20 @@ public class RecordControl extends Thread
             args[i] = file.getAbsolutePath();
         }
         return args;
+	}
+	
+	public String getFileName() {
+	    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
+	    Date now = new Date();
+	    String date = f.format(now);
+	    String name;
+	    
+		BORecordArgs args = this.recordArgs;
+		if (args.getEpgTitle() != null) {
+		    name = date+" "+args.getSenderName()+" "+args.getEpgTitle();   
+		} else {
+		    name = date+" "+args.getSenderName();
+		}	
+		return name;
 	}
 }
