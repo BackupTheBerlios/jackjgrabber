@@ -780,10 +780,9 @@ public class SerSettingsHandler {
 	 */
 	public static void readSettings() {
 		try {
-			XMLDecoder dec = new XMLDecoder(new FileInputStream(ControlMain.settingsFilename));
-			dec.setExceptionListener(new ExceptionListener() {
+			XMLDecoder dec = new XMLDecoder(new FileInputStream(ControlMain.settingsFilename),null,new ExceptionListener() {
 				public void exceptionThrown(Exception e) {
-					e.printStackTrace();
+					Logger.getLogger("ControlMain").error(e.getMessage());
 				}
 			});
 
