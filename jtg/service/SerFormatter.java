@@ -1,6 +1,7 @@
 package service;
 
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -9,6 +10,8 @@ import java.text.ParseException;
 import java.util.regex.*;
 import javax.swing.text.*;
 import java.awt.Color;
+import java.io.*;
+
 import javax.swing.ImageIcon;
 /**
  * @author ralix
@@ -18,6 +21,8 @@ public class SerFormatter {
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_SHORT_TIME = "dd.MM./HH:mm";
 	private static final String TIME = "HH:mm";
+	
+	private static HashMap calCache = new HashMap();
 
 	/** entferne alle unerlaubten Zeichen
 	 * 
@@ -154,10 +159,15 @@ public class SerFormatter {
 	}
 
 	public static String getCorrectEndTime(String start, String ende) {
-	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, TIME);
-		cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
+	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, TIME,true);
+		int hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
+		int min = cal.get(GregorianCalendar.MINUTE);
+	    cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
 		cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+ Integer.parseInt(ende.substring(3, 5)));
-		return getFormatGreCal(cal, TIME);
+		String val = getFormatGreCal(cal, TIME);
+	    cal.set(GregorianCalendar.HOUR_OF_DAY, hour);
+		cal.set(GregorianCalendar.MINUTE, min);
+		return val;
 	}
 
 	public static String getCorrectDate(String datum) {	   
@@ -202,16 +212,49 @@ public class SerFormatter {
     public static GregorianCalendar getDateFromString (String date, String format) {
     	return convString2GreCal(date, format);
     }
-    public static GregorianCalendar convString2GreCal (String date, String format) {	
-        SimpleDateFormat formatter  = new SimpleDateFormat(format);
-        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-        try {
-            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(date)).getTime());
-        }catch(ParseException pex){
-        }        
+
+    /** liefert ein Calendar Objekt für das gegeben Datum als String. 
+     * 
+     * @param date
+     * @param format
+     * @param useCache wenn true wird der Cache benützt! Achtung: Das Calendar Objekt darf in diesem Fall
+     * nicht verändert werden!
+     * @return
+     */
+    public static GregorianCalendar convString2GreCal (String date, String format,boolean useCache) {	
+        
+    	GregorianCalendar cal = null;
+    	if (useCache)
+    	{
+	    	cal = (GregorianCalendar) calCache.get(date + "|" + format);
+	    	if (cal == null)
+	    	{
+		    	SimpleDateFormat formatter  = new SimpleDateFormat(format);
+		        cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+		        try {
+		            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(date)).getTime());
+		            calCache.put(date + "|" + format,cal);
+		        }catch(ParseException pex){
+		        }
+	    	}
+    	}
+    	else
+    	{
+    		SimpleDateFormat formatter  = new SimpleDateFormat(format);
+	        cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+	        try {
+	            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(date)).getTime());
+	        }catch(ParseException pex){
+	        }
+    	}
         return cal;
     }
 
+    public static GregorianCalendar convString2GreCal (String date, String format) {	
+    	return convString2GreCal(date,format,false);
+    }
+    
+    
     public static GregorianCalendar getGC(GregorianCalendar gc, int value){
         GregorianCalendar newCal = (GregorianCalendar)gc.clone();
         newCal.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
@@ -225,13 +268,17 @@ public class SerFormatter {
         }catch(Exception pex){}        
         return cal;
     }
+    
     public static boolean compareDates(String date1, String date2){    	
     	if( date2.equals("today")){
     		date2=getFormatGreCal();
     	}    	  
-    	return convString2GreCal(date1, DATE_FULL).getTimeInMillis() >= convString2GreCal(date2, DATE_FULL).getTimeInMillis();
+    	return convString2GreCal(date1, DATE_FULL,true).getTimeInMillis() >= convString2GreCal(date2, DATE_FULL,true).getTimeInMillis();
     }
 
+    public static boolean compareDates(String date1, Calendar date2){    	
+    	return convString2GreCal(date1, DATE_FULL,true).getTimeInMillis() >= date2.getTimeInMillis();
+    }
     
     /**
      * @param cal1
@@ -295,11 +342,11 @@ public class SerFormatter {
         }
     }
         
-    static Highlighter.HighlightPainter myHighlightPainter = new MyHighlightPainter(new Color(255,204,51));
+	static Highlighter.HighlightPainter myHighlightPainter = new MyHighlightPainter(new Color(255,204,51));
     
     static class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
         public MyHighlightPainter(Color color) {
             super(color);
         }
-    }
+    }   
 }

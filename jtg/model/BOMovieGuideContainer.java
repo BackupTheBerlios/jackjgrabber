@@ -7,6 +7,7 @@
 package model;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -51,15 +52,20 @@ public class BOMovieGuideContainer{
 		 catch(MalformedURLException MEx){
 		    Logger.getLogger("ControlMovieGuideTab").error(file.getName()+" not found");	
 		 }
+			//long x = System.currentTimeMillis();
+		 
+		 
 		Element root = doc.getRootElement();
 		//clear();
-		try {						
+		try {		
+			Calendar today = Calendar.getInstance();
+			
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {				
 				Element entry = (Element) i.next();										
+				String datum = entry.element("datum").getStringValue();						
+				if(!SerFormatter.compareDates( datum,today)) continue;			
 				String sender = entry.element("sender").getStringValue();				
 				if( !(aboList.contains(sender)) && !aboList.isEmpty() ) continue;
-				String datum = entry.element("datum").getStringValue();						
-				if(!SerFormatter.compareDates( datum,"today")) continue;			
 				setDatumList(datum);
 				String titel  = entry.element("titel").getStringValue();
 				String dauer = entry.element("dauer").getStringValue();				
@@ -69,9 +75,9 @@ public class BOMovieGuideContainer{
 						String start = entry.element("start").getStringValue();			
 						bomovieguide = new BOMovieGuide(						
 							sender,	
-							SerFormatter.convString2GreCal(datum,DATE_FULL),
-							SerFormatter.convString2GreCal(datum+","+start, DATE_FULL_TIME),
-							SerFormatter.convString2GreCal(datum+","+SerFormatter.getCorrectEndTime(start,dauer), DATE_FULL_TIME),					
+							SerFormatter.convString2GreCal(datum,DATE_FULL,true),
+							SerFormatter.convString2GreCal(datum+","+start, DATE_FULL_TIME,true),
+							SerFormatter.convString2GreCal(datum+","+SerFormatter.getCorrectEndTime(start,dauer), DATE_FULL_TIME,true),					
 							titel,
 							entry.element("episode").getStringValue(),
 							entry.element("genre").getStringValue(),
@@ -90,18 +96,21 @@ public class BOMovieGuideContainer{
 				     String start = entry.element("start").getStringValue();
 				     String ende  = SerFormatter.getCorrectEndTime(start,dauer);
 				     bomovieguide = (BOMovieGuide)titelList.get(titel);                     
-					 bomovieguide.setDatum(SerFormatter.convString2GreCal(datum,DATE_FULL));
-                     bomovieguide.setStart(SerFormatter.convString2GreCal(datum+","+start, DATE_FULL_TIME));
+					 bomovieguide.setDatum(SerFormatter.convString2GreCal(datum,DATE_FULL,true));
+                     bomovieguide.setStart(SerFormatter.convString2GreCal(datum+","+start, DATE_FULL_TIME,true));
                      bomovieguide.setDauer(dauer);                                                  
                      bomovieguide.setSender(sender);
                      bomovieguide.setBild(entry.element("bild").getStringValue());
                      bomovieguide.setTon(entry.element("ton").getStringValue());
-                     bomovieguide.setEnde(SerFormatter.convString2GreCal(datum+","+ende, DATE_FULL_TIME));	
+                     bomovieguide.setEnde(SerFormatter.convString2GreCal(datum+","+ende, DATE_FULL_TIME,true));	
 				}
 			}		
     	}catch (Exception e) {
 	           Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_read_mg"));	
 		}			
+    	
+//		 System.out.println("Dauer: " + (System.currentTimeMillis() - x));
+
     	Collections.sort(getSenderList());		//alphabetisch geordnet 
         Collections.sort(getGenreList());		//alphabetisch geordnet
 		return titelList.size();
