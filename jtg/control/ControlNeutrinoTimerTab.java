@@ -176,10 +176,11 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 		int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList()[0];
 		for (int i=rows.length-1; 0<=i; i--) {
-			BOTimer timer = (BOTimer)timerList.get(rows[i]);
+		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
+			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
-				timerList.remove(rows[i]);
+				timerList.remove(modelIndex);
 				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
@@ -191,10 +192,11 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 		int[] rows = this.getTab().getJTableSystemTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList()[1];
 		for (int i=rows.length-1; 0<=i; i--) {
-			BOTimer timer = (BOTimer)timerList.get(rows[i]);
+		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
+			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
-				timerList.remove(rows[i]);
+				timerList.remove(modelIndex);
 				this.getTab().getSystemTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
