@@ -146,7 +146,7 @@ public class GuiMainView extends JFrame {
 			ControlMain.splash.setProgress(60, ControlMain.getProperty("progress_movieguide"));
 			mainTabPane.addTab(ControlMain.getProperty("tab_recordInfo"), iconManager.getIcon("help.png"), mainTabPane.getTabRecordInfo());
 			ControlMain.splash.setProgress(70, ControlMain.getProperty("progress_aufnahmeinfo"));
-			mainTabPane.addTab(ControlMain.getProperty("tab_recordEdit"), iconManager.getIcon(""), mainTabPane.getTabRecordEdit());
+			mainTabPane.addTab(ControlMain.getProperty("tab_recordEdit"), iconManager.getIcon("recordEdit.png"), mainTabPane.getTabRecordEdit());
 			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), iconManager.getIcon("configure.png"), mainTabPane.getTabSettings());
 			ControlMain.splash.setProgress(80, ControlMain.getProperty("progress_settingsPanel"));
 			mainTabPane.addTab(ControlMain.getProperty("tab_about"), iconManager.getIcon("info.gif"), mainTabPane.getTabAbout());
