@@ -331,10 +331,14 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	private String getPlaybackRequestString(BOPlaybackOption option, BOPid audioPid){
 		String execString = option.getPlaybackOption();
         String vPid = "0x" + this.getPids().getVPid().getNumber();
-        String ip = ControlMain.getBoxIpOfActiveBox();
-        String pmt = "0x"+this.getPids().getPmtPid().getNumber();
-
-        execString = SerFormatter.replace(execString, "$pmt", pmt);
+        String ip = ControlMain.getBoxIpOfActiveBox();       
+        
+        BOPid pmtPid = this.getPids().getPmtPid();
+        if (pmtPid!=null) {
+            String pmt = "0x"+this.getPids().getPmtPid().getNumber();
+            execString = SerFormatter.replace(execString, "$pmt", pmt);
+        } 
+        
         execString = SerFormatter.replace(execString, "$ip", ip);
         execString = SerFormatter.replace(execString, "$vPid", vPid);
         execString = SerFormatter.replace(execString, "$aPid", "0x"+audioPid.getNumber());
