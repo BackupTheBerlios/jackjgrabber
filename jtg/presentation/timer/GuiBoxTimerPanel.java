@@ -130,7 +130,12 @@ public class GuiBoxTimerPanel extends JPanel {
 	private ImageIcon getImageIcon() {
 		if (imageIcon == null) {
 			//imageIconNeutrino = new ImageIcon(ClassLoader.getSystemResource("ico/neutrino.gif"));
-			imageIcon = new ImageIcon(ClassLoader.getSystemResource(ControlMain.getBoxAccess().getIcon()));
+			String icon = ControlMain.getBoxAccess().getIcon();
+			if (icon != null && icon.length() > 0) {
+				imageIcon = new ImageIcon(ClassLoader.getSystemResource(ControlMain.getBoxAccess().getIcon()));
+			} else {
+				imageIcon = new ImageIcon();
+			}
 		}
 		return imageIcon;
 	}
