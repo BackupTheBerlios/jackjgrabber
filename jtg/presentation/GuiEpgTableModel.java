@@ -47,6 +47,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 			return epg.getTitle();
 		}
 	}
+	public Class getColumnClass(int c) {
+        return getValueAt(0, c).getClass();
+    }
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
