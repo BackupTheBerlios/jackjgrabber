@@ -83,15 +83,15 @@ public class GuiTabStart extends JPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
 						  "pref",  		// columns 
-						  "10, pref, 5, pref, 5, pref, 5, pref"); 			// rows
+						  "10, pref, pref, pref, pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
 		builder.add(this.getPanelClient(),				cc.xy(1, 2));
-		builder.add(this.getPanelInfo(), 				cc.xy(1, 4));
-		builder.add(this.getPanelNews(), 				cc.xy(1, 6));
-		builder.add(this.getPanelWarn(),	 			cc.xy(1, 8));
+		builder.add(this.getPanelInfo(), 				cc.xy(1, 3));
+		builder.add(this.getPanelNews(), 				cc.xy(1, 4));
+		builder.add(this.getPanelWarn(),	 			cc.xy(1, 5));
 	}
 	
     /**
@@ -139,7 +139,7 @@ public class GuiTabStart extends JPanel {
         if (panelNews == null) {
             panelNews = new JPanel();
 			FormLayout layout = new FormLayout("40, 10, pref", //columna
-					"pref, 5, 100, 5, pref, pref"); //rows
+					"pref, 5, 120"); //rows
 			PanelBuilder builder = new PanelBuilder(panelNews, layout);
 			CellConstraints cc = new CellConstraints();
 			
