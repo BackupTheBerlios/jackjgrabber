@@ -88,7 +88,7 @@ public class GuiTabRecordInfo extends GuiTab {
 
 		guiFilesTab = new GuiTabAvailableFiles(control);
 		tab.addTab(ControlMain.getProperty("tab_currentRecord"), currentRecord);
-		tab.addTab(ControlMain.getProperty("tab_recordInfos"), guiFilesTab);
+		tab.addTab(ControlMain.getProperty("label_recordPath"), guiFilesTab);
 		add(tab);
 
 	}
