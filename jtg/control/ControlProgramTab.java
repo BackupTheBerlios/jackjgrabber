@@ -156,23 +156,23 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.actionPlayback();
 				break;
 			}
-			if (action == "Box Reboot"){
+			if (action == "reboot"){
 				try{
 					SerBoxTelnet.runReboot();					
 				}catch (Exception ex){}
 				break;
 			}
-			if (action == "add to timer"){
+			if (action == "toTimer"){
 				this.actionAddToTimer();
 				break;
 			}
-			if (action == "nhttpd reset"){
+			if (action == "nhttpdRreset"){
 				try{
 					SerBoxTelnet.runNhttpdReset();
 				}catch (Exception ex){}
 				break;
 			}
-			if (action == "EPG Reset"){
+			if (action == "epgReset"){
 				try{
 					SerBoxTelnet.runSectiondReset();
 				}catch (Exception ex){}
