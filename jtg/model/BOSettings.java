@@ -19,18 +19,26 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.util.ArrayList;
 
+/**
+ * Klasse referenziert die Settings
+ * Settings werden beim Start gelesen und beim Beenden gespeichert
+ * Sind keine Änderungen an den Settings vorgenommen worden, werden diese nicht gespeichert
+ * Werden settings geaendert muss die Variable "settingsChanged" auf true gesetzt werden.
+ * Dies geschieht in den Setter-Methoden der einzelnen Settings-Optionen
+ */
 public class BOSettings {
     
-	private String locale;
-	private String themeLayout;
-    private String vlcPath;
-    private ArrayList boxList;
-    private boolean boxIpChanged = false;
-    private boolean settingsChanged = false;
-    private boolean projectXSettingsChanged = false;
-    private String streamingServerPort;
-    private boolean startStreamingServer;
-    private String savePath;
+	public String locale;
+	public String themeLayout;
+	public String vlcPath;
+	public ArrayList boxList;
+	public boolean boxIpChanged = false;
+	public boolean settingsChanged = false;
+	public boolean projectXSettingsChanged = false;
+	public String streamingServerPort;
+	public boolean startStreamingServer;
+	public String savePath;
+	public String playbackString;
     
     public void removeBox(int number) {
     	setSettingsChanged(true);
@@ -137,9 +145,11 @@ public class BOSettings {
 	/**
 	 * @param startStreamingServer The startStreamingServer to set.
 	 */
-	public void setStartStreamingServer(boolean startStreamingServer) {
-		setSettingsChanged(true);
-		this.startStreamingServer = startStreamingServer;
+	public void setStartStreamingServer(boolean startServer) {
+		if (this.startStreamingServer != startServer) {
+			setSettingsChanged(true);
+			this.startStreamingServer = startServer;
+		}
 	}
 	/**
 	 * @return Returns the savePath.
@@ -165,5 +175,21 @@ public class BOSettings {
 	 */
 	public void setProjectXSettingsChanged(boolean projectXSettingsChanged) {
 		this.projectXSettingsChanged = projectXSettingsChanged;
+	}
+	/**
+	 * @return Returns the playbackPlayer.
+	 */
+	public String getPlaybackString() {
+		if (playbackString!=null) {
+			return playbackString;
+		}
+		return"";
+	}
+	/**
+	 * @param playbackPlayer The playbackPlayer to set.
+	 */
+	public void setPlaybackString(String playbackPlayer) {
+		setSettingsChanged(true);
+		this.playbackString = playbackPlayer;
 	}
 }
