@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
+import service.SerAlertDialog;
 
 
 /**
@@ -52,8 +53,13 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
 		BOBox box = ControlMain.getSelectedBox();
 		this.getView().getMainTabPane().getTabProgramm().getControl().setSelectedBox(box);
-		int index = ControlMain.getIndexOfSelecteddBox();
-		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
+		
+		try {
+			int index = ControlMain.getIndexOfSelecteddBox();
+			this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
+		} catch (IllegalArgumentException e) {
+			SerAlertDialog.alert("No Box-IP in the Settings found", this.getView());
+		}
 	}
 	
 	private void initialize() {
