@@ -393,26 +393,21 @@ public class ControlProgramTab extends ControlTab
 	 */
 	public BOEpg getRunnigEpg(ArrayList epgList) {
 		if (epgList != null) {
-			Date now = new Date();
-			long nowTime = now.getTime();
-			for (int i = 0; i < epgList.size(); i++) {
-				BOEpg epgObj = (BOEpg) epgList.get(i);
-				long epgStart = Long.parseLong(epgObj.getUnformattedStart()) * 1000;
-				int epgIndex = i - 1;
-				if (nowTime - epgStart < 0 && epgIndex > -1) {
-					BOEpg neededEpg = (BOEpg) epgList.get(i - 1);
-					if (neededEpg != null) {
-						return neededEpg;
-					}
+			GregorianCalendar now = new GregorianCalendar();
+			long nowTime = now.getTimeInMillis();
+			for (int i=0; i<epgList.size(); i++) {
+				BOEpg epgObj = (BOEpg)epgList.get(i);
+				long epgStart = Long.parseLong(epgObj.getUnformattedStart())*1000;
+				int epgIndex = i-1;
+				if (now.get(GregorianCalendar.DATE)==epgObj.getStartdate().get(GregorianCalendar.DATE)) {
+				    if (nowTime-epgStart<0 && epgIndex>-1) {
+						BOEpg neededEpg = (BOEpg)epgList.get(i-1);
+						if (neededEpg != null) {
+							return neededEpg;
+						}
+					}   
 				}
-
-				// Wenn keines gefunden wurde, gib den letzten Eintrag zurück
-				if (i + 1 == epgList.size()) {
-					return (BOEpg) epgList.get(epgList.size() - 1);
-				}
-
 			}
-
 		}
 		return null;
 	}
