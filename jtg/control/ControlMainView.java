@@ -21,8 +21,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
-
-import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -81,8 +79,9 @@ public class ControlMainView implements ActionListener, ChangeListener {
         ControlMain.setResourceBundle(ControlMain.getLocale());
 	}
 	private void logSystemInfo() {
-		this.log(ControlMain.version[0]+"/"+ControlMain.version[1]+" "
-				+ControlMain.version[2]+" "+ControlMain.version[3]);
+		for (int i=0; i<ControlMain.version.length; i++) {
+			this.log(ControlMain.version[i]);
+		}
 		this.log("java.version\t"+System.getProperty("java.version"));
 		this.log("java.vendor\t"+System.getProperty("java.vendor"));
 		this.log("java.home\t"+System.getProperty("java.home"));
@@ -147,7 +146,9 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		}
 		if (count == 3) { //SettingsTab
 			pane.setComponentAt(count, pane.getTabSettings());
-			pane.getTabTimer().getControl().initialize();
+		}
+		if (count == 4) { //AboutTab
+			pane.setComponentAt(count, pane.getTabAbout());
 		}
 		pane.setIndex(count);
 	}
