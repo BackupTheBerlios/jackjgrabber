@@ -82,8 +82,12 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		while((line=input.readLine())!=null) {
         	StringTokenizer st = new StringTokenizer(line);
 			String nummer = st.nextToken();
-			String name = st.nextToken();
-			bouquetList.add(new BOBouquet(nummer, name));
+			String name = new String();
+			while (st.hasMoreTokens()) {
+				name += st.nextToken();
+				name += " ";
+			}
+			bouquetList.add(new BOBouquet(nummer, name.trim()));
 		}
 		return bouquetList;
 	}
@@ -123,7 +127,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 				name += st.nextToken();
 				name += " ";
 			}
-			senderList.add(new BOSender(nummer,channelId, name.substring(0, name.length()-1)));
+			senderList.add(new BOSender(nummer,channelId, name.trim()));
 		}
 		return senderList;
 	}	 
@@ -236,7 +240,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    		valueSenderName += st.nextToken();
 		    		valueSenderName += " ";
 				}
-		    	botimer.senderName=valueSenderName.substring(0, valueSenderName.length()-1);
+		    	botimer.senderName=valueSenderName.trim();
 		    }
 
 		    botimer.announceTime=valueAnno;
