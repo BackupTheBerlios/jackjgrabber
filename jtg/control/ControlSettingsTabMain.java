@@ -212,7 +212,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	        Logger.getLogger("ControlSettingsTabMain").info(execString);
 	        Process run = Runtime.getRuntime().exec(execString);
 	        new SerInputStreamReadThread(true, run.getInputStream()).start();
-	        new SerErrorStreamReadThread(true, run.getErrorStream()).start();
+	        new SerErrorStreamReadThread(run.getErrorStream(), true).start();
 	    } catch (IOException e) {
 	        Logger.getLogger("ControlSettingsTabMain").error(e.getMessage());
 	    }

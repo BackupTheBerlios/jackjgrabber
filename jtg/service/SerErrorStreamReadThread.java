@@ -27,10 +27,16 @@ import org.apache.log4j.Logger;
 
 public class SerErrorStreamReadThread extends Thread {
     BufferedReader input;
-    boolean logging;
+    boolean logging=true;
+    boolean logAsInfo=false;
     
     public SerErrorStreamReadThread(boolean log, InputStream in) {
     	logging=log;
+    	input = new BufferedReader(new InputStreamReader(in));
+    }
+    
+    public SerErrorStreamReadThread(InputStream in, boolean logasinfo) {
+        logAsInfo=logasinfo;
         input = new BufferedReader(new InputStreamReader(in));
     }
     
@@ -38,13 +44,14 @@ public class SerErrorStreamReadThread extends Thread {
         String line;
         try {
             while((line=input.readLine())!=null) {
-            	if (logging) {
-            		Logger.getLogger("SerErrorStreamReadThread").error(line);
-            	}
-            	line=null;
+                if (logging && !logAsInfo) {
+                    Logger.getLogger("SerErrorStreamReadThread").error(line);
+                }
+                if (logging && logAsInfo) {
+                    Logger.getLogger("SerErrorStreamReadThread").info(line);
+                }
+                line=null;
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
-
 }
