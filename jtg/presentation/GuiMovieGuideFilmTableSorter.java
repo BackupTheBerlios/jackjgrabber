@@ -43,8 +43,8 @@ public class GuiMovieGuideFilmTableSorter extends GuiTableSorter {
 	public static final Comparator DATE_COMPARATOR = new Comparator() {
         public int compare(Object o1, Object o2) {
             GregorianCalendar firstDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
-			GregorianCalendar secondDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
-			return firstDate.compareTo(secondDate);
+            GregorianCalendar secondDate = SerFormatter.getDateFromString((String)o1, "dd.MM.yy   HH:mm");
+            return SerFormatter.compareDates(firstDate, secondDate);
         }
     };
 }

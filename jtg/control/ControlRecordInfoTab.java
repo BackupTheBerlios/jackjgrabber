@@ -147,7 +147,7 @@ public class ControlRecordInfoTab extends ControlTab
 
 			File f = new File(file);
 			
-			print = new PrintStream(file);
+			print = new PrintStream(new FileOutputStream(file));
 			
 			StringBuffer log = new StringBuffer();
 			log.append(guiTabRecordInfo.getTitle() + "\n");

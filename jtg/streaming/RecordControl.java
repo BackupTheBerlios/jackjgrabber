@@ -117,7 +117,7 @@ public class RecordControl extends Thread {
 
 			File f = new File(file);
 
-			print = new PrintStream(file);
+			print = new PrintStream(new FileOutputStream(file));
 
 			StringTokenizer tok = new StringTokenizer(epg.toString(), "\n");
 			while (tok.hasMoreTokens()) {
