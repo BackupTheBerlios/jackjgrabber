@@ -21,7 +21,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -58,9 +57,9 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    this.initPlasticLookAndFeel();
 	    this.setLookAndFeel();
 	    this.setView(new GuiMainView(this));		
-	    this.logSystemInfo();
+	   
 	    this.checkStartVlc();
-	    this.log(ControlMain.getProperty("msg_app_starting"));		
+	    Logger.getLogger("ControlMainView").info(ControlMain.getProperty("msg_app_starting"));
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -125,41 +124,6 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
 		currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
 		return !currentTheme.equals(ControlMain.getSettings().getMainSettings().getThemeLayout());
-	}
-	
-	private void logSystemInfo() {
-		for (int i=0; i<ControlMain.version.length; i++) {
-			this.log(ControlMain.version[i]);
-		}
-		this.log("java.version\t"+System.getProperty("java.version"));
-		this.log("java.vendor\t"+System.getProperty("java.vendor"));
-		this.log("java.home\t"+System.getProperty("java.home"));
-		this.log("java.vm.version\t"+System.getProperty("java.vm.version"));
-		this.log("java.vm.vendor\t"+System.getProperty("java.vm.vendor"));
-		this.log("java.vm.name\t"+System.getProperty("java.vm.name"));
-		this.log("java.class.vers\t"+System.getProperty("java.class.version"));
-		this.log(ControlMain.getBoxAccess().getName()+"-"+ControlMain.getProperty("msg_accessLoaded"));
-	}
-		
-	public void logSysteminfo2() {
-		this.log("  "+java.text.DateFormat.getTimeInstance(java.text.DateFormat.FULL).format(new Date()));
-		this.log("\njava.version\t"+System.getProperty("java.version"));
-		this.log("\njava.vendor\t"+System.getProperty("java.vendor"));
-		this.log("\njava.home\t"+System.getProperty("java.home"));
-		this.log("\njava.vm.version\t"+System.getProperty("java.vm.version"));
-		this.log("\njava.vm.vendor\t"+System.getProperty("java.vm.vendor"));
-		this.log("\njava.vm.name\t"+System.getProperty("java.vm.name"));
-		this.log("\njava.class.vers\t"+System.getProperty("java.class.version"));
-		this.log("\njava.class.path\t"+System.getProperty("java.class.path"));
-		this.log("\nos.name\t"+System.getProperty("os.name"));
-		this.log("\nos.arch\t"+System.getProperty("os.arch"));
-		this.log("\nos.version\t"+System.getProperty("os.version"));
-		this.log("\nuser.name\t"+System.getProperty("user.name"));
-		this.log("\nuser.home\t"+System.getProperty("user.home"));
-	}
-	
-	private void log(String logtext) {
-		Logger.getLogger("ControlMainView").info(logtext);
 	}
 	
 	/**
