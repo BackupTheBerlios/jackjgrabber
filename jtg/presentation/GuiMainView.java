@@ -101,6 +101,7 @@ public class GuiMainView extends JFrame {
 			mainTabPane.addTab("Project-X", new JPanel());
 			mainTabPane.addTab("Settings", new JPanel());
 			mainTabPane.addTab("About", new JPanel());
+			//mainTabPane.addTab("MovieGuide", new JPanel());
 		}
 		return mainTabPane;
 	}
@@ -123,6 +124,9 @@ public class GuiMainView extends JFrame {
 	public GuiTabAbout getTabAbout() {
 		return this.getMainTabPane().getTabAbout();
 	}
+	//public GuiTabMovieGuide getTabMovieGuide() {
+	//	return this.getMainTabPane().getTabMovieGuide();
+	//}
 	/**
 	 * @return Returns the control.
 	 */

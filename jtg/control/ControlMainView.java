@@ -150,6 +150,9 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		if (count == 4) { //AboutTab
 			pane.setComponentAt(count, pane.getTabAbout());
 		}
+		//if (count == 5) { //MovieGuideTab
+		//	pane.setComponentAt(count, pane.getTabMovieGuide());
+		//}
 		pane.setIndex(count);
 	}
 		
