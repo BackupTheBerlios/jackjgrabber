@@ -34,9 +34,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
-
-import org.apache.log4j.Logger;
-
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
 import boxConnection.SerStreamingServer;
@@ -107,7 +104,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			this.setTvMode(false);
 			TableColumn nummerColumn = this.getJTableSender().getColumnModel().getColumn(0);
-			 this.getJTableSender().getTableHeader().getColumnModel().removeColumn(nummerColumn); //eventId ausblenden
+			this.getJTableSender().getTableHeader().getColumnModel().removeColumn(nummerColumn); //eventId ausblenden
 			 
 			BOBouquet bouquet = new BOBouquet("0", "Radio-Sender");
 			bouquet.setSender(this.getBoxAccess().getAllSender());
@@ -166,38 +163,50 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "record") {
-			this.actionRecord();
-		}
-		if (action == "playback") {
-			this.actionPlayback();
-		}
-		if (action == "Box Reboot"){
-			try{
-				SerBoxTelnet.runReboot();					
-			}catch (Exception ex){}
-		}
-		if (action == "add to timer"){
-			this.actionAddToTimer();
-		}
-		if (action == "nhttpd reset"){
-			try{
-				SerBoxTelnet.runNhttpdReset();
-			}catch (Exception ex){}
-		}
-		if (action == "EPG Reset"){
-			try{
-				SerBoxTelnet.runSectiondReset();
-			}catch (Exception ex){}
-		}
-		if (action == "startServer"){
-			this.actionStreamingServer();
-		}
-		if (action == "radioMode"){
-			this.actionRadioMode();
-		}
-		if (action == "tvMode"){
-			this.actionTvMode();
+		while (true) {
+			if (action == "record") {
+				this.actionRecord();
+				break;
+			}
+			if (action == "playback") {
+				this.actionPlayback();
+				break;
+			}
+			if (action == "Box Reboot"){
+				try{
+					SerBoxTelnet.runReboot();					
+				}catch (Exception ex){}
+				break;
+			}
+			if (action == "add to timer"){
+				this.actionAddToTimer();
+				break;
+			}
+			if (action == "nhttpd reset"){
+				try{
+					SerBoxTelnet.runNhttpdReset();
+				}catch (Exception ex){}
+				break;
+			}
+			if (action == "EPG Reset"){
+				try{
+					SerBoxTelnet.runSectiondReset();
+				}catch (Exception ex){}
+				break;
+			}
+			if (action == "startServer"){
+				this.actionStreamingServer();
+				break;
+			}
+			if (action == "radioMode"){
+				this.actionRadioMode();
+				break;
+			}
+			if (action == "tvMode"){
+				this.actionTvMode();
+				break;
+			}
+			break;
 		}
 	}
 	
@@ -363,11 +372,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.setSelectedEpg((BOEpg)this.getEpgTableModel().getEpgList().get(modelIndex)); 
 				if (me.getClickCount()==2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
-					if (ControlMain.getBoxAccess().writeTimer(timer).equals("ok")) {
-						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
-					} else {
-						Logger.getLogger("ControlProgramTab").error(timer.getInfo());
-					}
+					ControlMain.getBoxAccess().writeTimer(timer);
 				}
 			}
 		} catch (IOException e) {
@@ -567,11 +572,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				if (epg.getEventId().equals(eventId)) {
 					BOTimer timer = this.buildTimer(epg);
 					try {
-						if (ControlMain.getBoxAccess().writeTimer(timer).equals("ok")) {
-							Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
-						} else {
-							Logger.getLogger("ControlProgramTab").error(timer.getInfo());
-						}
+						ControlMain.getBoxAccess().writeTimer(timer);
 					} catch (IOException e) {
 						SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
 					}
