@@ -513,18 +513,12 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 			if (player.size() > 0) {
 				BOPlaybackOption play = BOPlaybackOption.detectPlaybackOption();
 				if (play != null) {
-					String exec = play.getPlaybackPlayer() + " " + play.getPlaybackPlayer();
-					exec = getExecStringWithoutParam(exec);
-
-					if (file.getAbsolutePath().indexOf(" ") > -1) {
-						exec += " \"" + file.getAbsolutePath() + "\"";
-					} else {
-						exec += " " + file.getAbsolutePath();
-					}
-					SerExternalProcessHandler.startProcess(play.getName(), exec, play.isLogOutput());
+                    String[] params = new String[2];
+                    params[0] = play.getPlaybackPlayer();
+                    params[1] = file.getAbsolutePath();
+					SerExternalProcessHandler.startProcess(play.getName(), params, play.isLogOutput());
 				}
 			}
-
 		} else {
 			try {
 
@@ -552,15 +546,6 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 				Logger.getLogger("ControlProgramTab").error(e.getMessage());
 			}
 		}
-	}
-
-	/**
-	 * @param exec
-	 * @return
-	 */
-	private String getExecStringWithoutParam(String exec) {
-		StringTokenizer tok = new StringTokenizer(exec);
-		return tok.nextToken().trim();
 	}
 
 	/*
