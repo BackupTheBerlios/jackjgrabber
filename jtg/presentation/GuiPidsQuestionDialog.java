@@ -1,6 +1,6 @@
 package presentation;
 /*
-GuiMainView.java by Geist Alexander 
+GuiPidsQuestionDialog.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
-public class GuiPidsQuestionDialog extends JDialog {
+public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	
 	private JButton jButtonOk;
 	private static JRadioButton[] jRadioButtonPids; 
@@ -44,10 +46,10 @@ public class GuiPidsQuestionDialog extends JDialog {
 	private JPanel panelPidButtons;
 	
 	public GuiPidsQuestionDialog(ArrayList pids, GuiMainView view) {
-		super(view, "Aufnahme-Pids auswählen", true);
+		super(view, true);
 		addWindowListener (new WindowAdapter() { 
 			public void windowClosing(WindowEvent e) { 
-				checkPidList();
+				checkPidList(true);
 			}
 		});
 		this.setPidList(pids);
@@ -64,9 +66,10 @@ public class GuiPidsQuestionDialog extends JDialog {
 			panelPidButtons = new JPanel();
 			jRadioButtonPids = new JRadioButton[pidList.size()];
 			PanelBuilder builder = new PanelBuilder(panelPidButtons, this.buildLayout());
+			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 			
-			builder.addSeparator("Aufnahme-Pids auswählen", cc.xy(1, 1));
+			builder.addSeparator("Selektiere Audio-Pids", cc.xy(1, 1));
 			for(int i = 0 ; i<pidList.size(); i++){
 				if (jRadioButtonPids[i]== null) {
 					jRadioButtonPids[i] = new JRadioButton();			
@@ -74,7 +77,11 @@ public class GuiPidsQuestionDialog extends JDialog {
 					jRadioButtonPids[i].setSelected(true);
 				}
 				builder.add(jRadioButtonPids[i],cc.xy(1, i+2));
+				if (i==pidList.size()-1) {
+				    builder.add(this.getJButtonOk(),cc.xy(1, i+3));
+				}
 			}
+			this.getJRadioButtonPids()[0].setVisible(false);
 		}
 		return panelPidButtons;
 	}
@@ -82,7 +89,7 @@ public class GuiPidsQuestionDialog extends JDialog {
 	private FormLayout buildLayout() {
 		ColumnSpec[] colSpecs = new ColumnSpec[1];
 		colSpecs[0]= new ColumnSpec("pref");
-		RowSpec[] rowSpecs = new RowSpec[pidList.size()+1];
+		RowSpec[] rowSpecs = new RowSpec[pidList.size()+2];
 		for (int i=0; i<rowSpecs.length; i++) {
 			rowSpecs[i]= new RowSpec("pref");
 		}
@@ -90,12 +97,18 @@ public class GuiPidsQuestionDialog extends JDialog {
 		return layout;
 	}
 	
-	private static void checkPidList() {
-		for (int i=pidList.size()-1; 0<=i; i--) {
-			if (!jRadioButtonPids[i].isSelected()) {
-				pidList.remove(i);
+	private static void checkPidList(boolean clear){
+	    if (!clear) {
+	        for (int i=pidList.size()-1; 0<=i; i--) {
+				if (!jRadioButtonPids[i].isSelected()) {
+					pidList.remove(i);
+				}
 			}
-		}
+	    } else {
+	        for (int i=pidList.size()-1; 0<=i; i--) {
+	            pidList.remove(i);
+	        }
+	    }
 	}
 	/**
 	 * @return Returns the control.
@@ -113,7 +126,15 @@ public class GuiPidsQuestionDialog extends JDialog {
 	 * @return Returns the jButtonOk.
 	 */
 	public JButton getJButtonOk() {
+	    if (jButtonOk == null) {
+	        jButtonOk = new JButton("OK");
+	        jButtonOk.addActionListener(this);
+	    }
 		return jButtonOk;
+	}
+	public void actionPerformed(ActionEvent e) {
+		checkPidList(false);
+		this.dispose();
 	}
 	/**
 	 * @return Returns the jRadioButtonPids.
