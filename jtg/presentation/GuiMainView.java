@@ -17,34 +17,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
 import javax.swing.*;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import projectX.common.X;
-import service.SerGUIUtils;
-import service.SerSettingsHandler;
-import snoozesoft.systray4j.SysTrayMenu;
-import snoozesoft.systray4j.SysTrayMenuIcon;
-import snoozesoft.systray4j.SysTrayMenuItem;
+import projectX.common.*;
+import service.*;
+import snoozesoft.systray4j.*;
 
-import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
-import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-import com.jgoodies.plaf.plastic.PlasticTheme;
-import com.sun.org.apache.xerces.internal.impl.*;
+import com.jgoodies.plaf.plastic.*;
 
-import control.ControlMain;
-import control.ControlMainView;
+import control.*;
 /*
  * Haupt-Gui, hier werden die einzelnen Tabs verwaltet
  */
@@ -64,19 +51,7 @@ public class GuiMainView extends JFrame {
 		super("FormLayout");
 		addWindowListener (new WindowAdapter() { 
 			public void windowClosing(WindowEvent e) { 
-				try {
-					if (ControlMain.getSettings().isSettingsChanged()) {
-						SerSettingsHandler.saveAllSettings();
-						Logger.getLogger("ControlMainView").info("Settings saved");
-					}
-					if (ControlMain.getSettings().isProjectXSettingsChanged()) {
-						X.inisave();
-						Logger.getLogger("ControlMainView").info("ProjectX-Settings saved");
-					}
-				} catch (IOException e1) {
-					Logger.getLogger("ControlMainView").error("Error while save Settings");
-				}
-				System.exit(0); 
+				ControlMain.endProgram();
 			}
 			public void windowIconified(WindowEvent e) {
 			    if (ControlMain.getSettings().useSysTray) {
@@ -165,8 +140,6 @@ public class GuiMainView extends JFrame {
 		this.getContentPane().add(this.getMainTabPane());
 		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
-		    sysTrayIcon[0].addSysTrayMenuListener( control );
-		    sysTrayIcon[1].addSysTrayMenuListener( control );
 			createMenu();   
 		}
 	}
@@ -190,6 +163,8 @@ public class GuiMainView extends JFrame {
 	
 	void createMenu()
     {
+	    registerTrayIconListener();
+
 //	  create an exit item
         SysTrayMenuItem itemOpen = new SysTrayMenuItem( ControlMain.getProperty("open"), "open" );
         itemOpen.addSysTrayMenuListener( control );
@@ -213,6 +188,14 @@ public class GuiMainView extends JFrame {
         menu.addItem( itemOpen );
     }
 	
+	/**
+	 * 
+	 */
+	private void registerTrayIconListener() {
+		sysTrayIcon[0].addSysTrayMenuListener( control );
+	    sysTrayIcon[1].addSysTrayMenuListener( control );
+	}
+
 	/**
 	 * Setzt das Tray Menü in Abhängigkeit von useTray Wird vom Einstellungstab aufgerufen wenn die CheckBox ihren Status ändert.
 	 * 

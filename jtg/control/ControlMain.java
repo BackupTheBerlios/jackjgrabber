@@ -38,6 +38,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
 import presentation.GuiSplashScreen;
+import projectX.common.*;
 import service.SerLogAppender;
 import service.SerSettingsHandler;
 import service.SerXMLHandling;
@@ -314,5 +315,25 @@ public class ControlMain {
 	 */
 	public static void setActiveBox(BOBox activeBox) {
 		ControlMain.activeBox = activeBox;
+	}
+
+	/**
+	 * 
+	 */
+	public static void endProgram() {
+		try {
+			if (ControlMain.getSettings().isSettingsChanged()) {
+				SerSettingsHandler.saveAllSettings();
+				Logger.getLogger("ControlMainView").info("Settings saved");
+			}
+			if (ControlMain.getSettings().isProjectXSettingsChanged()) {
+				X.inisave();
+				Logger.getLogger("ControlMainView").info("ProjectX-Settings saved");
+			}
+		} catch (IOException e1) {
+			Logger.getLogger("ControlMainView").error("Error while save Settings");
+		}
+		System.exit(0); 
+		
 	}
 }

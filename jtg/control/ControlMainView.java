@@ -176,7 +176,7 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 	public void menuItemSelected( SysTrayMenuEvent e ) {
 		while (true) {
 			if( e.getActionCommand().equals( "exit" ) ) {
-	        	System.exit( 0 );
+				ControlMain.endProgram();
 	        	break;
 	        }
 	        if( e.getActionCommand().equals( "about" ) ) {
