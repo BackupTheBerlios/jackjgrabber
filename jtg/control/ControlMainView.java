@@ -62,9 +62,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	private void initialize() {
 		this.logSystemInfo();
 		ControlMain.readSettings();
-		mainLogger.info("Searching Box-Image");
 		ControlMain.detectImage();
-		mainLogger.info(ControlMain.getBox().getName()+"-Access loaded");
 		this.setResourceBundle(locale);
 	}
 	private void logSystemInfo() {

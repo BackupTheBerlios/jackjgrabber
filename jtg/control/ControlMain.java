@@ -56,6 +56,7 @@ public class ControlMain {
 	};
 	
 	public static void detectImage() {
+		Logger.getLogger("ControlMain").info("Searching Box-Image");
 		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIp());
 		if (image==0) {
 			box=new SerBoxControlDefault();
@@ -69,6 +70,7 @@ public class ControlMain {
 		else if (image==2) {
 			box = new SerBoxControlEnigma();
 		}
+		Logger.getLogger("ControlMain").info(ControlMain.getBox().getName()+"-Access loaded");
 	}
 	
 	/**
