@@ -60,6 +60,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"recordAllPids", "true");
 		setElementInElement(root,"useStandardPlayback", "false");
 		setElementInElement(root,"showLogo", "true");
+		setElementInElement(root,"showLogWindow", "true");
 		setElementInElement(root,"useSysTray", "false");
 		setElementInElement(root,"startFullscreen", "false");
 		setElementInElement(root,"recordTimeBefore", "0");

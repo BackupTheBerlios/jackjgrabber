@@ -31,6 +31,7 @@ public class BOSettingsMain {
 	public boolean useSysTray = false;
 	public boolean showLogo = false;
 	public boolean startVlcAtStart;
+	public boolean showLogWindow;
 
 	public BOSettingsMain(BOSettings settings) {
 		this.setSettings(settings);
@@ -180,8 +181,23 @@ public class BOSettingsMain {
      */
     public void setStartVlcAtStart(boolean startVlcAtStart) {
         if (this.startVlcAtStart != startVlcAtStart) {
-      			setSettingsChanged(true);
-      			this.startVlcAtStart = startVlcAtStart;
-      		}
+  			setSettingsChanged(true);
+  			this.startVlcAtStart = startVlcAtStart;
+  		}
+    }
+    /**
+     * @return Returns the showLogWindow.
+     */
+    public boolean isShowLogWindow() {
+        return showLogWindow;
+    }
+    /**
+     * @param showLogWindow The showLogWindow to set.
+     */
+    public void setShowLogWindow(boolean showLogWindow) {
+        if (this.showLogWindow != showLogWindow) {
+  			setSettingsChanged(true);
+  			this.showLogWindow = showLogWindow;
+  		}
     }
 }

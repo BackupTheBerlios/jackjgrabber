@@ -57,6 +57,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
 		this.getTab().getCbStartVlcAtStart().setSelected(this.getSettings().isStartVlcAtStart());
+		this.getTab().getCbShowLogWindow().setSelected(this.getSettings().isShowLogWindow());
 		this.getTab().getCbUseSysTray().setSelected(this.getSettings().isUseSysTray());
 		this.initLookAndFeels();
 		this.getTab().getJComboBoxLookAndFeel().setSelectedIndex(currentSelectedLookAndFeel);
@@ -94,6 +95,10 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  				this.getSettings().setShowLogo(((JCheckBox)e.getSource()).isSelected());
 		  				break;
 		  		}
+		  		if (action.equals("showLogWindow")) {
+	  				this.getSettings().setShowLogWindow(((JCheckBox)e.getSource()).isSelected());
+	  				break;
+	  		}
 		  		if (action.equals("startFullscreen")) {
 		  				this.getSettings().setStartFullscreen(((JCheckBox)e.getSource()).isSelected());
 		  				break;
@@ -108,7 +113,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  				this.getMainView().checkTrayMenu(selected); // Damit das Tray sofort geladen, bzw. ausgeblendet wird
 		  				break;
 		  		}
-		    		break;
+		    	break;
 		}
 	}
 	/**

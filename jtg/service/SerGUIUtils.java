@@ -39,6 +39,16 @@ public class SerGUIUtils {
 		w.setLocation(x, y);
 	}
 	
+	public static void centerTop(Window w) {
+		Dimension screenSize = tk.getScreenSize();
+		Dimension wSize = w.getSize();
+	
+		int x = (screenSize.width - wSize.width) / 2;
+		int y = 0;
+	
+		w.setLocation(x, y);
+	}
+	
 	public static void addComponent(Container cont,
 			   GridBagLayout gbl,
 			   Component c,

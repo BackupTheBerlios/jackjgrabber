@@ -63,7 +63,7 @@ public class GuiMainView extends JFrame {
 		initialize();
 		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2]);
 		pack();
-		SerGUIUtils.center(this);
+		SerGUIUtils.centerTop(this);
 		if (ControlMain.getSettingsMain().isStartFullscreen()) {
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			device.setFullScreenWindow(this);
@@ -88,7 +88,6 @@ public class GuiMainView extends JFrame {
 
 			}
 		});
-		setVisible(true);
 	}
 
 	public void repaintGui() {
@@ -224,5 +223,9 @@ public class GuiMainView extends JFrame {
 	 */
 	public void setControl(ControlMainView control) {
 		this.control = control;
+	}
+	public void setVisible(boolean value) {
+	    super.setVisible(value);
+	    ControlMain.logWindow.setVisible(value);
 	}
 }

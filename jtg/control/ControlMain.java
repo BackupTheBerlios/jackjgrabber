@@ -43,6 +43,7 @@ import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
+import presentation.GuiLogWindow;
 import presentation.GuiSplashScreen;
 import service.SerExternalProcessHandler;
 import service.SerLogAppender;
@@ -69,6 +70,7 @@ public class ControlMain {
     private static Properties properties = new Properties();   
     private static Locale locale = new Locale("");
     public static GuiSplashScreen screen;
+    public static GuiLogWindow logWindow;
     
     public static String settingsFilename = "settings.xml";
     
@@ -78,22 +80,13 @@ public class ControlMain {
 		"User: "+System.getProperty("user.name")
 	};
 	
-	static String terms[] = { 
-		" ",
-		"TERMS OF CONDITIONS:",
-		"(1) this is a free Java based recording utility.",
-		"(2) It is intended for educational purposes only, as a non-commercial test project.",
-		"(3) It may not be used otherwise. Most parts are only experimental.",
-		"(4) released under the terms of the GNU GPL",
-		"(5) there is NO WARRANTY of any kind attached to this software",
-		"(6) use it at your own risk and for your own education as it was meant",
-		" ",
-	};
-
 	public static void main( String args[] ) {
 		startLogger();
+		logWindow = new GuiLogWindow();
 		readSettings();
-		if (ControlMain.getSettingsMain().showLogo) {
+		logWindow.setShouldBeVisible(ControlMain.getSettingsMain().isShowLogWindow());
+		logWindow.setVisible(ControlMain.getSettingsMain().isShowLogWindow());	
+		if (ControlMain.getSettingsMain().isShowLogo()) {
 			screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application..." );
 		}
 		setResourceBundle();
@@ -107,6 +100,7 @@ public class ControlMain {
 			} catch (InterruptedException e) {}
 			screen.dispose();
 		}
+		control.getView().setVisible(true);
 	};
 	
 	public static void startLogger() {
@@ -150,7 +144,7 @@ public class ControlMain {
 				File pathToXMLFile = new File(settingsFilename).getAbsoluteFile();
 				if (pathToXMLFile.exists()) {
 					settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
-					Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_settingsFound"));
+					Logger.getLogger("ControlMain").info("Settings found");
 				} else {
 					settingsDocument = SerXMLHandling.createStandardSettingsFile(pathToXMLFile);
 					Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_settingsNotFound"));
@@ -268,18 +262,6 @@ public class ControlMain {
 	 */
 	public static SerBoxControl getBoxAccess() {
 		return boxAccess;
-	}
-	/**
-	 * @return Returns the terms.
-	 */
-	public static String[] getTerms() {
-		return terms;
-	}
-	/**
-	 * @param terms The terms to set.
-	 */
-	public static void setTerms(String[] terms) {
-		ControlMain.terms = terms;
 	}
 
 	public static String getProperty(String key){		

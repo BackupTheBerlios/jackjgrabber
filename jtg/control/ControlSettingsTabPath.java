@@ -91,10 +91,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 	}
 	
 	private void openVlcPathFileChooser() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathVlc"));
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		JFileChooser fc = new JFileChooser();
 		FileFilter filter = new FileFilter(){
 			public boolean accept(File f){
 				return (f.getName().endsWith("vlc.exe") || f.isDirectory() );
@@ -103,14 +100,19 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 				return "vlc.exe";
 			}
 		};
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showSaveDialog( null ) ;
-	
+		fc.setFileFilter(filter);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_pathVlc"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-			String path = chooser.getSelectedFile().toString();
+			String path = fc.getSelectedFile().toString();
 			this.getTab().getJTextFieldVlcPath().setText(path);
-			this.getSettings().setVlcPath(path);	
-		}
+			this.getSettings().setVlcPath(path);
+		}	
 	}
 
 	private void openRecordPathFileChooser() {
@@ -122,19 +124,15 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
 		int returnVal = fc.showSaveDialog( null ) ;
 
-		if ( returnVal == JFileChooser.APPROVE_OPTION )
-			{
-				String path = fc.getSelectedFile().toString();
-				this.getTab().getJTextFieldRecordSavePath().setText(path);
-				this.getSettings().setSavePath(path);
-			}
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+			String path = fc.getSelectedFile().toString();
+			this.getTab().getJTextFieldRecordSavePath().setText(path);
+			this.getSettings().setSavePath(path);
+		}
 	}
 	
 	private void openProjectXPathFileChooser() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathProjectX"));
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+	    JFileChooser fc = new JFileChooser();
 		FileFilter filter = new FileFilter(){
 			public boolean accept(File f){
 				return (f.getName().endsWith("ProjectX.jar") || f.isDirectory() );
@@ -143,23 +141,24 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 				return "ProjectX.jar";
 			}
 		};
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showSaveDialog( null ) ;
-	
+		fc.setFileFilter(filter);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_pathProjectX"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-			String path = chooser.getSelectedFile().toString();
+		    String path = fc.getSelectedFile().toString();
 			this.getTab().getJTextFieldProjectXPath().setText(path);
 			this.getSettings().setProjectXPath(path);	
 		}
 	}
-	
-	
+		
 	private void openUdrecPathFileChooser() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathUdrec"));
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		FileFilter filter = new FileFilter(){
+	    JFileChooser fc = new JFileChooser();
+	    FileFilter filter = new FileFilter(){
 			public boolean accept(File f){
 				return (f.getName().endsWith("udrec.exe") || f.isDirectory() );
 			}
@@ -167,11 +166,16 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 				return "udrec.exe";
 			}
 		};
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showSaveDialog( null ) ;
-	
+		fc.setFileFilter(filter);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_pathUdrec"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-			String path = chooser.getSelectedFile().toString();
+		    String path = fc.getSelectedFile().toString();
 			this.getTab().getJTextFieldUdrecPath().setText(path);
 			this.getSettings().setUdrecPath(path);	
 		}

@@ -51,6 +51,7 @@ public class SerSettingsHandler {
 		getSettingsRecordAllPids(root, settings);
 		getSettingsUseAlwaysStandardPlayback(root, settings);
 		getSettingsShowLogo(root, settings);
+		getSettingsShowLogWindow(root, settings);
 		getSettingsStartFullscreen(root, settings);
 		getSettingsUseSysTray(root, settings);
 		getSettingsRecordtimeBefore(root, settings);
@@ -150,6 +151,16 @@ public class SerSettingsHandler {
 		} else {
 			SerXMLHandling.setElementInElement(root, "showLogo", "true");
 			settings.getMainSettings().setShowLogo(true);
+		}
+	}
+	
+	private static void getSettingsShowLogWindow(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/showLogWindow");
+		if (node != null) {
+			settings.getMainSettings().showLogWindow = node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root, "showLogWindow", "true");
+			settings.getMainSettings().setShowLogWindow(true);
 		}
 	}
 
@@ -558,7 +569,9 @@ public class SerSettingsHandler {
 		Node useSysTray = settingsDocument.selectSingleNode("/settings/useSysTray");
 		Node startFullscreen = settingsDocument.selectSingleNode("/settings/startFullscreen");
 		Node showLogo = settingsDocument.selectSingleNode("/settings/showLogo");
+		Node showLogWindow = settingsDocument.selectSingleNode("/settings/showLogWindow");
 
+		showLogWindow.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isShowLogWindow()));
 		startVlc.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isStartVlcAtStart()));
 		useSysTray.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isUseSysTray()));
 		startFullscreen.setText(Boolean.toString(ControlMain.getSettings().getMainSettings().isStartFullscreen()));

@@ -63,6 +63,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private GuiBoxSettingsTableModel modelBoxTable;
 	private JCheckBox cbStartFullscreen;
 	private JCheckBox cbShowLogo;
+	private JCheckBox cbShowLogWindow;
 	private JCheckBox cbUseSysTray;
 	private JCheckBox cbStartVlcAtStart;
 	private SerIconManager iconManager = SerIconManager.getInstance();
@@ -128,16 +129,17 @@ public class GuiSettingsTabMain extends GuiTab {
 			if (panelStartOptions == null) {
 			    panelStartOptions = new JPanel();
 				FormLayout layout = new FormLayout(  "pref, 10,  pref, pref:grow", //columna
-						"pref, 5, pref, pref, pref, pref, pref"); //rows
+						"pref, 5, pref, pref, pref, pref, pref, pref"); //rows
 				PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
 				CellConstraints cc = new CellConstraints();
 
 				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 3));
 				builder.add(this.getCbStartFullscreen(), 									cc.xyw(1, 3, 3));
 				builder.add(this.getCbShowLogo(),												cc.xyw(1, 4, 3));
-				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 5, 4));
-				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 6, 1));
-				builder.add(this.getJButtonStartVlc(),										cc.xy	(3, 6));
+				builder.add(this.getCbShowLogWindow(),												cc.xyw(1, 5, 3));
+				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 6, 4));
+				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 7, 1));
+				builder.add(this.getJButtonStartVlc(),										cc.xy	(3, 7));
 			}
 			return panelStartOptions;
 		}
@@ -323,6 +325,17 @@ public class GuiSettingsTabMain extends GuiTab {
 		return cbShowLogo;
 	}
 
+	/**
+	 * @return Returns the cbShowLogWindow.
+	 */
+	public JCheckBox getCbShowLogWindow() {
+		if (cbShowLogWindow == null) {
+		    cbShowLogWindow = new JCheckBox(ControlMain.getProperty("cbShowLogWindow"));
+		    cbShowLogWindow.setActionCommand("showLogWindow");
+		    cbShowLogWindow.addActionListener(control);
+		}
+		return cbShowLogWindow;
+	}
 	/**
 	 * @return Returns the cbUseSysTray.
 	 */

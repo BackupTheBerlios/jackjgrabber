@@ -43,7 +43,7 @@ public class SerLogAppender extends RollingFileAppender {
 			for (int i=0; i<getTextAreas().size(); i++) {
 			    JTextArea outputArea = (JTextArea)getTextAreas().get(i);
 			    outputArea.append(outputString);
-					outputArea.setCaretPosition(outputArea.getText().length());			    
+			    outputArea.setCaretPosition(outputArea.getText().length());			    
 			}
 		}
 		super.doAppend(event);
