@@ -17,6 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+
+import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -29,6 +31,7 @@ import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.table.TableColumn;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -173,6 +176,8 @@ public class GuiTabProgramm extends GuiTab {
 			jComboBoxBoxIP.setEditable(true);
 			jComboBoxBoxIP.setModel(new GuiIpListComboModel());
 			jComboBoxBoxIP.addItemListener(control);
+			jComboBoxBoxIP.setRenderer(new GuiIpComboCellRenderer());
+			jComboBoxBoxIP.setPreferredSize(new Dimension(100,22));
 			jComboBoxBoxIP.setEditable(false);
 			jComboBoxBoxIP.setName("ipList");
 		}
