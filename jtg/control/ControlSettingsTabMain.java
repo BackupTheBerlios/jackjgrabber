@@ -17,18 +17,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.filechooser.FileFilter;
 
 import model.BOBox;
 import model.BOLookAndFeelHolder;
@@ -46,7 +40,7 @@ import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 
-public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener, KeyListener {
+public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener {
 
 	GuiTabSettings			settingsTab;
 	public final String[]	localeNames	= {"de,Deutsch", "en,Englisch", "fi,Finisch"};
@@ -69,7 +63,6 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
 		this.getTab().getCbStartVlcAtStart().setSelected(this.getSettings().isStartVlcAtStart());
 		this.getTab().getCbUseSysTray().setSelected(this.getSettings().isUseSysTray());
-		this.getTab().getJTextFieldVlcPath().setText(this.getSettings().getVlcPath());
 		this.initLookAndFeels();
 		this.getTab().getJComboBoxLookAndFeel().setSelectedIndex(currentSelectedLookAndFeel);
 	}
@@ -102,9 +95,6 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  		if (action == "launchVlc") {
 			  			this.actionStartVlc();
 			  		}
-		  		if (action == "vlcPath") {
-			  			this.openVlcPathFileChooser();
-			  		}
 		  		if (action.equals("showLogo")) {
 		  				this.getSettings().setShowLogo(((JCheckBox)e.getSource()).isSelected());
 		  				break;
@@ -124,21 +114,6 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  				break;
 		  		}
 		    		break;
-		}
-	}
-
-	public void keyTyped(KeyEvent event) {}
-	
-	public void keyPressed(KeyEvent event) {}
-	
-	public void keyReleased(KeyEvent event) {
-		JTextField tf = (JTextField)event.getSource();
-		while (true) {
-			if (tf.getName().equals("vlcPath")){
-			    this.getSettings().setVlcPath(tf.getText());
-			    break;
-			}
-			break;
 		}
 	}
 	/**
@@ -182,33 +157,10 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	            lookAndFeel.equals(PlasticXPLookAndFeel.class.getName()) ||
 	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName()) );
 	}
-	
-	private void openVlcPathFileChooser() {
-			JFileChooser chooser = new JFileChooser();
-			chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-			chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathVlc"));
-			chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-			FileFilter filter = new FileFilter(){
-				public boolean accept(File f){
-					return (f.getName().endsWith("vlc.exe") || f.isDirectory() );
-				}
-				public String getDescription(){
-					return "vlc.exe";
-				}
-			};
-			chooser.setFileFilter(filter);
-			int returnVal = chooser.showSaveDialog( null ) ;
-		
-			if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-				String path = chooser.getSelectedFile().toString();
-				this.getTab().getJTextFieldVlcPath().setText(path);
-				this.getSettings().setVlcPath(path);	
-			}
-		}
 
 	private void actionStartVlc() {
 	    try {
-	        String execString=this.getSettings().getVlcPath()+" -I http";
+	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
 	        Logger.getLogger("ControlSettingsTabMain").info(execString);
 	        Process run = Runtime.getRuntime().exec(execString);
 	        new SerInputStreamReadThread(true, run.getInputStream()).start();
