@@ -87,9 +87,14 @@ public class SerTimerHandler {
             Node node = (Node) nodes.get(i);
             long localTimerStop=Long.parseLong(node.getText());
             long now = new GregorianCalendar().getTimeInMillis();
+            
             if (now>localTimerStop) {
-                root.remove(node.getParent()); //Timer zu alt->loeschen
-                edited=true;
+                Node localTimer = node.getParent();
+                Element repeatId = (Element)localTimer.selectSingleNode("mainTimer/eventRepeatId");
+                if (repeatId !=null && repeatId.getText().equals("0")) {
+                    root.remove(localTimer); 
+                    edited=true;    
+                }
             }
         }
         if (edited) {
