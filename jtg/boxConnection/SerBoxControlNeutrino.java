@@ -173,25 +173,26 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public ArrayList getTimer() throws IOException {
+		
 		ArrayList timerList = new ArrayList();
 	  	BOTimer botimer = new BOTimer();
 		BufferedReader input = getConnection("/control/timer");	
 		String text = new String();
 		String line, valueStart, valueStop, valueAnno;
-		while ((line = input.readLine()) != null) {  
+		while ((line = input.readLine()) != null) { 
 	        StringTokenizer st = new StringTokenizer(line);    
             botimer.setEventId(st.nextToken());
             botimer.setEventType(st.nextToken());
             botimer.setEventRepeat(st.nextToken());
-            valueAnno=st.nextToken();
-            botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)+" "+SerFormatter.formatUnixTime(valueAnno));
-		    valueStart=st.nextToken(st.nextToken());
+            valueAnno=st.nextToken(); 
+            botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)); 
+		    valueStart=st.nextToken();
 		    botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //start
 		    botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));
-		    valueStop=st.nextToken(st.nextToken());
+		    valueStop=st.nextToken();
 		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
-            botimer.setChannelId(st.nextToken());  
-            timerList.add(botimer);  
+            botimer.setChannelId(st.nextToken()); 
+            timerList.add(botimer); 
 		}   	
 		return timerList;
 	}
