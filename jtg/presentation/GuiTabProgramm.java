@@ -55,7 +55,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JScrollPane jScrollPaneEPG = null;
 	private JButton jButtonQuickRecord = null;
 	private JButton jButtonReboot = null;
-	private JButton jButtonVLC = null;
+	private JButton jButtonPlayback = null;
 	private JButton jButtonNhttpdReset = null;
 	private JButton jButtonEPGReset = null;
 	private JSpinner jSpinnerRecMin = null;
@@ -81,6 +81,7 @@ public class GuiTabProgramm extends GuiTab {
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
 		initialize();
+		this.setDisconnectModus();
 	}
 	
 	private  void initialize() {
@@ -121,7 +122,7 @@ public class GuiTabProgramm extends GuiTab {
 			
 			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJButtonNhttpdReset(),  					cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonVLC(),		  					cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonPlayback(),		  					cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJSpinner(),			  					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(new JLabel("Min"),			  					cc.xyw	(4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJButtonReboot(), 	 					cc.xyw	(3, 3, 2, CellConstraints.FILL, CellConstraints.FILL));
@@ -259,19 +260,20 @@ public class GuiTabProgramm extends GuiTab {
 		return jButtonReboot;
 	}
 	/**
-	 * This method initializes jButton1	
+	 * This method initializes jButtonPlayback	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	public JButton getJButtonVLC() {
-		if (jButtonVLC == null) {
-			jButtonVLC = new JButton();
-			jButtonVLC.setPreferredSize(new java.awt.Dimension(105,25));
-			jButtonVLC.setText("VLC-Play");
-			jButtonVLC.setToolTipText("AKtuelles Programm im VLC abspielen.");
-			jButtonVLC.addActionListener(this.getControl());
+	public JButton getJButtonPlayback() {
+		if (jButtonPlayback == null) {
+			jButtonPlayback = new JButton();
+			jButtonPlayback.setPreferredSize(new java.awt.Dimension(105,25));
+			jButtonPlayback.setText("Playback");
+			jButtonPlayback.setActionCommand("playback");
+			jButtonPlayback.setToolTipText("AKtuelles Programm abspielen.");
+			jButtonPlayback.addActionListener(this.getControl());
 		}
-		return jButtonVLC;
+		return jButtonPlayback;
 	}
 	/**
 	 * This method initializes jButtonNhttpdReset	
@@ -524,4 +526,25 @@ public class GuiTabProgramm extends GuiTab {
 		}
 		return jButtonOfflineEpg;
 	}
-   }
+	public void setDisconnectModus() {
+		this.getJButtonAufnahme().setEnabled(false);
+		this.getJButtonEpgReset().setEnabled(false);
+		this.getJButtonNhttpdReset().setEnabled(false);
+		this.getJButtonReadEPG().setEnabled(false);
+		this.getJButtonReboot().setEnabled(false);
+		this.getJButtonSelectedToTimer().setEnabled(false);
+		this.getJButtonStartServer().setEnabled(false);
+		this.getJButtonPlayback().setEnabled(false);
+	}
+	
+	public void setConnectModus() {
+		this.getJButtonAufnahme().setEnabled(true);
+		this.getJButtonEpgReset().setEnabled(true);
+		this.getJButtonNhttpdReset().setEnabled(true);
+		this.getJButtonReadEPG().setEnabled(true);
+		this.getJButtonReboot().setEnabled(true);
+		this.getJButtonSelectedToTimer().setEnabled(true);
+		this.getJButtonStartServer().setEnabled(true);
+		this.getJButtonPlayback().setEnabled(true);
+	}
+}
