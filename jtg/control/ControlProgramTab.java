@@ -495,7 +495,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			BOEpg selEpg = (BOEpg)this.getSelectedSender().getEpg().get(indexRunningEpg);
 			this.setSelectedEpg(selEpg);
 		}
-		this.reInitEpgDetail();
+		//this.reInitEpgDetail();
 	}
 	/**
 	 * Aktualisieren des Tables Sender
