@@ -327,7 +327,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             botimer.eventRepeatId=st.nextToken();
             //Abwärtskompatibilität gewährleisten. repeatCount erst in Images seit 12.2004 vorhanden
             String temp = st.nextToken();
-            if (temp.length()>5) {
+            if (temp.length()>5 || (botimer.eventRepeatId.equals("0") && temp.equals("0"))) {
                 botimer.announceTime=temp;
             } else {
                 botimer.repeatCount=temp;
