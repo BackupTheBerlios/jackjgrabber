@@ -12,6 +12,48 @@ import java.text.DateFormat;
  * @author  ralix
  */
 public class SerFormatter {
+    
+    public static String ersetzeUmlaute(String input) {
+        StringBuffer StrUmlBuf = new StringBuffer();
+        for (int i=0; i<input.length(); i++) {
+            char c = input.charAt(i);
+            switch (c) {
+            case 'ä' : {
+                StrUmlBuf.append("ae");
+                break;
+            }
+            case 'ö' : {
+                StrUmlBuf.append("oe");
+                break;
+            }
+            case 'ü' : {
+                StrUmlBuf.append("ue");
+                break;
+            }
+            case 'ß' : {
+                StrUmlBuf.append("ss");
+                break;
+            }
+            case 'Ü' : {
+                StrUmlBuf.append("Ue");
+                break;
+            }
+            case 'Ö' : {
+                StrUmlBuf.append("Oe");
+                break;
+            }
+            case 'Ä' : {
+                StrUmlBuf.append("Ae");
+                break;
+            }
+            default : {
+                StrUmlBuf.append(c);
+            }
+            }
+        }
+        return StrUmlBuf.toString();
+    }
+	
         
 	public static String getShortTime(long i){    
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

@@ -23,6 +23,8 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import service.SerFormatter;
+
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
@@ -114,12 +116,12 @@ public class RecordControl extends Thread
 				fileName = date+" "+args.getSenderName();
 			}
 		}
-		return fileName.replace(' ', '_');
+		return SerFormatter.ersetzeUmlaute(fileName.replace(' ', '_'));
 	}
 	
 	public File getDirectory() {
 	    if (directory == null) {
-	        directory = new File(ControlMain.getSettings().getSavePath(), this.getFileName().replace(' ', '_'));
+	        directory = new File(ControlMain.getSettings().getSavePath(), SerFormatter.ersetzeUmlaute(getFileName().replace(' ', '_')));
             directory.mkdir();
 	    }
 	    return directory;
