@@ -1,11 +1,9 @@
-/*
- * Created on 20.09.2004
- */
 package presentation;
 
 import java.awt.Dimension;
 import java.text.ParseException;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -13,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
 
@@ -43,6 +42,7 @@ public class GuiTabSettings extends JPanel {
 	private JLabel jLabel1 = null;
 	private JComboBox jComboBoxLocale = null;
 	private JFormattedTextField tfServerPort = null;
+	private JFormattedTextField tfBoxIp = null;
 
 	public GuiTabSettings(ControlSettingsTab ctrl) {
 		super();
@@ -166,7 +166,7 @@ public class GuiTabSettings extends JPanel {
 	private JScrollPane getJScrollPaneBoxSettings() {
 		if (jScrollPaneBoxSettings == null) {
 			jScrollPaneBoxSettings = new JScrollPane();
-			jScrollPaneBoxSettings.setPreferredSize(new Dimension(350, 100));
+			jScrollPaneBoxSettings.setPreferredSize(new Dimension(450, 100));
 			jScrollPaneBoxSettings.setViewportView(getJTableBoxSettings());
 		}
 		return jScrollPaneBoxSettings;
@@ -186,6 +186,9 @@ public class GuiTabSettings extends JPanel {
 			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(80);
 			jTableBoxSettings.getColumnModel().getColumn(3).setPreferredWidth(40);
 			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer( new GuiBoxSettingsTableCellRenderer(control));
+			
+			TableColumn columnIp = jTableBoxSettings.getColumnModel().getColumn(0);
+			columnIp.setCellEditor(new DefaultCellEditor(this.getTfBoxIp()));
 		}
 		return jTableBoxSettings;
 	}
@@ -243,5 +246,19 @@ public class GuiTabSettings extends JPanel {
 			}
 		}
 		return tfServerPort;
+	}
+	
+	public JFormattedTextField getTfBoxIp() {
+		if (tfBoxIp == null) {
+			try {
+				tfBoxIp = new JFormattedTextField(new MaskFormatter("###.###.###.###"));
+				((MaskFormatter)tfBoxIp.getFormatter()).setAllowsInvalid(false);
+				((MaskFormatter)tfBoxIp.getFormatter()).setOverwriteMode(true);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return tfBoxIp;
 	}
 }
