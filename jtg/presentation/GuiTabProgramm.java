@@ -313,7 +313,7 @@ public class GuiTabProgramm extends GuiTab {
 			jTableEPG = new JTable(sorter);
 			sorter.setTableHeader(jTableEPG.getTableHeader());
 			
-			jTableEPG.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			//jTableEPG.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
 			TableColumn eventIdColumnt = jTableEPG.getColumnModel().getColumn(0);
 			jTableEPG.getTableHeader().getColumnModel().removeColumn(eventIdColumnt); 
