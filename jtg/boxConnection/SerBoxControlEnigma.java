@@ -253,14 +253,14 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                endDateString=line2.substring(startpos, endpos)+".";
 		                startpos=endpos+3;
 		                endpos=line2.indexOf(" ", startpos+1);
-		                endTime=line2.substring(startpos, endpos);
+		                
 		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime, "dd.MM./HH:mm");
 		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
 		                valueStart=""+(startDate.getTimeInMillis()/1000);
 		                valueDuration = ""+((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
-		                duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
-						startDate =	SerFormatter.formatUnixDate(valueStart);
-						endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);    
+		                startDate = SerFormatter.formatUnixDate(valueStart);
+		    			duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
+		    			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));    
 						epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
 		                line=line2;
 		                startpos=line2.indexOf("ID: ");
