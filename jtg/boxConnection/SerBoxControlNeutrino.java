@@ -198,7 +198,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		
 		BufferedReader inputNhttpd = getConnection("/control/timer");
 		
-		String line, valueStart, valueStop, valueAnno;
+		String line, valueStart, valueStop, valueAnno, valueSenderName;
 		while ((line = inputNhttpd.readLine()) != null) {
 			BOTimer botimer = new BOTimer();
 						
@@ -211,17 +211,15 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             valueAnno=st.nextToken(); 
 		    valueStart=st.nextToken();
 		    valueStop=st.nextToken();
-		    		    
-		    if (!valueStop.equals("0")) {
-		    	int index = line.indexOf(valueStop)+valueStop.length()+1;
-			    botimer.setSenderName( line.substring(index, line.length()));
-		    }		   
+		    valueSenderName=st.nextToken();
+		    
+		    botimer.setSenderName( valueSenderName );
 		    botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)); //vorwarnzeit
 		    botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //startZeit
 			botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));  //startDatum
 		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
 		    
-		    if (botimer.getEventType().equals("RECORD")) {
+		    if (botimer.getEventType().equals("5")) {
 		    	timerList[0].add(botimer);
 		    } else {
 		    	timerList[1].add(botimer);

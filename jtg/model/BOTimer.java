@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /*
@@ -39,7 +40,11 @@ public class BOTimer extends java.lang.Object{
         this.eventId = eventId;
     }
     
-    public String getEventType(){
+    public String getEventType(){	
+    	return eventType;
+    }
+    
+    public String getFormattedEventType() {
     	switch(Integer.parseInt(eventType)) {
 			case 1: return "SHUTDOWN";
 			case 2: return "NEXTPROGRAM";
@@ -48,8 +53,8 @@ public class BOTimer extends java.lang.Object{
 			case 5: return "RECORD";
 			case 6: return "REMIND";
 			case 7: return "SLEEPTIMER";										
-    	}				
-    	return eventType;
+    	}
+    	return new String();
     }
     
     public void setEventType(String eventType){
@@ -58,6 +63,49 @@ public class BOTimer extends java.lang.Object{
     
     public String getEventRepeat (){
         return this.eventRepeat;
+    }
+    
+    public String getFormattedEventRepeat(){
+    	int repeatNumber = Integer.parseInt(eventRepeat);
+    	switch(repeatNumber) {
+			case 0:
+			return "einmal";
+			case 1:
+			return "täglich";
+			case 2:
+			return "wöchentlich";
+			case 3:
+			return "2-wöchentlich";
+			case 4:
+			return "4-wöchentlich";
+			case 5:
+			return "monatlich";
+    	}
+    	if (repeatNumber >5) {
+    		return "Wochentage"; 
+    	}
+    	return new String();
+    }
+    
+    public void setFormattedEventRepeat(String repeatString){
+		if (repeatString.equals("einmal")) {
+			eventRepeat = "0";
+		}
+		if (repeatString.equals("täglich")){
+			eventRepeat = "1";
+		}
+		if (repeatString.equals("wöchentlich")){
+			eventRepeat = "2";
+		}
+		if (repeatString.equals("2-wöchentlich")){
+			eventRepeat = "3";
+		}
+		if (repeatString.equals("4-wöchentlich")){
+			eventRepeat = "4";
+		}
+		if (repeatString.equals("monatlich")){
+			eventRepeat = "5";
+		}
     }
     
     public void setEventRepeat(String eventRepeat){

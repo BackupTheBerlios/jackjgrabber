@@ -4,10 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
+import javax.swing.JTable;
+
+import org.apache.log4j.Logger;
+
+import model.BOSender;
+import model.BOTimer;
 
 
 import presentation.GuiMainView;
@@ -17,13 +26,13 @@ import service.SerAlertDialog;
 /**
  * @author Alexander Geist
  */
-public class ControlNeutrinoTimerTab extends ControlTab implements ActionListener {
+public class ControlNeutrinoTimerTab extends ControlTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
 	ArrayList senderList;
 	GuiNeutrinoTimerPanel tab;
-	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "wochentage" };
+	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "Wochentage" };
 	public String[] timerType = { "Shutdown", "Umschalten", "Standby", "Erinnerung", "Sleep-Timer"};
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
@@ -47,7 +56,38 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 			
 		}
 	}
-		
+	
+	/**
+	 * Klick-Events der Tables
+	 */
+	public void mousePressed(MouseEvent me) {
+		JTable table = (JTable)me.getSource();
+		String tableName = table.getName();
+		int selectedRow = table.getSelectedRow();
+		if (tableName == "recordTimerTable") {
+			BOTimer timer = (BOTimer)this.getTimerList()[0].get(selectedRow);
+			this.getTab().selectRepeatDaysForRecordTimer(timer);
+			if (me.getClickCount()==2) { 
+				
+			}
+		}
+		if (tableName == "systemTimerTable") {
+			BOTimer timer = (BOTimer)this.getTimerList()[1].get(selectedRow);
+			this.getTab().selectRepeatDaysForSystemTimer(timer);
+			if (me.getClickCount()==2) {
+				
+			}
+		}
+	}
+	
+	public void mouseClicked(MouseEvent me) 
+	{}
+	public void mouseReleased(MouseEvent me)
+	{}
+	public void mouseExited(MouseEvent me)
+	{}
+	public void mouseEntered(MouseEvent me)
+	{}
 	/**
 	 * @return Returns the mainView.
 	 */

@@ -2,6 +2,8 @@ package presentation;
 
 
 
+import java.util.ArrayList;
+
 import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
@@ -39,7 +41,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		} if (columnIndex == 3) {
 			return timer.getStopTime();
 		} if (columnIndex == 4) {
-			return timer.getEventRepeat();
+			return timer.getFormattedEventRepeat();
 		} else {
 			return timer.getDescription(); 
 		}
@@ -49,12 +51,11 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		if (col == 0) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			timer.setSenderName((String)value);
-			this.fireTableDataChanged();
 		}
 		if (col == 4) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
-			timer.setEventRepeat((String)value);
-			this.fireTableDataChanged();
+			timer.setFormattedEventRepeat((String)value);
+			control.getTab().selectRepeatDaysForRecordTimer(timer);
 		}
     }
 
