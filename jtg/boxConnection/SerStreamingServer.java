@@ -36,7 +36,7 @@ import control.ControlProgramTab;
 
 public class SerStreamingServer extends Thread {
 	
-	int port = 4000;
+	int port;
 	ServerSocket server;
 	public boolean isRunning = false;
 	ControlProgramTab controlProgramTab;
@@ -57,7 +57,7 @@ public class SerStreamingServer extends Thread {
 			if (!isRunning) {
 			    isRunning=false;
 				Logger.getLogger("SerStreamingServer").error(ControlMain.getProperty("err_startServer")+port);
-				ControlMain.getControl().getView().getTabProgramm().getControl().stopStreamingServer();
+				controlProgramTab.stopStreamingServer();
 			}	
 		} catch (DocumentException e) {
 			Logger.getLogger("SerStreamingServer").error("Recording failed");	
