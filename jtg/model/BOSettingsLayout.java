@@ -107,7 +107,7 @@ public class BOSettingsLayout {
 	 */
 	public void setLocationOfTimerDialog(Point location) {
 		
-		if (locationOfTimerDialog == null || !locationOfTimerDialog.equals(location)))
+		if (locationOfTimerDialog == null || !locationOfTimerDialog.equals(location))
 		{
 			setSettingsChanged(true);
 			locationOfTimerDialog = location;
