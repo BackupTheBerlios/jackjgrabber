@@ -6,7 +6,6 @@
  */
 package service;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class SerXMLConverter {
 		}
 		settingsDocument.add(newBoxListRoot);
 		
-		SerXMLHandling.saveXMLFile(new File(ControlMain.filename), ControlMain.getSettingsDocument());
+		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
 	}
 	
 	public static void saveUserSettings() throws IOException {
@@ -99,7 +98,7 @@ public class SerXMLConverter {
 		themeNode.setText(ControlMain.getSettings().getThemeLayout());
 		themeLocale.setText(ControlMain.getSettings().getLocale());
 		
-		SerXMLHandling.saveXMLFile(new File(ControlMain.filename), ControlMain.getSettingsDocument());
+		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
 	}
 	
 	public static void saveAllSettings() throws IOException {
@@ -130,6 +129,6 @@ public class SerXMLConverter {
 		}
 		settingsDocument.add(newBoxListRoot);
 		
-		SerXMLHandling.saveXMLFile(new File(ControlMain.filename), ControlMain.getSettingsDocument());
+		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
 	}
 }

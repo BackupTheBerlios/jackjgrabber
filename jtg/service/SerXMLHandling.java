@@ -11,6 +11,8 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import control.ControlMain;
+
 
 public class SerXMLHandling {
 	
@@ -31,14 +33,14 @@ public class SerXMLHandling {
 		root.add(theme);
 		
 		root.addElement("boxList");
-		saveXMLFile(path, doc);
+		saveXMLFile(path);
 		return doc;
 	}
 		
-	public static void saveXMLFile(File path, Document doc) throws IOException {
+	public static void saveXMLFile(File path) throws IOException {
 		OutputFormat format = OutputFormat.createPrettyPrint(); 
 		XMLWriter writer = new XMLWriter( new FileWriter( path ), format );
-		writer.write( doc );
+		writer.write( ControlMain.getSettingsDocument() );
 		writer.close();
 	}
 	
