@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import model.*;
 import model.BOPid;
 import model.BOPids;
 import model.BORecordArgs;
@@ -39,7 +40,7 @@ public class UdrecRecord  extends Record {
 	RecordControl recordControl;
 	String boxIp;
 	boolean running = true;
-	Process run;
+	BOExternalProcess run;
 	
 	public UdrecRecord(BORecordArgs args, RecordControl control){
         recordControl = control;
@@ -89,12 +90,12 @@ public class UdrecRecord  extends Record {
 	}
 	
 	public void start() {
-	    run=(SerExternalProcessHandler.startProcess("udrec",  this.getRequestArray(), true)).getProcess();
+	    run=(SerExternalProcessHandler.startProcess("udrec",  this.getRequestArray(), true));
 	}	
 	
 	public void stop() {
 	    if (run != null) {
-	        PrintWriter out = new PrintWriter(run.getOutputStream());
+	        PrintWriter out = new PrintWriter(run.getProcess().getOutputStream());
 	    		out.write("\n");
 	    		out.flush();  
 	    }
