@@ -5,9 +5,10 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import boxConnection.SerBoxControl;
+
 import model.BOTimer;
 import control.ControlTimerTab;
-import service.SerBoxControl;
 
 public class GuiTimerTableModel extends AbstractTableModel 
 {

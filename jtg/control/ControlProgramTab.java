@@ -23,6 +23,8 @@ import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
 
+import boxConnection.SerBoxControl;
+
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -31,7 +33,6 @@ import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
 import presentation.GuiSenderTableModel;
 import service.SerAlertDialog;
-import service.SerBoxControl;
 
 
 

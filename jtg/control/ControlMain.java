@@ -19,14 +19,15 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
+import boxConnection.SerBoxControl;
+import boxConnection.SerBoxControlDefault;
+import boxConnection.SerBoxControlEnigma;
+import boxConnection.SerBoxControlNeutrino;
+
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
 import service.SerAlertDialog;
-import service.SerBoxControl;
-import service.SerBoxControlDefault;
-import service.SerBoxControlEnigma;
-import service.SerBoxControlNeutrino;
 import service.SerLogAppender;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
