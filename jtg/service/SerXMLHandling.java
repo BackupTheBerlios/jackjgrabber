@@ -40,34 +40,30 @@ public class SerXMLHandling {
 	 */
 	public static Document buildEmptyXMLFile(File path) throws IOException {
 		Document doc = DocumentHelper.createDocument();
-		Element root = doc.addElement( "settings" );
+		Element root = doc.addElement( "settings" );	
 		
-		Element locale = DocumentHelper.createElement("locale");
-		locale.setText("DE");
-		
-		Element theme = DocumentHelper.createElement("theme");
-		theme.setText("Silver");
-		
-		Element serverPort = DocumentHelper.createElement("streamingServerPort");
-		serverPort.setText("4000");
-		
-		Element startServer = DocumentHelper.createElement("startStremingServer");
-		startServer.setText("true");
-		
-		Element savePath = DocumentHelper.createElement("savePath");
-		savePath.setText(new File(System.getProperty("user.home")).getAbsolutePath());
-		
-		
-		root.add(startServer);
-		root.add(savePath);
-		root.add(locale);
-		root.add(theme);
-		root.add(serverPort);
-		
+		setElementInElement(root,"playbackPlayer", "vlc");
+		setElementInElement(root,"savePath", new File(System.getProperty("user.home")).getAbsolutePath());
+		setElementInElement(root,"startStreamingServer", "true");
+		setElementInElement(root,"streamingServerPort", "4000");
+		setElementInElement(root,"theme", "Silver");
+		setElementInElement(root,"locale", "DE");
+
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);
 		saveSettingsFile(path);
 		return doc;
+	}
+	
+	/**
+	 * @param parentElement
+	 * @param childElementName
+	 * @param childElementValue
+	 */
+	public static void setElementInElement(Element parentElement, String childElementName, String childElementValue) {
+		Element element = DocumentHelper.createElement(childElementName);
+		element.setText(childElementValue);
+		parentElement.add(element);
 	}
 		
 	public static void saveSettingsFile(File path) throws IOException {
