@@ -389,25 +389,25 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					    System.out.println(recurringDays+" "+typeValue);*/
 					    long typeValue=Long.parseLong(timerType);
 					    if ((typeValue&1048576)==1048576) {
-					        typeValue+=256;
-					    }
-					    if ((typeValue&2097152)==2097152) {
 					        typeValue+=512;
 					    }
-					    if ((typeValue&4194304)==4194304) {
+					    if ((typeValue&2097152)==2097152) {
 					        typeValue+=1024;
 					    }
-					    if ((typeValue&8388608)==8388608) {
+					    if ((typeValue&4194304)==4194304) {
 					        typeValue+=2048;
 					    }
-					    if ((typeValue&16777216)==16777216) {
+					    if ((typeValue&8388608)==8388608) {
 					        typeValue+=4096;
 					    }
-					    if ((typeValue&33554432)==33554432) {
+					    if ((typeValue&16777216)==16777216) {
 					        typeValue+=8192;
 					    }
-					    if ((typeValue&524288)==524288) {
+					    if ((typeValue&33554432)==33554432) {
 					        typeValue+=16384;
+					    }
+					    if ((typeValue&524288)==524288) {
+					        typeValue+=32768;
 					    }
 					    eventRepeatId=""+typeValue;
 					}
