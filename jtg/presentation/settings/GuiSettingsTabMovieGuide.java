@@ -79,7 +79,7 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 	private JPanel getPanelMovieguideSettings() {
 		if (panelMovieguideSettings == null) {
 			panelMovieguideSettings = new JPanel();
-			FormLayout layout = new FormLayout("300,10,pref", //columna
+			FormLayout layout = new FormLayout("445,10,pref", //columna
 					"pref, 5, pref,10,pref,5,pref,10,pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelMovieguideSettings, layout);
 			CellConstraints cc = new CellConstraints();
@@ -163,7 +163,8 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 					"PREMIERE KRIMI", "PREMIERE NOSTALGIE", "PREMIERE SERIE", "PREMIERE START", "SCI FI"};
 
 			channelList = new JList(channels);
-			channelList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+			channelList.setLayoutOrientation(JList.VERTICAL_WRAP);
+			channelList.setFixedCellWidth(145);
 			channelList.setName("channelList");
 			channelList.addListSelectionListener(control);
 			channelList.setCellRenderer(new DefaultListCellRenderer() {
