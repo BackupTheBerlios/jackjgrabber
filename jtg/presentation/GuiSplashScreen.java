@@ -40,7 +40,7 @@ public class GuiSplashScreen extends JWindow
     super(new Frame());
     this.title=title;
     this.text=text;
-    myImage=getToolkit().createImage(imageFile);
+    myImage=getToolkit().createImage(ClassLoader.getSystemResource(imageFile));
     try
     {
       final MediaTracker tracker=new MediaTracker(this);
