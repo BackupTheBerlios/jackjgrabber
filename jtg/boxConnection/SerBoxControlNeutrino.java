@@ -305,6 +305,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader input = getConnection(buffer.toString());
 		String line;
 		while((line=input.readLine())!=null) {
+			Logger.getLogger("ControlProgramTab").info("Timer uebertragen "+timer.getInfo());
 			timer.setModifiedId(null);
 			return line;
 		}
@@ -328,13 +329,13 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&ad="+timer.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH));
 			buffer.append("&amo="+(timer.getUnformattedStartTime().get(Calendar.MONTH)+1));
 			buffer.append("&ay="+timer.getUnformattedStartTime().get(Calendar.YEAR));
-			buffer.append("&ah="+timer.getUnformattedStartTime().get(Calendar.HOUR));
+			buffer.append("&ah="+timer.getUnformattedStartTime().get(Calendar.HOUR_OF_DAY));
 			buffer.append("&ami="+timer.getUnformattedStartTime().get(Calendar.MINUTE));
 			
 			buffer.append("&sd="+timer.getUnformattedStopTime().get(Calendar.DAY_OF_MONTH));
 			buffer.append("&smo="+(timer.getUnformattedStopTime().get(Calendar.MONTH)+1));
 			buffer.append("&sy="+timer.getUnformattedStopTime().get(Calendar.YEAR));
-			buffer.append("&sh="+timer.getUnformattedStopTime().get(Calendar.HOUR));
+			buffer.append("&sh="+timer.getUnformattedStopTime().get(Calendar.HOUR_OF_DAY));
 			buffer.append("&smi="+timer.getUnformattedStopTime().get(Calendar.MINUTE));
 			
 			buffer.append("&announce="+timer.getAnnounceTime());
