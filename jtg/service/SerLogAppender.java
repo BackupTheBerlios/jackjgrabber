@@ -18,8 +18,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 import java.io.IOException;
+import java.util.*;
 
 import javax.swing.JTextArea;
+import javax.swing.text.*;
 
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
@@ -32,20 +34,35 @@ public class SerLogAppender extends RollingFileAppender {
 	GuiMainView view;
 	PatternLayout customlayout;
 	
+	private Vector logDestination;
+	
 	public SerLogAppender(PatternLayout layout) throws IOException {
 		super(layout, "jackLog.log");
+		logDestination = new Vector();
 	}
 	
 	public void doAppend(LoggingEvent event) {
-		if (this.getView() != null) {		
+		if (this.getView() != null) {	
+			
+			if (logDestination.size() == 0)
+			{
+				logDestination.addElement(view.getTabProgramm().getJTextPaneAusgabe());
+			}
 			PatternLayout layout = new PatternLayout();
 			//Set outputformat for textpane
 			layout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");			
 			String outputString = layout.format(event);
 			
-			JTextArea outputArea = view.getTabProgramm().getJTextPaneAusgabe(); 
-			outputArea.append(outputString);
-			outputArea.setCaretPosition(outputArea.getText().length());
+			//JTextArea outputArea = view.getTabProgramm().getJTextPaneAusgabe(); 
+			Iterator iter = logDestination.iterator();
+
+			while (iter.hasNext()) {
+				JTextArea outputArea = (JTextArea) iter.next();
+				outputArea.append(outputString);
+				outputArea.setCaretPosition(outputArea.getText().length());	
+			}
+			
+			
 		}
 		super.doAppend(event);
 	}
@@ -72,5 +89,18 @@ public class SerLogAppender extends RollingFileAppender {
 	 */
 	public void setCustomlayout(PatternLayout customlayout) {
 		this.customlayout = customlayout;
+	}
+	
+	/** fügt eine weitere JTextArea der Log Ziele hinzu
+	 *
+	 */ 
+	public void addTextArea(JTextArea area)
+	{
+		logDestination.addElement(area);
+	}
+	
+	public void removeTextArea(JTextArea area)
+	{
+		logDestination.removeElement(area);
 	}
 }
