@@ -240,7 +240,7 @@ public class GuiTabProgramm extends GuiTab {
 		if (jButtonQuickRecord == null) {
 			jButtonQuickRecord = new JButton();
 			jButtonQuickRecord.setPreferredSize(new java.awt.Dimension(105,25));
-			jButtonQuickRecord.setText("Aufnahme");
+			jButtonQuickRecord.setText("Record");
 			jButtonQuickRecord.setActionCommand("record");
 			jButtonQuickRecord.setToolTipText("Sofortaufnahme starten");
 			jButtonQuickRecord.addActionListener(this.getControl());
