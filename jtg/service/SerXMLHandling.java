@@ -33,6 +33,7 @@ public class SerXMLHandling {
 		root.add(theme);
 		
 		root.addElement("boxList");
+		ControlMain.setSettingsDocument(doc);
 		saveXMLFile(path);
 		return doc;
 	}
