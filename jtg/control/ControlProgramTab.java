@@ -95,7 +95,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.getMainView().getTabProgramm().setConnectModus();
 			this.reInitStreamingServer();
 		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+//			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 		

@@ -106,7 +106,7 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
-		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/rocket.gif")).getImage());
+		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
 		    this.getSysTrayIcon().addSysTrayMenuListener( control );
 			createMenu();   

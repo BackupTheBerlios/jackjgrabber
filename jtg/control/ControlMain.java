@@ -37,6 +37,7 @@ import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
+import presentation.GuiSplashScreen;
 import service.SerLogAppender;
 import service.SerSettingsHandler;
 import service.SerXMLHandling;
@@ -61,7 +62,8 @@ public class ControlMain {
 	
 	
     private static Properties properties = new Properties();   
-    private static Locale locale = new Locale("");    
+    private static Locale locale = new Locale("");
+    public static GuiSplashScreen screen;
     
     public static String settingsFilename = "settings.xml";
     
@@ -85,11 +87,16 @@ public class ControlMain {
 	};
 
 	public static void main( String args[] ) {
+		screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application..." );
 		startLogger();
 		readSettings();
 		setResourceBundle();
 		detectActiveBox();
 		control = new ControlMainView();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+		screen.dispose();
 	};
 	
 	public static void startLogger() {
