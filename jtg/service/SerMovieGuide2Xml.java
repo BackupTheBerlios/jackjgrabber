@@ -123,7 +123,7 @@ public class SerMovieGuide2Xml extends Thread{
     	if (path != null) {
         	con = (new File(path).toURL()).openConnection();
     	} else {
-    		URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0)+".txt");
+    		URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
             con =url.openConnection();
     	}
     	return con;
@@ -166,5 +166,19 @@ public class SerMovieGuide2Xml extends Thread{
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }        
+    }
+    public static boolean checkNewMovieGuide(){
+    	String path = "movieguide.xml";
+    	boolean value = false;
+    	try{
+    	URLConnection con;
+    	//con = (new File(path).toURL()).openConnection();
+    	URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");    			    			
+		con =url.openConnection();
+		if(con.getContentLength()>0){
+			value = true;
+		}
+    	}catch (IOException ioex){}
+    	return value;
     }
 }
