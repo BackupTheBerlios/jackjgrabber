@@ -134,7 +134,6 @@ public class GuiMainTabPane extends JTabbedPane {
         if (tabStart == null) {
 			ControlStartTab control = new ControlStartTab(this.getView());
 			tabStart = new GuiTabStart(control);
-			new Thread(control).start();
 		}
         return tabStart;
     }
