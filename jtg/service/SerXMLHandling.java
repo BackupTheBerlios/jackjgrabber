@@ -80,7 +80,7 @@ public class SerXMLHandling {
 				"MGM|PREMIERE 1|PREMIERE 2|PREMIERE 3|PREMIERE 4|PREMIERE 5|PREMIERE 6|PREMIERE 7|PREMIERE KRIMI|" +
 				"PREMIERE NOSTALGIE|PREMIERE SERIE|PREMIERE START|SCI FI");
 		
-		setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_AUTO + "");
+		setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_ASK + "");
 		setElementInElement(root, "mgdefault", ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL + "");
 		setElementInElement(root, "mgstoreoriginal", "false");
 		root.addElement("boxList");
