@@ -59,6 +59,7 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
     public void run() {
        
     	getTab().getStoreOriginal().setSelected(getSettings().isMgStoreOriginal());
+    	getTab().getDontForgetCheckBox().setSelected(getSettings().isMgInfoDontForget());
     	int down = getSettings().getMgLoadType();
     	if (down == MGLOADTYPE_AUTO)
     	{
@@ -130,7 +131,7 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
 			getSettings().setMgStoreOriginal(((JCheckBox)comp).isSelected());
 		}
 		if (comp.getName().equals("infoDontForget")){
-			getSettings().setMgInfoDontForget(((JCheckBox)comp).isSelected());
+			getSettings().setMgInfoDontForget(((JCheckBox)comp).isSelected());			
 		}
 	}
 	
