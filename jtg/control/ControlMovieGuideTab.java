@@ -84,7 +84,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		this.getMainView().getTabMovieGuide().getComboBoxGenre().setSelectedIndex(0);
 		this.getMainView().getTabMovieGuide().getComboBoxSender().setSelectedIndex(0);
 		this.getMainView().getTabMovieGuide().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());
-		
+		this.getMainView().getTabMovieGuide().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -361,12 +361,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();
     		switch (value){
     			case 1: //datum
-    				if(bomovieguide.getDatum().contains(search)){
+    				if(bomovieguide.getDatum().contains(search)){ //FIXME indexOf nehmen
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;
     			case 2: //genre
-    				if(bomovieguide.getGenre().contains(search)){
+    				if(bomovieguide.getGenre().indexOf(search)!=-1){
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;

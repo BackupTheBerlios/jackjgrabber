@@ -30,7 +30,7 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		try{
 		Integer selectRow = this.getControl().getSelectRowFilmTable();				
 		if (columnIndex == 0) {		
-			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().toArray()[rowIndex];
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().toArray()[rowIndex];			
 		}else if (columnIndex == 1) {
 			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().toArray()[rowIndex];
 		}else if (columnIndex == 2) {			
