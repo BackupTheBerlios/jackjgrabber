@@ -27,7 +27,7 @@ public class ControlProjectXTab extends ControlTab {
 	 * Start ProjectX 
 	 */
 	public void initialize() {
-		this.getMainView().getTabProjectX().add(X.start(this.getMainView().getTabProjectX()));
+		X.start(this.getMainView().getTabProjectX());
 	}
 	/**
 	 * @return Returns the mainView.
