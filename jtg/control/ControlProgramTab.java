@@ -321,12 +321,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		
 	private BOTimer buildTimer(BOEpg epg) {
 		BOTimer timer = new BOTimer();
+		
+		int unformattedStart = Integer.parseInt(epg.getUnformattedStart());
+		int announce = unformattedStart-(60*1000);
+		
 		timer.setChannelId(this.getSelectedSender().getChanId());
-		timer.setAnnounceTime(epg.getUnformattedStart()); //Vorwarnzeit
+		timer.setAnnounceTime(Integer.toString(announce)); //Vorwarnzeit
 		timer.setStartTime(epg.getUnformattedStart()); //TODO -1 Minute??
 		timer.setEventRepeat("0");
 		timer.setStopTime(SerFormatter.getUnixEndTime(epg.getUnformattedStart(), epg.getUnformattedDuration()));
-		timer.setEventType("0");
+		timer.setEventType("5");
 		return timer;
 	}
 	/**
