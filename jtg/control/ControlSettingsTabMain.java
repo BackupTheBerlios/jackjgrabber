@@ -59,6 +59,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		this.getTab().getCbStartVlcAtStart().setSelected(this.getSettings().isStartVlcAtStart());
 		this.getTab().getCbShowLogWindow().setSelected(this.getSettings().isShowLogWindow());
 		this.getTab().getCbUseSysTray().setSelected(this.getSettings().isUseSysTray());
+		this.getTab().getCbStartMinimized().setSelected(this.getSettings().isStartMinimized());
 		this.initLookAndFeels();
 		this.getTab().getJComboBoxLookAndFeel().setSelectedIndex(currentSelectedLookAndFeel);
 	}
@@ -113,6 +114,10 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  				this.getMainView().checkTrayMenu(selected); // Damit das Tray sofort geladen, bzw. ausgeblendet wird
 		  				break;
 		  		}
+		  		if (action.equals("startMinimized")) {
+	  				this.getSettings().setStartMinimized(((JCheckBox)e.getSource()).isSelected());
+	  				break;
+	  		}
 		    	break;
 		}
 	}

@@ -65,6 +65,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JCheckBox cbShowLogWindow;
 	private JCheckBox cbUseSysTray;
 	private JCheckBox cbStartVlcAtStart;
+	private JCheckBox cbStartMinimized;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public final String[] themes = {"Silver", "BrownSugar", "DarkStar",
@@ -134,11 +135,13 @@ public class GuiSettingsTabMain extends GuiTab {
 
 				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 3));
 				builder.add(this.getCbStartFullscreen(), 									cc.xyw(1, 3, 3));
-				builder.add(this.getCbShowLogo(),												cc.xyw(1, 4, 3));
-				builder.add(this.getCbShowLogWindow(),												cc.xyw(1, 5, 3));
-				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 6, 4));
-				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 7, 1));
-				builder.add(this.getJButtonStartVlc(),										cc.xy	(3, 7));
+				builder.add(this.getCbStartMinimized(), 								cc.xyw(1, 4, 1));
+				builder.add(this.getCbShowLogo(),												cc.xyw(1, 5, 3));
+				builder.add(this.getCbShowLogWindow(),												cc.xyw(1, 6, 3));
+				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 7, 4));
+				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 8, 1));
+				
+				builder.add(this.getJButtonStartVlc(),										cc.xy	(3, 8));
 			}
 			return panelStartOptions;
 		}
@@ -310,6 +313,18 @@ public class GuiSettingsTabMain extends GuiTab {
 		    cbStartVlcAtStart.addActionListener(control);
 		}
 		return cbStartVlcAtStart;
+	}
+	
+	/**
+	 * @return Returns the cbStartVlcAtStart.
+	 */
+	public JCheckBox getCbStartMinimized() {
+		if (cbStartMinimized == null) {
+			cbStartMinimized = new JCheckBox(ControlMain.getProperty("cbStartMinimized"));
+			cbStartMinimized.setActionCommand("startMinimized");
+			cbStartMinimized.addActionListener(control);
+		}
+		return cbStartMinimized;
 	}
 
 	/**
