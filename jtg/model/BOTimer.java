@@ -13,14 +13,14 @@ import java.util.Date;
  * @author  ralix
  */
 public class BOTimer extends java.lang.Object{
-    private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, channelId;
+    private String eventId, eventType, eventRepeat, announceTime, startTime, stopTime, channelId, description;
     Date startDate, endDate;
     /** Creates a new instance of BOTimer */
     public BOTimer() {
     }
    
     public BOTimer(String eventId, String eventType, String eventRepeat, String announceTime, 
-                    String startTime, String stopTime, String sender,Date startDate ){
+                    String startTime, String stopTime, String sender,Date startDate, String description ){
         this.setEventId(eventId);
         this.setEventType(eventType);
         this.setEventRepeat(eventRepeat);
@@ -99,4 +99,28 @@ public class BOTimer extends java.lang.Object{
 		this.startDate = startDate;
 	}
      
+	/**
+	 * @return Returns the description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description The description to set.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	/**
+	 * @return Returns the endDate.
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
+	/**
+	 * @param endDate The endDate to set.
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 }
