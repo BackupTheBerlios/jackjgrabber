@@ -32,7 +32,10 @@ public class GuiMainView extends JFrame {
 
 	private GuiMainTabPane mainTabPane = null;
 	private ControlMainView control;
-	private SysTrayMenuIcon[] sysTrayIcon = {new SysTrayMenuIcon("grabber1"), new SysTrayMenuIcon("grabber2")};
+	private SysTrayMenuIcon[] sysTrayIcon = {
+	        new SysTrayMenuIcon(ClassLoader.getSystemResource("ico/grabber1.ico")), 
+	        new SysTrayMenuIcon(ClassLoader.getSystemResource("ico/grabber2.ico"))
+	};
 	private SysTrayMenu menu;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
