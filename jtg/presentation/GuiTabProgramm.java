@@ -512,7 +512,6 @@ public class GuiTabProgramm extends GuiTab {
 	private JScrollPane getJScrollPaneAusgabe() {
 		if (jScrollPaneAusgabe == null) {
 			jScrollPaneAusgabe = new JScrollPane();
-			jScrollPaneAusgabe.setAutoscrolls(false);
 			jScrollPaneAusgabe.setViewportView(getJTextPaneAusgabe());
 		}
 		return jScrollPaneAusgabe;
@@ -525,7 +524,6 @@ public class GuiTabProgramm extends GuiTab {
 	public JTextArea getJTextPaneAusgabe() {
 		if (jTextPaneAusgabe == null) {
 			jTextPaneAusgabe = new JTextArea();
-					
 		}
 		return jTextPaneAusgabe;
 	}

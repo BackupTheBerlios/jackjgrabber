@@ -2,6 +2,8 @@ package service;
 
 import java.io.IOException;
 
+import javax.swing.JTextArea;
+
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
@@ -33,7 +35,9 @@ public class SerLogAppender extends RollingFileAppender {
 			layout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");			
 			String outputString = layout.format(event);
 			
-			view.getTabProgramm().getJTextPaneAusgabe().append(outputString);
+			JTextArea outputArea = view.getTabProgramm().getJTextPaneAusgabe(); 
+			outputArea.append(outputString);
+			outputArea.setCaretPosition(outputArea.getText().length());
 		}
 		super.doAppend(event);
 	}
