@@ -302,7 +302,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		String line, channelID=new String(), eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String(), channel=new String();
 		String valueStart, valueDuration, timerType;
 		String eventRepeatId="0";
-		int startpos, startpos2; endpos, endpos2;
+		int startpos, startpos2, endpos, endpos2;
 		while ((line = input.readLine()) != null) {
 			if ((line.indexOf("Recurring Timer Events")>0)|(line.indexOf("Repeating Timer Events")>0)) {
 				recurring=true;
