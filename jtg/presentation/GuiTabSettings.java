@@ -31,7 +31,7 @@ public class GuiTabSettings extends JPanel {
 	private JPanel jPanel5 = null;
 	private JComboBox jComboBoxTheme = null;
 	private JButton jButtonAnlegen = null;
-	private JButton jButtonLöschen = null;
+	private JButton jButtonLoeschen = null;
 	private JScrollPane jScrollPaneBoxSettings = null;
 	private JTable jTableBoxSettings = null;
 	private JLabel jLabel = null;
@@ -196,7 +196,7 @@ public class GuiTabSettings extends JPanel {
 			gridBagConstraints51.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints51.gridheight = 5;
 			panelBoxSettings.add(getJButtonAnlegen(), gridBagConstraints3);
-			panelBoxSettings.add(getJButtonLöschen(), gridBagConstraints42);
+			panelBoxSettings.add(getJButtonLoeschen(), gridBagConstraints42);
 			panelBoxSettings.add(getJScrollPaneBoxSettings(), gridBagConstraints51);
 		}
 		return panelBoxSettings;
@@ -275,15 +275,15 @@ public class GuiTabSettings extends JPanel {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonLöschen() {
-		if (jButtonLöschen == null) {
-			jButtonLöschen = new JButton();
-			jButtonLöschen.setText("Löschen");
-			jButtonLöschen.setActionCommand("delete");
-			jButtonLöschen.addActionListener(control);
-			jButtonLöschen.setPreferredSize(new java.awt.Dimension(90,25));
+	private JButton getJButtonLoeschen() {
+		if (jButtonLoeschen == null) {
+			jButtonLoeschen = new JButton();
+			jButtonLoeschen.setText("Lï¿½schen");
+			jButtonLoeschen.setActionCommand("delete");
+			jButtonLoeschen.addActionListener(control);
+			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
 		}
-		return jButtonLöschen;
+		return jButtonLoeschen;
 	}
 	/**
 	 * This method initializes jScrollPaneBoxSettings	
