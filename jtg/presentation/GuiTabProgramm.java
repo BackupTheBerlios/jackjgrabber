@@ -434,6 +434,9 @@ public class GuiTabProgramm extends GuiTab {
 			jTableChannels.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jTableChannels.addMouseListener(control);
 			jTableChannels.setName("Sender");
+			jTableChannels.setShowHorizontalLines(false);
+			jTableChannels.setShowVerticalLines(false);
+			
 		}
 		return jTableChannels;
 	}
