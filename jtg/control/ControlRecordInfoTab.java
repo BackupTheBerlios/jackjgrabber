@@ -30,6 +30,7 @@ import javax.swing.event.*;
 import org.apache.log4j.*;
 
 import presentation.*;
+import service.SerLogAppender;
 
 /**
  * Controlklasse des Programmtabs.
@@ -119,7 +120,7 @@ public class ControlRecordInfoTab extends ControlTab
 			boolean timer) {
 		
 		this.directory = directory;
-		ControlMain.getLogAppender().addTextArea(guiTabRecordInfo.getLogArea());
+		SerLogAppender.getTextAreas().add(guiTabRecordInfo.getLogArea());
 		guiTabRecordInfo.startRecord(title, engine, directory, timer);
 	}
 
@@ -128,11 +129,10 @@ public class ControlRecordInfoTab extends ControlTab
 	 *
 	 */
 	public void stopRecord() {
-		ControlMain.getLogAppender().removeTextArea(
-				guiTabRecordInfo.getLogArea());
-		guiTabRecordInfo.stopRecord();
+	    SerLogAppender.getTextAreas().remove(guiTabRecordInfo.getLogArea());
+	    guiTabRecordInfo.stopRecord();
 		
-		saveLog();
+	    saveLog();
 	}
 
 	/** speichert das Log der Aufnahme

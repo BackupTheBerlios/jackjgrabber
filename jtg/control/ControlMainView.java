@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
+import service.SerLogAppender;
 import snoozesoft.systray4j.SysTrayMenuEvent;
 import snoozesoft.systray4j.SysTrayMenuListener;
 
@@ -56,7 +57,7 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 	
 	private void runAfterTerms() {;
 		this.setView(new GuiMainView(this));
-		ControlMain.getLogAppender().setView(this.getView());
+		SerLogAppender.getTextAreas().add(this.getView().getTabProgramm().getJTextPaneAusgabe());
 		this.initialize();
 		this.log(ControlMain.getProperty("msg_app_starting"));		
 	}

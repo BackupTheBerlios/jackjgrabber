@@ -56,7 +56,6 @@ public class ControlMain {
 	static Document settingsDocument;
 	static Document movieGuideDocument;
 	static SerBoxControl boxAccess;
-	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static BOBox activeBox;
 	
@@ -109,10 +108,10 @@ public class ControlMain {
 		layout.setConversionPattern("%d{HH:mm:ss:ms} %-5p %c - %m%n");
 		
 		try {
-			ControlMain.setLogAppender(new SerLogAppender(layout));
-			ControlMain.getLogAppender().setMaxBackupIndex(3); //Number of max Backup-Files
-			ControlMain.getLogAppender().setMaxFileSize("100KB");
-			BasicConfigurator.configure(ControlMain.getLogAppender());
+		    SerLogAppender logAppender =new SerLogAppender(layout);
+		    logAppender.setMaxBackupIndex(3); //Number of max Backup-Files
+		    logAppender.setMaxFileSize("100KB");
+		    BasicConfigurator.configure(logAppender);
 		} catch (IOException e) {}
 	}
 		
@@ -255,18 +254,6 @@ public class ControlMain {
 	 */
 	public static void setTerms(String[] terms) {
 		ControlMain.terms = terms;
-	}
-	/**
-	 * @return Returns the logAppender.
-	 */
-	public static SerLogAppender getLogAppender() {
-		return logAppender;
-	}
-	/**
-	 * @param logAppender The logAppender to set.
-	 */
-	public static void setLogAppender(SerLogAppender logAppender) {
-		ControlMain.logAppender = logAppender;
 	}
 
 	public static String getProperty(String key){		

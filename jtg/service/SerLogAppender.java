@@ -18,89 +18,56 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 
 import javax.swing.JTextArea;
-import javax.swing.text.*;
 
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 
-import presentation.GuiMainView;
-
 public class SerLogAppender extends RollingFileAppender {
 	
-	GuiMainView view;
-	PatternLayout customlayout;
-	
-	private ArrayList logDestination;
+	static ArrayList textAreas = new ArrayList();
+	static PatternLayout patternLayout;
 	
 	public SerLogAppender(PatternLayout layout) throws IOException {
 		super(layout, "jackLog.log");
-		logDestination = new ArrayList();
 	}
 	
 	public void doAppend(LoggingEvent event) {
-		if (this.getView() != null) {	
+		if (getTextAreas().size()>0) {	
+			String outputString = getPatternLayout().format(event);
 			
-			if (logDestination.size() == 0)
-			{
-				logDestination.add(view.getTabProgramm().getJTextPaneAusgabe());
+			for (int i=0; i<getTextAreas().size(); i++) {
+			    JTextArea outputArea = (JTextArea)getTextAreas().get(i);
+			    outputArea.append(outputString);
+					outputArea.setCaretPosition(outputArea.getText().length());			    
 			}
-			PatternLayout layout = new PatternLayout();
-			//Set outputformat for textpane
-			layout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");			
-			String outputString = layout.format(event);
-			
-			//JTextArea outputArea = view.getTabProgramm().getJTextPaneAusgabe(); 
-			Iterator iter = logDestination.iterator();
-
-			while (iter.hasNext()) {
-				JTextArea outputArea = (JTextArea) iter.next();
-				outputArea.append(outputString);
-				outputArea.setCaretPosition(outputArea.getText().length());	
-			}
-			
-			
 		}
 		super.doAppend(event);
 	}
-	/**
-	 * @return Returns the tabSettings.
-	 */
-	public GuiMainView getView() {
-		return view;
-	}
-	/**
-	 * @param tabSettings The tabSettings to set.
-	 */
-	public void setView(GuiMainView view) {
-		this.view = view;
-	}
-	/**
-	 * @return Returns the customlayout.
-	 */
-	public PatternLayout getCustomlayout() {
-		return customlayout;
-	}
-	/**
-	 * @param customlayout The customlayout to set.
-	 */
-	public void setCustomlayout(PatternLayout customlayout) {
-		this.customlayout = customlayout;
-	}
 	
-	/** fügt eine weitere JTextArea der Log Ziele hinzu
-	 *
-	 */ 
-	public void addTextArea(JTextArea area)
-	{
-		logDestination.add(area);
-	}
-	
-	public void removeTextArea(JTextArea area)
-	{
-		logDestination.remove(area);
-	}
+	 /**
+   * @return Returns the patternLayout.
+   */
+  public static PatternLayout getPatternLayout() {
+      if (patternLayout==null) {
+          patternLayout = new PatternLayout();
+          patternLayout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");			
+      }
+      return patternLayout;
+  }
+    /**
+     * @return Returns the textAreas.
+     */
+    public static ArrayList getTextAreas() {
+        return textAreas;
+    }
+    /**
+     * @param textAreas The textAreas to set.
+     */
+    public static void setTextAreas(ArrayList textAreas) {
+        SerLogAppender.textAreas = textAreas;
+    }
 }
