@@ -42,7 +42,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-public class ControlEnigmaTimerTab extends ControlTab implements ActionListener, MouseListener {
+public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
@@ -260,7 +260,7 @@ public class ControlEnigmaTimerTab extends ControlTab implements ActionListener,
 		if (longString.equals("einmal")) {
 			return "0";
 		} else {		
-			return "768";
+			return "20";
 		}
 	}
 	
@@ -352,5 +352,29 @@ public class ControlEnigmaTimerTab extends ControlTab implements ActionListener,
 	 */
 	public void setSenderList(ArrayList senderList) {
 		this.senderList = senderList;
+	}
+	/**
+	 * @return Returns the repeatOptions.
+	 */
+	public String[] getRepeatOptions() {
+		return repeatOptions;
+	}
+	/**
+	 * @param repeatOptions The repeatOptions to set.
+	 */
+	public void setRepeatOptions(String[] repeatOptions) {
+		this.repeatOptions = repeatOptions;
+	}
+	/**
+	 * @return Returns the timerType.
+	 */
+	public String[] getTimerType() {
+		return timerType;
+	}
+	/**
+	 * @param timerType The timerType to set.
+	 */
+	public void setTimerType(String[] timerType) {
+		this.timerType = timerType;
 	}
 }
