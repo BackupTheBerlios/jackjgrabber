@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
 import java.text.ParseException;
+import java.util.regex.*;
 
 /**
  * @author ralix
@@ -243,4 +244,14 @@ public class SerFormatter {
             return 1;
         }
     }
+    public static String replaceFind(String value, String search){      
+    	if (search.length() >=1){
+    		Pattern find = Pattern.compile(search, Pattern.CASE_INSENSITIVE);              
+    		Matcher m = find.matcher(value);                           
+    		while(m.find()) {                   
+    			value = value.replaceAll(m.group(0),"<HTML><font color=blue>"+m.group(0)+"</font><HTML>");
+    		}
+    	}
+        return value;
+    }    
 }
