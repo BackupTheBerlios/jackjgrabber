@@ -76,9 +76,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	Element root;
 
 	public static File movieGuideFile = new File("movieguide.xml");
+	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
+	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
+	
 	String SelectedItemJComboBox;
 	int SelectedItemJComboBoxSucheNach;
     int timerTableSize; 
+    int zaehler = 0;
     
 	public ControlMovieGuideTab(GuiMainView view) {
 		this.setMainView(view);		
@@ -371,23 +375,20 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     		controlMap.put(key,value);
     	}
     }
-    private boolean checkSearchToday(BOMovieGuide bomovieguide){ //prüfen ob Datum > als Heute in BOMovieGuide-Object
-    	return (bomovieguide.booleanArrayDate(bomovieguide.getDatum(),String.valueOf(SerFormatter.getStringToLong(SerFormatter.getDatumToday()))));
-    }
-    
+   
     private int doItSearch(BOMovieGuide bomovieguide ,String value, String search, int a){
     	if(value.indexOf(search)!=-1){    	
-    		a = searchValue(bomovieguide,a);  
+    		a = setEntryInTitelMap(bomovieguide,a);      		
 		}		
     	return (a);
     }
     private int doItSearchArray(BOMovieGuide bomovieguide ,ArrayList value, String search, int a){
-    	if(bomovieguide.booleanArrayTest(value,search.toLowerCase())){
-    		a = searchValue(bomovieguide,a);    
+    	if(bomovieguide.isValueInArray(value,search.toLowerCase())){
+    		a = setEntryInTitelMap(bomovieguide,a);        		
 		}
     	return (a);
     }
-    private int searchValue(BOMovieGuide bomovieguide,int a){
+    private int setEntryInTitelMap(BOMovieGuide bomovieguide,int a){    	
 		titelListAktuell.put(new Integer(a++),bomovieguide);
     	return (a++);
     }
@@ -400,11 +401,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     		Map.Entry entry = (Map.Entry)i.next();
     		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();    		
     		switch (value){
-    			case 1: //datum    				
-    				if(bomovieguide.getDatum().contains(String.valueOf(SerFormatter.getStringToLong(search)))){ 
-    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    	    		}
-    				break;
+    		case 1: //datum    				    				
+				if(bomovieguide.getDatum().contains(SerFormatter.convString2GreCal(search,DATE_FULL))){	
+	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+	    		}
+				break;
     			case 2: //genre
     				a = doItSearch(bomovieguide,bomovieguide.getGenre(),search,a);    				
     				break;
@@ -434,14 +435,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     				break;
     			case 11:
 					if(bomovieguide.getIfStringInObject(search.toLowerCase())){
-						a = searchValue(bomovieguide,a);						
+						a = setEntryInTitelMap(bomovieguide,a);						
 					}
 					break;
     			case 12: //sender    			
     				if(bomovieguide.getSender().contains(search)){
-    					a = searchValue(bomovieguide,a);    					
+    					a = setEntryInTitelMap(bomovieguide,a);    					
     	    		}    	    		
-    				break;     								
+    				break;    						
     		};    		
     		if(search.equals("all")){
     			titelListAktuell.put(new Integer(a++),bomovieguide);
@@ -450,32 +451,33 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     }
     
     public void setTitelMap() {				    	    // einlesen der xml datei in Hashtable (key,BOMovieGuide Object)
-    	titelList = new Hashtable();
-    	controlMap = new Hashtable();
+    	if(this.getTitelMap()==null){				          	            			
+    			titelList = new Hashtable();
+    			controlMap = new Hashtable();
+    	}    	
     	setGenreList("Genre...");
     	setSenderList("Sender...");
-    	try {
-			int a = 0;			
+    	try {						
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {
 				Element entry = (Element) i.next();						
-				if ( (SerFormatter.getStringToLong(entry.element("datum").getStringValue())) >= (SerFormatter.getStringToLong(SerFormatter.getDatumToday())) ){		//nur lesen was ab heutigen datum													
-				setDatumList(entry.element("datum").getStringValue());	
-				setSenderList(entry.element("sender").getStringValue());
-				//}
-				if(!controlMap.containsKey(entry.element("titel").getStringValue())){ //prüfen ob titel schon vorhanden ist, wenn ja nur neue Daten hinzugügen
-				String datum = entry.element("datum").getStringValue();
-				String start = entry.element("start").getStringValue();
-					BOMovieGuide bomovieguide = new BOMovieGuide(
-						entry.element("sender").getStringValue(), 
-						String.valueOf(SerFormatter.getStringToLong(datum)),
-						SerFormatter.getDateFromString(datum+","+start, "EEEE, dd. MMMM yyyy,HH:mm"),
-						SerFormatter.getDateFromString(
-						        datum+","+SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue()), 
-						        "EEEE, dd. MMMM yyyy,HH:mm"),					
-						entry.element("titel").getStringValue(),
+				String datum = entry.element("datum").getStringValue();						
+				if(SerFormatter.compareDates( datum,"today")) {				
+				setDatumList(datum);
+				String sender = entry.element("sender").getStringValue();
+				String titel  = entry.element("titel").getStringValue();
+				String dauer = entry.element("dauer").getStringValue();
+				setSenderList(sender);
+				if(!controlMap.containsKey(titel)){ //prüfen ob titel schon vorhanden ist, wenn ja nur neue Daten hinzugügen´			
+				String start = entry.element("start").getStringValue();			
+					BOMovieGuide bomovieguide = new BOMovieGuide(						
+						sender,	
+						SerFormatter.convString2GreCal(datum,DATE_FULL),
+						SerFormatter.convString2GreCal(datum+","+start, DATE_FULL_TIME),
+						SerFormatter.convString2GreCal(datum+","+SerFormatter.getCorrectEndTime(start,dauer), DATE_FULL_TIME),					
+						titel,
 						entry.element("episode").getStringValue(),
 						entry.element("genre").getStringValue(),
-						entry.element("dauer").getStringValue(),
+						dauer,
 						entry.element("land").getStringValue(),
 						entry.element("jahr").getStringValue(),
 						entry.element("regie").getStringValue(),
@@ -485,28 +487,25 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 						entry.element("inhalt").getStringValue()
 				);				
 				setGenreList(bomovieguide.getGenre());				
-				titelList.put(new Integer(a),bomovieguide);		
-				setControlMap(bomovieguide.getTitel(),new Integer(a));
-                a++;               
-				}else{	
-					 String datum = entry.element("datum").getStringValue();
+				titelList.put(new Integer(zaehler),bomovieguide);		
+				setControlMap(bomovieguide.getTitel(),new Integer(zaehler));
+				zaehler++;               
+				}else{						 
 				     String start = entry.element("start").getStringValue();
-					 BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(controlMap.get(entry.element("titel").getStringValue()));
-                     bomovieguide.setDatum(String.valueOf(SerFormatter.getStringToLong(datum)));
-                     bomovieguide.setStart(SerFormatter.getDateFromString(datum+","+start, "EEEE, dd. MMMM yyyy,HH:mm"));
-                     bomovieguide.setDauer(entry.element("dauer").getStringValue());
-                     bomovieguide.setSender(entry.element("sender").getStringValue());                             
+				     String ende  = SerFormatter.getCorrectEndTime(start,dauer);
+				     BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(controlMap.get(titel));                     
+					 bomovieguide.setDatum(SerFormatter.convString2GreCal(datum,DATE_FULL));
+                     bomovieguide.setStart(SerFormatter.convString2GreCal(datum+","+start, DATE_FULL_TIME));
+                     bomovieguide.setDauer(dauer);                                                  
+                     bomovieguide.setSender(sender);
                      bomovieguide.setBild(entry.element("bild").getStringValue());
                      bomovieguide.setTon(entry.element("ton").getStringValue());
-                     bomovieguide.setEnde(SerFormatter.getDateFromString(
-                        datum+","+SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue()), 
-                     	"EEEE, dd. MMMM yyyy,HH:mm"));	
+                     bomovieguide.setEnde(SerFormatter.convString2GreCal(datum+","+ende, DATE_FULL_TIME));	
                      titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
 			}
 			}
 		} catch (Exception ex) {System.out.println(ex);}				
-		setTitelMapSelected(SerFormatter.getDatumToday(),1);  // TitelMap für den heutigen Tag		    	
 	}
     
     
@@ -546,11 +545,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	public void setTab(GuiTabMovieGuide tab) {
 		this.tab = tab;
 	}
-	public boolean checkNewMovieGuide(){
-		boolean value = false;
-		//SerMovieGuide2Xml.op
-		return value;
-	}
+	
     /**
      * @return Returns the boxSenderList.
      */
