@@ -568,7 +568,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JRadioButton getJRadioButtonRadioMode() {
 		if (jRadioButtonRadioMode == null) {
-			jRadioButtonRadioMode = new JRadioButton(ControlMain.getProperty("button_tv"));
+			jRadioButtonRadioMode = new JRadioButton(ControlMain.getProperty("button_radio"));
 			jRadioButtonRadioMode.addActionListener(control);
 			jRadioButtonRadioMode.setActionCommand("radioMode");
 			tvRadioButtonGroup.add(jRadioButtonRadioMode);
@@ -580,7 +580,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JRadioButton getJRadioButtonTVMode() {
 		if (jRadioButtonTVMode == null) {
-			jRadioButtonTVMode = new JRadioButton(ControlMain.getProperty("button_radio"));
+			jRadioButtonTVMode = new JRadioButton(ControlMain.getProperty("button_tv"));
 			jRadioButtonTVMode.addActionListener(control);
 			jRadioButtonTVMode.setActionCommand("tvMode");
 			tvRadioButtonGroup.add(jRadioButtonTVMode);
