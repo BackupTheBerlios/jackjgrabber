@@ -32,7 +32,7 @@ public class GuiTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getTimerList().get(rowIndex);
 		if (columnIndex == 0) {
-			return timer.getSender();
+			return timer.getChannelId();
 		} if (columnIndex == 1) {
 			return timer.getStartDate();
 		} if (columnIndex == 2) {
