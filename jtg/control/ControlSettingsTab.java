@@ -72,28 +72,18 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 			this.openFileChooser();
 		}
 	}
-	public void keyTyped(KeyEvent event) {
-		JTextField tf = (JTextField)event.getSource();
-		if (tf.getName().equals("playbackString")){
-			settings.setPlaybackString(tf.getText());
-		}
-		settings.setStreamingServerPort(tf.getText());
-	}
+	public void keyTyped(KeyEvent event) {}
 	
-	public void keyPressed(KeyEvent event) {
-		JTextField tf = (JTextField)event.getSource();
-		if (tf.getName().equals("playbackString")){
-			settings.setPlaybackString(tf.getText());
-		}
-		settings.setStreamingServerPort(tf.getText());
-	}
+	public void keyPressed(KeyEvent event) {}
 	
 	public void keyReleased(KeyEvent event) {
 		JTextField tf = (JTextField)event.getSource();
 		if (tf.getName().equals("playbackString")){
 			settings.setPlaybackString(tf.getText());
 		}
-		settings.setStreamingServerPort(tf.getText());
+		if (tf.getName().equals("serverPort")){
+			settings.setStreamingServerPort(tf.getText());
+		}
 	}
 	
 	private void actionSetPlaybackString(ActionEvent event) {
