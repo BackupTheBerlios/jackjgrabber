@@ -70,7 +70,7 @@ public class GuiMainView extends JFrame {
 	}
 	
 	private void registerKeys() {
-	    final KeyStroke keyStroke = KeyStroke.getKeyStroke(76, InputEvent.CTRL_MASK, true);
+	    final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK, true);
 		getRootPane().registerKeyboardAction(control, keyStroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 	

@@ -20,6 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -48,7 +49,8 @@ public class GuiLogWindow extends JFrame {
     private boolean shouldBeVisible;
     
     public GuiLogWindow() {
-        setContentPane(getJPanelOutput()); 
+        super("Log Jack the JGrabber");
+    	setContentPane(getJPanelOutput()); 
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(600 , 150);
@@ -58,7 +60,7 @@ public class GuiLogWindow extends JFrame {
                 switchLogVisiblity();
             }
         };
-        final KeyStroke keyStroke = KeyStroke.getKeyStroke(76, InputEvent.CTRL_MASK, true);
+        final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK, true);
 		getRootPane().registerKeyboardAction(listener, keyStroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
     
