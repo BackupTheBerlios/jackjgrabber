@@ -50,7 +50,7 @@ public class GuiSplashScreen extends JDialog {
 
     public void setProgress(int position, String text){
         if (position >= progress.getMinimum()
-            && position <= progress.getMaximum() ){
+            && position <= progress.getMaximum() && position>progress.getValue()){
             progress.setValue(position);
             progress.setString(text);
         }
