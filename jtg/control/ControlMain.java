@@ -104,7 +104,7 @@ public class ControlMain {
 		PatternLayout layout = new PatternLayout();
 		
 		//http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html
-		layout.setConversionPattern("%d{HH:mm:ss} %-5p %c - %m%n");
+		layout.setConversionPattern("%d{HH:mm:ss:ms} %-5p %c - %m%n");
 		
 		try {
 			ControlMain.setLogAppender(new SerLogAppender(layout));
