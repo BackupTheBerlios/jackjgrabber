@@ -437,7 +437,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonToTimer = new JButton();
 			jButtonToTimer.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonToTimer.setText("add to timer");
-			jButtonToTimer.setToolTipText("ausgewï¿½hlte Dateien zum Timer hinzufï¿½gen.");
+			jButtonToTimer.setToolTipText("ausgewählte Dateien zum Timer hinzufügen.");
 		}
 		return jButtonToTimer;
 	}
