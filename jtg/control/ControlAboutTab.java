@@ -17,22 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.swing.JLabel;
-
 import presentation.GuiMainView;
-import service.BrowserLauncher;
-import service.SerAlertDialog;
 
 
-public class ControlAboutTab extends ControlTab implements MouseListener {
+public class ControlAboutTab extends ControlTab {
 	
 	GuiMainView mainView;
 	
@@ -70,24 +64,6 @@ public class ControlAboutTab extends ControlTab implements MouseListener {
 			}
 		} catch (IOException e) {}
 	}
-	
-	public void mousePressed(MouseEvent me) {
-		JLabel label = (JLabel)me.getSource();
-		try {
-			BrowserLauncher.openURL(label.getName());
-		} catch (IOException e) {
-			SerAlertDialog.alert(ControlMain.getProperty("msg_browserError"), this.getMainView());
-		}
-	}
-	
-	public void mouseClicked(MouseEvent me) 
-	{}
-	public void mouseReleased(MouseEvent me)
-	{}
-	public void mouseExited(MouseEvent me)
-	{}
-	public void mouseEntered(MouseEvent me)
-	{}
 	
 	/**
 	 * @return Returns the mainView.

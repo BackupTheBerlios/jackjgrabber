@@ -18,11 +18,18 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
+import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
+
+import service.SerHyperlinkAdapter;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -44,7 +51,10 @@ public class GuiTabAbout extends JPanel {
 	private JScrollPane scrollPaneOther;
 	private ImageIcon imageLogo;
 	private JPanel jGrabberInfo;
-	private JLabel linkHomePage, linkApache, linkProjectX, linkUdrec, linkDom4j, linkForms, linkSystray, labelOther, labelJGrabber, labelJGrabber2;
+	private JLabel labelOther, labelJGrabber;
+	private JTextPane linkHomePage, linkApache, linkProjectX, linkUdrec, linkDom4j, linkForms, linkSystray, labelJGrabber2;
+	SerHyperlinkAdapter hyperlinkAdapter = new SerHyperlinkAdapter(this);
+	Color background = (Color)UIManager.get("Panel.background");
 
 	public GuiTabAbout(ControlAboutTab ctrl) {
 		super();
@@ -74,19 +84,18 @@ public class GuiTabAbout extends JPanel {
 			jGrabberInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 			        "f:pref:grow, f:20,  f:pref:grow",	 		//columns 
-			  "pref, pref, 10, pref, pref, pref, pref, pref");							//rows
+			  "pref, pref, 5, pref, pref, pref, pref, pref");							//rows
 			PanelBuilder builder = new PanelBuilder(jGrabberInfo, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getLabelJgrabber(),																cc.xywh	(1, 1, 3, 1));
-			builder.add(this.getLabelJgrabber2(),																cc.xywh	(1, 2, 3, 1));
-			builder.add(this.getLabelOther(),																		cc.xywh	(1, 4, 3, 1));
-			builder.add(this.getLinkApache(),																	cc.xywh	(1, 5, 1, 1));
-			builder.add(this.getLinkDom4j(),																		cc.xywh	(1, 6, 1, 1));
-			builder.add(this.getLinkForms(),																		cc.xywh	(1, 7, 1, 1));
-			builder.add(this.getLinkProjectX(),																	cc.xywh	(3, 5, 1, 1));
-			builder.add(this.getLinkUdrec(),																		cc.xywh	(3, 6, 1, 1));
-			builder.add(this.getLinkSystray(),																	cc.xywh	(3, 7, 1, 1));
+			builder.add(this.getLabelJgrabber(),								cc.xywh	(1, 1, 3, 1));
+			builder.add(this.getLabelJgrabber2(),								cc.xywh	(1, 2, 3, 1));
+			builder.add(this.getLabelOther(),									cc.xywh	(1, 4, 3, 1));
+			builder.add(this.getLinkApache(),									cc.xywh	(1, 5, 1, 1));
+			builder.add(this.getLinkDom4j(),									cc.xywh	(1, 6, 1, 1));
+			builder.add(this.getLinkForms(),									cc.xywh	(1, 7, 1, 1));
+			builder.add(this.getLinkUdrec(),									cc.xywh	(3, 5, 1, 1));
+			builder.add(this.getLinkSystray(),									cc.xywh	(3, 6, 1, 1));
 		}
 		return jGrabberInfo;
 	}
@@ -206,11 +215,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLinkApache() {
+	public JTextPane getLinkApache() {
 		if (linkApache == null) {
-			linkApache = new JLabel("<HTML><font color=blue><u>commons & log4j</u></font></HTML>");
-			linkApache.setName("www.apache.org");
-			linkApache.addMouseListener(control);
+			linkApache = new JTextPane();		
+			linkApache.setPreferredSize(new Dimension(100,20));
+			linkApache.setBackground(background);
+			linkApache.setContentType("text/html");
+			linkApache.setEditable(false);
+			linkApache.setText("<html><a href=\"http://www.apache.org\">commons & log4j</a></html>");			
+			linkApache.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return linkApache;
 	}
@@ -218,23 +231,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLinkProjectX() {
-		if (linkProjectX == null) {
-			linkProjectX = new JLabel("<HTML><font color=blue><u>Project X</u></font></HTML>");
-			linkProjectX.setName("www.lucike.info/");
-			linkProjectX.addMouseListener(control);
-		}
-		return linkProjectX;
-	}
-	
-	/**
-	 * @return Returns the linkHomePage.
-	 */
-	public JLabel getLinkUdrec() {
-		if (linkUdrec == null) {
-			linkUdrec = new JLabel("<HTML><font color=blue><u>udrec</u></font></HTML>");
-			linkUdrec.setName("www.haraldmaiss.de");
-			linkUdrec.addMouseListener(control);
+	public JTextPane getLinkUdrec() {
+		if (linkUdrec == null) {	    
+		    linkUdrec = new JTextPane();			
+		    linkUdrec.setPreferredSize(new Dimension(100,20));
+		    linkUdrec.setBackground(background);
+		    linkUdrec.setContentType("text/html");
+		    linkUdrec.setEditable(false);
+		    linkUdrec.setText("<html><a href=\"http://www.haraldmaiss.de\">udrec</a></html>");			
+		    linkUdrec.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return linkUdrec;
 	}
@@ -242,11 +247,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLinkDom4j() {
+	public JTextPane getLinkDom4j() {
 		if (linkDom4j == null) {
-			linkDom4j = new JLabel("<HTML><font color=blue><u>dom4j</u></font></HTML>");
-			linkDom4j.setName("www.dom4j.org");
-			linkDom4j.addMouseListener(control);
+		    linkDom4j = new JTextPane();	
+		    linkDom4j.setPreferredSize(new Dimension(100,20));
+		    linkDom4j.setBackground(background);
+		    linkDom4j.setContentType("text/html");
+		    linkDom4j.setEditable(false);
+		    linkDom4j.setText("<html><a href=\"http://www.dom4j.org\">dom4j</a></html>");			
+		    linkDom4j.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return linkDom4j;
 	}
@@ -254,11 +263,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLinkForms() {
+	public JTextPane getLinkForms() {
 		if (linkForms == null) {
-			linkForms = new JLabel("<HTML><font color=blue><u>forms & looks</u></font></HTML>");
-			linkForms.setName("www.jgoodies.com/freeware/forms/index.html");
-			linkForms.addMouseListener(control);
+		    linkForms = new JTextPane();		
+		    linkForms.setPreferredSize(new Dimension(100,20));
+		    linkForms.setBackground(background);
+		    linkForms.setContentType("text/html");
+		    linkForms.setEditable(false);
+		    linkForms.setText("<html><a href=\"http://www.jgoodies.com/freeware/forms/index.html\">forms & looks</a></html>");			
+		    linkForms.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return linkForms;
 	}
@@ -266,11 +279,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLinkSystray() {
+	public JTextPane getLinkSystray() {
 		if (linkSystray == null) {
-			linkSystray = new JLabel("<HTML><font color=blue><u>systray4j</u></font></HTML>");
-			linkSystray.setName("http://sourceforge.net/projects/systray/");
-			linkSystray.addMouseListener(control);
+		    linkSystray = new JTextPane();		
+		    linkSystray.setPreferredSize(new Dimension(100,20));
+		    linkSystray.setBackground(background);
+		    linkSystray.setContentType("text/html");
+		    linkSystray.setEditable(false);
+		    linkSystray.setText("<html><a href=\"http://sourceforge.net/projects/systray\">systray4j</a></html>");			
+		    linkSystray.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return linkSystray;
 	}
@@ -288,11 +305,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLinkHomePage() {
+	public JTextPane getLinkHomePage() {
 		if (linkHomePage == null) {
-			linkHomePage = new JLabel("<HTML><font color=blue><u>Jack the Grabber</u></font></HTML>");
-			linkHomePage.setName("www.jackthegrabber.de");
-			linkHomePage.addMouseListener(control);
+		    linkHomePage = new JTextPane();	
+		    linkHomePage.setPreferredSize(new Dimension(120,20));
+		    linkHomePage.setBackground(background);
+		    linkHomePage.setContentType("text/html");
+		    linkHomePage.setEditable(false);
+		    linkHomePage.setText("<html><a href=\"http://www.jackthegrabber.de\">Jack the JGrabber</a></html>");			
+		    linkHomePage.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return linkHomePage;
 	}
@@ -304,7 +325,6 @@ public class GuiTabAbout extends JPanel {
 		if (labelJGrabber == null) {
 			labelJGrabber = new JLabel("Jack the JGrabber is free software, and is released under the");
 			labelJGrabber.setName("www.jackthegrabber.de");
-			labelJGrabber.addMouseListener(control);
 		}
 		return labelJGrabber;
 	}
@@ -312,11 +332,15 @@ public class GuiTabAbout extends JPanel {
 	/**
 	 * @return Returns the linkHomePage.
 	 */
-	public JLabel getLabelJgrabber2() {
+	public JTextPane getLabelJgrabber2() {
 		if (labelJGrabber2 == null) {
-			labelJGrabber2 = new JLabel("<HTML><font color=blue><u>GNU General Public License</u></font></HTML>");
-			labelJGrabber2.setName("www.gnu.org/licenses/gpl.txt");
-			labelJGrabber2.addMouseListener(control);
+		    labelJGrabber2 = new JTextPane();	
+		    labelJGrabber2.setPreferredSize(new Dimension(100,20));
+		    labelJGrabber2.setBackground(background);
+		    labelJGrabber2.setContentType("text/html");
+		    labelJGrabber2.setEditable(false);
+		    labelJGrabber2.setText("<html><a href=\"http://www.gnu.org/licenses/gpl.txt\">GNU General Public License</a></html>");			
+		    labelJGrabber2.addHyperlinkListener(hyperlinkAdapter);
 		}
 		return labelJGrabber2;
 	}
