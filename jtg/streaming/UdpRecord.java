@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.MessageFormat;
+
 import org.apache.log4j.Logger;
 
 import service.SerAlertDialog;
@@ -164,11 +165,11 @@ public class UdpRecord  extends Record {
 
 		if (ControlMain.getSettings().getShortJGrabberStreamType().equals("TS")) {
 			writeStream = new DataWriteStream[1];
-			writeStream[0] = new DataWriteStream('t', 0, baseFileName, recordControl);
+			writeStream[0] = new DataWriteStream('t', 0, recordControl);
 		}  else {
 			writeStream = new DataWriteStream[pidNum];
             for (int i = 0; i < pidNum; i++) {
-            	writeStream[i] = new DataWriteStream(avString.charAt(i), i, baseFileName, recordControl);
+            	writeStream[i] = new DataWriteStream(avString.charAt(i), i, recordControl);
             }
 		}
 		return pidNum;

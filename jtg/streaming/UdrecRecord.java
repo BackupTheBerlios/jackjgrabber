@@ -1,6 +1,6 @@
 package streaming;
 /*
-UdpRecord.java by Geist Alexander 
+UdrecRecord.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.MessageFormat;
+
+import org.apache.log4j.Logger;
 
 import model.BORecordArgs;
 import service.SerErrorStreamReadThread;
@@ -36,6 +40,7 @@ public class UdrecRecord  extends Record {
 	String boxIp;
 	boolean running = true;
 	String requestString;
+	Process run;
 	
 	public UdrecRecord(BORecordArgs args, RecordControl control){
         recordControl = control;
@@ -50,9 +55,11 @@ public class UdrecRecord  extends Record {
 	            ControlMain.getSettings().getUdrecPath(), 
 	            boxIp, 
 	            Integer.toString(spktBufNum), 
-	            ControlMain.getSettings().getShortUdrecStreamType() 
+	            ControlMain.getSettings().getShortUdrecStreamType(),
+	            '"'+new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()+'"'
 	    };
-	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3}");
+	    
+	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3} -o {4}");
 	    cmd.append(mf.format(args));
 	    
 	    if (recordArgs.getVPid() != null) {
@@ -67,21 +74,37 @@ public class UdrecRecord  extends Record {
 	
 	public void start() {
 	    try {
-            Process run = Runtime.getRuntime().exec(requestString);
+            run = Runtime.getRuntime().exec(requestString);
             new SerInputStreamReadThread(run.getInputStream()).start();
             new SerErrorStreamReadThread(run.getErrorStream()).start();
-            UdrecOutputStreamThread outputStream = new UdrecOutputStreamThread(run.getOutputStream());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Logger.getLogger("UdrecRecord").error("Unable to Start udrec"+e.getLocalizedMessage());
         }
 	}	
 	
 	public void stop() {
-	   
+		PrintWriter out = new PrintWriter(run.getOutputStream());
+		out.write("\n");
+		out.flush();
+		try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 	}
+	/**
+     * @return Returns the writeStream.
+     */
+    public DataWriteStream[] getWriteStream() {
+        return null;
+    }
 	
-	 public DataWriteStream[] getWriteStream() {
-	     return null; //TODO
-	 }
+    public String[] getFiles() {
+    	File[] files = recordControl.getDirectory().listFiles();
+    	String[] fullPathFiles = new String[files.length];
+    	for (int i=0; i<files.length; i++) {
+    	    fullPathFiles[i] = files[i].getAbsolutePath();
+    	}
+    	return fullPathFiles;
+    }
 }

@@ -52,7 +52,7 @@ public class TcpRecord extends Record{
         aPid = pid[0];
         Logger.getLogger("TcpRecord").info("Start record Pid "+aPid);
         String baseFileName = recordControl.getFileName();
-        writeStream[0] = new DataWriteStream(baseFileName, recordControl, ".mp2");
+        writeStream[0] = new DataWriteStream(recordControl);
 	}
 	
 	public void start() {
@@ -108,7 +108,7 @@ public class TcpRecord extends Record{
         }   
 	}
 	
-	/**
+    /**
      * @return Returns the writeStream.
      */
     public DataWriteStream[] getWriteStream() {

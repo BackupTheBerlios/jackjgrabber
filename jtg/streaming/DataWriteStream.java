@@ -26,9 +26,6 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import service.SerFormatter;
-
-import control.ControlMain;
 
 public class DataWriteStream {
 
@@ -36,8 +33,6 @@ public class DataWriteStream {
     BufferedOutputStream fileOut;
     int streamNumber;
     
-    File directory;
-    String fileName;
 	String fileNameExtension;;
 	int fileNumber;
 	File currentFile;
@@ -46,11 +41,10 @@ public class DataWriteStream {
 	boolean isActive = true;
 	boolean foundHeader = false;
 
-	public DataWriteStream(char dataType, int number, String filename, RecordControl control ) {
+	public DataWriteStream(char dataType, int number, RecordControl control ) {
 	    recordControl = control;
 	    streamNumber = number;
 	    fileNumber = 1;
-	    this.setFileName(filename);
 		switch (dataType) {
 			case 't':
 				fileNameExtension = ".ts";
@@ -62,20 +56,18 @@ public class DataWriteStream {
 		this.createFileOutput();
 	}
 	
-	public DataWriteStream(String filename, RecordControl control, String extension ) {
+	public DataWriteStream(RecordControl control) {
 	    recordControl = control;
-	    fileNameExtension=extension;
 	    streamNumber = 0;
 	    fileNumber = 0;
-	    this.setFileName(filename);
 		this.createFileOutput();
 	}
 	
 	private void createFileOutput () {
 	    try {
             fileNumber = fileList.size();
-            String fullFileName = fileName+"_"+streamNumber+"_"+fileNumber+fileNameExtension;
-            currentFile = new File(this.getDirectory(), fullFileName);
+            String fullFileName = recordControl.getFileName()+"_"+streamNumber+"_"+fileNumber+fileNameExtension;
+            currentFile = new File(recordControl.getDirectory(), fullFileName);
             
             fileOut = new BufferedOutputStream(new FileOutputStream(currentFile));
             fileList.add(fileNumber, currentFile);
@@ -83,14 +75,6 @@ public class DataWriteStream {
             Logger.getLogger("UdpRecord").error("Unable to create Output-Files");
             recordControl.stopRecord();
         }
-	}
-	
-	private File getDirectory() {
-	    if (directory == null) {
-	        directory = new File(ControlMain.getSettings().getSavePath(), fileName);
-            directory.mkdir();
-	    }
-	    return directory;
 	}
 	
 	public boolean scanForMPEGHeader(byte[] input) {		
@@ -165,10 +149,4 @@ public class DataWriteStream {
             e.printStackTrace();
         }
 	}
-    /**
-     * @param fileName The fileName to set.
-     */
-    public void setFileName(String fileName) {
-        this.fileName = SerFormatter.stripOff(fileName);
-    }
 }

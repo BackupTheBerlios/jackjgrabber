@@ -19,7 +19,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -36,6 +35,8 @@ public class RecordControl extends Thread
 	public boolean isRunning = true;
 	ControlProgramTab controlProgramTab;
 	BORecordArgs recordArgs;
+	String fileName;
+	File directory;
 	public Date stopTime;
 
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
@@ -87,7 +88,7 @@ public class RecordControl extends Thread
 	public void stopRecord() {
 	    record.stop();
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
-    	if (ControlMain.getSettings().isStartPX() && record.getWriteStream()!=null) {
+    	if (ControlMain.getSettings().isStartPX() && record.getFiles()!=null) {
     		this.startProjectX();
     		Logger.getLogger("RecordControl").info("Start ProjectX for demuxing");
     	}
@@ -95,40 +96,31 @@ public class RecordControl extends Thread
 	}
 	
 	public void startProjectX() {
-		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), this.buildPXcommand());
+		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), record.getFiles());
 		control.initialize();
 	}
 	
-	private String[] buildPXcommand() {
-        ArrayList allFiles = new ArrayList();
-        int streamCount = record.getWriteStream().length;
-        for (int i=0; i<streamCount; i++) {
-            ArrayList fileList = record.getWriteStream()[i].fileList;
-            for (int i2=0; i2<fileList.size(); i2++) {
-                File file = (File)fileList.get(i2);
-                allFiles.add(file);
-            }
-        }
-        String[] args = new String[allFiles.size()];
-        for (int i=0; i<args.length; i++) {
-            File file = (File)allFiles.get(i);
-            args[i] = file.getAbsolutePath();
-        }
-        return args;
+	public String getFileName() {
+		if (this.fileName==null) {
+		    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
+		    Date now = new Date();
+		    String date = f.format(now);
+		    
+			BORecordArgs args = this.recordArgs;
+			if (args.getEpgTitle() != null) {
+				fileName = date+" "+args.getSenderName()+" "+args.getEpgTitle();   
+			} else {
+				fileName = date+" "+args.getSenderName();
+			}
+		}
+		return fileName;
 	}
 	
-	public String getFileName() {
-	    SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
-	    Date now = new Date();
-	    String date = f.format(now);
-	    String name;
-	    
-		BORecordArgs args = this.recordArgs;
-		if (args.getEpgTitle() != null) {
-		    name = date+" "+args.getSenderName()+" "+args.getEpgTitle();   
-		} else {
-		    name = date+" "+args.getSenderName();
-		}	
-		return name;
+	public File getDirectory() {
+	    if (directory == null) {
+	        directory = new File(ControlMain.getSettings().getSavePath(), this.getFileName());
+            directory.mkdir();
+	    }
+	    return directory;
 	}
 }
