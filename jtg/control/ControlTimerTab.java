@@ -196,11 +196,12 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	}
 	
 	private void actionSend() {
-		//this.setChanId(this.getTimerList().getRecordTimerList());
 		try {
-			//this.writeAllTimer(this.getTimerList().getRecordTimerList());
-			this.writeAllTimer(this.getTimerList().getSystemTimerList());
-			this.reReadTimerList();
+			ArrayList timerList = this.getTimerList().getSystemTimerList();
+            for (int i=0; i<timerList.size(); i++) {
+                ControlMain.getBoxAccess().writeTimer((BOTimer)timerList.get(i));  
+            } 
+            this.reReadTimerList();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}

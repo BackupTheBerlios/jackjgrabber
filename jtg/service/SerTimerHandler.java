@@ -318,7 +318,7 @@ public class SerTimerHandler {
 //          nur bei lokalen Timern manuell erledigen, Box-Timer muessen automatisch nachgelesen werden
             if (timer.getModifiedId().equals("new") && timer.getLocalTimer().isLocal()) {
                 ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
-            } else if (timer.getModifiedId().equals("remove") && timer.getLocalTimer().isLocal()) {
+            } else if (timer.getModifiedId().equals("remove")) {
                 ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
             }
         } 
