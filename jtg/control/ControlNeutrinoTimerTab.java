@@ -82,67 +82,117 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	}
 	
 	private void actionDeleteAll() {
-		this.setChanId(this.getTimerList()[0]);
-		this.deleteAllTimer(this.getTimerList()[0]);
-		this.deleteAllTimer(this.getTimerList()[1]);
 		try {
-			this.setTimerList(ControlMain.getBoxAccess().readTimer());
+			this.deleteAllTimer(this.getTimerList()[0]);
+			this.deleteAllTimer(this.getTimerList()[1]);
+			this.rereadTimerList();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+		}
+	}
+	
+	private void actionDeleteAllRecordTimer() {
+		try {
+			this.deleteAllTimer(this.getTimerList()[0]);
+			this.getTimerList()[0] = new ArrayList();
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+		}
+	}
+	
+	private void actionDeleteAllSystemTimer() {
+		try {
+			this.deleteAllTimer(this.getTimerList()[1]);
+			this.getTimerList()[1] = new ArrayList();
 			this.getTab().getSystemTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
 	}
 	
-	private void actionDeleteAllRecordTimer() {
-		
-	}
-	
-	private void actionDeleteAllSystemTimer() {
-		
-	}
-	
 	private void actionDeleteSelectedRecordTimer() {
-		
+		int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
+		ArrayList timerList = this.getTimerList()[0];
+		for (int i=rows.length-1; 0<=i; i--) {
+			BOTimer timer = (BOTimer)timerList.get(rows[i]);
+			try {
+				this.deleteTimer(timer);
+				timerList.remove(i);
+				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			} catch (IOException e) {
+				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+			}
+		}
 	}
 	
 	private void actionDeleteSelectedSystemTimer() {
-		
+		int[] rows = this.getTab().getJTableSystemTimer().getSelectedRows();
+		ArrayList timerList = this.getTimerList()[1];
+		for (int i=rows.length-1; 0<=i; i--) {
+			BOTimer timer = (BOTimer)timerList.get(rows[i]);
+			try {
+				this.deleteTimer(timer);
+				timerList.remove(i);
+				this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+			} catch (IOException e) {
+				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+			}
+		}
 	}
 	
 	private void actionReload() {
-		
+		try {
+			this.rereadTimerList();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+		}
 	}
 	
 	private void actionSend() {
 		this.setChanId(this.getTimerList()[0]);
-		this.writeAllTimer(this.getTimerList()[0]);
-		this.writeAllTimer(this.getTimerList()[1]);
+		try {
+			this.writeAllTimer(this.getTimerList()[0]);
+			this.writeAllTimer(this.getTimerList()[1]);
+			this.rereadTimerList();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+		}
 	}
 	
-	private void deleteAllTimer(ArrayList timerList) {
+	private void deleteAllTimer(ArrayList timerList) throws IOException {
 		for (int i=0; i<timerList.size(); i++) {
 			BOTimer timer = (BOTimer)timerList.get(i);
-			if (timer.getTimerNumber() != null) {  //Neu angelegte Timer muessen nicht geloescht werden
-				timer.setModifiedId("remove");
-				this.writeTimer(timer);
-			}
+			this.deleteTimer(timer);
 		}
 	}
 	
-	private void writeTimer(BOTimer timer) {
-		try {
-			if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
-				Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
-			} else {
-				Logger.getLogger("ControlProgramTab").error(timer.getInfo());
-			}
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+	private void deleteTimer(BOTimer timer) throws IOException {
+		if (timer.getTimerNumber() != null) {  //Neu angelegte Timer muessen nicht geloescht werden
+			timer.setModifiedId("remove");
+			this.writeTimer(timer);
 		}
 	}
 	
-	private void writeAllTimer(ArrayList timerList) {
+	/**
+	 * Reload der Timer und refreshen der Tables
+	 */
+	private void rereadTimerList() throws IOException {
+		this.setTimerList(ControlMain.getBoxAccess().readTimer());
+		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+	}
+	
+	private void writeTimer(BOTimer timer) throws IOException {
+		if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
+			Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
+		} else {
+			Logger.getLogger("ControlProgramTab").error(timer.getInfo());
+			throw new IOException();
+		}
+	}
+	
+	private void writeAllTimer(ArrayList timerList) throws IOException {
 		for (int i=0; i<timerList.size(); i++) {
 			BOTimer timer = (BOTimer)timerList.get(i);
 			if (timer.getModifiedId() != null) { //nur neue und modifizierte Timer wegschreiben

@@ -270,11 +270,18 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		if (modifiedId.equals("remove")) {
 			buffer.append("/fb/timer.dbox2?action="+modifiedId);
 			buffer.append("&id="+timer.getTimerNumber());
+		}
+		if (modifiedId.equals("modify")) {
+			buffer.append("/fb/timer.dbox2?action="+modifiedId);
+			buffer.append("&id="+timer.getTimerNumber());
+			buffer.append("&alarm="+alarm);
+			buffer.append("&stop="+stop);
+			buffer.append("&announce="+timer.getAnnounceTime());
+			buffer.append("&type="+timer.getEventTypeId());
+			buffer.append("&rep="+timer.getEventRepeatId());
+			buffer.append("&channel_id="+timer.getChannelId());
 		} else {
 			buffer.append("/control/timer?action="+modifiedId);
-			if (modifiedId.equals("modify")) {
-				buffer.append("&id="+timer.getTimerNumber()); //id nur bei mofifierierten timern nötig
-			}
 			buffer.append("&alarm="+alarm);
 			buffer.append("&stop="+stop);
 			buffer.append("&announce="+timer.getAnnounceTime());
