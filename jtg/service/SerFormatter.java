@@ -31,7 +31,7 @@ public class SerFormatter {
 	 * @return
 	 */
 	public static String removeInvalidChars(String value){
-		String search ="[äÄöÖüÜß|{};/#// /^$ ':]";
+		String search ="\\p{Punct}"; // alle SonderZeichen
         Pattern find = Pattern.compile(search, Pattern.CASE_INSENSITIVE);
         Matcher m = find.matcher(value);
         while(m.find()) {
