@@ -37,7 +37,6 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiMainView;
 import presentation.timer.GuiNeutrinoRecordTimerTableModel;
 import presentation.timer.GuiNeutrinoSystemTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;

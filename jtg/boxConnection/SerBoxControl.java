@@ -30,7 +30,6 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiMainView;
 import presentation.timer.GuiRecordTimerTableModel;
 import presentation.timer.GuiSystemTimerTableModel;
 import service.SerTimerHandler;

@@ -23,8 +23,6 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiMainView;
-import presentation.timer.GuiBoxTimerPanel;
 import presentation.timer.GuiEnigmaRecordTimerTableModel;
 import presentation.timer.GuiEnigmaSystemTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;
