@@ -41,21 +41,24 @@ public abstract class SerBoxControl {
     public BOTimerList timerList;
     public BOLocalTimer nextLocalRecordTimer;
     
-    public void detectNextLocalRecordTimer() {
-        SerTimerHandler.deleteOldTimer();
-        nextLocalRecordTimer = timerList.getFirstLocalRecordTimer();
+    public BOLocalTimer detectNextLocalRecordTimer(boolean newRead) {
+        if (newRead || nextLocalRecordTimer==null) {
+            nextLocalRecordTimer = timerList.getFirstLocalRecordTimer();
+        }
+        return nextLocalRecordTimer;
     }
     
     public BOTimerList getTimerList(boolean newRead) {
         if (newRead || timerList==null || newTimerAdded) {
+            SerTimerHandler.deleteOldTimer();
             timerList = new BOTimerList();
             SerTimerHandler.readLocalTimer(timerList);
-            detectNextLocalRecordTimer();
             try {
                 reReadTimerList();
             } catch (IOException e) {
                 Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_read_timer"));
             }
+            
             newTimerAdded=false;
         }
         return timerList;

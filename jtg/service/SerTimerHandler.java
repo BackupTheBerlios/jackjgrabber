@@ -319,8 +319,10 @@ public class SerTimerHandler {
                     ControlMain.getBoxAccess().writeTimer(timer);
                 } 
             } 
+            if (timer.getLocalTimer().isLocal()) {
+                ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
+            }
             timer.setModifiedId(null);
-            ControlMain.getBoxAccess().detectNextLocalRecordTimer();
         } catch (IOException e) {
             
         }   
