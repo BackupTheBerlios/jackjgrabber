@@ -254,32 +254,38 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
-		ArrayList epgList=new ArrayList();
+		ArrayList epgList=sender.getEpg();
 		BufferedReader input = getConnection("/control/epg?"+sender.getChanId());
 		String line, eventId, duration, title, valueStart, valueDuration;
 		GregorianCalendar startDate, endDate;
                 
 		while((line=input.readLine())!=null) {
+            BOEpg epgObj = new BOEpg();
 			StringTokenizer st = new StringTokenizer(line);
 			
-			eventId = st.nextToken();
-			valueStart=st.nextToken();
-			valueDuration=st.nextToken();
-			
-			title = new String();
-		    while (st.hasMoreTokens()) {
-		    	title += st.nextToken();
-		    	title += " ";
-			}
+            epgObj.setEventId(st.nextToken()); //check if epgObj exists
+            if (!epgList.contains(epgObj)) {
+                epgObj.setUnformattedStart(st.nextToken());
+                epgObj.setUnformattedDuration(st.nextToken());
+                
+                title = new String();
+                while (st.hasMoreTokens()) {
+                    title += st.nextToken();
+                    title += " ";
+                }
+                epgObj.setTitle(title.trim());
 
-			startDate = SerFormatter.formatUnixDate(valueStart);
-			duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
-			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));
-			epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title.trim(), valueStart, valueDuration));                        
+                epgObj.setStartDate(SerFormatter.formatUnixDate(epgObj.getUnformattedStart()));
+                epgObj.setDuration(Integer.toString(Integer.parseInt(epgObj.getUnformattedDuration())/60) +" Min");
+                epgObj.setEndDate(SerFormatter.formatUnixDate(Long.parseLong(epgObj.getUnformattedStart()) 
+                        + Long.parseLong(epgObj.getUnformattedDuration())));
+                epgObj.setSender(sender);
+                epgList.add(epgObj);     
+            }                        
 		}
 		return epgList;
-	} 
-	
+	}     
+    
 	public BOEpgDetails getEpgDetail(BOEpg epg) throws IOException {
 		BOEpgDetails epgDetail = new BOEpgDetails();
 		BufferedReader input = getConnection("/control/epg?eventid="+epg.getEventId());
