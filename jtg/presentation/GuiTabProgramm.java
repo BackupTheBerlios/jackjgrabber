@@ -66,6 +66,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JButton jButtonToTimer = null;
 	private JButton jButtonStartServer = null;
 	private JButton jButtonRefresh = null;
+	private JButton jButtonShutdown = null;
 	private JRadioButton jRadioButtonTVMode = null;
 	private JRadioButton jRadioButtonRadioMode = null;
 	private ButtonGroup tvRadioButtonGroup = new ButtonGroup();
@@ -101,17 +102,17 @@ public class GuiTabProgramm extends GuiTab {
 		CellConstraints cc = new CellConstraints();
 	
 		builder.addSeparator(ControlMain.getProperty("label_date"),			cc.xywh	(1, 1, 1, 1));
-		builder.add(this.getJPanelChannels(),  												cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.addSeparator(ControlMain.getProperty("label_epg"),				cc.xywh	(3, 1, 7, 1));
-		builder.add(this.getJScrollPaneEPG(),													cc.xywh	(3, 2, 7, 1));
+		builder.add(this.getJPanelChannels(),  								cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator(ControlMain.getProperty("label_epg"),			cc.xywh	(3, 1, 7, 1));
+		builder.add(this.getJScrollPaneEPG(),								cc.xywh	(3, 2, 7, 1));
 		builder.addSeparator(ControlMain.getProperty("label_actions"),		cc.xywh	(1, 4, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.add(this.getJPanelButtonsAktionen(),  									cc.xywh	(1, 5, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.add(this.getJPanelButtonsAktionen(),  						cc.xywh	(1, 5, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
 		builder.addSeparator(ControlMain.getProperty("label_recordInfo"),	cc.xywh	(7, 4, 1, 1));
-		builder.add(this.getJPanelRecordInfo(), 				    							cc.xywh	(7, 5, 1, 1));
+		builder.add(this.getJPanelRecordInfo(), 				    		cc.xywh	(7, 5, 1, 1));
 		builder.addSeparator(ControlMain.getProperty("label_epgDetails"),	cc.xywh	(9, 4, 1, 1));
-		builder.add(this.getJScrollPaneEPGDetail(),							 				cc.xywh	(9, 5, 1, 4));
-		builder.addSeparator(ControlMain.getProperty("label_output"),			cc.xywh	(1, 7, 7, 1));
-		builder.add(this.getJScrollPaneAusgabe(), 	 										cc.xywh	(1, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.add(this.getJScrollPaneEPGDetail(),							cc.xywh	(9, 5, 1, 4));
+		builder.addSeparator(ControlMain.getProperty("label_output"),		cc.xywh	(1, 7, 7, 1));
+		builder.add(this.getJScrollPaneAusgabe(), 	 						cc.xywh	(1, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
 	}
 	
 	/**
@@ -123,17 +124,19 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 1dlu, pref, 1dlu, pref, 1dlu, pref",	 		//columna 
+				      "pref, 15, pref, 1dlu, pref, 1dlu, pref",	 		//columna 
 				      "pref, 1dlu, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(this.getJRadioButtonTVMode(),					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJButtonStartServer(),					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonReboot(), 	 						cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJRadioButtonRadioMode(),			cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonPlayback(),		  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonPlayback(),		  				cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(7, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJRadioButtonRadioMode(),				cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonReboot(), 	 					cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonShutdown(),  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+
 			
 		}
 		return jPanelButtonsAktionen;
@@ -253,7 +256,7 @@ public class GuiTabProgramm extends GuiTab {
 		return jButtonQuickRecord;
 	}
 	/**
-	 * This method initializes jButtonReboot	
+	 * This method initializes jButtonRefresh	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
@@ -266,6 +269,21 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonRefresh.addActionListener(this.getControl());
 		}
 		return jButtonRefresh;
+	}
+	/**
+	 * This method initializes jButtonShutdown	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	public JButton getJButtonShutdown() {
+	    if (jButtonShutdown == null) {
+	        jButtonShutdown = new JButton();
+	        jButtonShutdown.setText(ControlMain.getProperty("button_shutdown"));
+	        jButtonShutdown.setActionCommand("shutdown");
+	        jButtonShutdown.setToolTipText(ControlMain.getProperty("buttontt_shutdown"));
+	        jButtonShutdown.addActionListener(this.getControl());
+		}
+		return jButtonShutdown;
 	}
 	/**
 	 * This method initializes jButtonReboot	
@@ -489,6 +507,7 @@ public class GuiTabProgramm extends GuiTab {
 		this.getJButtonSelectedToTimer().setEnabled(false);
 		this.getJButtonStartServer().setEnabled(false);
 		this.getJButtonPlayback().setEnabled(false);
+		this.getJButtonShutdown().setEnabled(false);
 	}
 	
 	public void setConnectModus() {
@@ -497,6 +516,7 @@ public class GuiTabProgramm extends GuiTab {
 		this.getJButtonSelectedToTimer().setEnabled(true);
 		this.getJButtonStartServer().setEnabled(true);
 		this.getJButtonPlayback().setEnabled(true);
+		this.getJButtonShutdown().setEnabled(true);
 	}
 	
 	public void stopStreamingServerModus() {
