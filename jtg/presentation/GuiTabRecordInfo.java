@@ -30,6 +30,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+import service.SerHelper;
+
 import com.jgoodies.forms.builder.*;
 import com.jgoodies.forms.layout.*;
 
@@ -59,9 +61,6 @@ public class GuiTabRecordInfo extends GuiTab {
 	private static final int REFRESH_TIME = 1000; // Refresh Zeit der Dateiinfos
 	// in Millisekunden
 
-	private String[] videoEndings = new String[]{"mpv", "mpg", "ts"};
-
-	private String[] audioEndings = new String[]{"mp2", "ac3"};
 
 	public GuiTabRecordInfo(ControlRecordInfoTab control) {
 		this.setControl(control);
@@ -281,10 +280,10 @@ public class GuiTabRecordInfo extends GuiTab {
 			String size = calcSize(aFiles[i].length(), "MB");
 
 			String end = getEnd(aFiles[i]);
-			if (isVideo(aFiles[i].getName())) {
+			if (SerHelper.isVideo(aFiles[i].getName())) {
 				videoCount++;
 				video.append("Video " + end + " (" + videoCount + ")  : " + size + "\n");
-			} else if (isAudio(aFiles[i].getName())) {
+			} else if (SerHelper.isAudio(aFiles[i].getName())) {
 				audioCount++;
 				audio.append("Audio " + " " + end + " (" + audioCount + ")  : " + size + "\n");
 			} else {
@@ -312,38 +311,6 @@ public class GuiTabRecordInfo extends GuiTab {
 			return fileName.substring(end + 1);
 		}
 		return "";
-	}
-
-	/**
-	 * überprüft ob es sich bei der Datei um eine Audio Datei handelt
-	 * 
-	 * @param file
-	 * @return
-	 */
-	private boolean isAudio(String file) {
-		file = file.toLowerCase();
-		for (int i = 0; i < audioEndings.length; i++) {
-			if (file.endsWith(audioEndings[i])) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * überprüft ob es sich um eine Videodatei handelt (auch MPG)
-	 * 
-	 * @param file
-	 * @return
-	 */
-	private boolean isVideo(String file) {
-		file = file.toLowerCase();
-		for (int i = 0; i < videoEndings.length; i++) {
-			if (file.endsWith(videoEndings[i])) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
