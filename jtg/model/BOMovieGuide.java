@@ -7,7 +7,6 @@
 package model;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 
 import control.ControlMain;
 
@@ -406,41 +405,5 @@ public class BOMovieGuide {
 	    	sucheList.add(LIST_ENTRYS[8]);
 	    	sucheList.add(LIST_ENTRYS[9]);
     	}catch(Exception ex){}
-    }
-    public boolean isValueInArray(ArrayList value,String search){
-    	boolean retVal = false;
-    	for (Iterator i = value.iterator(); i.hasNext();) {   			
-    			if(i.next().toString().toLowerCase().indexOf(search)>=0){
-    				retVal = true;
-    			}
-    	}
-    	return retVal;
-    }
-    
-    public boolean getIfStringInObject(String search){
-    	boolean value = false;
-    	search = search.toLowerCase();
-    	if (this.getGenre().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}else if(this.getDarsteller().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}else if(this.getEpisode().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}else if(this.getInhalt().toLowerCase().indexOf(search)>=0){
-    		value = true;    	
-    	}else if(this.getLand().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}else if(this.getJahr().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}else if(this.isValueInArray(this.getBild(),search.toLowerCase())){
-    		value = true;
-    	}else if(this.isValueInArray(this.getTon(),search.toLowerCase())){
-    		value = true;
-    	}else if(this.getRegie().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}else if(this.getTitel().toLowerCase().indexOf(search)>=0){
-    		value = true;
-    	}
-    	return value;
-    }
+    }    
 }
