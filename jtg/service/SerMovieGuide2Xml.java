@@ -28,7 +28,6 @@ import java.util.Hashtable;
 
 import javax.swing.JProgressBar;
 
-import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -37,6 +36,7 @@ import presentation.GuiMainView;
 
 import control.ControlMain;
 import control.ControlMovieGuideTab;
+import org.apache.log4j.Logger;
 
 public class SerMovieGuide2Xml extends Thread{
     Hashtable htToken = new Hashtable();
@@ -48,16 +48,16 @@ public class SerMovieGuide2Xml extends Thread{
     JProgressBar bar;
     FileWriter fw = null;
     boolean storeOrignalMG;
-	int xml ;
+    int xml ;
     
-    public SerMovieGuide2Xml(String file, GuiMainView view) {
-		mainView=view;
-		bar=view.getTabMovieGuide().getJProgressBarDownload();
-		path = file;
-		doc = SerXMLHandling.createEmptyMovieguideFile();
+    public SerMovieGuide2Xml(String file, GuiMainView view) {   
+    	mainView=view;
+    	bar=view.getTabMovieGuide().getJProgressBarDownload();
+    	path = file;
+    	doc = SerXMLHandling.createEmptyMovieguideFile();
 		root = doc.getRootElement();
 		createHashTable();
-		storeOrignalMG = ControlMain.getSettingsMovieGuide().isMgStoreOriginal();
+		storeOrignalMG = ControlMain.getSettingsMovieGuide().isMgStoreOriginal();		   
     }
           
     private final void createHashTable() {
@@ -69,75 +69,83 @@ public class SerMovieGuide2Xml extends Thread{
     }
     
     private void createElement(int i, String input) {
-        switch (i) {
-            case 0:
-            	SerXMLHandling.setElementInElement(movie,"sender",input.substring(0, input.indexOf(":")));
-            	SerXMLHandling.setElementInElement(movie,"datum",SerFormatter.getCorrectDate(input.substring(input.indexOf(":") + 2)));
-            	SerXMLHandling.setElementInElement(movie,"start", input.substring(input.indexOf("/")+1));
-                break;
-            case 1:
-            	SerXMLHandling.setElementInElement(movie,"titel", input.substring(input.indexOf(":") + 2));
-                break;
-            case 2:
-            	SerXMLHandling.setElementInElement(movie,"episode",input.substring(9, input.indexOf("Genre") - 2));
-            	SerXMLHandling.setElementInElement(movie,"genre", input.substring(input.indexOf("Genre") + 7, input.indexOf("Länge") - 2));
-            	SerXMLHandling.setElementInElement(movie,"dauer", input.substring(input.indexOf("Länge") + 7, input.indexOf("Stunden") - 1));
-                break;
-            case 3:
-            	SerXMLHandling.setElementInElement(movie,"land",input.substring(input.indexOf(":") + 2, input.indexOf("Produktionsjahr") - 2));
-            	SerXMLHandling.setElementInElement(movie,"jahr", input.substring(input.indexOf("Produktionsjahr") + 17, input.indexOf("Regie") - 2));
-            	SerXMLHandling.setElementInElement(movie,"regie", input.substring(input.indexOf("Regie") + 7));
-                break;
-            case 4:
-            	SerXMLHandling.setElementInElement(movie,"bild",input.substring(input.indexOf(":") + 2, input.indexOf("/")));
-            	SerXMLHandling.setElementInElement(movie,"ton", input.substring(input.indexOf("/") + 1));
-                break;
-            case 5:
-            	SerXMLHandling.setElementInElement(movie,"darsteller", input.substring(input.indexOf(":") + 2));
-                break;
-        }
+        try {
+            switch (i) {
+                case 0:
+                SerXMLHandling.setElementInElement(movie,"sender",input.substring(0, input.indexOf(":")));
+                SerXMLHandling.setElementInElement(movie,"datum",SerFormatter.getCorrectDate(input.substring(input.indexOf(":") + 2)));
+                SerXMLHandling.setElementInElement(movie,"start", input.substring(input.indexOf("/")+1));
+                    break;
+                case 1:
+                SerXMLHandling.setElementInElement(movie,"titel", input.substring(input.indexOf(":") + 2));
+                    break;
+                case 2:
+                SerXMLHandling.setElementInElement(movie,"episode",input.substring(9, input.indexOf("Genre:") - 2));
+                SerXMLHandling.setElementInElement(movie,"genre", input.substring(input.indexOf("Genre:") + 7, input.indexOf("Länge:") - 2));
+                SerXMLHandling.setElementInElement(movie,"dauer", input.substring(input.indexOf("Länge:") + 7, input.indexOf("Stunden") - 1));
+                    break;
+                case 3:
+                SerXMLHandling.setElementInElement(movie,"land",input.substring(input.indexOf(":") + 2, input.indexOf("Produktionsjahr:") - 2));
+                SerXMLHandling.setElementInElement(movie,"jahr", input.substring(input.indexOf("Produktionsjahr:") + 17, input.indexOf("Regie:") - 2));
+                SerXMLHandling.setElementInElement(movie,"regie", input.substring(input.indexOf("Regie:") + 7));
+                    break;
+                case 4:
+                SerXMLHandling.setElementInElement(movie,"bild",input.substring(input.indexOf(":") + 2, input.indexOf("/")));
+                SerXMLHandling.setElementInElement(movie,"ton", input.substring(input.indexOf("/") + 1));
+                    break;
+                case 5:
+                SerXMLHandling.setElementInElement(movie,"darsteller", input.substring(input.indexOf(":") + 2));
+                    break;
+            }
+        } catch (StringIndexOutOfBoundsException ex) {}
     }
     
     private boolean[] getLineCounter(String input) {
         boolean[] value = new boolean[2];
-        value[0] = false;
-        value[0] = SerFormatter.isCorrectDate(input.substring(input.indexOf(":") + 2));
-        value[1] = false;
-        value[1] = htToken.containsKey(input.substring(0, input.indexOf(":")));
+        try {
+            value[0] = false;
+            value[0] = SerFormatter.isCorrectDate(input.substring(input.indexOf(":") + 2));
+        } catch (StringIndexOutOfBoundsException ex) {}
+        try {
+            value[1] = false;
+            value[1] = htToken.containsKey(input.substring(0, input.indexOf(":")));
+        } catch (StringIndexOutOfBoundsException ex) {}
         return value;
     }
     
     private int getNumber(String input) {
         int value = 0;
-        value = ((Integer) htToken.get(input.substring(0, input.indexOf(":")))).intValue();
+        try{
+            value = ((Integer) htToken.get(input.substring(0, input.indexOf(":")))).intValue();
+        } catch (StringIndexOutOfBoundsException ex) {}
         return value;
     }
     
     private URLConnection getConnection() throws IOException {
-    	URLConnection con;    
-    	if (path != null) {
-        	con = (new File(path).toURL()).openConnection();
-    	} else {
-    		URL url = null;
-    		if(!ControlMovieGuideTab.movieGuideFile.exists()){
-    			url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
-    			xml = 0;
-    		}else{
-        		url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");     
-        		xml = 1;
-    		}    		
-    		if(storeOrignalMG){        		        		            		        		
-        		fw = new FileWriter(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+url.getFile().substring(18));
-    		}
-    		con =url.openConnection();
-    	}
-    	return con;
+    URLConnection con;    
+    if (path != null) {
+        con = (new File(path).toURL()).openConnection(); 
+    } else {
+    URL url = null;
+    if(!ControlMovieGuideTab.movieGuideFile.exists()){
+    url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
+    xml = 0;
+    }else{
+        url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");     
+        xml = 1;
+    }    
+    if(storeOrignalMG){                                    
+        fw = new FileWriter(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+url.getFile().substring(18));      
+    }
+    con =url.openConnection();
+    }
+    return con;
     }
     
-    public void run()  {    	
-        try {        	
-        	URLConnection con = this.getConnection();        	
-        	int fileLength = con.getContentLength();
+    public void run()  {    
+        try {        
+        URLConnection con = this.getConnection();        
+        int fileLength = con.getContentLength();
             bar.setMaximum(fileLength);
             BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream(),"ISO8859-1"));                        
             String input = new String();
@@ -145,11 +153,11 @@ public class SerMovieGuide2Xml extends Thread{
             boolean[] lineCounter = new boolean[2];
             int sumValue = 0;
             while ((input = in.readLine()) != null) {
-            	if( (storeOrignalMG) && (path==null) ){
-            		fw.write(input+"\n");
-            	}
-            	sumValue = sumValue+input.getBytes().length;
-            	bar.setValue(sumValue);				
+            if( (storeOrignalMG) && (path==null) ){
+            fw.write(input+"\n");
+            }
+            sumValue = sumValue+input.getBytes().length;
+            bar.setValue(sumValue);
                 lineCounter = getLineCounter(input);
                 if (lineCounter[0]) {
                     movie = root.addElement("entry");
@@ -160,7 +168,7 @@ public class SerMovieGuide2Xml extends Thread{
                     if(input.length() > 0){
                         inhalt.append(input);
                     }else{
-                    	SerXMLHandling.setElementInElement(movie,"inhalt", inhalt.toString());
+                    SerXMLHandling.setElementInElement(movie,"inhalt", inhalt.toString());
                         inhalt.setLength(0);
                     }
                 }
@@ -169,10 +177,10 @@ public class SerMovieGuide2Xml extends Thread{
             if (xml == 0){
             SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFile, doc);
             }else {
-            	SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFileNext, doc);
+            SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFileNext, doc);
             }
             if( (storeOrignalMG) && (path==null)){
-            	fw.close();
+            fw.close();
             }
             mainView.getTabMovieGuide().getControl().run();            
         } catch (MalformedURLException e) {
@@ -183,18 +191,19 @@ public class SerMovieGuide2Xml extends Thread{
         
     }
     public static boolean checkNewMovieGuide(){
-    	boolean value = false;
-    	try{
-        	URLConnection con;
-        	//con = (new File(path).toURL()).openConnection();
-        	URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");    			    			
-    		con =url.openConnection();
-    		if(con.getContentLength()>0){
-    			value = true;
-    		}
-    	}catch (IOException ioex){
-            Logger.getLogger("SerMovieGuide2Xml").error(ioex.getMessage());
-        }
-    	return value;
+    String path = "movieguide.xml";
+    boolean value = false;
+    try{
+    URLConnection con;
+    //con = (new File(path).toURL()).openConnection();
+    URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");        
+	con =url.openConnection();
+	if(con.getContentLength()>0){
+		value = true;
+	}
+    }catch (IOException ioex){	
+         Logger.getLogger("SerMovieGuide2Xml").error(ioex.getMessage());	
+     }
+    return value;
     }
 }
