@@ -536,9 +536,9 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    long alarm = (timer.getUnformattedStartTime().getTimeInMillis())/1000;
 			long stop = (timer.getUnformattedStopTime().getTimeInMillis())/1000;
 			title=title.replaceAll(" ","%20");
-			title=title.replaceAll("\"", "&quot;");
 			title=title.replaceAll("&","und");
-		    long duration=stop-alarm;
+			title=title.replaceAll("\"", "&quot;");
+			long duration=stop-alarm;
 		    long repeatId=Long.parseLong(repeat);
 		    //System.out.println (repeatId);
 		    if (repeatId<30) {
