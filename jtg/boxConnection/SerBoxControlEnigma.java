@@ -392,28 +392,29 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					    }
 					    System.out.println(recurringDays+" "+typeValue);*/
 					    long typeValue=Long.parseLong(timerType);
+					    long typeValue2=0;
 					    if ((typeValue&1048576)==1048576) {
-					        typeValue+=512;
+					        typeValue2+=512;
 					    }
 					    if ((typeValue&2097152)==2097152) {
-					        typeValue+=1024;
+					        typeValue2+=1024;
 					    }
 					    if ((typeValue&4194304)==4194304) {
-					        typeValue+=2048;
+					        typeValue2+=2048;
 					    }
 					    if ((typeValue&8388608)==8388608) {
-					        typeValue+=4096;
+					        typeValue2+=4096;
 					    }
 					    if ((typeValue&16777216)==16777216) {
-					        typeValue+=8192;
+					        typeValue2+=8192;
 					    }
 					    if ((typeValue&33554432)==33554432) {
-					        typeValue+=16384;
+					        typeValue2+=16384;
 					    }
 					    if ((typeValue&524288)==524288) {
-					        typeValue+=32768;
+					        typeValue2+=32768;
 					    }
-					    eventRepeatId=""+typeValue;
+					    eventRepeatId=""+typeValue2;
 					}
 					BOTimer botimer = new BOTimer();
 					botimer.setEventTypeId(timerType);
@@ -548,6 +549,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    zapmode="0";
 		}
 	    BufferedReader input = getConnection("/body?mode=zap&zapmode="+zapmode+"&zapsubmode=4");
+		//BufferedReader input = getConnection("/body?path=;0:7:"+zapmode+":0:0:0:0:0:0:0:");
 		return "ok";
 	}
 }
