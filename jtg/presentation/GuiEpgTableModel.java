@@ -35,10 +35,10 @@ public class GuiEpgTableModel extends AbstractTableModel
 {
 	ControlProgramTab control;
 	ArrayList epgList = new ArrayList();
+	public int indexRunningEpg = -1;
 	
 	public GuiEpgTableModel(ControlProgramTab ctrl) {
 		this.setControl(ctrl);
-		this.createEpgList();
 	}
 
 	public int getColumnCount() {
@@ -93,8 +93,10 @@ public class GuiEpgTableModel extends AbstractTableModel
 	 * create a new EPG-list with equal Date to DateChooser
 	 */
 	public void createEpgList() {
+		this.setIndexRunningEpg(-1);
 		this.setEpgList(new ArrayList());
 		if (control.getSelectedSender() != null && control.getSelectedSender().getEpg() != null ) {
+			BOEpg runningEpg = control.getSelectedSender().getRunnigEpg();
 			ArrayList fullList = control.getSelectedSender().getEpg();
 			GregorianCalendar chooserDate = new GregorianCalendar();
 			chooserDate.setTime(control.getDateChooserDate());
@@ -102,8 +104,11 @@ public class GuiEpgTableModel extends AbstractTableModel
 			for (int i=0; i<fullList.size(); i++) {
 				BOEpg epg = (BOEpg)fullList.get(i);
 				if (epg.getStartdate().get(Calendar.DATE)==chooserDate.get(Calendar.DATE) && 
-					epg.getStartdate().get(Calendar.MONTH)==chooserDate.get(Calendar.MONTH)){                              
+					epg.getStartdate().get(Calendar.MONTH)==chooserDate.get(Calendar.MONTH)){
 						this.getEpgList().add(epg);
+						if (runningEpg != null && runningEpg.getEventId().equals(epg.getEventId())) {
+							this.setIndexRunningEpg(i);
+						}
 				}
 			}
 		}
@@ -143,5 +148,16 @@ public class GuiEpgTableModel extends AbstractTableModel
 	public void setControl(ControlProgramTab control) {
 		this.control = control;
 	}
-	
+	/**
+	 * @return Returns the indexRunningEpg.
+	 */
+	public int getIndexRunningEpg() {
+		return indexRunningEpg;
+	}
+	/**
+	 * @param indexRunningEpg The indexRunningEpg to set.
+	 */
+	public void setIndexRunningEpg(int indexRunningEpg) {
+		this.indexRunningEpg = indexRunningEpg;
+	}
 }
