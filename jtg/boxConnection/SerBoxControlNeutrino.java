@@ -399,7 +399,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		String line;
 		while((line=input.readLine())!=null) {
 			Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_sentTimer")+timer.getInfo());
-			timer.setModifiedId(null);
 			return line;
 		}
 		return line;

@@ -168,7 +168,6 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
-				timerList.remove(modelIndex);
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}

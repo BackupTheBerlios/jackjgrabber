@@ -117,9 +117,6 @@ public class ControlStartTab extends ControlTab {
 	}
 	
 	public String getNextTimerInfo() {
-        try {
-            Thread.sleep(2000); //Wait till timerList was loaded by Timer-Tab
-        } catch (InterruptedException e) {}
 	    BOTimerList list = ControlMain.getBoxAccess().getTimerList(false);
 	    BOTimer timer = list.getFirstRecordTimer();
 	    if (timer!=null) {

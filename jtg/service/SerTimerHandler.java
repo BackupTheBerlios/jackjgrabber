@@ -149,7 +149,6 @@ public class SerTimerHandler {
             mainTimer.addElement("senderName").addText(timer.getMainTimer().getSenderName());
 
             localTimer.add(mainTimer);
-            ControlMain.getBoxAccess().newTimerAdded=true;
         }
         
 		root.add(localTimer);
@@ -310,10 +309,14 @@ public class SerTimerHandler {
     public static void saveTimer(BOTimer timer, boolean reloadList) {
            //lokaler Teil muss immer gespeichert werden
         saveLocalTimer(timer); 
-        
-            
+          
         if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
             saveBoxTimer(timer, reloadList); 
+        }
+        if (timer.getModifiedId().equals("new")) {
+            ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
+        } else if (timer.getModifiedId().equals("remove")) {
+            ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
         }
         timer.setModifiedId(null);
         //ermittle naechsten faelligen lokalen-RecordTimer neu

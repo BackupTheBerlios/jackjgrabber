@@ -38,6 +38,7 @@ public abstract class SerBoxControl {
     public boolean newTimerAdded=true;
     public BOTimerList timerList;
     private BOTimer nextLocalRecordTimer;
+    private boolean locked = false;
     
     public BOTimer detectNextLocalRecordTimer(boolean newRead) {
         if (timerList != null && (newRead || nextLocalRecordTimer==null)) {
@@ -47,7 +48,8 @@ public abstract class SerBoxControl {
     }
     
     public BOTimerList getTimerList(boolean newRead) {
-        if (newRead || timerList==null || newTimerAdded) {
+        if ((newRead || timerList==null || newTimerAdded) && !locked ) {
+            locked=true;
             SerTimerHandler.deleteOldTimer();
             timerList=SerTimerHandler.readLocalTimer();
             try {
@@ -55,8 +57,8 @@ public abstract class SerBoxControl {
             } catch (IOException e) {
                 Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_read_timer"));
             }
-            
             newTimerAdded=false;
+            locked=false;
         }
         return timerList;
     }

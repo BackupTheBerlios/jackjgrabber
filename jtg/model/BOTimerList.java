@@ -20,6 +20,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import org.apache.log4j.Logger;
+
+import control.ControlMain;
+
 import service.SerFormatter;
 
 
@@ -72,6 +76,10 @@ public class BOTimerList {
                         }
                     }
                 }
+            }
+            if (timer !=null) {
+                Logger.getLogger("BOTimerList").info(ControlMain.getProperty("label_nextTimer")+
+                        timer.getStartTime()+"    Sender:"+timer.getSenderName());
             }
             return timer;
         }

@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import model.BORecordArgs;
+import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
@@ -29,6 +30,7 @@ import service.SerExternalProcessHandler;
 import service.SerFormatter;
 import service.SerHelper;
 import service.SerProcessStopListener;
+import service.SerTimerHandler;
 import control.ControlMain;
 import control.ControlProgramTab;
 
@@ -158,6 +160,11 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 	}
 
 	public void stopRecord() {
+        BOTimer timer = recordArgs.getLocalTimer().getMainTimer();
+        timer.setModifiedId("remove");
+        SerTimerHandler.saveTimer(timer, true);
+        LocalTimerRecordDaemon.running=false;
+
 		record.stop();
 		if (recordArgs.getLocalTimer().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
 			Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));

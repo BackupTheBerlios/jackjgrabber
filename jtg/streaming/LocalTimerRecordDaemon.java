@@ -33,7 +33,7 @@ import control.ControlProgramTab;
 
 public class LocalTimerRecordDaemon extends Thread {
     
-    boolean running = false;
+    public static boolean running = false;
     
     public void run() {
         while (!running) {
@@ -66,9 +66,9 @@ public class LocalTimerRecordDaemon extends Thread {
                 ControlMain.getBoxAccess().getTimerList(true);
                 running=false;
                 ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
-                this.run();
             }
         }
+        this.run();
     }
     
     private void startRecord(BOLocalTimer timer) {
