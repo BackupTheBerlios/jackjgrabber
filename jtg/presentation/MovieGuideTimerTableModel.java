@@ -45,6 +45,10 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		return new BOMovieGuide();
+	}
+	
+	public void setValueAt(Object value, int row, int col) {
+		
     }
 
 	public String getColumnName( int columnIndex ) {
@@ -71,6 +75,6 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 	}
 	
 	public void fireTableDataChanged() {
-		
+	
 	}
 }
