@@ -23,7 +23,8 @@ public class GuiMainTabPane extends JTabbedPane {
 	
 	/**
 	 * Aufbau der Tabs "Programm"
-	 * Aufbau der Gui, Start des Controls
+	 * Initialisierung des Controls passiert extern, da dieser Tab 
+	 * automatisch beim Aufbau der Gui angewählt wird
 	 */    
 	public GuiTabProgramm getTabProgramm() {
 		if (tabProgramm == null) {
@@ -57,7 +58,7 @@ public class GuiMainTabPane extends JTabbedPane {
 	}
 	
 	/**
-	 * Aufbau des Tabs Settings		
+	 * Aufbau des Tabs ProjectX	
 	 */    
 	public GuiTabProjectX getTabProjectX() {
 		if (tabProjectX == null) {
