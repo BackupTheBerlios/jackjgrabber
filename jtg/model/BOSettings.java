@@ -19,9 +19,11 @@ package model;
  */
 
 /**
- * Klasse referenziert die Settings Settings werden beim Start gelesen und beim Beenden gespeichert Sind keine Änderungen an den Settings
- * vorgenommen worden, werden diese nicht gespeichert Werden settings geaendert muss die Variable "settingsChanged" auf true gesetzt werden.
- * Dies geschieht in den Setter-Methoden der einzelnen Settings-Optionen
+ * Klasse referenziert die Settings Settings werden beim Start gelesen und beim
+ * Beenden gespeichert Sind keine Änderungen an den Settings vorgenommen worden,
+ * werden diese nicht gespeichert Werden settings geaendert muss die Variable
+ * "settingsChanged" auf true gesetzt werden. Dies geschieht in den
+ * Setter-Methoden der einzelnen Settings-Optionen
  */
 public class BOSettings {
 
@@ -29,10 +31,10 @@ public class BOSettings {
 	private BOSettingsRecord recordSettings;
 	private BOSettingsPlayback playbackSettings;
 	private BOSettingsMovieGuide movieGuideSettings;
-
+	private BOSettingsPath pathSettings;
 	private BOSettingsLayout layoutSettings;
 	private boolean settingsChanged = false;
-
+	
 	/**
 	 * @return Returns the settingsChanged.
 	 */
@@ -45,19 +47,18 @@ public class BOSettings {
 	 */
 	public void setSettingsChanged(boolean settingsChanged) {
 		this.settingsChanged = settingsChanged;
-	}
+	}    
 	/**
 	 * @return Returns the mainSettings.
 	 */
 	public BOSettingsMain getMainSettings() {
-		if (mainSettings == null) {
-			mainSettings = new BOSettingsMain(this);
+		if (mainSettings==null) {
+			mainSettings=new BOSettingsMain(this);
 		}
 		return mainSettings;
 	}
 	/**
-	 * @param mainSettings
-	 *            The mainSettings to set.
+	 * @param mainSettings The mainSettings to set.
 	 */
 	public void setMainSettings(BOSettingsMain mainSettings) {
 		this.mainSettings = mainSettings;
@@ -66,14 +67,13 @@ public class BOSettings {
 	 * @return Returns the movieGuideSettings.
 	 */
 	public BOSettingsMovieGuide getMovieGuideSettings() {
-		if (movieGuideSettings == null) {
-			movieGuideSettings = new BOSettingsMovieGuide(this);
+		if (movieGuideSettings==null) {
+			movieGuideSettings=new BOSettingsMovieGuide(this);
 		}
 		return movieGuideSettings;
 	}
 	/**
-	 * @param movieGuideSettings
-	 *            The movieGuideSettings to set.
+	 * @param movieGuideSettings The movieGuideSettings to set.
 	 */
 	public void setMovieGuideSettings(BOSettingsMovieGuide movieGuideSettings) {
 		this.movieGuideSettings = movieGuideSettings;
@@ -82,14 +82,13 @@ public class BOSettings {
 	 * @return Returns the playbackSettings.
 	 */
 	public BOSettingsPlayback getPlaybackSettings() {
-		if (playbackSettings == null) {
-			playbackSettings = new BOSettingsPlayback(this);
+		if (playbackSettings==null) {
+			playbackSettings=new BOSettingsPlayback(this);
 		}
 		return playbackSettings;
 	}
 	/**
-	 * @param playbackSettings
-	 *            The playbackSettings to set.
+	 * @param playbackSettings The playbackSettings to set.
 	 */
 	public void setPlaybackSettings(BOSettingsPlayback playbackSettings) {
 		this.playbackSettings = playbackSettings;
@@ -98,20 +97,33 @@ public class BOSettings {
 	 * @return Returns the recordSettings.
 	 */
 	public BOSettingsRecord getRecordSettings() {
-		if (recordSettings == null) {
-			recordSettings = new BOSettingsRecord(this);
+		if (recordSettings==null) {
+			recordSettings=new BOSettingsRecord(this);
 		}
 		return recordSettings;
 	}
 	/**
-	 * @param recordSettings
-	 *            The recordSettings to set.
+	 * @param recordSettings The recordSettings to set.
 	 */
 	public void setRecordSettings(BOSettingsRecord recordSettings) {
 		this.recordSettings = recordSettings;
 	}
-
-	public BOSettingsLayout getLayoutSettings() {
+	/**
+	 * @return Returns the recordSettings.
+	 */
+	public BOSettingsPath getPathSettings() {
+		if (pathSettings==null) {
+			pathSettings=new BOSettingsPath(this);
+		}
+		return pathSettings;
+	}
+	/**
+	 * @param recordSettings The recordSettings to set.
+	 */
+	public void setPathSettings(BOSettingsPath pathSettings) {
+		this.pathSettings = pathSettings;
+	}
+		public BOSettingsLayout getLayoutSettings() {
 		if (layoutSettings == null) {
 			layoutSettings = new BOSettingsLayout(this);
 		}
