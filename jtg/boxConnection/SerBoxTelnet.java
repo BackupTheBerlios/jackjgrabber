@@ -59,7 +59,7 @@ public class SerBoxTelnet  {
 	}
 	public static void runReboot() throws IOException, InterruptedException{	
 		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_reboot"));
-		createTelnetSession("touch test.io"); //FIXME reboot einfügen
+		createTelnetSession("halt"); //FIXME reboot einfügen
 		//createTelnetSession("reboot");
 	}
 }
