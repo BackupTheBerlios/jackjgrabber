@@ -20,7 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JPanel;
 
 import presentation.GuiMainView;
-import projectX.X;
+import projectX.common.X;
 
 public class ControlProjectXTab extends ControlTab {
 	
@@ -36,7 +36,7 @@ public class ControlProjectXTab extends ControlTab {
 	 * Start ProjectX 
 	 */
 	public void initialize() {
-		JPanel pxPanel = X.start(this.getMainView(), this.getPxArgs());
+		JPanel pxPanel = X.main(this.getPxArgs());
 		this.getMainView().getMainTabPane().setTabProjectX(pxPanel);
 	}
 	/**
@@ -56,6 +56,9 @@ public class ControlProjectXTab extends ControlTab {
 	 * @return String[]
 	 */
 	public String[] getPxArgs() {
+		if (pxArgs==null) {
+			return new String[0];
+		}
 		return pxArgs;
 	}
 
