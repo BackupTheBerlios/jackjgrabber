@@ -20,6 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import control.ControlAboutTab;
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
@@ -29,8 +30,9 @@ public class GuiMainTabPane extends JTabbedPane {
 
 	public GuiTabProgramm tabProgramm = null;
 	public GuiTabSettings tabSettings = null;
+	public GuiTabAbout tabAbout = null;
 	public GuiTimerPanel tabTimer=null;
-	public GuiTabProjectX tabProjectX=null;
+	public JPanel tabProjectX=null;
 	public GuiMainView view;
 	int index;
 
@@ -88,13 +90,24 @@ public class GuiMainTabPane extends JTabbedPane {
 	 * Aufbau des Tabs ProjectX	
 	 * Keine Parameter, da Start nicht nach einer Aufnahme
 	 */    
-	public GuiTabProjectX getTabProjectX() {
+	public JPanel getTabProjectX() {
 		if (tabProjectX == null) {
 			ControlProjectXTab control = new ControlProjectXTab(this.getView(), null);
-			tabProjectX = new GuiTabProjectX(control);
 			control.initialize();
 		}
 		return tabProjectX;
+	}	
+
+	/**
+	 * @return Returns the tabAbout.
+	 */
+	public GuiTabAbout getTabAbout() {
+		if (tabAbout == null) {
+			ControlAboutTab control = new ControlAboutTab(this.getView());
+			tabAbout = new GuiTabAbout(control);
+			control.initialize();
+		}
+		return tabAbout;
 	}
 
 	/**
@@ -124,10 +137,9 @@ public class GuiMainTabPane extends JTabbedPane {
 	/**
 	 * Sets the tabProjectX.
 	 * @param tabProjectX 
-	 * Tab wird nach Aufnahme gesetzt 
+	 * Tab wird nach Aufnahme (falls Muxen eingestellt) oder bei Betreten gesetzt 
 	 */
-	public void setTabProjectX(GuiTabProjectX tabProjectX) {
+	public void setTabProjectX(JPanel tabProjectX) {
 		this.tabProjectX = tabProjectX;
 	}
-
 }
