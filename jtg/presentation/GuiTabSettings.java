@@ -375,7 +375,7 @@ public class GuiTabSettings extends JPanel {
 	 */
 	public JCheckBox getCbStartPX() {
 		if (cbStartPX == null) {
-			cbStartPX = new JCheckBox("Nach Aufnahme mit PX demuxen");
+			cbStartPX = new JCheckBox("Nach Aufnahmeende mit ProjectX demuxen");
 			cbStartPX.setName("startPX");
 			cbStartPX.addItemListener(control);
 		}
