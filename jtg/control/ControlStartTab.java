@@ -70,6 +70,7 @@ public class ControlStartTab extends ControlTab {
 	    }
 	    File px = new File(ControlMain.getSettingsPath().getProjectXPath());
 	    File shutdown = new File(ControlMain.getSettingsPath().getShutdownToolPath());
+	    File vlc = new File(ControlMain.getSettingsPath().getVlcPath());
 	    int boxCount = ControlMain.getSettingsMain().getBoxList().size();
 	    int playerCount = ControlMain.getSettingsPlayback().getPlaybackOptions().size();
 	    
@@ -79,6 +80,10 @@ public class ControlStartTab extends ControlTab {
 
         if (!udrec.exists()) {
             warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_udrec"), "red");
+	    }
+        
+        if (!vlc.exists()) {
+            warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_vlc"), "red");
 	    }
 	    
 	    if (!px.exists()) {
