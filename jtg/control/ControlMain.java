@@ -69,6 +69,8 @@ public class ControlMain {
 	};
 
 	public static void main( String args[] ) {
+		startLogger();
+		readSettings();
 		control = new ControlMainView();
 	};
 	
