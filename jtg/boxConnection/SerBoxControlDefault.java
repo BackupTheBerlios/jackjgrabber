@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
 
@@ -49,7 +50,7 @@ public class SerBoxControlDefault extends SerBoxControl {
 		throw new IOException();
 	}
 		
-	public ArrayList getPids() throws IOException {
+	public BOPids getPids(boolean tvMode) throws IOException {
 		throw new IOException();
 	}	 
 	

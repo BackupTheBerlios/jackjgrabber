@@ -30,6 +30,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import model.BOPids;
+
 import service.SerGUIUtils;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -41,22 +43,25 @@ import com.jgoodies.forms.layout.RowSpec;
 public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	
 	private JButton jButtonOk;
-	private static JRadioButton[] jRadioButtonPids; 
-	private static ArrayList pidList;
+	private static JRadioButton jRadioButtonVPid;
+	private static JRadioButton[] jRadioButtonAPids;
+	private static BOPids pidList;
 	private JPanel panelPidButtons;
+	private int pidsCount;
 	
-	public GuiPidsQuestionDialog(ArrayList pids, GuiMainView view) {
+	public GuiPidsQuestionDialog(BOPids pids, GuiMainView view) {
 		super(view, true);
 		addWindowListener (new WindowAdapter() { 
 			public void windowClosing(WindowEvent e) { 
 				checkPidList(true);
 			}
 		});
+		pidsCount = pids.getPidCount();
 		this.setPidList(pids);
 		this.initialize();
 		this.pack();
 		SerGUIUtils.center(this);
-		setVisible(true);	
+		setVisible(true);
 	}
 	private void initialize() {
 		this.getContentPane().add(this.getQuestPanel());
@@ -64,24 +69,29 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	private JPanel getQuestPanel() {
 		if (panelPidButtons == null) {
 			panelPidButtons = new JPanel();
-			jRadioButtonPids = new JRadioButton[pidList.size()];
+			jRadioButtonAPids = new JRadioButton[pidList.getAPids().size()];
+			
 			PanelBuilder builder = new PanelBuilder(panelPidButtons, this.buildLayout());
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 			
-			builder.addSeparator("Selektiere Audio-Pids", cc.xy(1, 1));
-			for(int i = 0 ; i<pidList.size(); i++){
-				if (jRadioButtonPids[i]== null) {
-					jRadioButtonPids[i] = new JRadioButton();			
-					jRadioButtonPids[i].setText((String)pidList.get(i));
-					jRadioButtonPids[i].setSelected(true);
-				}
-				builder.add(jRadioButtonPids[i],cc.xy(1, i+2));
-				if (i==pidList.size()-1) {
-				    builder.add(this.getJButtonOk(),cc.xy(1, i+3));
-				}
+			builder.addSeparator("Selektiere Aufnahme-Pids", cc.xy(1, 1));
+			int counter = 0;
+			if (pidList.getVPid()!= null) {
+			    jRadioButtonVPid = new JRadioButton();			
+			    jRadioButtonVPid.setText(pidList.getVPid()[0]);
+			    jRadioButtonVPid.setSelected(true);
+				builder.add(jRadioButtonVPid,		cc.xy(1, 2));
+				counter=1;
 			}
-			this.getJRadioButtonPids()[0].setVisible(false);
+			for(int i = 0 ; i<pidList.getAPids().size(); i++){
+				jRadioButtonAPids[i] = new JRadioButton();			
+				jRadioButtonAPids[i].setText(pidList.getAPidNumber(i));
+				jRadioButtonAPids[i].setSelected(true);
+				builder.add(jRadioButtonAPids[i],cc.xy(1, counter+2));
+				counter++;
+			}	 
+		    builder.add(this.getJButtonOk(),cc.xy(1, pidsCount+2));
 		}
 		return panelPidButtons;
 	}
@@ -89,7 +99,7 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	private FormLayout buildLayout() {
 		ColumnSpec[] colSpecs = new ColumnSpec[1];
 		colSpecs[0]= new ColumnSpec("pref");
-		RowSpec[] rowSpecs = new RowSpec[pidList.size()+2];
+		RowSpec[] rowSpecs = new RowSpec[pidsCount+2];
 		for (int i=0; i<rowSpecs.length; i++) {
 			rowSpecs[i]= new RowSpec("pref");
 		}
@@ -99,27 +109,29 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	
 	private static void checkPidList(boolean clear){
 	    if (!clear) {
-	        for (int i=pidList.size()-1; 0<=i; i--) {
-				if (!jRadioButtonPids[i].isSelected()) {
-					pidList.remove(i);
+	        if (pidList.getVPid()!=null && !jRadioButtonVPid.isSelected()) {
+	            pidList.setVPid(null);
+	        }
+	        for (int i=pidList.getAPids().size()-1; 0<=i; i--) {
+				if (!jRadioButtonAPids[i].isSelected()) {
+					pidList.getAPids().remove(i);
 				}
 			}
 	    } else {
-	        for (int i=pidList.size()-1; 0<=i; i--) {
-	            pidList.remove(i);
-	        }
-	    }
+	        pidList.setVPid(null);
+	        pidList.setAPids(new ArrayList());
+        }
 	}
 	/**
 	 * @return Returns the control.
 	 */
-	public ArrayList getPidList() {
+	public BOPids getPidList() {
 		return pidList;
 	}
 	/**
 	 * @param control The control to set.
 	 */
-	public void setPidList(ArrayList list) {
+	public void setPidList(BOPids list) {
 		pidList = list;
 	}
 	/**
@@ -135,11 +147,5 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		checkPidList(false);
 		this.dispose();
-	}
-	/**
-	 * @return Returns the jRadioButtonPids.
-	 */
-	public JRadioButton[] getJRadioButtonPids() {
-		return jRadioButtonPids;
 	}
 }

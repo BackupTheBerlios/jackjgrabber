@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
 
@@ -73,7 +74,7 @@ public abstract class SerBoxControl {
 
 	public abstract String getName();
 	public abstract BufferedReader getConnection(String request) throws IOException;
-	public abstract ArrayList getPids() throws IOException;
+	public abstract BOPids getPids(boolean tvMode) throws IOException;
 	public abstract ArrayList getBouquetList() throws IOException;
 	public abstract ArrayList getAllSender() throws IOException;
 	public abstract ArrayList getSender(BOBouquet bouquet) throws IOException;
