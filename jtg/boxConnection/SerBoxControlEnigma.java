@@ -70,7 +70,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public BOPids getPids(boolean tvMode) throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
-		System.out.println("hallo");
 		BufferedReader input = getConnection("/control/zapto?getpids");
 		if (tvMode) {
 		    String[] vPid = new String[1];
