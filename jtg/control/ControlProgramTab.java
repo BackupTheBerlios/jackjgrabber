@@ -338,10 +338,13 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
         execString = SerFormatter.replace(execString, "$ip", ip);
         execString = SerFormatter.replace(execString, "$vPid", vPid);
         execString = SerFormatter.replace(execString, "$aPid", "0x"+audioPid.getNumber());
-        this.getPids().getAPids().remove(audioPid);
-        for (int i=0; i<this.getPids().getAPids().size(); i++) {
-            BOPid pid = (BOPid)this.getPids().getAPids().get(i);
-            execString = execString+",0x"+pid.getNumber();
+        if (execString.indexOf("$aPid")>-1) {
+            execString = SerFormatter.replace(execString, "$aPid", "0x"+audioPid.getNumber());
+            this.getPids().getAPids().remove(audioPid);
+            for (int i=0; i<this.getPids().getAPids().size(); i++) {
+                BOPid pid = (BOPid)this.getPids().getAPids().get(i);
+                execString = execString+",0x"+pid.getNumber();
+            }    
         }
         return execString;
 	}
