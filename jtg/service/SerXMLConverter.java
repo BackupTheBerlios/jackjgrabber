@@ -1,9 +1,3 @@
-/*
- * Created on 20.04.2004
- *
- * To change this generated comment go to 
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package service;
 
 import java.io.File;
@@ -12,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.BOBox;
+import model.BORecordArgs;
 import model.BOSettings;
 
 import org.dom4j.Document;
@@ -21,10 +16,8 @@ import org.dom4j.Node;
 
 import control.ControlMain;
 /**
- * @author QSE2419
- *
- * To change this generated comment go to 
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @author Geist Alexander
+ * 
  */
 public class SerXMLConverter {
 
@@ -138,5 +131,48 @@ public class SerXMLConverter {
 		settingsDocument.add(newBoxListRoot);
 		
 		SerXMLHandling.saveXMLFile(new File(ControlMain.filename));
+	}
+	/**
+	 * @param XML-Document der BOX
+	 * @return BORecordArgs
+	 */
+	public static BORecordArgs parseRecordDocument(Document document) {
+		BORecordArgs recordArgs = new BORecordArgs();
+		Element root = document.getRootElement();
+		
+		Element command = (Element)root.selectSingleNode("//record");
+		Node channelname = root.selectSingleNode("//channelname");
+		Node epgtitle = root.selectSingleNode("//epgtitle");
+		Node channelId = root.selectSingleNode("//id");
+		Node epgInfo1 = root.selectSingleNode("//info1");
+		Node epgInfo2 = root.selectSingleNode("//info2");
+		Node epgid = root.selectSingleNode("//epgid");
+		Node mode = root.selectSingleNode("//mode");
+		Node videopid = root.selectSingleNode("//videopid");
+		Element selectedAudiopid = (Element)root.selectSingleNode("//audiopids selected");
+		List aPidNodes = selectedAudiopid.selectNodes("//audio");
+		Node vtxtpid = root.selectSingleNode("//vtxtpid");
+		
+		recordArgs.setCommand(command.attributeValue("command"));
+		recordArgs.setSenderName(channelname.getStringValue());
+		recordArgs.setEpgTitle(epgtitle.getText());
+		recordArgs.setChannelId(channelId.getText());
+		recordArgs.setEpgInfo1(epgInfo1.getText());
+		recordArgs.setEpgInfo2(epgInfo2.getText());
+		recordArgs.setEpgId(epgid.getText());
+		recordArgs.setMode(mode.getText());
+		recordArgs.setVPid(videopid.getText());
+		recordArgs.setVideotextPid(vtxtpid.getText());
+		
+		ArrayList pidList = new ArrayList();
+		for( int i=0; i<aPidNodes.size(); i++ ) {
+			String[] pidInfo = new String[2];
+			Element aPid = (Element)aPidNodes.get(i);
+			pidInfo[0] = aPid.attributeValue("pid");
+			pidInfo[1] = aPid.attributeValue("name");
+			pidList.add(pidInfo);
+		}
+		recordArgs.setAPids(pidList);
+		return recordArgs;
 	}
 }
