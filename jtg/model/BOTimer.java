@@ -51,12 +51,6 @@ public class BOTimer extends java.lang.Object{
     	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
-    public String getDateWithoutYear(GregorianCalendar cal) {
-		String day = Integer.toString(this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH));
-		String month = Integer.toString(this.getUnformattedStartTime().get(Calendar.MONTH));
-		return day+"."+month;
-    }
-    
     public String getStopTime(){
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	return sdf.format(this.getUnformattedStopTime().getTime());
@@ -110,9 +104,7 @@ public class BOTimer extends java.lang.Object{
 	 * @return Returns the startDate.
 	 */
 	public String getStartDate() {
-		String day = Integer.toString(this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH));
-		String month = Integer.toString(this.getUnformattedStartTime().get(Calendar.MONTH));
-		String year = Integer.toString(this.getUnformattedStartTime().get(Calendar.YEAR));
-		return day+"."+month+"."+year;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+		return sdf.format(this.getUnformattedStartTime().getTime());
 	}
 }
