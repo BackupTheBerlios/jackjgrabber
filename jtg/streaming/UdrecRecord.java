@@ -48,6 +48,7 @@ public class UdrecRecord  extends Record {
 	
 	private String[] getRequestArray() {
 	    ArrayList cmd = new ArrayList();
+        String streamType=recordArgs.getLocalTimer().getShortUdrecStreamType();
 	    BOPids pids = recordArgs.getPids();
 	    String cmdReturn[];
 	    if (ControlMain.getSettingsPath().getUdrecPath().substring(0,4).equalsIgnoreCase("mono")) {
@@ -59,7 +60,7 @@ public class UdrecRecord  extends Record {
 	    cmd.add("-host");
 	    cmd.add(boxIp);
 	    cmd.add("-now");
-	    cmd.add("-"+recordArgs.getLocalTimer().getShortUdrecStreamType());
+	    cmd.add("-"+streamType);
 	    cmd.add("-o");
 	    cmd.add((new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()));
 	    cmd.addAll(recordArgs.getLocalTimer().getUdrecOptions().toStringList());
@@ -77,6 +78,9 @@ public class UdrecRecord  extends Record {
 		    cmd.add("-ap");
 		    cmd.add(pids.getVtxtPid().getNumber());
 		} 
+        if (!streamType.equals("-es")) { //-idd nur bei ES
+            cmd.remove("-idd");
+        }
 		cmdReturn = new String[cmd.size()];
 		cmd.toArray(cmdReturn);
 		return cmdReturn;
