@@ -37,7 +37,8 @@ public class BORecordArgs {
     public BORecordArgs(boolean quickRecord) {
         this.setQuickRecord(quickRecord);
     }
-    public BORecordArgs(BOLocalTimer timer, boolean qRecord) {
+    public BORecordArgs(BOPids pids, BOLocalTimer timer, boolean qRecord) {
+        this.setPids(pids);
         quickRecord=qRecord;
         this.setLocalTimer(timer);
     }

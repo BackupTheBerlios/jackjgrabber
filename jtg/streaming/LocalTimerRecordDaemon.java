@@ -73,8 +73,7 @@ public class LocalTimerRecordDaemon extends Thread {
             BOPids pids = ControlMain.getBoxAccess().getPids();
             //starte Aufnahme
             ControlProgramTab ctrl = ControlMain.getControl().getView().getTabProgramm().getControl();
-            BORecordArgs args = new BORecordArgs(timer, false);
-            args.setPids(pids);
+            BORecordArgs args = new BORecordArgs(pids, timer, false);
             ctrl.startRecord(args);
         } catch (IOException e) {
 
