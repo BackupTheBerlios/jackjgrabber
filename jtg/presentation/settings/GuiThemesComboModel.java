@@ -1,6 +1,6 @@
 package presentation.settings;
 /*
-GuiStreamTypeComboModel.java by Geist Alexander 
+GuiThemesComboModel.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,35 +20,29 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import javax.swing.DefaultComboBoxModel;
 
+import control.ControlSettingsTabMain;
+
 /**
  * ComboBoxModel der JCombobox Stream-Typ
  */
-public class GuiStreamTypeComboModel extends DefaultComboBoxModel { 
+public class GuiThemesComboModel extends DefaultComboBoxModel { 
 	
-	String[] streamTypes;
+	String[] themes;
+	ControlSettingsTabMain control;
 	
-	public GuiStreamTypeComboModel(String[] types) {
-		streamTypes = types;
+	public GuiThemesComboModel(ControlSettingsTabMain ctrl) {
+	    control = ctrl;
+		themes = ctrl.getValidThemes();
 	}
 	
 	public Object getElementAt(int index) {
-		return streamTypes[index];
+		return themes[index];
 	}
 
 	public int getSize() {
-		if (streamTypes!=null) {
-			return streamTypes.length;
+		if (themes!=null) {
+			return themes.length;
 		}
 		return 0;
-	}
-	/**
-	 * @param streamType The streamType to set.
-	 */
-	public void setStreamType(String[] types) {
-		this.streamTypes = types;
-		this.removeAllElements();
-		for (int i=0; i<streamTypes.length; i++) {
-			this.addElement(streamTypes[i]);
-		}
 	}
 }

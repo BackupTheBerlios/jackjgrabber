@@ -107,7 +107,7 @@ public class GuiMainView extends JFrame {
 
 	public void repaintGui() {
 		dispose();
-		SwingUtilities.updateComponentTreeUI(this);
+		SwingUtilities.updateComponentTreeUI(GuiMainView.this);
 		setVisible(true);
 	}
 

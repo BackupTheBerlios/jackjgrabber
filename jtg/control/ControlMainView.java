@@ -21,6 +21,11 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -40,7 +45,8 @@ import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticTheme;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.plaf.windows.ExtWindowsLookAndFeel;
-
+import com.l2fprod.gui.plaf.skin.Skin;
+import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
 /**
  * Control-Klasse des Haupt-Fensters, beinhaltet und verwaltet das MainTabPane
@@ -49,9 +55,14 @@ import com.jgoodies.plaf.windows.ExtWindowsLookAndFeel;
 public class ControlMainView implements ChangeListener, SysTrayMenuListener, ActionListener {
 	
 	GuiMainView view;
+	public static final String[] themes = {"Silver", "BrownSugar", "DarkStar", "DesertBlue",
+	        "ExperienceBlue", "SkyBluerTahoma", "SkyRed"};
+	public static String[] skinLFThemes;
+	public static HashMap skinLFThemesMap;
 	
 	public void initialize() {
-	    this.initPlasticLookAndFeel();
+	    this.initSkinLookAndFeel();
+	    this.initLookAndFeel();
 	    this.setLookAndFeel();
 	    this.setView(new GuiMainView(this));		
 	    if (ControlMain.getSettings().standardSettings==true) { //First start, go to Settings-Tab
@@ -64,9 +75,8 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    GuiLogWindow.switchLogVisiblity();
 	}
 	
-	private void initPlasticLookAndFeel() {
+	private void initLookAndFeel() {
 		try {
-			// Installiere das Plastic Look And Feel
 		    PlasticLookAndFeel l2 = new PlasticLookAndFeel();
 			UIManager.LookAndFeelInfo info2 = new UIManager.LookAndFeelInfo(l2.getName(), PlasticLookAndFeel.class.getName());
 			UIManager.installLookAndFeel(info2);
@@ -88,37 +98,118 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	}
 	
 	public void setLookAndFeel() {
-		try {
-			String lookAndFeel = ControlMain.getSettings().getMainSettings().getLookAndFeel();
-			String current = UIManager.getLookAndFeel().getClass().getName();
-			boolean lfChanged = !current.equals(lookAndFeel);
-			boolean themeChanged = this.isThemeChanged();
+	    String lookAndFeel = ControlMain.getSettings().getMainSettings().getLookAndFeel();
+	    String current = UIManager.getLookAndFeel().getClass().getName();
+		boolean lfChanged = !current.equals(lookAndFeel);
+		
+	    if (lookAndFeel.indexOf("SkinLookAndFeel") >-1) {
+	        this.setSkinLookAndFeel(lfChanged);
+	    } else {
+	        try {
+	            boolean themeChanged = this.isThemeChanged();
+				if (themeChanged) {
+					PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
+							+ ControlMain.getSettings().getMainSettings().getPlasticTheme())).newInstance();
+					PlasticLookAndFeel.setMyCurrentTheme(inst);
+				}
+
+				if (lfChanged || themeChanged) {
+					UIManager.setLookAndFeel(lookAndFeel);
+					if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
+						Font f = (Font) UIManager.get("TextArea.font");
+						UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
+					}
+					if (this.getView()!=null) {
+					    this.getView().repaintGui();    
+					}
+				}
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }    
+	    }
+	}
+	
+	public void setSkinLookAndFeel(boolean lfChanged) {
+	    try {
+            Skin aSkin = (Skin) skinLFThemesMap.get(ControlMain.getSettingsMain().getSkinLFTheme());
+            Skin old = SkinLookAndFeel.getSkin();
+            if (aSkin != null) {
+            	if(lfChanged || aSkin!=old) {
+            	    SkinLookAndFeel.setSkin(aSkin);
+            	    UIManager.setLookAndFeel(ControlMain.getSettings().getMainSettings().getLookAndFeel());    
+            	
+	            	if (this.getView()!=null) {
+					    this.getView().repaintGui();    
+					}
+            	}
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+	}
+	
+	private void initSkinLookAndFeel() {
+	    try {
+	        SkinLookAndFeel.loadThemePack(ClassLoader.getSystemResource("themepack.zip"));
+            ArrayList themesDateien = getSkinLFFiles();        
 			
-			if (themeChanged) {
-				PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
-						+ ControlMain.getSettings().getMainSettings().getThemeLayout())).newInstance();
-				PlasticLookAndFeel.setMyCurrentTheme(inst);
+			Skin aSkin = null;
+			String temp;
+			String shortName = "";
+			skinLFThemesMap = new HashMap();
+			skinLFThemes = new String[themesDateien.size()];
+
+			for (int i=0; i<themesDateien.size(); i++) {
+				URL skinUrl = (URL) themesDateien.get(i);
+				temp = skinUrl.getFile();
+				int index1 = temp.lastIndexOf('/');
+				int index2 = temp.lastIndexOf(".zip");
+				if (index1 == -1 || index2 == -1) {
+					continue;
+				}
+				shortName = temp.substring(index1 + 1, index2);
+				skinLFThemes[i]=shortName;
+				aSkin = SkinLookAndFeel.loadThemePack(skinUrl);
+				skinLFThemesMap.put(shortName, aSkin);				
 			}
 
-			if (lfChanged || themeChanged) {
-				UIManager.setLookAndFeel(lookAndFeel);
-				if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
-					Font f = (Font) UIManager.get("TextArea.font");
-					UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
-				}
-				if (this.getView()!=null) {
-				    this.getView().repaintGui();    
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            if(skinLFThemesMap.size()>0) {
+                SkinLookAndFeel lf = new SkinLookAndFeel();
+    			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(lf.getName(), SkinLookAndFeel.class.getName());
+    			UIManager.installLookAndFeel(info);    
+            }
+        } catch (Exception e) {
+            if (ControlMain.getSettingsMain().getLookAndFeel().indexOf("SkinLookAndFeel") >-1) {
+	            ControlMain.getSettingsMain().setPlasticTheme("ExperienceBlue");
+	            ControlMain.getSettingsMain().setLookAndFeel(PlasticLookAndFeel.class.getName());
+	        }
+            e.printStackTrace();
+        }
+	}
+	
+	private ArrayList getSkinLFFiles() {
+	    ArrayList themesDateien = new ArrayList();
+        try {
+            File themesPath = new File(ControlMain.jtjgDirectory + File.separator + "themes");
+            if (!themesPath.exists()) {
+                themesPath.mkdir();
+            }
+            File[] themeFiles = themesPath.listFiles();
+            for (int i = 0; i < themeFiles.length; i++) {
+            	if (themeFiles[i].isFile() && themeFiles[i].getName().indexOf(".zip") != -1) {
+            	    themesDateien.add(themeFiles[i].toURL());
+            	}
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return themesDateien;
 	}
 	
 	private boolean isThemeChanged() {
-	    String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
+        String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
 		currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
-		return !currentTheme.equals(ControlMain.getSettings().getMainSettings().getThemeLayout());
+		return !currentTheme.equals(ControlMain.getSettings().getMainSettings().getPlasticTheme());    
 	}
 	
 	/**

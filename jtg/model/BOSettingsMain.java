@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import control.ControlMainView;
+
 /*
  * BOSettingsMain.java by Geist Alexander
  * 
@@ -19,9 +21,10 @@ public class BOSettingsMain {
 
 	private BOSettings settings;
 	public String locale = "";
-	public String themeLayout;
+	public String plasticTheme;
 	public ArrayList boxList;
 	public String lookAndFeel;
+	public String skinLFTheme;
 	public boolean startFullscreen = false;
 	public boolean useSysTray = false;
 	public boolean showLogo = false;
@@ -38,6 +41,9 @@ public class BOSettingsMain {
 		this.getSettings().setSettingsChanged(value);
 	}
 
+	public boolean isSkinLookAndFeel() {
+	    return getLookAndFeel().indexOf("SkinLookAndFeel") >-1;
+	}
 	/**
 	 * @return Returns the settings.
 	 */
@@ -53,19 +59,22 @@ public class BOSettingsMain {
 	}
 
 	/**
-	 * @return Returns the themeLayout.
+	 * @return Returns the plasticTheme.
 	 */
-	public String getThemeLayout() {
-		return themeLayout;
+	public String getPlasticTheme() {
+	    if (plasticTheme==null) {
+	        plasticTheme="ExperienceBlue";
+	    }
+		return plasticTheme;
 	}
 	/**
-	 * @param themeLayout
-	 *            The themeLayout to set.
+	 * @param plasticTheme
+	 *            The plasticTheme to set.
 	 */
-	public void setThemeLayout(String layout) {
-		if (this.themeLayout == null || !this.themeLayout.equals(layout)) {
+	public void setPlasticTheme(String layout) {
+		if (this.plasticTheme == null || !this.plasticTheme.equals(layout)) {
 			setSettingsChanged(true);
-			this.themeLayout = layout;
+			this.plasticTheme = layout;
 		}
 	}
 
@@ -210,4 +219,19 @@ public class BOSettingsMain {
 			setSettingsChanged(true);
 		}
 	}
+    /**
+     * @return Returns the skinLFTheme.
+     */
+    public String getSkinLFTheme() {
+        if (skinLFTheme==null) {
+            skinLFTheme=ControlMainView.skinLFThemes[0];
+        }
+        return skinLFTheme;
+    }
+    /**
+     * @param skinLFTheme The skinLFTheme to set.
+     */
+    public void setSkinLFTheme(String skinLookAndFeel) {
+        this.skinLFTheme = skinLookAndFeel;
+    }
 }

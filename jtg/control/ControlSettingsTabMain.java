@@ -1,3 +1,4 @@
+package control;
 /*
  * ControlSettingsTabMain.java by Geist Alexander
  * 
@@ -11,7 +12,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-package control;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,11 +30,13 @@ import model.BOSettingsMain;
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
+import presentation.settings.GuiThemesComboModel;
 import service.SerExternalProcessHandler;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
+import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
 public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener {
 
@@ -52,7 +55,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	 * @see control.ControlTab#initialize()
 	 */
 	public void run() {
-		this.getTab().getJComboBoxTheme().setSelectedItem(this.getSettings().getThemeLayout());
+		this.getTab().getJComboBoxTheme().setSelectedItem(this.getSettings().getPlasticTheme());
 		this.getTab().getJComboBoxLocale().setSelectedItem(this.getSettings().getLocale());
 		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
@@ -131,10 +134,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	    while (true) {
 	        if (event.getStateChange() == 1) {
 	            if (comboBox.getName().equals("theme")) {
-	                getSettings().setThemeLayout((String) comboBox.getSelectedItem());
-	                if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null) {
-	                    this.getMainView().getControl().setLookAndFeel();
-	                }
+	                setTheme((String) comboBox.getSelectedItem());
 	                break;
 	            }
 	            if (comboBox.getName().equals("locale")) {
@@ -143,10 +143,8 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	            }
 	            if (comboBox.getName().equals("lookAndFeel")) {
 	                String lookAndFeel = ((BOLookAndFeelHolder) this.getTab().getJComboBoxLookAndFeel().getSelectedItem()).getLookAndFeelClassName();
-	                boolean enable = this.enableThemeComboBox(lookAndFeel);
-	                this.getTab().getJComboBoxTheme().setEnabled(enable);
 	                getSettings().setLookAndFeel(lookAndFeel);
-	                this.getMainView().getControl().setLookAndFeel();
+	                this.enableThemeComboBox(lookAndFeel);
 	                break;
 	            }
 	        }
@@ -154,13 +152,50 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	    }
 	}
 	
+	private void setTheme(String theme) {
+	    if (getSettings().isSkinLookAndFeel()) {
+	        getSettings().setSkinLFTheme(theme);
+	    } else {
+	        getSettings().setPlasticTheme(theme);    
+	    }
+        if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null) {
+            this.getMainView().getControl().setLookAndFeel();
+        }
+	}
+	
 	/*
 	 * Theme-Auswahl nur fuer Plastic-L&F´s erlauben
 	 */
-	private boolean enableThemeComboBox(String lookAndFeel) {
-	    return (lookAndFeel.equals(PlasticLookAndFeel.class.getName()) || 
+	private void enableThemeComboBox(String lookAndFeel) {
+	    if (lookAndFeel.equals(PlasticLookAndFeel.class.getName()) || 
 	            lookAndFeel.equals(PlasticXPLookAndFeel.class.getName()) ||
-	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName()) );
+	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName()) ||
+	            lookAndFeel.equals(SkinLookAndFeel.class.getName())) 
+	    {
+	        this.getTab().getJComboBoxTheme().setModel(new GuiThemesComboModel(this));
+	        this.getTab().getJComboBoxTheme().setEnabled(true);
+	        this.getTab().getJComboBoxTheme().setSelectedItem(getValidTheme());
+	    } else {
+	        this.getTab().getJComboBoxTheme().setEnabled(false);
+	        this.getMainView().getControl().setLookAndFeel();
+	    }
+	    
+	}
+	
+	public String[] getValidThemes() {
+	    if (getSettings().isSkinLookAndFeel()) {
+	        return ControlMainView.skinLFThemes;
+	    } else {
+	        return ControlMainView.themes;
+	    }
+	}
+	
+	public String getValidTheme() {
+	    if (getSettings().isSkinLookAndFeel()) {
+	        return ControlMain.getSettingsMain().getSkinLFTheme();
+	    } else {
+	        return ControlMain.getSettingsMain().getPlasticTheme();
+	    }
 	}
 
 	private void actionStartVlc() {

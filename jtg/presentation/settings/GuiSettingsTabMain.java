@@ -39,7 +39,6 @@ import service.SerIconManager;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 
 import control.ControlMain;
 import control.ControlSettingsTabMain;
@@ -67,9 +66,6 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JCheckBox cbStartVlcAtStart;
 	private JCheckBox cbStartMinimized;
 	private SerIconManager iconManager = SerIconManager.getInstance();
-
-	public final String[] themes = {"Silver", "BrownSugar", "DarkStar",
-			"DesertBlue", "ExperienceBlue", "SkyBluerTahoma", "SkyRed"};
 
 	public GuiSettingsTabMain(ControlSettingsTabMain ctrl) {
 		super();
@@ -187,12 +183,9 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JComboBox getJComboBoxTheme() {
 		if (jComboBoxTheme == null) {
-			jComboBoxTheme = new JComboBox(themes);
+			jComboBoxTheme = new JComboBox();
 			jComboBoxTheme.addItemListener(control);
 			jComboBoxTheme.setName("theme");
-			String currentSelLFClassName = ControlMain.getSettingsMain().getLookAndFeel();
-			jComboBoxTheme.setEnabled(currentSelLFClassName.equals(PlasticLookAndFeel.class.getName()));
-
 		}
 		return jComboBoxTheme;
 	}

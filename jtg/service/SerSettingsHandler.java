@@ -119,7 +119,7 @@ public class SerSettingsHandler {
 		rec.setDirPattern("%DATE YY-MM-DD% %TIME% %CHANNEL% %NAME%");
 		rec.setFilePattern("");
 		
-		main.setThemeLayout("ExperienceBlue");
+		main.setPlasticTheme("ExperienceBlue");
 		main.setLocale("DE");
 		main.setShowLogo(true);
 		main.setShowLogWindow(true);
