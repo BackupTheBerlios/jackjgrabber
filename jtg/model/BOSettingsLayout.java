@@ -70,7 +70,7 @@ public class BOSettingsLayout {
 		return size;
 	}
 	public void setSize(Dimension size) {
-		if (!size.equals(this.size)) {
+		if (size != null && !size.equals(this.size)) {
 			this.size = size;
 			setSettingsChanged(true);
 		}

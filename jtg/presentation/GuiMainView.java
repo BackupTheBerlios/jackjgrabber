@@ -75,7 +75,7 @@ public class GuiMainView extends JFrame {
 		}
 		Dimension dim = ControlMain.getSettingsLayout().getSize();
 		if (dim != null) {
-			setSize(dim);
+			//setSize(dim);
 		}
 
 		addComponentListener(new ComponentAdapter() {
