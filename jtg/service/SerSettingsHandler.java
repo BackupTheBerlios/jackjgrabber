@@ -66,20 +66,17 @@ public class SerSettingsHandler {
 		return settings;
 	}
 
-	private static void getSettingsAc3ReplaceStereo(Element root,
-			BOSettings settings) {
+	private static void getSettingsAc3ReplaceStereo(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/ac3ReplaceStereo");
 		if (node != null) {
 			settings.ac3ReplaceStereo = node.getText().equals("true");
 		} else {
-			SerXMLHandling.setElementInElement(root, "ac3ReplaceStereo",
-					"false");
+			SerXMLHandling.setElementInElement(root, "ac3ReplaceStereo", "false");
 			settings.setAc3ReplaceStereo(true);
 		}
 	}
 
-	private static void getSettingsUdrecOptions(Element root,
-			BOSettings settings) {
+	private static void getSettingsUdrecOptions(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/udrecOptions");
 		if (node != null) {
 			settings.udrecOptions = node.getText();
@@ -88,8 +85,7 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsRecordtimeBefore(Element root,
-			BOSettings settings) {
+	private static void getSettingsRecordtimeBefore(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/recordTimeBefore");
 		if (node != null) {
 			settings.recordTimeBefore = node.getText();
@@ -99,8 +95,7 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsRecordtimeAfter(Element root,
-			BOSettings settings) {
+	private static void getSettingsRecordtimeAfter(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/recordTimeAfter");
 		if (node != null) {
 			settings.recordTimeAfter = node.getText();
@@ -120,14 +115,12 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsStartFullscreen(Element root,
-			BOSettings settings) {
+	private static void getSettingsStartFullscreen(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/startFullscreen");
 		if (node != null) {
 			settings.startFullscreen = node.getText().equals("true");
 		} else {
-			SerXMLHandling
-					.setElementInElement(root, "startFullscreen", "false");
+			SerXMLHandling .setElementInElement(root, "startFullscreen", "false");
 			settings.setStartFullscreen(false);
 		}
 	}
@@ -142,8 +135,7 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsStreamingEngine(Element root,
-			BOSettings settings) {
+	private static void getSettingsStreamingEngine(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/engine");
 		if (node != null) {
 			settings.streamingEngine = Integer.parseInt(node.getText());
@@ -164,11 +156,10 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsProjectXPath(Element root,
-			BOSettings settings) {
+	private static void getSettingsProjectXPath(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/projectXPath");
 		if (node != null) {
-			settings.udrecPath = node.getText();
+			settings.projectXPath = node.getText();
 		} else {
 			String path = new File("ProjectX.jar").getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "projectXPath", path);
@@ -186,20 +177,17 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsUseAlwaysStandardPlayback(Element root,
-			BOSettings settings) {
+	private static void getSettingsUseAlwaysStandardPlayback(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/useStandardPlayback");
 		if (node != null) {
 			settings.alwaysUseStandardPlayback = node.getText().equals("true");
 		} else {
-			SerXMLHandling.setElementInElement(root, "useStandardPlayback",
-					"true");
+			SerXMLHandling.setElementInElement(root, "useStandardPlayback", "true");
 			settings.setAlwaysUseStandardPlayback(true);
 		}
 	}
 
-	private static void getSettingsRecordAllPids(Element root,
-			BOSettings settings) {
+	private static void getSettingsRecordAllPids(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/recordAllPids");
 		if (node != null) {
 			settings.recordAllPids = node.getText().equals("true");
@@ -214,8 +202,7 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.jgrabberStreamType = node.getText();
 		} else {
-			SerXMLHandling.setElementInElement(root, "jgrabberStreamType",
-					"PES MPEG-Packetized Elementary");
+			SerXMLHandling.setElementInElement(root, "jgrabberStreamType", "PES MPEG-Packetized Elementary");
 			settings.setJgrabberStreamType("PES");
 		}
 	}
@@ -225,8 +212,7 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.udrecStreamType = node.getText();
 		} else {
-			SerXMLHandling.setElementInElement(root, "udrecStreamType",
-					"PES MPEG-Packetized Elementary");
+			SerXMLHandling.setElementInElement(root, "udrecStreamType", "PES MPEG-Packetized Elementary");
 			settings.setUdrecPath("PES");
 		}
 	}
@@ -246,32 +232,27 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.setLookAndFeel(node.getText());
 		} else {
-			SerXMLHandling.setElementInElement(root, "lookandfeel",
-					PlasticLookAndFeel.class.getName());
+			SerXMLHandling.setElementInElement(root, "lookandfeel", PlasticLookAndFeel.class.getName());
 			settings.setLookAndFeel(PlasticLookAndFeel.class.getName());
 		}
 	}
 
-	private static void getSettingsStreamingServerPort(Element root,
-			BOSettings settings) {
+	private static void getSettingsStreamingServerPort(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/streamingServerPort");
 		if (node != null) {
 			settings.streamingServerPort = node.getText();
 		} else {
-			SerXMLHandling.setElementInElement(root, "streamingServerPort",
-					"4000");
+			SerXMLHandling.setElementInElement(root, "streamingServerPort", "4000");
 			settings.setStreamingServerPort("4000");
 		}
 	}
 
-	private static void getSettingsStartStreamingServer(Element root,
-			BOSettings settings) {
+	private static void getSettingsStartStreamingServer(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/startStreamingServer");
 		if (node != null) {
 			settings.startStreamingServer = node.getText().equals("true");
 		} else {
-			SerXMLHandling.setElementInElement(root, "startStreamingServer",
-					"true");
+			SerXMLHandling.setElementInElement(root, "startStreamingServer", "true");
 			settings.setStartStreamingServer(true);
 		}
 	}
@@ -281,8 +262,7 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.savePath = node.getText();
 		} else {
-			String path = new File(System.getProperty("user.home"))
-					.getAbsolutePath();
+			String path = new File(System.getProperty("user.home")) .getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "savePath", path);
 			settings.setSavePath(path);
 		}
@@ -298,8 +278,7 @@ public class SerSettingsHandler {
 		}
 	}
 
-	private static void getSettingsPlaybackPlayer(Element root,
-			BOSettings settings) {
+	private static void getSettingsPlaybackPlayer(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/playbackPlayer");
 		if (node != null) {
 			settings.playbackString = node.getText();
@@ -310,8 +289,7 @@ public class SerSettingsHandler {
 	}
 
 	/**
-	 * @param rootElement
-	 *            of the Settings-Document
+	 * @param rootElement of the Settings-Document
 	 * @return ArrayList of BOBox-Objects
 	 */
 	private static ArrayList buildBoxSettings(Element rootElement) {
@@ -352,25 +330,20 @@ public class SerSettingsHandler {
 	}
 
 	/**
-	 * @param rootElement
-	 *            of the Settings-Document
+	 * @param rootElement  of the Settings-Document
 	 * @return ArrayList of BOPlaybackOption-Objects
 	 */
 	private static ArrayList buildPlaybackSettings(Element rootElement) {
-		List playbackListNodes = rootElement.selectNodes("//playbackOption"); //All
-		// Box-Nodes
+		List playbackListNodes = rootElement.selectNodes("//playbackOption"); //All Box-Nodes
 		ArrayList boxList = new ArrayList(playbackListNodes.size());
 
-		for (int i = 0; i < playbackListNodes.size(); i++) { //Schleife über
-			// die Box-Elemente
+		for (int i = 0; i < playbackListNodes.size(); i++) { //Schleife über die Box-Elemente
 			BOPlaybackOption playbackOption = new BOPlaybackOption();
 			Node playbackElement = (Node) playbackListNodes.get(i);
 			List playbackValueNodes = playbackElement
 					.selectNodes("descendant::*");
 
-			for (int i2 = 0; i2 < playbackValueNodes.size(); i2++) { //Schleife
-				// über die
-				// BoxValue-Elemente
+			for (int i2 = 0; i2 < playbackValueNodes.size(); i2++) { //Schleife über die BoxValue-Elemente
 				Node value = (Node) playbackValueNodes.get(i2);
 				switch (i2) {
 				case 0:
@@ -399,131 +372,94 @@ public class SerSettingsHandler {
 	 * Erstellen eines XML-Settings-Dokuments und spreichern diesen
 	 */
 	public static void savePlaybackSettings() throws IOException {
-		Element settingsDocument = ControlMain.getSettingsDocument()
-				.getRootElement();
-		Node playbackListRoot = settingsDocument
-				.selectSingleNode("/settings/playbackList");
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		Node playbackListRoot = settingsDocument.selectSingleNode("/settings/playbackList");
 		if (playbackListRoot != null) {
-			settingsDocument.remove(playbackListRoot);
+		    settingsDocument.remove(playbackListRoot);    
 		}
-
+		
 		//Aufbereitung der Box-Settings
-		Element newPlaybackListRoot = DocumentHelper
-				.createElement("playbackList");
+		Element newPlaybackListRoot = DocumentHelper.createElement("playbackList");
 		ArrayList playbackList = ControlMain.getSettings().getPlaybackOptions();
-
-		for (int i = 0; i < playbackList.size(); i++) {
-			BOPlaybackOption playback = (BOPlaybackOption) playbackList.get(i);
+	
+		for (int i=0; i<playbackList.size(); i++) {
+		    BOPlaybackOption playback = (BOPlaybackOption)playbackList.get(i);
 			Element boxElement = DocumentHelper.createElement("playbackOption");
 			boxElement.addElement("name").addText(playback.getName());
-			boxElement.addElement("execString").addText(
-					playback.getExecString());
-			boxElement.addElement("standard").addText(
-					playback.isStandard().toString());
-			boxElement.addElement("logOutput").addText(
-					playback.isLogOutput().toString());
+			boxElement.addElement("execString").addText(playback.getExecString());
+			boxElement.addElement("standard").addText(playback.isStandard().toString());
+			boxElement.addElement("logOutput").addText(playback.isLogOutput().toString());
 			newPlaybackListRoot.add(boxElement);
 		}
 		settingsDocument.add(newPlaybackListRoot);
 	}
-
+	
 	/*
 	 * Erstellen eines XML-Settings-Dokuments und spreichern diesen
 	 */
 	public static void saveBoxSettings() throws IOException {
-		Element settingsDocument = ControlMain.getSettingsDocument()
-				.getRootElement();
-		Node boxListRoot = settingsDocument
-				.selectSingleNode("/settings/boxList");
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		Node boxListRoot = settingsDocument.selectSingleNode("/settings/boxList");
 		settingsDocument.remove(boxListRoot);
-
+		
 		//Aufbereitung der Box-Settings
 		Element newBoxListRoot = DocumentHelper.createElement("boxList");
 		ArrayList boxList = ControlMain.getSettings().getBoxList();
-
-		for (int i = 0; i < boxList.size(); i++) {
-			BOBox box = (BOBox) boxList.get(i);
+	
+		for (int i=0; i<boxList.size(); i++) {
+			BOBox box = (BOBox)boxList.get(i);
 			Element boxElement = DocumentHelper.createElement("box");
 			boxElement.addElement("boxIp").addText(box.getDboxIp());
 			boxElement.addElement("login").addText(box.getLogin());
 			boxElement.addElement("password").addText(box.getPassword());
-			boxElement.addElement("standard").addText(
-					box.isStandard().toString());
+			boxElement.addElement("standard").addText(box.isStandard().toString());
 			newBoxListRoot.add(boxElement);
 		}
 		settingsDocument.add(newBoxListRoot);
 	}
 
 	public static void saveUserSettings() throws IOException {
-		Element settingsDocument = ControlMain.getSettingsDocument()
-				.getRootElement();
+		Element settingsDocument = ControlMain.getSettingsDocument() .getRootElement();
 		Node theme = settingsDocument.selectSingleNode("/settings/theme");
-		Node lookAndFeel = settingsDocument
-				.selectSingleNode("/settings/lookandfeel");
+		Node lookAndFeel = settingsDocument.selectSingleNode("/settings/lookandfeel");
 		Node locale = settingsDocument.selectSingleNode("/settings/locale");
-		Node serverPort = settingsDocument
-				.selectSingleNode("/settings/streamingServerPort");
-		Node startServer = settingsDocument
-				.selectSingleNode("/settings/startStreamingServer");
+		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
+		Node startServer = settingsDocument.selectSingleNode("/settings/startStreamingServer");
 		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
-		Node playbackPlayer = settingsDocument
-				.selectSingleNode("/settings/playbackPlayer");
-		Node jgrabberStreamType = settingsDocument
-				.selectSingleNode("/settings/jgrabberStreamType");
-		Node udrecStreamType = settingsDocument
-				.selectSingleNode("/settings/udrecStreamType");
+		Node playbackPlayer = settingsDocument.selectSingleNode("/settings/playbackPlayer");
+		Node jgrabberStreamType = settingsDocument.selectSingleNode("/settings/jgrabberStreamType");
+		Node udrecStreamType = settingsDocument.selectSingleNode("/settings/udrecStreamType");
 		Node startPx = settingsDocument.selectSingleNode("/settings/startPX");
 		Node engine = settingsDocument.selectSingleNode("/settings/engine");
-		Node udrecPath = settingsDocument
-				.selectSingleNode("/settings/udrecPath");
+		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
 		Node projectXPath = settingsDocument.selectSingleNode("/settings/projectXPath");
-		Node recordAllPids = settingsDocument
-				.selectSingleNode("/settings/recordAllPids");
-		Node useStandardPlayback = settingsDocument
-				.selectSingleNode("/settings/useStandardPlayback");
-		Node useSysTray = settingsDocument
-				.selectSingleNode("/settings/useSysTray");
-		Node startFullscreen = settingsDocument
-				.selectSingleNode("/settings/startFullscreen");
+		Node recordAllPids = settingsDocument.selectSingleNode("/settings/recordAllPids");
+		Node useStandardPlayback = settingsDocument.selectSingleNode("/settings/useStandardPlayback");
+		Node useSysTray = settingsDocument.selectSingleNode("/settings/useSysTray");
+		Node startFullscreen = settingsDocument.selectSingleNode("/settings/startFullscreen");
 		Node showLogo = settingsDocument.selectSingleNode("/settings/showLogo");
-		Node recordTimeBefore = settingsDocument
-				.selectSingleNode("/settings/recordTimeBefore");
-		Node recordTimeAfter = settingsDocument
-				.selectSingleNode("/settings/recordTimeAfter");
-		Node ac3ReplaceStereo = settingsDocument
-				.selectSingleNode("/settings/ac3ReplaceStereo");
-		Node udrecOptions = settingsDocument
-				.selectSingleNode("/settings/udrecOptions");
+		Node recordTimeBefore = settingsDocument.selectSingleNode("/settings/recordTimeBefore");
+		Node recordTimeAfter = settingsDocument.selectSingleNode("/settings/recordTimeAfter");
+		Node ac3ReplaceStereo = settingsDocument.selectSingleNode("/settings/ac3ReplaceStereo");
+		Node udrecOptions = settingsDocument.selectSingleNode("/settings/udrecOptions");
 		
 		projectXPath.setText(ControlMain.getSettings().getUdrecPath());
-		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings()
-				.isAc3ReplaceStereo()));
+		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().isAc3ReplaceStereo()));
 		udrecOptions.setText(ControlMain.getSettings().getUdrecOptions());
-		recordTimeBefore.setText(ControlMain.getSettings()
-				.getRecordTimeBefore());
+		recordTimeBefore.setText(ControlMain.getSettings().getRecordTimeBefore());
 		recordTimeAfter.setText(ControlMain.getSettings().getRecordTimeAfter());
-		useSysTray.setText(Boolean.toString(ControlMain.getSettings()
-				.isUseSysTray()));
-		startFullscreen.setText(Boolean.toString(ControlMain.getSettings()
-				.isStartFullscreen()));
-		showLogo.setText(Boolean.toString(ControlMain.getSettings()
-				.isShowLogo()));
-		useStandardPlayback.setText(Boolean.toString(ControlMain.getSettings()
-				.isAlwaysUseStandardPlayback()));
-		recordAllPids.setText(Boolean.toString(ControlMain.getSettings()
-				.isRecordAllPids()));
-		engine.setText(Integer.toString(ControlMain.getSettings()
-				.getStreamingEngine()));
+		useSysTray.setText(Boolean.toString(ControlMain.getSettings().isUseSysTray()));
+		startFullscreen.setText(Boolean.toString(ControlMain.getSettings().isStartFullscreen()));
+		showLogo.setText(Boolean.toString(ControlMain.getSettings().isShowLogo()));
+		useStandardPlayback.setText(Boolean.toString(ControlMain.getSettings().isAlwaysUseStandardPlayback()));
+		recordAllPids.setText(Boolean.toString(ControlMain.getSettings().isRecordAllPids()));
+		engine.setText(Integer.toString(ControlMain.getSettings().getStreamingEngine()));
 		udrecPath.setText(ControlMain.getSettings().getUdrecPath());
-		startPx
-				.setText(Boolean
-						.toString(ControlMain.getSettings().isStartPX()));
-		jgrabberStreamType.setText(ControlMain.getSettings()
-				.getJgrabberStreamType());
+		startPx.setText(Boolean.toString(ControlMain.getSettings().isStartPX()));
+		jgrabberStreamType.setText(ControlMain.getSettings().getJgrabberStreamType());
 		udrecStreamType.setText(ControlMain.getSettings().getUdrecStreamType());
 		playbackPlayer.setText(ControlMain.getSettings().getPlaybackString());
-		startServer.setText(Boolean.toString(ControlMain.getSettings()
-				.isStartStreamingServer()));
+		startServer.setText(Boolean.toString(ControlMain.getSettings().isStartStreamingServer()));
 		savePath.setText(ControlMain.getSettings().getSavePath());
 		serverPort.setText(ControlMain.getSettings().getStreamingServerPort());
 		theme.setText(ControlMain.getSettings().getThemeLayout());
@@ -535,7 +471,6 @@ public class SerSettingsHandler {
 		saveUserSettings();
 		saveBoxSettings();
 		savePlaybackSettings();
-		SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename),
-				ControlMain.getSettingsDocument());
+		SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
 	}
 }
