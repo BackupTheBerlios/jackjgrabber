@@ -75,7 +75,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     private static BOMovieGuide boMovieGuide4Timer; 
     
 	public ControlMovieGuideTab(GuiMainView view) {
-		this.setMainView(view);		
+		this.setMainView(view);	
+		try{
+			initialized = true;
+			setRootElement();
+			if(this.getTitelMap()==null){				
+				setTitelMap();
+			}
+		}catch (Exception ex){}
 	}
 
 	public void initialize() {
@@ -155,8 +162,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			return new Integer(this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 		}
 	}
-	public int getSelectRowTimerTable(){		
-		if (this.getJTableTimer().getSelectedRow()<=0){
+	public int getSelectRowTimerTable(){				
+			if (this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow())<=0){
 			return 0;
 		}else{			
 			return this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
@@ -397,7 +404,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;
-    			case 11:
+    			case 11: //all
 					if(bomovieguide.getIfStringInObject(search.toLowerCase())){
 						titelListAktuell.put(new Integer(a++),bomovieguide);
 					}
