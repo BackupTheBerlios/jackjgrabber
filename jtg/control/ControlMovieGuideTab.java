@@ -66,8 +66,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	String searchString = "";
 	private static String homePath;
 	
-	public static File movieGuideFile = new File(getHomePath()+"movieguide_"+SerFormatter.getAktuellDateString(0,"MM_yy")+".xml");
-	public static File movieGuideFileNext = new File(getHomePath()+"movieguide_"+SerFormatter.getAktuellDateString(1,"MM_yy")+".xml");	
+	public static File movieGuideFile = new File(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"movieguide_"+SerFormatter.getAktuellDateString(0,"MM_yy")+".xml");
+	public static File movieGuideFileNext = new File(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"movieguide_"+SerFormatter.getAktuellDateString(1,"MM_yy")+".xml");	
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String GENRE  = ControlMain.getProperty("txt_genre2");
@@ -816,17 +816,6 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	return searchString;
     }
 
-    public static String getHomePath() {
-        if (homePath==null) {
-            String sep = System.getProperty("file.separator");
-            File dir = new File(System.getProperty("user.home")+sep+".JtJG");
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            homePath = dir.getAbsolutePath()+sep;    
-        }
-        return homePath;
-    }
     private boolean askToDownload(String value) {
 		int res = JOptionPane.showOptionDialog(this.getTab(), value, ControlMain.getProperty("button_pmg_download"), 0, JOptionPane.QUESTION_MESSAGE, null, new String[]{
 				ControlMain.getProperty("button_pmg_download"), ControlMain.getProperty("button_cancel")}, "");
