@@ -66,7 +66,7 @@ public class VlcRecord  extends Record {
 	}
 	
 	public void start() {
-	    run=(SerExternalProcessHandler.startProcess("vlcRecord",  this.getRequestArray(), true));
+	    run=(SerExternalProcessHandler.startProcess(recordControl, "vlcRecord",  this.getRequestArray(), true));
 	}	
 	
 	public void stop() {

@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
 
+import javax.swing.JOptionPane;
+
 import model.BOBox;
 import model.BOSettings;
 import model.BOSettingsLayout;
@@ -52,6 +54,7 @@ import service.SerIconManager;
 import service.SerLogAppender;
 import service.SerSettingsHandler;
 import streaming.LocalTimerRecordDaemon;
+import streaming.RecordControl;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxGuiDetector;
@@ -367,18 +370,30 @@ public class ControlMain {
 	}
 
 	public static void endProgram() {
-		SerExternalProcessHandler.closeAll();
-		try {
-			//save log layout settings
-			saveLogLayout();
-			if (ControlMain.getSettings().isSettingsChanged()) {
-				SerSettingsHandler.saveAllSettings();
-				log("Settings saved");
-			}
-		} catch (Exception e1) {
-			Logger.getLogger("ControlMain").error("Error while save Settings");
-		}
-		System.exit(0);
+        int result=0;
+        RecordControl record = getControl().getView().getTabProgramm().getControl().getRecordControl();
+        if (record!=null && record.isRunning ) {
+            result = JOptionPane.showConfirmDialog(
+                    getControl().getView(),
+                    getProperty("msg_warnRecord2")+": "+record.recordArgs.getEpgTitle(),
+                    getProperty("msg_warnRecord1"),
+                    JOptionPane.YES_NO_OPTION
+            );
+        }
+        if (result==0) {
+            SerExternalProcessHandler.closeAll();
+            try {
+                //save log layout settings
+                saveLogLayout();
+                if (ControlMain.getSettings().isSettingsChanged()) {
+                    SerSettingsHandler.saveAllSettings();
+                    log("Settings saved");
+                }
+            } catch (Exception e1) {
+                Logger.getLogger("ControlMain").error("Error while save Settings");
+            }
+            System.exit(0);        
+        }
 	}
 
 	private static void saveLogLayout() {

@@ -44,7 +44,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 	public boolean isRunning = true;
 	public boolean tvMode;
 	ControlProgramTab controlProgramTab;
-	BORecordArgs recordArgs;
+	public BORecordArgs recordArgs;
 	String fileName;
 	File directory;
     public String initSptsStatus;
@@ -162,8 +162,12 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		}
 	}
 
-	public void processStopped(int exitCode) {
-		this.checkForShutdown();
+	public void processStopped(int exitCode, String processName) {
+        if (processName.equals("vlcRecord")) {
+            this.controlProgramTab.stopRecord();
+        } else {
+            this.checkForShutdown(); //ende des PX-Prozesses    
+        }
 	}
 
 	private void waitForStop() {

@@ -19,5 +19,5 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 public abstract interface SerProcessStopListener {
     
-    public abstract void processStopped(int exitValue);
+    public abstract void processStopped(int exitValue, String processName);
 }

@@ -73,7 +73,7 @@ public class BOExternalProcess extends Thread {
 		    
 		    if (this.getListener()!=null) {
 		        int exitValue = this.getProcess().waitFor();
-		        this.getListener().processStopped(exitValue);
+		        this.getListener().processStopped(exitValue, this.progName);
 		    }
 		} catch (Exception e) {
 		    Logger.getLogger("BOExternalProcess").error(e.getMessage());
