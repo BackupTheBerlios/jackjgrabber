@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -55,6 +56,8 @@ public class GuiNoticeBroadcastView extends JDialog {
 	private JTable jTableNoticeList;
 	private JButton jButtonAnlegen;
 	private JButton jButtonLoeschen;
+    private JButton jButtonScan;
+    private JProgressBar progressScan;
 	
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	
@@ -65,6 +68,7 @@ public class GuiNoticeBroadcastView extends JDialog {
 		initialize();
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
+                getControl().runningScan=false;
                 SerNoticeListHandler.saveNoticeList(control.getNoticeList());
             }
         });
@@ -83,15 +87,17 @@ public class GuiNoticeBroadcastView extends JDialog {
 		if (mainPanel == null) {
 			mainPanel = new JPanel();
 			FormLayout layout = new FormLayout("pref:grow, 5, pref", //columns
-					"pref, 10, pref, pref, 100"); //rows
+					"pref, 10, pref, pref, 60, pref, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(mainPanel, layout);
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_notice"), 	cc.xyw(1,1,3));
-			builder.add(this.getJScrollPaneNoticeList(), 					cc.xywh(1,3,1,3));
+			builder.add(this.getJScrollPaneNoticeList(), 					cc.xywh(1,3,1,6));
 			builder.add(this.getJButtonAnlegen(), 							cc.xy(3,3));
 			builder.add(this.getJButtonLoeschen(), 							cc.xy(3,4));
+            builder.add(this.getProgressScan(),                             cc.xy(3,6));
+            builder.add(this.getJButtonScan(),                              cc.xy(3,8));
 		}
 		return mainPanel;
 	}
@@ -108,7 +114,6 @@ public class GuiNoticeBroadcastView extends JDialog {
 			jButtonAnlegen.setText(ControlMain.getProperty("button_create"));
 			jButtonAnlegen.setActionCommand("add");
 			jButtonAnlegen.addActionListener(control);
-			jButtonAnlegen.setPreferredSize(new java.awt.Dimension(100,25));
 		}
 		return jButtonAnlegen;
 	}
@@ -124,10 +129,24 @@ public class GuiNoticeBroadcastView extends JDialog {
 			jButtonLoeschen.setText(ControlMain.getProperty("button_delete"));
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);
-			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
 		}
 		return jButtonLoeschen;
 	}
+    /**
+     * This method initializes jButtonScan   
+     *  
+     * @return javax.swing.JButton  
+     */    
+    private JButton getJButtonScan() {
+        if (jButtonScan == null) {
+            jButtonScan = new JButton();
+            jButtonScan.setIcon(iconManager.getIcon("find.png"));
+            jButtonScan.setText(ControlMain.getProperty("button_scan"));
+            jButtonScan.setActionCommand("scan");
+            jButtonScan.addActionListener(control);
+        }
+        return jButtonScan;
+    }
 	/**
 	 * @return Returns the jScrollPaneNoticeList.
 	 */
@@ -152,12 +171,8 @@ public class GuiNoticeBroadcastView extends JDialog {
 		    }   
 			
 			jTableNoticeList.setName("noticeTable");
-			jTableNoticeList.getColumnModel().getColumn(0).setPreferredWidth(100);
-			jTableNoticeList.getColumnModel().getColumn(0).setMaxWidth(100);
-			jTableNoticeList.getColumnModel().getColumn(1).setMaxWidth(100);
-			jTableNoticeList.getColumnModel().getColumn(2).setMaxWidth(100);
-			jTableNoticeList.getColumnModel().getColumn(3).setMaxWidth(100);
-            jTableNoticeList.getColumnModel().getColumn(4).setMaxWidth(100);
+			jTableNoticeList.getColumnModel().getColumn(0).setPreferredWidth(250);
+
 			
 			jTableNoticeList.setDefaultRenderer(Boolean.class, new DefaultTableCellRenderer() {
 				
@@ -166,23 +181,29 @@ public class GuiNoticeBroadcastView extends JDialog {
 					BONoticeBroadcast notice = (BONoticeBroadcast)getControl().getNoticeList().get(row);
                     JCheckBox checkbox = new JCheckBox();
                     checkbox.setHorizontalAlignment(SwingConstants.CENTER);
+//                    if (column==1) {
+//                        checkbox.setSelected(notice.isSearchEpg());
+//                        return checkbox;
+//                    } else if (column==2) {
+//                        checkbox.setSelected(notice.isSearchMovieGuide());
+//                        return checkbox;
+//                    } else 
                     if (column==1) {
-                        checkbox.setSelected(notice.isSearchEpg());
-                        return checkbox;
-                    } else if (column==2) {
-                        checkbox.setSelected(notice.isSearchMovieGuide());
-                        return checkbox;
-                    } else if (column==3) {
                         checkbox.setSelected(notice.isSearchOnlyTitle());
                         return checkbox;
-                    } else if (column==4) {
+                    } else if (column==2) {
                         checkbox.setSelected(notice.isBuildTimer());
                         return checkbox;
                     } 
                     return checkbox;				
 				}
 			});
-		}
+		
+            TableColumn fnc = jTableNoticeList.getTableHeader().getColumnModel().getColumn(1);
+            jTableNoticeList.getTableHeader().getColumnModel().removeColumn(fnc);
+            TableColumn fnc2 = jTableNoticeList.getTableHeader().getColumnModel().getColumn(1);
+            jTableNoticeList.getTableHeader().getColumnModel().removeColumn(fnc2);
+        }
 		return jTableNoticeList;
 	}
 	/**
@@ -197,4 +218,14 @@ public class GuiNoticeBroadcastView extends JDialog {
 	public void setControl(ControlNoticeBroadcastView control) {
 		this.control = control;
 	}
+    /**
+     * @return Returns the progressScan.
+     */
+    public JProgressBar getProgressScan() {
+        if (progressScan == null){
+            progressScan = new JProgressBar(SwingConstants.HORIZONTAL, 0, 0);
+            progressScan.setStringPainted(true);            
+        }
+        return progressScan;
+    }
 }

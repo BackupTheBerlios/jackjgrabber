@@ -89,8 +89,9 @@ public class BOSender {
 		epg=value;
 	}
 	
-	public void readEpg() throws IOException {
+	public ArrayList readEpg() throws IOException {
         SerNoticeListHandler.containsNotice(ControlMain.getBoxAccess().getEpg(this));
+        return epg;
 	}
 	
 	/* (non-Javadoc)

@@ -25,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import model.BOEpg;
 import model.BONoticeBroadcast;
 import model.BOTimer;
@@ -46,23 +48,46 @@ public class SerNoticeListHandler {
                     for (int i2=0; i2<epgList.size(); i2++) { //Schleife über die Suchtexte
                         BOEpg epg = (BOEpg)epgList.get(i2);
                         
-                        if (notice.isSearchOnlyTitle()) { //Suche nur im Titel
-                            if (notice.getSearchString().indexOf(epg.getTitle())>=0) {
-                                SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
-                            }    
-                        } else { 
+                        if (notice.getSearchString()!=null) {
                             //Suche im Titel
-                            if (notice.getSearchString().indexOf(epg.getTitle())>=0) {
-                                SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
+                            if (epg.getTitle().indexOf(notice.getSearchString())>=0) {
+                                if (notice.isBuildTimer()) {
+                                    SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
+                                    break;    
+                                } else {
+                                    askForBuildTimer(epg, notice);
+                                    break;
+                                }
                             }
-                            //Suche im Titel und EPG-Details
-                            if (epg.getEpgDetail().getText().indexOf(notice.getSearchString())>=0) {
-                                SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
-                            }
+                            
+                            //Suche in den EPG-Details
+                            if (!notice.isSearchOnlyTitle()) { //Suche in den EPG-Details
+                                if (epg.getEpgDetail().getText().indexOf(notice.getSearchString())>=0) {
+                                    if (notice.isBuildTimer()) {
+                                        SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
+                                        break;    
+                                    } else {
+                                        askForBuildTimer(epg, notice);
+                                        break;
+                                    }
+                                }    
+                            }    
                         }
                     }    
                 }
             }    
+        }
+    }
+    
+    private static void askForBuildTimer(BOEpg epg, BONoticeBroadcast notice) {
+        int result = JOptionPane.showConfirmDialog(
+                ControlMain.getControl().getView(),
+                ControlMain.getProperty("msg_builTimer2")+"\n"+'"'+notice.getSearchString()+'"'+"\n\n"+epg.toString(),
+                ControlMain.getProperty("msg_buildTimer"),
+                JOptionPane.YES_NO_OPTION
+        );
+        if (result==0) {
+            SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
         }
     }
     

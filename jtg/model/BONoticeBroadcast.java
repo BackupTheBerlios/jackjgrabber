@@ -24,7 +24,7 @@ public class BONoticeBroadcast {
 	boolean searchEpg=true;
 	boolean searchMovieGuide=false;
 	boolean searchOnlyTitle=true;
-	boolean buildTimer;
+	boolean buildTimer=true;
 
 	/**
 	 * @return Returns the searchString.

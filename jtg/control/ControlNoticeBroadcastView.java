@@ -20,16 +20,22 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import model.BONoticeBroadcast;
+import model.BOSender;
 import presentation.noticeBroadcast.GuiNoticeBroadcastView;
+import service.SerAlertDialog;
+import service.SerNoticeListHandler;
 
 
 public class ControlNoticeBroadcastView implements ActionListener {
 	
 	ArrayList noticeList;
     GuiNoticeBroadcastView noticeView;
+    public Thread scanThread;
+    public boolean runningScan=false;
 
 	public ControlNoticeBroadcastView(ArrayList list) {
 		this.setNoticeList(list);
@@ -42,10 +48,42 @@ public class ControlNoticeBroadcastView implements ActionListener {
         if (action == "delete") {
             this.actionRemoveNoticeEntry();
         }
-        if (action == "add") {
+        else if (action == "add") {
             this.actionAddNoticeEntry();
         }
+        else if (action == "scan") {
+            this.actionScan();
+        }
      }
+    
+    private void actionScan() {
+        if (!runningScan && noticeList.size()>0) {
+            runningScan=true;
+            scanThread = new Thread() {
+                public void run() {
+                    try {
+                        ArrayList senderList = ControlMain.getBoxAccess().getAllSender();
+                        getNoticeView().getProgressScan().setMaximum(senderList.size());
+
+                        for (int i=0; i<senderList.size(); i++) {
+                            if(runningScan) {
+                                SerNoticeListHandler.containsNotice(((BOSender)senderList.get(i)).readEpg());
+                                getNoticeView().getProgressScan().setValue(i+1);
+                                System.out.println(i);
+                            } else {
+                                break;
+                            }
+                        }
+                        runningScan=false;
+                    } catch (IOException e) {
+                        SerAlertDialog.alertConnectionLost("ControlNoticeBroadcastView", getNoticeView());
+                        runningScan=false;
+                    }        
+                } 
+            };
+            scanThread.start();
+        }
+    }
 
 	private void actionAddNoticeEntry() {
         this.getNoticeList().add(new BONoticeBroadcast());

@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import control.ControlMain;
@@ -46,6 +47,11 @@ public class BOEpg {
         return ((BOEpg)o).getEventId().equals(this.getEventId());
     }
 
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy HH:mm");
+        return getSender().getName()+" "+sdf.format(this.getStartdate().getTime())+" "+this.getTitle();
+    }
+    
 	/**
 	 * @return Returns the sender.
 	 */
