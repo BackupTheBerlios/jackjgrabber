@@ -18,6 +18,7 @@ package service;
  */
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -33,6 +34,7 @@ import org.dom4j.Element;
 
 import presentation.GuiMainView;
 
+import control.ControlMain;
 import control.ControlMovieGuideTab;
 
 public class SerMovieGuide2Xml extends Thread{
@@ -43,7 +45,8 @@ public class SerMovieGuide2Xml extends Thread{
     Element movie;
     String path; 
     JProgressBar bar;
-    
+    FileWriter fw = null;
+    boolean storeOrignalMG;
     public SerMovieGuide2Xml(String file, GuiMainView view) {
     		try {
     			mainView=view;
@@ -52,6 +55,7 @@ public class SerMovieGuide2Xml extends Thread{
 				doc = SerXMLHandling.createEmptyMovieguideFile();
 				root = doc.getRootElement();
 				createHashTable();
+				storeOrignalMG = ControlMain.getSettingsMovieGuide().isMgStoreOriginal();
     		} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -123,24 +127,34 @@ public class SerMovieGuide2Xml extends Thread{
     	if (path != null) {
         	con = (new File(path).toURL()).openConnection();
     	} else {
-    		URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
-            con =url.openConnection();
+    		URL url = null;
+    		if(!ControlMovieGuideTab.movieGuideFile.exists()){
+    			url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0,"MM_yy")+".txt");
+    		}else{
+        		url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(1,"MM_yy")+".txt");        	
+    		}    		
+    		if(storeOrignalMG){        		        		            		        		
+        		fw = new FileWriter( url.getFile().substring(18));
+    		}
+    		con =url.openConnection();
     	}
     	return con;
     }
     
-    public void run()  {
-        try {
-        	URLConnection con = this.getConnection();
+    public void run()  {    	
+        try {        	
+        	URLConnection con = this.getConnection();        	
         	int fileLength = con.getContentLength();
             bar.setMaximum(fileLength);
-            BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream(),"ISO8859-1"));
-                        
+            BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream(),"ISO8859-1"));                        
             String input = new String();
             StringBuffer inhalt = new StringBuffer();
             boolean[] lineCounter = new boolean[2];
             int sumValue = 0;
             while ((input = in.readLine()) != null) {
+            	if( (storeOrignalMG) && (path==null) ){
+            		fw.write(input+"\n");
+            	}
             	sumValue = sumValue+input.getBytes().length;
             	bar.setValue(sumValue);				
                 lineCounter = getLineCounter(input);
@@ -160,12 +174,16 @@ public class SerMovieGuide2Xml extends Thread{
             }
             bar.setValue(fileLength);
             SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFile, doc);
-            mainView.getTabMovieGuide().getControl().run();
+            if( (storeOrignalMG) && (path==null)){
+            	fw.close();
+            }
+            mainView.getTabMovieGuide().getControl().run();            
         } catch (MalformedURLException e) {
             System.out.println("MalformedURLException: " + e.getMessage());
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }        
+        
     }
     public static boolean checkNewMovieGuide(){
     	String path = "movieguide.xml";
