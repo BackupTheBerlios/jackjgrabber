@@ -13,6 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import model.BOSender;
 import model.BOTimer;
 import control.ControlEnigmaTimerTab;
+import control.ControlMain;
 
 /*
 GuiEnigmaRecordTimerTableModel.java by Geist Alexander, Treito
@@ -138,21 +139,21 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-		    return "Status";
+		    return ControlMain.getProperty("state");
 		}if (columnIndex == 1) {
-			return "Sender"; 
+			return ControlMain.getProperty("sender"); 
 		//} if (columnIndex == 2) {
 		//	return "Datum";
 		} if (columnIndex == 2) {
-			return "Start";
+			return ControlMain.getProperty("start");
 		} if (columnIndex == 3) {
-			return "Ende";
+			return ControlMain.getProperty("end");
 		} if (columnIndex == 4) {
-			return "Wiederholung";
+			return ControlMain.getProperty("repeat");
 		} if (columnIndex == 5) {
-			return "Nach Aufn.";
+			return ControlMain.getProperty("afterRecord");
 		} else {
-			return "Titel";
+			return ControlMain.getProperty("title");
 		}
 	}
 	

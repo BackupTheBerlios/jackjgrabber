@@ -24,6 +24,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlEnigmaTimerTab;
+import control.ControlMain;
 import control.ControlTab;
 
 /*
@@ -46,7 +47,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 public class GuiEnigmaTimerPanel extends GuiTimerPanel {
-    private static String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
+    private static String[] WOCHENTAGE = {ControlMain.getProperty("monday"), ControlMain.getProperty("tuesday"), ControlMain.getProperty("wednesday"), 
+			ControlMain.getProperty("thursday"), ControlMain.getProperty("friday"), ControlMain.getProperty("saturday"), ControlMain.getProperty("sunday")};
 	public static final int[] WOCHENTAGE_VALUE = {256, 512, 1024, 2048, 4096, 8192, 16384};
 	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
 	private JPanel jPanelDauerTimer = null;
@@ -90,10 +92,10 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Aufnahme-Timer",					cc.xyw  (1, 1, 3));
+		builder.addSeparator(ControlMain.getProperty("label_recordTimer"),					cc.xyw  (1, 1, 3));
 		builder.add(this.getJScrollPaneRecordTimerTable(),   	cc.xyw  (1, 2, 3));
 		builder.add(this.getJPanelDauerTimer(),	 				cc.xyw  (1, 3, 3));
-		builder.addTitle("Aktionen Aufnahme-Timer",				cc.xy    (5, 1));
+		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),				cc.xy    (5, 1));
 		builder.add(this.getJPanelButtonsProgramTimer(), 		cc.xywh(5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
 		builder.add(this.getJPanelButtonsGui(),					cc.xywh(5, 5, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
@@ -229,7 +231,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	
 	public JButton getJButtonDeleteAllProgramTimer() {
 		if (jButtonDeleteAllProgramTimer == null) {
-			jButtonDeleteAllProgramTimer = new JButton("Alle löschen");
+			jButtonDeleteAllProgramTimer = new JButton(ControlMain.getProperty("button_deleteAll"));
 			jButtonDeleteAllProgramTimer.setActionCommand("deleteAllRecordTimer");
 			jButtonDeleteAllProgramTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllProgramTimer.addActionListener(control);
@@ -241,7 +243,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteSelectedProgramTimer() {
 		if (jButtonDeleteSelectedProgramTimer == null) {
-			jButtonDeleteSelectedProgramTimer = new JButton("Selektierte löschen");
+			jButtonDeleteSelectedProgramTimer = new JButton(ControlMain.getProperty("button_deleteSelected"));
 			jButtonDeleteSelectedProgramTimer.setActionCommand("deleteSelectedRecordTimer");
 			jButtonDeleteSelectedProgramTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteSelectedProgramTimer.addActionListener(control);
@@ -253,7 +255,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonNewProgramtimer() {
 		if (jButtonNewProgramtimer == null) {
-			jButtonNewProgramtimer = new JButton("Anlegen");
+			jButtonNewProgramtimer = new JButton(ControlMain.getProperty("button_create"));
 			jButtonNewProgramtimer.setActionCommand("addProgramTimer");
 			jButtonNewProgramtimer.setPreferredSize(new Dimension(150,25));
 			jButtonNewProgramtimer.addActionListener(control);
@@ -263,7 +265,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonSenden() {
 		if (jButtonSenden == null) {
-			jButtonSenden = new JButton("Senden");
+			jButtonSenden = new JButton(ControlMain.getProperty("button_send"));
 			jButtonSenden.setActionCommand("send");
 			jButtonSenden.addActionListener(control);
 			jButtonSenden.setPreferredSize(new Dimension(150,25));
@@ -273,7 +275,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	
 	public JButton getJButtonDeleteAl() {
 		if (jButtonDeleteAll == null) {
-			jButtonDeleteAll = new JButton("Timer aufräumen");
+			jButtonDeleteAll = new JButton(ControlMain.getProperty("button_cleanup"));
 			jButtonDeleteAll.setActionCommand("cleanup");
 			jButtonDeleteAll.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAll.addActionListener(control);
@@ -283,7 +285,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	
 	public JButton getJButtonReload() {
 		if (jButtonReload == null) {
-			jButtonReload = new JButton("Neu laden");
+			jButtonReload = new JButton(ControlMain.getProperty("button_reload"));
 			jButtonReload.setActionCommand("reload");
 			jButtonReload.setPreferredSize(new Dimension(150,25));
 			jButtonReload.addActionListener(control);

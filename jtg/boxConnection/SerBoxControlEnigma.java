@@ -75,7 +75,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    String[] vPid = new String[1];
 		    line=input.readLine();
 		    if (line.length() > 5) {
-		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Zappen, bitte erneut versuchen!");
+		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("err_zapping"));
 		        return pids;
 		    }
 		    vPid[0]=Integer.toHexString(Integer.parseInt(line));
@@ -84,7 +84,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		while((line=input.readLine())!=null) {
 		    String[] aPid = new String[1];
 		    if (line.length() > 5) {
-		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Zappen, bitte erneut versuchen!");
+		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("err_zapping"));
 		        return pids;
 		    }
 		    aPid[0]=Integer.toHexString(Integer.parseInt(line));
@@ -120,7 +120,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public ArrayList getAllSender() throws IOException {
-	    Logger.getLogger("SerBoxControlEnigma").info("Lese Sender");
 	    ArrayList senderList = new ArrayList();
 		String line;
 		String line2="";
@@ -130,7 +129,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		ArrayList readEChannels= new ArrayList();
 		ArrayList readEChannelsRef= new ArrayList();
 		BufferedReader in = getConnection("/body");
-		Logger.getLogger("SerBoxControlEnigma").info("Sender geladen");
 		while ((line = in.readLine()) != null) {
 			if (line.indexOf("channels[0]")>0) {
    		 		channelStart=0;
@@ -160,7 +158,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
     			senderList.add(new BOSender(""+(i+1),(String)readEChannelsRef.get(i),(String)readEChannels.get(i)));
     		}
     	}
-		Logger.getLogger("SerBoxControlEnigma").info("Sender verarbeitet");
         return senderList;
 	}
 	
@@ -331,9 +328,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		ArrayList[] timerList = new ArrayList[2];
 		timerList[0] = new ArrayList();
 		timerList[1] = new ArrayList();
-		Logger.getLogger("SerBoxControlEnigma").info("Lese Timer-Liste");
 		BufferedReader input=getConnection("/body?mode=controlTimerList");
-		Logger.getLogger("SerBoxControlEnigma").info("Timer-Liste gelesen");
 		boolean recurring = false;
 		boolean onetimer=false;
 		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
@@ -447,7 +442,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 				} 
 			}
 		}
-		Logger.getLogger("SerBoxControlEnigma").info("Timer-Liste verarbeitet");
 		return timerList;
 	}
 	public String writeTimer(BOTimer timer) throws IOException {
@@ -529,9 +523,9 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		       	}
 			}
 		    if (success.equals("ok")) { 
-	 		    Logger.getLogger("SerBoxControlEnigma").info("Timer "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description+" erfolgreich übertragen");
+	 		    Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("msg_sentTimer")+" "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description);
 		    } else {
-		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Timer "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description);
+		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("msg_timerError")+" "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description);
 		    }
 		}
 		

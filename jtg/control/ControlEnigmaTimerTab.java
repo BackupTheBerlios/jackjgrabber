@@ -51,9 +51,10 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	ArrayList[] timerList;
 	ArrayList senderList;
 	GuiEnigmaTimerPanel tab;
-	public String[] repeatOptions = { "einmal", "Wochentage" };
-	public String[] timerType = { "Nichts", "Standby", "Shutdown"};
-	public final String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
+	public String[] repeatOptions = { ControlMain.getProperty("once"), ControlMain.getProperty("weekdays")  };
+	public String[] timerType = { ControlMain.getProperty("nothing"), ControlMain.getProperty("standby"), ControlMain.getProperty("shutdown")};
+	public final String[] WOCHENTAGE = {ControlMain.getProperty("monday"), ControlMain.getProperty("tuesday"), ControlMain.getProperty("wednesday"), 
+			ControlMain.getProperty("thursday"), ControlMain.getProperty("friday"), ControlMain.getProperty("saturday"), ControlMain.getProperty("sunday")};
 	public final int[] WOCHENTAGE_VALUE = {512, 1024, 2048, 4096, 8192, 16384, 32768};
 	
 	public ControlEnigmaTimerTab(GuiMainView view) {
@@ -61,19 +62,15 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	}
 	
 	public void initialize() {
-	    Logger.getLogger("ControlEnigmaTimerTab").info("Initialisiere Timer-Panel");
 		this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
 		try {
 			this.setTimerList(ControlMain.getBoxAccess().readTimer());
-			Logger.getLogger("ControlEnigmaTimerTab").info("Befehl refreshTables");
 			this.refreshTables();
-			Logger.getLogger("ControlEnigmaTimerTab").info("Befehl ausgeführt");
 			//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
 		}
-		Logger.getLogger("ControlEnigmaTimerTab").info("Timer-Panel initialisiert");
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -197,21 +194,21 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	private void writeTimer(BOTimer timer) throws IOException {
 		if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
 			if (timer.getModifiedId().equals("cleanup")) {
-			    Logger.getLogger("ControlProgramTab").info("Timer gesäubert");
+			    Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_timerCleanup"));
 			} else if (timer.getModifiedId().equals("deleteall")) {
-			    Logger.getLogger("ControlProgramTab").info("alle Timer gelöscht");
+			    Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_allTimerDeleted"));
 			} else if (timer.getModifiedId().equals("remove")) {
-			    Logger.getLogger("ControlProgramTab").info("Timer wird gelöscht");
+			    Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_deleteTimer"));
 	        } else {
-			    Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
+			    Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_sentTimer")+" "+timer.getInfo());
 			}
 		} else {
 		    if (timer.getModifiedId().equals("cleanup")) {
-		        Logger.getLogger("ControlProgramTab").error("Timer nicht gesäubert");
+		        Logger.getLogger("ControlProgramTab").error(ControlMain.getProperty("err_timerCleanup"));
 			} else if (timer.getModifiedId().equals("deleteall")) {
-			    Logger.getLogger("ControlProgramTab").error("alle Timer nicht gelöscht");
+			    Logger.getLogger("ControlProgramTab").error(ControlMain.getProperty("err_allTimerDeleted"));
 			} else if (timer.getModifiedId().equals("remove")) {
-			    Logger.getLogger("ControlProgramTab").error("Timer wurde nicht gelöscht");
+			    Logger.getLogger("ControlProgramTab").error(ControlMain.getProperty("msg_deleteTimer"));
 	        } else {
 			Logger.getLogger("ControlProgramTab").error(timer.getInfo());
 			throw new IOException();
@@ -269,13 +266,13 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		long timerType=Long.parseLong(timerTypeString);
 	    
 		if ((timerType&256)==256) {
-		    return "erfolgreich";
+		    return ControlMain.getProperty("success");
 		} else if ((timerType&76)==76) {
-		    return "Aufnahme";
+		    return ControlMain.getProperty("recording");
 		} else if ((timerType&44)==44) {
-		    return "offen";
+		    return ControlMain.getProperty("todo");
 		} else {
-		    return "Fehler";
+		    return ControlMain.getProperty("error");
 		}
 	
 	}
@@ -284,17 +281,17 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		int repeatNumber = Integer.parseInt(shortString);
     	switch(repeatNumber) {
 			case 0:
-			return "einmal";
+			return ControlMain.getProperty("once");
 			
     	}
     	if (repeatNumber >1) {
-    		return "Wochentage"; 
+    		return ControlMain.getProperty("weekdays"); 
     	}
     	return new String();
 	}
 	
 	public String convertLongEventRepeat (String longString) {
-		if (longString.equals("einmal")) {
+		if (longString.equals(ControlMain.getProperty("once"))) {
 			return "0";
 		} else {		
 			return "20";
@@ -305,18 +302,18 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	    long timerType=Long.parseLong(shortString);
 	    
 		if ((timerType&134217728)==134217728) {
-		    return "Standby";
+		    return ControlMain.getProperty("standby");
 		} else if ((timerType&67108864)==67108864) {
-		    return "Shutdown";
+		    return ControlMain.getProperty("shutdown");
 		} else {
-		    return "Nichts";
+		    return ControlMain.getProperty("nothing");
 		}
 	}
 	
 	public String convertLongEventType(String longString) {
-	    if (longString.equals("Standby")) {
+	    if (longString.equals(ControlMain.getProperty("standby"))) {
 	        return "134217728";
-	    } else if (longString.equals("Shutdown")) {
+	    } else if (longString.equals(ControlMain.getProperty("shutdown"))) {
 	        return "67108864";
 	    } else {
 	        return "0";
