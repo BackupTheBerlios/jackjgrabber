@@ -160,13 +160,13 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			while((line=input.readLine())!=null) {
 			    if (line.indexOf("vpid:</td><td>")>0) {
 			        startpos=(line.indexOf("vpid:</td><td>")+14);
-			        pids.setVPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos)+1)), "video", 0));
+			        pids.setVPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos))), "video", 0));
 			        
 			    }
 			    if (line.indexOf("tpid:</td><td>")>0) {
 			        startpos=(line.indexOf("tpid:</td><td>")+14);
 			        if ((line.indexOf("h",startpos)-startpos)<5) {
-			        	 pids.setVtxtPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos)+1)), "vtxt", 2));
+			        	 pids.setVtxtPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos))), "vtxt", 2));
 			        }
 			    }
 			}
@@ -177,7 +177,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    	startpos=0;
 		    	while ((startpos=line.indexOf("value=", startpos+1))> 1) {
 		    		endpos=line.indexOf("\"", startpos+7);
-		    		pids.getAPids().add(new BOPid(line.substring(startpos+9, endpos)+"h",line.substring(endpos+2,line.indexOf("<", endpos)), 1));
+		    		pids.getAPids().add(new BOPid(line.substring(startpos+9, endpos),line.substring(endpos+2,line.indexOf("<", endpos)), 1));
 		    	}
 		    } else {
 					throw new IOException();
@@ -447,8 +447,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					endpos=line.indexOf("&type=", startpos);
 					title=line.substring(startpos+7,endpos);
 					startpos=endpos;
-					endpos=line.indexOf("\')", startpos);
-					endpos2=line.indexOf("\")", startpos);
+					endpos=line.indexOf("\')", startpos+1);
+					endpos2=line.indexOf("\")", startpos+1);
 					if (((endpos<startpos)|endpos2<endpos)&(endpos2>startpos)) {
 					    endpos=endpos2;
 					}
@@ -492,11 +492,11 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    			botimer.announceTime=""; //vorwarnzeit
 	    			botimer.unformattedStartTime=startDate;  //startDatum
 	    			botimer.unformattedStopTime=endDate;
-	    			botimer.description=title;
+	    			botimer.description=title.replaceAll("&quote;","\"");
 	    			botimer.timerNumber=("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
 	    			botimer.getLocalTimer().setLocal(false);
 	    			if (((Long.parseLong(timerType) & 2) ==2) | ((Long.parseLong(timerType) & 65536) == 65536)) { //switch-Timer | System-Timer
-	    				timerList.getSystemTimerList().add(botimer);
+	    				//timerList.getSystemTimerList().add(botimer);
 	    			} else {
 	    				timerList.getRecordTimerList().add(botimer);
 	    			}
@@ -536,6 +536,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    long alarm = (timer.getUnformattedStartTime().getTimeInMillis())/1000;
 			long stop = (timer.getUnformattedStopTime().getTimeInMillis())/1000;
 			title=title.replaceAll(" ","%20");
+			title=title.replaceAll("\"", "&quote;");
 			title=title.replaceAll("&","und");
 		    long duration=stop-alarm;
 		    long repeatId=Long.parseLong(repeat);
