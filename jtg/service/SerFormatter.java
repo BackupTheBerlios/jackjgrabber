@@ -53,4 +53,12 @@ public class SerFormatter {
 	      sourcestring = sourcestring.substring(0, i) + newString + sourcestring.substring(i + stringToReplace.length());
 	    return sourcestring;
 	  }
+	
+	public static Date setCorrectYear(Date datum){
+		GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );                        
+        int i = cal.get(GregorianCalendar.YEAR);            
+        cal.setTimeInMillis(datum.getTime());
+        cal.set(GregorianCalendar.YEAR, i);
+        return cal.getTime();
+    }
 }
