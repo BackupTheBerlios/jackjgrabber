@@ -70,5 +70,12 @@ public class SerFormatter {
 		dauer/=60; 
 		int stunden = dauer;
 		return out(stunden)+":"+out(minuten);      
-	}                    
+	}
+	
+	public static String getPrettyDateFormat(GregorianCalendar cal) {
+		String date = Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+		String month = Integer.toString(cal.get(Calendar.MONTH));
+		String year = Integer.toString(cal.get(Calendar.YEAR));
+		return date+"."+month+"."+year;
+	}
 }
