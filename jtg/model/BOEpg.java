@@ -22,6 +22,8 @@ public class BOEpg {
 	Date startDate, endDate;
 	BOEpgDetails epgGetail;
 	
+	public BOEpg() {}
+	
 	public BOEpg(BOSender sender, String eventId, String startTime, Date startDate, 
 			String endTime, Date endDate, String duration, String title) {		
                 this.setSender(sender);
@@ -32,6 +34,10 @@ public class BOEpg {
 		this.setStartTime(startTime);
 		this.setTitle(title);
                 this.setStartDate(startDate);
+	}
+	
+	public String getInfo() {
+		return this.getStartTime()+" "+this.getTitle();
 	}
 
 	/**
