@@ -90,7 +90,7 @@ public class ControlStartTab extends ControlTab {
             warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_vlc"), "red");
 	    }
 	    
-	    if (!mplex.exists()) {
+	    if (mplex!= null && !mplex.exists()) {
 	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_mplex"), "red");
 	    }
 	    
