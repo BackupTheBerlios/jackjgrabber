@@ -111,7 +111,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		try {
           this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());          
           if(getSettings().getMgLoadType()==1){
-          	if(SerMovieGuide2Xml.checkNewMovieGuide()){
+          	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){
           		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
           	}else{
           		if( (SerMovieGuide2Xml.checkNewMovieGuide()) && (!movieGuideFileNext.exists())){
