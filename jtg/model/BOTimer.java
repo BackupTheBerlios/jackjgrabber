@@ -100,6 +100,11 @@ public class BOTimer extends java.lang.Object{
     	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
+    public String getShortStartDate (){
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM");
+    	return sdf.format(this.getUnformattedStartTime().getTime());
+    }
+    
     public String getShortStartTime (){
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	return sdf.format(this.getUnformattedStartTime().getTime());

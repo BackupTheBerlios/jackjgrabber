@@ -389,7 +389,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			if ((indexSearchString = line.indexOf(searchString))>0) {
 				for (int i=0; i<timerList.size(); i++) {
 					BOTimer timer = (BOTimer)timerList.get(i);
-					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0 && line.indexOf(timer.getShortStartTime())>0) {
+					if (timer.getSenderName() != null && 
+					        line.indexOf(timer.getSenderName())>0 &&
+					        line.indexOf(timer.getShortStartDate())>0 &&
+					        line.indexOf(timer.getShortStartTime())>0) {
 						indexIdentifier= line.indexOf(">", indexSearchString);
 						timer.description=line.substring(indexIdentifier+1, line.length()-4);
 					}
