@@ -147,7 +147,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
 			builder.add(this.getJScrollPaneTimer(),			cc.xy	(1, 1));			
-			builder.add(this.getJScrollPaneInfo(), 				cc.xy	(1, 2));	
+			builder.add(this.getJScrollPaneInfo(), 			cc.xy	(1, 2));	
 			builder.add(this.getJScrollPaneDarsteller(), 	cc.xy	(1, 3));
 			builder.add(this.getJScrollPaneEpisode(), 		cc.xy	(1, 4));
 			builder.add(this.getJScrollPaneLand(), 			cc.xy	(1, 5));				
@@ -366,11 +366,11 @@ public class GuiTabMovieGuide extends JPanel {
 			mgTimerTableSorter = new GuiMovieGuideTimerTableSorter(mgTimerTableModel);
 			jTableTimer = new JTable(mgTimerTableSorter);
 			mgTimerTableSorter.setTableHeader(jTableTimer.getTableHeader());									 
-			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(275);
+			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(200);
 			jTableTimer.getColumnModel().getColumn(1).setMaxWidth(45);
 			jTableTimer.getColumnModel().getColumn(2).setMaxWidth(45);
 			jTableTimer.getColumnModel().getColumn(3).setMaxWidth(45);		
-			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(90);
+			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(165);			
 			jTableTimer.addMouseListener(control);
 			jTableTimer.setName("timerTable");
 		}
@@ -475,8 +475,7 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 
 	public JComboBox getComboBoxGenre(){
-		if (comboBoxGenre == null) {			
-			//comboBoxGenre = new JComboBox(this.getControl().getGenreList().toArray());
+		if (comboBoxGenre == null) {					
 			comboBoxGenre = new JComboBox();
 			comboBoxGenre.setModel(new GuiMovieGuideGenreComboModel(this.getControl()));
 			comboBoxGenre.addItemListener(control);
@@ -485,8 +484,7 @@ public class GuiTabMovieGuide extends JPanel {
 		return comboBoxGenre;
 	}
 	public JComboBox getComboBoxSender(){
-		if (comboBoxSender == null) {			
-			//comboBoxSender = new JComboBox(this.getControl().getSenderList().toArray());
+		if (comboBoxSender == null) {						
 			comboBoxSender = new JComboBox();
 			comboBoxSender.setModel(new GuiMovieGuideSenderComboModel(this.getControl()));
 			comboBoxSender.addItemListener(control);
@@ -495,13 +493,11 @@ public class GuiTabMovieGuide extends JPanel {
 		return comboBoxSender;
 	}
 	public JComboBox getComboBoxDatum() {
-		if (comboBoxDatum == null) {						
-			//comboBoxDatum = new JComboBox(this.getControl().getDatumList().toArray());
+		if (comboBoxDatum == null) {									
 			comboBoxDatum = new JComboBox();
 			comboBoxDatum.setModel(new GuiMovieGuideDatumComboModel(this.getControl()));
 			comboBoxDatum.addItemListener(this.getControl());
-			comboBoxDatum.setName("jComboBoxDatum");
-			//comboBoxDatum.setSelectedItem(SerFormatter.getDatumToday());
+			comboBoxDatum.setName("jComboBoxDatum");			
 		}
 		return comboBoxDatum;
 	}

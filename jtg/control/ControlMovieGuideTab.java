@@ -41,6 +41,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import presentation.GuiMainView;
+
+import presentation.GuiTabMovieGuide;
 import presentation.MovieGuideFilmTableModel;
 import presentation.MovieGuideTimerTableModel;
 import service.SerFormatter;
@@ -51,6 +53,7 @@ import service.SerXMLHandling;
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener  {
 	
 	GuiMainView mainView;
+	GuiTabMovieGuide tab;
 	BOMovieGuide boMovieGuide4Timer;
 	boolean initialized = false;
 
@@ -74,18 +77,19 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 
 	public void initialize() {
-		try{
+		try{			
 			initialized = true;
+			this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
 			setRootElement();
 			if(this.getTitelMap()==null){				
 				setTitelMap();
 			}
 		}catch (Exception ex){}	
 		if(this.getTitelMap()!=null){
-			this.getMainView().getTabMovieGuide().getComboBoxGenre().setSelectedIndex(0);
-			this.getMainView().getTabMovieGuide().getComboBoxSender().setSelectedIndex(0);
-			this.getMainView().getTabMovieGuide().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
-			this.getMainView().getTabMovieGuide().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet			
+			this.getTab().getComboBoxGenre().setSelectedIndex(0);
+			this.getTab().getComboBoxSender().setSelectedIndex(0);
+			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
+			this.getTab().mgFilmTableSorter.setSortingStatus(0,2);		//alphabetisch geordnet
 		}
 	}
 
@@ -103,7 +107,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			getTimerTableSelectToTimer();
 		}
 		if (action == "suchen") {					
-			setSelectedItemJComboBox(this.getMainView().getTabMovieGuide().getTfSuche().getText());	
+			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());	
 			reInitFilmTable(getSelectedItemJComboBoxSucheNach());						
 		}
 		if (action == "allDates") {
@@ -142,7 +146,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	private void setSelectedItemJComboBox(String value){
-		SelectedItemJComboBox = value;
+		this.SelectedItemJComboBox = value;
 	}
 	
 	public String getSelectedItemJComboBox(){
@@ -150,17 +154,17 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	public Integer getSelectRowFilmTable(){				
-		if (this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow())<=0){
+		if (this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow())<=0){
 			return new Integer(0);
 		}else{			
-			return new Integer(this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
+			return new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 		}
 	}
 	public int getSelectRowTimerTable(){				
-		if (this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow())<=0){
+		if (this.getTab().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow())<=0){
 			return 0;
 		}else{			
-			return this.getMainView().getTabMovieGuide().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
+			return this.getTab().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
 		}
 	}
 	
@@ -175,7 +179,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		JTable table = (JTable) me.getSource();
 		String tableName = table.getName();								
 		if (tableName == "filmTable") {				
-			reInitTable(new Integer(this.getMainView().getTabMovieGuide().mgFilmTableSorter.modelIndex(table.getSelectedRow())));			
+			reInitTable(new Integer(this.getTab().mgFilmTableSorter.modelIndex(table.getSelectedRow())));			
 		}
 		if (tableName == "timerTable") {		
 			if(me.getClickCount()>=2){ 						
@@ -186,14 +190,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	
 	private void reInitTable(Integer modelIndex){
 		setBOMovieGuide4Timer((BOMovieGuide)getTitelMap().get(modelIndex));			
-		this.getMainView().getTabMovieGuide().getTaEpisode().setText("Episode: "+getBOMovieGuide4Timer().getEpisode());			  		
-		this.getMainView().getTabMovieGuide().getTfGenre().setText("Genre: "+getBOMovieGuide4Timer().getGenre());		
-		this.getMainView().getTabMovieGuide().getTaLand().setText("Produktion: "+getBOMovieGuide4Timer().getLand()+" / "+getBOMovieGuide4Timer().getJahr()+" / Regie: "+getBOMovieGuide4Timer().getRegie());
-		this.getMainView().getTabMovieGuide().getTaAudioVideo().setText("Audio: "+getBOMovieGuide4Timer().getTon()+" / Video: "+getBOMovieGuide4Timer().getBild());											
-		this.getMainView().getTabMovieGuide().getTaDarsteller().setText("Darsteller: "+getBOMovieGuide4Timer().getDarsteller());
-		this.getMainView().getTabMovieGuide().getTaDarsteller().setCaretPosition(0);
-		this.getMainView().getTabMovieGuide().getTaBeschreibung().setText("Inhalt: "+getBOMovieGuide4Timer().getInhalt());
-		this.getMainView().getTabMovieGuide().getTaBeschreibung().setCaretPosition(0);
+		this.getTab().getTaEpisode().setText("Episode: "+getBOMovieGuide4Timer().getEpisode());			  		
+		this.getTab().getTfGenre().setText("Genre: "+getBOMovieGuide4Timer().getGenre());		
+		this.getTab().getTaLand().setText("Produktion: "+getBOMovieGuide4Timer().getLand()+" / "+getBOMovieGuide4Timer().getJahr()+" / Regie: "+getBOMovieGuide4Timer().getRegie());
+		this.getTab().getTaAudioVideo().setText("Audio: "+getBOMovieGuide4Timer().getTon()+" / Video: "+getBOMovieGuide4Timer().getBild());											
+		this.getTab().getTaDarsteller().setText("Darsteller: "+getBOMovieGuide4Timer().getDarsteller());
+		this.getTab().getTaDarsteller().setCaretPosition(0);
+		this.getTab().getTaBeschreibung().setText("Inhalt: "+getBOMovieGuide4Timer().getInhalt());
+		this.getTab().getTaBeschreibung().setCaretPosition(0);
 		setTimerTableSize(getBOMovieGuide4Timer().getDatum().size());
 		reInitTimerTable();
 	}
@@ -222,31 +226,36 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	*/
 	
 	private void getTimerTableSelectToTimer(){
-		BOTimer botimer = new BOTimer();  //FIXME timer aufbauen
-		BOTimer timer = new BOTimer();		
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60;
-		
+		BOTimer botimer = new BOTimer();  //FIXME timer aufbauen			
+		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60*1000*-1;
+		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60*1000;
+		int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*60*1000*-1;
+		int modelIndexTimer=getSelectRowTimerTable();
 		
 		// timer
 			botimer.setModifiedId("new");
 		//	botimer.setChannelId(this.getSelectedSender().getChanId());
 		//	botimer.setSenderName(this.getSelectedSender().getName());
-		//	botimer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
-		//	botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart-timeBefore));
-		//	botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime+timeAfter));
+			botimer.setAnnounceTime(Long.toString(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeAnnounce))); //Vorwarnzeit
+			botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore)));
+			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter)));
 			botimer.setEventRepeatId("0");
 			botimer.setEventTypeId("5");
-			botimer.setDescription(getBOMovieGuide4Timer().getTitel()); 
+			botimer.setDescription(getBOMovieGuide4Timer().getTitel());
+	
 		//
+		/*
+		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeAnnounce)));		
+		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore)));
+		System.out.println(SerFormatter.getShortTime(SerFormatter.getStringToLongWithTime(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]+","+getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter)));
 		
-		int modelIndexTimer=getSelectRowTimerTable();
 		System.out.println(getBOMovieGuide4Timer().getTitel());
 		System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
 		System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);
 		System.out.println(getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer]);
 		System.out.println(getBOMovieGuide4Timer().getDauer().toArray()[modelIndexTimer]);
-		System.out.println(getBOMovieGuide4Timer().getSender().toArray()[modelIndexTimer]); //FIXME senderid holen		
+		System.out.println(getBOMovieGuide4Timer().getSender().toArray()[modelIndexTimer]); //FIXME senderid holen
+		*/
 	}
 	
     private void setTimerTableSize(int size){
@@ -475,29 +484,20 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				}
 			}
 		} catch (Exception ex) {System.out.println(ex);}				
-		titelListAktuell = new Hashtable();   // Table aufbauen für den Heutigen Tag
-    	Iterator i = titelList.entrySet().iterator();
-    	int a = 0;
-    	while (i.hasNext()){
-    		Map.Entry entry = (Map.Entry)i.next();
-    		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();
-    		if(bomovieguide.getDatum().contains(SerFormatter.getDatumToday())){
-    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    		}
-    	}       	
+		setTitelMapSelected(SerFormatter.getDatumToday(),1);  // TitelMap für den heutigen Tag		    	
 	}
     
     
     public JTable getJTableFilm() {
-		return this.getMainView().getTabMovieGuide().getJTableFilm();
+		return this.getTab().getJTableFilm();
 	}
     
     public JTable getJTableTimer() {
-		return this.getMainView().getTabMovieGuide().getJTableTimer();
+		return this.getTab().getJTableTimer();
 	}
     
     private MovieGuideTimerTableModel getMovieGuideTimerTableModel() {
-		return this.getMainView().getTabMovieGuide().getGuiMovieGuideTimerTableModel();
+		return this.getTab().getGuiMovieGuideTimerTableModel();
 	}
     
     public void reInitTimerTable() {
@@ -507,12 +507,21 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
     
 	private MovieGuideFilmTableModel getMovieGuideFilmTableModel() {
-		return this.getMainView().getTabMovieGuide().getMovieGuideFilmTableModel();
+		return this.getTab().getMovieGuideFilmTableModel();
 	}
 	
 	public void reInitFilmTable(int value) {
 		if (this.getMainView().getMainTabPane().tabMovieGuide != null) { 
 			this.getMovieGuideFilmTableModel().fireTableDataChanged(value);
 		}
+	}
+	public GuiTabMovieGuide getTab() {
+		return tab;
+	}
+	/**
+	 * @param tab The tab to set.
+	 */
+	public void setTab(GuiTabMovieGuide tab) {
+		this.tab = tab;
 	}
 }

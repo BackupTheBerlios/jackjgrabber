@@ -117,4 +117,28 @@ public class SerFormatter {
     	DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
     	return formater2.format(cal.getTime()).toString();
     }
+    public static String getShortDate(long i){    
+		SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MMM.yy");
+		return sdf.format(new Date(i));               
+    }
+    public static long getStringToLong(String start){    
+        long value = 0L;	
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd. MMMM yyyy");		                
+        GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );        
+        try{              
+            cal.setTimeInMillis(formatter.parse(start).getTime());                                                
+            value = cal.getTimeInMillis();
+        }catch(Exception ex){}
+        return value;
+    }
+    public static long getStringToLongWithTime(String start,long time){    
+        long value = 0L;	
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd. MMMM yyyy,HH:mm");		                
+        GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );        
+        try{              
+            cal.setTimeInMillis(formatter.parse(start).getTime()+time);                                                
+            value = cal.getTimeInMillis();
+        }catch(Exception ex){}
+        return value;
+    }
 }
