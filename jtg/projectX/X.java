@@ -4598,17 +4598,8 @@ public static String[] getTerms()
  ************/
 public static void Msg(String msg)
 {
-	if (options[30]==1) 
-		System.out.println(msg); 
-
-	if (running) 
-		System.out.println("\r"+msg); 
-
-	else
-	{
-		TextArea.append("\r\n"+msg);
-		viewport.setViewPosition(new Point(0,TextArea.getHeight()));
-	}
+	TextArea.append("\r\n"+msg);
+	viewport.setViewPosition(new Point(0,TextArea.getHeight()));
 	messagelog += "\r\n"+msg;
 }
 
