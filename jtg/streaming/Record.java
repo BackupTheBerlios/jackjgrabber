@@ -17,7 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +48,11 @@ public class Record {
 	UdpReceiver udpReceiver;
 	TcpReceiver tcpReceiver;
 	Socket tcpSocket;
+	PrintWriter outputStream;
+	InputStream inputStream;
 	String boxIp;
 	public String avString;
+	boolean running = true; 
 	String[] dboxArgs;	
 	
 	public Record(BORecordArgs args, RecordControl control) {
@@ -60,45 +62,63 @@ public class Record {
 	}
 	
 	public void start() {
+	    Logger.getLogger("Record").info("Start Recording, please wait...");
+	    if (sendRequest()) {
+	        startRecord();
+	    }
+	}
+	
+	private boolean sendRequest() {
 		try {
-			tcpSocket = new Socket(boxIp,31340);
-			
-			PrintWriter out = new PrintWriter(tcpSocket.getOutputStream());	
-			String requestString = this.getRequestString();
-			out.write(requestString+"\n");
-			out.flush();
-			Logger.getLogger("Record").info("to DBox: "+requestString);
-
-			boolean isPid = false;
-			InputStream input = tcpSocket.getInputStream();
-			do {
-				byte[] buffer = new byte[1024];
-				
-				int length = input.read(buffer);
-				String[] replyString = new String(buffer, 0, length).split("\n");
-				
-				for (int i=0; i<replyString.length; i++) {
-				    String s = replyString[i];
-					if (s == "") continue;
-					if (s == "EXIT") {
-						recordControl.stopRecord();
-					}
-					Logger.getLogger("Record").info("from DBox: "+s);
-					if (0 < this.parseDBoxReply(s, spktBufNum)) isPid = true;
-				}
-			} while(!isPid);
-			
-			out.write("START\n");
-			out.flush();
-
-			udpReceiver = new UdpReceiver(this);
-			tcpReceiver = new TcpReceiver(this);
-			udpReceiver.start();
-			tcpReceiver.start();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("Record", ControlMain.getControl().getView());
-			recordControl.stopRecord();
-		}
+		    tcpSocket = new Socket(boxIp,31340);
+	        udpReceiver = new UdpReceiver(this);
+	        tcpReceiver = new TcpReceiver(this);
+            outputStream = new PrintWriter(tcpSocket.getOutputStream());
+            
+            String requestString = this.getRequestString();
+            if (running) { //vorzeitiger Stop möglich
+                outputStream.write(requestString+"\n");
+                outputStream.flush();
+            	Logger.getLogger("Record").info("to DBox: "+requestString);
+            	return true;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            SerAlertDialog.alertConnectionLost("Record", ControlMain.getControl().getView());
+            return false;
+        }
+	}
+	
+	private void startRecord() {
+		try {
+            boolean isPid = false;
+            inputStream = tcpSocket.getInputStream();
+            do {
+            	byte[] buffer = new byte[1024];
+            	
+            	int length = inputStream.read(buffer);
+            	String[] replyString = new String(buffer, 0, length).split("\n");
+            	
+            	for (int i=0; i<replyString.length; i++) {
+            	    String s = replyString[i];
+            		if (s == "") continue;
+            		if (s == "EXIT") {
+            			recordControl.stopRecord();
+            		}
+            		Logger.getLogger("Record").info("from DBox: "+s);
+            		if (0 < this.parseDBoxReply(s, spktBufNum)) isPid = true;
+            	}
+            } while(!isPid);
+            if (running) {
+                outputStream.write("START\n");
+                outputStream.flush();
+            }
+            udpReceiver.start();
+            tcpReceiver.start();
+        } catch (IOException e) {
+            SerAlertDialog.alertConnectionLost("Record", ControlMain.getControl().getView());
+        }
 	}
 	
 	public String getRequestString() {
@@ -180,12 +200,16 @@ public class Record {
 		return name;
 	}
 	
-	public void stop()
-	{
-	    udpReceiver.closeSocket();
-	    tcpReceiver.closeSocket();
-	    for (int i=0; i<writeStream.length; i++) {
-	        writeStream[i].stop();
-	    }
+	public void stop() {
+	    running = false;
+	    try {
+	        udpReceiver.closeSocket();
+	        tcpReceiver.closeSocket();
+            for (int i=0; i<writeStream.length; i++) {
+                writeStream[i].stop();
+            }
+        } catch (NullPointerException e) {
+            //doNothing Aufnahmeabbruch vor dem Start
+        }   
 	}
 }

@@ -34,7 +34,6 @@ public class TcpReceiver extends Thread {
 
 	Socket tcpSocket;
 	Record record;
-	public boolean isStopped = false;
 	
 	public TcpReceiver(Record stream) {
 		record = stream;
@@ -46,7 +45,7 @@ public class TcpReceiver extends Thread {
 			byte[] reply = new byte[1000];
 			int len;
 			
-			while (!isStopped) {
+			while (record.running) {
 				len = tcpSocket.getInputStream().read(reply);
 				if (len == 0) {
 					continue;
@@ -61,7 +60,7 @@ public class TcpReceiver extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			if (isStopped) {
+			if (!record.running) {
 				//Do nothing, Socket wurde regulaer geschlossen
 			} else {
 				SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
@@ -71,14 +70,11 @@ public class TcpReceiver extends Thread {
 	}
 	
 	public void closeSocket() {
-		isStopped = true;
-		if (tcpSocket.isBound()) {
-			try {
-				tcpSocket.close();
-				Logger.getLogger("TcpReceiver").info("TcpReceiver stopped");
-			} catch (IOException e) {
-				Logger.getLogger("TcpReceiver").error("Unable to stop Tcp-Socket");
-			}
+		try {
+			tcpSocket.close();
+			Logger.getLogger("TcpReceiver").info("TcpReceiver stopped");
+		} catch (IOException e) {
+			Logger.getLogger("TcpReceiver").error("Unable to stop Tcp-Socket");
 		}
 	}
 

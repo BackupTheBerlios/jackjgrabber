@@ -32,7 +32,6 @@ import control.ControlMain;
  */
 public class UdpReceiver extends Thread {
 	
-	public boolean isStopped = false;
 	public long packetCount = 0;
 	DatagramSocket udpSocket;
 	Record record; 
@@ -49,28 +48,30 @@ public class UdpReceiver extends Thread {
 			int curStatus = 0;
 			
 			do {			
-				if (isStopped) break;
+				if (!record.running) break;
 				udpSocket.receive( udpPacket.packet);
 				curStatus = udpPacket.getPacketStatus();					
 				record.writeStream[udpPacket.getStream()].write(udpPacket);
 				packetCount++;
-			} while (curStatus != 2 && !isStopped);		
+			} while (curStatus != 2 && record.running);		
 		} catch (IOException e) {
-			if (isStopped) {
+			if (!record.running) {
 				//Do nothing, regulaerer Stop
 			} else {
+			    e.printStackTrace();
 				SerAlertDialog.alertConnectionLost("UdpReceiver", ControlMain.getControl().getView());
 			    record.recordControl.stopRecord();
 			}
 		}
 	}
 	
-	public void closeSocket() {
-		isStopped = true;
-		if (udpSocket.isBound()) {
-			isStopped=true;
-			udpSocket.close();
-			Logger.getLogger("UdpReceiver").info("UdpReceiver stopped");
-		}
+	public boolean closeSocket() {
+	    try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {}
+		udpSocket.disconnect();
+		udpSocket.close();
+		Logger.getLogger("UdpReceiver").info("UdpReceiver stopped");
+		return true;
 	}
 }
