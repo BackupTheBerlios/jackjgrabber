@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
+import projectX.X;
 
 /**
  * @author Alexander Geist
@@ -109,6 +110,10 @@ public class ControlMainView implements ActionListener, ChangeListener {
 			ControlMain.detectImage();
 			pane.getTabProgramm().getControl().reInitialize();
 			ControlMain.getSettings().setBoxIpChanged(false);
+		}
+//		Change-Event beim Verlassen des ProjectX-Tabs
+		if (pane.getIndex()==2) {
+			X.inisave();
 		}
 		
 		//Change-Events bei betreten neuer Tabs
