@@ -255,7 +255,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		String line, line2;
 		String eventId=epg.getEventId();	
 		BufferedReader input = getConnection("/EPGDetails?ID="+eventId+"&ref="+sender.getChanId());
-		System.out.println("/EPGDetails?&ID="+eventId+"&ref="+sender.getChanId());
 		while((line=input.readLine())!=null) {
 		    if (line.indexOf("</h1") > 0) {
 		        while((line2=input.readLine())!=null) {
@@ -264,7 +263,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                    text+="\n";
 		                }
 		                text+=line2.trim();
-		                System.out.println(text);
 		            } else {
 		                epgDetail.setText(text);
 		        		epg.setEpgDetail(epgDetail);
