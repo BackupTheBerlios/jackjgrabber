@@ -96,6 +96,10 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 				if (event.getStateChange() == 1) {
 					if (comboBox.getName().equals("theme")) {
 						getSettings().setThemeLayout((String) comboBox.getSelectedItem());
+						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
+						{
+							ControlMain.getControl().getView().setLookAndFeel();
+						}
 						break;
 					}
 					if (comboBox.getName().equals("locale")) {
@@ -105,6 +109,10 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 					if (comboBox.getName().equals("lookAndFeel")) {
 						String lookAndFeel = ((LookAndFeelHolder)comboBox.getSelectedItem()).getLookAndFeelClassName();
 						getSettings().setLookAndFeel(lookAndFeel);
+						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
+						{
+							ControlMain.getControl().getView().setLookAndFeel();
+						}
 						break;
 					}
 				}
