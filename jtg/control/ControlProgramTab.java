@@ -518,9 +518,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			if (oldSelectedBox != null) {
 				oldSelectedBox.setSelected(false); //alte Box zurücksetzen!
 			}
-			ControlMain.setActiveBox(newSelectedBox);
-			newSelectedBox.setSelected(true);
-			ControlMain.detectImage();
+			ControlMain.newBoxSelected(newSelectedBox);
 			this.reInitialize();
 		}
 	}
