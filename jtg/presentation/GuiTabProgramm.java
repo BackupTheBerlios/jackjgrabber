@@ -20,6 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableColumn;
 
 import calendar.JDateChooser;
 
@@ -68,6 +69,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JDateChooser jDateChooser = null;
 	private JScrollPane jScrollPaneEPGDetail = null;
 	private JScrollPane jScrollPaneAusgabe = null;
+	public GuiEpgTableSorter sorter = null;
 	
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
@@ -312,11 +314,15 @@ public class GuiTabProgramm extends GuiTab {
 	public JTable getJTableEPG() {
 		if (jTableEPG == null) {
 			epgTableModel = new GuiEpgTableModel(control);
-			GuiEpgTableSorter sorter = new GuiEpgTableSorter(epgTableModel);
+			sorter = new GuiEpgTableSorter(epgTableModel);
 			jTableEPG = new JTable(sorter);
 			sorter.setTableHeader(jTableEPG.getTableHeader());
 			
 			jTableEPG.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			
+			TableColumn eventIdColumnt = jTableEPG.getColumnModel().getColumn(0);
+			jTableEPG.getTableHeader().getColumnModel().removeColumn(eventIdColumnt); 
+
 			jTableEPG.getColumnModel().getColumn(3).setPreferredWidth(280);
 			jTableEPG.addMouseListener(control);
 			jTableEPG.setName("Epg");
