@@ -302,7 +302,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		String line, channelID=new String(), eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String(), channel=new String();
 		String valueStart, valueDuration, timerType;
 		String eventRepeatId="0";
-		int startpos, endpos, endpos2;
+		int startpos, startpos2; endpos, endpos2;
 		while ((line = input.readLine()) != null) {
 			if ((line.indexOf("Recurring Timer Events")>0)|(line.indexOf("Repeating Timer Events")>0)) {
 				recurring=true;
@@ -318,6 +318,12 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					eventRepeatId="0";
 				    endpos=line.indexOf("javascript:editTimerEvent", startpos);
 					startpos=line.indexOf("(\'ref=",endpos);
+					if (startpos==0) {
+					    startpos2=line.indexOf("(\"ref=",endpos);
+					    if (startpos2>0) {
+					        startpos=startpos2;
+					    }
+					}
 					endpos=line.indexOf("&start=", startpos);
 					channelID=line.substring(startpos+6,endpos);
 					startpos=endpos;
