@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
-import projectX.X;
 
 /**
  * @author Alexander Geist
@@ -106,6 +105,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		//Change-Event beim Verlassen des Setting-Tabs
 		if (pane.getIndex()==3 && ControlMain.getSettings().isBoxIpChanged()) {
 			ControlMain.detectImage();
+			this.log("Standard-Box changed to"+ControlMain.getBoxIp());
 			pane.getTabProgramm().getControl().reInitialize();
 			ControlMain.getSettings().setBoxIpChanged(false);
 		}
