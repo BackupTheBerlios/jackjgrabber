@@ -12,6 +12,7 @@ import com.jgoodies.plaf.plastic.theme.DesertBlue;
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlSettingsTab;
+import control.ControlTimerTab;
 
 /*
  * Created on 31.08.2004
@@ -23,6 +24,7 @@ public class GuiMainView extends JFrame {
 	private JTabbedPane mainTabPane = null;
 	public GuiTabProgramm tabProgramm = null;
 	private GuiTabSettings tabSettings = null;
+	private GuiTabTimer tabTimer=null;
 	private ControlMain control;    
 	
 	/**
@@ -64,7 +66,9 @@ public class GuiMainView extends JFrame {
 			mainTabPane.setDoubleBuffered(true);
 			
 			mainTabPane.addTab("Programm", null, getTabProgramm(), null);
+			mainTabPane.addTab("Timerliste", null, getTabTimer(), null);
 			mainTabPane.addTab("Settings", null, getTabSettings(), null);
+			
 		}
 		return mainTabPane;
 	}
@@ -79,6 +83,17 @@ public class GuiMainView extends JFrame {
 			tabProgramm = new GuiTabProgramm(control);
 		}
 		return tabProgramm;
+	}
+	
+	/**
+	 * Aufbau des Tabs Timerliste		
+	 */    
+	public GuiTabTimer getTabTimer() {
+		if (tabTimer == null) {
+			ControlTimerTab control = new ControlTimerTab(this);
+			tabTimer = new GuiTabTimer(control);
+		}
+		return tabTimer;
 	}
 	
 	/**
