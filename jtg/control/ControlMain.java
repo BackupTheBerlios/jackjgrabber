@@ -206,14 +206,6 @@ public class ControlMain {
 		}
 		return -1;
 	}
-	
-	public static String getVlcPath() {
-		return (String)getSettings().getVlcPath();
-	}	
-	public static void setVlcPath(String boxIp) {
-		getSettings().setVlcPath(boxIp);
-	}
-	
 	/**
 	 * @return Returns the settings.
 	 */
