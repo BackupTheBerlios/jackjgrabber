@@ -30,7 +30,7 @@ public class BOSettingsLayout {
 
 	private int recordInfoDirectorySplitPos;
 
-	private Point locationOfTimerDialog = new Point(0,0);
+	private Point locationOfTimerDialog = new Point(0, 0);
 
 	public BOSettingsLayout(BOSettings settings) {
 		this.setSettings(settings);
@@ -107,14 +107,17 @@ public class BOSettingsLayout {
 	 */
 	public void setLocationOfTimerDialog(Point location) {
 		locationOfTimerDialog = location;
-		
+
 	}
-	
+
 	/**
 	 * @return Returns the locationOfTimerDialog.
 	 */
 	public Point getLocationOfTimerDialog() {
+		if (locationOfTimerDialog == null) {
+			return new Point(10, 10);
+		}
 		return locationOfTimerDialog;
 	}
-	
+
 }
