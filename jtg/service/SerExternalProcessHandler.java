@@ -37,7 +37,7 @@ public class SerExternalProcessHandler {
 		return process;
 	}
 
-	public static BOExternalProcess startProcess(String name, String execString, boolean logging, boolean logErrorAsInfo) {
+	public static BOExternalProcess startProcess(String name, String[] execString, boolean logging, boolean logErrorAsInfo) {
 		BOExternalProcess process = new BOExternalProcess(name, execString, logging, logErrorAsInfo);
 		getProcessList().add(process);
 		process.start();

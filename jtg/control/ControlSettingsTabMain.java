@@ -199,8 +199,8 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	}
 
 	private void actionStartVlc() {
-	    String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
-      SerExternalProcessHandler.startProcess("vlc", execString, true, true);
+	    String[] execString={ControlMain.getSettingsPath().getVlcPath(),"-I", "http"};
+	    SerExternalProcessHandler.startProcess("vlc", execString, true, true);
 	}
 	
 	private void actionAddBox() {

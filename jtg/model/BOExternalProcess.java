@@ -47,11 +47,11 @@ public class BOExternalProcess extends Thread {
 		this.setLogging(logging);
 	}
 	
-	public BOExternalProcess(String name, String execString, boolean logging, boolean logErrorAsInfo) {
+	public BOExternalProcess(String name, String[] execString, boolean logging, boolean logErrorAsInfo) {
 	    this.setLogErrorAsInfo(logErrorAsInfo);
 	    this.setLogging(logging);
 		this.setProgName(name);
-		this.setExecString(execString);
+		this.setExecStringArray(execString);
 	}
 	
 	public BOExternalProcess(String name, String[] execStringArray, boolean logging) {
@@ -82,7 +82,7 @@ public class BOExternalProcess extends Thread {
 	
 	private void logExecString() {
 	    if (this.getExecString()==null) {
-    		String logString="";
+    		String logString=new String();
     		for (int i = 0;i < execStringArray.length; i++) {
     		    logString += " "+ execStringArray[i];
     		}

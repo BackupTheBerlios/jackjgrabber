@@ -122,7 +122,7 @@ public class ControlMain {
 	
 	private static void checkStartVlc() {
 	    if (ControlMain.getSettings().getMainSettings().isStartVlcAtStart()) {
-	        String execString=ControlMain.getSettingsPath().getVlcPath()+" -I http";
+	        String[] execString={ControlMain.getSettingsPath().getVlcPath(),"-I", "http"};
 	        SerExternalProcessHandler.startProcess("vlc", execString, true, true);
 	    }
 	}
