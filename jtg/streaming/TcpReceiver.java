@@ -26,16 +26,12 @@ import control.ControlMain;
 
 import service.SerAlertDialog;
 
-/**
- * @author Geist Alexander
- *
- */
 public class TcpReceiver extends Thread {
 
 	Socket tcpSocket;
-	Record record;
+	UdpRecord record;
 	
-	public TcpReceiver(Record stream) {
+	public TcpReceiver(UdpRecord stream) {
 		record = stream;
 	}
 	

@@ -32,10 +32,10 @@ public class UdpReceiver extends Thread {
 	
 	public long packetCount = 0;
 	DatagramSocket udpSocket;
-	Record record; 
+	UdpRecord record; 
 
 	
-	public UdpReceiver(Record stream) {
+	public UdpReceiver(UdpRecord stream) {
 		record = stream;
 		try {
             udpSocket = new DatagramSocket(31341);
