@@ -288,4 +288,8 @@ public class BOTimer extends java.lang.Object{
 		this.checkStopTime();
 		this.setModifiedId("modify");
 	}
+    
+    public String toString() {
+        return this.getShortStartTime()+" "+this.getLocalTimer().getDescription();
+    }
 }

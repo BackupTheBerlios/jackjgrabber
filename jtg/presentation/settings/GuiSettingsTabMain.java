@@ -18,8 +18,6 @@
 package presentation.settings;
 
 import java.awt.Dimension;
-import java.net.InetAddress;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 
 import javax.swing.DefaultCellEditor;
@@ -32,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 

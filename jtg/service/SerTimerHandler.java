@@ -1,6 +1,6 @@
 package service;
 /*
-SerTimerHandler.java by Geist Alexander 
+SerTimerHandler.java by Geist Alexander
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,13 +14,19 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/ 
+*/
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import model.BOLocalTimer;
 import model.BOTimer;
@@ -35,14 +41,13 @@ import org.dom4j.Node;
 
 import service.XML.SerXMLHandling;
 import service.XML.SerXPathHandling;
-
 import control.ControlMain;
 
 public class SerTimerHandler {
-    
+
     private static Document timerDocument;
     private static String timerFile = ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"timer.xml";
-    
+
     /**
      * @return LocalTimer
      * hole den ersten faelligen lokalen Box-Timer
@@ -56,7 +61,7 @@ public class SerTimerHandler {
         }
         return null;
     }
-    
+
     private static boolean isValidTimer(BOLocalTimer timer) {
         try {
             GregorianCalendar boxTime = ControlMain.getBoxAccess().getBoxTime();
@@ -68,15 +73,15 @@ public class SerTimerHandler {
             return false;
         }
     }
-    
+
     /*
-     * entferne alle lokalen Timer deren Stopzeit kleiner Jetzt ist 
+     * entferne alle lokalen Timer deren Stopzeit kleiner Jetzt ist
      */
     public static void deleteOldTimer() {
         Element root = getTimerDocument().getRootElement();
         List nodes = SerXPathHandling.getNodes("/timerList/localTimer/stopTime", getTimerDocument());
         boolean edited = false;
-        
+
         for (int i=0; i<nodes.size(); i++) {
             Node node = (Node) nodes.get(i);
             long localTimerStop=Long.parseLong(node.getText());
@@ -94,7 +99,7 @@ public class SerTimerHandler {
             }
         }
     }
-    
+
     private static void deleteLocalTimer(BOLocalTimer timer) {
         if (timer.getTimerNode()!=null) {
             try {
@@ -105,16 +110,16 @@ public class SerTimerHandler {
             }
         }
     }
-    
+
     /*
      * speichere Timer lokal, lege Element "MainTimer" an
      * wenn Timer ausschliesslich lokal gespeichert wird
      */
     private static void saveNewTimer(BOLocalTimer timer) {
-		Element root = getTimerDocument().getRootElement();     
-        
+		Element root = getTimerDocument().getRootElement();
+
         //BOLocalTimer
-		Element localTimer = DocumentHelper.createElement("localTimer");		
+		Element localTimer = DocumentHelper.createElement("localTimer");
 		localTimer.addElement("startPX").addText(Boolean.toString(timer.isStartPX()));
 		localTimer.addElement("recordAllPids").addText(Boolean.toString(timer.isRecordAllPids()));
 		localTimer.addElement("ac3ReplaceStereo").addText(Boolean.toString(timer.isAc3ReplaceStereo()));
@@ -136,7 +141,7 @@ public class SerTimerHandler {
 		localTimer.addElement("startTime").addText(timer.getMainTimer().getLongStartTime());
         localTimer.addElement("stopTime").addText(timer.getMainTimer().getLongStopTime());
 		localTimer.addElement("local").addText(Boolean.toString(timer.isLocal()));
-        
+
         if (timer.isLocal()) {
 //          BOTimer
             Element mainTimer = DocumentHelper.createElement("mainTimer");
@@ -159,7 +164,7 @@ public class SerTimerHandler {
             Logger.getLogger("SerTimerHandler").error(e.getMessage());
         }
     }
-    
+
     private static void editOldTimer(BOLocalTimer timer) {
         Node timerNode = timer.getTimerNode();
         timerNode.selectSingleNode("ac3ReplaceStereo").setText(Boolean.toString(timer.isAc3ReplaceStereo()));
@@ -183,7 +188,7 @@ public class SerTimerHandler {
         timerNode.selectSingleNode("udrecOptions").setText(timer.getUdrecOptions().toString());
         timerNode.selectSingleNode("udrecStreamType").setText(timer.getUdrecStreamType());
         timerNode.selectSingleNode("local").setText(Boolean.toString(timer.isLocal()));
-        
+
         if (timer.isLocal()) {
 //          BOTimer
             Element mainTimer = (Element)timerNode.selectSingleNode("mainTimer");
@@ -199,10 +204,10 @@ public class SerTimerHandler {
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
         } catch (IOException e) {
-            Logger.getLogger("SerTimerHandler").error(e.getMessage());    
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());
         }
     }
-    
+
     /**
      * @param Main-Timer
      * @return Local-Timer
@@ -212,11 +217,11 @@ public class SerTimerHandler {
     public static BOLocalTimer findLocalTimer(BOTimer timer) {
         Node timerNode = findTimerNode(timer);
         if (timerNode != null) {
-            return buildLocalTimer(timerNode, new BOLocalTimer(timer));    
-        } 
-        return BOLocalTimer.getDefaultLocalTimer(timer);      
+            return buildLocalTimer(timerNode, new BOLocalTimer(timer));
+        }
+        return BOLocalTimer.getDefaultLocalTimer(timer);
     }
-    
+
     /**
      * @param mainTimer
      * @return XML-Timer-Node
@@ -226,39 +231,43 @@ public class SerTimerHandler {
         List nodes = SerXPathHandling.getNodes("/timerList/localTimer/startTime", getTimerDocument());
         long mainTimerStart=mainTimer.getUnformattedStartTime().getTimeInMillis();
 		for (int i = 0; i<nodes.size(); i++) {
-		    Node node = (Node) nodes.get(i);		    
+		    Node node = (Node) nodes.get(i);
 		    long localTimerStart=Long.parseLong(node.getText());
 		    if (mainTimerStart==localTimerStart) {
-		        return node.getParent();
+                long mainTimerStop=mainTimer.getUnformattedStopTime().getTimeInMillis();
+                long localTimerStop=Long.parseLong(SerXPathHandling.getFirstDescendentNode(node).getText());
+                if (mainTimerStop==localTimerStop) {
+                    return node.getParent();   
+                }
 		    }
 		}
 		return null;
     }
-    
+
     private static BOTimer buildMainTimer(Node mainTimerNode) {
         BOTimer botimer = new BOTimer();
-        
+
         botimer.eventTypeId=mainTimerNode.selectSingleNode("eventTypeId").getText();
         botimer.eventRepeatId=mainTimerNode.selectSingleNode("eventRepeatId").getText();
         botimer.repeatCount=mainTimerNode.selectSingleNode("repeatCount").getText();
         botimer.channelId=mainTimerNode.selectSingleNode("channelId").getText();
         botimer.senderName=mainTimerNode.selectSingleNode("senderName").getText();
-        botimer.announceTime=mainTimerNode.selectSingleNode("announceMainTimer").getText();       
-  
+        botimer.announceTime=mainTimerNode.selectSingleNode("announceMainTimer").getText();
+
         long startMillis = Long.parseLong(mainTimerNode.selectSingleNode("startMainTimer").getText());
         GregorianCalendar startTime = new GregorianCalendar();
         startTime.setTimeInMillis(startMillis);
-        
+
         long stopMillis = Long.parseLong(mainTimerNode.selectSingleNode("stopMainTimer").getText());
         GregorianCalendar stopTime = new GregorianCalendar();
         stopTime.setTimeInMillis(stopMillis);
-        
+
         botimer.unformattedStartTime=startTime;
         botimer.unformattedStopTime=stopTime;
-        
+
         return botimer;
     }
-    
+
     public static BOLocalTimer buildLocalTimer(Node timerNode, BOLocalTimer localTimer) {
         localTimer.setAc3ReplaceStereo(timerNode.selectSingleNode("ac3ReplaceStereo").getText().equals("true"));
         localTimer.setDescription(timerNode.selectSingleNode("description").getText());
@@ -297,45 +306,100 @@ public class SerTimerHandler {
                 if (!listFile.exists()) {
                     timerDocument=SerXMLHandling.createEmptyTimerFile(listFile);
                 } else {
-                    timerDocument=SerXMLHandling.readDocument(new File(timerFile));    
+                    timerDocument=SerXMLHandling.readDocument(new File(timerFile));
                 }
             }
         } catch (Exception e) {
             Logger.getLogger("SerTimerHandler").error(e.getMessage());
-        } 
+        }
         return timerDocument;
     }
-    
+
     /*
      * zentrale Methode um neue/geänderte Timer zu speichern
      */
-    public static void saveTimer(BOTimer timer, boolean reloadList) {
-           //lokaler Teil muss immer gespeichert werden
-        saveLocalTimer(timer); 
-          
-        if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
-            saveBoxTimer(timer, reloadList); 
-        }
+    public static void saveTimer(BOTimer reqTimer, boolean reloadList) {
+    	BOTimer timer = validateTimer(reqTimer);
+    	
+    	if (timer!=null) {
+    		//lokaler Teil muss immer gespeichert werden
+            saveLocalTimer(timer);
 
-        if (timer.getModifiedId() != null) {
-//          nur bei lokalen Timern manuell erledigen, Box-Timer muessen automatisch nachgelesen werden
-            if (timer.getModifiedId().equals("new") && timer.getLocalTimer().isLocal()) {
-                ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
-            } else if (timer.getModifiedId().equals("remove")) {
-                ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
+    		//nur veraenderte Timer	speichern
+            if (timer.getModifiedId() != null) {
+    			if (!timer.getLocalTimer().isLocal()) {
+    	            saveBoxTimer(timer, reloadList);
+    			} else {
+    				//bei localen Timern manuell um die Konsistenz der Timer-List kümmern
+    				//bei Box-Timern wird komplett nachgelesen
+    				if (timer.getModifiedId().equals("new")) {
+    					ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
+    				} else if (timer.getModifiedId().equals("remove")) {
+    					ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
+    				}
+    			}
             }
-        } 
-        timer.setModifiedId(null);
-        //ermittle naechsten faelligen lokalen-RecordTimer neu
-        if (timer.getLocalTimer().isLocal()) {
-            ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);   
-        }
-    } 
+            timer.setModifiedId(null);
+            //ermittle naechsten faelligen lokalen-RecordTimer neu
+            if (timer.getLocalTimer().isLocal()) {
+                ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
+            }	
+    	}
+    }
     
+    /*
+     * Überprüfe Timer auf Ueberschneidungen
+     * 
+     */
+    private static BOTimer validateTimer(BOTimer requestedTimer) {
+        if (requestedTimer.getModifiedId() != null && requestedTimer.getModifiedId().equals("new")) {
+    		ArrayList timerList = ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList();
+    		
+    		if (timerList.size()>0) {
+    			ArrayList equalTimer = new ArrayList();
+    
+    			for (int i=0; i<timerList.size(); i++) {
+    				BOTimer timer = (BOTimer)timerList.get(i);
+    				if (SerHelper.compareTimerTime(timer, requestedTimer)) { //Timerueberschneidung
+    					equalTimer.add(timer);
+    				}
+    			}
+    			if (equalTimer.size()>0) {
+    				equalTimer.add(0, requestedTimer);
+    				return startTimerQuestDialag(equalTimer);
+    			}
+    		} 
+        }
+    	return requestedTimer;
+	}
+    
+    private static BOTimer startTimerQuestDialag(ArrayList equalTimer) {
+    	JList list = new JList(equalTimer.toArray());
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		int ret = JOptionPane.showConfirmDialog(ControlMain.getControl().getView(), new Object[]{
+				ControlMain.getProperty("msg_chooseTimer2"), 
+				new JScrollPane(list)}, 
+				ControlMain.getProperty("msg_chooseTimer"),
+				JOptionPane.OK_CANCEL_OPTION, 
+				JOptionPane.QUESTION_MESSAGE);
+		if (ret == JOptionPane.OK_OPTION) {
+			if (list.getSelectedIndex()==0) { //alternative Timer löschen!
+				for (int i=1; i<equalTimer.size(); i++) {
+				    BOTimer timer = (BOTimer)equalTimer.get(i);
+                    timer.setModifiedId("remove");
+                    saveTimer(timer, !timer.getLocalTimer().isLocal());
+                    return (BOTimer)equalTimer.get(0);
+                }
+			}
+		}
+		return null;
+    }
+
     /*
      * Speichert Box-Timer
      * Liste muss neu gelesen werden, wenn ein neuer Box-Timer gespeichert wird
-     * 
+     *
      * Parameter reloadList wird benoetigt damit bei mehreren neuen Timern
      * die Liste nicht sofort neu gelesen wird, sondern nur nach dem letzten
      */
@@ -344,7 +408,7 @@ public class SerTimerHandler {
             if (timer.getModifiedId().equals("new")) {
                 ControlMain.getBoxAccess().writeTimer(timer);
                 if (reloadList) {
-                    ControlMain.getBoxAccess().getTimerList(true);  
+                    ControlMain.getBoxAccess().getTimerList(true);
                 }
             } else {
                 ControlMain.getBoxAccess().writeTimer(timer);
@@ -353,7 +417,7 @@ public class SerTimerHandler {
             Logger.getLogger("SerTimerHandler").error(e.getMessage());
         }
     }
-    
+
     private static int saveLocalTimer(BOTimer timer) {
         if (timer.getModifiedId() !=null && timer.getModifiedId().equals("remove")) {
             if (timer.localTimer==null) {
@@ -362,7 +426,7 @@ public class SerTimerHandler {
             deleteLocalTimer(timer.getLocalTimer());
             return 0;
         }
-        
+
         if (timer.localTimer==null) {
             BOLocalTimer.getDefaultLocalTimer(timer);
         }
@@ -373,7 +437,7 @@ public class SerTimerHandler {
         }
         return 1;
     }
-    
+
     /*
      * liest MainTimer und LocalTimer
      */
@@ -381,7 +445,7 @@ public class SerTimerHandler {
         BOTimerList list = new BOTimerList();
         Element root = getTimerDocument().getRootElement();
         List nodes = SerXPathHandling.getNodes("/timerList/localTimer/mainTimer", getTimerDocument());
-        
+
         for (int i=0; i<nodes.size(); i++) {
             Node mainTimerNode = (Node) nodes.get(i);
             Node localTimerNode =  mainTimerNode.getParent();

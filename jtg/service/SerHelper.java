@@ -245,11 +245,6 @@ public class SerHelper {
 			if (replaceWith == null || replaceWith.length() == 0) {
 				replaceWith = args.getEpgInfo1();
 			}
-			
-			if (replaceWith == null || replaceWith.length() == 0) {
-				replaceWith = "notavailable";
-			}
-			
 		} else if (patternToReplace.equals("%SERIE%")) {
 			replaceWith = args.getEpgInfo1();
 			if (replaceWith.length() > 0)
@@ -286,5 +281,26 @@ public class SerHelper {
 		fileName = fileName.replaceAll(patternToReplace, replaceWith);
 
 		return fileName.trim();
+	}
+
+	/*
+	 * return true, when the startTime of the second timer is
+	 * between start/stop-time of the first timer.
+	 */
+	public static boolean compareTimerTime(BOTimer timer1, BOTimer timer2) {
+		long timer1Start = timer1.getUnformattedStartTime().getTimeInMillis();
+		long timer2Start = timer2.getUnformattedStartTime().getTimeInMillis();
+        long timer1Stop = timer1.getUnformattedStopTime().getTimeInMillis();
+        long timer2Stop = timer2.getUnformattedStopTime().getTimeInMillis();
+		if (timer2Start>=timer1Start && timer2Start<=timer1Stop) {
+			return true;
+		}
+        if (timer2Stop>=timer1Start && timer2Stop<=timer1Stop) {
+            return true;
+        }
+        if (timer2Start<=timer1Start && timer2Stop>=timer1Stop) {
+            return true;
+        }
+		return false;
 	}
 }
