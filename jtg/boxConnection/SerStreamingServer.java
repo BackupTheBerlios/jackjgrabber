@@ -48,6 +48,7 @@ public class SerStreamingServer extends Thread {
 			        ControlMain.getProperty("msg_sserver")+
 			        ControlMain.getBoxIpOfActiveBox()+" Port: "+
 			        ControlMain.getSettingsRecord().getStreamingServerPort());
+			ControlMain.getBoxAccess().sendMessage("Start%20Streaming-Server");
 			Socket socket = server.accept();
 			this.record(socket);
 		} catch (IOException e) {
