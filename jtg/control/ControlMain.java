@@ -39,7 +39,6 @@ public class ControlMain {
 	static SerBoxControl boxAccess;
 	static SerLogAppender logAppender;
 	static ControlMainView control;
-	static int CurrentBox=0;
 	static BOLocale bolocale = new BOLocale();
 	
 	
@@ -206,19 +205,6 @@ public class ControlMain {
 	 */
 	public static Document getSettingsDocument() {
 		return settingsDocument;
-	}
-
-	/**
-	 * @return Returns the currentBox.
-	 */
-	public static int getCurrentBox() {
-		return CurrentBox;
-	}
-	/**
-	 * @param currentBox The currentBox to set.
-	 */
-	public static void setCurrentBox(int currentBox) {
-		CurrentBox = currentBox;
 	}
 	/**
 	 * @param settingsDocument The settingsDocument to set.
