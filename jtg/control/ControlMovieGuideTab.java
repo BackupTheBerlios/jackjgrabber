@@ -115,7 +115,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			//
 		}
 		if (action == "select2Timer") {
-			getTimerTableSelectToTimer();
+		    if (this.getJTableTimer().getSelectedRow()>=0) {
+				getTimerTableSelectToTimer();   
+		    } else {
+		        SerAlertDialog.alert("Kein Timer ausgewählt!", this.getMainView());
+		    }
 		}
 		if (action == "suchen") {					
 			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());	
@@ -178,12 +182,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			return new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
 		}
 	}
-	public int getSelectRowTimerTable(){				
-		if (this.getTab().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow())<=0){
-			return 0;
-		}else{			
-			return this.getTab().mgTimerTableSorter.modelIndex(this.getJTableTimer().getSelectedRow());
-		}
+	public int getSelectRowTimerTable(){	
+	    int selectedRow=this.getJTableTimer().getSelectedRow();
+		return this.getTab().mgTimerTableSorter.modelIndex(selectedRow);
 	}
 	
 	public void setBOMovieGuide4Timer(BOMovieGuide bomovieguide){
