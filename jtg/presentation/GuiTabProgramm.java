@@ -64,6 +64,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JScrollPane jScrollPaneAusgabe = null;
 	public GuiEpgTableSorter sorter = null;
 	
+	private JButton jButtonOfflineEpg = null;
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
 		initialize();
@@ -179,6 +180,7 @@ public class GuiTabProgramm extends GuiTab {
 	
 	private JPanel getJPanelButtonsInformationen() {
 		if (jPanelButtonsProgrammInfo == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			java.awt.GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			java.awt.GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			java.awt.GridBagConstraints gridBagConstraints131 = new GridBagConstraints();
@@ -189,24 +191,33 @@ public class GuiTabProgramm extends GuiTab {
 			jPanelButtonsProgrammInfo.setLayout(new GridBagLayout());
 			jPanelButtonsProgrammInfo.setPreferredSize(new java.awt.Dimension(225,110));
 			jPanelButtonsProgrammInfo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Informationen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints91.gridx = 0;
-			gridBagConstraints91.gridy = 1;
+			gridBagConstraints91.gridx = 3;
+			gridBagConstraints91.gridy = 0;
+			gridBagConstraints91.gridwidth = 3;
+			gridBagConstraints91.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints101.gridx = 0;
 			gridBagConstraints101.gridy = 2;
+			gridBagConstraints101.gridwidth = 3;
 			gridBagConstraints15.gridx = 1;
 			gridBagConstraints15.gridy = 0;
-			gridBagConstraints131.gridx = 1;
+			gridBagConstraints15.gridwidth = 2;
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints131.gridx = 3;
 			gridBagConstraints131.gridy = 1;
-			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.gridy = 2;
-			jPanelButtonsProgrammInfo.add(new JLabel("IP der Box:"), gridBagConstraints8);
-			jPanelButtonsProgrammInfo.add(this.getJButtonReadEPG(), gridBagConstraints131);
-			jPanelButtonsProgrammInfo.add(this.getJButtonClickfinder(), gridBagConstraints91);
-			jPanelButtonsProgrammInfo.add(this.getJButtonSelectedToTimer(), gridBagConstraints14);
-			jPanelButtonsProgrammInfo.add(this.getJComboBoxBoxIP(), gridBagConstraints15);
-			jPanelButtonsProgrammInfo.add(this.getJButtonStartServer(), gridBagConstraints101);
+			gridBagConstraints131.gridwidth = 3;
+			gridBagConstraints131.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints14.gridx = 0;
+			gridBagConstraints14.gridy = 1;
+			gridBagConstraints14.gridwidth = 3;
+			gridBagConstraints2.gridx = 5;
+			gridBagConstraints2.gridy = 2;
+			jPanelButtonsProgrammInfo.add(getJButtonReadEPG(), gridBagConstraints131);
+			jPanelButtonsProgrammInfo.add(getJButtonClickfinder(), gridBagConstraints91);
+			
+			jPanelButtonsProgrammInfo.add(getJButtonSelectedToTimer(), gridBagConstraints14);
+			jPanelButtonsProgrammInfo.add(getJComboBoxBoxIP(), gridBagConstraints15);
+			jPanelButtonsProgrammInfo.add(getJButtonStartServer(), gridBagConstraints101);
+			jPanelButtonsProgrammInfo.add(getJButtonOfflineEpg(), gridBagConstraints2);
 		}
 		return jPanelButtonsProgrammInfo;
 	}
@@ -637,4 +648,17 @@ public class GuiTabProgramm extends GuiTab {
 	public void setControl(ControlProgramTab control) {
 		this.control = control;
 	}
-  }
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getJButtonOfflineEpg() {
+		if (jButtonOfflineEpg == null) {
+			jButtonOfflineEpg = new JButton();
+			jButtonOfflineEpg.setPreferredSize(new java.awt.Dimension(105,25));
+			jButtonOfflineEpg.setText("Offline EPG");
+		}
+		return jButtonOfflineEpg;
+	}
+   }
