@@ -57,13 +57,12 @@ public class SerBoxTelnet  {
 		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_sectiond"));
 		createTelnetSession("killall sectionsd && sectionsd");						            
 	}
-	/*
-	public static void runReboot() throws IOException, InterruptedException{	
-		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_reboot"));
-		createTelnetSession("reboot"); //FIXME reboot einfügen
-		//createTelnetSession("reboot");
+	
+	public static void runHalt() throws IOException, InterruptedException{	
+		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_reboot"));	
+		createTelnetSession("halt");
 	}
-	*/
+	
 	public static void runReboot() throws IOException, InterruptedException{	
 		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("msg_reboot"));		
 		telnet.connect(ControlMain.getActiveBox().getDboxIp());
