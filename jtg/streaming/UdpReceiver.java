@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
@@ -39,11 +40,16 @@ public class UdpReceiver extends Thread {
 	
 	public UdpReceiver(Record stream) {
 		record = stream;
+		try {
+            udpSocket = new DatagramSocket(31341);
+        } catch (SocketException e) {
+            Logger.getLogger("UdpReceiver").error("Unable to create Udp-Socket");
+            record.recordControl.stopRecord();
+        }
 	}
 	
 	public void run() {
-		try {
-			udpSocket = new DatagramSocket(31341);
+		try {		
 			UdpPacket udpPacket = new UdpPacket();
 			int curStatus = 0;
 			
@@ -58,7 +64,6 @@ public class UdpReceiver extends Thread {
 			if (!record.running) {
 				//Do nothing, regulaerer Stop
 			} else {
-			    e.printStackTrace();
 				SerAlertDialog.alertConnectionLost("UdpReceiver", ControlMain.getControl().getView());
 			    record.recordControl.stopRecord();
 			}
@@ -66,9 +71,6 @@ public class UdpReceiver extends Thread {
 	}
 	
 	public boolean closeSocket() {
-	    try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {}
 		udpSocket.disconnect();
 		udpSocket.close();
 		Logger.getLogger("UdpReceiver").info("UdpReceiver stopped");
