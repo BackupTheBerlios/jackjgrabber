@@ -91,7 +91,6 @@ public class GuiTabMovieGuide extends JPanel {
 	
 	private JProgressBar jProgressBarDownload = null;
 	private JLabel jLabelMovieGuide = null;
-	//public GuiMovieGuideTimerTableModel mgTimerTableModel;
 	public MovieGuideTimerTableModel mgTimerTableModel;
 	public GuiTableSorter sorter = null;	
 	
@@ -106,10 +105,7 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 
 	private  void initialize() {
-		FormLayout layout = new FormLayout(
-			   //   "pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  					
-		 	//	"pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow,pref");	// rows
-				// columns 
+		FormLayout layout = new FormLayout(			 
 			      "320px:grow,10, 400px:grow",  							// columns
 			      "pref, 200px:grow, 10, pref, pref, pref");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
@@ -129,25 +125,7 @@ public class GuiTabMovieGuide extends JPanel {
 		builder.addSeparator("Aktionen MovieGuide",		cc.xywh	(3, 4, 1, 1));
 		builder.add(this.getJPanelDownload(),  			cc.xywh	(3, 5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));			
 			
-		builder.add(this.getJPanelProgressBar(), 	 	cc.xywh	(3, 6, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-		
-		
-		/*
-		builder.addSeparator("Suche",					cc.xywh	(1, 4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
-		builder.add(this.getJPanelSuche(),  			cc.xywh	(1, 8, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-		
-		builder.addSeparator("Aktionen MovieGuide",		cc.xywh	(3, 4, 7, 1));
-		builder.add(this.getJPanelDownload(),  			cc.xywh	(3, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));			
-		
-		builder.add(this.getJPanelProgressBar(), 	 	cc.xywh	(3, 5, 7, 1, CellConstraints.FILL, CellConstraints.FILL));		
-		*/
-		//builder.addSeparator("Aktionen",								cc.xywh	(1, 5, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-		
-		//builder.addSeparator("Record-Info",							cc.xywh	(7, 4, 1, 1));
-		//builder.add(this.getJPanelRecordInfo(), 				    	cc.xywh	(7, 5, 1, 1));		
-		//builder.add(this.getJScrollPaneEPGDetail(),	 				cc.xywh	(9, 5, 1, 4));
-		//builder.addSeparator("Ausgabe",								cc.xywh	(1, 7, 7, 1));
-		//builder.add(this.getJScrollPaneAusgabe(), 	 				cc.xywh	(1, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.add(this.getJPanelProgressBar(), 	 	cc.xywh	(3, 6, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
 	}
 	 
 	private JPanel getJPanelChannels() {
@@ -171,8 +149,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"140px:grow, 105px:grow, 32px:grow, pref,pref,pref,pref");		//rows
-					
+						"140px:grow, 100px:grow, 32px:grow, pref,pref,pref,pref");		//rows					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
 			builder.add(this.getJScrollPaneTimer(),			cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));			
