@@ -5,7 +5,7 @@
 	
 	<property name="targetJarName" 		value="jackTheJGrabber.jar" />
 	<property name="zipFileName" 		value="jackTheJGrabber.zip" />
-	<property name="targetDir" 			value="/home/alexg/jackTheJGrabber" />
+	<property name="targetDir" 			value="f:\jtg" />
 	<property name="mainclass" 			value="JackTheJGrabber.ControlMain" />
 	<property name="classpath1" 		value="./lib/dom4j.jar" />
 	<property name="classpath2" 		value="./lib/log4j-1.2.8.jar" />
@@ -14,12 +14,7 @@
 	<property name="classpath5" 		value="./lib/commons-net-1.2.2.jar" />
 	<property name="classpath6" 		value="./lib/looks-1.2.2.jar" />
 	<property name="classpath7" 		value="./lib/systray4j.jar" />
-	<property name="sourcedir1" 		value="control\*.class" />
-	<property name="sourcedir2" 		value="boxConnection\*.class" />
-	<property name="sourcedir3" 		value="model\*.class" />
-	<property name="sourcedir4" 		value="presentation\*.class" />
-	<property name="sourcedir6" 		value="service\*.class" />
-	<property name="sourcedir7" 		value="streaming\*.class" />
+	<property name="sourcedir1" 		value="**\*.class" />
 	<property name="resourcedir1" 		value="ico\*.*" />
 	
 	 <!-- Aufräumen der alten Files -->
@@ -33,11 +28,6 @@
 		<jar destfile="${targetDir}/${targetJarName}">
 			<fileset dir="">
 				<include name="${sourcedir1}"/>
-				<include name="${sourcedir2}"/>
-				<include name="${sourcedir3}"/>
-				<include name="${sourcedir4}"/>
-				<include name="${sourcedir6}"/>
-				<include name="${sourcedir7}"/>
 				<include name="${resourcedir1}"/>
 				<exclude name="**\*.java"/>
 				<exclude name="**\*.ini"/>
