@@ -26,16 +26,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import model.BOExternalProcess;
 import model.BORecordArgs;
 
 import org.apache.log4j.Logger;
 
+import service.SerProcessStopListener;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
 import control.ControlMain;
 import control.ControlProgramTab;
 
-public class RecordControl extends Thread {
+public class RecordControl extends Thread implements SerProcessStopListener{
 	Record record;
 	public boolean isRunning = true;
 	ControlProgramTab controlProgramTab;
@@ -132,6 +134,10 @@ public class RecordControl extends Thread {
 			}
 		}
 	}
+	
+	public void processStopped(int exitCode) {
+	    this.checkForShutdown();
+	}
 
 	private void waitForStop() {
 		boolean running = true;
@@ -152,24 +158,35 @@ public class RecordControl extends Thread {
 		if (ControlMain.getSettingsRecord().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
 		    Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
 		    this.startProjectX();
+		} else {
+		    this.checkForShutdown();
 		}
 		isRunning = false;
 	}
+	
+	private void checkForShutdown() {
+	    if (recordArgs.isQuickRecord() && controlProgramTab.isShutdownAfterRecord()) {
+	        ControlMain.shutdownPC();
+	    }
+	    if (!recordArgs.isQuickRecord() && ControlMain.getSettingsRecord().isShutdownAfterRecord()) {
+	        ControlMain.shutdownPC();
+	    }
+	}
 
 	public void startProjectX() {
+	    ArrayList files = record.getFiles();
+	    String[] param = new String[3+files.size()];
 		String separator = System.getProperty("file.separator");
-		ArrayList files = record.getFiles();
-		String fileString = new String();
+
+		param[0]=System.getProperty("java.home") + separator + "bin" + separator + "java";
+		param[1]="-jar";
+		param[2]=ControlMain.getSettingsPath().getProjectXPath();
+		
 		for (int i = 0; i < files.size(); i++) {
-			fileString += ((String) files.get(i)) + " ";
+		    param[i+3]=(String) files.get(i);
 		}
 
-		Object[] args = {System.getProperty("java.home") + separator + "bin" + separator + "java -jar",
-					ControlMain.getSettingsPath().getProjectXPath(),
-					//"-g",
-					fileString};
-		MessageFormat form = new MessageFormat("{0} {1} {2}");
-		SerExternalProcessHandler.startProcess("ProjectX", form.format(args), true);
+		BOExternalProcess proc = SerExternalProcessHandler.startProcess(this, "ProjectX", param, true);
 	}
 
 	public String getFileName() {
