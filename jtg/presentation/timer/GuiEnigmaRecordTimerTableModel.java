@@ -34,7 +34,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 public class GuiEnigmaRecordTimerTableModel extends GuiRecordTimerTableModel 
 {
 	
-	ControlTimerTab control;
+	
 	
 	public GuiEnigmaRecordTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
@@ -94,10 +94,6 @@ public class GuiEnigmaRecordTimerTableModel extends GuiRecordTimerTableModel
 	    
 	}
 	
-	public void fireTableDataChanged() {
-		this.fireTableDataChanged();
-		this.getControl().getView().enableRecordTimerWeekdays(false);
-	}
 	
 	public Class getColumnClass (int col) {
         if (col==0) {
@@ -106,11 +102,5 @@ public class GuiEnigmaRecordTimerTableModel extends GuiRecordTimerTableModel
         return String.class;
     }
 	
-	public ControlTimerTab getControl() {
-		return control;
-	}
 	
-	public void setControl(ControlTimerTab control) {
-		this.control = control;
-	}
 }

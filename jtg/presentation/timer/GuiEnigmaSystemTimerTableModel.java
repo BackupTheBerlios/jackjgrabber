@@ -29,7 +29,6 @@ import control.ControlTimerTab;
 
 public class GuiEnigmaSystemTimerTableModel extends GuiSystemTimerTableModel 
 {
-	ControlTimerTab control;
 	
 	public GuiEnigmaSystemTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
@@ -86,19 +85,6 @@ public class GuiEnigmaSystemTimerTableModel extends GuiSystemTimerTableModel
 	    	return false;
 	    }
 	    return true;
-	}
-	
-	public ControlTimerTab getControl() {
-		return control;
-	}
-	
-	public void setControl(ControlTimerTab control) {
-		this.control = control;
-	}
-	
-	public void fireTableDataChanged() {
-		this.fireTableDataChanged();
-		this.getControl().getView().enableSystemTimerWeekdays(false);
-	}
+	}	
 }
 

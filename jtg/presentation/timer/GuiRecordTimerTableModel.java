@@ -26,6 +26,7 @@ import control.ControlTimerTab;
 
 public abstract class GuiRecordTimerTableModel extends AbstractTableModel
 {
+	ControlTimerTab control;
 	
 	public abstract int getColumnCount();
 
@@ -36,10 +37,18 @@ public abstract class GuiRecordTimerTableModel extends AbstractTableModel
 	public abstract String getColumnName( int columnIndex );
 	public abstract boolean isCellEditable (int row, int col);
 
-	public abstract ControlTimerTab getControl();
-	public abstract void setControl(ControlTimerTab control);
+	public ControlTimerTab getControl() {
+		return control;
+	}
 	
-	public abstract void fireTableDataChanged();
+	public void setControl(ControlTimerTab control) {
+		this.control = control;
+	}
+	
+	public void fireTableDataChanged() {
+		super.fireTableDataChanged();
+		this.getControl().getView().enableRecordTimerWeekdays(false);
+	}
     
     public abstract Class getColumnClass (int col);
 }

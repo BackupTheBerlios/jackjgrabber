@@ -26,7 +26,6 @@ import control.ControlTimerTab;
 
 public class GuiNeutrinoRecordTimerTableModel extends GuiRecordTimerTableModel
 {
-	ControlTimerTab control;
 
 	public GuiNeutrinoRecordTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
@@ -78,18 +77,7 @@ public class GuiNeutrinoRecordTimerTableModel extends GuiRecordTimerTableModel
 	    return false;
 	}
 
-	public ControlTimerTab getControl() {
-		return control;
-	}
-
-	public void setControl(ControlTimerTab control) {
-		this.control = control;
-	}
-	
-	public void fireTableDataChanged() {
-		this.fireTableDataChanged();
-		this.getControl().getView().enableRecordTimerWeekdays(false);
-	}
+		
     
     public Class getColumnClass (int col) {
         if (col==0) {
