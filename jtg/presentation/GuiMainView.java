@@ -71,6 +71,17 @@ public class GuiMainView extends JFrame {
 			}
 		});
 	}
+
+	/**
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.getContentPane().add(this.getMainTabPane());
+		setIconImage(iconManager.getIcon("grabber1.gif").getImage());
+		if (ControlMain.getSettingsMain().isUseSysTray()) {
+			createMenu();
+		}
+	}
 	
 	private void registerKeys() {
 	    final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK, true);
@@ -100,16 +111,6 @@ public class GuiMainView extends JFrame {
 		setVisible(true);
 	}
 
-	/**
-	 * This method initializes this
-	 */
-	private void initialize() {
-		this.getContentPane().add(this.getMainTabPane());
-		setIconImage(iconManager.getIcon("grabber1.gif").getImage());
-		if (ControlMain.getSettingsMain().isUseSysTray()) {
-			createMenu();
-		}
-	}
 	/**
 	 * Haupt-TabPane. Neue Tabs werden hier angemeldet.
 	 */

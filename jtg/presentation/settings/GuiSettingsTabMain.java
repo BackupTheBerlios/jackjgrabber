@@ -69,7 +69,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public final String[] themes = {"Silver", "BrownSugar", "DarkStar",
-			"DesertBlue", "ExperienceBlue", "SkyBluerTahoma"};
+			"DesertBlue", "ExperienceBlue", "SkyBluerTahoma", "SkyRed"};
 
 	public GuiSettingsTabMain(ControlSettingsTabMain ctrl) {
 		super();

@@ -39,6 +39,7 @@ import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticTheme;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
+import com.jgoodies.plaf.windows.ExtWindowsLookAndFeel;
 
 
 /**
@@ -77,6 +78,10 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 			PlasticXPLookAndFeel l = new PlasticXPLookAndFeel();
 			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l.getName(), PlasticXPLookAndFeel.class.getName());
 			UIManager.installLookAndFeel(info);
+			
+			ExtWindowsLookAndFeel l4 = new ExtWindowsLookAndFeel();
+			UIManager.LookAndFeelInfo info4 = new UIManager.LookAndFeelInfo(l4.getName(), ExtWindowsLookAndFeel.class.getName());
+			UIManager.installLookAndFeel(info4);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

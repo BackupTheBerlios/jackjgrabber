@@ -90,29 +90,29 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  			this.actionAddBox();
 		  		}
 		  		if (action == "launchVlc") {
-			  			this.actionStartVlc();
-			  		}
+			  		this.actionStartVlc();
+			  	}
 		  		if (action.equals("showLogo")) {
-		  				this.getSettings().setShowLogo(((JCheckBox)e.getSource()).isSelected());
-		  				break;
+		  			this.getSettings().setShowLogo(((JCheckBox)e.getSource()).isSelected());
+		  			break;
 		  		}
 		  		if (action.equals("showLogWindow")) {
 	  				this.getSettings().setShowLogWindow(((JCheckBox)e.getSource()).isSelected());
 	  				break;
-	  		}
+		  		}
 		  		if (action.equals("startFullscreen")) {
-		  				this.getSettings().setStartFullscreen(((JCheckBox)e.getSource()).isSelected());
-		  				break;
+		  			this.getSettings().setStartFullscreen(((JCheckBox)e.getSource()).isSelected());
+		  			break;
 		  		}
 		  		if (action.equals("startVlc")) {
-		  				this.getSettings().setStartVlcAtStart(((JCheckBox)e.getSource()).isSelected());
-		  				break;
+		  			this.getSettings().setStartVlcAtStart(((JCheckBox)e.getSource()).isSelected());
+		  			break;
 		  		}
 		  		if (action.equals("useSysTray")) {
 		  		    boolean selected = ((JCheckBox)e.getSource()).isSelected();
-		  				this.getSettings().setUseSysTray(selected);
-		  				this.getMainView().checkTrayMenu(selected); // Damit das Tray sofort geladen, bzw. ausgeblendet wird
-		  				break;
+		  			this.getSettings().setUseSysTray(selected);
+		  			this.getMainView().checkTrayMenu(selected); // Damit das Tray sofort geladen, bzw. ausgeblendet wird
+		  			break;
 		  		}
 		  		if (action.equals("startMinimized")) {
 	  				this.getSettings().setStartMinimized(((JCheckBox)e.getSource()).isSelected());
