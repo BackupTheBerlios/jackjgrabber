@@ -59,7 +59,7 @@ import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
-import service.SerTimerHandler;
+import service.timer.SerTimerHandler;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;

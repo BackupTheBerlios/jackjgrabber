@@ -1,4 +1,4 @@
-package service;
+package service.timer;
 /*
 SerTimerHandler.java by Geist Alexander 
 
@@ -32,6 +32,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+
+import service.XML.SerXMLHandling;
+import service.XML.SerXPathHandling;
 
 import control.ControlMain;
 
@@ -83,7 +86,7 @@ public class SerTimerHandler {
             Node node = (Node) nodes.get(i);
             long localTimerStop=Long.parseLong(node.getText());
             long now = new GregorianCalendar().getTimeInMillis();
-            if (now-localTimerStop>0) {
+            if (now>localTimerStop) {
                 root.remove(node.getParent()); //Timer zu alt>>loeschen
                 edited=true;
             }
@@ -111,7 +114,7 @@ public class SerTimerHandler {
     
     /*
      * speichere Timer lokal, lege Element "MainTimer" an
-     * wenn Timer ausschliesslick lokal gespeichert wird
+     * wenn Timer ausschliesslich lokal gespeichert wird
      */
     private static void saveNewTimer(BOLocalTimer timer) {
 		Element root = getTimerDocument().getRootElement();     
@@ -221,7 +224,7 @@ public class SerTimerHandler {
     /**
      * @param Main-Timer
      * @return Local-Timer
-     * sucht den passenden Lokalen BoxTimer in XML-Datenbank
+     * sucht den passenden lokalen BoxTimer in XML-Datenbank
      * wenn keiner gefunden Standard-Lokal-Timer zurückgeben
      */
     public static BOLocalTimer findLocalTimer(BOTimer timer) {

@@ -40,7 +40,7 @@ import presentation.timer.GuiNeutrinoTimerPanel;
 import presentation.timer.GuiTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
-import service.SerTimerHandler;
+import service.timer.SerTimerHandler;
 
 
 public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionListener, MouseListener {

@@ -30,7 +30,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
-import service.SerXMLConverter;
+import service.XML.SerXMLConverter;
 import control.ControlMain;
 
 

@@ -28,7 +28,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import service.SerFormatter;
-import service.SerXMLHandling;
+import service.XML.SerXMLHandling;
 import control.ControlMain;
 
 public class BOMovieGuideContainer{

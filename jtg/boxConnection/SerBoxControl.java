@@ -30,7 +30,7 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
-import service.SerTimerHandler;
+import service.timer.SerTimerHandler;
 
 import control.ControlMain;
 

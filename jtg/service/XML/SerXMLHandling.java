@@ -1,4 +1,4 @@
-package service;
+package service.XML;
 /*
 SerXMLHandling.java by Geist Alexander 
 

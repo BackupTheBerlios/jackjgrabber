@@ -150,8 +150,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
             jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(30);
 			jTableRecordTimer.getColumnModel().getColumn(1).setPreferredWidth(85);
             jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(85);
-			jTableRecordTimer.getColumnModel().getColumn(2).setPreferredWidth(90);
-            jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(90);
+			jTableRecordTimer.getColumnModel().getColumn(2).setPreferredWidth(95);
+            jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(95);
             jTableRecordTimer.getColumnModel().getColumn(3).setPreferredWidth(55);
 			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(55);
             jTableRecordTimer.getColumnModel().getColumn(4).setPreferredWidth(85);

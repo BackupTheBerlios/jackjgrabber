@@ -50,7 +50,7 @@ import presentation.movieguide.GuiTabMovieGuide;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
-import service.SerTimerHandler;
+import service.timer.SerTimerHandler;
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener, Runnable, KeyListener {
 	
