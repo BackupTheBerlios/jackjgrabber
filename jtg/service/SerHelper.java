@@ -200,8 +200,10 @@ public class SerHelper {
 	}
 
 	/**
-	 * @param string
-	 * @param pattern
+	 * 
+	 * @param patternToReplace
+	 * @param fileName
+	 * @param args
 	 * @return
 	 */
 	private static String replacePattern(String patternToReplace, String fileName, BORecordArgs args) {
@@ -212,7 +214,7 @@ public class SerHelper {
 			Date d = new Date();
 
 			SimpleDateFormat f = new SimpleDateFormat("HH:mm");
-			replaceWith = f.format(d).replace(":","_");
+			replaceWith = SerFormatter.replace(f.format(d),":","_");
 		} else if (patternToReplace.equals("%NAME%")) {
 			replaceWith = args.getEpgTitle();
 			if (replaceWith == null || replaceWith.length() == 0) {
@@ -222,7 +224,7 @@ public class SerHelper {
 			replaceWith = args.getEpgInfo1();
 			if (replaceWith.length() > 0)
 			{
-				replaceWith = replaceWith.replace(args.getEpgTitle(),"");
+				replaceWith = SerFormatter.replace(replaceWith,args.getEpgTitle(),"");
 				if (replaceWith.indexOf("\n") > -1)
 				{
 					replaceWith = replaceWith.substring(2,replaceWith.indexOf("\n",2));
@@ -231,7 +233,7 @@ public class SerHelper {
 		} else if (patternToReplace.equals("%DATE%")) {
 			Date d = new Date();
 			String date = SimpleDateFormat.getDateInstance().format(d);
-			date = date.replace(".", "-");
+			date = SerFormatter.replace(date,".", "-");
 			replaceWith = date;
 		} else if (patternToReplace.startsWith("%DATE")) {
 
@@ -239,9 +241,9 @@ public class SerHelper {
 			int end = fileName.indexOf("%", start + 1);
 			patternToReplace = fileName.substring(start, end + 1);
 			String datePattern = patternToReplace.replaceAll("%DATE ", "");
-			datePattern = datePattern.replace("%", "");
-			datePattern = datePattern.replace("YY", "yy");
-			datePattern = datePattern.replace("DD", "dd");
+			datePattern = SerFormatter.replace(datePattern,"%", "");
+			datePattern = SerFormatter.replace(datePattern,"YY", "yy");
+			datePattern = SerFormatter.replace(datePattern,"DD", "dd");
 			Date d = new Date();
 			SimpleDateFormat format = new SimpleDateFormat(datePattern);
 			replaceWith = format.format(d);
@@ -254,16 +256,5 @@ public class SerHelper {
 		fileName = fileName.replaceAll(patternToReplace, replaceWith);
 
 		return fileName.trim();
-	}
-
-	public static void main(String[] args) {
-
-		BORecordArgs arg = new BORecordArgs();
-		arg.setEpgTitle("Testfilm (Testmovie)");
-		arg.setEpgInfo1("Info1");
-		//arg.setEpgInfo2("Info2");
-		arg.setSenderName("Premiere");
-		String pattern = "%DATE YY-MM-DD% %TIME% %CHANNEL% %NAME% %SERIE%";
-		System.out.println(createFileName(arg, pattern));
 	}
 }
