@@ -30,6 +30,7 @@ import service.SerAlertDialog;
 
 import control.ControlMain;
 
+import model.BOPid;
 import model.BORecordArgs;
 
 public class TcpRecord extends Record{
@@ -48,8 +49,8 @@ public class TcpRecord extends Record{
 	    recordControl = control;
         recordArgs = args;
         boxIp = ControlMain.getBoxIpOfActiveBox();
-        String[] pid = (String[])recordArgs.getAPids().get(0);
-        aPid = pid[0];
+        BOPid pid = (BOPid)recordArgs.getPids().getAPids().get(0);
+        aPid = pid.getNumber();
         Logger.getLogger("TcpRecord").info(ControlMain.getProperty("msg_recordPid")+aPid);
         String baseFileName = recordControl.getFileName();
         writeStream[0] = new DataWriteStream(recordControl, ".mp2");
