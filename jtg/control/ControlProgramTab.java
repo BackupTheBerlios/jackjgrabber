@@ -236,6 +236,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	private void actionTvMode() {
 		try {
 			if (this.getBoxAccess().setRadioTvMode("tv").equals("ok")) {
+                this.getBoxAccess().senderList=null;
 				this.reInitialize();
 			}
 		} catch (IOException e) {
@@ -246,6 +247,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	private void actionRadioMode() {
 		try {
 			if (this.getBoxAccess().setRadioTvMode("radio").equals("ok")) {
+                this.getBoxAccess().senderList=null;
 				this.reInitialize();
 			}
 		} catch (IOException e) {

@@ -44,7 +44,7 @@ import control.ControlMain;
  * Schnittstelle zum NeutrinoImage
  */
 public class SerBoxControlNeutrino extends SerBoxControl{
-        
+           
     public BOTimerList reReadTimerList() throws IOException {
         timerList=this.readTimer();
         return timerList;
@@ -139,20 +139,22 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public ArrayList getAllSender() throws IOException {
-		ArrayList senderList = new ArrayList();
-		String line;
-	
-		BufferedReader in = getConnection("/control/channellist");
-        while ((line = in.readLine()) != null) {
-        	StringTokenizer st = new StringTokenizer(line);
-			String chanId = st.nextToken();
-			
-			String name = new String();	
-			while (st.hasMoreTokens()) {
-				name += st.nextToken();
-				name += " ";
-			}
-			senderList.add(new BOSender("1",chanId, name.trim())); 
+        if (senderList==null) {
+            senderList = new ArrayList();
+            String line;
+        
+            BufferedReader in = getConnection("/control/channellist");
+            while ((line = in.readLine()) != null) {
+                StringTokenizer st = new StringTokenizer(line);
+                String chanId = st.nextToken();
+                
+                String name = new String(); 
+                while (st.hasMoreTokens()) {
+                    name += st.nextToken();
+                    name += " ";
+                }
+                senderList.add(new BOSender("1",chanId, name.trim())); 
+            }    
         }
         return senderList;
 	}

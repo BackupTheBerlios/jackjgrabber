@@ -41,6 +41,7 @@ public abstract class SerBoxControl {
     
     public BOTimerList getTimerList(boolean newRead) throws IOException {
         if (newRead || timerList==null || newTimerAdded) {
+            SerTimerHandler.deleteOldTimer();
             reReadTimerList();
             SerTimerHandler.readLocalTimer(timerList);
             newTimerAdded=false;
@@ -83,6 +84,9 @@ public abstract class SerBoxControl {
 		}
 		return imageType;
 	}
+    
+    public ArrayList senderList;
+    public abstract ArrayList getAllSender() throws IOException;
 
 	public abstract String getName();
 	protected abstract BOTimerList reReadTimerList() throws IOException;
@@ -90,7 +94,6 @@ public abstract class SerBoxControl {
 	public abstract BufferedReader getConnection(String request) throws IOException;
 	public abstract BOPids getPids() throws IOException;
 	public abstract ArrayList getBouquetList() throws IOException;
-	public abstract ArrayList getAllSender() throws IOException;
 	public abstract ArrayList getSender(BOBouquet bouquet) throws IOException;
 	public abstract String zapTo(String chanId) throws IOException;
 	public abstract ArrayList getEpg(BOSender sender) throws IOException;
