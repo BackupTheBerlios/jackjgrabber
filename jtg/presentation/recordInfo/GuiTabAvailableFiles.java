@@ -29,6 +29,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.event.*;
 import javax.swing.tree.DefaultTreeModel;
 
 import model.BOFileWrapper;
@@ -89,6 +90,22 @@ public class GuiTabAvailableFiles extends GuiTab {
 			public void componentResized(ComponentEvent e) {
 				int divLoc = split.getDividerLocation();
 				ControlMain.getSettingsLayout().setRecordInfoDirectorySplitPos(divLoc);
+			}
+		});
+
+		addAncestorListener(new AncestorListener() {
+			public void ancestorAdded(AncestorEvent event) {
+				control.reloadAvailableFiles();
+			}
+
+			public void ancestorRemoved(AncestorEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void ancestorMoved(AncestorEvent event) {
+				// TODO Auto-generated method stub
+
 			}
 		});
 

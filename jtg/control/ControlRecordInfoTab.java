@@ -67,6 +67,8 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 
 	private boolean currentlyDirectoryRefresh;
 
+	private String currentSavePath = "";
+	
 	public ControlRecordInfoTab(GuiMainView view) {
 		this.setMainView(view);
 
@@ -89,55 +91,72 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 	 * loads all available files in the store directory and shows them in a table
 	 *  
 	 */
-	protected void reloadAvailableFiles() {
+	public void reloadAvailableFiles() {
 
 		if (currentlyDirectoryRefresh) {
 			return;
 		}
-		currentlyDirectoryRefresh = true;
+		
+		currentSavePath = ControlMain.getSettingsPath().getSavePath();
 		DefaultTreeModel model = guiTabRecordInfo.getTreeModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+		
+		final JTree tree = guiTabRecordInfo.getTree();
+		final Enumeration enNodes = tree.getExpandedDescendants(new TreePath(root));
+		final TreePath[] selNodes = tree.getSelectionPaths();
 
-		JTree tree = guiTabRecordInfo.getTree();
-		Enumeration enNodes = tree.getExpandedDescendants(new TreePath(root));
-		TreePath[] selNodes = tree.getSelectionPaths();
 		root.removeAllChildren();
+		root.setUserObject("Dateistruktur wird geladen...");
+		model.reload();
 
-		String savePath = ControlMain.getSettingsPath().getSavePath();
-		if (savePath != null && savePath.length() > 0) {
-			File f = new File(savePath);
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				currentlyDirectoryRefresh = true;
+				DefaultTreeModel model = guiTabRecordInfo.getTreeModel();
+				DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
-			createStructure(root, f);
+				
 
-			if (guiTabRecordInfo != null) {
-				model.reload();
-			}
+				String savePath = ControlMain.getSettingsPath().getSavePath();
+				if (savePath != null && savePath.length() > 0) {
+					File f = new File(savePath);
 
-			if (enNodes != null) {
-				while (enNodes.hasMoreElements()) {
-					TreePath element = (TreePath) enNodes.nextElement();
-					Object[] path = element.getPath();
-					/*
-					 * for (int i = 1; i < path.length; i++) { DefaultMutableTreeNode node = (DefaultMutableTreeNode) path[path.l]; if (node !=
-					 * null) { expandNode(tree, node.getUserObject().toString(), root); } }
-					 */
-					BaseTreeNode node = (BaseTreeNode) path[path.length - 1];
-					expandNode(tree, node, root);
+					createStructure(root, f);
+					root.setUserObject(new BOFileWrapper(ControlMain.getSettingsPath().getSavePath()));
+					if (guiTabRecordInfo != null) {
+						model.reload();
+					}
+
+					if (enNodes != null) {
+						while (enNodes.hasMoreElements()) {
+							TreePath element = (TreePath) enNodes.nextElement();
+							Object[] path = element.getPath();
+							/*
+							 * for (int i = 1; i < path.length; i++) { DefaultMutableTreeNode node = (DefaultMutableTreeNode) path[path.l];
+							 * if (node != null) { expandNode(tree, node.getUserObject().toString(), root); } }
+							 */
+							BaseTreeNode node = (BaseTreeNode) path[path.length - 1];
+							expandNode(tree, node, root);
+						}
+					}
+
+					if (selNodes != null) {
+						for (int i = 0; i < selNodes.length; i++) {
+							BaseTreeNode node = (BaseTreeNode) selNodes[i].getLastPathComponent();
+							selectNode(tree, node, root);
+						}
+					}
+
+				} else {
+					root.setUserObject(ControlMain.getProperty("err_noStorePath"));
 				}
+				currentlyDirectoryRefresh = false;
 			}
+		});
 
-			if (selNodes != null) {
-				for (int i = 0; i < selNodes.length; i++) {
-					BaseTreeNode node = (BaseTreeNode) selNodes[i].getLastPathComponent();
-					selectNode(tree, node, root);
-				}
-			}
-		} else {
-			root.setUserObject(ControlMain.getProperty("err_noStorePath"));
-		}
-		currentlyDirectoryRefresh = false;
+		t.start();
+
 	}
-
 	/**
 	 * @param string
 	 * @param root
@@ -509,7 +528,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 	 * @return
 	 */
 	private String getExecStringWithoutParam(String exec) {
-	    StringTokenizer tok = new StringTokenizer(exec);
+		StringTokenizer tok = new StringTokenizer(exec);
 		return tok.nextToken().trim();
 	}
 
@@ -562,9 +581,13 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 			if (SerHelper.isVideo(file.getName())) {
 
 				// deactivated currently only for personal use of crazyreini
-			
-				  //m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) { startMuxxi(file); } }));
-				 
+
+				/*m.add(new JMenuItem(new AbstractAction("Muxxi") {
+					public void actionPerformed(ActionEvent e) {
+						startMuxxi(file);
+					}
+				}));
+				*/
 
 			}
 
@@ -680,7 +703,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 	 */
 	private void startMuxxi(File file) {
 
-		String execMuxxi = "C:\\Programme\\D-Box\\DVDAuthorMuxxi\\Muxxi.exe -i " + file.getAbsolutePath() + " -out DVD";
+		String execMuxxi = "C:\\Programme\\D-Box\\DVDAuthorMuxxi\\Muxxi.exe -i \"" + file.getAbsolutePath() + "\" -out DVD";
 		SerExternalProcessHandler.startProcess("Muxxi", execMuxxi, true);
 	}
 
@@ -814,5 +837,4 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 			}
 		}
 	}
-
 }
