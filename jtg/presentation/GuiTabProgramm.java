@@ -76,7 +76,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JDateChooser jDateChooser = null;
 	private JScrollPane jScrollPaneEPGDetail = null;
 	private JScrollPane jScrollPaneAusgabe = null;
-	public GuiEpgTableSorter sorter = null;
+	public GuiTableSorter sorter = null;
 	private SpinnerDateModel dateModelSpinnerStopTime;
 	
 	public GuiTabProgramm(ControlProgramTab control) {
@@ -191,7 +191,7 @@ public class GuiTabProgramm extends GuiTab {
 	public JTable getJTableEPG() {
 		if (jTableEPG == null) {
 			epgTableModel = new GuiEpgTableModel(control);
-			sorter = new GuiEpgTableSorter(epgTableModel);
+			sorter = new GuiTableSorter(epgTableModel);
 			jTableEPG = new JTable(sorter);
 			sorter.setTableHeader(jTableEPG.getTableHeader());
 			
