@@ -76,7 +76,7 @@ public class UdrecRecord  extends Record {
 		    cmd.add("-ap");
 		    cmd.add(pids.getVtxtPid().getNumber());
 		} 
-        if (!streamType.equals("-es")) { //-idd nur bei ES
+        if (!streamType.equals("es")) { //-idd nur bei ES
             cmd.remove("-idd");
         }
 		cmdReturn = new String[cmd.size()];
