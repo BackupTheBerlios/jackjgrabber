@@ -103,7 +103,7 @@ public class BOBox {
 	 * @param selected
 	 *            The selected to set.
 	 */
-	public void setSelected(boolean selected) {
+	public void setSelectedBox(boolean selected) {
 		this.selected = selected;
 	}
 
