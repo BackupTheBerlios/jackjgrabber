@@ -4517,13 +4517,6 @@ public static void inisave() //DM26012004 081.6 int12 changed, //DM26032004 081.
 		inis.print("p"+a+"*"); 
 		inis.println(comBox[a].getSelectedItem());
 	}
-
-	inis.println("// last position of main frame");
-	inis.println("wx"+guiTabProjectX.getX());
-	inis.println("wy"+guiTabProjectX.getY());
-	inis.println("ww"+guiTabProjectX.getWidth());
-	inis.println("wh"+guiTabProjectX.getHeight());
-
 	inis.close();
 	} 
 	catch (IOException e1)
