@@ -18,6 +18,7 @@ import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOSender;
+import model.BOTimer;
 import control.ControlMain;
 
 /**
@@ -168,5 +169,27 @@ public class SerBoxControlNeutrino extends SerBoxControl{
   	  Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird runtegefahren.");         
       return sendCommand("shutdown");
   }       
-
+  public ArrayList getTimer() throws IOException {
+  	ArrayList timerList = new ArrayList();
+  	BOTimer botimer = new BOTimer();
+	BufferedReader input = getConnection("/control/timer");	
+	String text = new String();
+	String line, valueStart, valueStop, valueAnno;
+	 while ((line = input.readLine()) != null) {  
+        StringTokenizer st = new StringTokenizer(line);    
+            botimer.setEventId(st.nextToken());
+            botimer.setEventType(st.nextToken());
+            botimer.setEventRepeat(st.nextToken());
+            valueAnno=st.nextToken();
+            botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)+" "+SerFormatter.formatUnixTime(valueAnno));
+            valueStart=st.nextToken(st.nextToken());
+            botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //start
+            botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));
+            valueStop=st.nextToken(st.nextToken());
+            botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
+            botimer.setSender(st.nextToken());  
+            timerList.add(botimer);  
+      }   	
+	return timerList;
+}
 }

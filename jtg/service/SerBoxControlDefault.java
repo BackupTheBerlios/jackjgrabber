@@ -69,6 +69,11 @@ public class SerBoxControlDefault extends SerBoxControl {
 
 	public String standbyBox(String modus) throws IOException {
         throw new IOException();
-	}        
+	}  
+	public ArrayList getTimer() throws IOException {
+		throw new IOException();
+	}
+
+
 
 }
