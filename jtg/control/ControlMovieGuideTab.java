@@ -84,15 +84,20 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	ArrayList boxSenderList;
 	
 	Element root;
-
+	String searchString = "";
+	
 	public static File movieGuideFile = new File("movieguide_"+SerFormatter.getAktuellDateString(0,"MM_yy")+".xml");
 	public static File movieGuideFileNext = new File("movieguide_"+SerFormatter.getAktuellDateString(1,"MM_yy")+".xml");
 	ArrayList aboList = getSettings().getMgSelectedChannels();
+	private final int aboListSize = aboList.size();
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
 	private static final String GENRE  = ControlMain.getProperty("txt_genre2");
 	private static final String SENDER = ControlMain.getProperty("txt_sender2");
+	private static final String GET_FORMAT_GRE_CAL = SerFormatter.getFormatGreCal();
+	private static final String GET_AKTUELL_DATE_STRING_0 = SerFormatter.getAktuellDateString(0,"MMMM");
+	private static final String GET_AKTUELL_DATE_STRING_1 = SerFormatter.getAktuellDateString(1,"MMMM"); 
 		
 	String SelectedItemJComboBox;
 	int SelectedItemJComboBoxSucheNach;
@@ -107,7 +112,15 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
           this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());          
           if(getSettings().getMgLoadType()==1){
           	if(SerMovieGuide2Xml.checkNewMovieGuide()){
-          		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+SerFormatter.getAktuellDateString(1,"MMMM")+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
+          		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
+          	}else{
+          		if( (SerMovieGuide2Xml.checkNewMovieGuide()) && (!movieGuideFileNext.exists())){
+        			try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}
+        		}
           	}
           }
           setRootElement();
@@ -138,10 +151,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	 */
 	private void beautifyGui(){		
 		if(getSettings().getMgDefault()==0){
-			setTitelMapSelected(SerFormatter.getFormatGreCal(),13);   // TitelMap Alles      
+			setTitelMapSelected(GET_FORMAT_GRE_CAL,13);   // TitelMap Alles      
 		}else{
-			setTitelMapSelected(SerFormatter.getFormatGreCal(),1);  // TitelMap für den heutigen Tag   
-			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getFormatGreCal());	 
+			setTitelMapSelected(GET_FORMAT_GRE_CAL,1);  // TitelMap für den heutigen Tag   
+			this.getTab().getComboBoxDatum().setSelectedItem(GET_FORMAT_GRE_CAL);	 
 		}      
         Collections.sort(getSenderList());		//alphabetisch geordnet 
         Collections.sort(getGenreList());		//alphabetisch geordnet
@@ -159,9 +172,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private void downloadMovieGuide(){
 		if(getMovieGuideFile().exists()){
 			if(SerMovieGuide2Xml.checkNewMovieGuide()){
-				SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+SerFormatter.getAktuellDateString(1,"MMMM")+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
+				SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
           	}else{
-          		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info3")+SerFormatter.getAktuellDateString(0,"MMMM")+".\n"+ControlMain.getProperty("txt_mg_info4")+SerFormatter.getAktuellDateString(1,"MMMM")+" "+ControlMain.getProperty("txt_mg_info5"),this.getMainView());
+          		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info3")+GET_AKTUELL_DATE_STRING_0+".\n"+ControlMain.getProperty("txt_mg_info4")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info5"),this.getMainView());
           	}
 		}else{				
 			try{
@@ -193,9 +206,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		        SerAlertDialog.alert(ControlMain.getProperty("error_no_timer_sel"), this.getMainView());
 		    }
 		}
-		if (action == "suchen") {		
+		if ( (action == "suchen") || (action == "textsuche") ) {		
 			if(this.getTitelMap()!=null){
 			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
+			searchString = getSelectedItemJComboBox();
 			if(getSelectedItemJComboBoxSucheNach()==0) {								
 				reInitFilmTable(2);
 			}else{					
@@ -209,6 +223,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (action == "allDates") {	
 			if(this.getTitelMap()!=null){
 				this.getTab().getTfSuche().setText("");
+				searchString = "";
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
 				this.getTab().getComboBoxSender().setSelectedIndex(0); 
 				reInitFilmTable(13);
@@ -221,6 +236,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxDatum();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
+				searchString = "";
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
 				this.getTab().getComboBoxSender().setSelectedIndex(0); 
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
@@ -233,6 +249,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxGenre();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
+				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(11);		
@@ -245,6 +262,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxSender();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
+				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(12);
@@ -264,7 +282,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			SerFormatter.highlight(this.getTab().getTaDarsteller(),search);
 			this.getTab().getTaDarsteller().setCaretPosition(0);		
 			SerFormatter.highlight(this.getTab().getTaBeschreibung(),search);		
-			this.getTab().getTaBeschreibung().setCaretPosition(0);					
+			this.getTab().getTaBeschreibung().setCaretPosition(0);								
 		}else{
 			SerFormatter.removeHighlights(this.getTab().getTaEpisode());								
 			SerFormatter.removeHighlights(this.getTab().getTaGenre());		
@@ -300,6 +318,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}	
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
 				this.getTab().getTfSuche().setText("");
+				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(11);		
@@ -311,6 +330,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}
 			if (comboBox.getName().equals("jComboBoxSender")) {	
 				this.getTab().getTfSuche().setText("");
+				searchString = "";
 				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(12);
@@ -793,12 +813,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	}
     	if(senderList.size()<=0){
     		setSenderList(SENDER);
-    	}    	
+    	}    	    	
     	try {						
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {				
 				Element entry = (Element) i.next();										
-				String sender = entry.element("sender").getStringValue();
-				if( (aboList.contains(sender)) || (aboList.size()<=0)  ){								
+				String sender = entry.element("sender").getStringValue();				
+				if( (aboList.contains(sender)) || (aboListSize<=0)  ){
 				String datum = entry.element("datum").getStringValue();						
 				if(SerFormatter.compareDates( datum,"today")) {				
 				setDatumList(datum);
@@ -825,7 +845,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 						entry.element("inhalt").getStringValue()
 				);				
 				setGenreList(bomovieguide.getGenre());				
-				titelList.put(new Integer(zaehler),bomovieguide);		
+				titelList.put(new Integer(zaehler),bomovieguide);						
 				setControlMap(bomovieguide.getTitel(),new Integer(zaehler));
 				zaehler++;               
 				}else{						 
@@ -966,4 +986,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		this.getTab().getTaGenre().setText("");
 		this.getTab().getTaEpisode().setText("");
     }    
+    public String getSearchString(){
+    	return searchString;
+    }
 }

@@ -18,6 +18,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
+import java.awt.Component;
+import java.awt.Insets;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -32,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.JProgressBar; 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellRenderer;
 
 import service.SerFormatter;
 
@@ -452,6 +456,8 @@ public class GuiTabMovieGuide extends JPanel {
 			tfSuche = new JTextField();
 			tfSuche.setEditable(true);			
 			tfSuche.setAutoscrolls(true);
+			tfSuche.setActionCommand("textsuche");
+			tfSuche.addActionListener(this.getControl());
 		}
 		return tfSuche;
 	}
@@ -556,9 +562,34 @@ public class GuiTabMovieGuide extends JPanel {
 			filmTableModel = new GuiMovieGuideFilmTableModel(control);			
 			mgFilmTableSorter = new GuiMovieGuideFilmTableSorter(filmTableModel);				 
 			jTableFilm = new JTable(mgFilmTableSorter);
-			//jTableFilm.getColumnModel().getColumn(0).setCellRenderer( new GuiMovieGuideColorCellRenderer(control)); //sinnvoll ?
-			//jTableFilm.getColumnModel().getColumn(0).setCellRenderer( new GuiMovieGuideFilmTableTextAreaRenderer());
-			//jTableFilm.getColumnModel().getColumn(0).setCellEditor(new GuiMovieGuideFilmTableCellEditor());
+			jTableFilm.setDefaultRenderer(Object.class,new TableCellRenderer() {
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){ 
+					JTextPane p = new JTextPane();
+					if (isSelected) {
+						p.setForeground(table.getSelectionForeground());
+						p.setBackground(table.getSelectionBackground());
+					} else{
+						p.setForeground(table.getForeground());
+						p.setBackground(table.getBackground());
+					}
+				String val = "";                
+                p.setMargin(new Insets(0, 0, 0, 0));
+                if (value == null)
+                    value = "";
+                val = value.toString();
+                p.setText(val);
+                if(getSearch().length()>=1){
+                	SerFormatter.highlight(p, getSearch());
+				}else{
+					SerFormatter.removeHighlights(p);
+				}
+                return p;
+            }
+				
+            public String getSearch(){
+                return getControl().getSearchString();
+            }            
+        });
 			mgFilmTableSorter.setTableHeader(jTableFilm.getTableHeader());
 			jTableFilm.setName("filmTable");
 			jTableFilm.addMouseListener(control);		
