@@ -345,17 +345,17 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					if (timerType.equalsIgnoreCase("44")) {
 						botimer.setEventType("offen");
 					}
-					else if (timerType.equalsIgnoreCase("256")) {
+					else if (timerType.equalsIgnoreCase("256")|timerType.equalsIgnoreCase("268")) {
 						botimer.setEventType("erfolgreich");
 					}
 					else if (timerType.equalsIgnoreCase("76")) {
-						botimer.setEventType("Aufnahme l√§uft");
+						botimer.setEventType("Aufnahme l‰uft");
 					}
 					else {
 						botimer.setEventType("Fehler");
 					}
 					botimer.setEventId("");
-					botimer.setEventRepeat("");
+					botimer.setEventRepeat("0");
 	    			botimer.setSenderName(channel);
 	    			botimer.setAnnounceTime(""); //vorwarnzeit
 	    			botimer.setUnformattedStartTime(startDate);  //startDatum
