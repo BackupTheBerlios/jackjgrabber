@@ -11,6 +11,7 @@ import com.jgoodies.plaf.plastic.theme.Silver;
 
 import control.ControlMain;
 import control.ControlProgramTab;
+import control.ControlProjectXTab;
 import control.ControlSettingsTab;
 import control.ControlTimerTab;
 
@@ -25,14 +26,15 @@ public class GuiMainView extends JFrame {
 	public GuiTabProgramm tabProgramm = null;
 	private GuiTabSettings tabSettings = null;
 	private GuiTabTimer tabTimer=null;
+	private GuiTabProjectX tabProjectX=null;
 	private ControlMain control;    
 	
 	public GuiMainView(ControlMain ctrl) {
 		super();
-		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
-		try {
-			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-		} catch (Exception e) {}
+//		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
+//		try {
+//			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+//		} catch (Exception e) {}
 		control = ctrl;
 		initialize();
 		SerGUIUtils.center(this);
@@ -65,6 +67,7 @@ public class GuiMainView extends JFrame {
 			
 			mainTabPane.addTab("Programm", null, getTabProgramm(), null);
 			mainTabPane.addTab("Timerliste", null, getTabTimer(), null);
+			mainTabPane.addTab("Project-X", null, getTabProjectX(), null);
 			mainTabPane.addTab("Settings", null, getTabSettings(), null);
 		}
 		return mainTabPane;
@@ -101,5 +104,16 @@ public class GuiMainView extends JFrame {
 			tabSettings = new GuiTabSettings(control);
 		}
 		return tabSettings;
+	}
+	
+	/**
+	 * Aufbau des Tabs Settings		
+	 */    
+	public GuiTabProjectX getTabProjectX() {
+		if (tabProjectX == null) {
+			ControlProjectXTab control = new ControlProjectXTab(this);
+			tabProjectX = new GuiTabProjectX(control);
+		}
+		return tabProjectX;
 	}
 }
