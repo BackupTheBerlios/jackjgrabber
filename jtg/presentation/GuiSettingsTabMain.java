@@ -84,7 +84,6 @@ public class GuiSettingsTabMain extends GuiTab {
 		String currentSelLFClassName = ControlMain.getSettings().getLookAndFeel();
 		for (int i = 0; i < looks.length; i++) {
 			lookAndFeels[i] = new LookAndFeelHolder(looks[i].getName(), looks[i].getClassName());
-			;
 			if (lookAndFeels[i].getLookAndFeelClassName().equals(currentSelLFClassName)) {
 				currentSelectedLookAndFeel = i;
 			}
@@ -100,6 +99,9 @@ public class GuiSettingsTabMain extends GuiTab {
 		builder.add(this.getPanelLayoutSettings(), cc.xy(1, 3));
 
 		jComboBoxLookAndFeel.setSelectedIndex(currentSelectedLookAndFeel);
+		jComboBoxTheme.setEnabled(currentSelLFClassName.equals(PlasticLookAndFeel.class.getName()));
+
+		
 	}
 
 	private JPanel getPanelBoxSettings() {
