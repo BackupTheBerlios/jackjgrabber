@@ -121,6 +121,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
         			}
         		}
+          		if( (!movieGuideFile.exists())){
+        			try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}
+        		}
           	}
           }
           setRootElement();
