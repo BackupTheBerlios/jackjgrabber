@@ -134,7 +134,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public ArrayList getSender(BOBouquet bouquet) throws IOException {
-		ArrayList senderList = new ArrayList();
+		/*ArrayList senderList = new ArrayList();
 		String line;
 		int seperator;
 		BufferedReader in = getConnection("/cgi-bin/getServices?ref="+bouquet.getBouquetNummer());
@@ -144,6 +144,37 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    if (seperator>0) {
 		        countChannels++;
 		        senderList.add(new BOSender(""+(countChannels),line.substring(0,seperator),line.substring(seperator+1,line.indexOf(";",seperator+1))));
+		    }
+		}*/
+	    ArrayList senderList = new ArrayList();
+		String line;
+		int seperator;
+		boolean tvMode=isTvMode();
+		BufferedReader in;
+		long countChannels = 0;
+		if (tvMode=true) {
+		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:6:0:0:0:0:0:0:&listContent=true");
+		} else {
+		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:4:0:0:0:0:0:0:&listContent=true");
+		}
+		while ((line = in.readLine()) != null) {
+		    if (line.substring(0,4).equals("4097")) {
+		        if (line.indexOf(bouquet.getBouquetNummer().substring(1))>0) {
+		            while ((line = in.readLine()) != null) {
+		                if (line.substring(0,4).equals("4097")) {
+		                    return senderList;
+		                } else {
+		                    seperator=line.indexOf(";");
+		    		        if (seperator>0) {
+		    		            countChannels++;
+		    		            senderList.add(new BOSender(""+(countChannels),line.substring(0,seperator),line.substring(seperator+1,line.indexOf(";",seperator+1))));
+		    		        }
+		                }
+		            }
+		        }
+		    } else {
+		        countChannels++;
+		        
 		    }
 		}
 		return senderList;
