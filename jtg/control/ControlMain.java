@@ -80,6 +80,7 @@ public class ControlMain {
 	public static void main(String args[]) {
 		startLogger();
 		logWindow = new GuiLogWindow();
+		logSystemInfo();
 		readSettings();	
 		initLogWindow();
 		
@@ -113,6 +114,20 @@ public class ControlMain {
 		}
 
 	};
+	
+	private static void logSystemInfo() {
+		for (int i=0; i<ControlMain.version.length; i++) {
+			log(version[i]);
+		}
+		log("java.version\t"+System.getProperty("java.version"));
+		log("java.vendor\t"+System.getProperty("java.vendor"));
+		log("java.home\t"+System.getProperty("java.home"));
+		log("java.vm.name\t"+System.getProperty("java.vm.name"));
+	}
+	
+	private static void log(String logtext) {
+		Logger.getLogger("ControlMain").info(logtext);
+	}
 
 	private static void initLogWindow() {
 		logWindow.setShouldBeVisible(ControlMain.getSettingsMain().isShowLogWindow());
@@ -143,7 +158,7 @@ public class ControlMain {
 	}
 
 	public static void detectImage() {
-		Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_searchImage"));
+		log(ControlMain.getProperty("msg_searchImage"));
 		int image = SerBoxControl.ConnectBox(ControlMain.getBoxIpOfActiveBox());
 		if (image == 0) {
 			boxAccess = new SerBoxControlDefault();
@@ -156,7 +171,7 @@ public class ControlMain {
 		} else if (image == 2) {
 			boxAccess = new SerBoxControlEnigma();
 		}
-		Logger.getLogger("ControlMain").info(ControlMain.getBoxAccess().getName() + "-" + ControlMain.getProperty("msg_accessLoaded"));
+		log(ControlMain.getBoxAccess().getName() + "-" + ControlMain.getProperty("msg_accessLoaded"));
 	}
 
 	/**
@@ -330,7 +345,7 @@ public class ControlMain {
 			saveLogLayout();
 			if (ControlMain.getSettings().isSettingsChanged()) {
 				SerSettingsHandler.saveAllSettings();
-				Logger.getLogger("ControlMainView").info("Settings saved");
+				log("Settings saved");
 			}
 		} catch (Exception e1) {
 			Logger.getLogger("ControlMainView").error("Error while save Settings");
