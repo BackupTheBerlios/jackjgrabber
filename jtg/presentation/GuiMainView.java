@@ -1,8 +1,14 @@
 package presentation;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 import service.SerGUIUtils;
+
+import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
+import com.jgoodies.plaf.plastic.theme.DesertBlue;
+
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlSettingsTab;
@@ -24,6 +30,10 @@ public class GuiMainView extends JFrame {
 	 */
 	public GuiMainView(ControlMain ctrl) {
 		super();
+		PlasticLookAndFeel.setMyCurrentTheme(new DesertBlue());
+		try {
+			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+		} catch (Exception e) {}
 		control = ctrl;
 		initialize();
 		SerGUIUtils.center(this);
