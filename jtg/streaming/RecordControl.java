@@ -19,11 +19,14 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
+import presentation.GuiTabProgramm;
 import presentation.GuiTabProjectX;
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
+import model.BOEpg;
 import model.BORecordArgs;
 
 
@@ -33,14 +36,39 @@ public class RecordControl extends Thread
 	public boolean isRunning = true;
 	ControlProgramTab controlProgramTab;
 	ArrayList recordFiles = new ArrayList();
+	BORecordArgs recordArgs;
+	public Date stopTime;
 
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
+		recordArgs = args;
 		controlProgramTab = control;
 		record = new Record(args, this);
 	}
 	
+	/*
+	 * Kontrolle der Stopzeit einer Sofortaufnahme
+	 */
 	public void run() {
-	   record.start();
+		record.start();
+		if (recordArgs.getBouquetNr() != null) { //Timer-Record hat keine bouquetNr 
+			long millis = new Date().getTime();
+			stopTime = new Date(millis+1500000);
+			controlProgramTab.setRecordStoptTime(stopTime);
+			waitForStop();
+		}
+	}
+	
+	private void waitForStop() {
+		boolean running = true;
+		while (running) {
+			long a = new Date().getTime(); 
+			long b = stopTime.getTime();
+			long c = a-b;
+			if (new Date().getTime()-stopTime.getTime()>0) {
+				running=false;
+			}
+		}
+		stopRecord();
 	}
 	
 	public void stopRecord() {
