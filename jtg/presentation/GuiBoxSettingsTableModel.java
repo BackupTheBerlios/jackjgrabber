@@ -62,7 +62,6 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		ControlMain.getSettings().setBoxIpChanged(true);
 		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(rowIndex);
 		if (columnIndex == 0) {
 			box.setDboxIp((String)aValue);
