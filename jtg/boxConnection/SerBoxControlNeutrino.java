@@ -67,11 +67,11 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		String line;
 	
 		BufferedReader input = getConnection("/control/zapto?getallpids");
-		if (tvMode) {
-		    String[] vPid = new String[1];
-		    vPid[0]=Integer.toHexString(Integer.parseInt(input.readLine()));
-		    pids.setVPid(vPid);
-		} 
+
+	    String[] vPid = new String[1];
+	    vPid[0]=Integer.toHexString(Integer.parseInt(input.readLine()));
+	    pids.setVPid(vPid);
+ 
 		while((line=input.readLine())!=null) {
 		    String[] aPid = new String[1];
 		    aPid[0]=Integer.toHexString(Integer.parseInt(line));
