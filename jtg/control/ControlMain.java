@@ -54,8 +54,7 @@ import service.SerSettingsHandler;
 import streaming.LocalTimerRecordDaemon;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
-import boxConnection.SerBoxControlEnigma;
-import boxConnection.SerBoxControlNeutrino;
+import boxConnection.SerBoxGuiDetector;
 import boxConnection.SerStreamingServer;
 
 /**
@@ -78,7 +77,7 @@ public class ControlMain {
 
 	private static String settingsFilename;
 
-	public static String version[] = {"Jack the JGrabber 0.2.5a", "18.01.2005", "User: " + System.getProperty("user.name")};
+	public static String version[] = {"Jack the JGrabber 0.2.5b", "12.01.2005", "User: " + System.getProperty("user.name")};
 
 	public static void main(String args[]) {
 	    startSplash();
@@ -99,6 +98,7 @@ public class ControlMain {
 		splash.setProgress(100, ControlMain.getProperty("msg_app_starting"));
 		splash.dispose();
         new LocalTimerRecordDaemon().start();
+        control.checkForStartWizard();
 	}
 	
 	private static void startSplash() {
@@ -178,22 +178,21 @@ public class ControlMain {
 		}
 	}
 
-	public static void detectImage() {
+	public synchronized static boolean detectImage() {
 		log(ControlMain.getProperty("msg_searchImage"));
 		splash.setProgress(15, ControlMain.getProperty("msg_searchImage"));
-		int image = SerBoxControl.ConnectBox(ControlMain.getBoxIpOfActiveBox());
-		if (image == 0) {
-			boxAccess = new SerBoxControlDefault();
-		}
-		if (image == 3) {
-			boxAccess = new SerBoxControlDefault();
-		}
-		if (image == 1) {
-			boxAccess = new SerBoxControlNeutrino();
-		} else if (image == 2) {
-			boxAccess = new SerBoxControlEnigma();
+		
+		Thread waitThread = new Thread();
+		synchronized( waitThread ) {
+			try {
+				new SerBoxGuiDetector(getBoxIpOfActiveBox(), waitThread).start();
+				waitThread.wait(2000);
+			} catch ( InterruptedException e ) {
+				log(e.getMessage());
+			}
 		}
 		log(ControlMain.getBoxAccess().getName() + "-" + ControlMain.getProperty("msg_accessLoaded"));
+		return true;
 	}
 
 	/**
@@ -316,6 +315,9 @@ public class ControlMain {
 	 * @return Returns the box.
 	 */
 	public static SerBoxControl getBoxAccess() {
+		if (boxAccess==null) {
+			boxAccess=new SerBoxControlDefault();
+		}
 		return boxAccess;
 	}
 
@@ -399,4 +401,10 @@ public class ControlMain {
         }
         return settingsFilename;
     }
+	/**
+	 * @param boxAccess The boxAccess to set.
+	 */
+	public static void setBoxAccess(SerBoxControl boxAccess) {
+		ControlMain.boxAccess = boxAccess;
+	}
 }

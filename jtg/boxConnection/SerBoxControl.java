@@ -1,22 +1,24 @@
 package boxConnection;
 /*
- * SerBoxControl.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+SerBoxControl.java by Alexander Geist
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Authenticator;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -63,54 +65,6 @@ public abstract class SerBoxControl {
             newTimerAdded=false;
         }
         return timerList;
-    }
-
-	/**
-	 * Detect the Image of the Box Rückgabe von 0 (default), 1 (Neutrino), 2 (Enigma), 3 (Sonstige)
-	 */
-	public static int ConnectBox(String ConnectBoxIP) {
-		int imageType = 3; //Defaultwert!!!
-		URL url;
-		BufferedReader in;
-		String inputLine;
-		Authenticator.setDefault(new SerBoxAuthenticator());
-
-	    if (isNeutrino(ConnectBoxIP)){
-	        imageType=1;
-	    } else if (isEnigma(ConnectBoxIP)) {
-	        imageType = 2;
-	    }
-	    return imageType;
-
-	}
-    
-    private static boolean isEnigma(String ConnectBoxIP) {
-        try {
-            URL url = new URL("http://" + ConnectBoxIP);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                if  (inputLine.toLowerCase().indexOf("enigma") > 0) {
-                    return true;
-                } 
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
-    }
-    
-    private static boolean isNeutrino(String ConnectBoxIP) {
-        try {
-            URL url=new URL("http://"+ConnectBoxIP+"/control/info");
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            if (in.readLine().equals("Neutrino")){
-                return true;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
     }
     
     public ArrayList senderList;
