@@ -95,8 +95,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "f:320:grow, 110:grow, 160:grow, 4dlu, pref",							// columns
-			      "pref, t:220:grow, pref, 8dlu, pref, t:100, b:100, pref");				// rows
+			      "f:320:grow, 110:grow, 160:grow, 7, pref",							// columns
+			      "pref, t:220:grow, pref, 10, pref, t:100, b:100, pref");				// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
