@@ -29,13 +29,11 @@ public class SerNewsHandler extends Thread {
 	}
 	
 	public void run() {
-		try {
-		    String htmlText = SerWebsiteContentLoader.getWebsiteContent(
-					"http://www.applejuicenet.org", 80,
-					"/inprog/news.php?version="
-							+ "0.30.146.1203");
-
-
+		try {        
+	        String htmlText = SerWebsiteContentLoader.getWebsiteContent(
+					"http://www.ralix.de", 80,
+					"/news.htm");
+		        
 			int pos = htmlText.toLowerCase().indexOf("<html>");
 			if (pos != -1) {
 				htmlText = htmlText.substring(pos);
