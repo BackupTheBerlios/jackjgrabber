@@ -202,7 +202,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				reInitFilmTable(getSelectedItemJComboBoxSucheNach());
 			}		
 			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
-			getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+			getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(0,0,true));
 			findAndReplaceGui(getSelectedItemJComboBox());
 			}
 		}
@@ -226,7 +226,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 				reInitFilmTable(1);						
 				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
-				getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+				getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(0,0,true));
 			}
 		}
 		if (action == "clickONGenreComboBox"){
@@ -237,7 +237,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(11);		
 					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
-					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(0,0,true));
 				}
 			}
 		}
@@ -249,7 +249,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(12);
 					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
-					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(0,0,true));
 				}
 			}
 		}
@@ -264,7 +264,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			SerFormatter.highlight(this.getTab().getTaDarsteller(),search);
 			this.getTab().getTaDarsteller().setCaretPosition(0);		
 			SerFormatter.highlight(this.getTab().getTaBeschreibung(),search);		
-			this.getTab().getTaBeschreibung().setCaretPosition(0);		
+			this.getTab().getTaBeschreibung().setCaretPosition(0);						
 		}else{
 			SerFormatter.removeHighlights(this.getTab().getTaEpisode());								
 			SerFormatter.removeHighlights(this.getTab().getTaGenre());		
