@@ -26,7 +26,9 @@ public class BOEpg {
 	BOSender sender;
 	String eventId, duration, title, unformattedStart, unformattedDuration;
 	GregorianCalendar startDate, endDate;
-	BOEpgDetails epgGetail;
+	BOEpgDetails epgDetail;
+    
+    public BOEpg() {}
 	
 	public BOEpg(BOSender sender, String eventId, GregorianCalendar startDate, 
 			GregorianCalendar endDate, String duration, String title, String unformStart, String unformDuration) {		
@@ -39,6 +41,10 @@ public class BOEpg {
 		this.setUnformattedStart(unformStart);
 		this.setUnformattedDuration(unformDuration);
 	}
+    
+    public boolean equals(Object o) {
+        return ((BOEpg)o).getEventId().equals(this.getEventId());
+    }
 
 	/**
 	 * @return Returns the sender.
@@ -101,22 +107,21 @@ public class BOEpg {
 		this.title = title;
 	}
 	/**
-	 * @return Returns the epgGetail.
+	 * @return Returns the epgDetail.
 	 */
-	public BOEpgDetails getEpgGetail() {
-		return epgGetail;
+	public BOEpgDetails getEpgDetail() {
+        if (epgDetail==null) {
+            try {
+                epgDetail=ControlMain.getBoxAccess().getEpgDetail(this);
+            } catch (IOException e) {}
+        }
+        return epgDetail;
 	}
 	/**
-	 * @param epgGetail The epgGetail to set.
+	 * @param epgDetail The epgDetail to set.
 	 */
 	public void setEpgDetail(BOEpgDetails value) {
-		epgGetail=value;
-	}
-	
-	public BOEpgDetails readEpgDetails() throws IOException {
-		BOEpgDetails detail = ControlMain.getBoxAccess().getEpgDetail(this);
-		this.setEpgDetail(detail);
-		return detail;
+		epgDetail=value;
 	}
 	/**
 	 * @return Returns the endDate.

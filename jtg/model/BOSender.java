@@ -20,6 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.io.IOException;
 import java.util.ArrayList;
 
+import service.SerNoticeListHandler;
+
 import control.ControlMain;
 
 public class BOSender {
@@ -75,6 +77,9 @@ public class BOSender {
 	 * @return Returns the epg.
 	 */
 	public ArrayList getEpg() {
+        if (epg==null) {
+            epg=new ArrayList();
+        }
 		return epg;
 	}
 	/**
@@ -84,10 +89,8 @@ public class BOSender {
 		epg=value;
 	}
 	
-	public ArrayList readEpg() throws IOException {
-		ArrayList epgList = ControlMain.getBoxAccess().getEpg(this);
-		this.setEpg(epgList);
-		return epgList;
+	public void readEpg() throws IOException {
+        SerNoticeListHandler.containsNotice(ControlMain.getBoxAccess().getEpg(this));
 	}
 	
 	/* (non-Javadoc)

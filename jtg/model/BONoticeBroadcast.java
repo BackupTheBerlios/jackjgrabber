@@ -21,9 +21,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 public class BONoticeBroadcast {
 
 	String searchString;
-	boolean searchEpg;
-	boolean searchMovieGuide;
-	boolean searchOnlyTitle;
+	boolean searchEpg=true;
+	boolean searchMovieGuide=false;
+	boolean searchOnlyTitle=true;
 	boolean buildTimer;
 
 	/**

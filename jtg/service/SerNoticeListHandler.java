@@ -25,17 +25,46 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import org.dom4j.Document;
-
+import model.BOEpg;
+import model.BONoticeBroadcast;
+import model.BOTimer;
 import control.ControlMain;
 
 
 public class SerNoticeListHandler {
 	
-	private static Document noticeDocument;
-    private static String noticeFile = ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"notice.xml";
-    
+    private static String noticeFile = ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"notice.xml";    
     private static ArrayList noticeList;
+    
+    public static void containsNotice(ArrayList epgList) {
+        if (epgList.size()>0) { 
+            for (int i=0; i<getNoticeList().size(); i++) {//Schleife ueber die EPG-Liste
+                BOTimer timer;
+                BONoticeBroadcast notice = (BONoticeBroadcast)getNoticeList().get(i);
+                
+                if (notice.isSearchEpg()) { 
+                    for (int i2=0; i2<epgList.size(); i2++) { //Schleife über die Suchtexte
+                        BOEpg epg = (BOEpg)epgList.get(i2);
+                        
+                        if (notice.isSearchOnlyTitle()) { //Suche nur im Titel
+                            if (notice.getSearchString().indexOf(epg.getTitle())>=0) {
+                                SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
+                            }    
+                        } else { 
+                            //Suche im Titel
+                            if (notice.getSearchString().indexOf(epg.getTitle())>=0) {
+                                SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
+                            }
+                            //Suche im Titel und EPG-Details
+                            if (epg.getEpgDetail().getText().indexOf(notice.getSearchString())>=0) {
+                                SerTimerHandler.saveTimer(SerTimerHandler.buildTimer(epg), false, true);
+                            }
+                        }
+                    }    
+                }
+            }    
+        }
+    }
     
     public static void readNoticeList() {
         try {
