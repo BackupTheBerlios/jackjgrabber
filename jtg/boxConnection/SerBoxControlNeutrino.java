@@ -193,7 +193,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		}
 		return line;
 	}
-	 public String removeRecordModus() throws IOException {
+	 public String stopRecordModus() throws IOException {
 		BufferedReader input = getConnection("/control/setmode?record=stop");
 		
 		String line;
