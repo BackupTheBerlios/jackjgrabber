@@ -287,8 +287,13 @@ public class SerHelper {
 	}
 
 	/*
-	 * return true, when the startTime of the second timer is
+	 * return true,
+     * 1. when the startTime of the second timer is
 	 * between start/stop-time of the first timer.
+     * 2. when the stopTime of the second timer is
+     * between start/stop-time of the first timer.
+     * 3. when the startTime of the second timer is
+     * before & the stopTime is after the first timer
 	 */
 	public static boolean compareTimerTime(BOTimer timer1, BOTimer timer2) {
 		long timer1Start = timer1.getUnformattedStartTime().getTimeInMillis();
