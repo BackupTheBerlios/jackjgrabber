@@ -131,9 +131,26 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public BOPids getPids() throws IOException {
 	    BOPids pids = new BOPids();
 		String line;
-		int startpos, endpos, getPidTries;
+		int startpos, endpos, reload=0;
+		boolean getPMT = false;
+		BufferedReader input = getConnection("/cgi-bin/getPMT");
+		while (((line=input.readLine())!=null) & (reload < 20) & !getPMT) {
+			reload++;
+			if (line.indexOf("ERROR")>0) {
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+				}
+				input = getConnection("/cgi-bin/getPMT");
+			} else {
+				getPMT=true;
+			}
+		}
+		if (!getPMT) {
+			throw new IOException();
+		}
 		if (isTvMode()) {
-			BufferedReader input = getConnection("/cgi-bin/status");
+			input = getConnection("/cgi-bin/status");
 			line=input.readLine();
 			while((line=input.readLine())!=null) {
 			    if (line.indexOf("vpid:</td><td>")>0) {
@@ -149,27 +166,17 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			    }
 			}
 		}
-		getPidTries=0;
-		BufferedReader input = getConnection("/cgi-bin/audioChannels");
-		while((line=input.readLine())!=null) {
-			System.out.println(line);
+		input = getConnection("/cgi-bin/audioChannels");
+		while ((line=input.readLine())!=null) {
 		    if (line.indexOf("selected") > 0) {
 		    	startpos=0;
 		    	while ((startpos=line.indexOf("value=", startpos+1))> 1) {
 		    		endpos=line.indexOf("\"", startpos+7);
-		    		System.out.println(getPidTries);
 		    		pids.getAPids().add(new BOPid(line.substring(startpos+9, endpos)+"h",line.substring(endpos+2,line.indexOf("<", endpos)), 1));
 		    	}
 		    } else {
-		    	getPidTries++;
-				if (getPidTries>50) {
 					throw new IOException();
-				}
-				System.out.println(getPidTries);
-				//zapTo(getChanIdOfRunningSender());
-				input = getConnection("/cgi-bin/audioChannels");
-		    }
-			
+			}
 		}
 		return pids;
 	}	 
@@ -267,55 +274,68 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		        }
 		    }
 		}
-		try {			
-			Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
 		return status;
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
 	    ArrayList epgList=new ArrayList();
-	    BufferedReader input = getConnection("/getcurrentepg?ref="+sender.getChanId());
+	    
 	    int startEpgInfo;
-		int endEpgInfo, startpos, endpos;
+		int endEpgInfo, startpos, endpos, reload=0;
 		long durationlong;
 		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
 		String line, line2, eventId=new String(), startTime=new String(), endTime=new String(), title=new String() ;
 		String valueStart, valueEnd, valueDuration,startDateString,endDateString,duration;
-		while((line=input.readLine())!=null) {
-		    startpos=line.indexOf("ID: ");
-		    if (startpos > 0){
-		        while ((line2=input.readLine())!=null) {
-		            if (line2.indexOf("ID: ")>0) {
-		                startpos+=4;
-		                endpos=line.indexOf(" ", startpos+1);
-		                eventId=line.substring(startpos, endpos);
-		                startpos=line.indexOf("<span class=\"epg\">")+18;
-		                endpos=line.indexOf(" ", startpos+1);
-		                startDateString=line.substring(startpos, endpos)+".";
-		                startpos=endpos+3;
-		                endpos=line.indexOf(" ", startpos+1);
-		                startTime=line.substring(startpos, endpos);
-		                startpos=endpos+1;
-		                endpos=line.indexOf("</span", startpos);
-		                title=line.substring(startpos, endpos);
-		                startpos=line2.indexOf("<span class=\"epg\">")+18;
-		                endpos=line2.indexOf(" ", startpos+1);
-		                endDateString=line2.substring(startpos, endpos)+".";
-		                startpos=endpos+3;
-		                endpos=line2.indexOf(" ", startpos+1);
-		                endTime=line2.substring(startpos, endpos);
-		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime, "dd.MM./HH:mm");
-		                endDate = SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
-		                valueStart = Long.toString(startDate.getTimeInMillis()/1000);
-		                valueDuration = Long.toString((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
-		                startDate = SerFormatter.formatUnixDate(valueStart);
-		    			duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
-		    			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));    
-						epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
-		                line=line2;
-		                startpos=line2.indexOf("ID: ");
+		boolean getEIT = false;
+		BufferedReader input = getConnection("/cgi-bin/getEIT");
+		while (((line=input.readLine())!=null) & (reload < 20) & !getEIT) {
+			reload++;
+			if (line.indexOf("ERROR")>0) {
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+				}
+				input = getConnection("/cgi-bin/getEIT");
+			} else {
+				getEIT=true;
+			}
+		}
+		if (getEIT) {
+			input = getConnection("/getcurrentepg?ref="+sender.getChanId());
+			while((line=input.readLine())!=null) {
+				startpos=line.indexOf("ID: ");
+				if (startpos > 0){
+					while ((line2=input.readLine())!=null) {
+						if (line2.indexOf("ID: ")>0) {
+							startpos+=4;
+							endpos=line.indexOf(" ", startpos+1);
+							eventId=line.substring(startpos, endpos);
+							startpos=line.indexOf("<span class=\"epg\">")+18;
+							endpos=line.indexOf(" ", startpos+1);
+							startDateString=line.substring(startpos, endpos)+".";
+							startpos=endpos+3;
+							endpos=line.indexOf(" ", startpos+1);
+							startTime=line.substring(startpos, endpos);
+							startpos=endpos+1;
+							endpos=line.indexOf("</span", startpos);
+							title=line.substring(startpos, endpos);
+							startpos=line2.indexOf("<span class=\"epg\">")+18;
+							endpos=line2.indexOf(" ", startpos+1);
+							endDateString=line2.substring(startpos, endpos)+".";
+							startpos=endpos+3;
+							endpos=line2.indexOf(" ", startpos+1);
+							endTime=line2.substring(startpos, endpos);
+							startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime, "dd.MM./HH:mm");
+							endDate = SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
+							valueStart = Long.toString(startDate.getTimeInMillis()/1000);
+							valueDuration = Long.toString((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
+							startDate = SerFormatter.formatUnixDate(valueStart);
+							duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
+							endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));    
+							epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
+							line=line2;
+							startpos=line2.indexOf("ID: ");
+						}
 		            }
 		        }
 		    }
