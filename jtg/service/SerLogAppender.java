@@ -32,7 +32,7 @@ public class SerLogAppender extends RollingFileAppender {
 	static PatternLayout areaOutpuLayout = new PatternLayout();
 	
 	public SerLogAppender(PatternLayout layout) throws IOException {
-		super(layout, "jackLog.log");
+		super(layout, "xmgLog.log");
         areaOutpuLayout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");
 	}
 	

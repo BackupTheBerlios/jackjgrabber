@@ -22,9 +22,7 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
@@ -73,7 +71,7 @@ public class ControlMain {
 	static BOBox activeBox;
 
 	private static Properties properties = new Properties();
-	public static String jtjgDirectory = System.getProperty("user.home")+File.separator+".jtjg";
+	public static String xmgDirectory = System.getProperty("user.home")+File.separator+".xmg";
 	private static Locale locale = new Locale("");
 	public static GuiSplashScreen splash = null;
 	public static GuiLogWindow logWindow;
@@ -209,13 +207,9 @@ public class ControlMain {
 	public static String getBoxIpOfActiveBox() {
 		BOBox box = getActiveBox();
 		if (box == null) {
-			return "";
-		}
-		try {
-			return (InetAddress.getByName(box.getDboxIp())).getHostAddress();
-		} catch (UnknownHostException e) {
-			return box.getDboxIp();
-		}
+			return new String();
+		} 
+		return box.getDboxIp();
 	}
 
 	/**
@@ -411,11 +405,11 @@ public class ControlMain {
      */
     public static String getSettingsFilename() {
         if (settingsFilename==null) {
-            File userHome = new File(jtjgDirectory);
+            File userHome = new File(xmgDirectory);
             if (!userHome.exists()) {
                 userHome.mkdir();
             }
-            settingsFilename = jtjgDirectory+File.separator+"settings.xml";    
+            settingsFilename = xmgDirectory+File.separator+"settings.xml";    
         }
         return settingsFilename;
     }

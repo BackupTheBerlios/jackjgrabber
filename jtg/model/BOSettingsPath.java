@@ -154,7 +154,7 @@ public class BOSettingsPath {
      */
     public String getWorkDirectory() {
         if (workDirectory==null) {
-            workDirectory=ControlMain.jtjgDirectory;
+            workDirectory=ControlMain.xmgDirectory;
         }
         return workDirectory;
     }

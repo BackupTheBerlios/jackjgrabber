@@ -125,8 +125,8 @@ public class SerSettingsHandler {
 		pathS.setVlcPath(new File("vlc.exe").getAbsolutePath());
         pathS.setMplexPath(new File("mplex.exe").getAbsolutePath());
 		pathS.setShutdownToolPath("");
-		pathS.setSavePath(ControlMain.jtjgDirectory);
-		pathS.setWorkDirectory(ControlMain.jtjgDirectory);
+		pathS.setSavePath(ControlMain.xmgDirectory);
+		pathS.setWorkDirectory(ControlMain.xmgDirectory);
 		
 		rec.setStartStreamingServer(true);
 		rec.setStreamingServerPort("4000");
