@@ -1,19 +1,22 @@
 package control;
 
 import java.io.File;
+
+import model.BOBox;
 import model.BOSettings;
+
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
+import service.SerAlertDialog;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
-import java.util.Properties;
-import java.util.Locale;
-import java.io.InputStream;
-import java.io.IOException;
+
+import java.util.ArrayList;
 
 /**
  * @author Alexander Geist
@@ -24,9 +27,10 @@ import java.io.IOException;
 public class ControlMain {
 	
 	static BOSettings settings;
+	public static String filename = "settings.xml";
 	static Document settingsDocument;
 	static SerBoxControl box;
-	static ControlMainView control;	
+	static ControlMainView control;
 	static int CurrentBox=0;
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
@@ -48,7 +52,7 @@ public class ControlMain {
 	};
 
 	public static void main( String args[] ) {
-		control = new ControlMainView();			
+		control = new ControlMainView();
 	};
 	
 	public static void detectImage() {
@@ -73,28 +77,32 @@ public class ControlMain {
 	 */
 	public static void readSettings() {
 		try {
-			File pathToXMLFile = new File("settings.xml").getAbsoluteFile();
+			File pathToXMLFile = new File(filename).getAbsoluteFile();
 			if (pathToXMLFile.exists()) {
 				settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
 				//mainLogger.info("Settings found");
 			} else {
 				settingsDocument = SerXMLHandling.buildEmptyXMLFile(pathToXMLFile);
-				//mainLogger.info("Settings not found, created empty document");
+				Logger.getLogger("ControlMain").info("Settings not found, created empty document");
 			}
-			setSettings((SerXMLConverter.buildSettings(getSettingsDocument())));
-		} catch (Exception ex) {}; //SerAlertDialog.alert("Fehler beim Zugriff auf die settings.xml Datei", this.getView());}
+			setSettings(SerXMLConverter.buildSettings(getSettingsDocument()));
+		} catch (Exception ex) {SerAlertDialog.alert("Fehler beim Zugriff auf die "+filename+" Datei", control.getView());}
 	}
 	
 	public static String getBoxIp() {
-		return (String)getSettings().getDboxIp();
+		String boxIp = new String();
+		ArrayList boxList = getSettings().getBoxList();
+		for (int i=0; boxList.size()>i; i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			if (box.isStandard().booleanValue()) {
+				boxIp = box.getDboxIp();
+			}
+		}
+		return boxIp;
 	}
 	public static String getVlcPath() {
 		return (String)getSettings().getVlcPath();
-	}
-	public static void setBoxIp(String boxIp) {
-		getSettings().setDboxIp(boxIp);
-	}
-	
+	}	
 	public static void setVlcPath(String boxIp) {
 		getSettings().setVlcPath(boxIp);
 	}

@@ -34,8 +34,6 @@ import presentation.GuiMainView;
 import presentation.GuiSenderTableModel;
 import service.SerAlertDialog;
 
-
-
 /**
  * @author Alexander Geist
  * Verwaltung des Programmtabs.
@@ -63,12 +61,21 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			this.setBox(ControlMain.getBox());
 			this.setBouquetList(this.getBox().getBouquetList());
-			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));
-			this.getSelectedBouquet().readSender();		
+			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		} catch (IOException e) {			
 			SerAlertDialog.alert(ControlMainView.getProperty("no_connect"), this.getMainView());
 		}
+	}
+	
+	public void reInitialize() {
+		this.setBouquetList(new ArrayList());
+		this.setSelectedBouquet(null);
+		this.getSenderTableModel().fireTableDataChanged();
+		this.getEpgTableModel().setEpgList(null);
+		this.getMainView().getTabProgramm().getBoquetsComboModel().setSelectedItem(null);
+		this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
+		this.initialize();
 	}
 	
 	/**
@@ -130,25 +137,33 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Setzen des aktuellen Bouquets, Selektion des 1. Senders
 	 */
 	public void itemStateChanged( ItemEvent e ) {
-		JComboBox selectedChoice = (JComboBox)e.getSource();
-		this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(selectedChoice.getSelectedIndex()));
-		this.reInitSender();
-		if (this.getSelectedBouquet().getSender().size()> 0) {
+		JComboBox comboBox = (JComboBox)e.getSource();
+		this.reInitBouquetList(comboBox);
+	}
+	
+	public void reInitBouquetList(JComboBox  comboBox) {
+		if (this.getBouquetList().size()>0) {
+			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(comboBox.getSelectedIndex()));
+			this.reInitSender();
+			this.showFirstSender();
+		}
+	}
+	
+	private void showFirstSender() {
+		if (this.getSelectedBouquet()!=null && this.getSelectedBouquet().getSender().size()> 0) {
 			this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(0,0);
 			this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(0));
 		}
-      }
-	
+	}
 	/**
 	 * Aktualisieren des Tables EPG
 	 */
 	public void reInitEpg() {
-		try {
-			this.getSelectedSender().readEpg();
-			this.getEpgTableModel().fireTableRowsInserted(1,1);
-			this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
-		} catch (IOException e) {
-			SerAlertDialog.alert("Fehler beim Lesen des EPG", this.getMainView());
+		this.getEpgTableModel().fireTableDataChanged();
+		if (this.getEpgTableModel().getEpgList().size() > 0) {
+			BOEpg epg = (BOEpg)this.getSelectedSender().getEpg().get(0);
+			this.setSelectedEpg(epg.getEventId());
+			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(0,0);
 		}
 	}
 	/**
@@ -158,7 +173,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			this.getSelectedBouquet().readSender();
 			if (this.getMainView().getMainTabPane().tabProgramm != null) { //Beim 1. Start gibt es noch keine Table zum refreshen
-				this.getSenderTableModel().fireTableRowsInserted(1,1);
+				this.getSenderTableModel().fireTableDataChanged();
 			}
 		} catch (IOException e) {
 			SerAlertDialog.alert("Fehler beim Lesen des EPG", this.getMainView());
@@ -213,13 +228,14 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void setSelectedSender(BOSender selectedSender) {
 		this.selectedSender = selectedSender;
-		this.reInitEpg();
-		
-		if (selectedSender.getEpg().size() > 0) {
-			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(0,0);
-			BOEpg epg = (BOEpg)this.getSelectedSender().getEpg().get(0);
-			this.setSelectedEpg(epg.getEventId());
+		if (selectedSender != null) {
+			try {
+				selectedSender.readEpg();
+			} catch (IOException e) {
+				SerAlertDialog.alert("Fehler beim Lesen des EPG", this.getMainView());
+			}
 		}
+		this.reInitEpg();
 	}
 	/**
 	 * @return Returns the box.
@@ -240,8 +256,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return selectedEpg;
 	}
 	/**
-	 * Setzen des aktuellen Epg, refreshen der dazugehï¿½rigen Epg-Details
-	 * Durch die Sortierung geht die Objektidentitï¿½t verloren
+	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details
+	 * Durch die Sortierung geht die Objektidentität verloren
 	 * Passendes EPG durch Event-ID finden
 	 */
 	public void setSelectedEpg(String eventId) {

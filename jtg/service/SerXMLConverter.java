@@ -7,15 +7,20 @@
 package service;
 
 
-import java.util.Iterator;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import model.BOBox;
 import model.BOSettings;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+
+import control.ControlMain;
 /**
  * @author QSE2419
  *
@@ -24,29 +29,58 @@ import org.dom4j.Node;
  */
 public class SerXMLConverter {
 
-	public static BOSettings buildSettings(Document document)
-		{	//Auslesen der Werte aus der XMLDatei und Aufbereitung
+	/**
+	 * Auslesen der Werte aus der XMLDatei und Aufbereitung
+	 */
+	public static BOSettings buildSettings(Document document) {	
 		BOSettings settings = new BOSettings();	
-			Element root = document.getRootElement();
-			for ( Iterator i = root.elementIterator(); i.hasNext(); ) {
-				Element element = (Element) i.next();
-				List nodes = SerXPathHandling.getDescendentNodes(element);
-				Node boxIp = (Node)nodes.get(0);
-				Node vlcpath = (Node)nodes.get(1); 
-				settings.setDboxIp(boxIp.getText());
-				settings.setVlcPath(vlcpath.getText());
-			};
-			return settings;
-		}
-		
-	public static void buildXMLDocument(Document document, BOSettings settings)
-		{	//Erstellen eines XML-Dokuments aus einer ArrayList von Settings
-			Element root = document.getRootElement();
-			root.clearContent();
+		Element root = document.getRootElement();
+		List boxListNodes = root.selectNodes("//box"); //All Box-Nodes
+		ArrayList boxList = new ArrayList(boxListNodes.size());
 
-			Element boxIpElement = DocumentHelper.createElement("Settings");
-			boxIpElement.addElement("boxIp").addText(settings.getDboxIp());
-			boxIpElement.addElement("vlcPath").addText(settings.getVlcPath());
-			root.add(boxIpElement);
+		for (int i=0; i<boxListNodes.size(); i++) { //Schleife über die Box-Elemente
+			BOBox box = new BOBox();
+			Node boxElement = (Node)boxListNodes.get(i);
+			List boxValueNodes = boxElement.selectNodes("descendant::*");
+			
+			for (int i2=0; i2<boxValueNodes.size(); i2++) { //Schleife über die BoxValue-Elemente
+				Node value = (Node)boxValueNodes.get(i2);
+				switch(i2) {
+					case 0: box.setDboxIp(value.getText());
+					break;
+					case 1: box.setLogin(value.getText());
+					break;
+					case 2: box.setPassword(value.getText());
+					break;
+					case 3: box.setStandard(Boolean.valueOf(value.getText()));
+					break;										
+				}				
+			}
+			boxList.add(box);
 		}
+		settings.setBoxList(boxList);
+		return settings;
+	}
+	
+	public static void saveBoxSettings() throws IOException {
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		Node boxListRoot = settingsDocument.selectSingleNode("/settings/boxList");
+		settingsDocument.remove(boxListRoot);
+		
+		Element newBoxListRoot = DocumentHelper.createElement("boxList");
+		ArrayList boxList = ControlMain.getSettings().getBoxList();
+	
+		for (int i=0; i<boxList.size(); i++) {
+			BOBox box = (BOBox)boxList.get(i);
+			Element boxElement = DocumentHelper.createElement("box");
+			boxElement.addElement("boxIp").addText(box.getDboxIp());
+			boxElement.addElement("login").addText(box.getLogin());
+			boxElement.addElement("password").addText(box.getPassword());
+			boxElement.addElement("standard").addText(box.isStandard().toString());
+			newBoxListRoot.add(boxElement);
+		}
+		settingsDocument.add(newBoxListRoot);
+		
+		SerXMLHandling.saveXMLFile(new File(ControlMain.filename), ControlMain.getSettingsDocument());
+	}
 }
