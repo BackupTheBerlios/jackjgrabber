@@ -1,6 +1,7 @@
 package service;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
@@ -82,5 +83,10 @@ public class SerFormatter {
             value = false;
         }            
         return value;
+    }
+    
+    public static String getAktuellDateString() {
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+        return "mguide_d_s_" + String.valueOf((cal.get(GregorianCalendar.MONTH) + 1)) + "_" + String.valueOf((cal.get(GregorianCalendar.YEAR))).substring(2) + ".txt";        
     }
 }

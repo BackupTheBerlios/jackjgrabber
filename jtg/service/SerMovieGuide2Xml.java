@@ -44,18 +44,7 @@ public class SerMovieGuide2Xml {
         writer.write(ControlMain.getMovieGuideDocument());
         writer.close();    
     }
-    
-    private static void setElementInElement(Element parentElement, String childElementName, String childElementValue) {
-        Element element = DocumentHelper.createElement(childElementName);
-        element.setText(childElementValue);
-        parentElement.add(element);
-    }
-    
-    private static String getAktuellDateString() {
-        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-        return "mguide_d_s_" + String.valueOf((cal.get(Calendar.MONTH) + 1)) + "_" + String.valueOf((cal.get(Calendar.YEAR))).substring(2) + ".txt";        
-    }
-    
+          
     private static final void createHashTable() {
         htToken.put((String) "Titel", new Integer(1));
         htToken.put((String) "Episode", new Integer(2));
@@ -68,29 +57,29 @@ public class SerMovieGuide2Xml {
         try {
             switch (i) {
                 case 0:
-                    setElementInElement(movie,"sender",input.substring(0, input.indexOf(":")));
-                    setElementInElement(movie,"datum",SerFormatter.getCorrectDate(input.substring(input.indexOf(":") + 2)));
-                    setElementInElement(movie,"start", input.substring(input.indexOf("/")+1));
+                	SerXMLHandling.setElementInElement(movie,"sender",input.substring(0, input.indexOf(":")));
+                	SerXMLHandling.setElementInElement(movie,"datum",SerFormatter.getCorrectDate(input.substring(input.indexOf(":") + 2)));
+                	SerXMLHandling.setElementInElement(movie,"start", input.substring(input.indexOf("/")+1));
                     break;
                 case 1:
-                    setElementInElement(movie,"titel", input.substring(input.indexOf(":") + 2));
+                	SerXMLHandling.setElementInElement(movie,"titel", input.substring(input.indexOf(":") + 2));
                     break;
                 case 2:
-                    setElementInElement(movie,"episode",input.substring(9, input.indexOf("Genre") - 2));
-                    setElementInElement(movie,"genre", input.substring(input.indexOf("Genre") + 7, input.indexOf("Länge") - 2));
-                    setElementInElement(movie,"dauer", input.substring(input.indexOf("Länge") + 7, input.indexOf("Stunden") - 1));
+                	SerXMLHandling.setElementInElement(movie,"episode",input.substring(9, input.indexOf("Genre") - 2));
+                	SerXMLHandling.setElementInElement(movie,"genre", input.substring(input.indexOf("Genre") + 7, input.indexOf("Länge") - 2));
+                	SerXMLHandling.setElementInElement(movie,"dauer", input.substring(input.indexOf("Länge") + 7, input.indexOf("Stunden") - 1));
                     break;
                 case 3:
-                    setElementInElement(movie,"land",input.substring(input.indexOf(":") + 2, input.indexOf("Produktionsjahr") - 2));
-                    setElementInElement(movie,"jahr", input.substring(input.indexOf("Produktionsjahr") + 17, input.indexOf("Regie") - 2));
-                    setElementInElement(movie,"regie", input.substring(input.indexOf("Regie") + 7));
+                	SerXMLHandling.setElementInElement(movie,"land",input.substring(input.indexOf(":") + 2, input.indexOf("Produktionsjahr") - 2));
+                	SerXMLHandling.setElementInElement(movie,"jahr", input.substring(input.indexOf("Produktionsjahr") + 17, input.indexOf("Regie") - 2));
+                	SerXMLHandling.setElementInElement(movie,"regie", input.substring(input.indexOf("Regie") + 7));
                     break;
                 case 4:
-                    setElementInElement(movie,"bild",input.substring(input.indexOf(":") + 2, input.indexOf("/")));
-                    setElementInElement(movie,"ton", input.substring(input.indexOf("/") + 1));
+                	SerXMLHandling.setElementInElement(movie,"bild",input.substring(input.indexOf(":") + 2, input.indexOf("/")));
+                	SerXMLHandling.setElementInElement(movie,"ton", input.substring(input.indexOf("/") + 1));
                     break;
                 case 5:
-                    setElementInElement(movie,"darsteller", input.substring(input.indexOf(":") + 2));
+                	SerXMLHandling.setElementInElement(movie,"darsteller", input.substring(input.indexOf(":") + 2));
                     break;
             }
         } catch (StringIndexOutOfBoundsException ex) {}
@@ -125,7 +114,7 @@ public class SerMovieGuide2Xml {
                     in = new BufferedReader(new FileReader(datei));
                     break;
                 case 2:
-                    URL url = new URL("http://www.premiere.de/content/download/"+ getAktuellDateString());
+                    URL url = new URL("http://www.premiere.de/content/download/"+ SerFormatter.getAktuellDateString());
                     Reader is = new InputStreamReader(url.openStream());
                     in = new BufferedReader(is);
                     break;
@@ -146,7 +135,7 @@ public class SerMovieGuide2Xml {
                     if(input.length() > 0){
                         inhalt.append(input);
                     }else{
-                        setElementInElement(movie,"inhalt", inhalt.toString());
+                    	SerXMLHandling.setElementInElement(movie,"inhalt", inhalt.toString());
                         inhalt.setLength(0);
                     }
                 }
