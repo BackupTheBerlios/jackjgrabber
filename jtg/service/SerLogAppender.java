@@ -29,16 +29,17 @@ import org.apache.log4j.spi.LoggingEvent;
 public class SerLogAppender extends RollingFileAppender {
 	
 	static ArrayList textAreas = new ArrayList();
-	static PatternLayout patternLayout;
+	static PatternLayout areaOutpuLayout = new PatternLayout();;
 	
 	public SerLogAppender(PatternLayout layout) throws IOException {
 		super(layout, "jackLog.log");
+        areaOutpuLayout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");
 	}
 	
 	public void doAppend(LoggingEvent event) {
-		if (getTextAreas().size()>0) {	
-			String outputString = getPatternLayout().format(event);
-			
+		if (getTextAreas().size()>0) {
+		    String outputString = getAreaOutpuLayout().format(event);   
+
 			for (int i=0; i<getTextAreas().size(); i++) {
 			    JTextArea outputArea = (JTextArea)getTextAreas().get(i);
 			    outputArea.append(outputString);
@@ -48,16 +49,12 @@ public class SerLogAppender extends RollingFileAppender {
 		super.doAppend(event);
 	}
 	
-	 /**
-   * @return Returns the patternLayout.
-   */
-  public static PatternLayout getPatternLayout() {
-      if (patternLayout==null) {
-          patternLayout = new PatternLayout();
-          patternLayout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");			
-      }
-      return patternLayout;
-  }
+	/**
+	* @return Returns the areaOutpuLayout.
+	*/
+	public static PatternLayout getAreaOutpuLayout() {
+      return areaOutpuLayout;
+	}
     /**
      * @return Returns the textAreas.
      */
