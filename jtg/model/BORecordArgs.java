@@ -193,7 +193,7 @@ public class BORecordArgs {
 		this.pids = pids;
 	}
 	public void checkTitle() {
-		if (!this.getLocalTimer().getDescription().equals("")) {
+		if (this.getLocalTimer().getDescription().length()>0) {
 			this.setEpgTitle(this.getLocalTimer().getDescription());
 		}
 	}
