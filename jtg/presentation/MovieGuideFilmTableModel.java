@@ -27,7 +27,7 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		if (columnIndex == 0) {								
+		if (columnIndex == 0) {				
 			return ((BOMovieGuide)this.getControl().getTitelMap().get(new Integer(rowIndex))).getTitel();
 		}else{
 			return null;
@@ -54,7 +54,8 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 		this.control = control;
 	}		
 
-	public void fireTableDataChanged() {						
+	public void fireTableDataChanged(int value) {								
+		this.getControl().setTitelMapSelected(this.getControl().getSelectedItemJComboBox(),value);
 		super.fireTableDataChanged();
 	}
 

@@ -20,7 +20,7 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		if (this.getControl().getTitelMap() == null) {
 			return 0;
 		} else {			
-			return 10;
+			return 2;
 			//return this.getControl().getTitelMap().size();
 			//return ((BOMovieGuide)this.getControl().getTitelMap().get(this.getControl().getSelectRowFilmTable())).getDatum().toArray().length;			
 			//Integer selectRow = this.getControl().getSelectRowFilmTable();

@@ -384,7 +384,8 @@ public class BOMovieGuide {
     	return sucheList;
     }
  
-    public void setSucheList(){    	
+    public void setSucheList(){ 
+    	sucheList.add("Suche nach...");
     	sucheList.add("Titel");
     	sucheList.add("Darsteller");    	
     	sucheList.add("Episode");

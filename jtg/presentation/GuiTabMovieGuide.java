@@ -18,9 +18,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-//import java.awt.Dimension;
-
-//import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -30,8 +27,9 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 
 import javax.swing.JTextField;
-import javax.swing.table.TableColumn;
 import javax.swing.JProgressBar; 
+
+import service.SerFormatter;
 
 import model.BOMovieGuide;
 
@@ -89,7 +87,8 @@ public class GuiTabMovieGuide extends JPanel {
 	private JLabel jLabelMovieGuide = null;
 	
 	public MovieGuideTimerTableModel mgTimerTableModel;
-	public GuiTableSorter sorter = null;
+	public GuiMovieGuideTimerTableSorter mgTimerTableSorter = null;
+	//public GuiTableSorter sorter = null;
 	
 	public MovieGuideFilmTableModel filmTableModel;
 	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
@@ -286,7 +285,8 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonNeuEinlesen = new JButton("Neu einlesen");
 			jButtonNeuEinlesen.setActionCommand("neuEinlesen");
 			jButtonNeuEinlesen.setToolTipText("Neueinlesen des aktuellen MovieGuide.");
-			jButtonNeuEinlesen.addActionListener(this.getControl());
+			jButtonNeuEinlesen.addActionListener(this.getControl());		
+			jButtonNeuEinlesen.setEnabled(false);
 		}
 		return jButtonNeuEinlesen;
 	}
@@ -357,14 +357,14 @@ public class GuiTabMovieGuide extends JPanel {
 	public JTable getJTableTimer() {
 		if (jTableTimer == null) {
 			mgTimerTableModel = new MovieGuideTimerTableModel(control);
-			sorter = new GuiTableSorter(mgTimerTableModel);
-			jTableTimer = new JTable(sorter);
-			sorter.setTableHeader(jTableTimer.getTableHeader());									 
-			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(70);
-			jTableTimer.getColumnModel().getColumn(1).setMaxWidth(50);
-			jTableTimer.getColumnModel().getColumn(2).setMaxWidth(50);
-			jTableTimer.getColumnModel().getColumn(3).setMaxWidth(50);		
-			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(280);
+			mgTimerTableSorter = new GuiMovieGuideTimerTableSorter(mgTimerTableModel);
+			jTableTimer = new JTable(mgTimerTableSorter);
+			mgTimerTableSorter.setTableHeader(jTableTimer.getTableHeader());									 
+			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(205);
+			jTableTimer.getColumnModel().getColumn(1).setMaxWidth(45);
+			jTableTimer.getColumnModel().getColumn(2).setMaxWidth(45);
+			jTableTimer.getColumnModel().getColumn(3).setMaxWidth(45);		
+			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(160);
 			jTableTimer.addMouseListener(control);
 			jTableTimer.setName("timerTable");
 		}
@@ -372,7 +372,9 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 	public JComboBox getComboBoxSucheNach(){
 		if (comboBoxSuchenNach == null) {						
-			comboBoxSuchenNach = new JComboBox(new BOMovieGuide().getSucheList().toArray());			
+			comboBoxSuchenNach = new JComboBox(new BOMovieGuide().getSucheList().toArray());	
+			comboBoxSuchenNach.addItemListener(control);
+			comboBoxSuchenNach.setName("jComboBoxSucheNach");
 		}
 		return comboBoxSuchenNach;
 	}
@@ -479,6 +481,7 @@ public class GuiTabMovieGuide extends JPanel {
 			comboBoxDatum = new JComboBox(this.getControl().getDatumList().toArray());
 			comboBoxDatum.addItemListener(this.getControl());
 			comboBoxDatum.setName("jComboBoxDatum");
+			comboBoxDatum.setSelectedItem(SerFormatter.getDatumToday());
 		}
 		return comboBoxDatum;
 	}
