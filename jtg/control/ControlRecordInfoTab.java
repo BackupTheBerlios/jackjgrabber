@@ -187,7 +187,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				if (files[i].isDirectory()) {
 
 					BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
-					node.setIdent("Directory:" + files[i].getName());
+					node.setIdent("Directory:" + files[i].getAbsolutePath());
 					parent.add(node);
 					createStructure(node, files[i]);
 				}
