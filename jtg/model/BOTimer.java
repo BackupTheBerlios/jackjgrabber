@@ -1,22 +1,17 @@
 package model;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/*
- * BOTimer.java
- *
- * Created on 11. September 2004, 11:33
- */
+import service.SerFormatter;
 
 /**
- *
- * @author  ralix
+ * @author  Alexander Geist
  */
 public class BOTimer extends java.lang.Object{
     private String eventId, eventType, eventRepeat, announceTime, senderName, description;;
-    private String stopTime;
     private GregorianCalendar unformattedStartTime, unformattedStopTime;
     
     public String getEventId (){
@@ -52,9 +47,8 @@ public class BOTimer extends java.lang.Object{
     }
     
     public String getStartTime (){
-		String hour = Integer.toString(this.getUnformattedStartTime().get(Calendar.HOUR_OF_DAY));
-		String minute = Integer.toString(this.getUnformattedStartTime().get(Calendar.MINUTE));
-        return hour+":"+minute;
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
     public String getDateWithoutYear(GregorianCalendar cal) {
@@ -64,13 +58,8 @@ public class BOTimer extends java.lang.Object{
     }
     
     public String getStopTime(){
-    	String hour = Integer.toString(this.getUnformattedStopTime().get(Calendar.HOUR_OF_DAY));
-		String minute = Integer.toString(this.getUnformattedStopTime().get(Calendar.MINUTE));
-        return hour+":"+minute;
-    }
-    
-    public void setStopTime(String stopTime){
-        this.stopTime = stopTime;
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    	return sdf.format(this.getUnformattedStartTime().getTime());
     }
     
     public String getSenderName (){
