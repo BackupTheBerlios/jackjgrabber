@@ -30,6 +30,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
 import service.SerXMLConverter;
+import control.ControlMain;
 import control.ControlProgramTab;
 
 
@@ -37,7 +38,7 @@ public class SerStreamingServer extends Thread {
 	
 	int port = 4000;
 	ServerSocket server;
-	public boolean isRunning = true;
+	public boolean isRunning = false;
 	ControlProgramTab controlProgramTab;
 	
 	public SerStreamingServer(int port, ControlProgramTab control) {
@@ -48,12 +49,15 @@ public class SerStreamingServer extends Thread {
 	public void run() {
 		try {
 			server = new ServerSocket(this.getPort());
+			isRunning=true;
 			Logger.getLogger("SerStreamingServer").info("Start Streaming-Server");
 			Socket socket = server.accept();
 			this.record(socket);
 		} catch (IOException e) {
 			if (!isRunning) {
-				Logger.getLogger("SerStreamingServer").error("StreamingServer not running");
+			    isRunning=false;
+				Logger.getLogger("SerStreamingServer").error(ControlMain.getProperty("err_startServer")+port);
+				ControlMain.getControl().getView().getTabProgramm().getControl().stopStreamingServer();
 			}	
 		} catch (DocumentException e) {
 			Logger.getLogger("SerStreamingServer").error("Recording failed");	
@@ -96,7 +100,7 @@ public class SerStreamingServer extends Thread {
 	}
 	public boolean stopServer() {
 		try {
-			if (server.isBound()) {
+			if (server != null && server.isBound()) {
 				server.close();
 				Logger.getLogger("SerStreamingServer").info("StreamingServer stopped");	
 				return true;
