@@ -1,42 +1,47 @@
 package model;
+/*
+BOBouquet.java by Geist Alexander 
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import control.ControlMain;
 
-/*
- * BOBouquet.java
- *
- * Created on 11. September 2004, 07:53
- */
-
-/**
- *
- * @author  ralix
- */
 public class BOBouquet extends java.lang.Object {
     String bouquetNummer;
     String bouquetName;
     ArrayList sender;
-    /** Creates a new instance of BOBouquet */
-    public BOBouquet() {
-    }
  
     public BOBouquet(String bouquetNummer, String bouquetName) {		
-	this.bouquetNummer = bouquetNummer;
-	this.bouquetName   = bouquetName;		
+		this.bouquetNummer = bouquetNummer;
+		this.bouquetName   = bouquetName;		
     }
     
     public String getBouquetNummer() {
-	return bouquetNummer;
+        return bouquetNummer;
     }   
 	
     public void setBouquetNummer(String bouquetNummer) {
-	this.bouquetNummer = bouquetNummer;
+        this.bouquetNummer = bouquetNummer;
     }
     public String getBouquetName() {
-	return bouquetName;
+        return bouquetName;
     }
 	
     public void setBouquetName(String bouquetName) {
