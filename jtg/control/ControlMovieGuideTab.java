@@ -180,6 +180,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         			}catch (Exception ex){
         				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
         			}
+              	}else{
+              		movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	
+              		beautifyGui(); 
               	}
           	}  
           
