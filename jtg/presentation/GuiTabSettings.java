@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import service.SerGUIUtils;
-import control.ControlMain;
 import control.ControlSettingsTab;
 
 /**
@@ -53,11 +52,9 @@ public class GuiTabSettings extends GuiTab {
 	private void createItems()
 	{
 		tfBoxIp = new JTextField();
-		tfBoxIp.setText(ControlMain.getBoxIp());
 		tfBoxIp.setPreferredSize(new Dimension(120,20));
 		
 		tfVlcPath = new JTextField();
-		tfVlcPath.setText(ControlMain.getSettings().getVlcPath());
 		tfVlcPath.setPreferredSize(new Dimension(200,20));
 		
 		pbVlcFileChooser = new JButton("...");
