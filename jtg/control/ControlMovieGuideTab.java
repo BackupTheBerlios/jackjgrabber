@@ -169,6 +169,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		    }
 		}
 		if (action == "suchen") {		
+			if(this.getTitelMap()!=null){
 			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
 			if(getSelectedItemJComboBoxSucheNach()==0) {								
 				reInitFilmTable(2);
@@ -177,40 +178,50 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			}		
 			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
 			findAndReplaceGui(getSelectedItemJComboBox());
+			}
 		}
 		if (action == "allDates") {	
-			this.getTab().getTfSuche().setText("");
-			this.getTab().getComboBoxGenre().setSelectedIndex(0);          
-		    this.getTab().getComboBoxSender().setSelectedIndex(0); 
-			reInitFilmTable(13);
+			if(this.getTitelMap()!=null){
+				this.getTab().getTfSuche().setText("");
+				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
+				this.getTab().getComboBoxSender().setSelectedIndex(0); 
+				reInitFilmTable(13);
+			}
 		}
 		if (action == "movieGuidePath") {
 			this.openFileChooser();
 		}
 		if (action == "clickONDatumComboBox"){
-			this.getTab().getTfSuche().setText("");
-			this.getTab().getComboBoxGenre().setSelectedIndex(0);          
-		    this.getTab().getComboBoxSender().setSelectedIndex(0); 
-			setSelectedItemJComboBox(this.getTab().getComboBoxDatum().getSelectedItem().toString());
-			reInitFilmTable(1);						
-			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
+			JComboBox comboBox = this.getTab().getComboBoxDatum();
+			if(comboBox.getItemCount()>=1){
+				this.getTab().getTfSuche().setText("");
+				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
+				this.getTab().getComboBoxSender().setSelectedIndex(0); 
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(1);						
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
+			}
 		}
 		if (action == "clickONGenreComboBox"){
 			JComboBox comboBox = this.getTab().getComboBoxGenre();
-			this.getTab().getTfSuche().setText("");
-			if(!comboBox.getSelectedItem().toString().equals(GENRE)){
-				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-				reInitFilmTable(11);		
-				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+			if(comboBox.getItemCount()>=1){
+				this.getTab().getTfSuche().setText("");
+				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
+					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+					reInitFilmTable(11);		
+					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+				}
 			}
 		}
 		if (action == "clickONSenderComboBox"){
 			JComboBox comboBox = this.getTab().getComboBoxSender();
-			this.getTab().getTfSuche().setText("");
-			if(!comboBox.getSelectedItem().toString().equals(SENDER)){
-				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-				reInitFilmTable(12);
-				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+			if(comboBox.getItemCount()>=1){
+				this.getTab().getTfSuche().setText("");
+				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
+					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+					reInitFilmTable(12);
+					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+				}
 			}
 		}
 	}
