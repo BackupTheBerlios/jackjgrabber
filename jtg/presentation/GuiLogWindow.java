@@ -21,10 +21,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JWindow;
 
 import service.SerLogAppender;
 
@@ -32,7 +32,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class GuiLogWindow extends JWindow {
+public class GuiLogWindow extends JFrame {
     
     private JTextArea logArea;
     private JScrollPane jScrollPaneLogArea;
@@ -43,7 +43,6 @@ public class GuiLogWindow extends JWindow {
         setContentPane(getJPanelOutput()); 
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(0, dim.height -150);
         setSize(600 , 150);
     }
     
