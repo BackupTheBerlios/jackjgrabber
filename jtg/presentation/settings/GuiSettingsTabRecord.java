@@ -21,6 +21,7 @@ package presentation.settings;
 import java.awt.Dimension;
 import java.text.ParseException;
 
+import javax.swing.*;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -71,6 +72,12 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbStoreEPG;
 	private JCheckBox cbStoreLogAfterRecord;
 	private SerIconManager iconManager = SerIconManager.getInstance();
+	private JButton testButton;
+	private JButton tagButton;
+	private JCheckBox cbOtherFile;
+	private JTextField dirPattern;
+	private JTextField filePattern;
+	private JPanel panelFileNameSettings;
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
 		super();
@@ -81,7 +88,7 @@ public class GuiSettingsTabRecord extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "f:pref:grow, 10 f:pref:grow",  		// columns 
-				  "pref, 25, t:pref, 25, pref"); 			// rows
+				  "pref, 25, t:pref, 25, pref,25,pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
@@ -89,6 +96,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 				builder.add(this.getPanelNorth(),						cc.xyw(1, 1, 3));
 				builder.add(this.getPanelServerRecordSettings(),  		cc.xy(1, 3));			
 				builder.add(this.getPanelRecordtimeSettings(),	   		cc.xy(1, 5));
+				builder.add(this.getPanelFileNameSettings(),		   				cc.xy(1, 7));
     }
     
     private JPanel getPanelNorth() {
@@ -196,6 +204,91 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return panelRecordtimeSettings;
 	}
+	
+	private JPanel getPanelFileNameSettings() {
+		if (panelFileNameSettings == null) {
+			panelFileNameSettings = new JPanel();
+			FormLayout layout = new FormLayout("pref,10,pref,10,pref,5,pref", //columns
+					"pref, 10, pref,pref,pref,pref"); //rows
+			PanelBuilder builder = new PanelBuilder(panelFileNameSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator(ControlMain.getProperty("filep_filepattern"), cc.xyw(1, 1, 7));
+			builder.add(new JLabel(ControlMain.getProperty("filep_directory")), cc.xy(1, 3));
+			builder.add(getDirPattern(), cc.xy(3, 3));
+			builder.add(getTagButton(), cc.xy(5, 3));
+			builder.add(getTestButton(), cc.xy(7, 3));
+
+			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 4));
+			builder.add(getFilePattern(), cc.xy(3, 4));
+			builder.add(getCbOtherFile(), cc.xy(5, 4));
+
+		}
+		return panelFileNameSettings;
+	}
+
+	/**
+	 * @return
+	 */
+	public JButton getTestButton() {
+		if (testButton == null) {
+			testButton = new JButton("Test");
+			testButton.setName("TestPattern");
+			testButton.addActionListener(control);
+		}
+		return testButton;
+	}
+
+	/**
+	 * @return
+	 */
+	public JButton getTagButton() {
+		if (tagButton == null) {
+			tagButton = new JButton("Tags");
+			tagButton.setName("Tags");
+			tagButton.addActionListener(control);
+		}
+		return tagButton;
+	}
+
+	/**
+	 * @return
+	 */
+	public JCheckBox getCbOtherFile() {
+		if (cbOtherFile == null) {
+			cbOtherFile = new JCheckBox(ControlMain.getProperty("filep_fileDifferent"));
+			cbOtherFile.setActionCommand("fileDifferent");
+			cbOtherFile.addActionListener(control);
+		}
+		return cbOtherFile;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getDirPattern() {
+
+		if (dirPattern == null) {
+			dirPattern = new JTextField(50);
+			dirPattern.setName("dirPattern");
+			dirPattern.addKeyListener(control);
+		}
+		return dirPattern;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getFilePattern() {
+
+		if (filePattern == null) {
+			filePattern = new JTextField(50);
+			filePattern.setName("filePattern");
+			filePattern.setEditable(false);
+			filePattern.addKeyListener(control);
+		}
+		return filePattern;
+	}	
 	
 	/**
 	 * This method initializes jComboBoxStreamType	

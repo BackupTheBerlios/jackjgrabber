@@ -330,4 +330,40 @@ public class BOSettingsRecord {
 			this.shutdownAfterRecord = shutdownAfterRecord;
 		}
     }
+
+	public void setFilePattern(String filePattern) {
+		if (!filePattern.equals(this.filePattern)) {
+			this.filePattern = filePattern;
+			setSettingsChanged(true);
+		}
+	}
+	public String dirPattern;
+	public String filePattern;
+	public boolean differentFilePattern;
+
+	public boolean isDifferentFilePattern() {
+		return differentFilePattern;
+	}
+
+	public void setDifferentFilePattern(boolean differentFilePattern) {
+		if (this.differentFilePattern != differentFilePattern) {
+			this.differentFilePattern = differentFilePattern;
+			setSettingsChanged(true);
+		}
+	}
+
+	public String getDirPattern() {
+		return dirPattern;
+	}
+
+	public void setDirPattern(String dirPattern) {
+		if (!dirPattern.equals(this.dirPattern)) {
+			this.dirPattern = dirPattern;
+			setSettingsChanged(true);
+		}
+	}
+
+	public String getFilePattern() {
+		return filePattern;
+	}
 }

@@ -17,20 +17,18 @@ package streaming;
  *  
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 
+import model.*;
 import model.BOExternalProcess;
 import model.BORecordArgs;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
+import service.*;
+import control.*;
 import service.SerProcessStopListener;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
@@ -191,7 +189,8 @@ public class RecordControl extends Thread implements SerProcessStopListener{
 
 	public String getFileName() {
 		if (this.fileName == null) {
-			SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
+			
+/*			SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
 			String date = f.format(new Date());
 
 			BORecordArgs args = this.recordArgs;
@@ -202,14 +201,34 @@ public class RecordControl extends Thread implements SerProcessStopListener{
 			} else {
 				fileName = date + "_" + args.getSenderName();
 			}
+			*/
+			
+			String pattern = null;
+			if (ControlMain.getSettingsRecord().isDifferentFilePattern())
+			{
+				pattern = ControlMain.getSettingsRecord().getFilePattern();
+			}
+			else
+			{
+				pattern = ControlMain.getSettingsRecord().getDirPattern();
+			}
+			
+			fileName = SerHelper.createFileName(recordArgs,pattern);
+			
+			// create directory
+			String dirName = SerHelper.createFileName(recordArgs,ControlMain.getSettingsRecord().getDirPattern());
+			
+			
+			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(dirName.replace(' ',
+			'_')));
+			directory.mkdir();			
 		}
-		return SerFormatter.removeInvalidCharacters(fileName);
+		return SerFormatter.removeInvalidCharacters(fileName.replace(' ', '_'));
 	}
 
 	public File getDirectory() {
 		if (directory == null) {
-			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName()));
-			directory.mkdir();
+			getFileName();
 		}
 		return directory;
 	}

@@ -70,6 +70,7 @@ public class SerSettingsHandler {
 		getSettingsShutdownTool(root, settings);
 
 		getSettingsLayout(root, settings);
+		getSettingsFilePattern(root, settings);
 
 		settings.getMainSettings().setBoxList(buildBoxSettings(root));
 		settings.getPlaybackSettings().setPlaybackOptions(buildPlaybackSettings(root));
@@ -434,6 +435,35 @@ public class SerSettingsHandler {
 		}
 	}
 
+	private static void getSettingsFilePattern(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/directoryPattern");
+		if (node != null) {
+			String strText = node.getText();
+			settings.getRecordSettings().setDirPattern(strText);
+		} else {
+			SerXMLHandling.setElementInElement(root, "directoryPattern", "");
+			settings.getRecordSettings().setDirPattern("");
+		}
+
+		node = root.selectSingleNode("/settings/filePattern");
+		if (node != null) {
+			String strText = node.getText();
+			settings.getRecordSettings().setFilePattern(strText);
+		} else {
+			SerXMLHandling.setElementInElement(root, "filePattern", "");
+			settings.getRecordSettings().setFilePattern("");
+		}
+
+		node = root.selectSingleNode("/settings/differentFilePattern");
+		if (node != null) {
+			String strText = node.getText();
+			settings.getRecordSettings().setDifferentFilePattern(strText.equals("true"));
+		} else {
+			SerXMLHandling.setElementInElement(root, "differentFilePattern", "false");
+			settings.getRecordSettings().setDifferentFilePattern(false);
+		}
+	}
+	
 	private static void getSettingsLayout(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/screensize");
 		if (node != null) {
@@ -645,6 +675,13 @@ public class SerSettingsHandler {
 		Node recordVtxt = settingsDocument.selectSingleNode("/settings/recordVtxt");
 		Node shutdown = settingsDocument.selectSingleNode("/settings/shutdown");
 
+		Node dirPattern = settingsDocument.selectSingleNode("/settings/directoryPattern");
+		Node filePattern = settingsDocument.selectSingleNode("/settings/filePattern");
+		Node diffFilePattern = settingsDocument.selectSingleNode("/settings/differentFilePattern");
+
+		
+		shutdown.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isShutdownAfterRecord()));
+		stereoReplaceAc3.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()));
 		shutdown.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isShutdownAfterRecord()));
 		stereoReplaceAc3.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()));
 		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordVtxt()));
@@ -661,6 +698,11 @@ public class SerSettingsHandler {
 		serverPort.setText(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
 		storeEPG.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreEPG()));
 		storeLogAfterRecord.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStoreLogAfterRecord()));
+		
+		diffFilePattern.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isDifferentFilePattern()));
+		filePattern.setText(ControlMain.getSettings().getRecordSettings().getFilePattern());
+		dirPattern.setText(ControlMain.getSettings().getRecordSettings().getDirPattern());
+		
 	}
 
 	public static void savePathSettings() throws IOException {
