@@ -1,5 +1,7 @@
 package control;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,6 +13,7 @@ import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 
 import presentation.GuiMainView;
+import presentation.GuiTerms;
 import service.SerAlertDialog;
 import service.SerBoxControl;
 import service.SerBoxControlDefault;
@@ -25,29 +28,57 @@ import service.SerXMLHandling;
  *
  *Startklasse, hier wird die Anwendung initialisiert und gestartet
  */
-public class ControlMain {
+public class ControlMain implements ActionListener {
 	
 	GuiMainView view;
 	ControlMain control;
+	GuiTerms guiTerms;
 	static BOSettings settings;
 	static Document settingsDocument;
 	static SerBoxControl box;
 	static int CurrentBox=0;
-	
 	private Logger mainLogger;
 	private SerLogAppender logAppender;
-	
-	public static void main( String args[] ) {
-		ControlMain control = new ControlMain();
-		control.setView(new GuiMainView(control));
-		control.startLogger();
-		control.getLogAppender().setView(control.getView());
-		control.init();
-		control.initializeTabControls();
-		control.getMainLogger().info("Anwendung gestartet");
+	public static String version[] = { 
+		"Jack the JGrabber 0.1",
+		"18.09.2004",
+		"TEST PROJECT ONLY",
+		", User: "+System.getProperty("user.name")
 	};
 	
+	static String terms[] = { 
+		" ",
+		"TERMS OF CONDITIONS:",
+		"(1) this is a free Java based recording utility.",
+		"(2) It is intended for educational purposes only, as a non-commercial test project.",
+		"(3) It may not be used otherwise. Most parts are only experimental.",
+		"(4) released under the terms of the GNU GPL",
+		"(5) there is NO WARRANTY of any kind attached to this software",
+		"(6) use it at your own risk and for your own education as it was meant",
+		" ",
+	};
+
+	public static void main( String args[] ) {
+		ControlMain control = new ControlMain();
+		control.showTerms();
+	};
+	
+	private void showTerms() {
+		guiTerms = new GuiTerms(this);
+		guiTerms.setVisible(true);
+	}
+	
+	private void runAfterTerms() {
+		this.setView(new GuiMainView(this));
+		this.startLogger();
+		this.getLogAppender().setView(this.getView());
+		this.init();
+		this.initializeTabControls();
+		this.getMainLogger().info("Anwendung gestartet");
+	}
+	
 	private void init() {
+		this.writeSystemInfo();
 		//lesen und Setzen des Settings-XMLdokuments beim Start der Anwendung
 		this.readSettings();
 		//Aufbereitung des Settings-XML-Dokuments
@@ -66,6 +97,18 @@ public class ControlMain {
 		this.getView().getTabSettings().getControl().initialize();
 		this.getView().getTabProgramm().getControl().initialize();
 
+	}
+	
+	private void writeSystemInfo() {
+		mainLogger.info(version[0]+"/"+version[1]+" "+version[2]+" "+version[3]);
+		mainLogger.info("java.version\t"+System.getProperty("java.version"));
+		mainLogger.info("java.vendor\t"+System.getProperty("java.vendor"));
+		mainLogger.info("java.home\t"+System.getProperty("java.home"));
+		mainLogger.info("java.vm.version\t"+System.getProperty("java.vm.version"));
+		mainLogger.info("java.vm.vendor\t"+System.getProperty("java.vm.vendor"));
+		mainLogger.info("java.vm.name\t"+System.getProperty("java.vm.name"));
+		mainLogger.info("java.class.vers\t"+System.getProperty("java.class.version"));
+		mainLogger.info("java.class.path\t"+System.getProperty("java.class.path"));
 	}
 	
 	public void startLogger() {
@@ -114,6 +157,23 @@ public class ControlMain {
 					mainLogger.info("Settings not found, created empty document");
 				}
 		} catch (Exception ex) { SerAlertDialog.alert("Fehler beim Zugriff auf die settings.xml Datei", this.getView());}
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		String actName = e.getActionCommand();
+
+		if (actName.equals("I agree"))  {
+			guiTerms.close();
+			this.runAfterTerms();
+		} else if (actName.equals("I disagree (closing)")) {
+			System.exit(0);
+		}
+	}
+	
+	public static String[] getTerms()
+	{
+		return terms;
 	}
 	
 	public static String getBoxIp() {
