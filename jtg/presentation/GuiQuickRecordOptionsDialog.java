@@ -99,7 +99,7 @@ public class GuiQuickRecordOptionsDialog {
      */
     public JSpinner getMinsSpinner() {
         if (minsSpinner==null) {
-            SpinnerNumberModel model = new SpinnerNumberModel(60, 1, 60, 1);
+            SpinnerNumberModel model = new SpinnerNumberModel(60, 1, 300, 1);
             minsSpinner = new JSpinner(model);	   
         }
         return minsSpinner;
