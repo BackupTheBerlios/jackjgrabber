@@ -19,12 +19,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 
 import calendar.JDateChooser;
-
-
 
 import control.ControlProgramTab;
 
@@ -356,6 +353,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonQuickRecord.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonQuickRecord.setText("Aufnahme");
 			jButtonQuickRecord.setToolTipText("Sofortaufnahme starten");
+			jButtonQuickRecord.addActionListener(this.getControl());
 		}
 		return jButtonQuickRecord;
 	}
@@ -370,6 +368,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonReboot.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonReboot.setText("Box Reboot");
 			jButtonReboot.setToolTipText("Box neu starten");
+			jButtonReboot.addActionListener(this.getControl());
 		}
 		return jButtonReboot;
 	}
@@ -384,6 +383,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonVLC.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonVLC.setText("VLC-Play");
 			jButtonVLC.setToolTipText("AKtuelles Programm im VLC abspielen.");
+			jButtonVLC.addActionListener(this.getControl());
 		}
 		return jButtonVLC;
 	}
@@ -398,6 +398,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonNhttpdReset.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonNhttpdReset.setText("nhttpd reset");
 			jButtonNhttpdReset.setToolTipText("nhttpd resetten");
+			jButtonNhttpdReset.addActionListener(this.getControl());
 		}
 		return jButtonNhttpdReset;
 	}
@@ -412,6 +413,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonEPGReset.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonEPGReset.setText("EPG Reset");
 			jButtonEPGReset.setToolTipText("EPG resetten");
+			jButtonEPGReset.addActionListener(this.getControl());
 		}
 		return jButtonEPGReset;
 	}
@@ -438,6 +440,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonToTimer.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonToTimer.setText("add to timer");
 			jButtonToTimer.setToolTipText("ausgewählte Dateien zum Timer hinzufügen.");
+			jButtonToTimer.addActionListener(this.getControl());
 		}
 		return jButtonToTimer;
 	}
@@ -452,6 +455,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonStartServer.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonStartServer.setText("Start Server");
 			jButtonStartServer.setToolTipText("Streamingserver starten");
+			jButtonStartServer.addActionListener(this.getControl());
 		}
 		return jButtonStartServer;
 	}
@@ -465,6 +469,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonReadEPG = new JButton();
 			jButtonReadEPG.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonReadEPG.setText("EPG lesen");
+			jButtonReadEPG.addActionListener(this.getControl());
 		}
 		return jButtonReadEPG;
 	}
@@ -479,6 +484,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonClickfinder.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonClickfinder.setText("Clickfinder");
 			jButtonClickfinder.setToolTipText("");
+			jButtonClickfinder.addActionListener(this.getControl());
 		}
 		return jButtonClickfinder;
 	}
