@@ -202,7 +202,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 				endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
 				endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);    
 				title=line.substring(startEpgInfo,endEpgInfo);
-				epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title));
+				epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));
 			}
 		}
 		return epgList;

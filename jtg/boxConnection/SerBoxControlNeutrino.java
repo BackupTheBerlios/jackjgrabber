@@ -111,7 +111,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader input = getConnection("/control/epg?"+sender.getChanId());
 		String line, eventId=new String(), startTime=new String(), duration=new String(), title=new String(),
 		endTime=new String();
-                Date startDate=new Date(), endDate=new Date();
+		Date startDate=new Date(), endDate=new Date();
 		String valueStart, valueDuration;
                 
 		while((line=input.readLine())!=null) {
@@ -120,18 +120,17 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			int thirdBlank = line.indexOf(" ", secondBlank+1);
 			eventId = line.substring(0, firstBlank);
 			
-                        valueStart=line.substring(firstBlank+1, secondBlank);			
-                        startTime = SerFormatter.formatUnixTime(valueStart);
-			startDate = SerFormatter.formatUnixDate(valueStart);                        
+			valueStart=line.substring(firstBlank+1, secondBlank);
+			valueDuration=line.substring(secondBlank+1, thirdBlank);
 			
-                        valueDuration=line.substring(secondBlank+1, thirdBlank);
-                        duration = SerFormatter.formatedEndTime(valueDuration);
-                        endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
+			startTime = SerFormatter.formatUnixTime(valueStart);
+			startDate = SerFormatter.formatUnixDate(valueStart);                        
+			duration = SerFormatter.formatedEndTime(valueDuration);
+			endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
 			endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);                        
-                        
-                        //duration = SerFormatter.formatedEndTime(line.substring(secondBlank+1, thirdBlank));
 			title = line.substring(thirdBlank+1, line.length());
-			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title));                        
+			
+			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration ));                        
 		}
 		return epgList;
 	} 
