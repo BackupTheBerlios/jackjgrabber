@@ -32,7 +32,8 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	private SerLogAppender logAppender;
 
 	public ControlMainView() {
-		this.showTerms();
+		//this.showTerms();
+		this.runAfterTerms();
 	}
 	private void showTerms() {
 		guiTerms = new GuiTerms(this);
