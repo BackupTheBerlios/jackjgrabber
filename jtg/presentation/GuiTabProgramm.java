@@ -84,7 +84,7 @@ public class GuiTabProgramm extends GuiTab {
 	
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "pref, 10, 100, 10, pref, 10, pref, 10, 300:grow",  							// columns 
+			      "pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  							// columns 
 			      "pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
@@ -147,17 +147,17 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelChannel == null) {
 			jPanelChannel = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 1dlu, pref",									//column 
-				      "pref, 4px, pref, pref, min:grow, pref");		//rows
+				      "180",									//column 
+				      "pref, 4px, pref, pref, min:grow, pref, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(jPanelChannel, layout);
 			CellConstraints cc = new CellConstraints();
 			
-			builder.add(this.getJDateChooser(),		  						cc.xyw	(1, 1, 3, CellConstraints.FILL, CellConstraints.FILL));
-			builder.addSeparator("Sender, Doppelklick Zapping",		cc.xyw	(1, 3, 3));
-			builder.add(this.getJComboBoxBouquets(), 					cc.xyw	(1, 4, 3, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJScrollPaneChannels(), 						cc.xyw	(1, 5, 3, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJDateChooser(),		  						cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.addSeparator("Sender, Doppelklick Zapping",		cc.xyw	(1, 3, 1));
+			builder.add(this.getJComboBoxBouquets(), 					cc.xyw	(1, 4, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJScrollPaneChannels(), 						cc.xyw	(1, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJComboBoxBoxIP(), 							cc.xyw	(1, 6, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonSelectedToTimer(), 				cc.xyw	(3, 6, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonSelectedToTimer(), 				cc.xyw	(1, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
 		}
 		return jPanelChannel;
 	}
@@ -172,7 +172,6 @@ public class GuiTabProgramm extends GuiTab {
 			jComboBoxBoxIP = new JComboBox();
 			jComboBoxBoxIP.setEditable(true);
 			jComboBoxBoxIP.setModel(new GuiIpListComboModel());
-			jComboBoxBoxIP.setPreferredSize(new java.awt.Dimension(115,25));
 			jComboBoxBoxIP.addItemListener(control);
 			jComboBoxBoxIP.setEditable(false);
 			jComboBoxBoxIP.setName("ipList");
@@ -326,9 +325,8 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonSelectedToTimer() {
 		if (jButtonToTimer == null) {
 			jButtonToTimer = new JButton();
-			jButtonToTimer.setPreferredSize(new java.awt.Dimension(115,25));
-			jButtonToTimer.setText("add to timer");
-			jButtonToTimer.setToolTipText("ausgewählte Dateien zum Timer hinzufügen.");
+			jButtonToTimer.setText("Selected to Timer");
+			jButtonToTimer.setToolTipText("ausgewählte Programme zum Timer hinzufügen.");
 			jButtonToTimer.addActionListener(this.getControl());
 		}
 		return jButtonToTimer;
@@ -447,9 +445,9 @@ public class GuiTabProgramm extends GuiTab {
 	 * This method initializes jDateChooser	
 	 * 
 	 * Achtung modifizierter DateChooser!!!	
-	 * Es wird das Control ControlProgramTab als "Listener" ï¿½bergeben
-	 * wird das Datum geï¿½ndert wird das aktuelle Datum automatisch
-	 * ï¿½ber setDateChooserDate(Date) gesetzt
+	 * Es wird das Control ControlProgramTab als "Listener" uebergeben
+	 * wird das Datum geaendert wird das aktuelle Datum automatisch
+	 * ueber setDateChooserDate(Date) gesetzt
 	 */    
 	public JDateChooser getJDateChooser() {
 	      if (jDateChooser == null) {
