@@ -177,24 +177,26 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 
 		for (int i = 0; i < files.length; i++) {
 
-			if (files[i].isDirectory()) {
-				BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
-				node.setIdent("Directory:" + files[i].getName());
-				parent.add(node);
-				createStructure(node, files[i]);
-			} else {
-				if (SerHelper.isVideo(files[i].getName())) {
+			if (!files[i].getName().startsWith(".")) {
+
+				if (files[i].isDirectory()) {
 					BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
-					videoNode.add(node);
-				} else if (SerHelper.isAudio(files[i].getName())) {
-					BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
-					audioNode.add(node);
+					node.setIdent("Directory:" + files[i].getName());
+					parent.add(node);
+					createStructure(node, files[i]);
 				} else {
-					BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
-					otherNode.add(node);
+					if (SerHelper.isVideo(files[i].getName())) {
+						BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
+						videoNode.add(node);
+					} else if (SerHelper.isAudio(files[i].getName())) {
+						BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
+						audioNode.add(node);
+					} else {
+						BaseTreeNode node = new BaseTreeNode(new BOFileWrapper(files[i]));
+						otherNode.add(node);
+					}
 				}
 			}
-
 		}
 
 		if (videoNode.getChildCount() == 0) {
@@ -229,7 +231,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	public void setRecordView(GuiTabRecordInfo tabRecordInfo) {
 		guiTabRecordInfo = tabRecordInfo;
 		reloadAvailableFiles();
-		
+
 	}
 
 	/**
@@ -549,15 +551,11 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
-		TreePath p  = guiTabRecordInfo.getTree().getClosestPathForLocation(e.getX(),e.getY());
-		if (p != null)
-		{
-			if (e.isControlDown() || e.isShiftDown())
-			{
+		TreePath p = guiTabRecordInfo.getTree().getClosestPathForLocation(e.getX(), e.getY());
+		if (p != null) {
+			if (e.isControlDown() || e.isShiftDown()) {
 				guiTabRecordInfo.getTree().addSelectionPath(p);
-			}
-			else
-			{
+			} else {
 				guiTabRecordInfo.getTree().setSelectionPath(p);
 			}
 		}
@@ -591,29 +589,25 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 						renameSelected();
 					}
 				}));
-				
-				if (SerHelper.isVideo(((BOFileWrapper)obj).getName()))
-				{
-/*					m.add(new JMenuItem(new AbstractAction("Muxxi") {
-						public void actionPerformed(ActionEvent e) {
-							startMuxxi(((BOFileWrapper)obj).getAbsoluteFile());
-						}
-					}));
-	*/				
-					
+
+				if (SerHelper.isVideo(((BOFileWrapper) obj).getName())) {
+					/*
+					 * m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) {
+					 * startMuxxi(((BOFileWrapper)obj).getAbsoluteFile()); } }));
+					 */
+
 				}
-				
-				
+
 			}
 		}
 		m.show(tree, e.getX(), e.getY());
 	}
-	
+
 	/**
 	 * @param absoluteFile
 	 */
 	private void startMuxxi(File file) {
-	
+
 		String execMuxxi = "C:\\Programme\\D-Box\\DVDAuthorMuxxi\\Muxxi.exe -i " + file.getAbsolutePath() + " -out DVD";
 		Process run;
 		try {
@@ -626,25 +620,22 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 			Logger.getLogger("ControlProgramTab").error(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
-	 * 
+	 *  
 	 */
 	protected void renameSelected() {
 		JTree tree = guiTabRecordInfo.getTree();
 		TreePath sel = tree.getSelectionPath();
-		if (sel != null)
-		{
+		if (sel != null) {
 			BOFileWrapper obj = (BOFileWrapper) ((BaseTreeNode) tree.getSelectionPath().getLastPathComponent()).getUserObject();
-			if (obj != null)
-			{
+			if (obj != null) {
 				File f = obj.getAbsoluteFile();
-				String newName = JOptionPane.showInputDialog(guiTabRecordInfo,ControlMain.getProperty("msg_rename"),f.getName());
-				if (newName != null && newName.length() > 0)
-				{
-					File newFile = new File(f.getParent(),newName);
+				String newName = JOptionPane.showInputDialog(guiTabRecordInfo, ControlMain.getProperty("msg_rename"), f.getName());
+				if (newName != null && newName.length() > 0) {
+					File newFile = new File(f.getParent(), newName);
 					obj.getAbsoluteFile().renameTo(newFile);
 				}
 			}
