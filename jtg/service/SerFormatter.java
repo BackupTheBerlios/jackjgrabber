@@ -305,7 +305,7 @@ public class SerFormatter {
      *  by the argument; and a value greater than 0 if the time of first
      *  Calendar is after the time represented by the argument.
      */
-    public static int compareDates (GregorianCalendar cal1, GregorianCalendar cal2) {
+    public static int compareDates (Calendar cal1, Calendar cal2) {
         long date1 = cal1.getTimeInMillis();
         long date2 = cal2.getTimeInMillis();
         if (date1==date2) {

@@ -246,10 +246,11 @@ public class LocalTimerRecordDaemon extends Thread {
 			Calendar now = Calendar.getInstance();
 			Iterator it = ControlMain.getBoxAccess().getEpg(new BOSender("1", timer.getMainTimer().getChannelId(), "")).iterator();
 			while (it.hasNext()) {
-				BOEpg element = (BOEpg) it.next();
-				if (element.getStartdate().compareTo(now) <= 0 && element.getEndDate().compareTo(now) >= 0) {
-					args.setEpgInfo1(element.getEpgDetail().getText());
-				}
+			    BOEpg element = (BOEpg) it.next();
+			    if (SerFormatter.compareDates(element.getStartdate(), now) <= 0 && SerFormatter.compareDates(element.getEndDate(), now) >= 0) {
+			        args.setEpgInfo1(element.getEpgDetail().getText()
+			        );
+			    }
 			}
 			ctrl.startRecord(args);
 		} catch (IOException e) {
