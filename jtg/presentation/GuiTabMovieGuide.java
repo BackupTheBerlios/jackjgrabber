@@ -478,15 +478,19 @@ public class GuiTabMovieGuide extends JPanel {
 
 	public JComboBox getComboBoxGenre(){
 		if (comboBoxGenre == null) {			
-			comboBoxGenre = new JComboBox(this.getControl().getGenreList().toArray());
+			//comboBoxGenre = new JComboBox(this.getControl().getGenreList().toArray());
+			comboBoxGenre = new JComboBox();
+			comboBoxGenre.setModel(new GuiMovieGuideGenreComboModel(this.getControl()));
 			comboBoxGenre.addItemListener(control);
-			comboBoxGenre.setName("jComboBoxGenre");
+			comboBoxGenre.setName("jComboBoxGenre");			
 		}
 		return comboBoxGenre;
 	}
 	public JComboBox getComboBoxSender(){
 		if (comboBoxSender == null) {			
-			comboBoxSender = new JComboBox(this.getControl().getSenderList().toArray());
+			//comboBoxSender = new JComboBox(this.getControl().getSenderList().toArray());
+			comboBoxSender = new JComboBox();
+			comboBoxSender.setModel(new GuiMovieGuideSenderComboModel(this.getControl()));
 			comboBoxSender.addItemListener(control);
 			comboBoxSender.setName("jComboBoxSender");
 		}
@@ -494,10 +498,12 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 	public JComboBox getComboBoxDatum() {
 		if (comboBoxDatum == null) {						
-			comboBoxDatum = new JComboBox(this.getControl().getDatumList().toArray());
+			//comboBoxDatum = new JComboBox(this.getControl().getDatumList().toArray());
+			comboBoxDatum = new JComboBox();
+			comboBoxDatum.setModel(new GuiMovieGuideDatumComboModel(this.getControl()));
 			comboBoxDatum.addItemListener(this.getControl());
 			comboBoxDatum.setName("jComboBoxDatum");
-			comboBoxDatum.setSelectedItem(SerFormatter.getDatumToday());
+			//comboBoxDatum.setSelectedItem(SerFormatter.getDatumToday());
 		}
 		return comboBoxDatum;
 	}

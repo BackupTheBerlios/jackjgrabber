@@ -80,7 +80,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			if(this.getTitelMap()==null){				
 				setTitelMap();
 			}
-		}catch (Exception ex){}
+		}catch (Exception ex){}		
+		this.getMainView().getTabMovieGuide().getComboBoxGenre().setSelectedIndex(0);
+		this.getMainView().getTabMovieGuide().getComboBoxSender().setSelectedIndex(0);
+		this.getMainView().getTabMovieGuide().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -435,7 +439,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     		if(bomovieguide.getDatum().contains(SerFormatter.getDatumToday())){
     			titelListAktuell.put(new Integer(a++),bomovieguide);
     		}
-    	}       			
+    	}       	
 	}
     
     
