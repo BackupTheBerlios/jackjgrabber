@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
@@ -57,7 +58,7 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JButton jButtonStartVlc = null;
-	private JFormattedTextField tfBoxIp = null;
+	private JTextField tfBoxIp = null;
 	private JFormattedTextField tfServerPort = null;	
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxLookAndFeel = null;
@@ -226,13 +227,9 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 		return jComboBoxLookAndFeel;
 	}
 
-	public JFormattedTextField getTfBoxIp() {
+	public JTextField getTfBoxIp() {
 		if (tfBoxIp == null) {
-			try {
-				tfBoxIp = new JFormattedTextField(new MaskFormatter("###.###.###.###"));
-			} catch (ParseException e) {
-			    Logger.getLogger("GuiSettingsTabMain").error(e.getMessage());
-			}
+				tfBoxIp = new JTextField();
 		}
 		return tfBoxIp;
 	}
