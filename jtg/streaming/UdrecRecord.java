@@ -81,9 +81,7 @@ public class UdrecRecord  extends Record {
 		    cmd.add(aPid);
 		}
 		cmdReturn = new String[cmd.size()];
-		for (int i = 0; i < cmd.size(); ++i) {
-		 	cmdReturn[i]=((String)cmd.get(i));
-		 	}
+		cmd.toArray(cmdReturn);
 		return cmdReturn;
 	}
 	
