@@ -418,6 +418,7 @@ public class BOMovieGuide {
     
     public boolean getIfStringInObject(String search){
     	boolean value = false;
+    	search = search.toLowerCase();
     	if (this.getGenre().toLowerCase().indexOf(search)>=0){
     		value = true;
     	}else if(this.getDarsteller().toLowerCase().indexOf(search)>=0){

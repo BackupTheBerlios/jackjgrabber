@@ -138,10 +138,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		        SerAlertDialog.alert("Kein Timer ausgewählt!", this.getMainView());
 		    }
 		}
-		if (action == "suchen") {			
+		if (action == "suchen") {		
+			System.out.println(this.getTab().getTfSuche().getText());
+			System.out.println(getSelectedItemJComboBoxSucheNach());
 			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
 			if(getSelectedItemJComboBoxSucheNach()==0) {								
-				reInitFilmTable(11);
+				reInitFilmTable(2);
 			}else{					
 				reInitFilmTable(getSelectedItemJComboBoxSucheNach());
 			}			
@@ -172,11 +174,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
 				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-					reInitFilmTable(2);		
+					reInitFilmTable(11);		
 				}
 			}
 			if (comboBox.getName().equals("jComboBoxSucheNach")) {		
-				SelectedItemJComboBoxSucheNach = (comboBox.getSelectedIndex()+2);			
+				SelectedItemJComboBoxSucheNach = (comboBox.getSelectedIndex()+2);					
 			}
 			if (comboBox.getName().equals("jComboBoxSender")) {		
 				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
@@ -435,7 +437,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	    			titelListAktuell.put(new Integer(a++),bomovieguide);
     	    		}
     				break;
-    			case 2: //genre
+    			case 11: //genre
     				a = doItSearch(bomovieguide,bomovieguide.getGenre(),search,a);    				
     				break;
     			case 3: //titel
@@ -462,8 +464,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     			case 10: //regie
     				a = doItSearch(bomovieguide,bomovieguide.getRegie(),search,a);    				
     				break;
-    			case 11:
-					if(bomovieguide.getIfStringInObject(search.toLowerCase())){
+    			case 2:
+					if(bomovieguide.getIfStringInObject(search)){
 						a = setEntryInTitelMap(bomovieguide,a);						
 					}
 					break;
