@@ -94,7 +94,7 @@ public class ControlMain {
 	
 	public static void startStreamingSever() {
 		int port = Integer.parseInt(getSettings().getStreamingServerPort());
-		Logger.getLogger("ControlMail").info("Start Streaming-Server");
+		Logger.getLogger("ControlMain").info("Start Streaming-Server");
 		setStreamingServerThread(new SerStreamingServer(port));
 		getStreamingServerThread().start();	
 	}
