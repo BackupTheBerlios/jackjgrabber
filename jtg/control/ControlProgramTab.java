@@ -29,10 +29,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
+
+import com.jgoodies.forms.layout.CellConstraints;
 
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
@@ -48,6 +53,7 @@ import model.BOTimer;
 import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
 import presentation.GuiSenderTableModel;
+import presentation.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import streaming.RecordControl;
@@ -56,12 +62,13 @@ import streaming.RecordControl;
 /**
  * Controlklasse des Programmtabs.
  */
-public class ControlProgramTab extends ControlTab implements ActionListener, MouseListener, ItemListener {
+public class ControlProgramTab extends ControlTab implements ActionListener, MouseListener, ItemListener, ChangeListener {
 	
 	ArrayList bouquetList = new ArrayList();
 	ArrayList pids;
 	BOSender selectedSender;
 	BOEpg selectedEpg;
+	BORecordArgs recordArgs;
 	BOBouquet selectedBouquet;
 	Date dateChooserDate;
 	GuiMainView mainView;	
@@ -196,7 +203,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Stop der Aufnahme und Versetzung der GUI in den Aufnahme-Warte-Modus
 	 */
 	public void stopRecord() {
-		recordControl.stopRecord();
+		if (recordControl != null) {
+			recordControl.stopRecord();
+		}
 		this.getMainView().getTabProgramm().stopRecordModus();
 	}
 	
@@ -205,6 +214,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Start der Aufnahme und Versetzung der GUI in den Aufnahme-Modus
 	 */
 	public void startRecord(BORecordArgs recordArgs) {
+		this.setRecordArgs(recordArgs);
 		recordControl = new RecordControl(recordArgs, this);
 		this.getMainView().getTabProgramm().startRecordModus();
 		recordControl.start();
@@ -218,7 +228,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	private BORecordArgs buildRecordArgs() {
 		BORecordArgs args = new BORecordArgs();
 		args.setBouquetNr(this.getSelectedBouquet().getBouquetNummer());
-		args.setChannelId(this.getSelectedSender().getChanId());
+		args.setEventId(this.getSelectedSender().getChanId());
 		args.setSenderName(this.getSelectedSender().getName());
 		if (this.getSelectedEpg() != null) {
 		    args.setEpgTitle(" "+this.getSelectedEpg().getTitle());
@@ -287,6 +297,14 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.newBoxSelected(comboBox);		}
 		if (comboBox.getName().equals("bouquets")) {
 			this.reInitBouquetList(comboBox);
+		}
+	}
+	
+	public void stateChanged(ChangeEvent event) {
+		JSpinner stopTimeSpinner = (JSpinner)event.getSource();
+		Date stopTime = (Date)stopTimeSpinner.getModel().getValue();
+		if (this.getRecordControl()!=null) {
+			this.getRecordControl().stopTime = stopTime;
 		}
 	}
 	
@@ -523,6 +541,15 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.startStreamingSever();
 		}
 	}
+	
+	public void setRecordStoptTime(Date time) {
+		GuiTabProgramm tabProg = this.getMainView().getTabProgramm();
+		tabProg.getDateModelSpinnerStopTime().setValue(time);
+	}
+	
+	public Date getRecordStopTime() {
+		return this.getMainView().getTabProgramm().getDateModelSpinnerStopTime().getDate();	
+	}
 	/**
 	 * @return BOBouquet
 	 */
@@ -611,5 +638,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void setStreamingServerThread(
 			SerStreamingServer streamingServerThread) {
 		this.streamingServerThread = streamingServerThread;
+	}
+	/**
+	 * @return Returns the recordArgs.
+	 */
+	public BORecordArgs getRecordArgs() {
+		return recordArgs;
+	}
+	/**
+	 * @param recordArgs The recordArgs to set.
+	 */
+	public void setRecordArgs(BORecordArgs recordArgs) {
+		this.recordArgs = recordArgs;
 	}
 }
