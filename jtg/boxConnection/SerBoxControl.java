@@ -55,7 +55,8 @@ public abstract class SerBoxControl {
     
     synchronized public BOTimerList getTimerList(boolean newRead) {
         if (newRead || timerList==null || newTimerAdded) {
-            SerTimerHandler.deleteOldTimer();
+            SerTimerHandler.deleteOldTimer();	
+            
             timerList=SerTimerHandler.readLocalTimer();
             try {
                 reReadTimerList();
@@ -97,7 +98,7 @@ public abstract class SerBoxControl {
 	public abstract String setRecordModus() throws IOException;
 	public abstract String stopRecordModus() throws IOException;
 	public abstract String [] getRepeatOptions() throws IOException;
-	public abstract String [] getTimerType() throws IOException;
+	public abstract String [][] getTimerType() throws IOException;
 	public abstract GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl);
 	public abstract GuiSystemTimerTableModel getSystemTimerTabelModel(ControlTimerTab ctrl);
 	public abstract String getIcon();

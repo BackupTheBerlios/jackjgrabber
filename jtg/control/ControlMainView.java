@@ -238,29 +238,12 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 				new Thread(pane.getTabStart().getControl()).start();
 				break;
 			}
-			if (count == 1) { //ProgrammTab
-				pane.setComponentAt(count, pane.getTabProgramm());
-				break;
-			}
 			if (count == 2) { //TimerTab
-				pane.setComponentAt(count, pane.getTabTimer());
 				new Thread(pane.getTabTimer().getControl()).start();
 				break;
 			}
 			if (count == 3) { //MovieGuideTab
-				pane.setComponentAt(count, pane.getTabMovieGuide());
 				pane.getTabMovieGuide().getControl().askToDownloadMG();
-				break;
-			}
-			if (count == 4) { //Record Info
-				pane.setComponentAt(count, pane.getTabRecordInfo());
-			}
-			if (count == 5) { //SettingsTab
-				pane.setComponentAt(count, pane.getTabSettings());
-				break;
-			}
-			if (count == 6) { //AboutTab
-				pane.setComponentAt(count, pane.getTabAbout());
 				break;
 			}
 			break;

@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
+import model.*;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -324,26 +325,27 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		while ((line = inputNhttpd.readLine()) != null) {
             int index=0;
 			String valueStart, valueStop, valueSenderName = new String();
-			BOTimer botimer = new BOTimer();
-						
-	        String[] result=line.split(" ");
+			BOTimer boTimer = new BOTimer();
+			
+			String[] result=line.split(" ");
 	        
-            botimer.timerNumber=result[0];
-            botimer.eventTypeId=result[1];
-            botimer.eventRepeatId=result[2];
+            boTimer.timerNumber=result[0];
+            boTimer.eventTypeId=result[1];
+            boTimer.eventRepeatId=result[2];
+            System.out.println("Event Repeat Type:" + boTimer.eventRepeatId);
             //Abwärtskompatibilität gewährleisten. repeatCount erst in Images seit 12.2004 vorhanden
             try {
                 long stop = Long.parseLong(result[6])*1000;
                 long now = new GregorianCalendar().getTimeInMillis(); 
                 if (stop>now) {
-                    botimer.repeatCount=result[3];
-                    botimer.announceTime=result[4];
+                    boTimer.repeatCount=result[3];
+                    boTimer.announceTime=result[4];
                     index=1;
                 } else {
-                    botimer.announceTime=result[3];
+                    boTimer.announceTime=result[3];
                 }
             } catch (Exception ex) {
-                botimer.announceTime=result[3];
+                boTimer.announceTime=result[3];
             }
             
             valueStart=result[4+index];
@@ -353,17 +355,17 @@ public class SerBoxControlNeutrino extends SerBoxControl{
                     valueSenderName += result[i];
                     valueSenderName += " ";
                 }
-		    	botimer.senderName=valueSenderName.trim();
+		    	boTimer.setSenderName(valueSenderName.trim());
 		    }
 
-		    botimer.unformattedStartTime=SerFormatter.formatUnixDate(valueStart);  
-			botimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop);
-            botimer.getLocalTimer().setLocal(false);
+		    boTimer.unformattedStartTime=SerFormatter.formatUnixDate(valueStart);  
+			boTimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop);
+            boTimer.getLocalTimer().setLocal(false);
 		    
-		    if (botimer.getEventTypeId().equals("5")) {
-		    	timerList.getRecordTimerList().add(botimer);
+		    if (boTimer.getEventTypeId().equals("5")) {
+		    	timerList.getRecordTimerList().add(boTimer);
 		    } else {
-		        timerList.getSystemTimerList().add(botimer);   	
+		        timerList.getSystemTimerList().add(boTimer);   	
 		    }
 		}
 		setTimerDesctiptionName(timerList.getRecordTimerList());
@@ -486,8 +488,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return new String [] {ControlMain.getProperty("once"), ControlMain.getProperty("dayly"), ControlMain.getProperty("weekly"), 
 			ControlMain.getProperty("2-weekly"), ControlMain.getProperty("4-weekly"), ControlMain.getProperty("weekdays")};
 	}
-	public String [] getTimerType() throws IOException {
-		return new String [] { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "RECORD", "REMIND", "SLEEPTIMER"};
+	
+	public String [][] getTimerType() throws IOException {
+		return new String [][] { {"Shutdown","1"},{"ZapTo","3"}, {"Standby","4"}, {"Remind","6"},{"SleepTimer","7"},{"User","1000"}};
 	}
 	public GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl) {
 		return new GuiNeutrinoRecordTimerTableModel(ctrl);

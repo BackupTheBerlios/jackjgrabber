@@ -487,7 +487,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					botimer.eventTypeId=timerType;
 					botimer.timerNumber="";
 					botimer.eventRepeatId=eventRepeatId;
-	    			botimer.senderName=channel;
+	    			botimer.setSenderName(channel);
 	    			botimer.channelId=channelID;
 	    			botimer.announceTime=""; //vorwarnzeit
 	    			botimer.unformattedStartTime=startDate;  //startDatum
@@ -585,9 +585,9 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		       	}
 			}
 		    if (success.equals("ok")) { 
-	 		    Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("msg_sentTimer")+" "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description);
+	 		    Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("msg_sentTimer")+" "+timer.getStartTime()+" "+timer.getSenderName()+" - "+timer.description);
 		    } else {
-		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("msg_timerError")+" "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description);
+		        Logger.getLogger("SerBoxControlEnigma").info(ControlMain.getProperty("msg_timerError")+" "+timer.getStartTime()+" "+timer.getSenderName()+" - "+timer.description);
 		    }
 		}
 		
@@ -695,8 +695,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return new String [] { ControlMain.getProperty("once"), ControlMain.getProperty("weekdays")  };
 	}
 	
-	public String [] getTimerType() throws IOException {
-		return new String [] { "Switch", "Sleeptimer" };
+	public String [][] getTimerType() throws IOException {
+		return new String [][] { {"Switch","0"}, {"Sleeptimer","1"} };
 	}
 	
 	public GuiRecordTimerTableModel getRecordTimerTabelModel(ControlTimerTab ctrl) {

@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -29,7 +30,9 @@ import java.util.Hashtable;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.table.*;
 
+import model.*;
 import model.BOLocalTimer;
 import model.BOSender;
 import model.BOTimer;
@@ -52,7 +55,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	Hashtable repeatOptionsHashTable;
 	Hashtable timerTypeHashTable;
 	public static String[] repeatOptions;
-	public static String[] timerType;
+	public static String[][] timerType;
 	
 	public static final String[] weekdays = {ControlMain.getProperty("monday"), ControlMain.getProperty("tuesday"), ControlMain.getProperty("wednesday"), 
 			ControlMain.getProperty("thursday"), ControlMain.getProperty("friday"), ControlMain.getProperty("saturday"), ControlMain.getProperty("sunday")
@@ -103,15 +106,16 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 				break;
 			}
 			if (action == "addSystemTimer") {
+				Enumeration enCols =this.getTab().getJTableSystemTimer().getColumnModel().getColumns();
+				while (enCols.hasMoreElements()) {
+					TableColumn element = (TableColumn) enCols.nextElement();
+					System.out.println(element.getPreferredWidth());
+				}
 				this.actionAddSystemTimer();
 				break;
 			}
 			if (action == "reload") {
 				this.reReadTimerList();
-				break;
-			}
-			if (action == "send") {
-				this.actionSend();
 				break;
 			}
 			break;
@@ -123,9 +127,12 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	}
 	
 	private void actionAddSystemTimer() {
-		this.getTimerList().getSystemTimerList().add(this.buildSystemTimer());
+		/*this.getTimerList().getSystemTimerList().add(this.buildSystemTimer());
 		this.getView().getSystemTimerTableModel().fireTableDataChanged();
 		this.getView().systemTimerSorter.fireTableDataChanged();
+		*/
+		
+		new ControlSystemTimerEditView(this,buildSystemTimer() );
 	}
 	
 	private void actionDeleteAll() {
@@ -214,7 +221,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
                         SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
                     }
                 }
-                this.refreshRecordTimerTable();    
+                this.refreshRecordTimerTable();
             }
         }
 	}
@@ -243,18 +250,6 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
                 this.getView().getSystemTimerTableModel().fireTableDataChanged();
             }
         }
-	}
-	
-	private void actionSend() {
-		try {
-			ArrayList timerList = this.getTimerList().getSystemTimerList();
-            for (int i=0; i<timerList.size(); i++) {
-                ControlMain.getBoxAccess().writeTimer((BOTimer)timerList.get(i));  
-            } 
-            this.reReadTimerList();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlTimerTab", this.getMainView());
-		}
 	}
 	
 	private void deleteAllTimer(ArrayList timerList) throws IOException {
@@ -316,6 +311,9 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 			selectRepeatDaysForRecordTimer(this.getSelectedRecordTimer(), this.getView().jRadioButtonWhtage);
 		}
 		if (tableName == "systemTimerTable") {
+			if (me.getClickCount()==2) {
+			    new ControlSystemTimerEditView(this, this.getSelectedSystemTimer());
+			}
 			this.selectRepeatDaysForSystemTimer(this.getSelectedSystemTimer());
 		}
 	}
@@ -335,10 +333,11 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	 * Bei Wochentagen wird der Montag vorselektiert. 
 	 */
 	public String convertLongEventRepeat (String longString) {
-		if (longString.equals(ControlMain.getProperty("weekdays"))) {
+/*		if (longString.equals(ControlMain.getProperty("weekdays"))) {
 			return "512";
 		}
-		return (String)this.getRepeatOptionsHashTable().get(longString);
+	*/
+			return (String)this.getRepeatOptionsHashTable().get(longString);
 	}
 	
 	public String convertShortEventRepeat(String shortString){
@@ -354,7 +353,14 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	}
 	
 	public String convertShortEventType(String timerType) {
-		return this.getTimerType()[Integer.parseInt(timerType)-1];
+		String[][] timer = getTimerType();
+		for (int i = 0; i < timer.length; i++) {
+			if (timer[i][1].equals(timerType))
+			{
+				return timer[i][0];
+			}
+		}
+		return "";
 	}
 	
 	public String convertShortTimerStatus (String timerStatusString) {
@@ -387,8 +393,8 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 		if (timerTypeHashTable == null) {
 			timerTypeHashTable = new Hashtable();
 			for (int i=0; i<this.getTimerType().length; i++) {
-				String timerType = this.getTimerType()[i];
-				timerTypeHashTable.put(timerType, Integer.toString(i+1));
+				String timerType = this.getTimerType()[i][0];
+				timerTypeHashTable.put(timerType, this.getTimerType()[i][1]);
 			}
 		}
 		return timerTypeHashTable;
@@ -546,7 +552,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	/**
 	 * @return Returns the timerType.
 	 */
-	public String[] getTimerType() {
+	public String[][] getTimerType() {
 		return timerType;
 	}
 }

@@ -414,8 +414,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
             engine = "Udrec " + ControlMain.getSettings().getRecordSettings().getUdrecStreamType();
         }
 
-        getMainView().getTabRecordInfo().getControl().startRecord(recordArgs.getEpgTitle(), engine,
-                recordControl.getDirectory(), !recordArgs.isQuickRecord());
+        getMainView().getTabRecordInfo().getControl().startRecord(recordArgs, engine,
+                recordControl.getDirectory());
     }
 
 	/**
