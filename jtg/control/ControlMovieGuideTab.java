@@ -26,23 +26,26 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.net.MalformedURLException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
-import org.apache.log4j.Logger;
+
+import model.BOMovieGuide;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
-import java.net.MalformedURLException;
-import model.BOMovieGuide;
+import org.apache.log4j.Logger;
+import service.SerXMLHandling;
 
 import presentation.GuiMainView;
-import service.SerXMLHandling;
+
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList filmeList = new ArrayList();
-	private static Document movieGuideDocument;
+	static Document movieGuideDocument;
 	public static String movieGuideFileName ="movieguide.xml";
 	
 	public ControlMovieGuideTab(GuiMainView view ) {
@@ -54,7 +57,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 	}
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "pmgDownload") {
+		if (action == "download") {
 			//this.actionRemoveBox();
 		}
 		if (action == "neuEinlesen") {
@@ -62,6 +65,15 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 		}
 		if (action == "select2Timer") {
 			//this.openFileChooser();
+		}
+		if (action == "suchen") {
+			//this.openFileChooser();
+		}
+		if (action == "allDates") {
+			//this.openFileChooser();
+		}		
+		if (action == "movieGuidePath") {
+			this.openFileChooser();
 		}
 	}	
 	public void mousePressed(MouseEvent me) {
@@ -113,24 +125,27 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 	public void setMainView(GuiMainView mainView) {
 		this.mainView = mainView;
 	}
-	/**
-	 * @return Returns the movieGuideDocument.
-	 */
-	public static Document getMovieGuideDocument() {
-		return movieGuideDocument;
+	private void openFileChooser() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		fc.setDialogType(JFileChooser.OPEN_DIALOG);
+
+		fc.setApproveButtonText( "Auswählen");
+		fc.setApproveButtonToolTipText( "Datei auswählen");
+		int returnVal = fc.showOpenDialog( null ) ;
+
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
+			{
+				//String path = fc.getSelectedFile().toString();
+				//this.getMainView().getTabSettings().getJTextFieldRecordSavePath().setText(path);
+				//ControlMain.getSettings().setSavePath(path);
+			}
 	}
-	/**
-	 * @param movieGuideDocument The movieGuideDocument to set.
-	 */
-	public static void setMovieGuideDocument(Document movieGuideDocument) {
-		ControlMovieGuideTab.movieGuideDocument = movieGuideDocument;
-	}
-	
 	public static void checkMovieGuide() {	
 		try {
 			File pathToXMLFile = new File(movieGuideFileName).getAbsoluteFile();
 			if (pathToXMLFile.exists()) {
-				ControlMovieGuideTab.movieGuideDocument = SerXMLHandling.readDocument(pathToXMLFile);				
+				movieGuideDocument = SerXMLHandling.readDocument(pathToXMLFile);				
 				Logger.getLogger("ControlMain").info("MovieGuide found");
 			} else {								
 				Logger.getLogger("ControlMain").info("MovieGuide not found");
@@ -143,4 +158,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
 		}
 }
+	/**
+	 * @return Returns the movieGuideDocument.
+	 */
+	public static Document getMovieGuideDocument() {
+		return movieGuideDocument;
+	}
+	/**
+	 * @param movieGuideDocument The movieGuideDocument to set.
+	 */
+	public static void setMovieGuideDocument(Document movieGuideDocument) {
+		ControlMain.movieGuideDocument = movieGuideDocument;
+	}
 }
