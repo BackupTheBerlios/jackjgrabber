@@ -267,9 +267,9 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	    
 		if ((timerType&256)==256) {
 		    return ControlMain.getProperty("success");
-		} else if ((timerType&76)==76) {
+		} else if ((timerType&72)==64) {
 		    return ControlMain.getProperty("recording");
-		} else if ((timerType&44)==44) {
+		} else if ((timerType&36)==32) {
 		    return ControlMain.getProperty("todo");
 		} else {
 		    return ControlMain.getProperty("error");
@@ -334,7 +334,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		timer.setModifiedId("new");
 				
 		timer.setEventRepeatId("0");
-		timer.setEventTypeId("44");
+		timer.setEventTypeId("32");
 		return timer;
 	}
 	
