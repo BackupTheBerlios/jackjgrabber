@@ -117,7 +117,7 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 	private JPanel getDefaultShowPanel() {
 
 		if (defaultShowPanel == null) {
-			defaultShowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			defaultShowPanel = new JPanel(new GridLayout(0,1));
 			completeMG = new JRadioButton(ControlMain.getProperty("label_mgcomplete"));
 			completeMG.setActionCommand("completeMG");
 			completeMG.addActionListener(control);
@@ -137,7 +137,7 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 	 */
 	private JPanel getDownloadPanel() {
 		if (downloadPanel == null) {
-			downloadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			downloadPanel = new JPanel(new GridLayout(0,1));
 			downloadAuto = new JRadioButton(ControlMain.getProperty("label_mgdownloadauto"));
 			downloadAuto.addActionListener(control);
 			downloadAuto.setActionCommand("downloadAuto");
