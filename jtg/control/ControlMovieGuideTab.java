@@ -220,35 +220,15 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		setTimerTableSize(getBOMovieGuide4Timer().getDatum().size());
 		reInitTimerTable();
 	}
-	/*
-	private BOTimer buildTimer(BOEpg epg) {
-		BOTimer timer = new BOTimer();		
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60;
-		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
-		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
-		long endtime = unformattedStart+unformattedDuration;
-		long announce = unformattedStart-(120);
-		
-		timer.setModifiedId("new");
-		timer.setChannelId(this.getSelectedSender().getChanId());
-		timer.setSenderName(this.getSelectedSender().getName());
-		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
-		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart-timeBefore));
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime+timeAfter));
-		
-		timer.setEventRepeatId("0");
-		timer.setEventTypeId("5");
-		timer.setDescription(epg.getTitle());
-		return timer;
-	}
-	*/
+
 	private BOSender getSenderObject(String senderName) throws IOException{
 	    BOSender sender;
         ArrayList senderList = this.getBoxSenderList();
         for (int i=0; i<senderList.size(); i++) {
             sender = (BOSender)senderList.get(i);
-            if (sender.getName().equals(senderName)) {
+            String boxSenderName = SerFormatter.replace(sender.getName()," ","");
+            String mgSenderName = SerFormatter.replace(senderName," ","");
+            if (boxSenderName.equals(mgSenderName)) {
                 return sender;
             }
         }
@@ -264,14 +244,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             BOTimer botimer = new BOTimer();  	
             int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*-1;
             int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter());
-            int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*-1;
+            int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*60000;
             
             botimer.setModifiedId("new");
             botimer.setChannelId(sender.getChanId());
             botimer.setSenderName(sender.getName());		
             botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().get(modelIndexTimer),timeBefore));
             botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().get(modelIndexTimer),timeAfter));			
-            botimer.setAnnounceTime( String.valueOf((SerFormatter.getGC(botimer.getUnformattedStartTime(),2)).getTimeInMillis()) );
+            botimer.setAnnounceTime( String.valueOf(new GregorianCalendar().getTimeInMillis()-timeAnnounce));
             botimer.setEventRepeatId("0");
             botimer.setEventTypeId("5");
             botimer.setDescription(getBOMovieGuide4Timer().getTitel());
@@ -280,12 +260,6 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             } catch (IOException e) {
                 SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
             }
-            System.out.println(getBOMovieGuide4Timer().getTitel());
-            System.out.println(getBOMovieGuide4Timer().getDatum().get(modelIndexTimer));
-            System.out.println(getBOMovieGuide4Timer().getStart().get(modelIndexTimer));
-            System.out.println(getBOMovieGuide4Timer().getEnde().get(modelIndexTimer));
-            System.out.println(getBOMovieGuide4Timer().getDauer().get(modelIndexTimer));
-            System.out.println(getBOMovieGuide4Timer().getSender().get(modelIndexTimer));
         } catch (IOException e) {
             Logger.getLogger("ControlMovieGuideTab").error("Keinen passenden Sender in der Box gefunden");
         }
