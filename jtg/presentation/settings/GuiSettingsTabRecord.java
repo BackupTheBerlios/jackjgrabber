@@ -1,3 +1,4 @@
+package presentation.settings;
 /*
  * GuiSettingsTabRecord.java by Geist Alexander
  * 
@@ -11,7 +12,6 @@
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-package presentation.settings;
 
 import java.awt.Dimension;
 import java.text.ParseException;
@@ -48,6 +48,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JPanel panelQuickRecordSettings = null;
 	private JPanel panelRecordtimeSettings = null;
 	private JPanel panelNorth = null;
+	private JPanel panelSouth = null;
 	private JComboBox jComboBoxStreamType = null;
 	private JTextField jTextFieldUdrecOptions = null;
 	private JRadioButton jRadioButtonUdrec;
@@ -84,15 +85,16 @@ public class GuiSettingsTabRecord extends GuiTab {
 
 	protected void initialize() {
 		FormLayout layout = new FormLayout("f:pref:grow, 10 f:pref:grow", // columns
-				"pref, 25, t:pref, 25, pref,25,pref"); // rows
+				"pref, 15, pref, 25, pref, 25, pref, 15, t:pref"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
-		builder.add(this.getPanelNorth(), cc.xyw(1, 1, 3));
-		builder.add(this.getPanelServerRecordSettings(), cc.xy(1, 3));
-		builder.add(this.getPanelRecordtimeSettings(), cc.xy(1, 5));
-		builder.add(this.getPanelFileNameSettings(), cc.xy(1, 7));
+		builder.addSeparator("<HTML><font size=5>"+ControlMain.getProperty("label_recordSettings1")+"</font><HTML>", cc.xyw(1, 1, 3));
+		builder.add(this.getPanelNorth(), cc.xyw(1, 3, 3));
+		builder.add(this.getPanelFileNameSettings(), cc.xy(1, 5));
+		builder.addSeparator("<HTML><font size=5>"+ControlMain.getProperty("label_serverRecordSettings1")+"</font><HTML>", cc.xyw(1, 7, 3));
+		builder.add(this.getPanelSouth(), cc.xy(1, 9));		
 	}
 
 	private JPanel getPanelNorth() {
@@ -109,6 +111,20 @@ public class GuiSettingsTabRecord extends GuiTab {
 		return panelNorth;
 	}
 
+	private JPanel getPanelSouth() {
+		if (panelSouth == null) {
+		    panelSouth = new JPanel();
+			FormLayout layout = new FormLayout("pref, 25, pref:grow", //columns
+					"t:pref"); //rows
+			PanelBuilder builder = new PanelBuilder(panelSouth, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.add(this.getPanelServerRecordSettings(), cc.xy(1, 1));
+			builder.add(this.getPanelRecordtimeSettings(), cc.xy(3, 1));
+		}
+		return panelSouth;
+	}
+	
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
@@ -201,19 +217,19 @@ public class GuiSettingsTabRecord extends GuiTab {
 		if (panelFileNameSettings == null) {
 			panelFileNameSettings = new JPanel();
 			FormLayout layout = new FormLayout("pref,10,350:grow,10,pref,5,pref", //columns
-					"pref, 10, pref,pref,pref,pref"); //rows
+					"pref, pref,pref,pref,pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelFileNameSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("filep_filepattern"), cc.xyw(1, 1, 7));
-			builder.add(new JLabel(ControlMain.getProperty("filep_directory")), cc.xy(1, 3));
-			builder.add(getDirPattern(), cc.xy(3, 3));
-			builder.add(getTagButton(), cc.xy(5, 3));
-			builder.add(getTestButton(), cc.xy(7, 3));
+			builder.add(new JLabel(ControlMain.getProperty("filep_directory")), cc.xy(1, 2));
+			builder.add(getDirPattern(), cc.xy(3, 2));
+			builder.add(getTagButton(), cc.xy(5, 2));
+			builder.add(getTestButton(), cc.xy(7, 2));
 
-			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 4));
-			builder.add(getFilePattern(), cc.xy(3, 4));
-			builder.add(getTagButtonFile(), cc.xy(5, 4));
+			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 3));
+			builder.add(getFilePattern(), cc.xy(3, 3));
+			builder.add(getTagButtonFile(), cc.xy(5, 3));
 
 		}
 		return panelFileNameSettings;
