@@ -336,6 +336,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jCheckBoxAbAktuell.setName("showAbHeute");
 			jCheckBoxAbAktuell.setSelected(true);
 			jCheckBoxAbAktuell.addItemListener(control);
+			jCheckBoxAbAktuell.addMouseListener(control);
 		}
 		return jCheckBoxAbAktuell;
 	}
@@ -526,6 +527,8 @@ public class GuiTabMovieGuide extends JPanel {
 			comboBoxGenre = new JComboBox();
 			comboBoxGenre.setModel(new GuiMovieGuideGenreComboModel(this.getControl()));
 			comboBoxGenre.addItemListener(control);
+			comboBoxGenre.addActionListener(this.getControl());
+			comboBoxGenre.setActionCommand("clickONGenreComboBox");
 			comboBoxGenre.setName("jComboBoxGenre");			
 		}
 		return comboBoxGenre;
@@ -535,6 +538,8 @@ public class GuiTabMovieGuide extends JPanel {
 			comboBoxSender = new JComboBox();
 			comboBoxSender.setModel(new GuiMovieGuideSenderComboModel(this.getControl()));
 			comboBoxSender.addItemListener(control);
+			comboBoxSender.addActionListener(this.getControl());
+			comboBoxSender.setActionCommand("clickONSenderComboBox");
 			comboBoxSender.setName("jComboBoxSender");
 		}
 		return comboBoxSender;
@@ -544,6 +549,8 @@ public class GuiTabMovieGuide extends JPanel {
 			comboBoxDatum = new JComboBox();
 			comboBoxDatum.setModel(new GuiMovieGuideDatumComboModel(this.getControl()));
 			comboBoxDatum.addItemListener(this.getControl());
+			comboBoxDatum.addActionListener(this.getControl());
+			comboBoxDatum.setActionCommand("clickONDatumComboBox");
 			comboBoxDatum.setName("jComboBoxDatum");			
 		}
 		return comboBoxDatum;
