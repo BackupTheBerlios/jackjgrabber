@@ -194,15 +194,12 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		}
 	}
 	/**
-	 * Aktualisieren des Tables EPG
+	 * Setzen des Epg-Tables in den Ursprungszustand
 	 */
 	public void reInitEpg() {
 		this.getEpgTableModel().fireTableDataChanged();
-		if (this.getEpgTableModel().getEpgList().size() > 0) {
-			BOEpg epg = (BOEpg)this.getSelectedSender().getEpg().get(0);
-			this.setSelectedEpg(epg.getEventId());
-			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(0,0);
-		}
+		this.selectedEpg=null;
+		this.reInitEpgDetail();
 	}
 	/**
 	 * Aktualisieren des Tables Sender
@@ -222,12 +219,14 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void reInitEpgDetail() {
 		this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
-		try {
-			BOEpgDetails detail = this.getSelectedEpg().readEpgDetails();
-			this.getJTextAreaEPG().setText(detail.getText());
-			this.getJTextAreaEPG().setCaretPosition(0);
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		if (getSelectedEpg() != null) {
+			try {
+				BOEpgDetails detail = this.getSelectedEpg().readEpgDetails();
+				this.getJTextAreaEPG().setText(detail.getText());
+				this.getJTextAreaEPG().setCaretPosition(0);
+			} catch (IOException e) {
+				SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+			}
 		}
 	}
 	/**
@@ -293,15 +292,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Passendes EPG durch Event-ID finden
 	 */
 	public void setSelectedEpg(String eventId) {
-		ArrayList epgList = this.getEpgTableModel().getEpgList();
-		for (int i = 0; i<epgList.size(); i++) {
-			BOEpg epg = (BOEpg)epgList.get(i);
-			if (epg.getEventId().equals(eventId)) {
-				this.selectedEpg = epg;
-				this.reInitEpgDetail();
-				break;
+		if (eventId != null) {
+			ArrayList epgList = this.getEpgTableModel().getEpgList();
+			for (int i = 0; i<epgList.size(); i++) {
+				BOEpg epg = (BOEpg)epgList.get(i);
+				if (epg.getEventId().equals(eventId)) {
+					this.selectedEpg = epg;
+					break;
+				}
 			}
 		}
+		this.reInitEpgDetail();
 	}
 	
 	private void actionAddToTimer() {
