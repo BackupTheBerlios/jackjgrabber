@@ -58,6 +58,7 @@ public class GuiTabMovieGuide extends JPanel {
 			
 	private JComboBox comboBoxGenre = null;
 	private JComboBox comboBoxDatum = null;
+	private JComboBox comboBoxSender = null;
 	private JComboBox comboBoxSuchenNach = null;
 	
 	private JTable jTableFilm = null;	
@@ -88,7 +89,6 @@ public class GuiTabMovieGuide extends JPanel {
 	
 	public MovieGuideTimerTableModel mgTimerTableModel;
 	public GuiMovieGuideTimerTableSorter mgTimerTableSorter = null;
-	//public GuiTableSorter sorter = null;
 	
 	public MovieGuideFilmTableModel filmTableModel;
 	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
@@ -110,7 +110,7 @@ public class GuiTabMovieGuide extends JPanel {
 		builder.addSeparator("Datum",		   		    cc.xywh	(1, 1, 1, 1));
 		builder.add(this.getJPanelChannels(),  			cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		
-		builder.addSeparator("Programm Info",			cc.xywh	(3, 1, 1, 1));						
+		builder.addSeparator("Programm Info, Doppelklick 2 Timer",	cc.xywh	(3, 1, 1, 1));						
 		builder.add(this.getJPanelInfo(),				cc.xywh	(3, 2, 1, 1));
 		
 		builder.addSeparator("Suche",					cc.xywh	(1, 4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
@@ -132,7 +132,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelChannel, layout);
 			CellConstraints cc = new CellConstraints();			
 			builder.add(this.getJPanelDatum(),		  		cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.addSeparator("Titel, Doppelklick toTimer",	cc.xyw	(1, 2, 1));
+			builder.addSeparator("Titel",	cc.xyw	(1, 2, 1));
 			builder.add(this.getJScrollPaneChannels(), 			cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));			
 			builder.add(this.getJButtonSelectedToTimer(), 	    cc.xyw	(1, 4, 1, CellConstraints.FILL, CellConstraints.FILL));								
 		}
@@ -176,16 +176,19 @@ public class GuiTabMovieGuide extends JPanel {
 		if (jPanelSucheErw == null) {
 			jPanelSucheErw = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "320:grow",	 		//columna 
+				      "150px:grow,10,170px:grow",	 		//columna 
 				      "pref,pref,pref");	//rows					
 			PanelBuilder builder = new PanelBuilder(jPanelSucheErw, layout);
 			CellConstraints cc = new CellConstraints();										
-			builder.add(this.getComboBoxSucheNach(), cc.xyw	(1, 1, 1));
-			builder.addSeparator("Suche nach Genre", cc.xyw	(1, 2, 1));
-			builder.add(this.getComboBoxGenre(), 	 cc.xyw	(1, 3, 1));					
+			builder.add(this.getComboBoxSucheNach(), 	cc.xyw	(1, 1, 1));
+			builder.addSeparator("Suche nach Genre", 	cc.xyw	(1, 2, 1));
+			builder.add(this.getComboBoxGenre(), 	 	cc.xyw	(1, 3, 1));
+			builder.addSeparator("Suche nach Sendern", 	cc.xyw	(3, 2, 1));
+			builder.add(this.getComboBoxSender(), 	 	cc.xyw	(3, 3, 1));
 		}
 		return jPanelSucheErw;
 	}
+	
 	private JPanel getJPanelProgressBar() {
 		if (jPanelProgressBar == null) {
 			jPanelProgressBar = new JPanel();
@@ -244,7 +247,7 @@ public class GuiTabMovieGuide extends JPanel {
 	public JButton getJButtonMovieGuideFileChooser() {
 		if (jButtonMovieGuideFileChooser == null) {
 			jButtonMovieGuideFileChooser = new JButton("Öffnen");
-			jButtonMovieGuideFileChooser.setToolTipText("Öffnen der MovieGuide Datei von der Festplatte");
+			jButtonMovieGuideFileChooser.setToolTipText("Öffnen der MovieGuide Datei von einem localen Datenträger");
 			jButtonMovieGuideFileChooser.setActionCommand("movieGuidePath");
 			jButtonMovieGuideFileChooser.addActionListener(this.getControl());
 		}
@@ -276,6 +279,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonDownload = new JButton();
 			jButtonDownload.setActionCommand("download");
 			jButtonDownload.setText("PMG Download");			
+			jButtonDownload.setToolTipText("Aktuellen MovieGuide runterladen.");
 			jButtonDownload.addActionListener(this.getControl());
 		}
 		return jButtonDownload;
@@ -353,7 +357,11 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jScrollPaneAudioVideo;
 	}	
-		
+	
+	public MovieGuideTimerTableModel getGuiMovieGuideTimerTableModel() {
+		return mgTimerTableModel;
+	}
+	
 	public JTable getJTableTimer() {
 		if (jTableTimer == null) {
 			mgTimerTableModel = new MovieGuideTimerTableModel(control);
@@ -476,6 +484,14 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return comboBoxGenre;
 	}
+	public JComboBox getComboBoxSender(){
+		if (comboBoxSender == null) {			
+			comboBoxSender = new JComboBox(this.getControl().getSenderList().toArray());
+			comboBoxSender.addItemListener(control);
+			comboBoxSender.setName("jComboBoxSender");
+		}
+		return comboBoxSender;
+	}
 	public JComboBox getComboBoxDatum() {
 		if (comboBoxDatum == null) {						
 			comboBoxDatum = new JComboBox(this.getControl().getDatumList().toArray());
@@ -491,12 +507,12 @@ public class GuiTabMovieGuide extends JPanel {
 	public JTable getJTableFilm() {
 		if (jTableFilm == null) {				
 			filmTableModel = new MovieGuideFilmTableModel(control);			
-			mgFilmTableSorter = new GuiMovieGuideFilmTableSorter(filmTableModel);
+			mgFilmTableSorter = new GuiMovieGuideFilmTableSorter(filmTableModel);						
 			jTableFilm = new JTable(mgFilmTableSorter);
+			//jTableFilm.getColumnModel().getColumn(0).setCellRenderer( new GuiMovieGuideColorCellRenderer(control)); //sinnvoll ?
 			mgFilmTableSorter.setTableHeader(jTableFilm.getTableHeader());
 			jTableFilm.setName("filmTable");
-			jTableFilm.addMouseListener(control);			
-			//TableColumn columnEventType = jTableFilm.getColumnModel().getColumn(0);										
+			jTableFilm.addMouseListener(control);														
 		}
 		return jTableFilm;
 	}	
