@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
 import model.BOBox;
@@ -47,7 +48,9 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
     public void initialize() {
 		this.getTab().getJComboBoxTheme().setSelectedItem(this.getSettings().getThemeLayout());
 		this.getTab().getJComboBoxLocale().setSelectedItem(this.getSettings().getLocale());
-
+		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());
+		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
+		this.getTab().getCbUseSysTray().setSelected(this.getSettings().isUseSysTray());
     }
     
     public void actionPerformed(ActionEvent e) {
@@ -62,22 +65,41 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
     
 //  Change-Events der Combos und der Checkbox
 	public void itemStateChanged (ItemEvent event) {
-	    JComboBox comboBox = (JComboBox)event.getSource();
-		if (event.getStateChange()==1) {
-		    while (true) {
-				if (comboBox.getName().equals("theme")) {
-				    getSettings().setThemeLayout((String)comboBox.getSelectedItem());
+		String comp = event.getSource().getClass().getName();
+		while (true) {
+			if (comp.equals("javax.swing.JCheckBox")) {
+				JCheckBox checkBox = (JCheckBox)event.getSource();
+				if (checkBox.getName().equals("showLogo")) {
+					this.getSettings().setShowLogo(checkBox.isSelected());
 					break;
 				}
-				if (comboBox.getName().equals("locale")) {
-				    getSettings().setLocale((String)comboBox.getSelectedItem());
+				if (checkBox.getName().equals("startFullscreen")) {
+				    this.getSettings().setStartFullscreen(checkBox.isSelected());
 					break;
 				}
-				break;		
-			}				
+				if (checkBox.getName().equals("useSysTray")) {
+				    this.getSettings().setUseSysTray(checkBox.isSelected());
+					break;
+				}
+				break;
+			} else {
+				JComboBox comboBox = (JComboBox)event.getSource();
+				if (event.getStateChange()==1) {
+					if (comboBox.getName().equals("theme")) {
+					    getSettings().setThemeLayout((String)comboBox.getSelectedItem());
+						break;
+					}
+					if (comboBox.getName().equals("locale")) {
+					    getSettings().setLocale((String)comboBox.getSelectedItem());
+						break;
+					}
+				}	
+				break;
+			}	
 		}
+		
 	}
-    
+        
     private void actionAddBox() {
 		BOBox box = new BOBox();
 		this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);

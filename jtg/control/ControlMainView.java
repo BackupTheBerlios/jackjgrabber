@@ -21,21 +21,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
+
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
 import service.SerAlertDialog;
+import snoozesoft.systray4j.SysTrayMenuEvent;
+import snoozesoft.systray4j.SysTrayMenuListener;
 
 
 /**
  * Control-Klasse des Haupt-Fensters, beinhaltet und verwaltet das MainTabPane
  * Klasse wird beim Start der Anwendung initialisiert und ist immer verfügbar
  */
-public class ControlMainView implements ActionListener, ChangeListener {
+public class ControlMainView implements ActionListener, ChangeListener, SysTrayMenuListener {
 	
 	GuiMainView view;
 	GuiTerms guiTerms;
@@ -155,6 +159,22 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		//}
 		pane.setIndex(count);
 	}
+	public void iconLeftDoubleClicked( SysTrayMenuEvent e ) {}
+	
+	public void iconLeftClicked( SysTrayMenuEvent e ){
+	    if( this.getView().isVisible() ) {
+	        this.getView().setVisible(false);
+	    } else {
+	        this.getView().setVisible(true);    
+	    }
+	}
+	
+	public void menuItemSelected( SysTrayMenuEvent e ) {
+        if( e.getActionCommand().equals( "exit" ) ) System.exit( 0 );
+        else if( e.getActionCommand().equals( "about" ) ) {
+            JOptionPane.showMessageDialog( this.getView(), ControlMain.version[0] );
+        }
+    }
 		
 	/**
 	 * @return Returns the guiTerms.

@@ -56,10 +56,43 @@ public class SerSettingsHandler {
 		getSettingsUdrecPath(root, settings);
 		getSettingsRecordAllPids(root, settings);
 		getSettingsUseAlwaysStandardPlayback(root, settings);
+		getSettingsShowLogo(root, settings);
+		getSettingsStartFullscreen(root, settings);
+		getSettingsUseSysTray(root, settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
 		return settings;
+	}
+	
+	private static void getSettingsShowLogo(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/showLogo");
+		if (node != null) {
+			settings.showLogo=node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root,"showLogo", "true");
+			settings.setShowLogo(true);
+		}
+	}
+	
+	private static void getSettingsStartFullscreen(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/startFullscreen");
+		if (node != null) {
+			settings.startFullscreen=node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root,"startFullscreen", "false");
+			settings.setStartFullscreen(false);
+		}
+	}
+	
+	private static void getSettingsUseSysTray(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/useSysTray");
+		if (node != null) {
+			settings.useSysTray=node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root,"useSysTray", "false");
+			settings.setUseSysTray(false);
+		}
 	}
 	
 	private static void getSettingsStreamingEngine(Element root, BOSettings settings) {
@@ -323,7 +356,13 @@ public class SerSettingsHandler {
 		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
 		Node recordAllPids = settingsDocument.selectSingleNode("/settings/recordAllPids");
 		Node useStandardPlayback = settingsDocument.selectSingleNode("/settings/useStandardPlayback");
+		Node useSysTray = settingsDocument.selectSingleNode("/settings/useSysTray");
+		Node startFullscreen = settingsDocument.selectSingleNode("/settings/startFullscreen");
+		Node showLogo = settingsDocument.selectSingleNode("/settings/showLogo");
 
+		useSysTray.setText(Boolean.toString(ControlMain.getSettings().isUseSysTray()));
+		startFullscreen.setText(Boolean.toString(ControlMain.getSettings().isStartFullscreen()));
+		showLogo.setText(Boolean.toString(ControlMain.getSettings().isShowLogo()));
 		useStandardPlayback.setText(Boolean.toString(ControlMain.getSettings().isAlwaysUseStandardPlayback()));
 		recordAllPids.setText(Boolean.toString(ControlMain.getSettings().isRecordAllPids()));
 		engine.setText(Integer.toString(ControlMain.getSettings().getStreamingEngine()));

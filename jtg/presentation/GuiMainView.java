@@ -17,18 +17,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
 import org.apache.log4j.Logger;
 
 import projectX.common.X;
 import service.SerGUIUtils;
 import service.SerSettingsHandler;
+import snoozesoft.systray4j.SysTrayMenu;
+import snoozesoft.systray4j.SysTrayMenuIcon;
+import snoozesoft.systray4j.SysTrayMenuItem;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
@@ -43,7 +50,10 @@ public class GuiMainView extends JFrame {
 
 	
 	private GuiMainTabPane mainTabPane = null;
-	private ControlMainView control;    
+	private ControlMainView control;
+	private SysTrayMenuIcon sysTrayIcon = new SysTrayMenuIcon( "ico/jgrabber" );
+	private SysTrayMenu menu;
+
 	
 	public GuiMainView(ControlMainView ctrl) {
 		super("FormLayout");
@@ -63,6 +73,11 @@ public class GuiMainView extends JFrame {
 				}
 				System.exit(0); 
 			}
+			public void windowIconified(WindowEvent e) {
+			    if (ControlMain.getSettings().useSysTray) {
+			        ControlMain.getControl().getView().setVisible(false);
+			    }
+			}
 		});
 		setLookAndFeel();
 		control = ctrl;
@@ -71,6 +86,10 @@ public class GuiMainView extends JFrame {
 				" "+ControlMain.version[2]+", "+ControlMain.version[3]);
 		pack();
 		SerGUIUtils.center(this);
+		if (ControlMain.getSettings().isStartFullscreen()) {
+		    GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			device.setFullScreenWindow(this);
+		}
 		setVisible(true);	
 	}
 	
@@ -87,6 +106,11 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
+		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/rocket.gif")).getImage());
+		if (ControlMain.getSettings().isUseSysTray()) {
+		    this.getSysTrayIcon().addSysTrayMenuListener( control );
+			createMenu();   
+		}
 	}
 	/**
 	 * Haupt-TabPane. Neue Tabs werden hier angemeldet.
@@ -105,6 +129,31 @@ public class GuiMainView extends JFrame {
 		}
 		return mainTabPane;
 	}
+	
+	void createMenu()
+    {
+//	  create an exit item
+        SysTrayMenuItem itemOpen = new SysTrayMenuItem( "Öffnen", "open" );
+        itemOpen.addSysTrayMenuListener( control );
+	    
+        // create an exit item
+        SysTrayMenuItem itemExit = new SysTrayMenuItem( "Beenden", "exit" );
+        itemExit.addSysTrayMenuListener( control );
+
+        // create an about item
+        SysTrayMenuItem itemAbout = new SysTrayMenuItem( "About...", "about" );
+        itemAbout.addSysTrayMenuListener( control );
+
+        // create the main menu
+        menu = new SysTrayMenu( this.getSysTrayIcon(), ControlMain.version[0] );
+
+        // insert items
+        menu.addItem( itemExit );
+        menu.addSeparator();
+        menu.addItem( itemAbout );
+        menu.addSeparator();
+        menu.addItem( itemOpen );
+    }
 	    
 	public GuiTabProgramm getTabProgramm() {
 		return this.getMainTabPane().getTabProgramm();
@@ -139,4 +188,10 @@ public class GuiMainView extends JFrame {
 	public void setControl(ControlMainView control) {
 		this.control = control;
 	}
+    /**
+     * @return Returns the sysTrayIcon.
+     */
+    public SysTrayMenuIcon getSysTrayIcon() {
+        return sysTrayIcon;
+    }
 }

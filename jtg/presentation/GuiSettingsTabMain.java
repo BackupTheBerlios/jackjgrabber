@@ -23,6 +23,7 @@ import java.text.ParseException;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -54,6 +55,9 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JTable jTableBoxSettings = null;
 	private GuiBoxSettingsTableModel modelBoxTable;
 	private JPanel panelLayoutSettings = null;
+	private JCheckBox cbStartFullscreen;
+	private JCheckBox cbShowLogo;
+	private JCheckBox cbUseSysTray;
 	
     public GuiSettingsTabMain(ControlSettingsTabMain ctrl) {
 		super();
@@ -63,14 +67,14 @@ public class GuiSettingsTabMain extends GuiTab {
     
     protected void initialize() {
         FormLayout layout = new FormLayout(
-				  "f:pref:grow, 10, f:pref",  		// columns 
-				  "f:pref"); 			// rows
+				  "f:pref:grow, 100",  		// columns 
+				  "f:pref, 10, pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
 		builder.add(this.getPanelBoxSettings(),		   		cc.xy(1,1));
-		builder.add(this.getPanelLayoutSettings(),	   		cc.xy(3,1));
+		builder.add(this.getPanelLayoutSettings(),	   		cc.xy(1,3));
     }
     
     private JPanel getPanelBoxSettings() {
@@ -82,27 +86,32 @@ public class GuiSettingsTabMain extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelBoxSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Box-Settings",						cc.xywh	(1, 1, 3, 1));
+			builder.addSeparator("Netzwerk-Einstellungen",				cc.xywh	(1, 1, 3, 1));
 			builder.add(this.getJScrollPaneBoxSettings(),	  			cc.xywh	(1, 2, 1, 3));
 			builder.add(this.getJButtonAnlegen(),						cc.xy	(3, 2));
 			builder.add(this.getJButtonLoeschen(),						cc.xy	(3, 3));
 		}
 		return panelBoxSettings;
 	}
+    
     private JPanel getPanelLayoutSettings() {
 		if (panelLayoutSettings == null) {
 			panelLayoutSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref, 10, pref",	 		//columna 
-			  "pref, pref, pref, pref");	//rows
+					  "f:300, 10, pref",	 		//columna 
+			  "pref, pref, pref, pref, 5, pref, pref, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(panelLayoutSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Layout-Settings",						cc.xywh	(1, 1, 3, 1));
+			builder.addSeparator("Darstellungs-Einstellungen (Programm-Neustart erforderlich)",	cc.xywh	(1, 1, 3, 1));
 			builder.add(new JLabel("Theme"),				  			cc.xy	(1, 2));
 			builder.add(this.getJComboBoxTheme(),						cc.xy	(3, 2));
-			builder.add(new JLabel("Locale"),				  			cc.xy	(1, 4));
+			builder.add(new JLabel("Sprache"),				  			cc.xy	(1, 4));
 			builder.add(this.getJComboBoxLocale(),						cc.xy	(3, 4));
+			
+			builder.add(this.getCbStartFullscreen(),				cc.xyw	(1, 6, 3));
+			builder.add(this.getCbShowLogo(),						cc.xyw	(1, 7, 3));
+			builder.add(this.getCbUseSysTray(),						cc.xyw	(1, 8, 3));
 		}
 		return panelLayoutSettings;
 	}
@@ -117,7 +126,6 @@ public class GuiSettingsTabMain extends GuiTab {
 			jComboBoxLocale = new JComboBox(new BOLocale().getLocaleList().toArray());
 			jComboBoxLocale.addItemListener(control);
 			jComboBoxLocale.setName("locale");
-			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,19));
 		}
 		return jComboBoxLocale;
 	}
@@ -154,7 +162,6 @@ public class GuiSettingsTabMain extends GuiTab {
 			jComboBoxTheme = new JComboBox(ControlMain.themes);
 			jComboBoxTheme.addItemListener(control);
 			jComboBoxTheme.setName("theme");
-			jComboBoxTheme.setPreferredSize(new java.awt.Dimension(105,19));
 		}
 		return jComboBoxTheme;
 	}
@@ -216,6 +223,42 @@ public class GuiSettingsTabMain extends GuiTab {
 			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
 		}
 		return jButtonLoeschen;
+	}
+	
+	/**
+	 * @return Returns the cbStartFullscreen.
+	 */
+	public JCheckBox getCbStartFullscreen() {
+		if (cbStartFullscreen == null) {
+		    cbStartFullscreen = new JCheckBox("Im Vollbildmodus starten");
+		    cbStartFullscreen.setName("startFullscreen");
+		    cbStartFullscreen.addItemListener(control);
+		}
+		return cbStartFullscreen;
+	}
+	
+	/**
+	 * @return Returns the cbShowLogo.
+	 */
+	public JCheckBox getCbShowLogo() {
+		if (cbShowLogo == null) {
+		    cbShowLogo = new JCheckBox("Beim Start Logo anzeigen");
+		    cbShowLogo.setName("showLogo");
+		    cbShowLogo.addItemListener(control);
+		}
+		return cbShowLogo;
+	}
+	
+	/**
+	 * @return Returns the cbUseSysTray.
+	 */
+	public JCheckBox getCbUseSysTray() {
+		if (cbUseSysTray == null) {
+		    cbUseSysTray = new JCheckBox("Programm in Systray minimieren (untertützt nur unter Windows und KDE)");
+		    cbUseSysTray.setName("useSysTray");
+		    cbUseSysTray.addItemListener(control);
+		}
+		return cbUseSysTray;
 	}
     
     /**

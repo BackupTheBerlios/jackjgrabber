@@ -36,6 +36,9 @@ public class BOSettings {
 	public boolean alwaysUseStandardPlayback;
 	public boolean settingsChanged = false;
 	public boolean projectXSettingsChanged = false;
+	public boolean startFullscreen = false;
+	public boolean useSysTray = false;
+	public boolean showLogo = false;
 	public String streamingServerPort;
 	public boolean startStreamingServer;
 	public boolean startPX;
@@ -51,6 +54,7 @@ public class BOSettings {
     	setSettingsChanged(true);
     	getBoxList().remove(number);
     }
+    
     
     public void addPlaybackOption(BOPlaybackOption playbackOption) {
     	setSettingsChanged(true);
@@ -367,5 +371,50 @@ public class BOSettings {
             }
         }
         return null; //should not happen
+    }
+    /**
+     * @return Returns the showLogo.
+     */
+    public boolean isShowLogo() {
+        return showLogo;
+    }
+    /**
+     * @param showLogo The showLogo to set.
+     */
+    public void setShowLogo(boolean showLogo) {
+        if (this.showLogo != showLogo) {
+			setSettingsChanged(true);
+			this.showLogo = showLogo;
+		}
+    }
+    /**
+     * @return Returns the startFullscreen.
+     */
+    public boolean isStartFullscreen() {
+        return startFullscreen;
+    }
+    /**
+     * @param startFullscreen The startFullscreen to set.
+     */
+    public void setStartFullscreen(boolean startFullscreen) {
+        if (this.startFullscreen != startFullscreen) {
+			setSettingsChanged(true);
+			this.startFullscreen = startFullscreen;
+		}
+    }
+    /**
+     * @return Returns the useSysTray.
+     */
+    public boolean isUseSysTray() {
+        return useSysTray;
+    }
+    /**
+     * @param useSysTray The useSysTray to set.
+     */
+    public void setUseSysTray(boolean useSysTray) {
+        if (this.useSysTray != useSysTray) {
+			setSettingsChanged(true);
+			this.useSysTray = useSysTray;
+		}
     }
 }

@@ -55,6 +55,9 @@ public class SerXMLHandling {
 		setElementInElement(root,"engine", "0");
 		setElementInElement(root,"recordAllPids", "true");
 		setElementInElement(root,"useStandardPlayback", "false");
+		setElementInElement(root,"showLogo", "true");
+		setElementInElement(root,"useSysTray", "false");
+		setElementInElement(root,"startFullscreen", "false");
 
 		root.addElement("boxList");
 		root.addElement("playbackList");
