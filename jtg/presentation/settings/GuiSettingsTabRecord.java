@@ -208,7 +208,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JPanel getPanelFileNameSettings() {
 		if (panelFileNameSettings == null) {
 			panelFileNameSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref,10,pref,10,pref,5,pref", //columns
+			FormLayout layout = new FormLayout("pref,10,350:grow,10,pref,5,pref", //columns
 					"pref, 10, pref,pref,pref,pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelFileNameSettings, layout);
 			CellConstraints cc = new CellConstraints();
@@ -256,7 +256,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JTextField getDirPattern() {
 
 		if (dirPattern == null) {
-			dirPattern = new JTextField(40);
+			dirPattern = new JTextField();
 			dirPattern.setName("dirPattern");
 			dirPattern.addKeyListener(control);
 		}
@@ -269,7 +269,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JTextField getFilePattern() {
 
 		if (filePattern == null) {
-			filePattern = new JTextField(40);
+			filePattern = new JTextField();
 			filePattern.setName("filePattern");
 			filePattern.addKeyListener(control);
 		}

@@ -203,12 +203,9 @@ public class RecordControl extends Thread implements SerProcessStopListener{
 			}
 			*/
 			
-			String pattern = null;
-			if (ControlMain.getSettingsRecord().isDifferentFilePattern())
-			{
-				pattern = ControlMain.getSettingsRecord().getFilePattern();
-			}
-			else
+			String pattern = ControlMain.getSettingsRecord().getFilePattern();
+			
+			if (pattern == null || pattern.length() == 0)
 			{
 				pattern = ControlMain.getSettingsRecord().getDirPattern();
 			}
