@@ -1,7 +1,6 @@
 package presentation;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
 import service.SerGUIUtils;
@@ -11,10 +10,6 @@ import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.theme.Silver;
 
 import control.ControlMain;
-import control.ControlProgramTab;
-import control.ControlProjectXTab;
-import control.ControlSettingsTab;
-import control.ControlTimerTab;
 
 /*
  * Created on 31.08.2004
