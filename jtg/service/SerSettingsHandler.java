@@ -222,7 +222,7 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.themeLayout = node.getText();
 		} else {
-			SerXMLHandling.setElementInElement(root, "theme", "Silver");
+			SerXMLHandling.setElementInElement(root, "theme", "ExperienceBlue");
 			settings.setThemeLayout("Silver");
 		}
 	}

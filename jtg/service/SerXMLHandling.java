@@ -46,7 +46,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"savePath", new File(System.getProperty("user.home")).getAbsolutePath());
 		setElementInElement(root,"startStreamingServer", "true");
 		setElementInElement(root,"streamingServerPort", "4000");
-		setElementInElement(root,"theme", "Silver");
+		setElementInElement(root,"theme", "ExperienceBlue");
 		setElementInElement(root,"locale", "DE");
 		setElementInElement(root,"jgrabberStreamType", "PES MPEG-Packetized Elementary");
 		setElementInElement(root,"udrecStreamType", "PES MPEG-Packetized Elementary");
