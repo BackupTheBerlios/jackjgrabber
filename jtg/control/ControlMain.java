@@ -213,6 +213,11 @@ public class ControlMain {
 		}
 		return -1;
 	}
+	public static void newBoxSelected(BOBox box) {
+	    box.setSelected(true);
+	    setActiveBox(box);
+		ControlMain.detectImage();
+	}
 	/**
 	 * @return Returns the settings.
 	 */
