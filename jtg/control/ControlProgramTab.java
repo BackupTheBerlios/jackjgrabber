@@ -341,12 +341,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		
 		int unformattedStart = Integer.parseInt(epg.getUnformattedStart());
 		int unformattedDuration = Integer.parseInt(epg.getUnformattedDuration());
+		int endtime = unformattedStart+unformattedDuration;
 		int announce = unformattedStart-(60*1000);
 		
 		timer.setSenderName(this.getSelectedSender().getChanId());
 		timer.setAnnounceTime(Integer.toString(announce)); //Vorwarnzeit
 		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart));
-		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(unformattedStart+unformattedDuration));
+		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime));
 		
 		timer.setEventRepeat("0");
 		timer.setEventType("5");
