@@ -560,7 +560,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */    
-	private JComboBox getJComboBoxBouquets() {
+	public JComboBox getJComboBoxBouquets() {
 	      if (JComboBoxBouquets == null) {
 	         boquetsComboModel = new GuiBoquetsComboModel(control);
 	         JComboBoxBouquets = new JComboBox(boquetsComboModel);
