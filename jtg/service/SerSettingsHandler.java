@@ -165,6 +165,8 @@ public class SerSettingsHandler {
 		mg.setMgLoadType(ControlSettingsTabMovieGuide.MGLOADTYPE_ASK);
 		mg.setMgDefault(ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL);
 		mg.setMgStoreOriginal(false);
+		mg.setMgDontForgetListe(new ArrayList());
+		mg.setMgInfoDontForget(false);
 		return settings;
 	}	
 }
