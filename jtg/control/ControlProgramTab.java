@@ -51,15 +51,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.setMainView(view);		
 	}
 	
-	/*
-	 *  (non-Javadoc)
-	 * @see control.ControlTab#initialize()
-	 */
 	public void initialize() {
 		try {
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
-			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
-			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
+			this.selectRunningSender();
 		} catch (IOException e) {			
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -76,6 +71,30 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.initialize();
 	}
 	
+	public void selectRunningSender() {
+		try {
+			String runningChanId = ControlMain.getBoxAccess().getChanIdOfRunningSender();
+			for (int i=0; i<getBouquetList().size(); i++) {
+				BOBouquet bouquet = (BOBouquet)this.getBouquetList().get(i);
+				bouquet.readSender();
+				for (int i2=0; i2<bouquet.getSender().size(); i2++) {
+					BOSender sender = (BOSender)bouquet.getSender().get(i2);
+					if (sender.getChanId().equals(runningChanId)) {
+						this.setSelectedBouquet(bouquet);
+						this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(i);
+						this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(i2, i2);
+						this.setSelectedSender(sender);
+						break;
+					}
+				}
+			}
+			
+		} catch (IOException e) {
+			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
+			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
+		}
+	}
+	
 	/**
 	 * Klick-Events der Buttons
 	 */
@@ -89,8 +108,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 					System.out.println(timer.getStartTime());
 				}
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 			}
 		}
 		if (action == "Box Reboot"){
@@ -205,13 +223,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Aktualisieren des Tables Sender
 	 */
 	public void reInitSender() {
-		try {
-			this.getSelectedBouquet().readSender();
-			if (this.getMainView().getMainTabPane().tabProgramm != null) { //Beim 1. Start gibt es noch keine Table zum refreshen
-				this.getSenderTableModel().fireTableDataChanged();
-			}
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		if (this.getMainView().getMainTabPane().tabProgramm != null) { //Beim 1. Start gibt es noch keine Table zum refreshen
+			this.getSenderTableModel().fireTableDataChanged();
 		}
 	}
 	/**
