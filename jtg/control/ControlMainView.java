@@ -60,7 +60,7 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		this.initialize();
 		
 		this.startProgramControl();		
-		this.log("Anwendung gestartet");		
+		this.log(ControlMain.getProperty("msg_app_starting"));		
 	}
 	/*
 	 * erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
@@ -71,17 +71,16 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		
 		int index = ControlMain.getIndexOfActiveBox();
 		if (index ==-1) {
-			SerAlertDialog.alert("No Box-IP in the Settings found", this.getView());
+			SerAlertDialog.alert(ControlMain.getProperty("msg_ipError"), this.getView());
 		} 
 		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
 	}
 	
 	private void initialize() {
 		this.logSystemInfo();
-
 		ControlMain.detectImage();
-        ControlMain.setResourceBundle(ControlMain.getLocale());
 	}
+	
 	private void logSystemInfo() {
 		for (int i=0; i<ControlMain.version.length; i++) {
 			this.log(ControlMain.version[i]);

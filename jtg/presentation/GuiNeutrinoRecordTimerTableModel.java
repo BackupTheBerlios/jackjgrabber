@@ -28,6 +28,7 @@ import javax.swing.table.AbstractTableModel;
 
 import model.BOSender;
 import model.BOTimer;
+import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
 
 public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
@@ -99,15 +100,15 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Sender";
+			return ControlMain.getProperty("sender");
 		} if (columnIndex == 1) {
-			return "Start";
+			return ControlMain.getProperty("start");
 		} if (columnIndex == 2) {
-			return "Ende";
+			return ControlMain.getProperty("end");
 		} if (columnIndex == 3) {
-			return "Wiederholung";
+			return ControlMain.getProperty("repeat");
 		} else {
-			return "Titel";
+			return ControlMain.getProperty("title");
 		}
 	}
 

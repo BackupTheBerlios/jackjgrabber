@@ -38,6 +38,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
 import control.ControlTab;
 
@@ -100,17 +101,17 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
-		builder.addSeparator("Aufnahme-Timer",					cc.xyw  (1, 1, 3));
-		builder.add(this.getJScrollPaneRecordTimerTable(),   	cc.xyw  (1, 2, 3));
-		builder.add(this.getJPanelDauerTimer(),	 				cc.xyw  (1, 3, 3));
-		builder.addSeparator("Sytem-Timer",						cc.xyw  (1, 5, 1));
-		builder.add(this.getJScrollPaneSystemTimerTable(),  	cc.xywh (1, 6, 1, 2));
-		builder.add(this.getJPanelDauerTimer2(), 				cc.xywh (2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle("Aktionen Aufnahme-Timer",				cc.xy   (5, 1));
-		builder.add(this.getJPanelButtonsRecordTimer(), 		cc.xywh (5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle("Aktionen System-Timer",				cc.xy   (3, 5));
-		builder.add(this.getJPanelButtonsSystemTimer(),			cc.xy   (3, 6));
-		builder.add(this.getJPanelButtonsGui(),					cc.xywh (5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
+		builder.addSeparator(ControlMain.getProperty("label_recordTimer"),					cc.xyw  (1, 1, 3));
+		builder.add(this.getJScrollPaneRecordTimerTable(),   											cc.xyw  (1, 2, 3));
+		builder.add(this.getJPanelDauerTimer(),	 															cc.xyw  (1, 3, 3));
+		builder.addSeparator(ControlMain.getProperty("label_systemTimer"),				cc.xyw  (1, 5, 1));
+		builder.add(this.getJScrollPaneSystemTimerTable(),  											cc.xywh (1, 6, 1, 2));
+		builder.add(this.getJPanelDauerTimer2(), 															cc.xywh (2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),							cc.xy   (5, 1));
+		builder.add(this.getJPanelButtonsRecordTimer(), 												cc.xywh (5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),							cc.xy   (3, 5));
+		builder.add(this.getJPanelButtonsSystemTimer(),												cc.xy   (3, 6));
+		builder.add(this.getJPanelButtonsGui(),																cc.xywh (5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
 	public ControlTab getControl() {
@@ -274,10 +275,10 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 				if (jRadioButtonWhtage[i]== null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
 					jRadioButtonWhtage[i].addActionListener(control);
-					jRadioButtonWhtage[i].setName(Integer.toString(control.WOCHENTAGE_VALUE[i]));
+					jRadioButtonWhtage[i].setName(Integer.toString(control.weekdays_value[i]));
 					jRadioButtonWhtage[i].setActionCommand("recordTimer");
 					jRadioButtonWhtage[i].setEnabled(false);					
-					jRadioButtonWhtage[i].setText(control.WOCHENTAGE[i]);
+					jRadioButtonWhtage[i].setText(control.weekdays[i]);
 				}
 				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
 				a = a+2;
@@ -300,9 +301,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 					jRadioButtonWhtage2[i] = new JRadioButton();
 					jRadioButtonWhtage2[i].setEnabled(false);
 					jRadioButtonWhtage2[i].setActionCommand("systemTimer");
-					jRadioButtonWhtage2[i].setName(Integer.toString(control.WOCHENTAGE_VALUE[i]));
+					jRadioButtonWhtage2[i].setName(Integer.toString(control.weekdays_value[i]));
 					jRadioButtonWhtage2[i].addActionListener(control);
-					jRadioButtonWhtage2[i].setText(control.WOCHENTAGE[i]);
+					jRadioButtonWhtage2[i].setText(control.weekdays[i]);
 				}
 				builder.add(jRadioButtonWhtage2[i],cc.xy(1, a));
 				a = a+2;
@@ -314,7 +315,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteAllRecordTimer() {
 		if (jButtonDeleteAllRecordTimer == null) {
-			jButtonDeleteAllRecordTimer = new JButton("Aufnahmetimer löschen");
+			jButtonDeleteAllRecordTimer = new JButton(ControlMain.getProperty("button_deleteRecTimer"));
 			jButtonDeleteAllRecordTimer.setActionCommand("deleteAllRecordTimer");
 			jButtonDeleteAllRecordTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllRecordTimer.addActionListener(control);
@@ -324,7 +325,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteAllSystemTimer() {
 		if (jButtonDeleteAllSystemTimer == null) {
-			jButtonDeleteAllSystemTimer = new JButton("Systemtimer löschen");
+			jButtonDeleteAllSystemTimer = new JButton(ControlMain.getProperty("button_deleteSysTimer"));
 			jButtonDeleteAllSystemTimer.setActionCommand("deleteAllSystemTimer");
 			jButtonDeleteAllSystemTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllSystemTimer.addActionListener(control);
@@ -334,7 +335,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteSelectedRecordTimer() {
 		if (jButtonDeleteSelectedRecordTimer == null) {
-			jButtonDeleteSelectedRecordTimer = new JButton("Selektierte löschen");
+			jButtonDeleteSelectedRecordTimer = new JButton(ControlMain.getProperty("button_deleteSelected"));
 			jButtonDeleteSelectedRecordTimer.setActionCommand("deleteSelectedRecordTimer");
 			jButtonDeleteSelectedRecordTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteSelectedRecordTimer.addActionListener(control);
@@ -344,7 +345,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteSelectedSystemTimer() {
 		if (jButtonDeleteSelectedSystemTimer == null) {
-			jButtonDeleteSelectedSystemTimer = new JButton("Selektierte löschen");
+			jButtonDeleteSelectedSystemTimer = new JButton(ControlMain.getProperty("button_deleteSelected"));
 			jButtonDeleteSelectedSystemTimer.setActionCommand("deleteSelectedSystemTimer");
 			jButtonDeleteSelectedSystemTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteSelectedSystemTimer.addActionListener(control);
@@ -355,7 +356,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonNewRecordTimer() {
 		if (jButtonNewRecordTimer == null) {
-			jButtonNewRecordTimer = new JButton("Anlegen");
+			jButtonNewRecordTimer = new JButton(ControlMain.getProperty("button_create"));
 			jButtonNewRecordTimer.setActionCommand("addRecordTimer");
 			jButtonNewRecordTimer.setPreferredSize(new Dimension(150,25));
 			jButtonNewRecordTimer.addActionListener(control);
@@ -365,7 +366,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonSenden() {
 		if (jButtonSenden == null) {
-			jButtonSenden = new JButton("Senden");
+			jButtonSenden = new JButton(ControlMain.getProperty("button_send"));
 			jButtonSenden.setActionCommand("send");
 			jButtonSenden.addActionListener(control);
 			jButtonSenden.setPreferredSize(new Dimension(150,25));
@@ -375,7 +376,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteAl() {
 		if (jButtonDeleteAll == null) {
-			jButtonDeleteAll = new JButton("Alle Löschen");
+			jButtonDeleteAll =new JButton(ControlMain.getProperty("button_deleteAll"));
 			jButtonDeleteAll.setActionCommand("deleteAll");
 			jButtonDeleteAll.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAll.addActionListener(control);
@@ -385,7 +386,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonReload() {
 		if (jButtonReload == null) {
-			jButtonReload = new JButton("Neu laden");
+			jButtonReload = new JButton(ControlMain.getProperty("button_reload"));
 			jButtonReload.setActionCommand("reload");
 			jButtonReload.addActionListener(control);
 		}
@@ -394,7 +395,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonNewSystemtimer() {
 		if (jButtonNewSystemtimer == null) {
-			jButtonNewSystemtimer = new JButton("Anlegen");
+			jButtonNewSystemtimer = new JButton(ControlMain.getProperty("button_create"));
 			jButtonNewSystemtimer.setActionCommand("addSystemTimer");
 			jButtonNewSystemtimer.setPreferredSize(new Dimension(150,25));
 			jButtonNewSystemtimer.addActionListener(control);

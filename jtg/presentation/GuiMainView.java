@@ -120,11 +120,11 @@ public class GuiMainView extends JFrame {
 			mainTabPane = new GuiMainTabPane(this);
 			mainTabPane.addChangeListener(control);
 			
-			mainTabPane.addTab("Programm", mainTabPane.getTabProgramm());
-			mainTabPane.addTab("Timerliste", new JPanel());
-			mainTabPane.addTab("Project-X", new JPanel());
-			mainTabPane.addTab("Settings", new JPanel());
-			mainTabPane.addTab("About", new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_program"), mainTabPane.getTabProgramm());
+			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_projectx"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_about"), new JPanel());
 			//mainTabPane.addTab("MovieGuide", new JPanel());
 		}
 		return mainTabPane;
@@ -133,15 +133,15 @@ public class GuiMainView extends JFrame {
 	void createMenu()
     {
 //	  create an exit item
-        SysTrayMenuItem itemOpen = new SysTrayMenuItem( "Öffnen", "open" );
+        SysTrayMenuItem itemOpen = new SysTrayMenuItem( ControlMain.getProperty("open"), "open" );
         itemOpen.addSysTrayMenuListener( control );
 	    
         // create an exit item
-        SysTrayMenuItem itemExit = new SysTrayMenuItem( "Beenden", "exit" );
+        SysTrayMenuItem itemExit = new SysTrayMenuItem( ControlMain.getProperty("exit"), "exit" );
         itemExit.addSysTrayMenuListener( control );
 
         // create an about item
-        SysTrayMenuItem itemAbout = new SysTrayMenuItem( "About...", "about" );
+        SysTrayMenuItem itemAbout = new SysTrayMenuItem( ControlMain.getProperty("about"), "about" );
         itemAbout.addSysTrayMenuListener( control );
 
         // create the main menu

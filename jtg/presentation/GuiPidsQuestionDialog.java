@@ -40,6 +40,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+import control.ControlMain;
+
 public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	
 	private JButton jButtonOk;
@@ -75,7 +77,7 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 			
-			builder.addSeparator("Selektiere Aufnahme-Pids", cc.xy(1, 1));
+			builder.addSeparator(ControlMain.getProperty("label_selectPids"), cc.xy(1, 1));
 			int counter = 0;
 			if (pidList.getVPid()!= null) {
 			    jRadioButtonVPid = new JRadioButton();			
@@ -139,7 +141,7 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	 */
 	public JButton getJButtonOk() {
 	    if (jButtonOk == null) {
-	        jButtonOk = new JButton("OK");
+	        jButtonOk = new JButton(ControlMain.getProperty("button_ok"));
 	        jButtonOk.addActionListener(this);
 	    }
 		return jButtonOk;

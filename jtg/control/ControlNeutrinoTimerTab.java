@@ -47,10 +47,15 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	GuiNeutrinoTimerPanel tab;
 	Hashtable repeatOptionsHashTable;
 	Hashtable timerTypeHashTable;
-	public final String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "Wochentage" };
+	public final String[] repeatOptions = {ControlMain.getProperty("once"), ControlMain.getProperty("dayly"), ControlMain.getProperty("weekly"), 
+			ControlMain.getProperty("2-weekly"), ControlMain.getProperty("4-weekly"), ControlMain.getProperty("weekdays")  };
+	
 	public static final String[] timerType = { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "RECORD", "REMIND", "SLEEPTIMER"};
-	public final String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
-	public final int[] WOCHENTAGE_VALUE = {512, 1024, 2048, 4096, 8192, 16384, 32768};
+	
+	public final String[] weekdays = {ControlMain.getProperty("monday"), ControlMain.getProperty("tuesday"), ControlMain.getProperty("wednesday"), 
+			ControlMain.getProperty("thursday"), ControlMain.getProperty("friday"), ControlMain.getProperty("saturday"), ControlMain.getProperty("sunday")
+	};
+	public final int[] weekdays_value = {512, 1024, 2048, 4096, 8192, 16384, 32768};
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -174,7 +179,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 			this.deleteAllTimer(this.getTimerList()[1]);
 			this.rereadTimerList();
 		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
 	}
 	
@@ -333,7 +338,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	 * Bei Wochentagen wird der Montag vorselektiert. 
 	 */
 	public String convertLongEventRepeat (String longString) {
-		if (longString.equals("Wochentage")) {
+		if (longString.equals(ControlMain.getProperty("weekdays"))) {
 			return "512";
 		}
 		return (String)this.getRepeatOptionsHashTable().get(longString);
@@ -342,7 +347,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	public String convertShortEventRepeat(String shortString){
 		int number = Integer.parseInt(shortString);
     	if (number >5) {
-    		return "Wochentage"; 
+    		return ControlMain.getProperty("weekdays"); 
     	}
 		return this.getRepeatOptions()[number];
 	}
@@ -426,7 +431,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		if (result>5) {
 			this.getTab().enableRecordTimerWeekdays();
 			for (int i = 0; i<7; i++){
-				this.getTab().jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+				this.getTab().jRadioButtonWhtage[i].setSelected((result&weekdays_value[i])==weekdays_value[i]);
 			}
 		} else {
 			this.getTab().disableRecordTimerWeekdays();
@@ -438,7 +443,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		if (result>5) {
 			this.getTab().enableSystemTimerWeekdays();
 			for (int i = 0; i<7; i++){
-				this.getTab().jRadioButtonWhtage2[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+				this.getTab().jRadioButtonWhtage2[i].setSelected((result&weekdays_value[i])==weekdays_value[i]);
 			}
 		} else {
 			this.getTab().disableSystemTimerWeekdays();

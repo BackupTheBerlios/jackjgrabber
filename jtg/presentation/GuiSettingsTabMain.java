@@ -33,8 +33,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
-import model.BOLocale;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -58,6 +56,10 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JCheckBox cbStartFullscreen;
 	private JCheckBox cbShowLogo;
 	private JCheckBox cbUseSysTray;
+	
+	public final String[] themes = {
+			"Silver", "BrownSugar", "DarkStar", "DesertBlue", "ExperienceBlue", "SkyBluerTahoma"
+		};
 	
     public GuiSettingsTabMain(ControlSettingsTabMain ctrl) {
 		super();
@@ -86,10 +88,10 @@ public class GuiSettingsTabMain extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelBoxSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Netzwerk-Einstellungen",				cc.xywh	(1, 1, 3, 1));
-			builder.add(this.getJScrollPaneBoxSettings(),	  			cc.xywh	(1, 2, 1, 3));
-			builder.add(this.getJButtonAnlegen(),						cc.xy	(3, 2));
-			builder.add(this.getJButtonLoeschen(),						cc.xy	(3, 3));
+			builder.addSeparator(ControlMain.getProperty("label_networkSettings"),				cc.xywh	(1, 1, 3, 1));
+			builder.add(this.getJScrollPaneBoxSettings(),	  														cc.xywh	(1, 2, 1, 3));
+			builder.add(this.getJButtonAnlegen(),																		cc.xy	(3, 2));
+			builder.add(this.getJButtonLoeschen(),																	cc.xy	(3, 3));
 		}
 		return panelBoxSettings;
 	}
@@ -103,7 +105,7 @@ public class GuiSettingsTabMain extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelLayoutSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Darstellungs-Einstellungen (Programm-Neustart erforderlich)",	cc.xywh	(1, 1, 3, 1));
+			builder.addSeparator(ControlMain.getProperty("label_guiSettings"),	cc.xywh	(1, 1, 3, 1));
 			builder.add(new JLabel("Theme"),				  			cc.xy	(1, 2));
 			builder.add(this.getJComboBoxTheme(),						cc.xy	(3, 2));
 			builder.add(new JLabel("Sprache"),				  			cc.xy	(1, 4));
@@ -123,7 +125,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */    
 	public JComboBox getJComboBoxLocale() {
 		if (jComboBoxLocale == null) {
-			jComboBoxLocale = new JComboBox(new BOLocale().getLocaleList().toArray());
+			jComboBoxLocale = new JComboBox(control.localeNames);
 			jComboBoxLocale.addItemListener(control);
 			jComboBoxLocale.setName("locale");
 		}
@@ -159,7 +161,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */    
 	public JComboBox getJComboBoxTheme() {
 		if (jComboBoxTheme == null) {
-			jComboBoxTheme = new JComboBox(ControlMain.themes);
+			jComboBoxTheme = new JComboBox(themes);
 			jComboBoxTheme.addItemListener(control);
 			jComboBoxTheme.setName("theme");
 		}
@@ -202,7 +204,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton getJButtonAnlegen() {
 		if (jButtonAnlegen == null) {
 			jButtonAnlegen = new JButton();
-			jButtonAnlegen.setText("Anlegen");
+			jButtonAnlegen.setText(ControlMain.getProperty("button_create"));
 			jButtonAnlegen.setActionCommand("add");
 			jButtonAnlegen.addActionListener(control);
 			jButtonAnlegen.setPreferredSize(new java.awt.Dimension(90,25));
@@ -217,7 +219,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton getJButtonLoeschen() {
 		if (jButtonLoeschen == null) {
 			jButtonLoeschen = new JButton();
-			jButtonLoeschen.setText("Löschen");
+			jButtonLoeschen.setText(ControlMain.getProperty("button_delete"));
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);
 			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
@@ -230,7 +232,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JCheckBox getCbStartFullscreen() {
 		if (cbStartFullscreen == null) {
-		    cbStartFullscreen = new JCheckBox("Im Vollbildmodus starten");
+		    cbStartFullscreen = new JCheckBox(ControlMain.getProperty("cbFullscreen"));
 		    cbStartFullscreen.setName("startFullscreen");
 		    cbStartFullscreen.addItemListener(control);
 		}
@@ -242,7 +244,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JCheckBox getCbShowLogo() {
 		if (cbShowLogo == null) {
-		    cbShowLogo = new JCheckBox("Beim Start Logo anzeigen");
+		    cbShowLogo =new JCheckBox(ControlMain.getProperty("cbShowLogo"));
 		    cbShowLogo.setName("showLogo");
 		    cbShowLogo.addItemListener(control);
 		}
@@ -254,7 +256,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JCheckBox getCbUseSysTray() {
 		if (cbUseSysTray == null) {
-		    cbUseSysTray = new JCheckBox("Programm in Systray minimieren (untertützt nur unter Windows und KDE)");
+		    cbUseSysTray = new JCheckBox(ControlMain.getProperty("cbUseSystray"));
 		    cbUseSysTray.setName("useSysTray");
 		    cbUseSysTray.addItemListener(control);
 		}

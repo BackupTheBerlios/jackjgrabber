@@ -23,6 +23,7 @@ import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
+import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
 
 
@@ -77,11 +78,11 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Timer-Typ"; 
+			return ControlMain.getProperty("timerType");
 		} if (columnIndex == 1) {
-			return "Nächster Zeitpunkt";
+			return ControlMain.getProperty("nextStart");
 		} else {
-			return "Wiederholung";
+			return ControlMain.getProperty("repeat");
 		}
 	}
 	

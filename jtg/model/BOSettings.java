@@ -343,7 +343,7 @@ public class BOSettings {
      * if no standard-option declared, return 1st Option
      */
     public BOPlaybackOption getStandardPlaybackOption() {
-        if (this.getPlaybackOptions()==null) {
+        if (this.getPlaybackOptions()==null || this.getPlaybackOptions().size() ==0) {
             return null;
         }
         for (int i=0; i<this.getPlaybackOptions().size(); i++) {
@@ -416,5 +416,9 @@ public class BOSettings {
 			setSettingsChanged(true);
 			this.useSysTray = useSysTray;
 		}
+    }
+    
+    public String getShortLocale() {
+    	return this.getLocale().substring(0,2);
     }
 }

@@ -25,6 +25,7 @@ import java.util.GregorianCalendar;
 import javax.swing.table.AbstractTableModel;
 
 import model.BOEpg;
+import control.ControlMain;
 import control.ControlProgramTab;
 /**
  * TableModel des EPG-Tables
@@ -75,13 +76,13 @@ public class GuiEpgTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return "Event-ID"; 
 		} if (columnIndex == 1) {
-			return "Start";
+			return ControlMain.getProperty("start");
 		} if (columnIndex == 2) {
-			return "Ende";
+			return ControlMain.getProperty("end");
 		} if (columnIndex == 3) {
-			return "Dauer";
+			return ControlMain.getProperty("duration");
 		} else {
-			return "Titel";
+			return ControlMain.getProperty("title");
 		}
 	}
 	

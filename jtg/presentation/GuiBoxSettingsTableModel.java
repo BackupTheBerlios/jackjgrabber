@@ -124,7 +124,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 			ControlMain.getSettings().removeBox(rowNumber);
 			fireTableDataChanged();
 			this.refreshIpComboBox();
-		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert("Bitte eine Zeile markieren", control.getMainView());};
+		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());};
 	}
 	
 	public boolean isCellEditable (int row, int col) {

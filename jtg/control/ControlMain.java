@@ -24,9 +24,11 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Properties;
 
 import model.BOBox;
-import model.BOLocale;
 import model.BOSettings;
 
 import org.apache.log4j.BasicConfigurator;
@@ -35,17 +37,13 @@ import org.apache.log4j.PatternLayout;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
+import service.SerLogAppender;
+import service.SerSettingsHandler;
+import service.SerXMLHandling;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
-import service.SerLogAppender;
-import service.SerSettingsHandler;
-import service.SerXMLHandling;
-
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Properties;
 
 /**
  * Startklasse, Start der Anwendung
@@ -59,18 +57,17 @@ public class ControlMain {
 	static SerBoxControl boxAccess;
 	static SerLogAppender logAppender;
 	static ControlMainView control;
-	static BOLocale bolocale = new BOLocale();
 	static BOBox activeBox;
 	
 	
-    private static Properties prop = new Properties();   
+    private static Properties properties = new Properties();   
     private static Locale locale = new Locale("");    
     
     public static String settingsFilename = "settings.xml";
     
 	public static String version[] = { 
-		"Jack the JGrabber 0.1.5a",
-		"14.11.2004",
+		"Jack the JGrabber 0.1.6a",
+		"18.11.2004",
 		"TEST PROJECT ONLY",
 		"User: "+System.getProperty("user.name")
 	};
@@ -86,18 +83,11 @@ public class ControlMain {
 		"(6) use it at your own risk and for your own education as it was meant",
 		" ",
 	};
-	
-	public static final String[] themes = {
-		"Silver", "BrownSugar", "DarkStar", "DesertBlue", "ExperienceBlue", "SkyBluerTahoma"
-	};
-	
-	public static final String[] streamTypes = {
-			"PES", "TS"
-		};
 
 	public static void main( String args[] ) {
 		startLogger();
 		readSettings();
+		setResourceBundle();
 		detectActiveBox();
 		control = new ControlMainView();
 	};
@@ -115,11 +105,9 @@ public class ControlMain {
 			BasicConfigurator.configure(ControlMain.getLogAppender());
 		} catch (IOException e) {}
 	}
-	
-	
 		
 	public static void detectImage() {
-		Logger.getLogger("ControlMain").info("Searching Box-Image");
+		Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_searchImage"));
 		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIpOfActiveBox());
 		if (image==0) {
 			boxAccess=new SerBoxControlDefault();
@@ -133,7 +121,7 @@ public class ControlMain {
 		else if (image==2) {
 			boxAccess = new SerBoxControlEnigma();
 		}
-		Logger.getLogger("ControlMain").info(ControlMain.getBoxAccess().getName()+"-Access loaded");
+		Logger.getLogger("ControlMain").info(ControlMain.getBoxAccess().getName()+"-"+ControlMain.getProperty("msg_accessLoaded"));
 	}
 	
 	/**
@@ -145,18 +133,18 @@ public class ControlMain {
 				File pathToXMLFile = new File(settingsFilename).getAbsoluteFile();
 				if (pathToXMLFile.exists()) {
 					settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
-					Logger.getLogger("ControlMain").info("Settings found");
+					Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_settingsFound"));
 				} else {
 					settingsDocument = SerXMLHandling.createStandardSettingsFile(pathToXMLFile);
-					Logger.getLogger("ControlMain").info("Settings not found, created empty document");
+					Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_settingsNotFound"));
 				}
 				setSettings(SerSettingsHandler.buildSettings(getSettingsDocument()));
 			} catch (MalformedURLException e) {
-				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
+				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
 			} catch (DocumentException e) {
-				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
+				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
 			} catch (IOException e) {
-				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
+				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
 			}
 	}	
 
@@ -276,34 +264,20 @@ public class ControlMain {
 	public static void setLogAppender(SerLogAppender logAppender) {
 		ControlMain.logAppender = logAppender;
 	}
-	
-	private static void setLocale(String sprache){       		              
-	     if (!bolocale.getLocale().equals("de")){        	
-                locale = new Locale(bolocale.getLocale().substring(0,2));
-         }
-	}
-
-	public static Locale getLocale(){           			
-		bolocale.setLocale(settings.getLocale().toString());
-		setLocale(bolocale.getLocale().substring(0,2));		
-        return locale;
-	}
 
 	public static String getProperty(String key){		
-		return prop.getProperty(key);
+		return properties.getProperty(key);
 	}
 
-	public static void setResourceBundle(Locale loc){		
-		String _MESSAGE_BUNDLE ="locale/messages_"+locale.getLanguage()+".properties";
-		ControlMain.locale=loc;        
-		try{                            
-			if (locale.getLanguage().equalsIgnoreCase("de") || locale.getLanguage().length() < 1   ){      
-                	_MESSAGE_BUNDLE="locale/messages.properties";
-			}                               
+	public static void setResourceBundle(){		
+		String _MESSAGE_BUNDLE ="locale/messages_"+ControlMain.getSettings().getShortLocale()+".properties";                              
         File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();       
-        InputStream is = new FileInputStream(f);                
-        prop.load(is);                          
-		}catch (IOException ex){}                       
+        try {
+	        InputStream is = new FileInputStream(f);                
+	        properties.load(is);                          
+		}catch (IOException ex){
+			Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_propertyError")+f.getName());
+		}                       
 	}    
 	/**
 	 * @return Returns the control.

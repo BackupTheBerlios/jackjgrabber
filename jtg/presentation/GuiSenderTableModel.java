@@ -21,6 +21,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.table.AbstractTableModel;
 
 import model.BOSender;
+import control.ControlMain;
 import control.ControlProgramTab;
 
 public class GuiSenderTableModel extends AbstractTableModel 
@@ -56,9 +57,9 @@ public class GuiSenderTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Nr."; 
+			return ControlMain.getProperty("nr"); 
 		} else {
-			return "Sender";
+			return ControlMain.getProperty("sender"); 
 		}
 	}
 	

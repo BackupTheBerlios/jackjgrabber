@@ -81,13 +81,13 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Name"; 
+			return ControlMain.getProperty("name"); 
 		}
 		if (columnIndex == 1) {
-			return "Aufruf-Option";
+			return ControlMain.getProperty("playbackOption");
 		}
 		else {
-			return "Standard";
+			return ControlMain.getProperty("standard");
 		}
 	}
 	
@@ -106,7 +106,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		try {
 			ControlMain.getSettings().removePlaybackOption(rowNumber);
 			fireTableDataChanged();
-		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert("Bitte eine Zeile markieren", control.getMainView());};
+		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());};
 	}
 	
 	public boolean isCellEditable (int row, int col) {

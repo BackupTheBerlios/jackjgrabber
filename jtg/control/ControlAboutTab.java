@@ -76,7 +76,7 @@ public class ControlAboutTab extends ControlTab implements MouseListener {
 		try {
 			BrowserLauncher.openURL(label.getName());
 		} catch (IOException e) {
-			SerAlertDialog.alert("Standardbrowser konnte nicht gestartet werden", this.getMainView());
+			SerAlertDialog.alert(ControlMain.getProperty("msg_browserError"), this.getMainView());
 		}
 	}
 	

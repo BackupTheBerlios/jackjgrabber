@@ -232,17 +232,17 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
   
 	public String sendMessage(String message) throws IOException {                                         
-		Logger.getLogger("SerBoxControlNeutrino").info("Sende Message zur Box...");
+		Logger.getLogger("SerBoxControlNeutrino").info(ControlMain.getProperty("msg_boxSend"));
 		return sendCommand("message?popup="+message); 
 	}
 	
 	public String standbyBox(String modus) throws IOException {
-		Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird in den StandbyModus gebracht.");
+		Logger.getLogger("SerBoxControlNeutrino").info(ControlMain.getProperty("msg_standby"));
 		return sendCommand("standby?"+modus);
 	}
 	
 	public String shutdownBox() throws IOException {
-		Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird runtegefahren.");         
+		Logger.getLogger("SerBoxControlNeutrino").info(ControlMain.getProperty("msg_shutdown"));         
 		return sendCommand("shutdown");
 	}
 	/**
@@ -319,7 +319,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader input = getConnection(buffer.toString());
 		String line;
 		while((line=input.readLine())!=null) {
-			Logger.getLogger("ControlProgramTab").info("Timer uebertragen "+timer.getInfo());
+			Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_sentTimer")+timer.getInfo());
 			timer.setModifiedId(null);
 			return line;
 		}

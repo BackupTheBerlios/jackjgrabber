@@ -168,8 +168,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
-		fc.setApproveButtonText( "Auswählen");
-		fc.setApproveButtonToolTipText( "Verzeichnis auswählen");
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
 		int returnVal = fc.showSaveDialog( null ) ;
 
 		if ( returnVal == JFileChooser.APPROVE_OPTION )
@@ -182,8 +182,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	
 	private void openUdrecPathFileChooser() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText( "Auswählen");
-		chooser.setApproveButtonToolTipText( "Pfad zur udrec.exe auswählen");
+		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathUdrec"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		FileFilter filter = new FileFilter(){
 			public boolean accept(File f){

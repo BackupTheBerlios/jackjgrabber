@@ -255,7 +255,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Wiedergabe des laufenden Senders
 	 */
 	private void actionPlayback() {
-	    if (ControlMain.getSettings().getPlaybackOptions() != null || ControlMain.getSettings().getPlaybackOptions().size()>0) {
+	    if (ControlMain.getSettings().getPlaybackOptions() != null && ControlMain.getSettings().getPlaybackOptions().size()>0) {
 	        try {
                 this.zapToSelectedSender();
                 String execString = this.getPlaybackRequestString();
@@ -268,7 +268,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
                 Logger.getLogger("ControlProgramTab").error(e.getMessage());
             }
 	    } else {
-	        SerAlertDialog.alert("Es konnte keine Playback-Option gefunden werden", this.getMainView());
+	        SerAlertDialog.alert(ControlMain.getProperty("msg_playbackOptionError"), this.getMainView());
 	    }
 	}
 	private String getPlaybackRequestString() {
@@ -299,8 +299,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	    
 	    String ret = (String)JOptionPane.showInputDialog(
                 this.getMainView(),
-                "Bitte eine Wiedergabe-Option auswählen",
-                "Wiedergabe-Optionen Auswahl",
+                ControlMain.getProperty("msg_choosePlayback2"),
+                ControlMain.getProperty("msg_choose"),
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 ControlMain.getSettings().getPlaybackOptionNames(),

@@ -37,6 +37,7 @@ import presentation.GuiTabSettings;
 public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener{
     
     GuiTabSettings settingsTab;
+    public final String[] localeNames = { "de,Deutsch", "en,Englisch","fi,Finisch"	};
     
     public ControlSettingsTabMain (GuiTabSettings tabSettings) {
 		this.setSettingsTab(tabSettings);

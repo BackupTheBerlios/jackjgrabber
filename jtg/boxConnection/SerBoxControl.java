@@ -33,6 +33,8 @@ import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
+import control.ControlMain;
+
 public abstract class SerBoxControl {	
 	
 	/**
@@ -64,10 +66,10 @@ public abstract class SerBoxControl {
 			}
 			in.close();
 		} catch (IOException e) { //Box ist aus, Rückgabe des Defaultwertes
-			Logger.getLogger("SerBoxControl").error("Unable to connect");
+			Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_connect"));
 			return(imageType);
 		} catch (IllegalArgumentException ex) {
-			Logger.getLogger("SerBoxControl").error("No valid BoxIp");
+			Logger.getLogger("SerBoxControl").error(ControlMain.getProperty("err_valid_ip"));
 		}
 		return(imageType);
 	}

@@ -23,14 +23,16 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
+import control.ControlMain;
+
 //Mit SerAlertDialog.alert(String nachricht, Compnonent parentComponent) aufrufen!!!
 public class SerAlertDialog extends JFrame  {
 	
-	public static void alert(String nachricht, Component comp )  { 
+	public static void alert(String message, Component comp )  { 
 		JOptionPane.showMessageDialog(
 			comp,
-			nachricht,
-			"Achtung!",
+			message,
+			ControlMain.getProperty("attention"),
 			JOptionPane.YES_OPTION
 		);
 	}
@@ -38,11 +40,11 @@ public class SerAlertDialog extends JFrame  {
 	public static void alertConnectionLost( String loggingClass, Component comp )  { 
 		JOptionPane.showMessageDialog(
 			comp,
-			"No connection to box",
-			"Achtung!",
+			ControlMain.getProperty("err_noConnection"),
+			ControlMain.getProperty("attention"),
 			JOptionPane.YES_OPTION
 		);
-		Logger.getLogger(loggingClass).error("No connection to box");
+		Logger.getLogger(loggingClass).error(ControlMain.getProperty("err_noConnection"));
 	}
 }
 
