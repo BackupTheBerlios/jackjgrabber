@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.regex.*;
 import javax.swing.text.*;
 import java.awt.Color;
+import javax.swing.ImageIcon;
 /**
  * @author ralix
  */
@@ -245,6 +246,25 @@ public class SerFormatter {
             return 1;
         }
     }
+    public static void insertPicture(JTextComponent textComp,String path) {
+        try {
+         StyledDocument doc = (StyledDocument)textComp.getDocument();
+         Style style = doc.addStyle("StyleName", null);
+         StyleConstants.setIcon(style, new ImageIcon(path));
+         doc.insertString(doc.getLength(), " ", style);
+        } catch (BadLocationException e) {}
+    }
+    
+    public static void underScore(JTextComponent textComp, String pattern, boolean value, int pos) {                      	
+    	StyledDocument doc = (StyledDocument)textComp.getDocument();        
+        Style style = doc.addStyle("Underline", null);
+        StyleConstants.setUnderline(style, value);
+        try {                                    
+            	doc.insertString(pos, pattern, style);            	
+            	StyleConstants.setUnderline(style, false);
+        } catch (BadLocationException e) {}    
+    }
+    
     public static void highlight(JTextComponent textComp, String pattern) {
     	Pattern find = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);              
         Matcher m = find.matcher(textComp.getText());      
