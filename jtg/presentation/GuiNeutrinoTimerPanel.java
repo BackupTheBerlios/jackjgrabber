@@ -366,7 +366,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonSenden() {
 		if (jButtonSenden == null) {
-			jButtonSenden = new JButton(ControlMain.getProperty("button_send"));
+			jButtonSenden = new JButton("<HTML><font color=red>"+ControlMain.getProperty("button_send")+"</font></HTML>");
 			jButtonSenden.setActionCommand("send");
 			jButtonSenden.addActionListener(control);
 			jButtonSenden.setPreferredSize(new Dimension(150,25));
