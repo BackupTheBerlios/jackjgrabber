@@ -40,11 +40,13 @@ public class GuiSettingsTabPath extends GuiTab {
 	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldUdrecPath;
 	private JTextField jTextFieldProjectXPath;
-	private JTextField jTextFieldVlcPath =null;
+	private JTextField jTextFieldVlcPath;
+	private JTextField jTextFieldShutdonwToolPath;
 	private JButton jButtonRecordPathFileChooser = null;
 	private JButton jButtonUdrecPathFileChooser = null;
 	private JButton jButtonProjectXPathFileChooser = null;
 	private JButton jButtonVlcPathFileChooser = null;
+	private JButton jButtonShutdownToolPathFileChooser = null;
 	private SerIconManager iconManager = SerIconManager.getInstance();
        
     public GuiSettingsTabPath(ControlSettingsTabPath ctrl) {
@@ -56,23 +58,26 @@ public class GuiSettingsTabPath extends GuiTab {
     protected void initialize() {
         FormLayout layout = new FormLayout(
 				  "pref, 10, f:pref:grow, 5, pref",  		// columns 
-				  "pref, pref, pref, pref"); 			// rows
+				  "pref, pref, pref, pref, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
 				
 				builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 1));
-				builder.add(this.getJTextFieldRecordSavePath(),																cc.xy	(3, 1));
-				builder.add(this.getJButtonRecordPathFileChooser(),														cc.xy	(5, 1));
-				builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),	cc.xy	(1, 2));
-				builder.add(this.getJTextFieldProjectXPath(),																			cc.xy	(3, 2));
-				builder.add(this.getJButtonProjectXPathFileChooser(),													cc.xy	(5, 2));
+				builder.add(this.getJTextFieldRecordSavePath(),								cc.xy	(3, 1));
+				builder.add(this.getJButtonRecordPathFileChooser(),							cc.xy	(5, 1));
+				builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),		cc.xy	(1, 2));
+				builder.add(this.getJTextFieldProjectXPath(),								cc.xy	(3, 2));
+				builder.add(this.getJButtonProjectXPathFileChooser(),						cc.xy	(5, 2));
 				builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),			cc.xy	(1, 3));
-				builder.add(this.getJTextFieldUdrecPath(),																				cc.xy	(3, 3));
-				builder.add(this.getJButtonUdrecPathFileChooser(),														cc.xy	(5, 3));
-				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),					cc.xy	(1, 4));
-				builder.add(this.getJTextFieldVlcPath(),																						cc.xy	(3, 4));
-				builder.add(this.getJButtonVlcPathFileChooser(),																cc.xy	(5, 4));
+				builder.add(this.getJTextFieldUdrecPath(),									cc.xy	(3, 3));
+				builder.add(this.getJButtonUdrecPathFileChooser(),							cc.xy	(5, 3));
+				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),			cc.xy	(1, 4));
+				builder.add(this.getJTextFieldVlcPath(),									cc.xy	(3, 4));
+				builder.add(this.getJButtonVlcPathFileChooser(),							cc.xy	(5, 4));
+				builder.add(new JLabel(ControlMain.getProperty("label_shutdownToolPath")),	cc.xy	(1, 5));
+				builder.add(this.getJTextFieldShutdonwToolPath(),							cc.xy	(3, 5));
+				builder.add(this.getJButtonShutdownToolPathFileChooser(),					cc.xy	(5, 5));
     }
 	    	
 	
@@ -179,5 +184,28 @@ public class GuiSettingsTabPath extends GuiTab {
      */
     public void setControl(ControlSettingsTabPath control) {
         this.control = control;
+    }
+    /**
+     * @return Returns the jButtonShutdownToolPathFileChooser.
+     */
+    public JButton getJButtonShutdownToolPathFileChooser() {
+        if (jButtonShutdownToolPathFileChooser == null) {
+            jButtonShutdownToolPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
+            jButtonShutdownToolPathFileChooser.setActionCommand("shutdownToolPath");
+            jButtonShutdownToolPathFileChooser.addActionListener(control);
+		}
+        return jButtonShutdownToolPathFileChooser;
+    }
+    /**
+     * @return Returns the jTextFieldShutdonwToolPath.
+     */
+    public JTextField getJTextFieldShutdonwToolPath() {
+        if (jTextFieldShutdonwToolPath == null) {
+            jTextFieldShutdonwToolPath = new JTextField();
+            jTextFieldShutdonwToolPath.addKeyListener(control);
+            jTextFieldShutdonwToolPath.setName("shutdownToolPath");
+            jTextFieldShutdonwToolPath.setPreferredSize(new Dimension(340, 19));
+		}
+        return jTextFieldShutdonwToolPath;
     }
 }

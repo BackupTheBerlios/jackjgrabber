@@ -48,6 +48,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
         this.getTab().getJTextFieldProjectXPath().setText(this.getSettings().getProjectXPath());
         this.getTab().getJTextFieldUdrecPath().setText(this.getSettings().getUdrecPath());
         this.getTab().getJTextFieldVlcPath().setText(this.getSettings().getVlcPath());
+        this.getTab().getJTextFieldShutdonwToolPath().setText(this.getSettings().getShutdownToolPath());
     }
 		
 	public void actionPerformed(ActionEvent e) {
@@ -68,6 +69,10 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 		  			this.openProjectXPathFileChooser();
 		  			break;
 		  		}
+		  		if (action.equals("shutdownToolPath")) {
+		  			this.openShutdownToolPathFileChooser();
+		  			break;
+		  		}
 		  		break;
 		}
 	}
@@ -86,8 +91,28 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			    this.getSettings().setVlcPath(tf.getText());
 			    break;
 			}
+			if (tf.getName().equals("shutdownToolPath")){
+			    this.getSettings().setShutdownToolPath(tf.getText());
+			    break;
+			}
 			break;
 		}
+	}
+	
+	private void openShutdownToolPathFileChooser() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_pathShutdownTool"));
+		int returnVal = fc.showSaveDialog( null ) ;
+
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+			String path = fc.getSelectedFile().toString();
+			this.getTab().getJTextFieldShutdonwToolPath().setText(path);
+			this.getSettings().setShutdownToolPath(path);
+		}	
 	}
 	
 	private void openVlcPathFileChooser() {
@@ -101,7 +126,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			}
 		};
 		fc.setFileFilter(filter);
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
 		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
@@ -142,7 +167,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			}
 		};
 		fc.setFileFilter(filter);
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
 		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
@@ -167,7 +192,7 @@ public class ControlSettingsTabPath extends ControlTabSettings implements Action
 			}
 		};
 		fc.setFileFilter(filter);
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 
 		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));

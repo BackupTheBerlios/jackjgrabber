@@ -66,6 +66,7 @@ public class SerSettingsHandler {
 		getSettingsRecordVtxt(root, settings);
 		getSettingsStartVlc(root, settings);
 		getSettingsVlcPath(root, settings);
+		getSettingsShutdownTool(root, settings);
 
 		getSettingsLayout(root, settings);
 
@@ -92,6 +93,16 @@ public class SerSettingsHandler {
 			String path = new File("vlc.exe").getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "vlcPath", path);
 			settings.getPathSettings().setVlcPath(path);
+		}
+	}
+	
+	private static void getSettingsShutdownTool(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/shutdownTool");
+		if (node != null) {
+			settings.getPathSettings().shutdownToolPath = node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root, "shutdownTool", "");
+			settings.getPathSettings().setShutdownToolPath("");
 		}
 	}
 
@@ -645,7 +656,9 @@ public class SerSettingsHandler {
 		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
 		Node projectXPath = settingsDocument.selectSingleNode("/settings/projectXPath");
 		Node vlcPath = settingsDocument.selectSingleNode("/settings/vlcPath");
+		Node shutdownTool = settingsDocument.selectSingleNode("/settings/shutdownTool");
 
+		shutdownTool.setText(ControlMain.getSettings().getPathSettings().getShutdownToolPath());
 		projectXPath.setText(ControlMain.getSettings().getPathSettings().getProjectXPath());
 		udrecPath.setText(ControlMain.getSettings().getPathSettings().getUdrecPath());
 		savePath.setText(ControlMain.getSettings().getPathSettings().getSavePath());

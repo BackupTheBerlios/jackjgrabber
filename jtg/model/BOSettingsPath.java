@@ -1,6 +1,4 @@
 package model;
-
-
 /*
 BOSettingsRecords.java by Geist Alexander 
 
@@ -26,6 +24,7 @@ public class BOSettingsPath {
 	public String udrecPath;
 	public String projectXPath;
 	public String vlcPath;
+	public String shutdownToolPath;
 
 	public BOSettingsPath(BOSettings settings) {
 		this.setSettings(settings);
@@ -109,4 +108,19 @@ public class BOSettingsPath {
 			this.projectXPath = projectXPath;
 		}
 	}
+    /**
+     * @return Returns the shutdownToolPath.
+     */
+    public String getShutdownToolPath() {
+        return shutdownToolPath;
+    }
+    /**
+     * @param shutdownToolPath The shutdownToolPath to set.
+     */
+    public void setShutdownToolPath(String shutdownToolPath) {
+        if (this.shutdownToolPath == null || !this.shutdownToolPath.equals(shutdownToolPath)) {
+			setSettingsChanged(true);
+			this.shutdownToolPath = shutdownToolPath;
+		}
+    }
 }

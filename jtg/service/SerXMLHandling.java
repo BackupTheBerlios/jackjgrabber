@@ -71,6 +71,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"recordVtxt", "false");
 		setElementInElement(root,"startVlc", "false");
 		setElementInElement(root,"vlcPath", new File("vlc.exe").getAbsolutePath());
+		setElementInElement(root,"shutdownTool", "");
 		setElementInElement(root, "lookandfeel", PlasticLookAndFeel.class.getName());
 		setElementInElement(root, "storeepg", "false");
 		setElementInElement(root, "storelogafterrecord", "false");
