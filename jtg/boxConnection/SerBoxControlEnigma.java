@@ -218,7 +218,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 				startEpgInfo=line.indexOf("&start=")+7;
 				endEpgInfo=line.indexOf("&duration=",startEpgInfo);
 				valueStart=line.substring(startEpgInfo,endEpgInfo);
-				startTime=SerFormatter.formatUnixTime(valueStart);
+				startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
 				startDate =	SerFormatter.formatUnixDate(valueStart);
 				startEpgInfo=endEpgInfo+10;
 				endEpgInfo=line.indexOf("&descr=",startEpgInfo);
@@ -226,8 +226,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 				duration=SerFormatter.formatedEndTime(valueDuration);
 				startEpgInfo=line.indexOf("<span class=\"event\">")+20;
 				endEpgInfo=line.indexOf("</span>",startEpgInfo);
-				endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
-				endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);    
+				endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
+				endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);    
 				title=line.substring(startEpgInfo,endEpgInfo);
 				epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));
 			}
@@ -337,10 +337,10 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					startpos=endpos;
 					endpos=line.indexOf("\')", startpos);
 					timerType=line.substring(startpos+6,endpos);
-					startTime=SerFormatter.formatUnixTime(valueStart);
+					startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
 					startDate =	SerFormatter.formatUnixDate(valueStart);
-					endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
-					endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);
+					endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
+					endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) * 1000+Long.parseLong(valueDuration) * 1000);
 					BOTimer botimer = new BOTimer();
 					if (timerType.equalsIgnoreCase("44")) {
 						botimer.setEventType("offen");

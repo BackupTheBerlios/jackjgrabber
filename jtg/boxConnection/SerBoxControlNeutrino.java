@@ -140,11 +140,11 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    	title += " ";
 			}
 
-			startTime = SerFormatter.formatUnixTime(valueStart);
+			startTime = SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
 			startDate = SerFormatter.formatUnixDate(valueStart);
 			duration = SerFormatter.formatedEndTime(valueDuration);
-			endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
-			endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);                        
+			endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
+			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);                        
 			
 			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));                        
 		}
@@ -211,9 +211,11 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             valueAnno=st.nextToken(); 
 		    valueStart=st.nextToken();
 		    valueStop=st.nextToken();
-		    valueSenderName=st.nextToken();
-		    
-		    botimer.setSenderName( valueSenderName );
+		    if (!valueStop.equals("0")) {
+		    	valueSenderName=st.nextToken();
+		    	botimer.setSenderName( valueSenderName );
+		    }
+
 		    botimer.setAnnounceTime(valueAnno);
 		    botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(valueStart));  
 			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(valueStop)); 
