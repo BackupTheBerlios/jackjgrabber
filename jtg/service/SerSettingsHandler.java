@@ -17,10 +17,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import model.*;
 
+import org.apache.log4j.*;
 import org.dom4j.*;
 
 import com.jgoodies.plaf.plastic.*;
@@ -757,21 +759,60 @@ public class SerSettingsHandler {
 
 	public static void saveAllSettings() throws Exception {
 
-		if (ControlMain.flagNewSettings) {
-			XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.settingsFilename + "n")));
-			dec.writeObject(ControlMain.getSettings());
-			dec.flush();
-			dec.close();
+		XMLEncoder dec = new XMLEncoder(new FileOutputStream(new File(ControlMain.settingsFilename)));
+		dec.writeObject(ControlMain.getSettings());
+		dec.flush();
+		dec.close();
 
-		} else {
-			savePathSettings();
+		/*savePathSettings();
 			saveRecordSettings();
 			saveMainSettings();
 			saveMovieGuideSettings();
 			savePlaybackSettings();
 			saveLayoutSettings();
 			SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
-		}
+		*/
 
+	}
+
+	/**
+	 * 
+	 */
+	public static void readSettings() {
+		try {
+			XMLDecoder dec = new XMLDecoder(new FileInputStream(ControlMain.settingsFilename));
+			dec.setExceptionListener(new ExceptionListener() {
+				public void exceptionThrown(Exception e) {
+					e.printStackTrace();
+				}
+			});
+
+			BOSettings settings = (BOSettings) dec.readObject();
+			settings.setSettingsChanged(false);
+			ControlMain.setSettings(settings);
+			Logger.getLogger("ControlMain").info("Settings found");
+
+		} catch (Exception ex) {
+			Logger.getLogger("ControlMain").info("read old settings");
+			// read old settings file
+			try {
+				File pathToXMLFile = new File(ControlMain.settingsFilename).getAbsoluteFile();
+				if (pathToXMLFile.exists()) {
+					ControlMain.setSettingsDocument(SerXMLHandling.readDocument(pathToXMLFile));
+					Logger.getLogger("ControlMain").info("Settings found");
+				} else {
+					ControlMain.setSettingsDocument(SerXMLHandling.createStandardSettingsFile(pathToXMLFile));
+					Logger.getLogger("ControlMain").info(ControlMain.getProperty("msg_settingsNotFound"));
+				}
+				ControlMain.setSettings(SerSettingsHandler.buildSettings(ControlMain.getSettingsDocument()));
+			} catch (MalformedURLException e) {
+				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
+			} catch (DocumentException e) {
+				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
+			} catch (IOException e) {
+				Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_settingsError"));
+			}
+		}
+		
 	}
 }

@@ -63,7 +63,7 @@ public class BOSettingsMain {
 	 *            The themeLayout to set.
 	 */
 	public void setThemeLayout(String layout) {
-		if (themeLayout == null || !this.themeLayout.equals(layout)) {
+		if (this.themeLayout == null || !this.themeLayout.equals(layout)) {
 			setSettingsChanged(true);
 			this.themeLayout = layout;
 		}

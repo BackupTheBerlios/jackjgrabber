@@ -336,7 +336,7 @@ public class BOSettingsRecord {
     }
 
 	public void setFilePattern(String filePattern) {
-		if (!filePattern.equals(this.filePattern)) {
+		if (this.filePattern == null || !filePattern.equals(this.filePattern)) {
 			this.filePattern = filePattern;
 			setSettingsChanged(true);
 		}
@@ -347,7 +347,7 @@ public class BOSettingsRecord {
 	}
 
 	public void setDirPattern(String dirPattern) {
-		if (!dirPattern.equals(this.dirPattern)) {
+		if (this.dirPattern == null || !dirPattern.equals(this.dirPattern)) {
 			this.dirPattern = dirPattern;
 			setSettingsChanged(true);
 		}
