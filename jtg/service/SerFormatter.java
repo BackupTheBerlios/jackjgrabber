@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 /**
  * @author  ralix
@@ -60,5 +62,25 @@ public class SerFormatter {
         cal.setTimeInMillis(datum.getTime());
         cal.set(GregorianCalendar.YEAR, i);
         return cal.getTime();
+    }
+    
+    public static String getCorrectDate(String datum){            
+        SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");
+        try{
+           datum = SerFormatter.setCorrectYear(formatter.parse(datum)).toString();               
+        }catch(ParseException pex){               
+        }            
+        return datum;
+    }
+    
+    public static boolean isCorrectDate(String datum){
+        boolean value = true;
+        SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");
+        try{
+           datum = SerFormatter.setCorrectYear(formatter.parse(datum)).toString();               
+        }catch(ParseException pex){
+            value = false;
+        }            
+        return value;
     }
 }
