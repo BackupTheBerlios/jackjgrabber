@@ -36,7 +36,7 @@ public class Record {
 	
 	public Record(BORecordArgs args) {
 		this.setRecordArgs(args);
-		this.setBoxIp(ControlMain.getBoxIpOfSelectedBox());
+		this.setBoxIp(ControlMain.getBoxIpOfActiveBox());
 		streams = new StreamList(this);
 	}
 	

@@ -57,7 +57,7 @@ public class Record {
 	public Record(BORecordArgs args, RecordControl control) {
 		recordControl = control;
 	    recordArgs = args;
-	    boxIp = ControlMain.getBoxIpOfSelectedBox();
+	    boxIp = ControlMain.getBoxIpOfActiveBox();
 	}
 	
 	public void start() {

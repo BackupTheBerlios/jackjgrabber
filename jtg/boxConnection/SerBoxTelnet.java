@@ -30,15 +30,15 @@ public class SerBoxTelnet  {
 	static TelnetClient telnet = new TelnetClient();
 
 	private static void createTelnetSession(String command) throws IOException, InterruptedException{		 	    
-		telnet.connect(ControlMain.getSelectedBox().getDboxIp());
+		telnet.connect(ControlMain.getActiveBox().getDboxIp());
 		InputStream istream = telnet.getInputStream();
 	    OutputStream ostream = telnet.getOutputStream();
 	    Reader reader = new InputStreamReader( istream );
 	    Writer writer = new OutputStreamWriter( ostream );
-	    writer.write( ControlMain.getSelectedBox().getLogin() + "\n" );
+	    writer.write( ControlMain.getActiveBox().getLogin() + "\n" );
         writer.flush();
         Thread.sleep(1000);	        
-        writer.write( ControlMain.getSelectedBox().getPassword() + "\n" );
+        writer.write( ControlMain.getActiveBox().getPassword() + "\n" );
         writer.flush();
         Thread.sleep(1000);	 
         writer.write( command +"\n" );

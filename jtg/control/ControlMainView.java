@@ -26,8 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import model.BOBox;
-
 import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
@@ -65,12 +63,9 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	private void startProgramControl() {
 		//erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
 		//manuell erfolgen
-		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
-		BOBox box = ControlMain.getSelectedBox();
-		this.getView().getMainTabPane().getTabProgramm().getControl().setSelectedBox(box);
-		
+		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();	
 		try {
-			int index = ControlMain.getIndexOfSelecteddBox();
+			int index = ControlMain.getIndexOfActiveBox();
 			this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
 		} catch (IllegalArgumentException e) {
 			SerAlertDialog.alert("No Box-IP in the Settings found", this.getView());

@@ -175,8 +175,9 @@ public class GuiTabProgramm extends GuiTab {
 		if (jComboBoxBoxIP == null) {
 			jComboBoxBoxIP = new JComboBox();
 			jComboBoxBoxIP.setEditable(true);
-			jComboBoxBoxIP.setModel(new GuiIpListComboModel(control));
+			jComboBoxBoxIP.setModel(new GuiIpListComboModel());
 			jComboBoxBoxIP.addItemListener(control);
+			jComboBoxBoxIP.setEditable(false);
 			jComboBoxBoxIP.setName("ipList");
 		}
 		return jComboBoxBoxIP;
@@ -247,7 +248,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonReboot() {
+	public JButton getJButtonReboot() {
 		if (jButtonReboot == null) {
 			jButtonReboot = new JButton();
 			jButtonReboot.setPreferredSize(new java.awt.Dimension(105,25));
@@ -262,7 +263,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonVLC() {
+	public JButton getJButtonVLC() {
 		if (jButtonVLC == null) {
 			jButtonVLC = new JButton();
 			jButtonVLC.setPreferredSize(new java.awt.Dimension(105,25));
@@ -277,7 +278,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonNhttpdReset() {
+	public JButton getJButtonNhttpdReset() {
 		if (jButtonNhttpdReset == null) {
 			jButtonNhttpdReset = new JButton();
 			jButtonNhttpdReset.setPreferredSize(new java.awt.Dimension(105,25));
@@ -292,7 +293,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonEpgReset() {
+	public JButton getJButtonEpgReset() {
 		if (jButtonEPGReset == null) {
 			jButtonEPGReset = new JButton();
 			jButtonEPGReset.setPreferredSize(new java.awt.Dimension(105,25));
@@ -320,7 +321,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonSelectedToTimer() {
+	public JButton getJButtonSelectedToTimer() {
 		if (jButtonToTimer == null) {
 			jButtonToTimer = new JButton();
 			jButtonToTimer.setPreferredSize(new java.awt.Dimension(105,25));
@@ -335,7 +336,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonStartServer() {
+	public JButton getJButtonStartServer() {
 		if (jButtonStartServer == null) {
 			jButtonStartServer = new JButton();
 			jButtonStartServer.setPreferredSize(new java.awt.Dimension(105,25));
@@ -350,7 +351,7 @@ public class GuiTabProgramm extends GuiTab {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
-	private JButton getJButtonReadEPG() {
+	public JButton getJButtonReadEPG() {
 		if (jButtonReadEPG == null) {
 			jButtonReadEPG = new JButton();
 			jButtonReadEPG.setPreferredSize(new java.awt.Dimension(105,25));

@@ -59,6 +59,7 @@ public class ControlMain {
 	static ControlMainView control;
 	static BOLocale bolocale = new BOLocale();
 	static SerStreamingServer streamingServerThread;
+	static BOBox activeBox;
 	
 	
     private static Properties prop = new Properties();   
@@ -91,6 +92,7 @@ public class ControlMain {
 	public static void main( String args[] ) {
 		startLogger();
 		readSettings();
+		detectActiveBox();
 		control = new ControlMainView();
 		if (settings.isStartStreamingServer()) {
 			startStreamingSever();
@@ -120,7 +122,7 @@ public class ControlMain {
 		
 	public static void detectImage() {
 		Logger.getLogger("ControlMain").info("Searching Box-Image");
-		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIpOfSelectedBox());
+		int image=SerBoxControl.ConnectBox(ControlMain.getBoxIpOfActiveBox());
 		if (image==0) {
 			boxAccess=new SerBoxControlDefault();
 		}
@@ -158,75 +160,57 @@ public class ControlMain {
 			} catch (IOException e) {
 				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
 			}
+	}
 
-
+	public static String getBoxIpOfActiveBox() {
+		BOBox box = getActiveBox();
+		if (box==null) {
+			return "";
+		}
+		return box.getDboxIp();
 	}
+	
 	/**
-	 * Wenn nur ein Box angelegt, diese als Standard benutzen
+	 * Wenn nur eine Box angelegt, diese als Standard benutzen.
+	 * Wenn mehrere Boxen angelegt sind, und keine als Standard definiert ist, die 1. Box als Standard benutzen
 	 */
-	public static String getBoxIpOfSelectedBox() {
+	public static boolean  detectActiveBox() {
 		ArrayList boxList = getSettings().getBoxList();
-		if (boxList.size()==1) {
-			BOBox box = (BOBox)boxList.get(0);
-			return box.getDboxIp();
+		BOBox box;
+		if (boxList.size()==1) { //nur eine Box vorhanden, diese als Standard benutzen
+			box = (BOBox)boxList.get(0);
+			box.setSelected(true);
+			setActiveBox(box);
+			return true;
 		}
-		for (int i=0; boxList.size()>i; i++) {
-			BOBox box = (BOBox)boxList.get(i);
-			if (box.isSelected()) {
-				return box.getDboxIp();
+		for (int i=0; boxList.size()>i; i++) { 
+			box = (BOBox)boxList.get(i);
+			if (box.isStandard().booleanValue()) { //mehrer Boxen vorhanden, die Standardbox zurückgeben
+				box.setSelected(true);
+				setActiveBox(box);
+				return true;
 			}
 		}
-		return new String();
+		if (boxList.size()>0) {//mehrere Boxen vorhanden, die 1. als Standard benutzen
+			box = (BOBox)boxList.get(0);
+			box.setSelected(true);
+			setActiveBox(box);
+			return true;
+		}
+		return false;
 	}
 	
-	public static BOBox getStandardBox() {
+	public static int getIndexOfActiveBox() {
 		ArrayList boxList = getSettings().getBoxList();
-		for (int i=0; boxList.size()>i; i++) {
-			BOBox box = (BOBox)boxList.get(i);
-			if (box.isStandard().booleanValue()) {
-				return box;
+		if (getActiveBox() != null) { 
+			for (int i=0; boxList.size()>i; i++) {
+				BOBox box = (BOBox)boxList.get(i);
+				if (box.getDboxIp().equals(getActiveBox().getDboxIp())) {
+					return i;
+				}
 			}
 		}
-		return new BOBox();
-	}
-	/**
-	 * Wenn nur ein Box angelegt, diese als Standard benutzen
-	 */
-	public static BOBox getSelectedBox() {
-		ArrayList boxList = getSettings().getBoxList();
-		if (boxList.size()==1) {
-			return (BOBox)boxList.get(0);
-		
-		}
-		for (int i=0; boxList.size()>i; i++) {
-			BOBox box = (BOBox)boxList.get(i);
-			if (box.isSelected()) {
-				return box;
-			}
-		}
-		return new BOBox();
-	}
-	
-	public static int getIndexOfStandardBox() {
-		ArrayList boxList = getSettings().getBoxList();
-		for (int i=0; boxList.size()>i; i++) {
-			BOBox box = (BOBox)boxList.get(i);
-			if (box.isStandard().booleanValue()) {
-				return i;
-			}
-		}
-		return 0;
-	}
-	
-	public static int getIndexOfSelecteddBox() {
-		ArrayList boxList = getSettings().getBoxList();
-		for (int i=0; boxList.size()>i; i++) {
-			BOBox box = (BOBox)boxList.get(i);
-			if (box.isSelected()) {
-				return i;
-			}
-		}
-		return 0;
+		return -1;
 	}
 	
 	public static String getVlcPath() {
@@ -350,5 +334,17 @@ public class ControlMain {
 	 */
 	public static void setControl(ControlMainView control) {
 		ControlMain.control = control;
+	}
+	/**
+	 * @return Returns the activeBox.
+	 */
+	public static BOBox getActiveBox() {
+		return activeBox;
+	}
+	/**
+	 * @param activeBox The activeBox to set.
+	 */
+	public static void setActiveBox(BOBox activeBox) {
+		ControlMain.activeBox = activeBox;
 	}
 }

@@ -59,7 +59,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	ArrayList bouquetList = new ArrayList();
 	BOSender selectedSender;
-	BOBox selectedBox;
 	BOEpg selectedEpg;
 	BOBouquet selectedBouquet;
 	Date dateChooserDate;
@@ -74,8 +73,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
 			this.selectRunningSender();
+			this.setConnectModus();
 		} catch (IOException e) {			
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+			this.setDisconnectModus();
 		}
 	}
 	
@@ -143,6 +144,29 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}catch (Exception ex){}
 		}
 	}
+	
+	public void setDisconnectModus() {
+		this.getMainView().getTabProgramm().getJButtonAufnahme().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonEpgReset().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonNhttpdReset().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonReadEPG().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonReboot().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonSelectedToTimer().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonStartServer().setEnabled(false);
+		this.getMainView().getTabProgramm().getJButtonVLC().setEnabled(false);
+	}
+	
+	public void setConnectModus() {
+		this.getMainView().getTabProgramm().getJButtonAufnahme().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonEpgReset().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonNhttpdReset().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonReadEPG().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonReboot().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonSelectedToTimer().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonStartServer().setEnabled(true);
+		this.getMainView().getTabProgramm().getJButtonVLC().setEnabled(true);
+	}
+	
 	/*
 	 * Steuerung der 2 Zustaende. 
 	 * Aufnahme läuft bereits ->stop
@@ -232,10 +256,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		JComboBox comboBox = (JComboBox)e.getSource();
 		if (comboBox.getName().equals("ipList")) {
 			BOBox newSelectedBox = (BOBox)ControlMain.getSettings().getBoxList().get(comboBox.getSelectedIndex());
-			if (this.getSelectedBox().isSelected() != newSelectedBox.isSelected() || 
-					this.getSelectedBox().getDboxIp() == null) { 
-				this.getSelectedBox().setSelected(false); //alte Box zurücksetzen!	
-				this.setSelectedBox(newSelectedBox);
+			BOBox oldSelectedBox = ControlMain.getActiveBox();
+			if (oldSelectedBox==null || //Konstellation möglich, wenn erste Box angelegt wird 
+					oldSelectedBox.isSelected() != newSelectedBox.isSelected())  { 
+				if (oldSelectedBox!=null) {
+					oldSelectedBox.setSelected(false); //alte Box zurücksetzen!
+				}	
+				ControlMain.setActiveBox(newSelectedBox);
 				newSelectedBox.setSelected(true);
 				ControlMain.detectImage();
 				this.reInitialize();
@@ -466,18 +493,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	private JTable getJTableEPG() {
 		return this.getMainView().getTabProgramm().getJTableEPG();
-	}
-	/**
-	 * @return Returns the selectedBox.
-	 */
-	public BOBox getSelectedBox() {
-		return selectedBox;
-	}
-	/**
-	 * @param selectedBox The selectedBox to set.
-	 */
-	public void setSelectedBox(BOBox selectedBox) {
-		this.selectedBox = selectedBox;
 	}
 	/**
 	 * @return Returns the recordControl.

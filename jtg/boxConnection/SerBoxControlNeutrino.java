@@ -57,7 +57,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
-		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfSelectedBox()+request).openStream()));
+		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream()));
 	}
 		
 	public ArrayList getPids() throws IOException {
@@ -279,7 +279,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public String writeTimer(BOTimer timer) throws IOException {
 		StringBuffer buffer = this.fillRequestString(timer);
 		BufferedReader input = getConnection(buffer.toString());
-		System.out.println(buffer.toString());
 		String line;
 		while((line=input.readLine())!=null) {
 			timer.setModifiedId(null);

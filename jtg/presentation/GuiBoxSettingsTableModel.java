@@ -102,15 +102,29 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		}
 	}
 	
-	public void addRow(BOBox data) {
-		ControlMain.getSettings().addBox(data);
+	/*
+	 * Wenn die 1. Box angelegt wird, diese als Standard deklarieren
+	 */
+	public void addRow(BOBox box) {
+		if (ControlMain.getSettings().getBoxList().size()==0) {
+			box.setStandard(Boolean.TRUE);
+		}
+		ControlMain.getSettings().addBox(box);
 		fireTableDataChanged();
+		this.refreshIpComboBox();
+	}
+	
+	private void refreshIpComboBox() {
+		control.getMainView().getTabProgramm().getJComboBoxBoxIP().setModel(new GuiIpListComboModel());
+		int index = ControlMain.getIndexOfActiveBox();
+		control.getMainView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
 	}
 	
 	public void removeRow(int rowNumber) {
 		try {
 			ControlMain.getSettings().removeBox(rowNumber);
 			fireTableDataChanged();
+			this.refreshIpComboBox();
 		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert("Bitte eine Zeile markieren", control.getMainView());};
 	}
 	
