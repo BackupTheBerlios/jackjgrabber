@@ -142,7 +142,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"f:140px:grow, f:95px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
+						"f:140px:grow, f:90px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
 					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
@@ -151,7 +151,7 @@ public class GuiTabMovieGuide extends JPanel {
 			builder.add(this.getJScrollPaneDarsteller(), 	cc.xy	(1, 3));
 			builder.add(this.getJScrollPaneEpisode(), 		cc.xy	(1, 4));
 			builder.add(this.getJScrollPaneLand(), 			cc.xy	(1, 5));				
-			builder.add(this.getTfGenre(),							cc.xy	(1, 6));
+			builder.add(this.getTfGenre(),					cc.xy	(1, 6));
 			builder.add(this.getJScrollPaneAudioVideo(),	cc.xy	(1, 7));
 		}
 		return jPanelInfo;
@@ -366,11 +366,11 @@ public class GuiTabMovieGuide extends JPanel {
 			mgTimerTableSorter = new GuiMovieGuideTimerTableSorter(mgTimerTableModel);
 			jTableTimer = new JTable(mgTimerTableSorter);
 			mgTimerTableSorter.setTableHeader(jTableTimer.getTableHeader());									 
-			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(205);
+			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(275);
 			jTableTimer.getColumnModel().getColumn(1).setMaxWidth(45);
 			jTableTimer.getColumnModel().getColumn(2).setMaxWidth(45);
 			jTableTimer.getColumnModel().getColumn(3).setMaxWidth(45);		
-			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(160);
+			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(90);
 			jTableTimer.addMouseListener(control);
 			jTableTimer.setName("timerTable");
 		}
