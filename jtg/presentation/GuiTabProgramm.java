@@ -312,7 +312,10 @@ public class GuiTabProgramm extends GuiTab {
 	public JTable getJTableEPG() {
 		if (jTableEPG == null) {
 			epgTableModel = new GuiEpgTableModel(control);
-			jTableEPG = new JTable(epgTableModel);
+			GuiEpgTableSorter sorter = new GuiEpgTableSorter(epgTableModel);
+			jTableEPG = new JTable(sorter);
+			sorter.setTableHeader(jTableEPG.getTableHeader());
+			
 			jTableEPG.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jTableEPG.getColumnModel().getColumn(3).setPreferredWidth(280);
 			jTableEPG.addMouseListener(control);
