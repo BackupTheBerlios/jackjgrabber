@@ -90,7 +90,8 @@ public class GuiTabRecordInfo extends GuiTab {
 		recordTitle = new JTextArea();
 
 		recordTitle.setEditable(false);
-
+		recordTitle.setBorder(BorderFactory.createEtchedBorder());
+		
 		JPanel p = new JPanel();
 		FormLayout layout = new FormLayout("710:grow", // columns
 				"pref,10,pref"); // rows
@@ -117,9 +118,16 @@ public class GuiTabRecordInfo extends GuiTab {
 		start.setEditable(false);
 		end.setEditable(false);
 		engine.setEditable(false);
+		state.setBorder(BorderFactory.createEtchedBorder());
+		type.setBorder(BorderFactory.createEtchedBorder());
+		start.setBorder(BorderFactory.createEtchedBorder());
+		end.setBorder(BorderFactory.createEtchedBorder());
+		engine.setBorder(BorderFactory.createEtchedBorder());
+
+		
 
 		JPanel p = new JPanel();
-		FormLayout layout = new FormLayout("pref, 20, 100, 20,30,20,100,20,50,pref,f:330:grow", // columns
+		FormLayout layout = new FormLayout("pref, 20, 120, 20,30,20,100,20,50,pref,f:330:grow", // columns
 				"pref, pref,pref,pref,pref,pref"); // rows
 
 		p.setLayout(layout);
