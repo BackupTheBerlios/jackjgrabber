@@ -65,9 +65,9 @@ public class Record {
 			
 			PrintWriter out = new PrintWriter(tcpSocket.getOutputStream());	
 			String requestString = this.getRequestString();
-			out.write(requestString);
+			out.write(requestString+"\n");
 			out.flush();
-			Logger.getLogger("Record").info("to DBox: "+requestString.replace("\n", ""));
+			Logger.getLogger("Record").info("to DBox: "+requestString);
 
 			boolean isPid = false;
 			InputStream input = tcpSocket.getInputStream();
@@ -132,8 +132,6 @@ public class Record {
 		    cmd.append(recordArgs.getBouquetNr()+" ");
 			cmd.append(recordArgs.getEventId()+" ");
 		}
-
-		cmd.append("\n");
 		return cmd.toString();
 	}
 	
