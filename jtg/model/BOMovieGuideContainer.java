@@ -38,7 +38,7 @@ public class BOMovieGuideContainer{
 	ArrayList genreList = new ArrayList();
 	ArrayList datumList = new ArrayList();
 	ArrayList senderList = new ArrayList();
-	ArrayList announceList = new ArrayList();
+	ArrayList announceList = new ArrayList();	
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
@@ -121,12 +121,8 @@ public class BOMovieGuideContainer{
         announceList = createAnnounceList();
 		return titelList.size();
 	}
-	
-	public int getAnnounceListSize(){
-		return announceList.size();
-	}
-	
-	public ArrayList getAnnounceList(){
+		
+	public ArrayList getAnnounceList(){		
 		return announceList;
 	}
 	
@@ -153,20 +149,28 @@ public class BOMovieGuideContainer{
         	}
 		}
 	}
+		
+	private ArrayList createInfoList(){
+		ArrayList infoList = new ArrayList();
+		infoList.add("Acapulco");
+		infoList.add("Absolon");
+		return infoList;		
+	}
+	
 	private ArrayList createAnnounceList(){
+		return createAnnounceList(createInfoList());
+	}
+	private ArrayList createAnnounceList(ArrayList infoList){		
 		ArrayList searchList = new ArrayList();		
-		ArrayList retVal = new ArrayList();
-		ArrayList recordList = new ArrayList();
-		recordList.add("Scarface");
-		recordList.add("September");
+		ArrayList retVal = new ArrayList();		
 		int a = 0;
-		 while(a <= recordList.size()-1){
-            searchList=(search(recordList.get(a++),3));        
+		 while(a <= infoList.size()-1){
+            searchList=(search(infoList.get(a++),3));        
             int b = 0;
             while (b <= searchList.size() -1){
-            	retVal.add((BOMovieGuide)searchList.get(b++));            	
+            	retVal.add(searchList.get(b++));                     	
             }            
-        }		
+        }				 
 		return retVal;
 	}
 	
@@ -277,9 +281,13 @@ public class BOMovieGuideContainer{
     }
 	public ArrayList search(Object searchValue, int value){
 		returnList.clear();
-		String search = (String)searchValue;
+		String search = new String();
+		if(value < 15){
+			search = (String)searchValue;
+		}
     	GregorianCalendar searchGC = new GregorianCalendar();	    	 
     	GregorianCalendar searchGCTime = new GregorianCalendar();
+    	ArrayList searchAL;
     	if(value==1){
     		searchGC = SerFormatter.convString2GreCal(search,DATE_FULL);
     	}
@@ -288,7 +296,7 @@ public class BOMovieGuideContainer{
     		searchGCTime = SerFormatter.convTime2GreCal(search);        		    		
     		check.set(Calendar.HOUR_OF_DAY,23);
     		check.set(Calendar.MINUTE,59);
-    	}
+    	}    	
 		Iterator i = titelList.entrySet().iterator();
 		while(i.hasNext()){
 			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
@@ -362,7 +370,7 @@ public class BOMovieGuideContainer{
 							returnList.add(bomovieguide);
 						}
 					//}
-					break;	
+					break;
 			}
 		}
 		return returnList;

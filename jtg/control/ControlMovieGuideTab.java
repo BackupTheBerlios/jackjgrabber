@@ -61,6 +61,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 
 	BOMovieGuideContainer movieList = new BOMovieGuideContainer();
 	ArrayList titelListAktuell;
+	ArrayList infoListAktuell;
 		
 	ArrayList boxSenderList;
 	
@@ -147,7 +148,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());                            	
 	          	beautifyGui(); 
           	}
-	    }
+          	//if (movieList.getAnnounceList().size()> 0){
+    	    	//infoNewMovieGuide("Es kommen Filme aus deiner Liste.");
+    	    //}	
+	    }	   
 	}
 	/*
 	 * private void buildMG() {
@@ -182,7 +186,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
           this.getTab().getComboBoxSucheNach().setEnabled(true);                           
           
 		if(getSettings().getMgDefault()==0){
-			setTitelMapSelected(GET_FORMAT_GRE_CAL,13);   // TitelMap Alles      
+			setTitelMapSelected(GET_FORMAT_GRE_CAL,13);   // TitelMap Alles      			
 		}else{
 			setTitelMapSelected(GET_FORMAT_GRE_CAL,1);  // TitelMap für den heutigen Tag   
 			this.getTab().getComboBoxDatum().setSelectedItem(GET_FORMAT_GRE_CAL);	 
@@ -192,9 +196,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         try{
         	this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         	getJTableFilm().getSelectionModel().setSelectionInterval(0,0); //1 Row selected
-        }catch(ArrayIndexOutOfBoundsException ex){System.out.println(ex);}
-        
-        
+        }catch(ArrayIndexOutOfBoundsException ex){System.out.println(ex);}                 
    }
 	
 	
@@ -232,6 +234,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 		if (action == "neuEinlesen") {
 			//
+			reInitFilmTable(15);
 		}
 		if (action == "select2Timer") {
 		    if (this.getJTableTimer().getSelectedRow()>=0) {
@@ -658,16 +661,23 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
      * oder per DatumComboBox ausgewählt würden.
      */
     public ArrayList getTitelMap(){
-    	return titelListAktuell;		
+    	return titelListAktuell;		    	
     }    	           
+    public ArrayList getInfoList(){
+    	return infoListAktuell;		    	
+    }   
     
     /**
      * @param searchValue
      * @param value
      * bauen der AnzeigeMap nach Suchkriterien  
      */
-    public void setTitelMapSelected(Object searchValue,int value){    	
-    	titelListAktuell=movieList.search(searchValue,value);
+    public void setTitelMapSelected(Object searchValue,int value){    	    	
+		if(value == 15){
+			titelListAktuell=movieList.getAnnounceList();					
+		}else {
+			titelListAktuell=movieList.search(searchValue,value);
+		}
     }
   
     public JTable getJTableFilm() {
