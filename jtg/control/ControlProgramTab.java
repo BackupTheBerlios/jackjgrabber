@@ -306,7 +306,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		int aPidStringIndex = execString.indexOf("aPid");
 		try {
 			if (aPidStringIndex > 0) {
-				int pidIndex = Integer.parseInt(execString.substring(aPidStringIndex + 4));
+				int pidIndex = Integer.parseInt(execString.substring(aPidStringIndex + 4, aPidStringIndex + 5));
 				String aPid = "0x" + ((BOPid) this.getPids().getAPids().get(pidIndex - 1)).getNumber();
 				execString = SerFormatter.replace(execString, "$aPid" + Integer.toString(pidIndex), aPid);
 			}
