@@ -188,7 +188,7 @@ public class SerFormatter {
         return getFormatGreCal(calmg,"MM")+"_"+getFormatGreCal(calmg,"yy");				
 	}
 
-	public static String getDatumToday() {
+	public static String getFormatGreCal() {
 		GregorianCalendar caltoday = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
 		return getFormatGreCal(caltoday,DATE_FULL);
 	}
@@ -219,7 +219,7 @@ public class SerFormatter {
   
     public static boolean compareDates(String date1, String date2){    	
     	if( date2.equals("today")){
-    		date2=getDatumToday();
+    		date2=getFormatGreCal();
     	}    	  
     	return convString2GreCal(date1, DATE_FULL).getTimeInMillis() >= convString2GreCal(date2, DATE_FULL).getTimeInMillis();
     }

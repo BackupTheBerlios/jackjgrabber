@@ -97,7 +97,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
           }
           this.getTab().getComboBoxGenre().setSelectedIndex(0);
           this.getTab().getComboBoxSender().setSelectedIndex(0);
-          this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
+          this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getFormatGreCal());			
           this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
       } catch (MalformedURLException e) {
           Logger.getLogger("ControlMovieGuideTab").error(movieGuideFile.getName()+" not found");
