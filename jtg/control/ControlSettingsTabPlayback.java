@@ -42,7 +42,7 @@ public class ControlSettingsTabPlayback extends ControlTabSettings implements Ac
     /* (non-Javadoc)
      * @see control.ControlTab#initialize()
      */
-    public void initialize() {
+    public void run() {
         this.getTab().getCbUseStandardOption().setSelected(this.getSettings().isAlwaysUseStandardPlayback());
     }
 

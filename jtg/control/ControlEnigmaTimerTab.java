@@ -57,16 +57,18 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		this.setMainView(view);
 	}
 	
-	public void initialize() {
-		this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
-		try {
-			this.setTimerList(ControlMain.getBoxAccess().readTimer());
-			this.refreshTables();
-			//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
-			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
-		}
+	public void initialize() {}
+	
+	public void run() {
+	    this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
+			try {
+				this.setTimerList(ControlMain.getBoxAccess().readTimer());
+				this.refreshTables();
+				//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
+				this.setSenderList(ControlMain.getBoxAccess().getAllSender());
+			} catch (IOException e) {
+				SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
+			}
 	}
 	
 	public void actionPerformed(ActionEvent e) {

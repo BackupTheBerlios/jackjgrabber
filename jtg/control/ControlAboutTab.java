@@ -39,7 +39,7 @@ public class ControlAboutTab extends ControlTab implements MouseListener {
 		this.setMainView(view);
 	}
 
-	public void initialize() {
+	public void run() {
 		this.showVersion();
 		this.showAuthors();
 	}

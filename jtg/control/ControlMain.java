@@ -69,8 +69,7 @@ public class ControlMain {
     
 	public static String version[] = { 
 		"Jack the JGrabber 0.1.6e",
-		"24.11.2004",
-		"TEST PROJECT ONLY",
+		"28.11.2004",
 		"User: "+System.getProperty("user.name")
 	};
 	
@@ -94,6 +93,7 @@ public class ControlMain {
 		}
 		setResourceBundle();
 		detectActiveBox();
+		ControlMain.detectImage();
 		control = new ControlMainView();
 		if (screen != null) {
 			try {
@@ -132,7 +132,6 @@ public class ControlMain {
 		else if (image==2) {
 			boxAccess = new SerBoxControlEnigma();
 		}
-		Logger.getLogger("ControlMain").info(ControlMain.getBoxAccess().getName()+"-"+ControlMain.getProperty("msg_accessLoaded"));
 	}
 	
 	/**
@@ -244,12 +243,6 @@ public class ControlMain {
 	 */
 	public static SerBoxControl getBoxAccess() {
 		return boxAccess;
-	}
-	/**
-	 * @param box The box to set.
-	 */
-	public static void setBoxAccess(SerBoxControl box) {
-		ControlMain.boxAccess = box;
 	}
 	/**
 	 * @return Returns the terms.

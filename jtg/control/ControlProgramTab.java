@@ -65,7 +65,7 @@ import boxConnection.SerStreamingServer;
 /**
  * Controlklasse des Programmtabs.
  */
-public class ControlProgramTab extends ControlTab implements ActionListener,MouseListener, ItemListener, ChangeListener {
+public class ControlProgramTab extends ControlTab implements Runnable, ActionListener,MouseListener, ItemListener, ChangeListener {
 
     ArrayList bouquetList = new ArrayList();
     BOPids pids;
@@ -81,10 +81,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener,Mous
     boolean firstStart = true;
 
     public ControlProgramTab(GuiMainView view) {
-        this.setMainView(view);
+        this.setMainView(view); 		
     }
 
-    public void initialize() {
+    public void run() {
         try {
             if (this.getBoxAccess().isTvMode()) {
                 this.setTvMode(true);
@@ -97,9 +97,18 @@ public class ControlProgramTab extends ControlTab implements ActionListener,Mous
             this.selectRunningSender();
             this.getMainView().getTabProgramm().setConnectModus();
             this.reInitStreamingServer();
+            this.setActiveBox();
             this.firstStart = false;
         } catch (IOException e) {
         }
+    }
+    
+    private void setActiveBox() {
+        int index = ControlMain.getIndexOfActiveBox();
+        if (index ==-1) {
+            Logger.getLogger("ControlMainView").error(ControlMain.getProperty("msg_ipError"));
+        } 
+        this.getMainView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
     }
 
     /*
@@ -115,7 +124,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener,Mous
         this.getEpgTableModel().fireTableDataChanged();
         this.getMainView().getTabProgramm().getBoquetsComboModel().setSelectedItem(null);
         this.getMainView().getTabProgramm().getJTextAreaEPG().setText("");
-        this.initialize();
+        this.run();
     }
 
     /*

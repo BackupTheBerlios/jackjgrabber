@@ -20,13 +20,9 @@ package control;
 
 import presentation.GuiTabSettings;
 
-public abstract class ControlTabSettings {
+public abstract class ControlTabSettings implements Runnable {
     
     public abstract GuiTabSettings getSettingsTab();
-	public abstract void setSettingsTab(GuiTabSettings view);
-	/**
-	 * Mit dieser Methode wird der zugehörige TAB mit Daten versorgt 
-	 */
-	public abstract void initialize();
+    public abstract void setSettingsTab(GuiTabSettings view);
 
 }

@@ -51,12 +51,8 @@ public class ControlSettingsTab extends ControlTab implements ChangeListener {
 		pane.setIndex(count);
 	}
 	
-	/*
-	 *  (non-Javadoc)
-	 * @see control.ControlTab#initialize()
-	 */
-	public void initialize() {
-	}
+	public void run() {};
+	
 	/**
 	 * @return Returns the mainView.
 	 */

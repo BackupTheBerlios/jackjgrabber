@@ -73,7 +73,7 @@ public class GuiMainView extends JFrame {
 		control = ctrl;
 		initialize();
 		setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
-				" "+ControlMain.version[2]+", "+ControlMain.version[3]);
+				" "+ControlMain.version[2]);
 		pack();
 		SerGUIUtils.center(this);
 		if (ControlMain.getSettings().isStartFullscreen()) {
@@ -89,14 +89,11 @@ public class GuiMainView extends JFrame {
 	private void initPlasticLookAndFeel() {
 		try {
 			// Installiere das Plastic Look And Feel
-			PlasticTheme inst = (PlasticTheme) (Class
-					.forName("com.jgoodies.plaf.plastic.theme."
-							+ ControlMain.getSettings().getThemeLayout()))
-					.newInstance();
+			PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
+							+ ControlMain.getSettings().getThemeLayout())).newInstance();
 			PlasticLookAndFeel.setMyCurrentTheme(inst);
 			PlasticLookAndFeel l = new PlasticLookAndFeel();
-			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l
-					.getName(), PlasticLookAndFeel.class.getName());
+			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l.getName(), PlasticLookAndFeel.class.getName());
 			UIManager.installLookAndFeel(info);
 		} catch (Exception e1) {
 			e1.printStackTrace();

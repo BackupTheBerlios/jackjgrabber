@@ -20,12 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import presentation.GuiMainView;
 
 
-public abstract class ControlTab {
+public abstract class ControlTab implements Runnable {
 
 	public abstract GuiMainView getMainView();
 	public abstract void setMainView(GuiMainView view);
-	/**
-	 * Mit dieser Methode wird der zugehörige TAB mit Daten versorgt 
-	 */
-	public abstract void initialize();
 }

@@ -53,7 +53,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
     /* (non-Javadoc)
      * @see control.ControlTab#initialize()
      */
-    public void initialize() {
+    public void run() {
         this.getTab().getTfServerPort().setText(this.getSettings().getStreamingServerPort());
         this.getTab().getJTextFieldRecordSavePath().setText(this.getSettings().getSavePath());
         this.getTab().getJTextFieldProjectXPath().setText(this.getSettings().getProjectXPath());

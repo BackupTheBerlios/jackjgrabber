@@ -57,12 +57,11 @@ import service.SerMovieGuide2Xml;
 import service.SerXMLHandling;
 
 
-public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener  {
+public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener, Runnable  {
 	
 	GuiMainView mainView;
 	GuiTabMovieGuide tab;
 	BOMovieGuide boMovieGuide4Timer;
-	boolean initialized = false;
 	boolean searchAbHeute = true;
 
 	Hashtable titelList;
@@ -84,24 +83,23 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	public ControlMovieGuideTab(GuiMainView view) {
 		this.setMainView(view);		
 	}
-
-	public void initialize() {
-		try {
-            initialized = true;
-            this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
-            setRootElement();
-            if(this.getTitelMap()==null){				
-            	setTitelMap();
-            }
-            this.getTab().getComboBoxGenre().setSelectedIndex(0);
-            this.getTab().getComboBoxSender().setSelectedIndex(0);
-            this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
-            this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
-        } catch (MalformedURLException e) {
-            Logger.getLogger("ControlMovieGuideTab").error(movieGuideFile.getName()+" not found");
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }		
+	
+	public void run() {
+			try {
+          this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
+          setRootElement();
+          if(this.getTitelMap()==null){				
+          	setTitelMap();
+          }
+          this.getTab().getComboBoxGenre().setSelectedIndex(0);
+          this.getTab().getComboBoxSender().setSelectedIndex(0);
+          this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
+          this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
+      } catch (MalformedURLException e) {
+          Logger.getLogger("ControlMovieGuideTab").error(movieGuideFile.getName()+" not found");
+      } catch (DocumentException e) {
+          e.printStackTrace();
+      }		
 	}
 
 	public void actionPerformed(ActionEvent e) {

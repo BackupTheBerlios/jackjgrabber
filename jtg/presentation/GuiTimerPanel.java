@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import control.ControlDefaultTimerTab;
 import control.ControlEnigmaTimerTab;
 import control.ControlNeutrinoTimerTab;
-import control.ControlTab;
+import control.ControlTabTimer;
 
 /**
  * Imagespezifische Timer-Gui's und Controls werden hier angelegt
@@ -47,5 +47,5 @@ public abstract class GuiTimerPanel extends JPanel {
 			
 	}
 	
-	public abstract ControlTab getControl();
+	public abstract ControlTabTimer getControl();
 }

@@ -51,6 +51,7 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabProgramm == null) {
 			ControlProgramTab control = new ControlProgramTab(this.getView());
 			tabProgramm = new GuiTabProgramm(control);
+			new Thread(control).start();
 		}
 		return tabProgramm;
 	}
@@ -81,7 +82,7 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabSettings == null) {
 			ControlSettingsTab control = new ControlSettingsTab(this.getView());
 			tabSettings = new GuiTabSettings(control);
-			control.initialize();
+			new Thread(control).start();
 		}
 		return tabSettings;
 	}
@@ -93,7 +94,7 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabAbout == null) {
 			ControlAboutTab control = new ControlAboutTab(this.getView());
 			tabAbout = new GuiTabAbout(control);
-			control.initialize();
+			new Thread(control).start();
 		}
 		return tabAbout;
 	}
@@ -102,6 +103,7 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabMovieGuide == null) {
 			ControlMovieGuideTab control = new ControlMovieGuideTab(this.getView());
 			tabMovieGuide = new GuiTabMovieGuide(control);
+			new Thread(control).start();
 		}
 		return tabMovieGuide;
 	}

@@ -33,14 +33,13 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlNeutrinoTimerTab;
-import control.ControlTab;
+import control.ControlTabTimer;
 
 public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	
@@ -114,7 +113,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		builder.add(this.getJPanelButtonsGui(),																cc.xywh (6, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
-	public ControlTab getControl() {
+	public ControlTabTimer getControl() {
 		return control;
 	}
 

@@ -18,14 +18,13 @@ import javax.swing.text.DateFormatter;
 
 import model.BOTimer;
 
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlEnigmaTimerTab;
 import control.ControlMain;
-import control.ControlTab;
+import control.ControlTabTimer;
 
 /*
 GuiEnigmaTimerPanel.java by Geist Alexander, Treito
@@ -100,7 +99,7 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 		builder.add(this.getJPanelButtonsGui(),					cc.xywh(5, 5, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
-	public ControlTab getControl() {
+	public ControlTabTimer getControl() {
 		return control;
 	}
 

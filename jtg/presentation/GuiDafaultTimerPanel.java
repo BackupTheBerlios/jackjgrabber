@@ -18,7 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import control.ControlDefaultTimerTab;
-import control.ControlTab;
+import control.ControlTabTimer;
 
 public class GuiDafaultTimerPanel extends GuiTimerPanel {
 
@@ -28,7 +28,7 @@ public class GuiDafaultTimerPanel extends GuiTimerPanel {
 		control = ctrl;
 	}
 	
-	public ControlTab getControl() {
+	public ControlTabTimer getControl() {
 		return control;
 	}
 }

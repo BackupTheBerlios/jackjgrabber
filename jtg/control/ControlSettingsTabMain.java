@@ -18,15 +18,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.*;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
-import com.jgoodies.plaf.plastic.*;
-
 import model.BOBox;
 import model.BOSettings;
-import presentation.*;
+import presentation.GuiLookAndFeelHolder;
 import presentation.GuiMainView;
 import presentation.GuiSettingsTabMain;
 import presentation.GuiTabSettings;
@@ -45,7 +42,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	 * 
 	 * @see control.ControlTab#initialize()
 	 */
-	public void initialize() {
+	public void run() {
 		this.getTab().getJComboBoxTheme().setSelectedItem(this.getSettings().getThemeLayout());
 		this.getTab().getJComboBoxLocale().setSelectedItem(this.getSettings().getLocale());
 		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());

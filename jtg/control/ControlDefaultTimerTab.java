@@ -17,9 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.util.ArrayList;
+
 import presentation.GuiMainView;
 
-public class ControlDefaultTimerTab extends ControlTab {
+public class ControlDefaultTimerTab extends ControlTabTimer {
 	
 	GuiMainView mainView;
 
@@ -28,7 +30,19 @@ public class ControlDefaultTimerTab extends ControlTab {
 		this.setMainView(view);
 	}
 	
+	public void run() {}
+	
 	public void initialize() {}
+	
+	public ArrayList getSenderList() {
+	  return null;  
+	}
+	public String[] getRepeatOptions() {
+		  return null;  
+	}
+	public String[] getTimerType() {
+		  return null;  
+	}
 
 	/**
 	 * @return Returns the mainView.

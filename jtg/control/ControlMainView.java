@@ -58,27 +58,11 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		this.setView(new GuiMainView(this));
 		ControlMain.getLogAppender().setView(this.getView());
 		this.initialize();
-		
-		this.startProgramControl();		
 		this.log(ControlMain.getProperty("msg_app_starting"));		
-	}
-	/*
-	 * erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
-	 * manuell erfolgen
-	 */
-	private void startProgramControl() {
-		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();	
-		
-		int index = ControlMain.getIndexOfActiveBox();
-		if (index ==-1) {
-			Logger.getLogger("ControlMainView").error(ControlMain.getProperty("msg_ipError"));
-		} 
-		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
 	}
 	
 	private void initialize() {
 		this.logSystemInfo();
-		ControlMain.detectImage();
 	}
 	
 	private void logSystemInfo() {
@@ -93,6 +77,7 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		this.log("java.vm.name\t"+System.getProperty("java.vm.name"));
 		this.log("java.class.vers\t"+System.getProperty("java.class.version"));
 		this.log("java.class.path\t"+System.getProperty("java.class.path"));
+		this.log(ControlMain.getBoxAccess().getName()+"-"+ControlMain.getProperty("msg_accessLoaded"));
 	}
 		
 	public void logSysteminfo2() {
@@ -135,25 +120,30 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		GuiMainTabPane pane = (GuiMainTabPane)event.getSource();
 		int count = pane.getSelectedIndex(); //number of selected Tab
 				
-		//Change-Events bei betreten neuer Tabs
-		if (count == 0) { //ProgrammTab
-			pane.setComponentAt(count, pane.getTabProgramm());
-		}
-		if (count == 1) { //TimerTab
-			pane.setComponentAt(count, pane.getTabTimer());
-			pane.getTabTimer().getControl().initialize();
-		}
-		if (count == 2) { //MovieGuideTab
-			pane.setComponentAt(count, pane.getTabMovieGuide());
-			if (!pane.getTabMovieGuide().getControl().initialized) {
-				pane.getTabMovieGuide().getControl().initialize();
+		while (true) {
+			//Change-Events bei betreten neuer Tabs
+			if (count == 0) { //ProgrammTab
+				pane.setComponentAt(count, pane.getTabProgramm());
+				break;
 			}
-		}
-		if (count == 3) { //SettingsTab
-			pane.setComponentAt(count, pane.getTabSettings());
-		}
-		if (count == 4) { //AboutTab
-			pane.setComponentAt(count, pane.getTabAbout());
+			if (count == 1) { //TimerTab
+				pane.setComponentAt(count, pane.getTabTimer());
+				new Thread(pane.getTabTimer().getControl()).start();
+				break;
+			}
+			if (count == 2) { //MovieGuideTab
+				pane.setComponentAt(count, pane.getTabMovieGuide());
+				break;
+			}
+			if (count == 3) { //SettingsTab
+				pane.setComponentAt(count, pane.getTabSettings());
+				break;
+			}
+			if (count == 4) { //AboutTab
+				pane.setComponentAt(count, pane.getTabAbout());
+				break;
+			}
+			break;
 		}
 		pane.setIndex(count);
 	}

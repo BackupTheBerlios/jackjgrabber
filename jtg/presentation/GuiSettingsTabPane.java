@@ -46,7 +46,7 @@ public class GuiSettingsTabPane extends JTabbedPane {
 		if (tabSettingsMain == null) {
 		    ControlSettingsTabMain control = new ControlSettingsTabMain(this.getTabSettings());
 			tabSettingsMain = new GuiSettingsTabMain(control);
-			control.initialize();
+			control.run();
 		}
 		return tabSettingsMain;
 	}
@@ -55,7 +55,7 @@ public class GuiSettingsTabPane extends JTabbedPane {
 		if (tabSettingsRecord == null) {
 		    ControlSettingsTabRecord control = new ControlSettingsTabRecord(this.getTabSettings());
 		    tabSettingsRecord = new GuiSettingsTabRecord(control);
-			control.initialize();
+			control.run();
 		}
 		return tabSettingsRecord;
 	}
@@ -64,7 +64,7 @@ public class GuiSettingsTabPane extends JTabbedPane {
 		if (tabSettingsPlayback == null) {
 		    ControlSettingsTabPlayback control = new ControlSettingsTabPlayback(this.getTabSettings());
 		    tabSettingsPlayback = new GuiSettingsTabPlayback(control);
-			control.initialize();
+			control.run();
 		}
 		return tabSettingsPlayback;
 	}

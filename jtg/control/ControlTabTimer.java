@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /*
  * Superklasse fuer die Timer-Controls
  */
-public abstract class ControlTabTimer extends ControlTab{
+public abstract class ControlTabTimer extends ControlTab {
 
 	public abstract ArrayList getSenderList();
 	public abstract String[] getRepeatOptions();
