@@ -109,7 +109,7 @@ public class BOUdrecOptions implements Serializable {
 	 */
 	public String getASplit() {
 		if (aSplit==null) {
-			aSplit="0";
+			aSplit="3";
 		}
 		return aSplit;
 	}
@@ -136,7 +136,7 @@ public class BOUdrecOptions implements Serializable {
 	 */
 	public String getVSplit() {
 		if (vSplit==null) {
-			vSplit="0";
+			vSplit="-1";
 		}
 		return vSplit;
 	}
