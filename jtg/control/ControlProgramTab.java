@@ -106,7 +106,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Laufenden Sender in den Bouquets suchen und selektieren
 	 * Wird beim Start der Anwendung benötigt.
 	 */
-	public String selectRunningSender() {
+	public void selectRunningSender() {
 		try {
 			String runningChanId = ControlMain.getBoxAccess().getChanIdOfRunningSender();
 			for (int i=0; i<getBouquetList().size(); i++) { //Schleife ueber die Bouquets
@@ -119,7 +119,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 						this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(i);
 						this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(i2, i2);
 						this.setSelectedSender(sender);
-						return sender.getChanId();
+						break;
 					}
 				}
 			}
@@ -127,7 +127,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		}
-		return null;
 	}
 	
 	/**
