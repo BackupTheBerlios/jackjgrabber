@@ -115,6 +115,7 @@ public class UdpRecord  extends Record {
             if (running) {
                 outputStream.write("START\n");
                 outputStream.flush();
+                Logger.getLogger("UdpRecord").info("to DBox: START");
             }
             udpReceiver.start();
             tcpReceiver.start();
@@ -184,6 +185,10 @@ public class UdpRecord  extends Record {
 	public void stop() {
 	    running = false;
 	    try {
+	        outputStream.write("STOP\n");
+	        outputStream.flush();
+	        Logger.getLogger("UdpRecord").info("to DBox: STOP");
+	        
 	        udpReceiver.closeSocket();
 	        tcpReceiver.closeSocket();
             for (int i=0; i<writeStream.length; i++) {
@@ -191,7 +196,7 @@ public class UdpRecord  extends Record {
             }
         } catch (NullPointerException e) {
             //doNothing Aufnahmeabbruch vor dem Start
-        }   
+        }
 	}
     /**
      * @return Returns the writeStream.
