@@ -18,7 +18,6 @@
 	<property name="sourcedir2" 		value="boxConnection\*.class" />
 	<property name="sourcedir3" 		value="model\*.class" />
 	<property name="sourcedir4" 		value="presentation\*.class" />
-	<property name="sourcedir5" 		value="projectX" />
 	<property name="sourcedir6" 		value="service\*.class" />
 	<property name="sourcedir7" 		value="streaming\*.class" />
 	<property name="resourcedir1" 		value="ico\*.*" />
@@ -37,7 +36,6 @@
 				<include name="${sourcedir2}"/>
 				<include name="${sourcedir3}"/>
 				<include name="${sourcedir4}"/>
-				<include name="${sourcedir5}\**"/>
 				<include name="${sourcedir6}"/>
 				<include name="${sourcedir7}"/>
 				<include name="${resourcedir1}"/>
