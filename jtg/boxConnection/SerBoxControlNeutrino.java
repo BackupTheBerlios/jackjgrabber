@@ -168,12 +168,13 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		epgDetail.setText(text);
 		return epgDetail;
 	}
+
 	private String sendCommand (String message) throws IOException {
         String line;          
         BufferedReader input = getConnection("/control/"+message);          
         while ((line = input.readLine()) != null) {  
-          StringTokenizer st = new StringTokenizer(line);    
-              message = (st.nextToken());
+        	StringTokenizer st = new StringTokenizer(line);    
+        	message = (st.nextToken());
         }         
        return message;  
 	}
@@ -252,7 +253,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			if ((indexSearchString = line.indexOf(searchString))>0) {
 				for (int i=0; i<timerList.size(); i++) {
 					BOTimer timer = (BOTimer)timerList.get(i);
-					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0 && line.indexOf(timer.getStartTime())>0) {
+					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0 && line.indexOf(timer.getShortStartTime())>0) {
 						indexIdentifier= line.indexOf(">", indexSearchString);
 						timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
 					}
@@ -273,6 +274,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		}
 		if (modifiedId.equals("modify")) {
 			buffer.append("/fb/timer.dbox2?action="+modifiedId);
+			//buffer.append("/control/timer?action="+modifiedId);
 			buffer.append("&id="+timer.getTimerNumber());
 			buffer.append("&alarm="+alarm);
 			buffer.append("&stop="+stop);
