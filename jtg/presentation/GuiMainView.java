@@ -52,8 +52,8 @@ public class GuiMainView extends JFrame {
 	private GuiMainTabPane mainTabPane = null;
 	private ControlMainView control;
 	private SysTrayMenuIcon[] sysTrayIcon = { 
-	        new SysTrayMenuIcon( "ico/jgrabber1" ),
-	        new SysTrayMenuIcon( "ico/jgrabber2" )
+	        new SysTrayMenuIcon( "ico/jgrabber" ),
+	        new SysTrayMenuIcon( "ico/jgrabber" )
 	};
 	private SysTrayMenu menu;
 
@@ -109,7 +109,7 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
-		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
+		setIconImage( new ImageIcon(ClassLoader.getSystemResource("ico/grabber.gif")).getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
 		    sysTrayIcon[0].addSysTrayMenuListener( control );
 		    sysTrayIcon[1].addSysTrayMenuListener( control );

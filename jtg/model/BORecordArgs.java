@@ -19,6 +19,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.util.ArrayList;
 
+import control.ControlMain;
+
 public class BORecordArgs {
 
 	String senderName;
@@ -189,5 +191,22 @@ public class BORecordArgs {
      */
     public void setQuickRecord(boolean quickRecord) {
         this.quickRecord = quickRecord;
+    }
+    /*
+     * Checken ob ein AC3-Stream den Streostrem ersetzen muss
+     */
+    public void checkSettings() {
+        if (ControlMain.getSettings().isAc3ReplaceStereo()) {
+            for (int i=this.getAPids().size()-1; 0<=i; i--) {
+                String[] aPid = (String[])this.getAPids().get(i);
+                String desc = aPid[1];
+                if (desc.indexOf("AC3")>-1) {
+                    ArrayList newList = new ArrayList();
+                    newList.add(aPid);
+                    this.setAPids(newList);
+                    break;
+                }
+            }    
+        }
     }
 }

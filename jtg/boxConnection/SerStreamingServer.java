@@ -75,6 +75,7 @@ public class SerStreamingServer extends Thread {
 			controlProgramTab.stopRecord();
 		}
 		if (recordArgs.getCommand().equals("record")) {
+		    recordArgs.checkSettings();
 			controlProgramTab.startRecord(recordArgs);
 		}
 		server.close();  //server restart
