@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -70,6 +71,9 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbStartPX;
 	private JCheckBox cbAC3ReplaceStereo;
 	private JSpinner recordMinsBefore, recordMinsAfter; 
+	
+	private JCheckBox storeEPG;
+	private JCheckBox storeLogAfterRecord;
 	private SerIconManager iconManager = SerIconManager.getInstance();
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
@@ -98,7 +102,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					"pref, 10, pref:grow, 5, pref",	 		//columns 
-			  		"pref, pref, pref, pref");		//rows
+			  		"pref, pref, pref, pref,pref,pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -110,6 +114,10 @@ public class GuiSettingsTabRecord extends GuiTab {
 			builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),		cc.xy	(1, 4));
 			builder.add(this.getJTextFieldProjectXPath(),											cc.xy	(3, 4));
 			builder.add(this.getJButtonProjectXPathFileChooser(),								cc.xy	(5, 4));
+			
+			builder.add(this.getStoreEPG(),cc.xy(1,5));
+			builder.add(this.getStoreLogAfterRecord(),cc.xy(1,6));
+			
 			
 		}
 		return panelRecordSettings;
@@ -255,6 +263,31 @@ public class GuiSettingsTabRecord extends GuiTab {
 		}
 		return jButtonUdrecPathFileChooser;
 	}
+	
+	/**
+	 * @return Returns the checkbox for storing epg.
+	 */
+	public JCheckBox getStoreEPG() {
+		if (storeEPG == null) {
+			storeEPG = new JCheckBox(ControlMain.getProperty("cbStoreEPG"));
+			storeEPG.setActionCommand("storeEPG");
+			storeEPG.addActionListener(control);
+		}
+		return storeEPG;
+	}	
+	
+	/**
+	 * @return Returns the checkbox for storing epg.
+	 */
+	public JCheckBox getStoreLogAfterRecord() {
+		if (storeLogAfterRecord == null) {
+			storeLogAfterRecord = new JCheckBox(ControlMain.getProperty("cbStoreLogAfterRecord"));
+			storeLogAfterRecord.setActionCommand("storeLogAfterRecord");
+			storeLogAfterRecord.addActionListener(control);
+		}
+		return storeLogAfterRecord;
+	}	
+
 	
 	/**
 	 * @return Returns the jButtonProjectXPathFileChooser.
