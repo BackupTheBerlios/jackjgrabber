@@ -17,22 +17,41 @@ package control;
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
  */
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Properties;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
-import model.*;
+import model.BOBox;
+import model.BOSettings;
+import model.BOSettingsLayout;
+import model.BOSettingsMain;
+import model.BOSettingsMovieGuide;
+import model.BOSettingsPath;
+import model.BOSettingsPlayback;
+import model.BOSettingsRecord;
 
-import org.apache.log4j.*;
-import org.dom4j.*;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.dom4j.Document;
 
-import presentation.*;
-import service.*;
-import boxConnection.*;
+import presentation.GuiLogWindow;
+import presentation.GuiSplashScreen;
+import service.SerExternalProcessHandler;
+import service.SerLogAppender;
+import service.SerSettingsHandler;
+import boxConnection.SerBoxControl;
+import boxConnection.SerBoxControlDefault;
+import boxConnection.SerBoxControlEnigma;
+import boxConnection.SerBoxControlNeutrino;
 
 /**
  * Startklasse, Start der Anwendung Deklaration der globalen Variablen
@@ -58,8 +77,7 @@ public class ControlMain {
 	public static void main(String args[]) {
 		startLogger();
 		logWindow = new GuiLogWindow();
-		readSettings();
-
+		readSettings();	
 		initLogWindow();
 		
 		if (ControlMain.getSettingsMain().isShowLogo()) {
@@ -265,14 +283,12 @@ public class ControlMain {
 	}
 
 	public static void setResourceBundle() {
-		String _MESSAGE_BUNDLE = "locale/messages_" + ControlMain.getSettingsMain().getShortLocale() + ".properties";
-
-		File f = new File(_MESSAGE_BUNDLE.toLowerCase());
+		String locale = "messages_" + ControlMain.getSettingsMain().getShortLocale() + ".properties";
+		URL url = ClassLoader.getSystemResource("locale/"+locale.toLowerCase());
 		try {
-			InputStream is = new FileInputStream(f);
-			properties.load(is);
+			properties.load(url.openStream());
 		} catch (IOException ex) {
-			Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_propertyError") + f.getName());
+			Logger.getLogger("ControlMain").error(ControlMain.getProperty("msg_propertyError") + locale);
 		}
 	}
 	/**
