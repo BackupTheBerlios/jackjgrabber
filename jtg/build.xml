@@ -56,6 +56,9 @@
 		<copy todir="${targetDir}/lib">
 			<fileset dir="lib"/>
 		</copy>	
+		<copy todir="${targetDir}/locale">
+			<fileset dir="locale"/>
+		</copy>	
 		<copy file="Authors" todir="${targetDir}"/>
 		<copy file="COPYING" todir="${targetDir}"/>
 		<copy file="README" todir="${targetDir}"/>

@@ -270,8 +270,9 @@ public class ControlMain {
 	}
 
 	public static void setResourceBundle(){		
-		String _MESSAGE_BUNDLE ="locale/messages_"+ControlMain.getSettings().getShortLocale()+".properties";                              
-        File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();       
+		String _MESSAGE_BUNDLE ="locale/messages_"+ControlMain.getSettings().getShortLocale()+".properties";   
+		
+        File f = new File(_MESSAGE_BUNDLE.toLowerCase());
         try {
 	        InputStream is = new FileInputStream(f);                
 	        properties.load(is);                          
