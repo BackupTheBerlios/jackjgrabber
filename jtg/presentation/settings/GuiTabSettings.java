@@ -18,10 +18,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.awt.CardLayout;
+import java.awt.Color;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -75,7 +77,7 @@ public class GuiTabSettings extends GuiTab {
         optionPanels[5] = new GuiSettingsTabProxy(control5);
         
         menuList = new JList(optionPanels);
-        
+        menuList.setBackground((Color)UIManager.get("Panel.background"));
         menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         menuList.setCellRenderer(new GuiMenuListCellRenderer());
         for (int i = 0; i < optionPanels.length; i++) {
@@ -91,7 +93,7 @@ public class GuiTabSettings extends GuiTab {
         });
         menuList.setSelectedValue(optionPanels[0], true);
           
-		FormLayout layout = new FormLayout( "f:pref:grow, f:pref:grow", "f:pref:grow");
+		FormLayout layout = new FormLayout( "f:pref, f:pref:grow", "f:pref:grow");
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		CellConstraints cc = new CellConstraints();
 		
