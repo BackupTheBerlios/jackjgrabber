@@ -394,13 +394,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
     	return (a++);
     }
+    
     public void setTitelMapSelected(String search,int value){  //bauen der AnzeigeMap nach Suchkriterien
     	titelListAktuell = new Hashtable();    	
     	Iterator i = titelList.entrySet().iterator();
     	int a = 0;
     	while (i.hasNext()){
     		Map.Entry entry = (Map.Entry)i.next();
-    		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();
+    		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();    		
     		switch (value){
     			case 1: //datum    				
     				if(bomovieguide.getDatum().contains(String.valueOf(SerFormatter.getStringToLong(search)))){ 
@@ -459,9 +460,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	try {
 			int a = 0;			
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {
-				Element entry = (Element) i.next();		
+				Element entry = (Element) i.next();						
+				if ( (SerFormatter.getStringToLong(entry.element("datum").getStringValue())) >= (SerFormatter.getStringToLong(SerFormatter.getDatumToday())) ){		//nur lesen was ab heutigen datum													
 				setDatumList(entry.element("datum").getStringValue());	
 				setSenderList(entry.element("sender").getStringValue());
+				//}
 				if(!controlMap.containsKey(entry.element("titel").getStringValue())){ //prüfen ob titel schon vorhanden ist, wenn ja nur neue Daten hinzugügen
 				String datum = entry.element("datum").getStringValue();
 				String start = entry.element("start").getStringValue();
@@ -499,6 +502,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
                      bomovieguide.setEnde(SerFormatter.getString2Cal(datum,SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue())));
                      titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
+			}
 			}
 		} catch (Exception ex) {System.out.println(ex);}				
 		setTitelMapSelected(SerFormatter.getDatumToday(),1);  // TitelMap für den heutigen Tag		    	
@@ -540,5 +544,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	 */
 	public void setTab(GuiTabMovieGuide tab) {
 		this.tab = tab;
+	}
+	public boolean checkNewMovieGuide(){
+		boolean value = false;
+		//SerMovieGuide2Xml.op
+		return value;
 	}
 }
