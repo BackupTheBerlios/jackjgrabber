@@ -20,8 +20,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
-import control.ControlMain;
-
 
 public class SerNewsHandler extends Thread {
 	private JTextPane nachrichten;
@@ -32,9 +30,11 @@ public class SerNewsHandler extends Thread {
 	
 	public void run() {
 		try {
-			String htmlText = SerWebsiteContentLoader.getWebsiteContent(
-					"http://www.jackthegrabber.de", 80,
-					"/inprog/news.php?version="+ ControlMain.version[0]);
+		    String htmlText = SerWebsiteContentLoader.getWebsiteContent(
+					"http://www.applejuicenet.org", 80,
+					"/inprog/news.php?version="
+							+ "0.30.146.1203");
+
 
 			int pos = htmlText.toLowerCase().indexOf("<html>");
 			if (pos != -1) {
