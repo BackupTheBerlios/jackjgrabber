@@ -98,6 +98,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 			builder.add(this.getCbStartPX(),															cc.xywh	(1, 5, 5, 1));
 			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 6));
 			builder.add(this.getJTextFieldRecordSavePath(),									cc.xywh	(4, 6, 3, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(),								cc.xy	(8, 6));
 		}
 		return panelRecordSettings;
 	}
