@@ -123,17 +123,36 @@ public class GuiMainView extends JFrame {
 
 	public void setLookAndFeel() {
 		try {
+			
 			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
-			PlasticTheme inst = (PlasticTheme) (Class
-					.forName("com.jgoodies.plaf.plastic.theme."
-							+ ControlMain.getSettings().getThemeLayout()))
-					.newInstance();
-			PlasticLookAndFeel.setMyCurrentTheme(inst);
-			UIManager.setLookAndFeel(lookAndFeel);
-			dispose();
-			SwingUtilities.updateComponentTreeUI(this);
-			setVisible(true);
-			validate();
+
+			String current = UIManager.getLookAndFeel().getClass().getName();
+			String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getName();
+			currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
+			boolean themeChanged = !currentTheme.equals(ControlMain.getSettings().getThemeLayout());
+			boolean lfChanged = !current.equals(lookAndFeel);  
+				
+			if (themeChanged)
+			{
+				if (current.equals(PlasticLookAndFeel.class.getName()))
+				{
+					PlasticTheme inst = (PlasticTheme) (Class
+							.forName("com.jgoodies.plaf.plastic.theme."
+									+ ControlMain.getSettings().getThemeLayout()))
+							.newInstance();
+					PlasticLookAndFeel.setMyCurrentTheme(inst);
+				}
+			}
+			
+			if (lfChanged || themeChanged)
+			{
+				UIManager.setLookAndFeel(lookAndFeel);
+				dispose();
+				SwingUtilities.updateComponentTreeUI(this);
+				setVisible(true);
+
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

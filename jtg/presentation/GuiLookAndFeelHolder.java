@@ -20,7 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  * @version 24.11.2004
  *
  */
-public class LookAndFeelHolder {
+public class GuiLookAndFeelHolder {
 
 	private String lookAndFeelName;
 	
@@ -29,7 +29,7 @@ public class LookAndFeelHolder {
 	/**
 	 * 
 	 */
-	public LookAndFeelHolder() {
+	public GuiLookAndFeelHolder() {
 		super();
 	}
 	
@@ -37,7 +37,7 @@ public class LookAndFeelHolder {
 	 * @param name
 	 * @param className
 	 */
-	public LookAndFeelHolder(String name, String className) {		
+	public GuiLookAndFeelHolder(String name, String className) {		
 		super();
 		setLookAndFeelName(name);
 		setLookAndFeelClassName(className);

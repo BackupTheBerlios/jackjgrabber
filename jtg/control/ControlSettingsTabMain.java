@@ -107,7 +107,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 						break;
 					}
 					if (comboBox.getName().equals("lookAndFeel")) {
-						String lookAndFeel = ((LookAndFeelHolder)comboBox.getSelectedItem()).getLookAndFeelClassName();
+						String lookAndFeel = ((GuiLookAndFeelHolder)comboBox.getSelectedItem()).getLookAndFeelClassName();
 						getSettings().setLookAndFeel(lookAndFeel);
 						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
 						{
