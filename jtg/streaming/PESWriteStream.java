@@ -131,8 +131,7 @@ public class PESWriteStream {
 	public void write(UdpPacket udpPacket) {
 	    if (!foundHeader) {
 	        this.scanForMPEGHeader(udpPacket.buffer);
-	    }
-	    if (foundHeader) {
+	    } else {
 	        try {
 	            fileOut.write(udpPacket.buffer, udpPacket.dataOffset, udpPacket.UsedLength - udpPacket.dataOffset);
 	        } catch (IOException e) {
