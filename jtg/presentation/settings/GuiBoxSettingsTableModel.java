@@ -102,14 +102,14 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		ControlMain.getSettingsMain().addBox(box);
 		fireTableDataChanged();
 		
-		if (ControlMain.getSettingsMain().getBoxList().size()==1) {
-		    ControlMain.setActiveBox(box);
-		    ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
-		    ControlMain.getControl().getView().getMainTabPane().tabProgramm=null;
-		    ControlMain.getControl().getView().getMainTabPane().reInitTimerPanel();
-		} else {
-		    this.refreshIpComboBox();
-		}
+//		if (ControlMain.getSettingsMain().getBoxList().size()==1) {
+//		    ControlMain.setActiveBox(box);
+//		    ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
+//		    ControlMain.getControl().getView().getMainTabPane().tabProgramm=null;
+//		    ControlMain.getControl().getView().getMainTabPane().reInitTimerPanel();
+//		} else {
+//		    this.refreshIpComboBox();
+//		}
 	}
 	
 	private void refreshIpComboBox() {
