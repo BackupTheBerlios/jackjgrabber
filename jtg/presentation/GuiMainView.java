@@ -68,7 +68,7 @@ public class GuiMainView extends JFrame {
 		initialize();
 		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2]);
 		pack();
-		SerGUIUtils.centerTop(this);
+		SerGUIUtils.center(this);
 		checkSettings();
 		registerKeys();
 
