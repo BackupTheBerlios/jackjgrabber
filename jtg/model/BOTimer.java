@@ -59,7 +59,7 @@ public class BOTimer extends java.lang.Object{
     
     public String getStopTime(){
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-    	return sdf.format(this.getUnformattedStartTime().getTime());
+    	return sdf.format(this.getUnformattedStopTime().getTime());
     }
     
     public String getSenderName (){
