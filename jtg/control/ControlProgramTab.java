@@ -282,9 +282,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			} catch (IOException e) {
 				Logger.getLogger("ControlProgramTab").error(e.getMessage());
 			}
-		} else {
-			SerAlertDialog.alert(ControlMain.getProperty("msg_playbackOptionError"), this.getMainView());
-		}
+		} 
 	}
 
 	private String getPlaybackRequestString(BOPlaybackOption option) {

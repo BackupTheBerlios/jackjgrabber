@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import service.SerAlertDialog;
 import control.ControlMain;
 
 public class BOPlaybackOption {
@@ -119,6 +120,7 @@ public class BOPlaybackOption {
 	        }
 	        return option;
 		}
+		SerAlertDialog.alert(ControlMain.getProperty("msg_playbackOptionError"), ControlMain.getControl().getView());
 		return null;
 	}
 	
