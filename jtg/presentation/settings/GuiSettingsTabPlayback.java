@@ -153,11 +153,15 @@ public class GuiSettingsTabPlayback extends JPanel implements GuiSettingsTab {
 				
 					public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
 							int column) {
-						BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettingsPlayback().getPlaybackOptions().get(row);
-						JCheckBox checkbox = new JCheckBox();
-						checkbox.setHorizontalAlignment(SwingConstants.CENTER);
-						checkbox.setSelected(playbackOption.isStandard());
-						return checkbox;					}
+                        BOPlaybackOption playbackOption = (BOPlaybackOption)ControlMain.getSettingsPlayback().getPlaybackOptions().get(row);
+                        JCheckBox checkbox = new JCheckBox();
+                        checkbox.setHorizontalAlignment(SwingConstants.CENTER);
+                        if (column==3) {
+                            checkbox.setSelected(playbackOption.isStandard());
+                            return checkbox;
+                        } 
+                        checkbox.setSelected(playbackOption.isLogOutput());
+                        return checkbox;				}
 				});
 			
 			jTablePlaybackSettings.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
