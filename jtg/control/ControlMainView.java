@@ -72,7 +72,6 @@ public class ControlMainView implements ActionListener, ChangeListener {
 			SerAlertDialog.alert("No Box-IP in the Settings found", this.getView());
 		} 
 		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
-		
 	}
 	
 	private void initialize() {
@@ -133,7 +132,6 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	public void stateChanged(ChangeEvent event) {
 		GuiMainTabPane pane = (GuiMainTabPane)event.getSource();
 		int count = pane.getSelectedIndex(); //number of selected Tab
-		JPanel comp = (JPanel)pane.getComponent(count);
 				
 		//Change-Events bei betreten neuer Tabs
 		if (count == 0) { //ProgrammTab
