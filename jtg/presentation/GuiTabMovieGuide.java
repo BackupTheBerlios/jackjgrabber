@@ -236,10 +236,10 @@ public class GuiTabMovieGuide extends JPanel {
 		return jPanelDatum;
 	}
 
-	private JProgressBar getJProgressBarDownload(){
+	public JProgressBar getJProgressBarDownload(){
 		if (jProgressBarDownload == null){
-			jProgressBarDownload = new JProgressBar(1,100);			
-			jProgressBarDownload.setValue(100);			
+			jProgressBarDownload = new JProgressBar(JProgressBar.HORIZONTAL, 0, 0);
+			jProgressBarDownload.setStringPainted(true);
 		}
 		return jProgressBarDownload;
 	}

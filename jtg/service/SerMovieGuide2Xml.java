@@ -1,20 +1,31 @@
-/*
- * Created on 21.10.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package service;
-
+/*
+ * SerMovieGuide2Xml.java by Ralph Henneberger
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 675 Mass
+ * Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Hashtable;
+
+import javax.swing.JProgressBar;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -24,23 +35,25 @@ import org.dom4j.io.XMLWriter;
 
 import control.ControlMovieGuideTab;
 
-/**
- * @author ralix
- *
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
- */
 public class SerMovieGuide2Xml extends Thread{
     static Hashtable htToken = new Hashtable();
     static Document doc;
     static Element root;
     static Element movie;
-    String datei;
-    int quelle;
+    String path; 
+    JProgressBar bar;
     
-    public SerMovieGuide2Xml(String file,int ident) {
-    	datei = file;
-    	quelle = ident;
+    public SerMovieGuide2Xml(String file, JProgressBar comp) {
+    		try {
+				bar=comp;
+				path = file;
+				buildEmptyXMLFile();
+				createHashTable();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
     }
     
     private static void buildEmptyXMLFile() throws IOException {
@@ -121,25 +134,27 @@ public class SerMovieGuide2Xml extends Thread{
     }
     
     public void run()  {
-        BufferedReader in = (null);
-        
+        BufferedReader in;
+        URLConnection con;
         try {
-            switch (quelle){
-                case 1:
-                    in = new BufferedReader(new FileReader(datei));
-                    break;
-                case 2:
-                    URL url = new URL("http://www.premiere.de/content/download/"+ SerFormatter.getAktuellDateString());
-                    Reader is = new InputStreamReader(url.openStream());
-                    in = new BufferedReader(is);
-                    break;
-            }
-            buildEmptyXMLFile();
+        	if (path != null) {
+            	con = (new URL(path)).openConnection();
+        	} else {
+        		URL url = new URL("http://www.premiere.de/content/download/"+ SerFormatter.getAktuellDateString());
+                con =url.openConnection();
+        	}
+        	
+        	int fileLength = con.getContentLength();
+            bar.setMaximum(fileLength);
+            in = new BufferedReader( new InputStreamReader(con.getInputStream()));
+            
             String input = new String();
             StringBuffer inhalt = new StringBuffer();
-            createHashTable();
-            boolean[] lineCounter = new boolean[2];            
+            boolean[] lineCounter = new boolean[2];
+            int sumValue = 0;
             while ((input = in.readLine()) != null) {
+            	sumValue = sumValue+input.getBytes().length;
+            	bar.setValue(sumValue);				
                 lineCounter = getLineCounter(input);
                 if (lineCounter[0]) {
                     movie = root.addElement("entry");
@@ -155,6 +170,7 @@ public class SerMovieGuide2Xml extends Thread{
                     }
                 }
             }
+            bar.setValue(fileLength);
             saveXMLFile(doc);
         } catch (MalformedURLException e) {
             System.out.println("MalformedURLException: " + e);
