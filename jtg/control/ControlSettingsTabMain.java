@@ -201,7 +201,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 			if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 				String path = chooser.getSelectedFile().toString();
 				this.getTab().getJTextFieldVlcPath().setText(path);
-				ControlMain.getSettings().setUdrecPath(path);	
+				ControlMain.getSettings().setVlcPath(path);	
 			}
 		}
 
