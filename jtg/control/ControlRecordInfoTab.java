@@ -193,13 +193,13 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				}
 			}
 		}
-	} 
-	
+	}
+
 	/*
-	   * (non-Javadoc)
-	   * 
-	   * @see control.ControlTab#getMainView()
-	   */
+	 * (non-Javadoc)
+	 * 
+	 * @see control.ControlTab#getMainView()
+	 */
 	public GuiMainView getMainView() {
 		return mainView;
 	}
@@ -474,15 +474,13 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 					String exec = play.getExecString();
 					exec = getExecStringWithoutParam(exec);
 
-					exec += " " + file.getAbsolutePath();
-
-					try {
-						Logger.getLogger("ControlProgramTab").info(exec);
-						Process run = Runtime.getRuntime().exec(exec);
-					} catch (IOException e) {
-
-						Logger.getLogger("ControlProgramTab").error(e.getMessage());
+					if (file.getAbsolutePath().indexOf(" ") > -1) {
+						exec += " \"" + file.getAbsolutePath() + "\"";
+					} else {
+						exec += " " + file.getAbsolutePath();
 					}
+
+					SerExternalProcessHandler.startProcess(play.getName(), exec, true);
 				}
 			}
 
@@ -835,14 +833,15 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		dirToDelete.add(0, dirToDel);
 
 		File[] files = dirToDel.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) {
-				addAllFiles(files[i], filesToDelete, dirToDelete);
-			} else {
-				filesToDelete.add(files[i]);
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					addAllFiles(files[i], filesToDelete, dirToDelete);
+				} else {
+					filesToDelete.add(files[i]);
+				}
 			}
 		}
-
 	}
 
 }
