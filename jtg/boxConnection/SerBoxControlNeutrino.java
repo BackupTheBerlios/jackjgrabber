@@ -37,8 +37,15 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
+import presentation.GuiMainView;
+import presentation.timer.GuiNeutrinoRecordTimerTableModel;
+import presentation.timer.GuiNeutrinoSystemTimerTableModel;
+import presentation.timer.GuiRecordTimerTableModel;
+import presentation.timer.GuiSystemTimerTableModel;
+
 import service.SerFormatter;
 import control.ControlMain;
+import control.ControlTimerTab;
 
 /**
  * Schnittstelle zum NeutrinoImage
@@ -446,5 +453,23 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&channel_id="+timer.getChannelId());
 		}
 		return buffer;
+	}
+	public String [] getRepeatOptions() throws IOException {
+		return new String [] {ControlMain.getProperty("once"), ControlMain.getProperty("dayly"), ControlMain.getProperty("weekly"), 
+			ControlMain.getProperty("2-weekly"), ControlMain.getProperty("4-weekly"), ControlMain.getProperty("weekdays")};
+	}
+	public String [] getTimerType() throws IOException {
+		return new String [] { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "RECORD", "REMIND", "SLEEPTIMER"};
+	}
+	public GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view) {
+		ControlTimerTab control = new ControlTimerTab(view);
+		return new GuiNeutrinoRecordTimerTableModel(control);
+	}
+	public GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view) {
+		ControlTimerTab control = new ControlTimerTab(view);
+		return new GuiNeutrinoSystemTimerTableModel(control);
+	}
+	public String getIcon() {
+		return ("ico/neutrino-logo.jpg");	
 	}
 }

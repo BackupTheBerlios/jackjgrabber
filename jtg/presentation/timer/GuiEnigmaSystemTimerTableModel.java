@@ -27,11 +27,11 @@ import control.ControlMain;
 import control.ControlTimerTab;
 
 
-public class GuiNeutrinoSystemTimerTableModel extends GuiSystemTimerTableModel
+public class GuiEnigmaSystemTimerTableModel extends GuiSystemTimerTableModel 
 {
 	ControlTimerTab control;
 	
-	public GuiNeutrinoSystemTimerTableModel(ControlTimerTab ctrl){
+	public GuiEnigmaSystemTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
 	}
 
@@ -101,3 +101,4 @@ public class GuiNeutrinoSystemTimerTableModel extends GuiSystemTimerTableModel
 		this.getControl().getView().enableSystemTimerWeekdays(false);
 	}
 }
+

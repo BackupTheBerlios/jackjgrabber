@@ -10,8 +10,8 @@ import javax.swing.table.AbstractTableModel;
 import model.BOSender;
 import model.BOTimer;
 import service.SerFormatter;
-import control.ControlEnigmaTimerTab;
 import control.ControlMain;
+import control.ControlTimerTab;
 
 /*
 GuiEnigmaRecordTimerTableModel.java by Geist Alexander, Treito
@@ -31,11 +31,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel 
+public class GuiEnigmaRecordTimerTableModel extends GuiRecordTimerTableModel 
 {
-	ControlEnigmaTimerTab control;
 	
-	public GuiEnigmaRecordTimerTableModel(ControlEnigmaTimerTab ctrl){
+	ControlTimerTab control;
+	
+	public GuiEnigmaRecordTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
 	}
 
@@ -52,102 +53,64 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
-		if (columnIndex == 0) {
-		    return control.convertShortTimerType(timer.getEventTypeId());
-		} if (columnIndex == 1) {
+		if (columnIndex == 1) {
+		    return control.convertShortTimerStatus(timer.getEventTypeId());
+		}else if (columnIndex == 0) {
+			return new Boolean(timer.getLocalTimer().isLocal());
+		} else if (columnIndex == 2) {
 			return timer.getSenderName();
-		//} if (columnIndex == 2) {
-		//	return timer.getStartDate();
-		} if (columnIndex == 2) {
+		} else if (columnIndex == 3) {
 			return timer.getStartTime();
-		} if (columnIndex == 3) {
+		} else if (columnIndex == 4) {
 			return timer.getStopTime();
-		} if (columnIndex == 4) {
+		} else if (columnIndex == 5) {
 			return control.convertShortEventRepeat(timer.getEventRepeatId());
-		} if (columnIndex == 5) {
-		    return control.convertShortEventType(timer.getEventTypeId());
-		} else {
-			return timer.getDescription(); 
-		}
+		} 
+		return timer.getLocalTimer().getDescription();
 	}
 	
-	public void setValueAt(Object value, int row, int col) {
-	    BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(row);
-		if (col == 1) {
-			int senderIndex = this.getControl().getView().getComboBoxSender().getSelectedIndex();
-			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
-			timer.setChannelId(sender.getChanId());
-			timer.setSenderName((String)value);
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
-		}
-		if (col == 2) {
-		    GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "dd.MM.yy   HH:mm");
-			timer.setUnformattedStartTime(newDate.getTimeInMillis());
-		}	
-		if (col == 3) {
-		    GregorianCalendar oldcal = timer.getUnformattedStopTime();
-			GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "HH:mm");
-			oldcal.set(Calendar.HOUR_OF_DAY, newDate.get(Calendar.HOUR_OF_DAY));
-			oldcal.set(Calendar.MINUTE, newDate.get(Calendar.MINUTE));
-		}
-		if (col == 4) {
-		    timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			System.out.println (timer.getEventRepeatId());
-			control.getView().selectRepeatDaysForRecordTimer(timer);
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
-		}
-		if (col == 5) {
-			timer.setEventTypeId(control.convertLongEventType((String)value));
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
-		}
-		if (col == 6) {
-			timer.setDescription((String)value);
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
-		}
-    }
+	
 
 	public String getColumnName( int columnIndex ) {
-		if (columnIndex == 0) {
+		if (columnIndex == 1) {
 		    return ControlMain.getProperty("state");
-		}if (columnIndex == 1) {
-			return ControlMain.getProperty("sender"); 
-		//} if (columnIndex == 2) {
-		//	return "Datum";
-		} if (columnIndex == 2) {
+		} else if (columnIndex == 0) {
+			return " ";
+		} else if (columnIndex == 2) {
+			return ControlMain.getProperty("sender");
+		} else if (columnIndex == 3) {
 			return ControlMain.getProperty("start");
-		} if (columnIndex == 3) {
+		} else if (columnIndex == 4) {
 			return ControlMain.getProperty("end");
-		} if (columnIndex == 4) {
+		} else if (columnIndex == 5) {
 			return ControlMain.getProperty("repeat");
-		} if (columnIndex == 5) {
-			return ControlMain.getProperty("afterRecord");
-		} else {
-			return ControlMain.getProperty("title");
-		}
+		} 
+		return ControlMain.getProperty("title");
 	}
 	
 	public boolean isCellEditable (int row, int col) {
 	    Class columnClass = getColumnClass(col);
-	    if (col==0) {
-	    	return false;
-	    } else {
-	        return true;
-	    }
+	    return false;
+	    
 	}
 	
-	public ControlEnigmaTimerTab getControl() {
+	public void fireTableDataChanged() {
+		this.fireTableDataChanged();
+		this.getControl().getView().enableRecordTimerWeekdays(false);
+	}
+	
+	public Class getColumnClass (int col) {
+        if (col==0) {
+            return Boolean.class;
+        }
+        return String.class;
+    }
+	
+	public ControlTimerTab getControl() {
 		return control;
 	}
 	
-	public void setControl(ControlEnigmaTimerTab control) {
+	public void setControl(ControlTimerTab control) {
 		this.control = control;
 	}
 }

@@ -348,7 +348,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
     }
     
 	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
-		ControlNeutrinoTimerTab.selectRepeatDaysForRecordTimer(timer,this.getView().jRadioButtonWhtage);
+		ControlTimerTab.selectRepeatDaysForRecordTimer(timer,this.getView().jRadioButtonWhtage);
 
 	}
 

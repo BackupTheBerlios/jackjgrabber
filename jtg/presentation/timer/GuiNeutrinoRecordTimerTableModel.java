@@ -22,13 +22,13 @@ import javax.swing.table.AbstractTableModel;
 
 import model.BOTimer;
 import control.ControlMain;
-import control.ControlNeutrinoTimerTab;
+import control.ControlTimerTab;
 
-public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
+public class GuiNeutrinoRecordTimerTableModel extends GuiRecordTimerTableModel
 {
-	ControlNeutrinoTimerTab control;
+	ControlTimerTab control;
 
-	public GuiNeutrinoRecordTimerTableModel(ControlNeutrinoTimerTab ctrl){
+	public GuiNeutrinoRecordTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
 	}
 
@@ -78,16 +78,16 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	    return false;
 	}
 
-	public ControlNeutrinoTimerTab getControl() {
+	public ControlTimerTab getControl() {
 		return control;
 	}
 
-	public void setControl(ControlNeutrinoTimerTab control) {
+	public void setControl(ControlTimerTab control) {
 		this.control = control;
 	}
 	
 	public void fireTableDataChanged() {
-		super.fireTableDataChanged();
+		this.fireTableDataChanged();
 		this.getControl().getView().enableRecordTimerWeekdays(false);
 	}
     

@@ -22,9 +22,8 @@ import javax.swing.JPanel;
 import presentation.GuiMainView;
 
 import control.ControlDefaultTimerTab;
-import control.ControlEnigmaTimerTab;
-import control.ControlNeutrinoTimerTab;
 import control.ControlTabTimer;
+import control.ControlTimerTab;
 
 /**
  * Imagespezifische Timer-Gui's und Controls werden hier angelegt
@@ -33,12 +32,12 @@ public abstract class GuiTimerPanel extends JPanel {
 	
 	public static GuiTimerPanel getTimerPanel(String boxName, GuiMainView view) {
 		if (boxName.equals("Enigma")) {
-			ControlEnigmaTimerTab control = new ControlEnigmaTimerTab(view);
-			GuiEnigmaTimerPanel panel = new GuiEnigmaTimerPanel(control);
+			ControlTimerTab control = new ControlTimerTab(view);
+			GuiBoxTimerPanel panel = new GuiBoxTimerPanel(control);
 			return panel;
 		} else if (boxName.equals("Neutrino")) {
-			ControlNeutrinoTimerTab control = new ControlNeutrinoTimerTab(view);
-			GuiNeutrinoTimerPanel panel = new GuiNeutrinoTimerPanel(control);
+			ControlTimerTab control = new ControlTimerTab(view);
+			GuiBoxTimerPanel panel = new GuiBoxTimerPanel(control);
 			return panel;
 		} 
 			ControlDefaultTimerTab control = new ControlDefaultTimerTab(view);

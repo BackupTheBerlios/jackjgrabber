@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import service.SerTimerHandler;
-import control.ControlNeutrinoTimerTab;
+import control.ControlTimerTab;
 
 public class BOTimer extends java.lang.Object{
     public String channelId; 
@@ -134,7 +134,7 @@ public class BOTimer extends java.lang.Object{
 		String outputString;
 		if (this.getSenderName() == null) {
 			int type = Integer.parseInt(this.getEventTypeId())-1;
-			outputString = ControlNeutrinoTimerTab.timerType[type];
+			outputString = ControlTimerTab.timerType[type];
 		} else {
 			outputString = this.getSenderName();
 		}

@@ -41,7 +41,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
-import control.ControlNeutrinoTimerTab;
+import control.ControlTimerTab;
 import control.ControlTimerEditView;
 
 public class GuiTimerEditView extends JFrame{
@@ -250,10 +250,10 @@ public class GuiTimerEditView extends JFrame{
 				if (jRadioButtonWhtage[i]== null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
 					jRadioButtonWhtage[i].addActionListener(control);
-					jRadioButtonWhtage[i].setName(Integer.toString(ControlNeutrinoTimerTab.weekdays_value[i]));
+					jRadioButtonWhtage[i].setName(Integer.toString(ControlTimerTab.weekdays_value[i]));
 					jRadioButtonWhtage[i].setActionCommand("recordTimer");
 					jRadioButtonWhtage[i].setEnabled(false);					
-					jRadioButtonWhtage[i].setText(ControlNeutrinoTimerTab.weekdays[i]);
+					jRadioButtonWhtage[i].setText(ControlTimerTab.weekdays[i]);
 				}
 				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
 				a = a+2;

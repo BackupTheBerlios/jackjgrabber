@@ -23,8 +23,16 @@ import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
+import presentation.GuiMainView;
+import presentation.timer.GuiEnigmaRecordTimerTableModel;
+import presentation.timer.GuiEnigmaSystemTimerTableModel;
+import presentation.timer.GuiNeutrinoRecordTimerTableModel;
+import presentation.timer.GuiRecordTimerTableModel;
+import presentation.timer.GuiSystemTimerTableModel;
+
 import service.SerFormatter;
 import control.ControlMain;
+import control.ControlTimerTab;
 
 /*
 SerBoxControlEnigma.java by Geist Alexander, Treito
@@ -47,7 +55,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 public class SerBoxControlEnigma extends SerBoxControl {
     
-    private BOTimerList timerList;
+   
     
     public GregorianCalendar getBoxTime() throws IOException {
     	BufferedReader input = getConnection("/cgi-bin/status");
@@ -66,12 +74,12 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    return new GregorianCalendar();
 	}
     
-    public BOTimerList getTimerList() throws IOException {
+    /*public BOTimerList getTimerList() throws IOException {
         if (timerList==null) {
             timerList=this.readTimer();
         }
         return timerList;
-    }
+    }*/
     
     public BOTimerList reReadTimerList() throws IOException {
         timerList=this.readTimer();
@@ -396,7 +404,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return sendCommand("standby");
 	}
 	public BOTimerList readTimer() throws IOException {
-	    BOTimerList timerList = new BOTimerList();
+	    //timerList = new BOTimerList();
 		BufferedReader input=getConnection("/body?mode=controlTimerList");
 		boolean recurring = false;
 		boolean onetimer=false;
@@ -479,16 +487,17 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					    eventRepeatId=""+typeValue2;
 					}
 					BOTimer botimer = new BOTimer();
-					botimer.setEventTypeId(timerType);
-					botimer.setTimerNumber("");
-					botimer.setEventRepeatId(eventRepeatId);
-	    			botimer.setSenderName(channel);
-	    			botimer.setChannelId(channelID);
-	    			botimer.setAnnounceTime(""); //vorwarnzeit
+					botimer.eventTypeId=timerType;
+					botimer.timerNumber="";
+					botimer.eventRepeatId=eventRepeatId;
+	    			botimer.senderName=channel;
+	    			botimer.channelId=channelID;
+	    			botimer.announceTime=""; //vorwarnzeit
 	    			botimer.unformattedStartTime=startDate;  //startDatum
 	    			botimer.unformattedStopTime=endDate;
-	    			botimer.setDescription(title);
-	    			botimer.setTimerNumber("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
+	    			botimer.description=title;
+	    			botimer.timerNumber=("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
+	    			botimer.getLocalTimer().setLocal(false);
 	    			timerList.getRecordTimerList().add(botimer);
 	    			startpos=endpos;
 				} 
@@ -673,4 +682,25 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public String [] getRepeatOptions() throws IOException {
+		return new String [] { ControlMain.getProperty("once"), ControlMain.getProperty("weekdays")  };
+	}
+	
+	public String [] getTimerType() throws IOException {
+		return new String [] { "Switch", "Sleeptimer" };
+	}
+	
+	public GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view) {
+		ControlTimerTab control = new ControlTimerTab(view);
+		return new GuiEnigmaRecordTimerTableModel(control);
+	}
+	public GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view) {
+		ControlTimerTab control = new ControlTimerTab(view);
+		return new GuiEnigmaSystemTimerTableModel(control);
+	}
+	
+	public String getIcon() {
+		return ("ico/enigma-logo.jpg");	
+	}
+	
 }

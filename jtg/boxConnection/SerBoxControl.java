@@ -33,6 +33,10 @@ import org.apache.log4j.Logger;
 import service.SerTimerHandler;
 import control.ControlMain;
 
+import presentation.GuiMainView;
+import presentation.timer.GuiRecordTimerTableModel;
+import presentation.timer.GuiSystemTimerTableModel;
+
 public abstract class SerBoxControl {
         
     public boolean newTimerAdded=true;
@@ -138,5 +142,10 @@ public abstract class SerBoxControl {
 	public abstract String setRecordModusWithPlayback() throws IOException;
 	public abstract String setRecordModus() throws IOException;
 	public abstract String stopRecordModus() throws IOException;
+	public abstract String [] getRepeatOptions() throws IOException;
+	public abstract String [] getTimerType() throws IOException;
+	public abstract GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view);
+	public abstract GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view);
+	public abstract String getIcon();
 
 }

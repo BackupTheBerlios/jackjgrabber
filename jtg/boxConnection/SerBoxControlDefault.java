@@ -22,6 +22,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import presentation.GuiMainView;
+import presentation.timer.GuiEnigmaRecordTimerTableModel;
+import presentation.timer.GuiEnigmaSystemTimerTableModel;
+import presentation.timer.GuiRecordTimerTableModel;
+import presentation.timer.GuiSystemTimerTableModel;
+
+import control.ControlMain;
+import control.ControlTimerTab;
+
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
@@ -137,6 +146,25 @@ public class SerBoxControlDefault extends SerBoxControl {
 	 */
 	public String stopRecordModus() throws IOException {
 		throw new IOException();
+	}
+	public String [] getRepeatOptions() throws IOException {
+		return new String [] {};
+	}
+	
+	public String [] getTimerType() throws IOException {
+		return new String [] {};
+	}
+	
+	public GuiRecordTimerTableModel getRecordTimerTabelModel(GuiMainView view) {
+		ControlTimerTab control = new ControlTimerTab(view);
+		return new GuiEnigmaRecordTimerTableModel(control);
+	}
+	public GuiSystemTimerTableModel getSystemTimerTabelModel(GuiMainView view) {
+		ControlTimerTab control = new ControlTimerTab(view);
+		return new GuiEnigmaSystemTimerTableModel(control);
+	}
+	public String getIcon() {
+		return ("");	
 	}
 
 }
