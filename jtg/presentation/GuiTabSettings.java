@@ -27,7 +27,6 @@ public class GuiTabSettings extends JPanel {
 	private JPanel jPanel3 = null;
 	private JPanel jPanel4 = null;
 	private JPanel jPanel5 = null;
-	private JButton jButtonSpeichern = null;
 	private JComboBox jComboBoxTheme = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLöschen = null;
@@ -54,7 +53,6 @@ public class GuiTabSettings extends JPanel {
 	 * @return void
 	 */
 	private  void initialize() {
-		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
@@ -90,16 +88,12 @@ public class GuiTabSettings extends JPanel {
 		gridBagConstraints6.gridy = 1;
 		gridBagConstraints6.gridwidth = 1;
 		gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints41.gridx = 1;
-		gridBagConstraints41.gridy = 3;
-		gridBagConstraints41.anchor = java.awt.GridBagConstraints.EAST;
 		this.add(getJPanel(), gridBagConstraints1);
 		this.add(getPanelLayoutSettings(), constraintsLayoutSettings);
 		this.add(getPanelBoxSettings(), constraintsBoxSettings);
 		this.add(getJPanel3(), gridBagConstraints4);
 		this.add(getJPanel4(), gridBagConstraints5);
 		this.add(getJPanel5(), gridBagConstraints6);
-		this.add(getJButtonSpeichern(), gridBagConstraints41);
 	}
 	/**
 	 * This method initializes jPanel	
@@ -244,20 +238,6 @@ public class GuiTabSettings extends JPanel {
 			jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		}
 		return jPanel5;
-	}
-	/**
-	 * This method initializes jButtonSpeichern	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
-	private JButton getJButtonSpeichern() {
-		if (jButtonSpeichern == null) {
-			jButtonSpeichern = new JButton();
-			jButtonSpeichern.setActionCommand("save");
-			jButtonSpeichern.setText("Speichern");
-			jButtonSpeichern.addActionListener(control);
-		}
-		return jButtonSpeichern;
 	}
 	/**
 	 * This method initializes jComboBoxLocale	

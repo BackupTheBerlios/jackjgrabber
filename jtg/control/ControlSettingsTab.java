@@ -7,7 +7,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -18,9 +17,6 @@ import javax.swing.filechooser.FileFilter;
 import model.BOBox;
 
 import presentation.GuiMainView;
-import service.SerAlertDialog;
-import service.SerXMLConverter;
-
 
 /**
  * @author Alexander Geist
@@ -44,9 +40,6 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "save") {
-			this.actionSpeichern();
-		}
 		if (action == "delete") {
 			this.actionRemoveBox();
 		}
@@ -61,7 +54,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 		if (comboBox.getName().equals("theme")) {
 			ControlMain.getSettings().setThemeLayout((String)comboBox.getSelectedItem());
 		}
-		if (comboBox.getName().equals("theme")) {
+		if (comboBox.getName().equals("locale")) {
 			ControlMain.getSettings().setLocale((String)comboBox.getSelectedItem());
 		}
 	}
@@ -89,17 +82,8 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	private void actionRemoveBox() {
 		int selectedRow = this.getMainView().getTabSettings().getJTableBoxSettings().getSelectedRow();
 		this.getMainView().getTabSettings().getModelBoxTable().removeRow(selectedRow);
-		this.actionSpeichern();
 	}
 
-	private void actionSpeichern() {	
-		try {
-			SerXMLConverter.saveAllSettings();
-		} catch (IOException e) {
-			SerAlertDialog.alert("Fehler beim Speichern der Settings", this.getMainView());
-		}
-	}
-	
 	private void openFileChooser() {		
 		JFileChooser chooser = new JFileChooser();
 		FileFilter filter = new FileFilter(){
@@ -115,8 +99,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	
 		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
 			String path = chooser.getSelectedFile().toString();
-			//this.getMainView().getTabSettings().getTfVlcPath().setText(path);
-			actionSpeichern();		
+
 		}
 	}
 	
