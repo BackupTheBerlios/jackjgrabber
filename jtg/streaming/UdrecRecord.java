@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import model.BOPid;
 import model.BOPids;
@@ -47,32 +48,45 @@ public class UdrecRecord  extends Record {
         boxIp = ControlMain.getBoxIpOfActiveBox();
 	}
 	
-	private String getRequestString() {
-	    StringBuffer cmd = new StringBuffer();
+	private String[] getRequestArray() {
+	    ArrayList cmd = new ArrayList();
 	    BOPids pids = recordArgs.getPids();
-	    Object[] args = {
-	            ControlMain.getSettingsPath().getUdrecPath(), 
-	            boxIp, 
-	            Integer.toString(spktBufNum), 
-	            ControlMain.getSettingsRecord().getShortUdrecStreamType(),
-	            new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath(),
-	            ControlMain.getSettingsRecord().getUdrecOptions()
-	    };
-	    
-	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3} -o {4} {5}");
-	    cmd.append(mf.format(args));
+	    String cmdReturn[];
+	    if ((System.getProperty("os.name")).equalsIgnoreCase("Linux")) {
+	    	cmd.add("mono");
+	    }
+	    cmd.add(ControlMain.getSettingsPath().getUdrecPath());
+	    cmd.add("-host");
+	    cmd.add(boxIp);
+	    cmd.add("-buf");
+	    cmd.add(Integer.toString(spktBufNum));
+	    cmd.add("-now");
+	    cmd.add("-"+ControlMain.getSettingsRecord().getShortUdrecStreamType());
+	    cmd.add("-o");
+	    cmd.add((new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()));
+	    StringTokenizer udrecOptions = new StringTokenizer(ControlMain.getSettingsRecord().getUdrecOptions());
+	    while (udrecOptions.hasMoreTokens()) {
+	    	cmd.add(udrecOptions.nextToken());
+	    }
 	    
 	    if (recordArgs.getPids().getVPid() != null) {
-		    cmd.append(" -vp "+pids.getVPid().getNumber());
+		    cmd.add("-vp");
+		    cmd.add(pids.getVPid().getNumber());
 		}
 		for (int i=0; i<recordArgs.getPids().getAPids().size(); i++){
-		    cmd.append(" -ap "+((BOPid)pids.getAPids().get(i)).getNumber());
+		    String aPid = ((BOPid)pids.getAPids().get(i)).getNumber();
+		    cmd.add("-ap");
+		    cmd.add(aPid);
 		}
-		return cmd.toString();
+		cmdReturn = new String[cmd.size()];
+		for (int i = 0; i < cmd.size(); ++i) {
+		 	cmdReturn[i]=((String)cmd.get(i));
+		 	}
+		return cmdReturn;
 	}
 	
 	public void start() {
-	    SerExternalProcessHandler.startProcess("vlc",  this.getRequestString(), true);
+	    SerExternalProcessHandler.startProcess("udrec",  this.getRequestArray(), true);
 	}	
 	
 	public void stop() {
