@@ -31,10 +31,10 @@ public class GuiMainView extends JFrame {
 	
 	public GuiMainView(ControlMain ctrl) {
 		super();
-//		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
-//		try {
-//			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-//		} catch (Exception e) {}
+		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
+		try {
+			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+		} catch (Exception e) {}
 		control = ctrl;
 		initialize();
 		SerGUIUtils.center(this);
