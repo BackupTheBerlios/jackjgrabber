@@ -97,7 +97,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private JPanel jPanelProgressBar= null;	
 	
 	private JProgressBar jProgressBarDownload = null;
-	private JLabel jLabelMovieGuide = null;
+	private JLabel jLabelSearchCount = null;
 	
 	public GuiMovieGuideTimerTableModel mgTimerTableModel;
 	public GuiMovieGuideTimerTableSorter mgTimerTableSorter = null;
@@ -192,7 +192,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelSucheErw, layout);
 			CellConstraints cc = new CellConstraints();										
 			builder.add(this.getComboBoxSucheNach(), 	cc.xyw	(1, 1, 1));
-			//builder.add(this.getCheckBoxAbAktuell(), 	cc.xyw	(3, 1, 1));
+			builder.add(this.getJLabelSearchCount(), 	cc.xyw	(3, 1, 1));
 			builder.addSeparator(ControlMain.getProperty("suche_genre"), 	cc.xyw	(1, 2, 1));
 			builder.add(this.getComboBoxGenre(), 	 	cc.xyw	(1, 3, 1));
 			builder.addSeparator(ControlMain.getProperty("suche_sender"), 	cc.xyw	(3, 2, 1));
@@ -228,11 +228,11 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jPanelDownload;
 	}
-	private JLabel getJLabelMovieGuide(){
-		if (jLabelMovieGuide == null) {
-			jLabelMovieGuide = new JLabel("MovieGuide für: Monat");
+	public JLabel getJLabelSearchCount(){
+		if (jLabelSearchCount == null) {
+			jLabelSearchCount = new JLabel("Treffer:");
 		}
-		return jLabelMovieGuide;
+		return jLabelSearchCount;
 	}
 	private JPanel getJPanelDatum() {
 		if (jPanelDatum == null) {

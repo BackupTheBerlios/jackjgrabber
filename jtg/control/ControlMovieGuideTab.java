@@ -202,6 +202,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
 			getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
 			findAndReplaceGui(getSelectedItemJComboBox());
+			this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 			}
 		}
 		if (action == "allDates") {	
@@ -211,6 +212,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
 				this.getTab().getComboBoxSender().setSelectedIndex(0); 
 				reInitFilmTable(13);
+				this.getTab().getJLabelSearchCount().setText("");
 			}
 		}
 		if (action == "movieGuidePath") {
@@ -221,6 +223,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
 				searchString = "";
+				this.getTab().getJLabelSearchCount().setText("");
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
 				this.getTab().getComboBoxSender().setSelectedIndex(0); 
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
@@ -239,6 +242,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 					reInitFilmTable(11);		
 					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
 					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 				}
 			}
 		}
@@ -246,12 +250,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			JComboBox comboBox = this.getTab().getComboBoxSender();
 			if(comboBox.getItemCount()>=1){
 				this.getTab().getTfSuche().setText("");
-				searchString = "";
+				searchString = "";				
 				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(12);
 					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
 					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 				}
 			}
 		}
@@ -295,10 +300,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}else{	
 			JComboBox comboBox = (JComboBox)event.getSource();
 			if (comboBox.getName().equals("jComboBoxDatum")) {	
-				this.getTab().getTfSuche().setText("");
+				this.getTab().getTfSuche().setText("");				
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 				reInitFilmTable(1);						
-				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);						
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
+				this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 			}	
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
 				this.getTab().getTfSuche().setText("");
@@ -307,6 +313,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(11);		
 					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 				}
 			}
 			if (comboBox.getName().equals("jComboBoxSucheNach")) {		
@@ -319,6 +326,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 					reInitFilmTable(12);
 					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 				}
 			}
 		}
@@ -766,5 +774,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     }    
     public String getSearchString(){
     	return searchString;
+    }
+    private void clearTextFields(){
+    	
     }
 }
