@@ -457,8 +457,13 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 
 				TreePath sel = ((JTree) s).getSelectionPath();
 				if (sel != null && sel.getLastPathComponent() != null) {
-					BOFileWrapper file = (BOFileWrapper) ((DefaultMutableTreeNode) sel.getLastPathComponent()).getUserObject();
-					openFile(file);
+					
+					Object ob = ((DefaultMutableTreeNode) sel.getLastPathComponent()).getUserObject();
+					if (ob instanceof BOFileWrapper)
+					{
+						BOFileWrapper file = (BOFileWrapper)ob ;
+						openFile(file);
+					}
 
 				}
 			}
