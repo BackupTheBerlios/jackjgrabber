@@ -127,7 +127,7 @@ public class GuiMainView extends JFrame {
 			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
 
 			String current = UIManager.getLookAndFeel().getClass().getName();
-			String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getName();
+			String currentTheme = PlasticLookAndFeel.getMyCurrentTheme().getClass().getName();
 			currentTheme = currentTheme.substring(currentTheme.lastIndexOf(".") + 1);
 			boolean themeChanged = !currentTheme.equals(ControlMain.getSettings().getThemeLayout());
 			boolean lfChanged = !current.equals(lookAndFeel);  
