@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
@@ -49,19 +50,23 @@ public class GuiSettingsTabMain extends GuiTab {
 
 	private ControlSettingsTabMain control;
 	private JPanel panelBoxSettings = null;
+	private JPanel panelLayoutSettings = null;
+	private JPanel panelStartOptions = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
+	private JButton jButtonVlcPathFileChooser = null;
 	private JFormattedTextField tfBoxIp = null;
+	private JTextField jTextFieldVlcPath =null;
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxLookAndFeel = null;
 	private JComboBox jComboBoxLocale = null;
 	private JScrollPane jScrollPaneBoxSettings = null;
 	private JTable jTableBoxSettings = null;
 	private GuiBoxSettingsTableModel modelBoxTable;
-	private JPanel panelLayoutSettings = null;
 	private JCheckBox cbStartFullscreen;
 	private JCheckBox cbShowLogo;
 	private JCheckBox cbUseSysTray;
+	private JCheckBox cbStartVlcAtStart;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public final String[] themes = {"Silver", "BrownSugar", "DarkStar",
@@ -76,14 +81,14 @@ public class GuiSettingsTabMain extends GuiTab {
 	protected void initialize() {
 
 		FormLayout layout = new FormLayout("f:pref:grow, 100", // columns
-				"f:pref, 10, pref"); // rows
+				"f:pref, 10, pref, 10, pref"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
 		builder.add(this.getPanelBoxSettings(), cc.xy(1, 1));
 		builder.add(this.getPanelLayoutSettings(), cc.xy(1, 3));
-
+		builder.add(this.getPanelStartOptions(), cc.xy(1, 5));
 	}
 
 	private JPanel getPanelBoxSettings() {
@@ -94,43 +99,76 @@ public class GuiSettingsTabMain extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelBoxSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain
-					.getProperty("label_networkSettings"), cc.xywh(1, 1, 3, 1));
+			builder.addSeparator(ControlMain.getProperty("label_networkSettings"), cc.xywh(1, 1, 3, 1));
 			builder.add(this.getJScrollPaneBoxSettings(), cc.xywh(1, 2, 1, 3));
 			builder.add(this.getJButtonAnlegen(), cc.xy(3, 2));
 			builder.add(this.getJButtonLoeschen(), cc.xy(3, 3));
 		}
 		return panelBoxSettings;
 	}
-
+	
 	private JPanel getPanelLayoutSettings() {
 		if (panelLayoutSettings == null) {
 			panelLayoutSettings = new JPanel();
 			FormLayout layout = new FormLayout("f:300, 10, pref", //columna
-					"pref, pref, pref, pref, 5, pref, pref, pref,pref"); //rows
+					"pref, pref, pref, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelLayoutSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator(ControlMain.getProperty("label_guiSettings"),
-					cc.xywh(1, 1, 3, 1));
-
-			builder.add(
-					new JLabel(ControlMain.getProperty("label_lookandfeel")),
-					cc.xy(1, 2));
-			builder.add(this.getJComboBoxLookAndFeel(), cc.xy(3, 2));
-
-			builder.add(new JLabel(ControlMain.getProperty("label_theme")), cc
-					.xy(1, 4));
-			builder.add(this.getJComboBoxTheme(), cc.xy(3, 4));
-			builder.add(new JLabel(ControlMain.getProperty("label_lang")), cc
-					.xy(1, 6));
-			builder.add(this.getJComboBoxLocale(), cc.xy(3, 6));
-
-			builder.add(this.getCbStartFullscreen(), cc.xyw(1, 7, 3));
-			builder.add(this.getCbShowLogo(), cc.xyw(1, 8, 3));
-			builder.add(this.getCbUseSysTray(), cc.xyw(1, 9, 3));
+			builder.addSeparator(ControlMain.getProperty("label_guiSettings"),			cc.xywh(1, 1, 3, 1));
+			builder.add(new JLabel(ControlMain.getProperty("label_lookandfeel")),	cc.xy(1, 2));
+			builder.add(this.getJComboBoxLookAndFeel(), 																	cc.xy(3, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_theme")), 				cc.xy(1, 3));
+			builder.add(this.getJComboBoxTheme(), 																					cc.xy(3, 3));
+			builder.add(new JLabel(ControlMain.getProperty("label_lang")),						cc.xy(1, 4));
+			builder.add(this.getJComboBoxLocale(), 																					cc.xy(3, 4));
 		}
 		return panelLayoutSettings;
+	}
+	
+	private JPanel getPanelStartOptions() {
+			if (panelStartOptions == null) {
+			    panelStartOptions = new JPanel();
+				FormLayout layout = new FormLayout(  "pref, 10,  pref:grow, 5, pref", //columna
+						"pref, 5, pref, pref, pref, pref, pref"); //rows
+				PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
+				CellConstraints cc = new CellConstraints();
+
+				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 5));
+				builder.add(this.getCbStartFullscreen(), 																					cc.xyw(1, 3, 5));
+				builder.add(this.getCbShowLogo(),																								cc.xyw(1, 4, 5));
+				builder.add(this.getCbUseSysTray(), 																							cc.xyw(1, 5, 5));
+				builder.add(this.getCbStartVlcAtStart(), 																				cc.xyw(1, 6, 3));
+				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),				cc.xy	(1, 7));
+				builder.add(this.getJTextFieldVlcPath(),																					cc.xy	(3, 7));
+				builder.add(this.getJButtonVlcPathFileChooser(),															cc.xy	(5, 7));
+			}
+			return panelStartOptions;
+		}
+	
+	/**
+	 * @return Returns the jButtonVlcPathFileChooser.
+	 */
+	public JButton getJButtonVlcPathFileChooser() {
+		if (jButtonVlcPathFileChooser == null) {
+		    jButtonVlcPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
+		    jButtonVlcPathFileChooser.setActionCommand("vlcPath");
+		    jButtonVlcPathFileChooser.addActionListener(control);
+		}
+		return jButtonVlcPathFileChooser;
+	}
+
+	/**
+	 * @return Returns the jTextFieldVlcPath.
+	 */
+	public JTextField getJTextFieldVlcPath() {
+		if (jTextFieldVlcPath == null) {
+		    jTextFieldVlcPath = new JTextField();
+		    jTextFieldVlcPath.addKeyListener(control);
+		    jTextFieldVlcPath.setName("vlcPath");
+		    jTextFieldVlcPath.setPreferredSize(new Dimension(340, 19));
+		}
+		return jTextFieldVlcPath;
 	}
 
 	/**
@@ -275,12 +313,23 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JCheckBox getCbStartFullscreen() {
 		if (cbStartFullscreen == null) {
-			cbStartFullscreen = new JCheckBox(ControlMain
-					.getProperty("cbFullscreen"));
-			cbStartFullscreen.setName("startFullscreen");
-			cbStartFullscreen.addItemListener(control);
+			cbStartFullscreen = new JCheckBox(ControlMain.getProperty("cbFullscreen"));
+			cbStartFullscreen.setActionCommand("startFullscreen");
+			cbStartFullscreen.addActionListener(control);
 		}
 		return cbStartFullscreen;
+	}
+	
+	/**
+	 * @return Returns the cbStartVlcAtStart.
+	 */
+	public JCheckBox getCbStartVlcAtStart() {
+		if (cbStartVlcAtStart == null) {
+		    cbStartVlcAtStart = new JCheckBox(ControlMain.getProperty("cbVlcStart"));
+		    cbStartVlcAtStart.setActionCommand("startVlc");
+		    cbStartVlcAtStart.addActionListener(control);
+		}
+		return cbStartVlcAtStart;
 	}
 
 	/**
@@ -289,8 +338,8 @@ public class GuiSettingsTabMain extends GuiTab {
 	public JCheckBox getCbShowLogo() {
 		if (cbShowLogo == null) {
 			cbShowLogo = new JCheckBox(ControlMain.getProperty("cbShowLogo"));
-			cbShowLogo.setName("showLogo");
-			cbShowLogo.addItemListener(control);
+			cbShowLogo.setActionCommand("showLogo");
+			cbShowLogo.addActionListener(control);
 		}
 		return cbShowLogo;
 	}
@@ -300,10 +349,9 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JCheckBox getCbUseSysTray() {
 		if (cbUseSysTray == null) {
-			cbUseSysTray = new JCheckBox(ControlMain
-					.getProperty("cbUseSystray"));
-			cbUseSysTray.setName("useSysTray");
-			cbUseSysTray.addItemListener(control);
+			cbUseSysTray = new JCheckBox(ControlMain.getProperty("cbUseSystray"));
+			cbUseSysTray.setActionCommand("useSysTray");
+			cbUseSysTray.addActionListener(control);
 		}
 		return cbUseSysTray;
 	}

@@ -64,6 +64,8 @@ public class SerXMLHandling {
 		setElementInElement(root,"ac3ReplaceStereo", "false");
 		setElementInElement(root,"udrecOptions", "");
 		setElementInElement(root,"recordVtxt", "false");
+		setElementInElement(root,"startVlc", "false");
+		setElementInElement(root,"vlcPath", new File("vlc.exe").getAbsolutePath());
 
 		root.addElement("boxList");
 		root.addElement("playbackList");

@@ -17,11 +17,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.filechooser.FileFilter;
 
 import model.BOBox;
 import model.BOLookAndFeelHolder;
@@ -34,7 +40,7 @@ import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 
-public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener {
+public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener, KeyListener {
 
 	GuiTabSettings			settingsTab;
 	public final String[]	localeNames	= {"de,Deutsch", "en,Englisch", "fi,Finisch"};
@@ -55,7 +61,9 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		this.getTab().getJComboBoxLocale().setSelectedItem(this.getSettings().getLocale());
 		this.getTab().getCbShowLogo().setSelected(this.getSettings().isShowLogo());
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
+		this.getTab().getCbStartVlcAtStart().setSelected(this.getSettings().isStartVlcAtStart());
 		this.getTab().getCbUseSysTray().setSelected(this.getSettings().isUseSysTray());
+		this.getTab().getJTextFieldVlcPath().setText(this.getSettings().getVlcPath());
 		this.initLookAndFeels();
 		this.getTab().getJComboBoxLookAndFeel().setSelectedIndex(currentSelectedLookAndFeel);
 	}
@@ -78,69 +86,83 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action == "delete") {
-			this.actionRemoveBox();
-		}
-		if (action == "add") {
-			this.actionAddBox();
+		while (true) {
+		    if (action == "delete") {
+		  			this.actionRemoveBox();
+		  		}
+		  		if (action == "add") {
+		  			this.actionAddBox();
+		  		}
+		  		if (action == "vlcPath") {
+			  			this.openVlcPathFileChooser();
+			  		}
+		  		if (action.equals("showLogo")) {
+		  				this.getSettings().setShowLogo(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("startFullscreen")) {
+		  				this.getSettings().setStartFullscreen(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("startVlc")) {
+		  				this.getSettings().setStartVlcAtStart(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("useSysTray")) {
+		  		    boolean selected = ((JCheckBox)e.getSource()).isSelected();
+		  				this.getSettings().setUseSysTray(selected);
+		  				this.getMainView().checkTrayMenu(selected); // Damit das Tray sofort geladen, bzw. ausgeblendet wird
+		  				break;
+		  		}
+		    		break;
 		}
 	}
 
+	public void keyTyped(KeyEvent event) {}
+	
+	public void keyPressed(KeyEvent event) {}
+	
+	public void keyReleased(KeyEvent event) {
+		JTextField tf = (JTextField)event.getSource();
+		while (true) {
+			if (tf.getName().equals("vlcPath")){
+			    this.getSettings().setVlcPath(tf.getText());
+			    break;
+			}
+			break;
+		}
+	}
 	/**
 	 * Change-Events der Combos und der Checkbox
 	 * 
 	 * @version 24.11.2004 12:00
 	 */
 	public void itemStateChanged(ItemEvent event) {
-		String comp = event.getSource().getClass().getName();
-		while (true) {
-			if (comp.equals("javax.swing.JCheckBox")) {
-				JCheckBox checkBox = (JCheckBox) event.getSource();
-				if (checkBox.getName().equals("showLogo")) {
-					this.getSettings().setShowLogo(checkBox.isSelected());
-					break;
-				}
-				if (checkBox.getName().equals("startFullscreen")) {
-					this.getSettings().setStartFullscreen(checkBox.isSelected());
-					break;
-				}
-				if (checkBox.getName().equals("useSysTray")) {
-					boolean useTray = checkBox.isSelected();
-					this.getSettings().setUseSysTray(useTray);
-
-					this.getMainView().checkTrayMenu(useTray); // Damit das Tray sofort geladen, bzw. ausgeblendet wird
-
-					break;
-				}
-				break;
-			}
-			else {
-				JComboBox comboBox = (JComboBox) event.getSource();
-				if (event.getStateChange() == 1) {
-					if (comboBox.getName().equals("theme")) {
-						getSettings().setThemeLayout((String) comboBox.getSelectedItem());
-						if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null)
-						{
-							this.getMainView().getControl().setLookAndFeel();
-						}
-						break;
-					}
-					if (comboBox.getName().equals("locale")) {
-						getSettings().setLocale((String) comboBox.getSelectedItem());
-						break;
-					}
-					if (comboBox.getName().equals("lookAndFeel")) {
-					    String lookAndFeel = ((BOLookAndFeelHolder) this.getTab().getJComboBoxLookAndFeel().getSelectedItem()).getLookAndFeelClassName();
-						boolean enable = this.enableThemeComboBox(lookAndFeel);
-						this.getTab().getJComboBoxTheme().setEnabled(enable);
-						getSettings().setLookAndFeel(lookAndFeel);
-						this.getMainView().getControl().setLookAndFeel();
-						break;
-					}
-				}
-				break;
-			}
-		}
+	    JComboBox comboBox = (JComboBox) event.getSource();
+	    while (true) {
+	        if (event.getStateChange() == 1) {
+	            if (comboBox.getName().equals("theme")) {
+	                getSettings().setThemeLayout((String) comboBox.getSelectedItem());
+	                if (ControlMain.getControl() != null && ControlMain.getControl().getView() != null) {
+	                    this.getMainView().getControl().setLookAndFeel();
+	                }
+	                break;
+	            }
+	            if (comboBox.getName().equals("locale")) {
+	                getSettings().setLocale((String) comboBox.getSelectedItem());
+	                break;
+	            }
+	            if (comboBox.getName().equals("lookAndFeel")) {
+	                String lookAndFeel = ((BOLookAndFeelHolder) this.getTab().getJComboBoxLookAndFeel().getSelectedItem()).getLookAndFeelClassName();
+	                boolean enable = this.enableThemeComboBox(lookAndFeel);
+	                this.getTab().getJComboBoxTheme().setEnabled(enable);
+	                getSettings().setLookAndFeel(lookAndFeel);
+	                this.getMainView().getControl().setLookAndFeel();
+	                break;
+	            }
+	        }
+	        break;
+	    }
 	}
 	
 	/*
@@ -151,6 +173,29 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	            lookAndFeel.equals(PlasticXPLookAndFeel.class.getName()) ||
 	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName()) );
 	}
+	
+	private void openVlcPathFileChooser() {
+			JFileChooser chooser = new JFileChooser();
+			chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
+			chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathVlc"));
+			chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+			FileFilter filter = new FileFilter(){
+				public boolean accept(File f){
+					return (f.getName().endsWith("vlc.exe") || f.isDirectory() );
+				}
+				public String getDescription(){
+					return "vlc.exe";
+				}
+			};
+			chooser.setFileFilter(filter);
+			int returnVal = chooser.showSaveDialog( null ) ;
+		
+			if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+				String path = chooser.getSelectedFile().toString();
+				this.getTab().getJTextFieldVlcPath().setText(path);
+				ControlMain.getSettings().setUdrecPath(path);	
+			}
+		}
 
 	private void actionAddBox() {
 		BOBox box = new BOBox();

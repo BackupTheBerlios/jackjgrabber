@@ -64,12 +64,34 @@ public class SerSettingsHandler {
 		getSettingsStoreLogAfterRecord(root,settings);
 		getSettingsMovieguide(root,settings);
 		getSettingsRecordVtxt(root,settings);
-		
+		getSettingsStartVlc(root,settings);
+		getSettingsVlcPath(root,settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
 		return settings;
 	}
+	
+	private static void getSettingsStartVlc(Element root, BOSettings settings) {
+			Node node = root.selectSingleNode("/settings/startVlc");
+			if (node != null) {
+				settings.startVlcAtStart = node.getText().equals("true");
+			} else {
+				SerXMLHandling.setElementInElement(root, "startVlc", "false");
+				settings.setStartVlcAtStart(false);
+			}
+		}
+	
+	private static void getSettingsVlcPath(Element root, BOSettings settings) {
+			Node node = root.selectSingleNode("/settings/vlcPath");
+			if (node != null) {
+				settings.vlcPath = node.getText();
+			} else {
+				String path = new File("vlc.exe").getAbsolutePath();
+				SerXMLHandling.setElementInElement(root, "vlcPath", path);
+				settings.setVlcPath(path);
+			}
+		}
 
 	private static void getSettingsAc3ReplaceStereo(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/ac3ReplaceStereo");
@@ -527,7 +549,11 @@ public class SerSettingsHandler {
 		Node mgLoadType = settingsDocument.selectSingleNode("/settings/mgloadtype");
 		Node mgDefault = settingsDocument.selectSingleNode("/settings/mgdefault");
 		Node mgStoreOriginal = settingsDocument.selectSingleNode("/settings/mgstoreoriginal");
+		Node vlcPath = settingsDocument.selectSingleNode("/settings/vlcPath");
+		Node startVlc = settingsDocument.selectSingleNode("/settings/startVlc");
 		
+		startVlc.setText(Boolean.toString(ControlMain.getSettings().isStartVlcAtStart()));
+		vlcPath.setText(ControlMain.getSettings().getVlcPath());
 		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().isRecordVtxt()));
 		projectXPath.setText(ControlMain.getSettings().getProjectXPath());
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().isAc3ReplaceStereo()));

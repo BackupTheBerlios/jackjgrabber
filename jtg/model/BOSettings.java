@@ -45,6 +45,7 @@ public class BOSettings {
 	public boolean ac3ReplaceStereo;
 	public String savePath;
 	public String udrecPath;
+	public String vlcPath;
 	public String projectXPath;
 	public String udrecOptions;
 	public String playbackString;
@@ -57,6 +58,7 @@ public class BOSettings {
 	public boolean storeEPG;
 	public boolean storeLogAfterRecord;
 	public boolean recordVtxt;
+	public boolean startVlcAtStart;
 	
 	// Movieguide Settings
 	public ArrayList mgSelectedChannels;
@@ -598,6 +600,36 @@ public class BOSettings {
         if (this.recordVtxt != recordVtxt) {
       			setSettingsChanged(true);
       			this.recordVtxt = recordVtxt;
+      		}
+    }
+    /**
+     * @return Returns the startVlcAtStart.
+     */
+    public boolean isStartVlcAtStart() {
+        return startVlcAtStart;
+    }
+    /**
+     * @param startVlcAtStart The startVlcAtStart to set.
+     */
+    public void setStartVlcAtStart(boolean startVlcAtStart) {
+        if (this.startVlcAtStart != startVlcAtStart) {
+      			setSettingsChanged(true);
+      			this.startVlcAtStart = startVlcAtStart;
+      		}
+    }
+    /**
+     * @return Returns the vlcPath.
+     */
+    public String getVlcPath() {
+        return vlcPath;
+    }
+    /**
+     * @param vlcPath The vlcPath to set.
+     */
+    public void setVlcPath(String vlcPath) {
+        if (this.vlcPath == null || !this.vlcPath.equals(vlcPath)) {
+      			setSettingsChanged(true);
+      			this.vlcPath = vlcPath;
       		}
     }
 }

@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.awt.Font;
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -30,6 +31,8 @@ import org.apache.log4j.Logger;
 
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
+import service.SerErrorStreamReadThread;
+import service.SerInputStreamReadThread;
 import service.SerLogAppender;
 import snoozesoft.systray4j.SysTrayMenuEvent;
 import snoozesoft.systray4j.SysTrayMenuListener;
@@ -54,10 +57,23 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	public void initialize() {
 	    this.initPlasticLookAndFeel();
 	    this.setLookAndFeel();
-		this.setView(new GuiMainView(this));		
-		SerLogAppender.getTextAreas().add(this.getView().getTabProgramm().getJTextPaneAusgabe());
-		this.logSystemInfo();
-		this.log(ControlMain.getProperty("msg_app_starting"));		
+	    this.setView(new GuiMainView(this));		
+	    SerLogAppender.getTextAreas().add(this.getView().getTabProgramm().getJTextPaneAusgabe());
+	    this.logSystemInfo();
+	    this.checkStartVlc();
+	    this.log(ControlMain.getProperty("msg_app_starting"));		
+	}
+	
+	private void checkStartVlc() {
+	    if (ControlMain.getSettings().isStartVlcAtStart()) {
+	        try {
+                Process run = Runtime.getRuntime().exec(ControlMain.getSettings().getVlcPath()+" --extraintf=http");
+                new SerInputStreamReadThread(true, run.getInputStream()).start();
+                new SerErrorStreamReadThread(true, run.getErrorStream()).start();
+            } catch (IOException e) {
+                Logger.getLogger("ControlMainView").error(e.getMessage());
+            }
+	    }
 	}
 	
 	private void initPlasticLookAndFeel() {
