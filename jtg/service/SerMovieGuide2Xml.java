@@ -6,8 +6,6 @@
  */
 package service;
 
-import model.BOMovieGuide;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -30,28 +28,11 @@ public class SerMovieGuide2Xml {
     static Hashtable htGenreMap = new Hashtable();
     static Document doc;
     static Element root;
+    static Element movie;
     
     private static void buildEmptyXMLFile() throws IOException {
         doc = DocumentHelper.createDocument();
         root = doc.addElement("movieguide");
-    }
-    
-    private static void addElement(BOMovieGuide guide){
-        Element movie = root.addElement("entry");
-        movie.addAttribute("sender",guide.getSender());
-        movie.addAttribute("datum",guide.getDatum());
-        movie.addAttribute("start",guide.getStart());
-        movie.addAttribute("titel",guide.getTitel());
-        movie.addAttribute("episode",guide.getEpisode());
-        movie.addAttribute("genre",guide.getGenre());
-        movie.addAttribute("dauer",guide.getDauer());
-        movie.addAttribute("land",guide.getLand());
-        movie.addAttribute("jahr",guide.getJahr());
-        movie.addAttribute("regie",guide.getRegie());
-        movie.addAttribute("bild",guide.getBild());
-        movie.addAttribute("ton",guide.getTon());
-        movie.addAttribute("darsteller",guide.getDarsteller());
-        movie.addAttribute("inhalt",guide.getInhalt());
     }
     
     public static void saveXMLFile(Document doc) throws IOException {
@@ -59,6 +40,12 @@ public class SerMovieGuide2Xml {
         XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
         writer.write(doc);
         writer.close();
+    }
+    
+    public static void setElementInElement(Element parentElement, String childElementName, String childElementValue) {
+        Element element = DocumentHelper.createElement(childElementName);
+        element.setText(childElementValue);
+        parentElement.add(element);
     }
     
     private static void generateGenreMap(String entry) {
@@ -149,57 +136,53 @@ public class SerMovieGuide2Xml {
                     in = new BufferedReader(is);
                     break;
             }
-            BOMovieGuide bomovie = new BOMovieGuide();
             buildEmptyXMLFile();
             String input = new String();
+            StringBuffer inhalt = new StringBuffer();
             createHashTable();
             boolean[] lineCounter = new boolean[3];
             int number = 0;
             String[] out;
             while ((input = in.readLine()) != null) {
                 lineCounter = getLineCounter(input);
-                if (lineCounter[0]) {
+                if (lineCounter[0]) {                    
                     out = createElement(0, input);
-                    bomovie = new BOMovieGuide();
-                    bomovie.setSender(out[0]);
-                    bomovie.setDatum(out[1]);
-                    bomovie.setStart(out[2]);
+                    movie = root.addElement("entry");
+                    setElementInElement(movie,"sender",out[0]);
+                    setElementInElement(movie,"datum", out[1]);
+                    setElementInElement(movie,"start", out[2]);
                 } else if (lineCounter[1]) {
                     number = getNumber(input);
                     switch (number) {
                         case 1:
-                            bomovie.setTitel(createElement(number, input)[0]);
+                            setElementInElement(movie,"titel", createElement(number, input)[0]);
                             break;
                         case 2:
                             out = createElement(number, input);
-                            bomovie.setEpisode(out[0]);
-                            bomovie.setGenre(out[1]);
-                            bomovie.setDauer(out[2]);
+                            setElementInElement(movie,"episode",out[0]);
+                            setElementInElement(movie,"genre", out[1]);
+                            setElementInElement(movie,"dauer", out[2]);
                             break;
                         case 3:
                             out = createElement(number, input);
-                            bomovie.setLand(out[0]);
-                            bomovie.setJahr(out[1]);
-                            bomovie.setRegie(out[2]);
+                            setElementInElement(movie,"land",out[0]);
+                            setElementInElement(movie,"jahr", out[1]);
+                            setElementInElement(movie,"regie", out[2]);
                             break;
                         case 4:
                             out = createElement(number, input);
-                            bomovie.setBild(out[0]);
-                            bomovie.setTon(out[1]);
+                            setElementInElement(movie,"bild",out[0]);
+                            setElementInElement(movie,"ton", out[1]);
                         case 5:
-                            bomovie.setDarsteller(createElement(number, input)[0]);
+                            setElementInElement(movie,"darsteller", createElement(number, input)[0]);
                             break;
                     }
                 } else if ((lineCounter[0] && lineCounter[1]) == false){
                     if(input.length() > 0){
-                        if( bomovie.getInhalt() != null){
-                            bomovie.setInhalt(bomovie.getInhalt() + input);
-                        }else{
-                            bomovie.setInhalt(input);
-                        }
+                        inhalt.append(input);
                     }else{
-                        bomovie.toOut();
-                        addElement(bomovie);
+                        setElementInElement(movie,"inhalt", inhalt.toString());
+                        inhalt.setLength(0);
                     }
                 }
             }
@@ -217,7 +200,7 @@ public class SerMovieGuide2Xml {
      */
     public static void main(String[] args) {
         try {
-            readGuide("/tmp/1.txt",2);
+            readGuide("/tmp/1.txt",1);
         } catch (Exception e) {
         }
     }
