@@ -273,4 +273,9 @@ public class BOSettings {
 	    StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
 	    return st.nextToken();
 	}
+	
+	public String getShortUdrecStreamType() {
+	    StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
+	    return st.nextToken().toLowerCase();
+	}
 }

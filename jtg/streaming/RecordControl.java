@@ -41,20 +41,29 @@ public class RecordControl extends Thread
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
 		recordArgs = args;
 		controlProgramTab = control;
-		if (control.isTvMode()) {
-		    record = new UdpRecord(args, this);
-		} else {
-		    record = new TcpRecord(args, this);
-		}
-		
+		this.detectRecord();
 	}
 	
+	private boolean detectRecord() {
+	    if (controlProgramTab.isTvMode() && ControlMain.getSettings().getStreamingEngine()==0) {
+		    record = new UdpRecord(recordArgs, this);
+		    return true;
+		}
+		if (controlProgramTab.isTvMode() && ControlMain.getSettings().getStreamingEngine()==1) {
+		    record = new UdrecRecord(recordArgs, this);
+		    return true;
+		}
+		else {
+		    record = new TcpRecord(recordArgs, this);
+		    return true;
+		}
+	}
 	/*
 	 * Kontrolle der Stopzeit einer Sofortaufnahme
 	 */
 	public void run() {
 		record.start();
-		if (recordArgs.isQuickRecord()) { //Timer-UdpRecord hat keine bouquetNr 
+		if (recordArgs.isQuickRecord()) { 
 			long millis = new Date().getTime();
 			stopTime = new Date(millis+1500000);
 			controlProgramTab.setRecordStoptTime(stopTime);
