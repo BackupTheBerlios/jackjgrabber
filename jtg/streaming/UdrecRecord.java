@@ -20,7 +20,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import model.BOExternalProcess;
 import model.BOPid;
@@ -59,16 +58,11 @@ public class UdrecRecord  extends Record {
 	    }
 	    cmd.add("-host");
 	    cmd.add(boxIp);
-	    cmd.add("-buf");
-	    cmd.add(Integer.toString(spktBufNum));
 	    cmd.add("-now");
 	    cmd.add("-"+recordArgs.getLocalTimer().getShortUdrecStreamType());
 	    cmd.add("-o");
 	    cmd.add((new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()));
-	    StringTokenizer udrecOptions = new StringTokenizer(recordArgs.getLocalTimer().getUdrecOptions());
-	    while (udrecOptions.hasMoreTokens()) {
-	    	cmd.add(udrecOptions.nextToken());
-	    }
+	    cmd.addAll(recordArgs.getLocalTimer().getUdrecOptions().toStringList());
 	    
 	    if (recordArgs.getPids().getVPid() != null) {
 		    cmd.add("-vp");

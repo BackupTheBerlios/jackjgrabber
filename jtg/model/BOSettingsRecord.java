@@ -1,6 +1,7 @@
 package model;
 
 
+
 /*
  * BOSettingsRecords.java by Geist Alexander
  * 
@@ -24,7 +25,7 @@ public class BOSettingsRecord {
 	public boolean ac3ReplaceStereo;
 	public boolean stereoReplaceAc3;
 	public boolean shutdownAfterRecord;
-	public String udrecOptions;
+	public BOUdrecOptions udrecOptions;
 
 	public String jgrabberStreamType; //PES, TS, ES
 	public String udrecStreamType; //PES, TS
@@ -258,22 +259,24 @@ public class BOSettingsRecord {
 	/**
 	 * @return Returns the udrecOptions.
 	 */
-	public String getUdrecOptions() {
-		if (udrecOptions == null) {
-			return "";
+	public BOUdrecOptions getUdrecOptions() {
+		if (udrecOptions==null) {
+			udrecOptions=new BOUdrecOptions();
 		}
 		return udrecOptions;
 	}
+
 	/**
 	 * @param udrecOptions
 	 *            The udrecOptions to set.
 	 */
-	public void setUdrecOptions(String udrecOptions) {
+	public void setUdrecOptions(BOUdrecOptions udrecOptions) {
 		if (this.udrecOptions == null || !this.udrecOptions.equals(udrecOptions)) {
 			setSettingsChanged(true);
 			this.udrecOptions = udrecOptions;
 		}
 	}
+	
 	public boolean isStoreEPG() {
 		return storeEPG;
 	}

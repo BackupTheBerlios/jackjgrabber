@@ -21,6 +21,7 @@ import java.util.StringTokenizer;
 
 import org.dom4j.Node;
 
+import service.SerHelper;
 import control.ControlMain;
 
 public class BOLocalTimer {
@@ -31,7 +32,7 @@ public class BOLocalTimer {
 	private boolean stereoReplaceAc3;
 	private boolean shutdownAfterRecord;
 	private String description;
-	private String udrecOptions;
+	public BOUdrecOptions udrecOptions;
 	private String savePath;
 	private String jgrabberStreamType; //PES, TS, ES
 	private String udrecStreamType; //PES, TS
@@ -71,7 +72,7 @@ public class BOLocalTimer {
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
 		timer.setStoreLogAfterRecord(ControlMain.getSettingsRecord().isStoreLogAfterRecord());
 		timer.setStreamingEngine(ControlMain.getSettingsRecord().getStreamingEngine());
-		timer.setUdrecOptions(ControlMain.getSettingsRecord().getUdrecOptions());
+		timer.setUdrecOptions((BOUdrecOptions)SerHelper.serialClone(ControlMain.getSettingsRecord().getUdrecOptions()));
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		timer.setStartTime(mainTimer.getUnformattedStartTime().getTimeInMillis());
@@ -94,7 +95,7 @@ public class BOLocalTimer {
 		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
 		timer.setStoreLogAfterRecord(ControlMain.getSettingsRecord().isStoreLogAfterRecord());
 		timer.setStreamingEngine(ControlMain.getSettingsRecord().getStreamingEngine());
-		timer.setUdrecOptions(ControlMain.getSettingsRecord().getUdrecOptions());
+		timer.setUdrecOptions((BOUdrecOptions)SerHelper.serialClone(ControlMain.getSettingsRecord().getUdrecOptions()));
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		return timer;
@@ -281,13 +282,13 @@ public class BOLocalTimer {
 	/**
 	 * @return Returns the udrecOptions.
 	 */
-	public String getUdrecOptions() {
+	public BOUdrecOptions getUdrecOptions() {
 		return udrecOptions;
 	}
 	/**
 	 * @param udrecOptions The udrecOptions to set.
 	 */
-	public void setUdrecOptions(String udrecOptions) {
+	public void setUdrecOptions(BOUdrecOptions udrecOptions) {
 		this.udrecOptions = udrecOptions;
 	}
 	/**

@@ -72,6 +72,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JButton jButtonTest;
 	private JButton jButtonDirTag;
 	private JButton jButtonFileTag;
+	private JButton jButtonUdrecOptions;
 	
 	private JTextField tfDirPattern;
 	private JTextField tfFilePattern;
@@ -182,7 +183,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JPanel getPanelEngineSettings() {
 		if (panelEngineSettings == null) {
 			panelEngineSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref, 5, pref, 30, 250:grow", //columns
+			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
 					"pref, pref, 10, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
@@ -191,8 +192,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 			builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
 			builder.add(this.getJRadioButtonUdrec(), cc.xy(3, 2));
 			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_udrecOptions")), cc.xyw(1, 4, 4));
-			builder.add(this.getJTextFieldUdrecOptions(), cc.xy(5, 4));
+			builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 4, 1));
+			builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 4, 3));
 		}
 		return panelEngineSettings;
 	}
@@ -273,6 +274,18 @@ public class GuiSettingsTabRecord extends GuiTab {
 	}
 	
 	/**
+	 * @return jButtonFileTag
+	 */
+	public JButton getJButtonUdrecOptions() {
+		if (jButtonUdrecOptions == null) {
+			jButtonUdrecOptions = new JButton(ControlMain.getProperty("label_udrecOptions"));
+			jButtonUdrecOptions.setActionCommand("udrecOptions");
+			jButtonUdrecOptions.addActionListener(control);
+		}
+		return jButtonUdrecOptions;
+	}
+	
+	/**
 	 * @return tfDirPattern
 	 */
 	public JTextField getTfDirPattern() {
@@ -308,7 +321,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 			jComboBoxStreamType = new JComboBox();
 			jComboBoxStreamType.addItemListener(control);
 			jComboBoxStreamType.setName("streamType");
-			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(50, 19));
+			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(40, 19));
 		}
 		return jComboBoxStreamType;
 	}
@@ -398,7 +411,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 			jTextFieldUdrecOptions = new JTextField();
 			jTextFieldUdrecOptions.addKeyListener(control);
 			jTextFieldUdrecOptions.setName("udrecOptions");
-			jTextFieldUdrecOptions.setPreferredSize(new Dimension(340, 19));
+			jTextFieldUdrecOptions.setPreferredSize(new Dimension(300, 19));
 		}
 		return jTextFieldUdrecOptions;
 	}

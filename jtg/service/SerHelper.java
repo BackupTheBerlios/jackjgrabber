@@ -22,6 +22,28 @@ import control.*;
  */
 
 public class SerHelper {
+    
+    public static Object serialClone(Object o) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ObjectOutputStream os = new ObjectOutputStream(out);
+            
+            os.writeObject(o);
+            os.flush();
+
+            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+            ObjectInputStream is = new ObjectInputStream(in);
+            Object ret = is.readObject();
+            is.close();
+            os.close();
+            return ret;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 	/**
 	 * überprüft ob es sich bei der Datei um eine Audio Datei handelt

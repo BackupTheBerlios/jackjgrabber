@@ -1,3 +1,4 @@
+package control;
 /*
  * ControlSettingsTabRecord.java by Geist Alexander
  * 
@@ -11,8 +12,6 @@
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-package control;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +37,7 @@ import javax.swing.event.ChangeListener;
 import model.BOPatternTag;
 import model.BORecordArgs;
 import model.BOSettingsRecord;
+import presentation.GuiUdrecOptionsDialog;
 import presentation.settings.GuiSettingsTabRecord;
 import presentation.settings.GuiStreamTypeComboModel;
 import presentation.settings.GuiTabSettings;
@@ -69,7 +69,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.getTab().getCbRecordVtxt().setSelected(this.getSettings().isRecordVtxt());
 		this.getTab().getJSpinnerRecordMinsBefore().setValue(Integer.valueOf(this.getSettings().getRecordTimeBefore()));
 		this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
-		this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions());
+		this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions().toString());
 		this.getTab().getCbStoreEPG().setSelected(this.getSettings().isStoreEPG());
 		this.getTab().getCbStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
 		this.getTab().getCbShutdownAfterRecord().setSelected(this.getSettings().isShutdownAfterRecord());
@@ -180,10 +180,17 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			if (action.equals("Test")) {
 				testPattern();
 			}
-
+			if (action.equals("udrecOptions")) {
+				openUdrecOptions();
+			}
 			break;
 
 		}
+	}
+	
+	private void openUdrecOptions() {
+		new GuiUdrecOptionsDialog(this.getSettings().getUdrecOptions(), this.getTab().getJTextFieldUdrecOptions());
+		this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions().toString());
 	}
 
 	private void testPattern() {
@@ -265,10 +272,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			}
 			if (tf.getName().equals("udrecPath")) {
 				ControlMain.getSettingsPath().setUdrecPath(tf.getText());
-				break;
-			}
-			if (tf.getName().equals("udrecOptions")) {
-				this.getSettings().setUdrecOptions(tf.getText());
 				break;
 			}
 			if (tf.getName().equals("filePattern")) {

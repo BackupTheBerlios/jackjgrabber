@@ -91,6 +91,7 @@ public class GuiTimerEditView extends JFrame{
 	private JButton jButtonOk;
 	private JButton jButtonCancel;
 	private JButton jButtonRecordPathFileChooser;
+	private JButton jButtonUdrecOptions;
 	
 	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
 	private JToolBar toolBar;
@@ -157,8 +158,8 @@ public class GuiTimerEditView extends JFrame{
 	private JPanel getPanelEngineSettings() {
 		if (panelEngineSettings == null) {
 			panelEngineSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref, 5, pref, 30, 250:grow", //columns
-					"pref, pref, 10, pref"); //rows
+			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
+			"pref, pref, 10, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -166,8 +167,8 @@ public class GuiTimerEditView extends JFrame{
 			builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
 			builder.add(this.getJRadioButtonUdrec(), cc.xy(3, 2));
 			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_udrecOptions")), cc.xyw(1, 4, 4));
-			builder.add(this.getJTextFieldUdrecOptions(), cc.xy(5, 4));
+			builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 4, 1));
+			builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 4, 3));
 		}
 		return panelEngineSettings;
 	}
@@ -275,7 +276,17 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return toolBar;
 	}
-	
+	/**
+	 * @return jButtonFileTag
+	 */
+	public JButton getJButtonUdrecOptions() {
+		if (jButtonUdrecOptions == null) {
+			jButtonUdrecOptions = new JButton(ControlMain.getProperty("label_udrecOptions"));
+			jButtonUdrecOptions.setActionCommand("udrecOptions");
+			jButtonUdrecOptions.addActionListener(control);
+		}
+		return jButtonUdrecOptions;
+	}
 	
 	/**
 	 * @return jButtonTest

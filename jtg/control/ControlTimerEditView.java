@@ -46,6 +46,7 @@ import model.BOPatternTag;
 import model.BORecordArgs;
 import model.BOSender;
 import model.BOTimer;
+import presentation.GuiUdrecOptionsDialog;
 import presentation.settings.GuiStreamTypeComboModel;
 import presentation.settings.GuiTagFrame;
 import presentation.timer.GuiTimerEditView;
@@ -76,7 +77,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		this.getView().getJComboBoxStreamType().setSelectedItem(timer.getJgrabberStreamType());
 		this.getView().getCbStartPX().setSelected(timer.isStartPX());
 		this.getView().getCbRecordVtxt().setSelected(timer.isRecordVtxt());
-		this.getView().getJTextFieldUdrecOptions().setText(timer.getUdrecOptions());
+		this.getView().getJTextFieldUdrecOptions().setText(timer.getUdrecOptions().toString());
 		this.getView().getCbStoreEPG().setSelected(timer.isStoreEPG());
 		this.getView().getCbStoreLogAfterRecord().setSelected(timer.isStoreLogAfterRecord());
 		this.getView().getCbShutdownAfterRecord().setSelected(timer.isShutdownAfterRecord());
@@ -208,8 +209,15 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				this.actionRecordTimerRepeatDaysChanged(e);
 				break;
 			}
+			if (action.equals("udrecOptions")) {
+				openUdrecOptions();
+			}
 			break;
 		}
+	}
+	
+	private void openUdrecOptions() {
+		new GuiUdrecOptionsDialog(this.getTimer().getUdrecOptions(), this.getView().getJTextFieldUdrecOptions());
 	}
 	
 	private void actionSaveRecordTimer() {
@@ -399,10 +407,6 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
 				timer.getMainTimer().setUnformattedStopTime(newDate);
 			    break;
-			}
-			if (tf.getName().equals("udrecOptions")) {
-				this.getTimer().setUdrecOptions(tf.getText());
-				break;
 			}
 			if (tf.getName().equals("filePattern")) {
 			    this.getTimer().setFilePattern(tf.getText());

@@ -17,8 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.util.ArrayList;
-
 import service.SerTimerHandler;
 
 public class BORecordArgs {
@@ -189,11 +187,8 @@ public class BORecordArgs {
         if (this.getLocalTimer().isAc3ReplaceStereo()) {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
-                if (aPid.getName().indexOf("AC3")>-1) {
-                    ArrayList newList = new ArrayList();
-                    newList.add(aPid);
-                    this.getPids().setAPids(newList);
-                    break;
+                if (!(aPid.getName().indexOf("AC3")>-1)) {
+                    this.getPids().getAPids().remove(aPid);
                 }
             }    
         }
@@ -201,7 +196,7 @@ public class BORecordArgs {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
                 if (aPid.getName().indexOf("AC3")>-1) {
-                    this.getPids().getAPids().remove(aPid);
+                	this.getPids().getAPids().remove(aPid);
                 }
             }
         }

@@ -1,5 +1,4 @@
 package service;
-
 /*
  * SerSettingsHandler.java by Geist Alexander
  * 
@@ -13,21 +12,38 @@ package service;
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.beans.ExceptionListener;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
-import model.*;
+import model.BOBox;
+import model.BOPlaybackOption;
+import model.BOSettings;
+import model.BOUdrecOptions;
 
-import org.apache.log4j.*;
-import org.dom4j.*;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.Node;
 
-import com.jgoodies.plaf.plastic.*;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 
-import control.*;
+import control.ControlMain;
+import control.ControlSettingsTabMovieGuide;
 
 public class SerSettingsHandler {
 
@@ -134,7 +150,7 @@ public class SerSettingsHandler {
 	private static void getSettingsUdrecOptions(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/udrecOptions");
 		if (node != null) {
-			settings.getRecordSettings().udrecOptions = node.getText();
+			settings.getRecordSettings().setUdrecOptions(new BOUdrecOptions(node.getText().split(" ")));
 		} else {
 			SerXMLHandling.setElementInElement(root, "udrecOptions", "");
 		}
@@ -679,7 +695,7 @@ public class SerSettingsHandler {
 		stereoReplaceAc3.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()));
 		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordVtxt()));
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()));
-		udrecOptions.setText(ControlMain.getSettings().getRecordSettings().getUdrecOptions());
+		udrecOptions.setText(ControlMain.getSettings().getRecordSettings().getUdrecOptions().toString());
 		recordTimeBefore.setText(ControlMain.getSettings().getRecordSettings().getRecordTimeBefore());
 		recordTimeAfter.setText(ControlMain.getSettings().getRecordSettings().getRecordTimeAfter());
 		recordAllPids.setText(Boolean.toString(ControlMain.getSettings().getRecordSettings().isRecordAllPids()));

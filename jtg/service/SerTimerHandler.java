@@ -25,6 +25,7 @@ import java.util.List;
 import model.BOLocalTimer;
 import model.BOTimer;
 import model.BOTimerList;
+import model.BOUdrecOptions;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -113,7 +114,7 @@ public class SerTimerHandler {
 		recordTimer.addElement("stereoReplaceAc3").addText(Boolean.toString(timer.isStereoReplaceAc3()));
 		recordTimer.addElement("shutdownAfterRecord").addText(Boolean.toString(timer.isShutdownAfterRecord()));
 		recordTimer.addElement("description").addText(timer.getDescription());
-		recordTimer.addElement("udrecOptions").addText(timer.getUdrecOptions());
+		recordTimer.addElement("udrecOptions").addText(timer.getUdrecOptions().toString());
 		recordTimer.addElement("savePath").addText(timer.getSavePath());
 		recordTimer.addElement("jgrabberStreamType").addText(timer.getJgrabberStreamType());
 		recordTimer.addElement("udrecStreamType").addText(timer.getUdrecStreamType());
@@ -149,7 +150,7 @@ public class SerTimerHandler {
         timerNode.selectSingleNode("storeEpg").setText(Boolean.toString(timer.isStoreEPG()));
         timerNode.selectSingleNode("storeLogAfterRecord").setText(Boolean.toString(timer.isStoreLogAfterRecord()));
         timerNode.selectSingleNode("streamingEngine").setText(Integer.toString(timer.getStreamingEngine()));
-        timerNode.selectSingleNode("udrecOptions").setText(timer.getUdrecOptions());
+        timerNode.selectSingleNode("udrecOptions").setText(timer.getUdrecOptions().toString());
         timerNode.selectSingleNode("udrecStreamType").setText(timer.getUdrecStreamType());
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
@@ -215,7 +216,7 @@ public class SerTimerHandler {
         localTimer.setStoreEPG(timerNode.selectSingleNode("storeEpg").getText().equals("true"));
         localTimer.setStoreLogAfterRecord(timerNode.selectSingleNode("storeLogAfterRecord").getText().equals("true"));
         localTimer.setStreamingEngine(Integer.parseInt(timerNode.selectSingleNode("streamingEngine").getText()));
-        localTimer.setUdrecOptions(timerNode.selectSingleNode("udrecOptions").getText());
+        localTimer.setUdrecOptions(new BOUdrecOptions(timerNode.selectSingleNode("udrecOptions").getText().split(" ")));
         localTimer.setUdrecStreamType(timerNode.selectSingleNode("udrecStreamType").getText());
         localTimer.setTimerNode(timerNode);
         return localTimer;
