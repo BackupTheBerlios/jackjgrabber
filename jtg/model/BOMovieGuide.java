@@ -8,6 +8,9 @@ package model;
 
 import java.util.ArrayList;
 
+
+
+
 /**
  * @author ralix
  *
@@ -18,17 +21,17 @@ public class BOMovieGuide {
 	 /**
      * Holds value of property sender.
      */
-    private String sender;
+    private ArrayList sender;
     
     /**
      * Holds value of property datum.
      */
-    private String datum;
+    private ArrayList datum;
     
     /**
      * Holds value of property start.
      */
-    private String start;
+    private ArrayList start;
     
     /**
      * Holds value of property titel.
@@ -48,7 +51,7 @@ public class BOMovieGuide {
     /**
      * Holds value of property dauer.
      */
-    private String dauer;
+    private ArrayList dauer;
     
     /**
      * Holds value of property land.
@@ -84,16 +87,40 @@ public class BOMovieGuide {
      * Holds value of property inhalt.
      */
     private String inhalt;
-
+    //private Hashtable ht_value = new Hashtable(); 
+    //private ArrayList genreList = new ArrayList();
     private ArrayList sucheList = new ArrayList();
-
+    
     /** Creates a new instance of BOMovieGuide */
-    public BOMovieGuide() {
+    
+    public BOMovieGuide() {  
     	
     }
-    
     public BOMovieGuide(String sender, String datum , String start, String titel, String episode,
-                        String genre, String dauer, String land, String jahr, String regie,
+            String genre, String dauer, String land, String jahr, String regie,
+            String bild, String ton, String darsteller, String inhalt){
+    		this.sender = new ArrayList();
+    		this.datum  = new ArrayList();
+    		this.start  = new ArrayList(); 
+    		this.dauer  = new ArrayList();
+    		this.setSender(sender);
+			this.setDatum(datum);
+			this.setStart(start);
+			this.titel      = titel;        
+			this.episode    = episode;
+			this.genre      = genre;
+			this.setDauer(dauer);
+			this.land       = land;
+			this.jahr       = jahr;
+			this.regie      = regie;
+			this.bild       = bild;
+			this.ton        = ton;
+			this.darsteller = darsteller;
+			this.inhalt     = inhalt;                    
+    }
+    
+    public BOMovieGuide(ArrayList sender, ArrayList datum , ArrayList start, String titel, String episode,
+                        String genre, ArrayList dauer, String land, String jahr, String regie,
                         String bild, String ton, String darsteller, String inhalt){
         this.sender     = sender;
         this.datum      = datum;
@@ -114,7 +141,7 @@ public class BOMovieGuide {
      * Getter for property sender.
      * @return Value of property sender.
      */
-    public String getSender() {
+    public ArrayList getSender() {
         return this.sender;
     }
     
@@ -123,14 +150,14 @@ public class BOMovieGuide {
      * @param sender New value of property sender.
      */
     public void setSender(String sender) {
-        this.sender = sender;
+        this.sender.add(sender);
     }
     
     /**
      * Getter for property datum.
      * @return Value of property datum.
      */
-    public String getDatum() {
+    public ArrayList getDatum() {
         return this.datum;
     }
     
@@ -139,14 +166,14 @@ public class BOMovieGuide {
      * @param datum New value of property datum.
      */
     public void setDatum(String datum) {
-        this.datum = datum;
+        this.datum.add(datum);
     }
     
     /**
      * Getter for property start.
      * @return Value of property start.
      */
-    public String getStart() {
+    public ArrayList getStart() {
         return this.start;
     }
     
@@ -155,7 +182,7 @@ public class BOMovieGuide {
      * @param start New value of property start.
      */
     public void setStart(String start) {
-        this.start = start;
+        this.start.add(start);
     }
     
     /**
@@ -210,7 +237,7 @@ public class BOMovieGuide {
      * Getter for property dauer.
      * @return Value of property dauer.
      */
-    public String getDauer() {
+    public ArrayList getDauer() {
         return this.dauer;
     }
     
@@ -219,7 +246,7 @@ public class BOMovieGuide {
      * @param dauer New value of property dauer.
      */
     public void setDauer(String dauer) {
-        this.dauer = dauer;
+        this.dauer.add(dauer);
     }
     
     /**
@@ -333,7 +360,7 @@ public class BOMovieGuide {
     public void setInhalt(String inhalt) {
         this.inhalt = inhalt;
     }
-  
+   
     public ArrayList getSucheList(){    	
     	setSucheList();
     	return sucheList;

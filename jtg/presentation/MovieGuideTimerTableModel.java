@@ -19,14 +19,11 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
-
-import model.BOEpg;
+import model.BOMovieGuide;
 import control.ControlMovieGuideTab;
-import control.ControlProgramTab;
+
 /**
  * TableModel des EPG-Tables
  * es wird eine eigene EPG-ArrayList verwaltet!! 
@@ -34,40 +31,40 @@ import control.ControlProgramTab;
  */
 public class MovieGuideTimerTableModel extends AbstractTableModel 
 {
-	ControlMovieGuideTab control;
-	ArrayList epgList = new ArrayList();
-	public int indexRunningEpg = -1;
+	ControlMovieGuideTab control;	
 	
 	public MovieGuideTimerTableModel(ControlMovieGuideTab ctrl) {
 		this.setControl(ctrl);
 	}
 
 	public int getColumnCount() {
-		return 6;	
+		return 5;	
 	}	
 
 	public int getRowCount() {
-		if (this.getEpgList() == null) {
+		if (this.getControl().getTitelMap() == null) {
 			return 0;
+		} else {
+			//return this.getControl().getTitelMap().size();
+			return 2;
+			//return ((BOMovieGuide)this.getControl().getTitelMap().get(this.getControl().getSelectRowFilmTable())).getDatum().size();
 		}
-		return this.getEpgList().size();
 	}
 
-	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOEpg epg = (BOEpg)this.getEpgList().get(rowIndex);
-
+	public Object getValueAt( int rowIndex, int columnIndex ) {	
+		Integer selectedRow = getControl().getSelectRowFilmTable();
 		if (columnIndex == 0) {
-			return epg.getEventId();
+			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectedRow)).getDatum();
 		} if (columnIndex == 1) {
-			return epg.getStartTime();
+			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectedRow)).getStart();
 		} if (columnIndex == 2) {
-			return epg.getEndTime();
+			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectedRow)).getStart();
 		} if (columnIndex == 3) {
-			return epg.getDuration();
+			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectedRow)).getDauer();
 		} if (columnIndex == 4) {
-			return epg.getDuration();
+			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectedRow)).getSender();
 		} else {
-			return epg.getTitle();
+			return null;
 		}
 	}
 	public Class getColumnClass(int c) {
@@ -76,17 +73,17 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Event-ID"; 
+			return "Datum"; 
 		} if (columnIndex == 1) {
-			return "Datum";
-		} if (columnIndex == 2) {
 			return "Start";
-		} if (columnIndex == 3) {
+		} if (columnIndex == 2) {
 			return "Ende";
-		} if (columnIndex == 4) {
+		} if (columnIndex == 3) {
 			return "Dauer";
-		} else {
+		} if (columnIndex == 4) {
 			return "Programm";
+		} else {
+			return null;
 		}
 	}
 	
@@ -94,53 +91,9 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		return false;
 	}
 	
-	/**
-	 * create a new EPG-list with equal Date to DateChooser
-	 */
-	public void createEpgList() {
-		/*
-		this.setIndexRunningEpg(-1);
-		this.setEpgList(new ArrayList());
-		if (control.getSelectedSender() != null && control.getSelectedSender().getEpg() != null ) {
-			BOEpg runningEpg = control.getSelectedSender().getRunnigEpg();
-			ArrayList fullList = control.getSelectedSender().getEpg();
-			GregorianCalendar chooserDate = new GregorianCalendar();
-			chooserDate.setTime(control.getDateChooserDate());
-			
-			for (int i=0; i<fullList.size(); i++) {
-				BOEpg epg = (BOEpg)fullList.get(i);
-				if (epg.getStartdate().get(Calendar.DATE)==chooserDate.get(Calendar.DATE) && 
-					epg.getStartdate().get(Calendar.MONTH)==chooserDate.get(Calendar.MONTH)){
-						this.getEpgList().add(epg);
-						if (runningEpg != null && runningEpg.getEventId().equals(epg.getEventId())) {
-							this.setIndexRunningEpg(i);
-						}
-				}
-			}
-		}
-		*/
-	}
 	
-	/**
-	 * update the own EPG-list
-	 */
-	public void fireTableDataChanged() {
-		this.createEpgList();
+	public void fireTableDataChanged() {		
 		super.fireTableDataChanged();
-	}
-	/**
-	 * @return ArrayList
-	 */
-	public ArrayList getEpgList() {
-		return epgList;
-	}
-
-	/**
-	 * Sets the epgList.
-	 * @param epgList The epgList to set
-	 */
-	public void setEpgList(ArrayList epgList) {
-		this.epgList = epgList;
 	}
 
 	/**
@@ -155,16 +108,5 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 	public void setControl(ControlMovieGuideTab control) {
 		this.control = control;
 	}
-	/**
-	 * @return Returns the indexRunningEpg.
-	 */
-	public int getIndexRunningEpg() {
-		return indexRunningEpg;
-	}
-	/**
-	 * @param indexRunningEpg The indexRunningEpg to set.
-	 */
-	public void setIndexRunningEpg(int indexRunningEpg) {
-		this.indexRunningEpg = indexRunningEpg;
-	}
+	
 }
