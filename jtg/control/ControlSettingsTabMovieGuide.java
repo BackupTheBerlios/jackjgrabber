@@ -32,6 +32,8 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import javax.swing.JOptionPane;
+
 import model.BOSettingsMovieGuide;
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabMovieGuide;
@@ -113,14 +115,22 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
     	{
     		getSettings().setMgLoadType(MGLOADTYPE_ASK);
     	}
+    	if (action == "addTitel") {
+  			this.startDontForgetDialog();
+  		}
+    	if (action == "deleteTitel") {
+  			this.actionDeleteDontForget();
+  		}
 	}
     
 //  Change-Events der der Checkbox
 	public void itemStateChanged (ItemEvent event) {
 		Component comp = (Component) event.getSource();
-		if (comp.getName().equals("saveOriginal"))
-		{
+		if (comp.getName().equals("saveOriginal")){
 			getSettings().setMgStoreOriginal(((JCheckBox)comp).isSelected());
+		}
+		if (comp.getName().equals("infoDontForget")){
+			getSettings().setMgInfoDontForget(((JCheckBox)comp).isSelected());
 		}
 	}
 	
@@ -164,6 +174,16 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
     private GuiSettingsTabMovieGuide getTab() {
         return this.getSettingsTab().getSettingsTabMovieGuide();
     }
-
+    
+    private void actionDeleteDontForget() {
+    	int index = this.getTab().getJListDontForget().getSelectedIndex();
+    	this.getTab().dontForgetListModel.remove(index);
+    }
+    private void startDontForgetDialog() {
+		String titel = JOptionPane.showInputDialog(this.getMainView(), "Bitte Filmtitel eingeben:");					
+		if (titel!=null) {						
+			getTab().dontForgetListModel.addElement(titel);			
+		}		
+	}
 	
 }

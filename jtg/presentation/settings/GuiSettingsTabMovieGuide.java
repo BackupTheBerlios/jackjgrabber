@@ -1,5 +1,5 @@
 /*
- * GuiSettingsTabPlayback.java by Geist Alexander
+ * GuiSettingsTabMovieGuide.java by Henneberger Ralph
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option) any later version.
@@ -16,16 +16,24 @@ package presentation.settings;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import model.BOSettingsMovieGuide;
 
 import service.SerIconManager;
 
@@ -34,6 +42,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
+
 import control.ControlSettingsTabMovieGuide;
 import control.ControlTabSettings;
 
@@ -51,12 +60,22 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 	private JRadioButton dayMG;
 
 	private JCheckBox storeOriginal;
+	private JCheckBox infoDontForget;
 	private JList channelList;
+	private ArrayList dontForget;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	private JPanel defaultShowPanel;
 	private JPanel downloadPanel;
 
+	private JList jListDontForget;
+	public GuiDontForgetListModel dontForgetListModel;
+	private JScrollPane jScrollPaneDontForgetList;
+	private JPanel panelDontForget;
+	private JButton jButtonAddDontForget = null;
+	private JButton jButtonDeleteDontForget = null;
+	private JTextField tfFilmTitel = null;
+	
 	public GuiSettingsTabMovieGuide(ControlSettingsTabMovieGuide ctrl) {
 		super();
 		this.setControl(ctrl);
@@ -76,8 +95,8 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 	private JPanel getPanelMovieguideSettings() {
 		if (panelMovieguideSettings == null) {
 			panelMovieguideSettings = new JPanel();
-			FormLayout layout = new FormLayout("445,10,pref", //columna
-					"pref, 5, pref,10,pref,5,pref,15,pref,pref,10,pref,5,pref"); //rows
+			FormLayout layout = new FormLayout("445,10,pref,pref", //columna
+					"pref, 5, pref,10,pref,5,pref,15,pref,pref,10,pref,5,pref,5,pref,5,pref,pref,pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelMovieguideSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -89,7 +108,12 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 			builder.add(getStoreOriginal(), cc.xywh(1, 9, 1, 1));
 			builder.addSeparator(ControlMain.getProperty("label_mgdefaultshow"), cc.xywh(1, 12, 1, 1));
 			builder.add(getDefaultShowPanel(), cc.xywh(1, 14, 1, 1));
-
+			builder.addSeparator("Suchliste für Filme",	cc.xywh	(1, 16,1,1 ));
+			builder.add(this.getJScrollPanePlayerList(),  cc.xywh (1, 18, 1, 1));
+			builder.add(this.getJButtonAddPlayer(),		cc.xy	(3, 18));
+			builder.add(this.getJButtonDeletePlayer(),	cc.xy	(3, 19));
+			builder.add(this.getDontForgetCheckBox(),	cc.xy	(1, 20));
+			
 
 		}
 		return panelMovieguideSettings;
@@ -99,7 +123,6 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 	 * @return
 	 */
 	public JCheckBox getStoreOriginal() {
-
 		if (storeOriginal == null) {
 			storeOriginal = new JCheckBox(ControlMain.getProperty("label_mgsaveoriginal"));
 			storeOriginal.setName("saveOriginal");
@@ -107,7 +130,14 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 		}
 		return storeOriginal;
 	}
-
+	public JCheckBox getDontForgetCheckBox() {
+		if (infoDontForget == null) {
+			infoDontForget = new JCheckBox("Benachrichtigen wenn gefunden");
+			infoDontForget.setName("infoDontForget");
+			infoDontForget.addItemListener(control);
+		}
+		return infoDontForget;
+	}
 	/**
 	 * @return
 	 */
@@ -230,4 +260,73 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
     public String getMenuText() {
         return ControlMain.getProperty("tab_movieGuide");
     }
+    public JList getJListDontForget() {
+		if (jListDontForget==null) {
+			dontForgetListModel = new GuiDontForgetListModel();
+			dontForget = ControlMain.getSettingsMovieGuide().getMgDontForgetListe();
+			for (int i=0; i<dontForget.size(); i++) {
+				dontForgetListModel.add(i, dontForget.get(i));	
+			}
+			jListDontForget = new JList(dontForgetListModel);
+			jListDontForget.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);			
+			jListDontForget.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					if (!e.getValueIsAdjusting()) {
+						int titelIndex = jListDontForget.getSelectedIndex();						
+						if (titelIndex>-1) {
+							BOSettingsMovieGuide option = (BOSettingsMovieGuide)ControlMain.getSettingsMovieGuide().getMgDontForgetListe().get(titelIndex);
+							option.setMgDontForgetListe(dontForget);
+						}
+												
+					}
+				}
+			});
+			
+		}
+		return jListDontForget;
+	}
+	/**
+	 * @return Returns the jScrollPanePlayerList.
+	 */
+	public JScrollPane getJScrollPanePlayerList() {
+		if (jScrollPaneDontForgetList == null) {
+			jScrollPaneDontForgetList = new JScrollPane();
+			jScrollPaneDontForgetList.setPreferredSize(new Dimension(300,100));
+			jScrollPaneDontForgetList.setViewportView(this.getJListDontForget());
+		}
+		return jScrollPaneDontForgetList;
+	}
+
+	/**
+	 * @return Returns the jButtonAddPlayer.
+	 */
+	public JButton getJButtonAddPlayer() {
+		if (jButtonAddDontForget == null) {
+			jButtonAddDontForget = new JButton();
+			jButtonAddDontForget.setIcon(iconManager.getIcon("new.png"));
+			jButtonAddDontForget.setText(ControlMain.getProperty("button_create"));
+			jButtonAddDontForget.setActionCommand("addTitel");
+			jButtonAddDontForget.addActionListener(control);
+		}
+		return jButtonAddDontForget;
+	}
+	/**
+	 * @return Returns the jButtonDeletePlayer.
+	 */
+	public JButton getJButtonDeletePlayer() {
+		if (jButtonDeleteDontForget == null) {
+			jButtonDeleteDontForget = new JButton();
+			jButtonDeleteDontForget.setIcon(iconManager.getIcon("trash.png"));
+			jButtonDeleteDontForget.setText(ControlMain.getProperty("button_delete"));
+			jButtonDeleteDontForget.setActionCommand("deleteTitel");
+			jButtonDeleteDontForget.addActionListener(control);
+		}
+		return jButtonDeleteDontForget;
+	}
+	public JTextField getTfBoxIp() {
+		if (tfFilmTitel == null) {
+			tfFilmTitel = new JTextField();
+		}
+		return tfFilmTitel;
+	}
 }

@@ -1,6 +1,6 @@
 package control;
 /*
- * ControlMovieGuideTab by Ralph Henneberger
+ * ControlMovieGuideTab by Henneberger Ralph
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -107,7 +107,9 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
       	    }              	
       	}
       	this.buildMG();
-          	 
+      	if ( (movieList.getAnnounceList().size()> 0) && (getSettings().mgInfoDontForget) ){
+	    	infoNewMovieGuide("Es kommen Filme aus deiner Liste.\n Zur Auswahl auf den RecordListeButton drücken.");
+	    }	  	 
 	}
 	
 	public void askToDownloadMG() {
@@ -137,20 +139,15 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	
 	private void buildMG() {
 	    if(this.getTitelMap()==null && (movieGuideFile.exists())){	
-	    	//System.out.println("1");
           	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
           	if(!movieGuideFileNext.exists() && (!SerMovieGuide2Xml.checkNewMovieGuide())){
           		beautifyGui(); 
           	}          
-          	if(movieGuideFileNext.exists() && (movieGuideFile.exists()) ){			
-		    	//System.out.println("2");
+          	if(movieGuideFileNext.exists() && (movieGuideFile.exists()) ){					    	
 	          	setMovieGuideFile(movieGuideFileNext);                  
 	          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());                            	
 	          	beautifyGui(); 
-          	}
-          	//if (movieList.getAnnounceList().size()> 0){
-    	    	//infoNewMovieGuide("Es kommen Filme aus deiner Liste.");
-    	    //}	
+          	}          	
 	    }	   
 	}
 	/*
@@ -228,13 +225,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	public void actionPerformed(ActionEvent e) {	
-		String action = e.getActionCommand();
+		String action = e.getActionCommand();		
 		if (action == "download") {
 			downloadMovieGuide();
 		}
 		if (action == "neuEinlesen") {
-			//
 			reInitFilmTable(15);
+			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
+			getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
 		}
 		if (action == "select2Timer") {
 		    if (this.getJTableTimer().getSelectedRow()>=0) {
@@ -426,11 +424,23 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	 * @return Selectierte Row der FilmTable
 	 * 
 	 */
-	public Integer getSelectRowFilmTable(){				
+	/*
+	 * public Integer getSelectRowFilmTable(){		
+		Integer retVal = new Integer(0);
+		try{
 		if (this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow())<=0){
 			return new Integer(0);
-		}			
+		}	
+		}catch(ArrayIndexOutOfBoundsException e){}
 		return new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
+	}
+	 */
+	public Integer getSelectRowFilmTable(){		
+		Integer retVal = new Integer(0);
+		try{
+			retVal = new Integer(this.getTab().mgFilmTableSorter.modelIndex(this.getJTableFilm().getSelectedRow()));
+		}catch(ArrayIndexOutOfBoundsException e){}
+		return retVal;
 	}
 	/**
 	 * @return Selectierte Row der TimerTable
@@ -807,5 +817,5 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
     private void infoNewMovieGuide(String value){
     	JOptionPane.showMessageDialog(this.getTab(),value);
-    }
+    }   
 }

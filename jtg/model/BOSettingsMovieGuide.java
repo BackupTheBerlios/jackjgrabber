@@ -24,9 +24,11 @@ public class BOSettingsMovieGuide {
 	
 	private BOSettings settings;
 	public ArrayList mgSelectedChannels;
+	public ArrayList mgDontForgetListe;
 	public int mgLoadType;
 	public int mgDefault;
 	public boolean mgStoreOriginal;
+	public boolean mgInfoDontForget;
 
 	public BOSettingsMovieGuide(BOSettings settings) {
 		this.setSettings(settings);
@@ -75,6 +77,16 @@ public class BOSettingsMovieGuide {
 				this.mgSelectedChannels = mgSelectedChannels;
 			}
 	}
+	public ArrayList getMgDontForgetListe() {
+		return mgDontForgetListe;
+	}
+	public void setMgDontForgetListe(ArrayList mgDontForgetListe) {
+			if (mgDontForgetListe != null && !mgDontForgetListe.equals(this.mgDontForgetListe)) {
+				setSettingsChanged(true);
+				this.mgDontForgetListe = mgDontForgetListe;
+			}
+	}
+	
 	public boolean isMgStoreOriginal() {
 		return mgStoreOriginal;
 	}
@@ -82,6 +94,15 @@ public class BOSettingsMovieGuide {
 			if (this.mgStoreOriginal != mgStoreOriginal) {
 				setSettingsChanged(true);
 				this.mgStoreOriginal = mgStoreOriginal;
+			}
+	}
+	public boolean isMgInfoDontForget() {
+		return mgInfoDontForget;
+	}
+	public void setMgInfoDontForget(boolean mgInfoDontForget) {
+			if (this.mgInfoDontForget != mgInfoDontForget) {
+				setSettingsChanged(true);
+				this.mgInfoDontForget = mgInfoDontForget;
 			}
 	}
 }

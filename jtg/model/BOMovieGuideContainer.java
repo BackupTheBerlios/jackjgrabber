@@ -1,6 +1,6 @@
 package model;
 /*
- * BOMovieGuideContainer.java by Henneberger Ralf
+ * BOMovieGuideContainer.java by Henneberger Ralph
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2, or (at your option) any later version.
@@ -118,7 +118,7 @@ public class BOMovieGuideContainer{
 
     	Collections.sort(getSenderList());		//alphabetisch geordnet 
         Collections.sort(getGenreList());		//alphabetisch geordnet
-        announceList = createAnnounceList();
+        announceList = createAnnounceList(ControlMain.getSettingsMovieGuide().getMgDontForgetListe());
 		return titelList.size();
 	}
 		
@@ -126,40 +126,6 @@ public class BOMovieGuideContainer{
 		return announceList;
 	}
 	
-	public void toOut(){
-		ArrayList out = getAnnounceList();
-		StringBuffer tmp = new StringBuffer();
-		int a = 0;
-		while(a <= out.size()-1){
-			BOMovieGuide bomovieguide = (BOMovieGuide)out.get(a++);
-			tmp.append(bomovieguide.getTitel());
-         	tmp.append(" ");             
-        	int c = 0;
-        	while(c <= bomovieguide.getDatum().size()-1){
-        		tmp.append(SerFormatter.getFormatGreCal((GregorianCalendar)bomovieguide.getDatum().get(c),"EEEE, dd.MMM.yy"));
-         		tmp.append(" ");
-         		tmp.append(SerFormatter.getFormatGreCal((GregorianCalendar)bomovieguide.getStart().get(c),"HH:mm"));
-         		tmp.append(" ");
-         		tmp.append(SerFormatter.getFormatGreCal((GregorianCalendar)bomovieguide.getEnde().get(c),"HH:mm"));
-         		tmp.append(" ");
-         		tmp.append(bomovieguide.getSender().get(c));
-         		c++;         		         		        
-         		System.out.println(c+" "+tmp.toString());
-         		tmp.setLength(0);
-        	}
-		}
-	}
-		
-	private ArrayList createInfoList(){
-		ArrayList infoList = new ArrayList();
-		infoList.add("Acapulco");
-		infoList.add("Absolon");
-		return infoList;		
-	}
-	
-	private ArrayList createAnnounceList(){
-		return createAnnounceList(createInfoList());
-	}
 	private ArrayList createAnnounceList(ArrayList infoList){		
 		ArrayList searchList = new ArrayList();		
 		ArrayList retVal = new ArrayList();		
@@ -364,12 +330,10 @@ public class BOMovieGuideContainer{
 				case 13:
 					returnList.add(bomovieguide);
 					break;							
-				case 14:						
-					//if(bomovieguide.getDatum().contains(searchGC)){
+				case 14:											
 						if(isTimeInArray(bomovieguide.getStart(),searchGCTime)){
 							returnList.add(bomovieguide);
-						}
-					//}
+						}					
 					break;
 			}
 		}
