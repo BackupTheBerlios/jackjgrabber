@@ -20,6 +20,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -29,12 +30,16 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.log4j.Logger;
+
 import model.BOBox;
 import model.BOLookAndFeelHolder;
 import model.BOSettings;
 import presentation.GuiMainView;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
+import service.SerErrorStreamReadThread;
+import service.SerInputStreamReadThread;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
@@ -93,6 +98,9 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  		if (action == "add") {
 		  			this.actionAddBox();
 		  		}
+		  		if (action == "launchVlc") {
+			  			this.actionStartVlc();
+			  		}
 		  		if (action == "vlcPath") {
 			  			this.openVlcPathFileChooser();
 			  		}
@@ -197,6 +205,16 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 			}
 		}
 
+	private void actionStartVlc() {
+	    try {
+            Process run = Runtime.getRuntime().exec(ControlMain.getSettings().getVlcPath()+" --extraintf=http");
+            new SerInputStreamReadThread(true, run.getInputStream()).start();
+            new SerErrorStreamReadThread(true, run.getErrorStream()).start();
+        } catch (IOException e) {
+            Logger.getLogger("ControlSettingsTabMain").error(e.getMessage());
+        }
+	}
+	
 	private void actionAddBox() {
 		BOBox box = new BOBox();
 		this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);

@@ -55,6 +55,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JButton jButtonVlcPathFileChooser = null;
+	private JButton jButtonStartVlc = null;
 	private JFormattedTextField tfBoxIp = null;
 	private JTextField jTextFieldVlcPath =null;
 	private JComboBox jComboBoxTheme = null;
@@ -129,19 +130,20 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JPanel getPanelStartOptions() {
 			if (panelStartOptions == null) {
 			    panelStartOptions = new JPanel();
-				FormLayout layout = new FormLayout(  "pref, 10,  pref:grow, 5, pref", //columna
+				FormLayout layout = new FormLayout(  "pref, 10,  pref:grow, 5, pref, pref", //columna
 						"pref, 5, pref, pref, pref, pref, pref"); //rows
 				PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
 				CellConstraints cc = new CellConstraints();
 
-				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 5));
-				builder.add(this.getCbStartFullscreen(), 																					cc.xyw(1, 3, 5));
-				builder.add(this.getCbShowLogo(),																								cc.xyw(1, 4, 5));
-				builder.add(this.getCbUseSysTray(), 																							cc.xyw(1, 5, 5));
+				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 6));
+				builder.add(this.getCbStartFullscreen(), 																					cc.xyw(1, 3, 6));
+				builder.add(this.getCbShowLogo(),																								cc.xyw(1, 4, 6));
+				builder.add(this.getCbUseSysTray(), 																							cc.xyw(1, 5, 6));
 				builder.add(this.getCbStartVlcAtStart(), 																				cc.xyw(1, 6, 3));
 				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),				cc.xy	(1, 7));
 				builder.add(this.getJTextFieldVlcPath(),																					cc.xy	(3, 7));
 				builder.add(this.getJButtonVlcPathFileChooser(),															cc.xy	(5, 7));
+				builder.add(this.getJButtonStartVlc(),																						cc.xy	(6, 7));
 			}
 			return panelStartOptions;
 		}
@@ -195,19 +197,12 @@ public class GuiSettingsTabMain extends GuiTab {
 			modelBoxTable = new GuiBoxSettingsTableModel(control);
 			jTableBoxSettings = new JTable(modelBoxTable);
 			jTableBoxSettings.setName("BoxSettings");
-			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(
-					80);
-			jTableBoxSettings.getColumnModel().getColumn(1).setPreferredWidth(
-					80);
-			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(
-					80);
-			jTableBoxSettings.getColumnModel().getColumn(3).setPreferredWidth(
-					40);
-			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer(
-					new GuiBoxSettingsTableCellRenderer());
-
-			TableColumn columnIp = jTableBoxSettings.getColumnModel()
-					.getColumn(0);
+			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(80);
+			jTableBoxSettings.getColumnModel().getColumn(1).setPreferredWidth(80);
+			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(80);
+			jTableBoxSettings.getColumnModel().getColumn(3).setPreferredWidth(40);
+			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer(new GuiBoxSettingsTableCellRenderer());
+			TableColumn columnIp = jTableBoxSettings.getColumnModel().getColumn(0);
 			columnIp.setCellEditor(new DefaultCellEditor(this.getTfBoxIp()));
 		}
 		return jTableBoxSettings;
@@ -291,6 +286,23 @@ public class GuiSettingsTabMain extends GuiTab {
 		}
 		return jButtonAnlegen;
 	}
+	
+	
+	/**
+	 * This method initializes jButtonStartVlc
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButtonStartVlc() {
+		if (jButtonStartVlc == null) {
+		    jButtonStartVlc = new JButton();
+		    jButtonStartVlc.setIcon(iconManager.getIcon("vlc16x16.gif"));
+		    jButtonStartVlc.setActionCommand("launchVlc");
+		    jButtonStartVlc.addActionListener(control);
+		}
+		return jButtonStartVlc;
+	}
+	
 	/**
 	 * This method initializes getJButtonLoeschen
 	 * 
