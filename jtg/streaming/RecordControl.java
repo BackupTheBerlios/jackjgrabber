@@ -214,10 +214,10 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 
 	private void checkForShutdown() {
 		if (recordArgs.isQuickRecord() && controlProgramTab.isShutdownAfterRecord()) {
-			ControlMain.shutdownPC();
+			ControlMain.shutdown();
 		}
-		if (!recordArgs.isQuickRecord() && recordArgs.getLocalTimer().isShutdownAfterRecord()) {
-			ControlMain.shutdownPC();
+        else if (!recordArgs.isQuickRecord() && recordArgs.getLocalTimer().isShutdownAfterRecord()) {
+			ControlMain.shutdown();
 		}
 	}
 

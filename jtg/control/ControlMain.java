@@ -365,7 +365,10 @@ public class ControlMain {
 		ControlMain.activeBox = activeBox;
 	}
 
-	public static void shutdownPC() {
+	public static void shutdown() {
+        try {
+            getBoxAccess().shutdownBox();
+        } catch (IOException e) {}
 		SerExternalProcessHandler.startProcess("shutdown", getSettingsPath().getShutdownToolPath(), true);
 	}
 
