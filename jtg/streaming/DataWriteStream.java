@@ -67,9 +67,10 @@ public class DataWriteStream {
 	
 	private void createFileOutput () {
 	    try {
+	        String separator = System.getProperty("file.separator");
             fileNumber = fileList.size();
             String fullFileName = recordControl.getFileName()+"_"+streamNumber+"_"+fileNumber+fileNameExtension;
-            currentFile = new File(recordControl.getDirectory(), fullFileName);
+            currentFile = new File(recordControl.getDirectory().getAbsolutePath()+separator+fullFileName);
             
             fileOut = new BufferedOutputStream(new FileOutputStream(currentFile));
             fileList.add(fileNumber, currentFile);
