@@ -1,11 +1,10 @@
 package service;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 /**
@@ -84,6 +83,15 @@ public class SerFormatter {
         }            
         return value;
     }
+    
+    public static String stripOff(String input) {
+        String delim = new String("<>*?|/\":");
+        StringTokenizer t = new StringTokenizer(input,delim);
+        StringBuffer    b = new StringBuffer(input.length());
+        while(t.hasMoreTokens()) b.append(t.nextToken());
+        return b.toString();
+    }
+        
     
     public static String getAktuellDateString() {
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
