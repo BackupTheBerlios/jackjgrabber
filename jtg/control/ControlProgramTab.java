@@ -58,6 +58,7 @@ import streaming.RecordControl;
 public class ControlProgramTab extends ControlTab implements ActionListener, MouseListener, ItemListener {
 	
 	ArrayList bouquetList = new ArrayList();
+	ArrayList pids;
 	BOSender selectedSender;
 	BOEpg selectedEpg;
 	BOBouquet selectedBouquet;
@@ -73,13 +74,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
 			this.selectRunningSender();
-			this.setConnectModus();
+			this.getMainView().getTabProgramm().setConnectModus();
 		} catch (IOException e) {			
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
-			this.setDisconnectModus();
 		}
 	}
 	
+	/*
+	 * Versetzen des Programm-Tabs in den Ausgangszustand
+	 * und initialisiere diesen neu
+	 */
 	public void reInitialize() {
 		this.setBouquetList(new ArrayList());
 		this.setSelectedBouquet(null);
@@ -91,7 +95,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.initialize();
 	}
 	/*
-	 * Sender in den Bouquets suchen und selektieren
+	 * Laufenden Sender in den Bouquets suchen und selektieren
+	 * Wird beim Start der Anwendung benötigt.
 	 */
 	public void selectRunningSender() {
 		try {
@@ -125,6 +130,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		if (action == "record") {
 			this.actionRecord();
 		}
+		if (action == "playback") {
+			this.actionPlayback();
+		}
 		if (action == "Box Reboot"){
 			try{
 				SerBoxTelnet.runReboot();					
@@ -144,29 +152,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}catch (Exception ex){}
 		}
 	}
-	
-	public void setDisconnectModus() {
-		this.getMainView().getTabProgramm().getJButtonAufnahme().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonEpgReset().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonNhttpdReset().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonReadEPG().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonReboot().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonSelectedToTimer().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonStartServer().setEnabled(false);
-		this.getMainView().getTabProgramm().getJButtonVLC().setEnabled(false);
-	}
-	
-	public void setConnectModus() {
-		this.getMainView().getTabProgramm().getJButtonAufnahme().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonEpgReset().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonNhttpdReset().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonReadEPG().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonReboot().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonSelectedToTimer().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonStartServer().setEnabled(true);
-		this.getMainView().getTabProgramm().getJButtonVLC().setEnabled(true);
-	}
-	
+		
 	/*
 	 * Steuerung der 2 Zustaende. 
 	 * Aufnahme läuft bereits ->stop
@@ -181,20 +167,53 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.stopRecordModus();
 		}
 	}
+	/*
+	 * TV-Wiedergabe des laufenden Senders
+	 */
+	private void actionPlayback() {
+		try {
+			this.zapToSelectedSender();
+			String vPid = "0x"+(String)this.getPids().get(0);
+			String aPid = "0x"+(String)this.getPids().get(1);
+			String ip = ControlMain.getBoxIpOfActiveBox();
+			String execString =  ControlMain.getSettings().getPlaybackString();
+			
+			execString = SerFormatter.replace(execString, "$ip",  ip);
+			execString = SerFormatter.replace(execString, "$vPid", vPid);
+			execString = SerFormatter.replace(execString, "$aPid", aPid);
+			
+			Process p = Runtime.getRuntime().exec(execString);
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		}
+	}
 	
+	/**
+	 * Stop der Aufnahme und Versetzung der GUI in den Aufnahme-Warte-Modus
+	 */
 	public void stopRecordModus() {
 		recordControl=null;
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Aufnahme");
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufnahme starten");
 	}
 	
-	public RecordControl startRecordModus(BORecordArgs args) {
-		recordControl = new RecordControl(args, this);
+	/**
+	 * @param recordArgs
+	 * @return RecordControl
+	 * Start der Aufnahme und Versetzung der GUI in den Aufnahme-Modus
+	 */
+	public RecordControl startRecordModus(BORecordArgs recordArgs) {
+		recordControl = new RecordControl(recordArgs, this);
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Stop");
 		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufname stoppen");
 		return recordControl;
 	}
 	
+
+	/**
+	 * @return BORecordArgs
+	 * Erstellen des Objektes BORecordArgs aus den Sender und EPG-Informationen
+	 */
 	private BORecordArgs buildRecordArgs() {
 		BORecordArgs args = new BORecordArgs();
 		args.setBouquetNr(this.getSelectedBouquet().getBouquetNummer());
@@ -205,6 +224,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		}; 
 		return args;
 	}
+	
+	/*
+	 * Zapping zum selektierten Sender und Ermittlung der Pids
+	 */
+	private void zapToSelectedSender() throws IOException{
+		if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
+			this.setPids(ControlMain.getBoxAccess().getPids());
+		}
+	}
+	
 	/**
 	 * Klick-Events der Tables
 	 */
@@ -216,8 +245,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			if (tableName == "Sender") {  
 				this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
 				if (me.getClickCount()==2) { //Zapping
-					if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
-					}
+					this.zapToSelectedSender();
 				}
 			}
 			//Neue Epg-Zeile selektiert
@@ -255,29 +283,43 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void itemStateChanged( ItemEvent e ) {
 		JComboBox comboBox = (JComboBox)e.getSource();
 		if (comboBox.getName().equals("ipList")) {
-			BOBox newSelectedBox = (BOBox)ControlMain.getSettings().getBoxList().get(comboBox.getSelectedIndex());
-			BOBox oldSelectedBox = ControlMain.getActiveBox();
-			if (oldSelectedBox==null || //Konstellation möglich, wenn erste Box angelegt wird 
-					oldSelectedBox.isSelected() != newSelectedBox.isSelected())  { 
-				if (oldSelectedBox!=null) {
-					oldSelectedBox.setSelected(false); //alte Box zurücksetzen!
-				}	
-				ControlMain.setActiveBox(newSelectedBox);
-				newSelectedBox.setSelected(true);
-				ControlMain.detectImage();
-				this.reInitialize();
-				this.getMainView().getMainTabPane().reInitTimerPanel(); //Bei IP-Wechsel refreshen, da evtl anderes Box-Image
-			}
-		}
+			this.newBoxSelected(comboBox);		}
 		if (comboBox.getName().equals("bouquets")) {
 			this.reInitBouquetList(comboBox);
 		}
 	}
 	
-	//Setzen des aktuellen Bouquets
-	public void reInitBouquetList(JComboBox  comboBox) {
+	/**
+	 * @param boxIpComboBox
+	 * Setzen der neuen aktiven Box-IP
+	 * Ermitteln des laufenden Images der neuen Box
+	 * Reinitialisierung der Programm-GUI
+	 * Reinitialisierung der Timer-GUI
+	 */
+	private void newBoxSelected(JComboBox boxIpComboBox) {
+		BOBox newSelectedBox = (BOBox)ControlMain.getSettings().getBoxList().get(boxIpComboBox.getSelectedIndex());
+		BOBox oldSelectedBox = ControlMain.getActiveBox();
+		if (oldSelectedBox==null || //Konstellation möglich, wenn erste Box angelegt wird 
+				oldSelectedBox.isSelected() != newSelectedBox.isSelected())  { 
+			if (oldSelectedBox!=null) {
+				oldSelectedBox.setSelected(false); //alte Box zurücksetzen!
+			}	
+			ControlMain.setActiveBox(newSelectedBox);
+			newSelectedBox.setSelected(true);
+			ControlMain.detectImage();
+			this.reInitialize();
+			this.getMainView().getMainTabPane().reInitTimerPanel(); //Bei IP-Wechsel refreshen, da evtl anderes Box-Image
+		}
+	}
+	
+	/**
+	 * @param bouquetsComboBox
+	 * Setzen des aktuellen Bouquets, refresh der Senderlist,
+	 * Selektion des 1. Senders
+	 */
+	public void reInitBouquetList(JComboBox  bouquetsComboBox) {
 		if (this.getBouquetList().size()>0) {
-			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(comboBox.getSelectedIndex()));
+			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(bouquetsComboBox.getSelectedIndex()));
 			this.reInitSender();
 			this.showFirstSender();
 		}
@@ -422,7 +464,12 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}
 		}
 	}
-		
+	
+	/**
+	 * @param epg
+	 * @return BOTimer
+	 * Erstellein eines BOTimer-Objekts aus den EPG-Informationen
+	 */
 	private BOTimer buildTimer(BOEpg epg) {
 		BOTimer timer = new BOTimer();
 		
@@ -469,7 +516,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return dateChooserDate;
 	}
 	/**
-	 * Methode wird aufgerufen wenn Datum geaendert wurde
+	 * @param dateChooserDate
+	 * Methode wird aufgerufen wenn Datum im DateChooser geaendert wurde
 	 */
 	public void setDateChooserDate(Date dateChooserDate) {
 		this.dateChooserDate = dateChooserDate;
@@ -505,5 +553,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void setRecordControl(RecordControl recordControl) {
 		this.recordControl = recordControl;
+	}
+	/**
+	 * @return Returns the pids.
+	 */
+	public ArrayList getPids() {
+		return pids;
+	}
+	/**
+	 * @param pids The pids to set.
+	 */
+	public void setPids(ArrayList pids) {
+		this.pids = pids;
 	}
 }
