@@ -36,7 +36,7 @@ public class BOTimerList {
         if (this.getRecordTimerList().size()>0) {
             BOTimer timer=null;
             
-            for (int i=1; i<this.getRecordTimerList().size(); i++) {
+            for (int i=0; i<this.getRecordTimerList().size(); i++) {
                 if (timer==null) {
                     if (!((BOTimer)this.getRecordTimerList().get(i)).getLocalTimer().isLocal())
                     timer = (BOTimer)this.getRecordTimerList().get(i);
