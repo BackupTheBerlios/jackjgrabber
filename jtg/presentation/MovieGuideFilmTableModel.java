@@ -17,22 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.swing.table.AbstractTableModel;
 import model.BOMovieGuide;
-import model.BOTimer;
 import control.ControlMovieGuideTab;
 
 
 public class MovieGuideFilmTableModel extends AbstractTableModel 
 {
-	ControlMovieGuideTab control;
-	BOMovieGuide mguide = new BOMovieGuide();
+	ControlMovieGuideTab control;	
+	BOMovieGuide mguide = new BOMovieGuide();    			
+	
 	public MovieGuideFilmTableModel(ControlMovieGuideTab ctrl){
-		this.setControl(ctrl);
+		this.setControl(ctrl);			
 	}
 
 	public int getColumnCount() {
@@ -43,28 +39,30 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 		if (control.getFilmeList() == null) {
 			return 0;
 		} else {
-			return control.getFilmeList().size();
+			//return control.getFilmeList().size();
+			return mguide.getTitelMap().size();			
 		}
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOMovieGuide mguide = new BOMovieGuide();
-		return mguide.getTitel();
+		if (columnIndex == 0) {
+			return mguide.getTitelMap(new Integer(rowIndex));						
+		}else{
+			return null;
+		}	
 	}
 	
-	public void setValueAt(Object value, int row, int col) {
-		if (col == 0) {
-			mguide.getTitelList().get(row);			
+	public String getColumnName( int columnIndex ) {		
+		String value = "";
+		if (columnIndex == 0) {	
+			value = "Titel";				
 		}		
-    }
-
-	public String getColumnName() {		
-			return "Film"; 		
+		return value;
 	}
 	
 	public boolean isCellEditable (int row, int col) {
 	    Class columnClass = getColumnClass(col);
-	    return true;
+	    return false;
 	}
 	
 	public ControlMovieGuideTab getControl() {

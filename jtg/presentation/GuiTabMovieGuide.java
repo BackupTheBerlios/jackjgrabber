@@ -65,8 +65,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private JComboBox comboBoxDatum = null;
 	private JComboBox comboBoxSuchenNach = null;
 	
-	private JTable jTableFilm = null;
-	private JTable jTableSender = null;
+	private JTable jTableFilm = null;	
 	private JTable jTableTimer = null;
 	
 	private JScrollPane jScrollPaneChannel = null;
@@ -91,13 +90,13 @@ public class GuiTabMovieGuide extends JPanel {
 	
 	private JProgressBar jProgressBarDownload = null;
 	private JLabel jLabelMovieGuide = null;
+	
 	public MovieGuideTimerTableModel mgTimerTableModel;
-	public GuiTableSorter sorter = null;	
+	public GuiTableSorter sorter = null;
 	
-	public MovieGuideTimerTableModel timerTableModel;
-	public MovieGuideSenderTableModel senderTableModel;
 	public MovieGuideFilmTableModel filmTableModel;
-	
+	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
+		
 	public GuiTabMovieGuide(ControlMovieGuideTab ctrl) {
 		super();
 		this.setControl(ctrl);
@@ -105,8 +104,8 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 
 	private  void initialize() {
-		FormLayout layout = new FormLayout(			 
-			      "320px:grow,10, 400px:grow",  							// columns
+		FormLayout layout = new FormLayout(	
+			      "320px:grow,10, 400px:grow",  				// columns
 			      "pref, 200px:grow, 10, pref, pref, pref");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
@@ -149,7 +148,8 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"140px:grow, 100px:grow, 32px:grow, pref,pref,pref,pref");		//rows					
+						"140px:grow, 95px:grow, 42px:grow, pref,pref,pref,pref");		//rows
+					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
 			builder.add(this.getJScrollPaneTimer(),			cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));			
@@ -307,7 +307,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private JScrollPane getJScrollPaneChannels() {
 		if (jScrollPaneChannel == null) {
 			jScrollPaneChannel = new JScrollPane();
-			//jScrollPane.setViewportView(getJTableChannels());
+			jScrollPaneChannel.setViewportView(getJTableFilm());
 		}
 		return jScrollPaneChannel;
 	}
@@ -371,7 +371,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jTableTimer.getColumnModel().getColumn(3).setMaxWidth(50);		
 			jTableTimer.getColumnModel().getColumn(4).setMaxWidth(280);
 			jTableTimer.addMouseListener(control);
-			jTableTimer.setName("Info");
+			jTableTimer.setName("timerTable");
 		}
 		return jTableTimer;
 	}
@@ -412,8 +412,8 @@ public class GuiTabMovieGuide extends JPanel {
 			tfGenre.setText("Genre: ");
 		}
 		return tfGenre;
-	}
-
+	}	
+	
 	public JTextArea getTaBeschreibung() {
 		if (taBeschreibung == null) {
 			taBeschreibung = new JTextArea();
@@ -480,37 +480,22 @@ public class GuiTabMovieGuide extends JPanel {
 	}
 	public JComboBox getComboBoxDatum() {
 		if (comboBoxDatum == null) {	
-			comboBoxDatum = new JComboBox(new BOMovieGuide().getDatumList().toArray());
+			comboBoxDatum = new JComboBox(new BOMovieGuide().getDatumList().toArray());			
 		}
 		return comboBoxDatum;
 	}
 
 	public JTable getJTableFilm() {
-		if (jTableFilm == null) {			
-			filmTableModel = new MovieGuideFilmTableModel(control);
-			jTableFilm = new JTable(filmTableModel);
+		if (jTableFilm == null) {				
+			filmTableModel = new MovieGuideFilmTableModel(control);			
+			mgFilmTableSorter = new GuiMovieGuideFilmTableSorter(filmTableModel);
+			jTableFilm = new JTable(mgFilmTableSorter);
+			mgFilmTableSorter.setTableHeader(jTableFilm.getTableHeader());
 			jTableFilm.setName("filmTable");
 			jTableFilm.addMouseListener(control);
-			jTableFilm.setRowHeight(20);
-			jTableFilm.getColumnModel().getColumn(0).setPreferredWidth(120);
-			jTableFilm.getColumnModel().getColumn(0).setMaxWidth(120);
-			TableColumn columnEventType = jTableFilm.getColumnModel().getColumn(0);			
-			//columnEventType.setCellEditor(new DefaultCellEditor(this.getComboBoxEventType()));					
+			
+			//TableColumn columnEventType = jTableFilm.getColumnModel().getColumn(0);										
 		}
 		return jTableFilm;
-	}
-	public JTable getJTableSender() {
-		if (jTableSender == null) {			
-			senderTableModel = new MovieGuideSenderTableModel(control);
-			jTableSender = new JTable(senderTableModel);
-			jTableSender.setName("senderTable");
-			jTableSender.addMouseListener(control);
-			jTableSender.setRowHeight(20);
-			jTableSender.getColumnModel().getColumn(0).setPreferredWidth(120);
-			jTableSender.getColumnModel().getColumn(0).setMaxWidth(120);
-			TableColumn columnEventType = jTableSender.getColumnModel().getColumn(0);			
-			//columnEventType.setCellEditor(new DefaultCellEditor(this.getComboBoxEventType()));					
-		}
-		return jTableSender;
 	}	
 }

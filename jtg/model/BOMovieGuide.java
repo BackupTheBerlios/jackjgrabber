@@ -7,6 +7,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import control.ControlMovieGuideTab;
 
 import service.SerMovieGuide2Xml;
 
@@ -86,12 +88,13 @@ public class BOMovieGuide {
      * Holds value of property inhalt.
      */
     private String inhalt;
-    
+    private Hashtable ht_value = new Hashtable(); 
     private ArrayList genreList = new ArrayList();
     private ArrayList sucheList = new ArrayList();
     private SerMovieGuide2Xml guide = new SerMovieGuide2Xml();
     /** Creates a new instance of BOMovieGuide */
     public BOMovieGuide() {
+    	setTitelMap();
     }
     
     public BOMovieGuide(String sender, String datum , String start, String titel, String episode,
@@ -335,23 +338,19 @@ public class BOMovieGuide {
     public void setInhalt(String inhalt) {
         this.inhalt = inhalt;
     }
-    public ArrayList getDatumList(){
-    	setValueList("datum");
-    	return genreList;
+    public ArrayList getDatumList(){	  
+	    	setValueList("datum");
+	    	return genreList;
     }
    
     public ArrayList getGenreList(){
     	setValueList("genre");
     	return genreList;
     }
-    public ArrayList getTitelList(){
-    	setValueList("titel");
-    	return genreList;
-    }
-    
+   
     public void  setValueList(String value){
     	try{
-    		this.genreList = guide.getGenryList(value);
+    		this.genreList = ControlMovieGuideTab.getGenryList(value);
     	}catch(Exception ex){}
     }
     
@@ -359,6 +358,21 @@ public class BOMovieGuide {
     	setSucheList();
     	return sucheList;
     }
+    
+    public String getTitelMap(Integer a){    	
+    	return ht_value.get(a).toString();
+    }
+    
+    public Hashtable getTitelMap(){    	
+    	return ht_value;
+    }
+    
+    public void setTitelMap(){
+    	try{
+    		this.ht_value = ControlMovieGuideTab.getTitelMap();
+    	}catch(Exception ex){}    	
+    }
+    
     public void setSucheList(){    	
     	sucheList.add("Titel");
     	sucheList.add("Darsteller");    	
