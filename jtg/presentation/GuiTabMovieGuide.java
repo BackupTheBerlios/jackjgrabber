@@ -311,6 +311,7 @@ public class GuiTabMovieGuide extends JPanel {
 		if (jCheckBoxAbAktuell == null) {
 			jCheckBoxAbAktuell = new JCheckBox("Erst ab heutigen Datum");
 			jCheckBoxAbAktuell.setName("showAbHeute");
+			jCheckBoxAbAktuell.setSelected(true);
 			jCheckBoxAbAktuell.addItemListener(control);
 		}
 		return jCheckBoxAbAktuell;
