@@ -20,7 +20,6 @@ package presentation.settings;
 
 import java.awt.Dimension;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -29,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import presentation.GuiTab;
+import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -48,6 +48,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 	private JScrollPane jScrollPanePlaybackSettings = null;
 	private JTable jTablePlaybackSettings = null;
 	private GuiPlaybackSettingsTableModel playbackSettingsTableModel;
+	private SerIconManager iconManager = SerIconManager.getInstance();
     
     public GuiSettingsTabPlayback(ControlSettingsTabPlayback ctrl) {
 		super();
@@ -129,8 +130,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 	private JButton getJButtonAnlegen() {
 		if (jButtonAnlegen == null) {
 			jButtonAnlegen = new JButton();
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/new.png"));
-			jButtonAnlegen.setIcon(icon);
+			jButtonAnlegen.setIcon(iconManager.getIcon("new.png"));
 			jButtonAnlegen.setText(ControlMain.getProperty("button_create"));
 			jButtonAnlegen.setActionCommand("add");
 			jButtonAnlegen.addActionListener(control);
@@ -146,8 +146,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 	private JButton getJButtonLoeschen() {
 		if (jButtonLoeschen == null) {
 			jButtonLoeschen = new JButton();
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/trash.png"));
-			jButtonLoeschen.setIcon(icon);
+			jButtonLoeschen.setIcon(iconManager.getIcon("trash.png"));
 			jButtonLoeschen.setText(ControlMain.getProperty("button_delete"));
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);

@@ -16,13 +16,12 @@ package presentation;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.*;
+import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -33,8 +32,8 @@ import presentation.movieguide.GuiTabMovieGuide;
 import presentation.program.GuiTabProgramm;
 import presentation.recordInfo.GuiTabRecordInfo;
 import presentation.settings.GuiTabSettings;
-
 import service.SerGUIUtils;
+import service.SerIconManager;
 import snoozesoft.systray4j.SysTrayMenu;
 import snoozesoft.systray4j.SysTrayMenuIcon;
 import snoozesoft.systray4j.SysTrayMenuItem;
@@ -53,6 +52,7 @@ public class GuiMainView extends JFrame {
 	private ControlMainView control;
 	private SysTrayMenuIcon[] sysTrayIcon = {new SysTrayMenuIcon("grabber1"), new SysTrayMenuIcon("grabber2")};
 	private SysTrayMenu menu;
+	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public GuiMainView(ControlMainView ctrl) {
 		super("FormLayout");
@@ -141,7 +141,7 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.getContentPane().add(this.getMainTabPane());
-		setIconImage(new ImageIcon(ClassLoader.getSystemResource("ico/grabber1.gif")).getImage());
+		setIconImage(iconManager.getIcon("grabber1.gif").getImage());
 		if (ControlMain.getSettings().isUseSysTray()) {
 			createMenu();
 		}
@@ -154,12 +154,12 @@ public class GuiMainView extends JFrame {
 			mainTabPane = new GuiMainTabPane(this);
 			mainTabPane.addChangeListener(control);
 
-			mainTabPane.addTab(ControlMain.getProperty("tab_program"), mainTabPane.getTabProgramm());
-			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), new JPanel());
-			mainTabPane.addTab("MovieGuide", new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_recordInfo"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), new JPanel());
-			mainTabPane.addTab(ControlMain.getProperty("tab_about"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_program"), iconManager.getIcon("main.png"), mainTabPane.getTabProgramm());
+			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), iconManager.getIcon("clock.png"), new JPanel());
+			mainTabPane.addTab("MovieGuide", iconManager.getIcon("download.png"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_recordInfo"), iconManager.getIcon("help.png"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), iconManager.getIcon("configure.png"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_about"), iconManager.getIcon("info.gif"), new JPanel());
 
 		}
 		return mainTabPane;

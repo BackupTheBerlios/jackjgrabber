@@ -22,7 +22,6 @@ import java.awt.Dimension;
 import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -36,6 +35,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.text.MaskFormatter;
 
 import presentation.GuiTab;
+import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -70,6 +70,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbStartPX;
 	private JCheckBox cbAC3ReplaceStereo;
 	private JSpinner recordMinsBefore, recordMinsAfter; 
+	private SerIconManager iconManager = SerIconManager.getInstance();
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
 		super();
@@ -237,8 +238,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JButton getJButtonRecordPathFileChooser() {
 		if (jButtonRecordPathFileChooser == null) {
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
-			jButtonRecordPathFileChooser = new JButton(icon);
+			jButtonRecordPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
 			jButtonRecordPathFileChooser.setActionCommand("recordPath");
 			jButtonRecordPathFileChooser.addActionListener(control);
 		}
@@ -249,8 +249,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JButton getJButtonUdrecPathFileChooser() {
 		if (jButtonUdrecPathFileChooser == null) {
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
-			jButtonUdrecPathFileChooser = new JButton(icon);
+			jButtonUdrecPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
 			jButtonUdrecPathFileChooser.setActionCommand("udrecPath");
 			jButtonUdrecPathFileChooser.addActionListener(control);
 		}
@@ -262,8 +261,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JButton getJButtonProjectXPathFileChooser() {
 		if (jButtonProjectXPathFileChooser == null) {
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
-			jButtonProjectXPathFileChooser = new JButton(icon);
+			jButtonProjectXPathFileChooser = new JButton(iconManager.getIcon("Open16.gif"));
 			jButtonProjectXPathFileChooser.setActionCommand("projectxPath");
 			jButtonProjectXPathFileChooser.addActionListener(control);
 		}

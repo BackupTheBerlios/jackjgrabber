@@ -16,7 +16,6 @@ package presentation.program;
 import java.awt.Dimension;
 
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -29,17 +28,18 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 import presentation.GuiTab;
 import presentation.GuiTableSorter;
+import service.SerIconManager;
+import calendar.JDateChooser;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import calendar.JDateChooser;
 
 import control.ControlMain;
 import control.ControlProgramTab;
@@ -87,6 +87,7 @@ public class GuiTabProgramm extends GuiTab {
 	private JScrollPane jScrollPaneAusgabe = null;
 	public GuiTableSorter sorter = null;
 	private SpinnerDateModel dateModelSpinnerStopTime;
+	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
@@ -320,8 +321,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JButton getJButtonRefresh() {
 		if (jButtonRefresh == null) {
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Refresh16.gif"));
-			jButtonRefresh = new JButton(icon);
+			jButtonRefresh = new JButton(iconManager.getIcon("Refresh16.gif"));
 			jButtonRefresh.setActionCommand("refresh");
 			jButtonRefresh.setToolTipText(ControlMain.getProperty("buttontt_refresh"));
 			jButtonRefresh.addActionListener(this.getControl());
@@ -398,7 +398,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JButton getJButtonSelectedToTimer() {
 		if (jButtonToTimer == null) {
-			jButtonToTimer = new JButton();
+			jButtonToTimer = new JButton(iconManager.getIcon("attach.png"));
 			jButtonToTimer.setText(ControlMain.getProperty("button_toTimer"));
 			jButtonToTimer.setActionCommand("toTimer");
 			jButtonToTimer.setToolTipText(ControlMain.getProperty("buttontt_toTimer"));
@@ -612,8 +612,7 @@ public class GuiTabProgramm extends GuiTab {
 	public void startRecordModus() {
 		this.getJButtonAufnahme().setText(ControlMain.getProperty("button_stopRecord"));
 		this.getJButtonAufnahme().setToolTipText(ControlMain.getProperty("buttontt_stopRecord"));
-		ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/stop.png"));
-		this.getJButtonAufnahme().setIcon(icon);
+		this.getJButtonAufnahme().setIcon(iconManager.getIcon("stop.png"));
 	}
 	/**
 	 * @return Returns the dateModelSpinnerStopTime.

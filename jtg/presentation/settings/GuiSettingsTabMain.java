@@ -18,10 +18,10 @@
 package presentation.settings;
 
 import java.awt.Dimension;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
 
-import javax.swing.*;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,18 +31,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.UIManager.*;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 
 import presentation.GuiTab;
 import presentation.program.GuiBoxSettingsTableCellRenderer;
 import presentation.program.GuiBoxSettingsTableModel;
+import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.plaf.plastic.*;
+import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 
 import control.ControlMain;
 import control.ControlSettingsTabMain;
@@ -64,6 +66,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JCheckBox cbStartFullscreen;
 	private JCheckBox cbShowLogo;
 	private JCheckBox cbUseSysTray;
+	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public final String[] themes = {"Silver", "BrownSugar", "DarkStar",
 			"DesertBlue", "ExperienceBlue", "SkyBluerTahoma"};
@@ -279,8 +282,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton getJButtonAnlegen() {
 		if (jButtonAnlegen == null) {
 			jButtonAnlegen = new JButton();
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/new.png"));
-			jButtonAnlegen.setIcon(icon);
+			jButtonAnlegen.setIcon(iconManager.getIcon("new.png"));
 			jButtonAnlegen.setText(ControlMain.getProperty("button_create"));
 			jButtonAnlegen.setActionCommand("add");
 			jButtonAnlegen.addActionListener(control);
@@ -296,8 +298,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton getJButtonLoeschen() {
 		if (jButtonLoeschen == null) {
 			jButtonLoeschen = new JButton();
-			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/trash.png"));
-			jButtonLoeschen.setIcon(icon);
+			jButtonLoeschen.setIcon(iconManager.getIcon("trash.png"));
 			jButtonLoeschen.setText(ControlMain.getProperty("button_delete"));
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);
