@@ -64,11 +64,19 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    this.initSkinLookAndFeel();
 	    this.initLookAndFeel();
 	    this.setLookAndFeel();
-	    this.setView(new GuiMainView(this));		
-	    if (ControlMain.getSettings().standardSettings==true) { //First start, go to Settings-Tab
-	        this.getView().getMainTabPane().setSelectedIndex(5);
-	    }
+	    this.setView(new GuiMainView(this));
+	    this.checkForStartWizard();
 	    Logger.getLogger("ControlMainView").info(ControlMain.getProperty("msg_app_starting"));
+	}
+	
+	private void checkForStartWizard() {
+		if (ControlMain.getSettings().standardSettings==true) { //First start, go to Settings-Tab
+	        this.getView().getMainTabPane().setSelectedIndex(5);
+	        ControlSettingsTabMain ctrl = 
+	        	(ControlSettingsTabMain)this.getView().getTabSettings().getSettingsTabMain().getControl();
+	        ctrl.startWizard();
+	        
+	    }
 	}
 	
 	public void actionPerformed(ActionEvent e) {

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 import model.BOBox;
-import presentation.program.GuiIpListComboModel;
 import service.SerAlertDialog;
 import control.ControlMain;
 import control.ControlSettingsTabMain;
@@ -77,7 +76,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 					this.fireTableDataChanged();
 				}
 			}
-			box.setStandard(((Boolean)aValue).booleanValue());
+			box.setStandard(true);
 		}
 	}
 
@@ -112,17 +111,11 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 //		}
 	}
 	
-	private void refreshIpComboBox() {
-		control.getMainView().getTabProgramm().getJComboBoxBoxIP().setModel(new GuiIpListComboModel());
-		int index = ControlMain.getIndexOfActiveBox();
-		control.getMainView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
-	}
-	
 	public void removeRow(int rowNumber) {
 		try {
 			ControlMain.getSettingsMain().removeBox(rowNumber);
 			fireTableDataChanged();
-			this.refreshIpComboBox();
+			control.refreshIpComboBox();
 		} catch (ArrayIndexOutOfBoundsException ex) {SerAlertDialog.alert(ControlMain.getProperty("msg_selectRow"), control.getMainView());}
 	}
 	

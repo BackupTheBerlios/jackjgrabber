@@ -1,17 +1,22 @@
 package control;
 /*
- * ControlSettingsTabMain.java by Geist Alexander
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *  
- */
+ControlSettingsTabMain.java by Alexander Geist
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 
 
 import java.awt.event.ActionEvent;
@@ -21,6 +26,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -28,6 +34,7 @@ import model.BOBox;
 import model.BOLookAndFeelHolder;
 import model.BOSettingsMain;
 import presentation.GuiMainView;
+import presentation.program.GuiIpListComboModel;
 import presentation.settings.GuiSettingsTabMain;
 import presentation.settings.GuiTabSettings;
 import presentation.settings.GuiThemesComboModel;
@@ -204,6 +211,28 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		int selectedRow = this.getSettingsTab().getSettingsTabMain().getJTableBoxSettings().getSelectedRow();
 		this.getSettingsTab().getSettingsTabMain().getModelBoxTable().removeRow(selectedRow);
 	}
+	
+	public void startWizard() {
+		String ip = JOptionPane.showInputDialog(this.getMainView(), "Bitte die IP der Box angeben");
+		if (ip!=null) {
+			BOBox box = new BOBox();
+			box.setDboxIp(ip);
+			box.setDboxIp(ip);
+			this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);
+			
+		    ControlMain.setActiveBox(box);
+		    ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
+		    ControlMain.getControl().getView().getMainTabPane().tabProgramm=null;
+		    ControlMain.getControl().getView().getMainTabPane().reInitTimerPanel();	
+		}
+	}
+	
+	public void refreshIpComboBox() {
+		getMainView().getTabProgramm().getJComboBoxBoxIP().setModel(new GuiIpListComboModel());
+		int index = ControlMain.getIndexOfActiveBox();
+		getMainView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
+	}
+	
 
 	/*
 	 * (non-Javadoc)
