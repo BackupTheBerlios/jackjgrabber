@@ -23,12 +23,6 @@ public class BOBox {
 	public boolean standard = false;
 	private boolean selected;
 
-	public BOBox() {
-	}
-
-	public BOBox(String ip) {
-		this.setDboxIp(ip);
-	}
 	/**
 	 * @return Returns the dboxIp.
 	 */
