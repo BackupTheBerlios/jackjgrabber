@@ -68,6 +68,7 @@ public class GuiMainTabPane extends JTabbedPane {
 			ControlProgramTab control = new ControlProgramTab(this.getView());
 			tabProgramm = new GuiTabProgramm(control);
 			new Thread(control).start();
+			control.reInitStreamingServer();
 		}
 		return tabProgramm;
 	}
