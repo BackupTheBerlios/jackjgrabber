@@ -18,22 +18,22 @@ import java.util.Date;
  */
 public class BOEpg {
 	BOSender sender;
-	String eventId, startTime, endTime, duration, title;
+	String eventId, startTime, endTime, duration, title, unformattedStart, unformattedDuration;
 	Date startDate, endDate;
 	BOEpgDetails epgGetail;
 	
-	public BOEpg() {}
-	
 	public BOEpg(BOSender sender, String eventId, String startTime, Date startDate, 
-			String endTime, Date endDate, String duration, String title) {		
-                this.setSender(sender);
+			String endTime, Date endDate, String duration, String title, String unformStart, String unformDuration) {		
+		this.setSender(sender);
 		this.setDuration(duration);
 		this.setEndTime(endTime);
 		this.setEndDate(endDate);
 		this.setEventId(eventId);
 		this.setStartTime(startTime);
 		this.setTitle(title);
-                this.setStartDate(startDate);
+		this.setStartDate(startDate);
+		this.setUnformattedStart(unformStart);
+		this.setUnformattedDuration(unformDuration);
 	}
 	
 	public String getInfo() {
@@ -153,5 +153,29 @@ public class BOEpg {
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	/**
+	 * @return Returns the unformattedStart.
+	 */
+	public String getUnformattedStart() {
+		return unformattedStart;
+	}
+	/**
+	 * @param unformattedStart The unformattedStart to set.
+	 */
+	public void setUnformattedStart(String unformattedStartString) {
+		this.unformattedStart = unformattedStartString;
+	}
+	/**
+	 * @return Returns the unformattedDuration.
+	 */
+	public String getUnformattedDuration() {
+		return unformattedDuration;
+	}
+	/**
+	 * @param unformattedDuration The unformattedDuration to set.
+	 */
+	public void setUnformattedDuration(String unformattedDuration) {
+		this.unformattedDuration = unformattedDuration;
 	}
 }
