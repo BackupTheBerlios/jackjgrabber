@@ -52,6 +52,9 @@ public class BOLocalTimer {
 	private BOTimer mainTimer;
 	private BOAfterRecordOptions afterRecordOptions;
 	
+	private boolean systemTimer = false;
+	private String processToStart = "";
+	
 	private BOLocalTimer() {
 
 	}
@@ -451,5 +454,19 @@ public class BOLocalTimer {
 	 */
 	public void setAfterRecordOptions(BOAfterRecordOptions afterRecordOptions) {
 		this.afterRecordOptions = afterRecordOptions;
+	}
+	
+	
+	public String getProcessToStart() {
+		return processToStart;
+	}
+	public void setProcessToStart(String processToStart) {
+		this.processToStart = processToStart;
+	}
+	public boolean isSystemTimer() {
+		return systemTimer;
+	}
+	public void setSystemTimer(boolean systemTimer) {
+		this.systemTimer = systemTimer;
 	}
 }
