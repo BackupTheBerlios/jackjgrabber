@@ -1,4 +1,5 @@
 package service;
+
 /*
  * SerSettingsHandler.java by Geist Alexander
  * 
@@ -58,6 +59,7 @@ public class SerSettingsHandler {
 		getSettingsRecordtimeAfter(root, settings);
 		getSettingsAc3ReplaceStereo(root, settings);
 		getSettingsUdrecOptions(root, settings);
+		getSettingsProjectXPath(root, settings);
 
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
@@ -159,6 +161,18 @@ public class SerSettingsHandler {
 			String path = new File("udrec.exe").getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "udrecPath", path);
 			settings.setUdrecPath(path);
+		}
+	}
+
+	private static void getSettingsProjectXPath(Element root,
+			BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/projectXPath");
+		if (node != null) {
+			settings.udrecPath = node.getText();
+		} else {
+			String path = new File("ProjectX.jar").getAbsolutePath();
+			SerXMLHandling.setElementInElement(root, "projectXPath", path);
+			settings.setProjectXPath(path);
 		}
 	}
 
@@ -305,28 +319,28 @@ public class SerSettingsHandler {
 		ArrayList boxList = new ArrayList(boxListNodes.size());
 
 		for (int i = 0; i < boxListNodes.size(); i++) { //Schleife über die
-														// Box-Elemente
+			// Box-Elemente
 			BOBox box = new BOBox();
 			Node boxElement = (Node) boxListNodes.get(i);
 			List boxValueNodes = boxElement.selectNodes("descendant::*");
 
 			for (int i2 = 0; i2 < boxValueNodes.size(); i2++) { //Schleife über
-																// die
-																// BoxValue-Elemente
+				// die
+				// BoxValue-Elemente
 				Node value = (Node) boxValueNodes.get(i2);
 				switch (i2) {
-					case 0 :
-						box.dboxIp = (value.getText());
-						break;
-					case 1 :
-						box.login = (value.getText());
-						break;
-					case 2 :
-						box.password = (value.getText());
-						break;
-					case 3 :
-						box.standard = (Boolean.valueOf(value.getText()));
-						break;
+				case 0:
+					box.dboxIp = (value.getText());
+					break;
+				case 1:
+					box.login = (value.getText());
+					break;
+				case 2:
+					box.password = (value.getText());
+					break;
+				case 3:
+					box.standard = (Boolean.valueOf(value.getText()));
+					break;
 				}
 			}
 			if ((box.isStandard().booleanValue())) {
@@ -344,35 +358,34 @@ public class SerSettingsHandler {
 	 */
 	private static ArrayList buildPlaybackSettings(Element rootElement) {
 		List playbackListNodes = rootElement.selectNodes("//playbackOption"); //All
-																			  // Box-Nodes
+		// Box-Nodes
 		ArrayList boxList = new ArrayList(playbackListNodes.size());
 
 		for (int i = 0; i < playbackListNodes.size(); i++) { //Schleife über
-															 // die Box-Elemente
+			// die Box-Elemente
 			BOPlaybackOption playbackOption = new BOPlaybackOption();
 			Node playbackElement = (Node) playbackListNodes.get(i);
 			List playbackValueNodes = playbackElement
 					.selectNodes("descendant::*");
 
 			for (int i2 = 0; i2 < playbackValueNodes.size(); i2++) { //Schleife
-																	 // über die
-																	 // BoxValue-Elemente
+				// über die
+				// BoxValue-Elemente
 				Node value = (Node) playbackValueNodes.get(i2);
 				switch (i2) {
-					case 0 :
-						playbackOption.name = (value.getText());
-						break;
-					case 1 :
-						playbackOption.execString = (value.getText());
-						break;
-					case 2 :
-						playbackOption.standard = (Boolean.valueOf(value
-								.getText()));
-						break;
-					case 3 :
-						playbackOption.logOutput = (Boolean.valueOf(value
-								.getText()));
-						break;
+				case 0:
+					playbackOption.name = (value.getText());
+					break;
+				case 1:
+					playbackOption.execString = (value.getText());
+					break;
+				case 2:
+					playbackOption.standard = (Boolean.valueOf(value.getText()));
+					break;
+				case 3:
+					playbackOption.logOutput = (Boolean
+							.valueOf(value.getText()));
+					break;
 				}
 			}
 			if ((playbackOption.isStandard().booleanValue())) {
@@ -463,6 +476,7 @@ public class SerSettingsHandler {
 		Node engine = settingsDocument.selectSingleNode("/settings/engine");
 		Node udrecPath = settingsDocument
 				.selectSingleNode("/settings/udrecPath");
+		Node projectXPath = settingsDocument.selectSingleNode("/settings/projectXPath");
 		Node recordAllPids = settingsDocument
 				.selectSingleNode("/settings/recordAllPids");
 		Node useStandardPlayback = settingsDocument
@@ -480,7 +494,8 @@ public class SerSettingsHandler {
 				.selectSingleNode("/settings/ac3ReplaceStereo");
 		Node udrecOptions = settingsDocument
 				.selectSingleNode("/settings/udrecOptions");
-
+		
+		projectXPath.setText(ControlMain.getSettings().getUdrecPath());
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings()
 				.isAc3ReplaceStereo()));
 		udrecOptions.setText(ControlMain.getSettings().getUdrecOptions());
