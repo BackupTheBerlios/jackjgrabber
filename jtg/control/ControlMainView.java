@@ -31,7 +31,6 @@ import org.apache.log4j.Logger;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
-import service.SerAlertDialog;
 import snoozesoft.systray4j.SysTrayMenuEvent;
 import snoozesoft.systray4j.SysTrayMenuListener;
 
@@ -72,7 +71,7 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		
 		int index = ControlMain.getIndexOfActiveBox();
 		if (index ==-1) {
-			SerAlertDialog.alert(ControlMain.getProperty("msg_ipError"), this.getView());
+			Logger.getLogger("ControlMainView").error(ControlMain.getProperty("msg_ipError"));
 		} 
 		this.getView().getTabProgramm().getJComboBoxBoxIP().setSelectedIndex(index);
 	}
