@@ -18,13 +18,18 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package model;
 
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import control.ControlMain;
 
 public class BOPlaybackOption {
     
     public String name="mplayer";
-    public String execString="d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid";
+    public String execString="d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid1";
     public Boolean standard = Boolean.FALSE;
+    public Boolean logOutput = Boolean.TRUE;
 
     /**
      * @return Returns the execString.
@@ -83,5 +88,55 @@ public class BOPlaybackOption {
 	 */
 	public void setSettingsChanged(boolean settingsChanged) {
 		ControlMain.getSettings().setSettingsChanged(settingsChanged);
+	}
+	/**
+	 * @param printOutput The printOutput to set.
+	 */
+	public void setLogOutput(Boolean printOutput) {
+		if (this.logOutput.booleanValue() != printOutput.booleanValue()) {
+	        this.logOutput = printOutput;
+	        this.setSettingsChanged(true);
+	    }
+	}
+	/**
+	 * @return Returns the printOutput.
+	 */
+	public Boolean isLogOutput() {
+		return logOutput;
+	}
+	
+	/*
+	 * Rückgabe der Stardard-Playbackoption
+	 * oder Start eines Abfragedialogs
+	 */
+	public static BOPlaybackOption detectPlaybackOption() {
+		if (ControlMain.getSettings().getPlaybackOptions() != null && ControlMain.getSettings().getPlaybackOptions().size()>0) {
+			BOPlaybackOption option;
+	        if (ControlMain.getSettings().isAlwaysUseStandardPlayback()) {
+	            option = ControlMain.getSettings().getStandardPlaybackOption();
+	        } else {
+	            option = startPlaybackOptionsQuestDialog();
+	        }
+	        return option;
+		}
+		return null;
+	}
+	
+	private static BOPlaybackOption startPlaybackOptionsQuestDialog() {
+	    ArrayList options = ControlMain.getSettings().getPlaybackOptions();
+	    
+	    String ret = (String)JOptionPane.showInputDialog(
+	    		ControlMain.getControl().getView(),
+                ControlMain.getProperty("msg_choosePlayback2"),
+                ControlMain.getProperty("msg_choose"),
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                ControlMain.getSettings().getPlaybackOptionNames(),
+                ControlMain.getSettings().getPlaybackOptionNames()[0]
+              );
+	    if (ret!=null) {
+	        return ControlMain.getSettings().getPlaybackOption(ret);
+	    }
+	    return null;
 	}
 }

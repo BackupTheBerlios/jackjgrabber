@@ -75,7 +75,7 @@ public class SerSettingsHandler {
 			settings.ac3ReplaceStereo=node.getText().equals("true");
 		} else {
 			SerXMLHandling.setElementInElement(root,"ac3ReplaceStereo", "false");
-			settings.setAc3ReplaceStereo(false);
+			settings.setAc3ReplaceStereo(true);
 		}
 	}
 	
@@ -326,6 +326,8 @@ public class SerSettingsHandler {
 					break;	
 					case 2: playbackOption.standard=(Boolean.valueOf(value.getText()));
 					break;	
+					case 3: playbackOption.logOutput=(Boolean.valueOf(value.getText()));
+					break;
 				}				
 			}
 			if ((playbackOption.isStandard().booleanValue())) {
@@ -355,6 +357,7 @@ public class SerSettingsHandler {
 			boxElement.addElement("name").addText(playback.getName());
 			boxElement.addElement("execString").addText(playback.getExecString());
 			boxElement.addElement("standard").addText(playback.isStandard().toString());
+			boxElement.addElement("logOutput").addText(playback.isLogOutput().toString());
 			newPlaybackListRoot.add(boxElement);
 		}
 		settingsDocument.add(newPlaybackListRoot);

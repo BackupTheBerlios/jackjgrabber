@@ -39,17 +39,15 @@ public class UdrecRecord  extends Record {
 	RecordControl recordControl;
 	String boxIp;
 	boolean running = true;
-	String requestString;
 	Process run;
 	
 	public UdrecRecord(BORecordArgs args, RecordControl control){
         recordControl = control;
         recordArgs = args;
         boxIp = ControlMain.getBoxIpOfActiveBox();
-        this.buildRequestString();
 	}
 	
-	private void buildRequestString() {
+	private String getRequestString() {
 	    StringBuffer cmd = new StringBuffer();
 	    Object[] args = {
 	            ControlMain.getSettings().getUdrecPath(), 
@@ -70,14 +68,16 @@ public class UdrecRecord  extends Record {
 		    String[] aPid = (String[])recordArgs.getAPids().get(i);
 		    cmd.append(" -ap "+aPid[0]);
 		}
-		requestString = cmd.toString();
+		return cmd.toString();
 	}
 	
 	public void start() {
 	    try {
+	    	String requestString = this.getRequestString();
+	    	Logger.getLogger("UdrecRecord").info("to DBox: "+requestString);
             run = Runtime.getRuntime().exec(requestString);
-            new SerInputStreamReadThread(run.getInputStream()).start();
-            new SerErrorStreamReadThread(run.getErrorStream()).start();
+            new SerInputStreamReadThread(true, run.getInputStream()).start();
+            new SerErrorStreamReadThread(true, run.getErrorStream()).start();
         } catch (IOException e) {
             Logger.getLogger("UdrecRecord").error(ControlMain.getProperty("err_udrec")+e.getLocalizedMessage());
         }

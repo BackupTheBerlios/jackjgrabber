@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -53,7 +52,9 @@ import presentation.GuiPidsQuestionDialog;
 import presentation.GuiSenderTableModel;
 import presentation.GuiTabProgramm;
 import service.SerAlertDialog;
+import service.SerErrorStreamReadThread;
 import service.SerFormatter;
+import service.SerInputStreamReadThread;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
@@ -253,14 +254,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Wiedergabe des laufenden Senders
 	 */
 	private void actionPlayback() {
-	    if (ControlMain.getSettings().getPlaybackOptions() != null && ControlMain.getSettings().getPlaybackOptions().size()>0) {
+		BOPlaybackOption option = BOPlaybackOption.detectPlaybackOption();
+	    if (option != null) {
 	        try {
                 this.zapToSelectedSender();
-                String execString = this.getPlaybackRequestString();
-                if (execString != null ) {
-                    Process run = Runtime.getRuntime().exec(execString);
-        			//new SerInputStreamReadThread(run.getInputStream()).start();
-        	        //new SerErrorStreamReadThread(run.getErrorStream()).start();   
+                String execString = this.getPlaybackRequestString(option);
+                if (execString != null) {
+			        Process run = Runtime.getRuntime().exec(execString);
+			        Logger.getLogger("ControlProgramTab").info(execString);
+					new SerInputStreamReadThread(option.isLogOutput().booleanValue(), run.getInputStream()).start();
+			        new SerErrorStreamReadThread(option.isLogOutput().booleanValue(), run.getErrorStream()).start();   
                 }
             } catch (IOException e) {
                 Logger.getLogger("ControlProgramTab").error(e.getMessage());
@@ -269,45 +272,25 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	        SerAlertDialog.alert(ControlMain.getProperty("msg_playbackOptionError"), this.getMainView());
 	    }
 	}
-	private String getPlaybackRequestString() {
-	    BOPlaybackOption option;
-        
-        if (ControlMain.getSettings().isAlwaysUseStandardPlayback()) {
-            option = ControlMain.getSettings().getStandardPlaybackOption();
-        } else {
-            option = this.startPlaybackOptionsQuestDialog();
-            if (option==null) {
-                return null;
-            }
-        }
-        String vPid = "0x"+(String)this.getPids().getVPid()[0];
-        String[] aPids = (String[])this.getPids().getAPids().get(0);
-        String aPid = "0x"+aPids[0];
-        String ip = ControlMain.getBoxIpOfActiveBox();
-        
-        String execString =  option.getExecString();
-        execString = SerFormatter.replace(execString, "$ip",  ip);
-        execString = SerFormatter.replace(execString, "$vPid", vPid);
-        execString = SerFormatter.replace(execString, "$aPid", aPid);
-        return execString;
-	}
 	
-	private BOPlaybackOption startPlaybackOptionsQuestDialog() {
-	    ArrayList options = ControlMain.getSettings().getPlaybackOptions();
-	    
-	    String ret = (String)JOptionPane.showInputDialog(
-                this.getMainView(),
-                ControlMain.getProperty("msg_choosePlayback2"),
-                ControlMain.getProperty("msg_choose"),
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                ControlMain.getSettings().getPlaybackOptionNames(),
-                ControlMain.getSettings().getPlaybackOptionNames()[0]
-              );
-	    if (ret!=null) {
-	        return ControlMain.getSettings().getPlaybackOption(ret);
-	    }
-	    return null;
+	private String getPlaybackRequestString(BOPlaybackOption option) {
+		String execString =  option.getExecString();
+		String vPid = "0x"+(String)this.getPids().getVPid()[0];
+		String ip = ControlMain.getBoxIpOfActiveBox();
+		execString = SerFormatter.replace(execString, "$ip",  ip);
+        execString = SerFormatter.replace(execString, "$vPid", vPid);
+        int aPidStringIndex = execString.indexOf("aPid");
+        try {		
+			if (aPidStringIndex>0) {
+				int pidIndex = Integer.parseInt(execString.substring(aPidStringIndex+4));
+			   	String aPid = "0x"+((String[])this.getPids().getAPids().get(pidIndex-1))[0];
+			   	execString = SerFormatter.replace(execString, "$aPid"+Integer.toString(pidIndex), aPid);
+			}
+		} catch (IndexOutOfBoundsException e) {
+			SerAlertDialog.alert(ControlMain.getProperty("msg_aPidNotAvailabe")+execString.substring(aPidStringIndex, aPidStringIndex+4), this.getMainView());
+			return null;
+		}
+        return execString;
 	}
 	
 	/**
@@ -318,7 +301,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			recordControl.stopRecord();
 		}
 		this.getMainView().getTabProgramm().stopRecordModus();
-		this.getMainView().setSystrayDefaultIcon();
 	}
 	
 	/**
@@ -329,7 +311,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.setRecordArgs(recordArgs);
 		recordControl = new RecordControl(recordArgs, this);
 		this.getMainView().getTabProgramm().startRecordModus();
-		this.getMainView().setSystrayRecordIcon();
 		recordControl.start();
 	}
 

@@ -73,8 +73,8 @@ public class GuiSettingsTabPlayback extends GuiTab{
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_playbackOptions"),										cc.xywh	(1, 1, 3, 1));
-			builder.add(new JLabel("z.B. xine http://$ip:31339/$vPid,$aPid"),				cc.xywh	(1, 3, 3, 1));
-			builder.add(new JLabel("z.B. d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid"),	cc.xywh	(1, 4, 3, 1));
+			builder.add(new JLabel("z.B. xine http://$ip:31339/$vPid,$aPid1"),				cc.xywh	(1, 3, 3, 1));
+			builder.add(new JLabel("z.B. d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid2"),	cc.xywh	(1, 4, 3, 1));
 			builder.add(this.getJScrollPanePlaybackSettings(),								cc.xywh	(1, 6, 1, 3));
 			builder.add(this.getJButtonAnlegen(),											cc.xy	(3, 6));
 			builder.add(this.getJButtonLoeschen(),											cc.xy	(3, 7));
@@ -112,6 +112,8 @@ public class GuiSettingsTabPlayback extends GuiTab{
 			jTablePlaybackSettings.getColumnModel().getColumn(1).setPreferredWidth(120);
 			jTablePlaybackSettings.getColumnModel().getColumn(2).setMaxWidth(80);
 			jTablePlaybackSettings.getColumnModel().getColumn(2).setCellRenderer( new GuiPlaybackSettingsTableCellRenderer());
+			jTablePlaybackSettings.getColumnModel().getColumn(3).setMaxWidth(80);
+			jTablePlaybackSettings.getColumnModel().getColumn(3).setCellRenderer( new GuiPlaybackSettingsTableCellRenderer());
 		}
 		return jTablePlaybackSettings;
 	}

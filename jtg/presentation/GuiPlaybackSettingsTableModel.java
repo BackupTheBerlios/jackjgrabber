@@ -36,7 +36,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	}
 
 	public int getColumnCount() {
-		return 3;	
+		return 4;	
 	}	
 
 	public int getRowCount() {
@@ -54,7 +54,10 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		if (columnIndex == 1) {
 			return playbackOption.getExecString();
 		}
-		else return playbackOption.isStandard();
+		if (columnIndex == 2) {
+			return playbackOption.isLogOutput();
+		}
+		return playbackOption.isStandard();
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -65,8 +68,11 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		if (columnIndex == 1) {
 		    playbackOption.setExecString((String)aValue);
 		}
-		//nur eine Checkbox darf selektiert sein!!
 		if (columnIndex == 2) {
+		    playbackOption.setLogOutput((Boolean)aValue);
+		}
+		//nur eine Checkbox darf selektiert sein!!
+		if (columnIndex == 3) {
 			if (((Boolean)aValue).booleanValue()) {
 				ArrayList playbackList = ControlMain.getSettings().getPlaybackOptions();
 				for (int i=0; i<playbackList.size(); i++) { 
@@ -86,17 +92,20 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		if (columnIndex == 1) {
 			return ControlMain.getProperty("playbackOption");
 		}
-		else {
-			return ControlMain.getProperty("standard");
+		if (columnIndex == 2) {
+			return ControlMain.getProperty("logOutput");
 		}
+		return ControlMain.getProperty("standard");
 	}
 	
 	/*
 	 * Wenn die 1. Box angelegt wird, diese als Standard deklarieren
+	 * und Logoutput auf aktiv setzen.
 	 */
 	public void addRow(BOPlaybackOption playbackOption) {
 		if (ControlMain.getSettings().getPlaybackOptions().size()==0) {
 		    playbackOption.setStandard(Boolean.TRUE);
+		    playbackOption.setLogOutput(Boolean.TRUE);
 		}
 		ControlMain.getSettings().addPlaybackOption(playbackOption);
 		fireTableDataChanged();
@@ -115,7 +124,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	}
 
 	public Class getColumnClass (int col) {
-       if (col==2) {
+       if (col==2 || col==3) {
           return Boolean.class;
        }
        return String.class;
