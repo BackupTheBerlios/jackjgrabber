@@ -31,6 +31,21 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return "Enigma";
 	}
 	
+	public String getChanIdOfRunningSender() throws IOException {
+		BufferedReader input = getConnection("/cgi-bin/streaminfo");
+		String line;
+		int startpos, endpos;
+		while((line=input.readLine())!=null) {
+		    startpos=line.indexOf("<td>Service reference");
+		    if (startpos>0) {
+		        startpos=line.indexOf("<td>",startpos+1);
+		        endpos=line.indexOf("</td>", startpos+1);
+		        return line.substring(startpos+4, endpos);
+		    }
+		}
+		return line;
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
 		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfSelectedBox()+request).openStream()));
 	}
