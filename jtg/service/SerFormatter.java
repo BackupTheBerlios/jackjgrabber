@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
 import java.text.ParseException;
+import java.text.DateFormat;
 
 /**
  * @author  ralix
@@ -64,12 +65,15 @@ public class SerFormatter {
         return cal.getTime();
     }
     
-    public static String getCorrectDate(String datum){            
-        SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");
-        try{
-           datum = SerFormatter.setCorrectYear(formatter.parse(datum)).toString();               
-        }catch(ParseException pex){               
-        }            
+	public static String getCorrectDate(String datum){
+        SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");         
+        GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );        
+        try{              
+            cal.setTimeInMillis(SerFormatter.setCorrectYear(formatter.parse(datum)).getTime());
+            DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
+            datum = formater2.format(cal.getTime()).toString();            
+        }catch(ParseException pex){
+        }        
         return datum;
     }
     

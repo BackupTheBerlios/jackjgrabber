@@ -23,13 +23,14 @@ import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 import model.BOMovieGuide;
+import model.BOTimer;
 import control.ControlMovieGuideTab;
 
 
 public class MovieGuideFilmTableModel extends AbstractTableModel 
 {
 	ControlMovieGuideTab control;
-	
+	BOMovieGuide mguide = new BOMovieGuide();
 	public MovieGuideFilmTableModel(ControlMovieGuideTab ctrl){
 		this.setControl(ctrl);
 	}
@@ -39,44 +40,22 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
-		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList()[1].size();
+		if (control.getFilmeList() == null) {
+			return 0;
+		} else {
+			return control.getFilmeList().size();
 		}
-		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
-		if (columnIndex == 0) {
-			return control.convertShortEventType(timer.getEventTypeId());
-		} if (columnIndex == 1) {
-			return timer.getStartTime();
-		} else {
-			return control.convertShortEventRepeat(timer.getEventRepeatId());
-		}
+		BOMovieGuide mguide = new BOMovieGuide();
+		return mguide.getTitel();
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
 		if (col == 0) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			timer.setEventTypeId(control.convertLongEventType((String)value));
-		}
-		if (col == 1) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
-			try {
-				Date newDate = sdf.parse((String)value);
-				timer.setUnformattedStartTime(newDate.getTime());
-				if (timer.getModifiedId() == null) {
-					timer.setModifiedId("modify");
-				}
-			} catch (ParseException e) {}
-		}
-		if (col == 2) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			control.selectRepeatDaysForSystemTimer(timer);
-		}
+			mguide.getTitelList().get(row);			
+		}		
     }
 
 	public String getColumnName() {		
@@ -94,10 +73,5 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 	
 	public void setControl(ControlMovieGuideTab control) {
 		this.control = control;
-	}
-	
-	public void fireTableDataChanged() {
-		super.fireTableDataChanged();
-		this.getControl().getTab().enableSystemTimerWeekdays(false);
-	}
+	}		
 }

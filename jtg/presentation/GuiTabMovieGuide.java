@@ -33,6 +33,11 @@ import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import javax.swing.JProgressBar; 
 
+import service.SerMovieGuide2Xml;
+
+import model.BOLocale;
+import model.BOMovieGuide;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -64,6 +69,8 @@ public class GuiTabMovieGuide extends JPanel {
 	private JFormattedTextField tfTon;
 	private JProgressBar pbDownload;
 	private JTextField tfSuche;
+	private JScrollPane jPaneTitel= null;
+	private JPanel jPanelTitel = null;
 	
 	public MovieGuideTimerTableModel timerTableModel;
 	public MovieGuideSenderTableModel senderTableModel;
@@ -77,13 +84,14 @@ public class GuiTabMovieGuide extends JPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-						  "150:grow, 8dlu, pref:grow, 8dlu, pref:grow, 8dlu,  pref:grow",  		// columns 
-						  "pref, 4dlu, f:50:grow, 4dlu, pref, 4dlu, f:330:grow"); 			// rows
+				  "f:pref:grow, 20, f:200",  		// columns 
+				  "f:pref, 20, pref, 20, pref"); 			// rows
 				PanelBuilder builder = new PanelBuilder(this, layout);
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();	
-				builder.addSeparator("MovieGuide", cc.xyw  (1, 1, 3));
-				builder.add(this.getJPanelButtonsGui(), cc.xywh (1, 6, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));				
+				//builder.addSeparator("MovieGuide", cc.xyw  (1, 1, 3));				
+				builder.add(this.getJPanelButtonsGui(),		   		cc.xy(1,1));
+				
 	}
 	    
 	/**
@@ -103,13 +111,17 @@ public class GuiTabMovieGuide extends JPanel {
 		if (jPanelButtonsGui == null) {
 			jPanelButtonsGui = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "Fill:pref",	 		//columna
-		      "pref, pref, pref, ");	//rows
+					"pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  							// columns 
+		      "pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow");	// rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsGui, layout);
 			CellConstraints cc = new CellConstraints();	
-			builder.add(this.getJButtonSelect2Timer(), cc.xy(1, 1));
-			builder.add(this.getJButtonNeuEinlesen(), cc.xy(1, 2));
-			builder.add(this.getJButtonDownload(), cc.xy(1, 3));
+			builder.add(this.getJButtonSelect2Timer(), cc.xy(1, 5));
+			builder.add(this.getJButtonNeuEinlesen(), cc.xy(3, 5));
+			builder.add(this.getJButtonDownload(), cc.xy(5, 5));				
+			builder.add(this.getComboBoxDatum(), cc.xy(1,2));
+			builder.add(this.getComboBoxGenre(), cc.xy(3,2));
+			builder.add(this.getJTableFilm(), cc.xy(5,2));
+			
 		}
 		return jPanelButtonsGui;
 	}
@@ -221,23 +233,48 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jButtonSelect2Timer;
 	}
-	public JComboBox getComboBoxGenre() {
+	public JComboBox getComboBoxGenre(){
 		if (comboBoxGenre == null) {
-			//comboBoxGenre = new JComboBox(new GuiTimerSenderComboModel(control));
-			comboBoxGenre = new JComboBox();
+			SerMovieGuide2Xml guide = new SerMovieGuide2Xml();				
+			comboBoxGenre = new JComboBox(new BOMovieGuide().getGenreList().toArray());
 		}
 		return comboBoxGenre;
 	}
 	public JComboBox getComboBoxDatum() {
 		if (comboBoxDatum == null) {
 			//comboBoxDatum = new JComboBox(new GuiTimerSenderComboModel(control));
-			comboBoxDatum = new JComboBox();
+			comboBoxDatum = new JComboBox(new BOMovieGuide().getDatumList().toArray());
 		}
 		return comboBoxDatum;
 	}
+	
+	private JPanel getPanelTitel() {
+		if (jPanelTitel == null) {
+			jPanelTitel = new JPanel();
+			FormLayout layout = new FormLayout(
+					  "pref:grow, 5, pref",	 		//columna 
+			  "pref:grow, pref:grow, pref:grow, 40:grow");				//rows
+			PanelBuilder builder = new PanelBuilder(jPanelTitel, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator("Box-Settings",						cc.xywh	(1, 1, 3, 1));
+			builder.add(this.getJScrollTitel(),	  			cc.xywh	(1, 2, 1, 3));		
+		}
+		return jPanelTitel;
+	}
+	
+	private JScrollPane getJScrollTitel() {
+		if (jPaneTitel == null) {
+			jPaneTitel = new JScrollPane();
+			jPaneTitel.setPreferredSize(new Dimension(450, 100));
+			panelTitel.setViewportView(getJTableFilm());
+		}
+		return jPaneTitel;
+	}
+		
+	
 	public JTable getJTableFilm() {
-		if (jTableFilm == null) {
-			//systemTimerTableModel = new GuiNeutrinoSystemTimerTableModel(control);
+		if (jTableFilm == null) {			
 			filmTableModel = new MovieGuideFilmTableModel(control);
 			jTableFilm = new JTable(filmTableModel);
 			jTableFilm.setName("filmTable");

@@ -6,6 +6,10 @@
  */
 package model;
 
+import java.util.ArrayList;
+
+import service.SerMovieGuide2Xml;
+
 /**
  * @author ralix
  *
@@ -83,6 +87,8 @@ public class BOMovieGuide {
      */
     private String inhalt;
     
+    private ArrayList genreList = new ArrayList();
+    private SerMovieGuide2Xml guide = new SerMovieGuide2Xml();
     /** Creates a new instance of BOMovieGuide */
     public BOMovieGuide() {
     }
@@ -328,6 +334,26 @@ public class BOMovieGuide {
     public void setInhalt(String inhalt) {
         this.inhalt = inhalt;
     }
+    public ArrayList getDatumList(){
+    	setValueList("datum");
+    	return genreList;
+    }
+   
+    public ArrayList getGenreList(){
+    	setValueList("genre");
+    	return genreList;
+    }
+    public ArrayList getTitelList(){
+    	setValueList("titel");
+    	return genreList;
+    }
+    
+    public void  setValueList(String value){
+    	try{
+    		this.genreList = guide.getGenryList(value);
+    	}catch(Exception ex){}
+    }
+    
     public void toOut(){
     	System.out.println("this.sender     = "+sender);
     	System.out.println("this.datum      = "+datum);

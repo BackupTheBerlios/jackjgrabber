@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 
@@ -36,6 +37,7 @@ import presentation.GuiMainView;
 public class ControlMovieGuideTab extends ControlTab implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
+	ArrayList filmeList = new ArrayList();
 	
 	public ControlMovieGuideTab(GuiMainView view ) {
 		this.setMainView(view);
@@ -85,6 +87,17 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 	/**
 	 * @return Returns the mainView.
 	 */
+	public ArrayList getFilmeList() {
+		return filmeList;
+	}
+	/**
+	 * @param bouquetList The bouquetList to set.
+	 */
+	public void setFilmeList(ArrayList filmeList) {
+		this.filmeList = filmeList;
+	}
+	
+	
 	public GuiMainView getMainView() {
 		return mainView;
 	}
