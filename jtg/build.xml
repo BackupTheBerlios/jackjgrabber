@@ -14,7 +14,6 @@
 	<property name="classpath5" 		value="./lib/commons-net-1.2.2.jar" />
 	<property name="classpath6" 		value="./lib/looks-1.2.2.jar" />
 	<property name="classpath7" 		value="./lib/systray4j.jar" />
-	<property name="classpath8" 		value="./lib/skinlf.jar" />
 	<property name="sourcedir1" 		value="**\*.class" />
 	<property name="resourcedir1" 		value="ico\*.*" />
 	<property name="resourcedir2" 		value="locale\*.*" />
@@ -39,7 +38,7 @@
 			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="control.ControlMain"/>
-				<attribute name="Class-Path" value="${classpath1} ${classpath2} ${classpath3} ${classpath4} ${classpath5} ${classpath6} ${classpath7} ${classpath8}"/>
+				<attribute name="Class-Path" value="${classpath1} ${classpath2} ${classpath3} ${classpath4} ${classpath5} ${classpath6} ${classpath7}"/>
 	       	</manifest>
 		</jar>
 	</target>
@@ -63,7 +62,7 @@
 	<target depends="copyLibs" name="zipProject">
 		 <zip destfile="${targetDir}/${zipFileName}"
 				basedir="${targetDir}"
-				excludes="**/settings.xml, X.ini, jackLog.*"
+				excludes="**/settings.xml, X.ini, jackLog.*, xmgLog.*"
 				update="true"
 		  />
 	</target>

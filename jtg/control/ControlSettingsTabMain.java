@@ -49,7 +49,6 @@ import service.SerExternalProcessHandler;
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
-import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
 public class ControlSettingsTabMain extends ControlTabSettings implements KeyListener, ActionListener, ItemListener {
 
@@ -196,8 +195,7 @@ public class ControlSettingsTabMain extends ControlTabSettings implements KeyLis
 	private void enableThemeComboBox(String lookAndFeel) {
 	    if (lookAndFeel.equals(PlasticLookAndFeel.class.getName()) || 
 	            lookAndFeel.equals(PlasticXPLookAndFeel.class.getName()) ||
-	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName()) ||
-	            lookAndFeel.equals(SkinLookAndFeel.class.getName())) 
+	            lookAndFeel.equals(Plastic3DLookAndFeel.class.getName())) 
 	    {
 	        this.getTab().getJComboBoxTheme().setModel(new GuiThemesComboModel(this));
 	        this.getTab().getJComboBoxTheme().setEnabled(true);

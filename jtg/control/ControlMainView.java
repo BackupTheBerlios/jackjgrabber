@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,8 +44,6 @@ import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticTheme;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.plaf.windows.ExtWindowsLookAndFeel;
-import com.l2fprod.gui.plaf.skin.Skin;
-import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
 /**
  * Control-Klasse des Haupt-Fensters, beinhaltet und verwaltet das MainTabPane
@@ -61,7 +58,6 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	public static HashMap skinLFThemesMap;
 	
 	public void initialize() {
-	    this.initSkinLookAndFeel();
 	    this.initLookAndFeel();
 	    this.setLookAndFeel();
 	    this.setView(new GuiMainView(this));
@@ -109,113 +105,27 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 	    String lookAndFeel = ControlMain.getSettings().getMainSettings().getLookAndFeel();
 	    String current = UIManager.getLookAndFeel().getClass().getName();
 		boolean lfChanged = !current.equals(lookAndFeel);
-		
-	    if (lookAndFeel.indexOf("SkinLookAndFeel") >-1) {
-	        this.setSkinLookAndFeel(lfChanged);
-	    } else {
-	        try {
-	            boolean themeChanged = this.isPlasticThemeChanged();
-				if (themeChanged) {
-					PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
-							+ ControlMain.getSettings().getMainSettings().getPlasticTheme())).newInstance();
-					PlasticLookAndFeel.setMyCurrentTheme(inst);
-				}
 
-				if (lfChanged || themeChanged) {
-					UIManager.setLookAndFeel(lookAndFeel);
-					if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
-						UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
-					}
-					if (this.getView()!=null) {
-					    this.getView().repaintGui();    
-					}
-				}
-		    } catch (Exception e) {
-		        Logger.getLogger("ControlMainView").error(e.getMessage());
-		    }    
-	    }
-	}
-	
-	public void setSkinLookAndFeel(boolean lfChanged) {
-	    try {
-            Skin aSkin = (Skin) skinLFThemesMap.get(ControlMain.getSettingsMain().getSkinLFTheme());
-            Skin old = SkinLookAndFeel.getSkin();
-            if (aSkin != null) {
-            	if(lfChanged || aSkin!=old) { //Zeichne GUI neu, wenn L&F oder Theme geändert
-            	    SkinLookAndFeel.setSkin(aSkin);
-            	    UIManager.setLookAndFeel(ControlMain.getSettings().getMainSettings().getLookAndFeel());    
-            	
-	            	if (this.getView()!=null) {
-					    this.getView().repaintGui();    
-					}
-            	}
-            }
-        } catch (Exception e) {
-            Logger.getLogger("ControlMainView").error(e.getMessage());
-        } 
-	}
-	
-	/*
-	 * installiere das Skin-L&F
-	 */
-	private void initSkinLookAndFeel() {
-	    try {
-	        SkinLookAndFeel.loadThemePack(ClassLoader.getSystemResource("themepack.zip"));
-            ArrayList themesDateien = getSkinLFFiles();        
-			
-			Skin aSkin = null;
-			String temp;
-			String shortName = "";
-			skinLFThemesMap = new HashMap();
-			skinLFThemes = new String[themesDateien.size()];
-
-			for (int i=0; i<themesDateien.size(); i++) {
-				URL skinUrl = (URL) themesDateien.get(i);
-				temp = skinUrl.getFile();
-				int index1 = temp.lastIndexOf('/');
-				int index2 = temp.lastIndexOf(".zip");
-				if (index1 == -1 || index2 == -1) {
-					continue;
-				}
-				shortName = temp.substring(index1 + 1, index2);
-				skinLFThemes[i]=shortName;
-				aSkin = SkinLookAndFeel.loadThemePack(skinUrl);
-				skinLFThemesMap.put(shortName, aSkin);				
+        try {
+            boolean themeChanged = this.isPlasticThemeChanged();
+			if (themeChanged) {
+				PlasticTheme inst = (PlasticTheme) (Class.forName("com.jgoodies.plaf.plastic.theme."
+						+ ControlMain.getSettings().getMainSettings().getPlasticTheme())).newInstance();
+				PlasticLookAndFeel.setMyCurrentTheme(inst);
 			}
 
-			//Skin-L&F installieren, wenn Themes-Dateien vorhanden
-            if(skinLFThemesMap.size()>0) {
-                SkinLookAndFeel lf = new SkinLookAndFeel();
-    			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(lf.getName(), SkinLookAndFeel.class.getName());
-    			UIManager.installLookAndFeel(info);    
-            }
-        } catch (Exception e) {
-          //Bei Fehlern des Skin L&F auf das Plastic-L&F ausweichen
-            if (ControlMain.getSettingsMain().isSkinLookAndFeel()) { 
-	            ControlMain.getSettingsMain().setLookAndFeel(PlasticLookAndFeel.class.getName());
-	        }
-            Logger.getLogger("ControlMainView").error(e.getMessage());
-        }
-	}
-	
-	private ArrayList getSkinLFFiles() {
-	    ArrayList themesDateien = new ArrayList();
-        try {
-            File themesPath = new File(ControlMain.getSettingsPath().getWorkDirectory()+File.separator+"themes");
-            if (!themesPath.exists()) {
-                themesPath.mkdir();
-            }
-            File[] themeFiles = themesPath.listFiles();
-            //checken ob gültige Theme-Datei
-            for (int i = 0; i < themeFiles.length; i++) {
-            	if (themeFiles[i].isFile() && themeFiles[i].getName().indexOf(".zip") != -1) {
-            	    themesDateien.add(themeFiles[i].toURL());
-            	}
-            }
-        } catch (MalformedURLException e) {
-            Logger.getLogger("ControlMainView").error(e.getMessage());
-        }
-        return themesDateien;
+			if (lfChanged || themeChanged) {
+				UIManager.setLookAndFeel(lookAndFeel);
+				if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1) {
+					UIManager.put("TextArea.font", new Font("Tahoma", Font.PLAIN, 11));
+				}
+				if (this.getView()!=null) {
+				    this.getView().repaintGui();    
+				}
+			}
+	    } catch (Exception e) {
+	        Logger.getLogger("ControlMainView").error(e.getMessage());
+	    }    
 	}
 	
 	private boolean isPlasticThemeChanged() {
