@@ -19,9 +19,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import java.awt.Color;
-import java.io.IOException;
-import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -47,12 +46,13 @@ public class GuiTabStart extends JPanel {
 	private JPanel panelInfo;
 	private JPanel panelWarn;
 	private JPanel panelNews;
-	private JPanel panelVersion;
 	private JTextPane paneClient;
 	private JTextPane paneInfo;
 	private JTextPane paneNews;
 	private JTextPane linkWiki;
 	private JTextPane paneWarns;
+	private JTextPane paneVersion;
+	private ImageIcon imageLogo;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	Color background = (Color)UIManager.get("Panel.background");
 	SerHyperlinkAdapter hyperlinkAdapter = new SerHyperlinkAdapter(this);
@@ -79,16 +79,17 @@ public class GuiTabStart extends JPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-						  "pref",  		// columns 
-						  "10, pref, pref, pref, pref"); 			// rows
+						  "200:grow, 10, 230:grow, 30, 190",  		// columns 
+						  "10, t:130, pref, pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
 		builder.add(this.getPanelClient(),				cc.xy(1, 2));
-		builder.add(this.getPanelInfo(), 				cc.xy(1, 3));
-		builder.add(this.getPanelNews(), 				cc.xy(1, 4));
-		builder.add(this.getPanelWarn(),	 			cc.xy(1, 5));
+		builder.add(this.getPanelInfo(), 				cc.xyw(3, 2, 3));
+		builder.add(this.getPanelNews(), 				cc.xyw(1, 3, 5));
+		builder.add(this.getPanelWarn(),	 			cc.xyw(1, 4, 4));
+		builder.add(new JLabel(this.getImageLogo()),    cc.xywh(5, 4, 1, 1, CellConstraints.RIGHT, CellConstraints.BOTTOM ));
 	}
 	
     /**
@@ -97,15 +98,17 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelClient() {
         if (panelClient == null) {
             panelClient = new JPanel();
-			FormLayout layout = new FormLayout("40, 10, pref", //columns
-					"pref, 5, pref, 5, pref, 5, pref"); //rows
+			FormLayout layout = new FormLayout("40, 10, pref:grow", //columns
+					"pref, 5, pref, 5, t:70, 5, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelClient, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(new JLabel(iconManager.getIcon("penguin.png")),			cc.xy(1, 1));
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_client")+"</font><HTML>",			cc.xy(3, 1));
 			builder.addLabel(ControlMain.version[0],			cc.xy(3, 3));
-			builder.add(this.getPanelVersion(),					cc.xy(3, 5));
+			JScrollPane scrollPane = new JScrollPane(this.getPaneVersion());
+			scrollPane.setBorder(null);
+			builder.add(scrollPane,								cc.xy(3, 5));
 			builder.add(this.getLinkWiki(),						cc.xy(3, 7));
 		}
         return panelClient;
@@ -125,7 +128,6 @@ public class GuiTabStart extends JPanel {
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_info")+"</font><HTML>",			cc.xy(3, 1));
 			builder.addLabel("Sender: "+control.getRunningSender(),				cc.xy(3, 3));
 			builder.addLabel(ControlMain.getProperty("label_nextTimer")+control.getNextTimerInfo(),	cc.xy(3, 5));
-//			builder.addLabel(ControlMain.version[0],			cc.xy(3, 3));
 		}
         return panelInfo;
     }
@@ -155,8 +157,8 @@ public class GuiTabStart extends JPanel {
     public JPanel getPanelWarn() {
         if (panelWarn == null) {
             panelWarn = new JPanel();
-            FormLayout layout = new FormLayout("40, 10, 600", //columns
-				"pref, 5, f:95"); //rows
+            FormLayout layout = new FormLayout("30, 10, 350, 20", //columns
+				"pref, 5, t:115"); //rows
 			PanelBuilder builder = new PanelBuilder(panelWarn, layout);
 			CellConstraints cc = new CellConstraints();
 			
@@ -166,40 +168,10 @@ public class GuiTabStart extends JPanel {
 			JScrollPane scrollPane = new JScrollPane(this.getPaneWarns());
 			scrollPane.setBorder(null);
 			builder.add(scrollPane,    cc.xy(3, 3));
-			
 		}
         return panelWarn;
     }
     
-    private JPanel getPanelVersion() {
-        if (panelVersion==null) {
-            panelVersion=new JPanel();
-            FormLayout layout = new FormLayout("pref", //columns
-			""); //rows 
-            PanelBuilder builder = new PanelBuilder(panelVersion, layout);
-            CellConstraints cc = new CellConstraints();
-            
-            try {
-                ArrayList version = ControlMain.getBoxAccess().getBoxVersion();
-                for (int i=0; i<version.size(); i++) {
-                    builder.appendRow("pref");
-                    builder.addLabel((String)version.get(i), cc.xy(1, i+1));
-                }
-                if (version.size()>0) {
-                    String conString = ControlMain.getProperty("label_connected1")+
-                    	ControlMain.getBoxIpOfActiveBox()+" "+ControlMain.getProperty("label_connected2");
-                    builder.appendRow("pref");
-                    builder.addLabel(conString, cc.xy(1, version.size()+1));
-                } else {
-                    
-                }
-            } catch (IOException e) {
-                return panelVersion;
-            }
-            
-        }
-        return panelVersion;
-    }
     /**
      * @return Returns the paneClient.
      */
@@ -250,5 +222,23 @@ public class GuiTabStart extends JPanel {
 	        paneWarns.setText(control.checkWarns());
 	    }
 	    return paneWarns;
+	}
+	
+	public JTextPane getPaneVersion() {
+	    if (paneVersion==null) {
+	        paneVersion=new JTextPane();
+	        paneVersion.setBackground(background);
+	        paneVersion.setContentType("text/html");
+	        paneVersion.setEditable(false);	
+	        paneVersion.setText(control.getVersion());
+	    }
+	    return paneVersion;
+	}
+	
+	private ImageIcon getImageLogo() {
+		if (imageLogo == null) {
+			imageLogo = new ImageIcon(ClassLoader.getSystemResource("ico/jtjg_bubble.png"));
+		}
+		return imageLogo;
 	}
 }

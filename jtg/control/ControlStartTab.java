@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import model.BOSender;
 import model.BOTimer;
@@ -37,9 +38,22 @@ public class ControlStartTab extends ControlTab {
 	public void run() {
 	}
 	
+	public String getVersion() {
+	    String version = new String("<html>");
+	    try {
+            ArrayList result = ControlMain.getBoxAccess().getBoxVersion();
+            for (int i=0; i<result.size(); i++) {
+                version=version+this.getHtmlString((String)result.get(i), "black");
+            }
+        } catch (IOException e) {
+            return version;
+        }
+        return version+"</html>";
+	}
+	
 	public String checkWarns() {
 	    File udrec;
-	    String warnText=new String();
+	    String warnText=new String("<html>");
 	    File save = new File(ControlMain.getSettingsPath().getSavePath());
 	    if (ControlMain.getSettingsPath().getUdrecPath()==null &&
 	            ControlMain.getSettingsPath().getUdrecPath().substring(0,4).equalsIgnoreCase("mono")) {
@@ -53,34 +67,34 @@ public class ControlStartTab extends ControlTab {
 	    int playerCount = ControlMain.getSettingsPlayback().getPlaybackOptions().size();
 	    
 	    if (!save.exists()) {
-	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_save"));
+	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_save"), "red");
 	    }
 
         if (!udrec.exists()) {
-            warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_udrec"));
+            warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_udrec"), "red");
 	    }
 	    
 	    if (!px.exists()) {
-	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_px"));
+	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_px"), "red");
 	    }
 	    
 	    if (!shutdown.exists()) {
-	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_shutdown"));
+	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_shutdown"), "red");
 	    }
 	    
 	    if (boxCount==0) {
-	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_box"));
+	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_box"), "red");
 	    }
 	    
 	    if (playerCount==0) {
-	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_player"));
+	        warnText=warnText+this.getHtmlString(ControlMain.getProperty("warn_player"), "red");
 	    }
   
-	    return warnText;
+	    return warnText+"</html>";
 	}
 	
-	public String getHtmlString(String string) {
-	    return "<br><font color=red>"+string+"<font></br>";
+	public String getHtmlString(String string, String color) {
+	    return "<font color="+color+">"+string+"<font><br>";
 	}
 	
 	public String getRunningSender() {
