@@ -468,7 +468,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			title=title.replaceAll("&","und");
 		    long duration=stop-alarm;
 		    long repeatId=Long.parseLong(repeat);
-		    System.out.println (repeatId);
+		    //System.out.println (repeatId);
 		    if (repeatId<30) {
 		        repeatId=0;
 		    }
@@ -506,14 +506,20 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		        } 
 		        requestString = "/addTimerEvent?timer=repeating&ref="+chanId+"&shour="+timer.getShortStartTime().substring(0,2)+"&smin="+timer.getShortStartTime().substring(3,5)+"&ehour="+timer.getStopTime().substring(0,2)+"&emin=" +timer.getStopTime().substring(3,5)+ "&mo=" + mo + "&tu=" + tu + "&we=" + we + "&th=" + th + "&fr=" + fr + "&sa=" + sa + "&su=" + su +"&duration="+duration+"&descr="+title+"&after_event="+eventType;
 		    }
-		    System.out.println (requestString);
+		    //System.out.println (requestString);
 		    BufferedReader input = getConnection(requestString);
 		    while((line=input.readLine())!=null) {
 		       	if ((line.indexOf("success")>0)^(line.indexOf("erfolgreich")>0)) {
 		       	    success="ok";
-		        }
+		       	}
 			}
+		    if (success.equals("ok")) { 
+	 		    Logger.getLogger("SerBoxControlEnigma").info("Timer "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description+" erfolgreich übertragen");
+		    } else {
+		        Logger.getLogger("SerBoxControlEnigma").info("Fehler beim Timer "+timer.getStartTime()+" "+timer.senderName+" - "+timer.description);
+		    }
 		}
+		
 		return success;
 	}
 	
@@ -527,7 +533,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    if (line.indexOf("zapMode")>0) {
 		        startpos=(line.indexOf("zapMode")+10);
 		        zapmode=line.substring(startpos,startpos+1);
-		        System.out.println(zapmode);
 		        if (zapmode.equals("0")) {
 		            tvMode=true;
 		        } else {
@@ -541,7 +546,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public String setRadioTvMode(String mode) throws IOException {
-		System.out.println(mode);
 		String zapmode;
 		if (mode.equalsIgnoreCase("radio")) {
 		    zapmode="1";
@@ -549,7 +553,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    zapmode="0";
 		}
 	    BufferedReader input = getConnection("/body?mode=zap&zapmode="+zapmode+"&zapsubmode=4");
-		//BufferedReader input = getConnection("/body?path=;0:7:"+zapmode+":0:0:0:0:0:0:0:");
 		return "ok";
 	}
 }
