@@ -53,10 +53,12 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 	private JPanel panelBoxSettings = null;
 	private JPanel panelLayoutSettings = null;
 	private JPanel panelStartOptions = null;
+	private JPanel panelServerRecordSettings = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JButton jButtonStartVlc = null;
 	private JFormattedTextField tfBoxIp = null;
+	private JFormattedTextField tfServerPort = null;	
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxLookAndFeel = null;
 	private JComboBox jComboBoxLocale = null;
@@ -68,6 +70,7 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 	private JCheckBox cbUseSysTray;
 	private JCheckBox cbStartVlcAtStart;
 	private JCheckBox cbStartMinimized;
+	private JCheckBox cbStartStreamingServer;
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	public GuiSettingsTabMain(ControlSettingsTabMain ctrl) {
@@ -79,7 +82,7 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 	public void initialize() {
 
 		FormLayout layout = new FormLayout("f:pref:grow, 100", // columns
-				"f:pref, 10, pref, 10, pref"); // rows
+				"f:pref, 10, pref, 10, pref, 20, pref"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -87,6 +90,7 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 		builder.add(this.getPanelBoxSettings(), cc.xy(1, 1));
 		builder.add(this.getPanelLayoutSettings(), cc.xy(1, 3));
 		builder.add(this.getPanelStartOptions(), cc.xy(1, 5));
+		builder.add(this.getPanelServerRecordSettings(), cc.xy(1, 7));
 	}
 
 	private JPanel getPanelBoxSettings() {
@@ -125,24 +129,40 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 	}
 	
 	private JPanel getPanelStartOptions() {
-			if (panelStartOptions == null) {
-			    panelStartOptions = new JPanel();
-				FormLayout layout = new FormLayout(  "pref, 10,  pref, pref:grow", //columna
-						"pref, 5, pref, pref, pref, pref, pref"); //rows
-				PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
-				CellConstraints cc = new CellConstraints();
+		if (panelStartOptions == null) {
+		    panelStartOptions = new JPanel();
+			FormLayout layout = new FormLayout(  "pref, 10,  pref, pref:grow", //columna
+					"pref, 5, pref, pref, pref, pref, pref"); //rows
+			PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
+			CellConstraints cc = new CellConstraints();
 
-				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 	cc.xyw(1, 1, 3));
-				builder.add(this.getCbStartFullscreen(), 								cc.xyw(1, 3, 3));
-				builder.add(this.getCbStartMinimized(), 								cc.xyw(1, 4, 1));
+			builder.addSeparator(ControlMain.getProperty("label_startOptions"), 	cc.xyw(1, 1, 3));
+			builder.add(this.getCbStartFullscreen(), 								cc.xyw(1, 3, 3));
+			builder.add(this.getCbStartMinimized(), 								cc.xyw(1, 4, 1));
 
-				builder.add(this.getCbShowLogWindow(),									cc.xyw(1, 5, 3));
-				builder.add(this.getCbUseSysTray(), 									cc.xyw(1, 6, 4));
-				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 7, 1));
-				builder.add(this.getJButtonStartVlc(),									cc.xy	(3, 7));
-			}
-			return panelStartOptions;
+			builder.add(this.getCbShowLogWindow(),									cc.xyw(1, 5, 3));
+			builder.add(this.getCbUseSysTray(), 									cc.xyw(1, 6, 4));
+			builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 7, 1));
+			builder.add(this.getJButtonStartVlc(),									cc.xy	(3, 7));
 		}
+		return panelStartOptions;
+	}
+	
+	private JPanel getPanelServerRecordSettings() {
+		if (panelServerRecordSettings == null) {
+			panelServerRecordSettings = new JPanel();
+			FormLayout layout = new FormLayout("pref, 15, pref, 5, pref", //columns
+					"pref, pref, pref"); //rows
+			PanelBuilder builder = new PanelBuilder(panelServerRecordSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator(ControlMain.getProperty("label_serverRecordSettings"), cc.xyw(1, 1, 5));
+			builder.add(this.getCbStartStreamingServer(), cc.xy(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")), cc.xy(3, 2));
+			builder.add(this.getTfServerPort(), cc.xy(5, 2));
+		}
+		return panelServerRecordSettings;
+	}
 	/**
 	 * This method initializes jComboBoxLocale
 	 * 
@@ -338,6 +358,37 @@ public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 			cbUseSysTray.addActionListener(control);
 		}
 		return cbUseSysTray;
+	}
+	
+	/**
+	 * @return Returns the tfServerPort.
+	 */
+	public JFormattedTextField getTfServerPort() {
+		if (tfServerPort == null) {
+			try {
+				tfServerPort = new JFormattedTextField(new MaskFormatter("####"));
+				tfServerPort.setName("serverPort");
+				tfServerPort.addKeyListener(control);
+				((MaskFormatter) tfServerPort.getFormatter()).setAllowsInvalid(false);
+				((MaskFormatter) tfServerPort.getFormatter()).setOverwriteMode(true);
+				tfServerPort.setPreferredSize(new java.awt.Dimension(40, 19));
+			} catch (ParseException e) {
+			    Logger.getLogger("GuiSettingsTabRecord").error(e.getMessage());
+			}
+		}
+		return tfServerPort;
+	}
+
+	/**
+	 * @return Returns the cbStartStreamingServer.
+	 */
+	public JCheckBox getCbStartStreamingServer() {
+		if (cbStartStreamingServer == null) {
+			cbStartStreamingServer = new JCheckBox(ControlMain.getProperty("cbStartServer"));
+			cbStartStreamingServer.setActionCommand("startStreamingServer");
+			cbStartStreamingServer.addActionListener(control);
+		}
+		return cbStartStreamingServer;
 	}
 
 	/**

@@ -19,23 +19,18 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import java.awt.Dimension;
-import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.text.MaskFormatter;
-
-import org.apache.log4j.Logger;
 
 import service.SerIconManager;
 
@@ -52,8 +47,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
     private Icon menuIcon;
 	private ControlSettingsTabRecord control;
 	private JPanel panelEngineSettings = null;
-	private JPanel panelRecordSettings = null;
-	private JPanel panelServerRecordSettings = null;
+	private JPanel panelRecordSettings = null;	
 	private JPanel panelQuickRecordSettings = null;
 	private JPanel panelRecordtimeSettings = null;
 	private JPanel panelFileNameSettings;
@@ -73,8 +67,6 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
 	private ButtonGroup buttonGroupAudioOptions = new ButtonGroup();
     private ButtonGroup buttonGroupSaveOptions = new ButtonGroup();
-	private JFormattedTextField tfServerPort = null;
-	private JCheckBox cbStartStreamingServer;
 	private JCheckBox cbStartPX;
 	private JCheckBox cbRecordVtxt;
 	private JCheckBox cbShutdownAfterRecord;
@@ -108,9 +100,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 
 		builder.addSeparator("<HTML><font size=5>"+ControlMain.getProperty("label_recordSettings1")+"</font><HTML>", cc.xyw(1, 1, 3));
 		builder.add(this.getPanelNorth(), cc.xyw(1, 3, 3));
-		builder.add(this.getPanelFileNameSettings(), cc.xy(1, 5));
-		builder.addSeparator("<HTML><font size=5>"+ControlMain.getProperty("label_serverRecordSettings1")+"</font><HTML>", cc.xyw(1, 7, 3));
-		builder.add(this.getPanelSouth(), cc.xy(1, 9));		
+		builder.add(this.getPanelFileNameSettings(), cc.xy(1, 5));	
 	}
 
 	private JPanel getPanelNorth() {
@@ -142,27 +132,12 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
         }
         return panelSaveOptions;
     }
-
-    
-	private JPanel getPanelSouth() {
-		if (panelSouth == null) {
-		    panelSouth = new JPanel();
-			FormLayout layout = new FormLayout("pref, 25, pref:grow", //columns
-					"t:pref"); //rows
-			PanelBuilder builder = new PanelBuilder(panelSouth, layout);
-			CellConstraints cc = new CellConstraints();
-
-			builder.add(this.getPanelServerRecordSettings(), cc.xy(1, 1));
-			builder.add(this.getPanelRecordtimeSettings(), cc.xy(3, 1));
-		}
-		return panelSouth;
-	}
 	
 	private JPanel getPanelRecordSettings() {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout("pref:grow", //columns
-					"pref, pref, pref, pref, pref, pref, 10, pref, pref, pref"); //rows
+					"pref, pref, pref, pref, pref, pref, 10, pref, pref, pref, 15, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -176,25 +151,10 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 			builder.add(this.getJRadioButtonRecordAllPids(), cc.xy(1, 8));
 			builder.add(this.getJRadioButtonAC3ReplaceStereo(), cc.xy(1, 9));
 			builder.add(this.getJRadioButtonStereoReplaceAc3(), cc.xy(1, 10));
+			
+			builder.add(this.getCbShutdownAfterRecord(), cc.xy(1, 12));
 		}
 		return panelRecordSettings;
-	}
-
-	private JPanel getPanelServerRecordSettings() {
-		if (panelServerRecordSettings == null) {
-			panelServerRecordSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref, 15, pref, 5, pref", //columns
-					"pref, pref, pref"); //rows
-			PanelBuilder builder = new PanelBuilder(panelServerRecordSettings, layout);
-			CellConstraints cc = new CellConstraints();
-
-			builder.addSeparator(ControlMain.getProperty("label_serverRecordSettings"), cc.xyw(1, 1, 5));
-			builder.add(this.getCbStartStreamingServer(), cc.xy(1, 2));
-			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")), cc.xy(3, 2));
-			builder.add(this.getTfServerPort(), cc.xy(5, 2));
-			builder.add(this.getCbShutdownAfterRecord(), cc.xyw(1, 3, 5));
-		}
-		return panelServerRecordSettings;
 	}
 
 	private JPanel getPanelQuickRecordSettings() {
@@ -215,7 +175,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 		if (panelEngineSettings == null) {
 			panelEngineSettings = new JPanel();
 			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
-					"pref, pref, pref, pref, pref, 10, pref"); //rows
+					"pref, pref, pref, pref, pref, 10, pref, 20, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -228,6 +188,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
             
             builder.addLabel(ControlMain.getProperty("label_recordType"), cc.xywh(1, 7, 3, 1));
 			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 7));
+			builder.add(this.getPanelRecordtimeSettings(), cc.xyw(1, 9, 5));
 		}
 		return panelEngineSettings;
 	}
@@ -360,36 +321,6 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 		return jComboBoxStreamType;
 	}
 
-	/**
-	 * @return Returns the tfServerPort.
-	 */
-	public JFormattedTextField getTfServerPort() {
-		if (tfServerPort == null) {
-			try {
-				tfServerPort = new JFormattedTextField(new MaskFormatter("####"));
-				tfServerPort.setName("serverPort");
-				tfServerPort.addKeyListener(control);
-				((MaskFormatter) tfServerPort.getFormatter()).setAllowsInvalid(false);
-				((MaskFormatter) tfServerPort.getFormatter()).setOverwriteMode(true);
-				tfServerPort.setPreferredSize(new java.awt.Dimension(40, 19));
-			} catch (ParseException e) {
-			    Logger.getLogger("GuiSettingsTabRecord").error(e.getMessage());
-			}
-		}
-		return tfServerPort;
-	}
-
-	/**
-	 * @return Returns the cbStartStreamingServer.
-	 */
-	public JCheckBox getCbStartStreamingServer() {
-		if (cbStartStreamingServer == null) {
-			cbStartStreamingServer = new JCheckBox(ControlMain.getProperty("cbStartServer"));
-			cbStartStreamingServer.setActionCommand("startStreamingServer");
-			cbStartStreamingServer.addActionListener(control);
-		}
-		return cbStartStreamingServer;
-	}
 	/**
 	 * @return Returns the checkbox for storing epg.
 	 */

@@ -62,9 +62,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		this.setSettingsTab(tabSettings);
 	}
 
-	public void run() {
-		this.getTab().getTfServerPort().setText(this.getSettings().getStreamingServerPort());
-		this.getTab().getCbStartStreamingServer().setSelected(this.getSettings().isStartStreamingServer());
+	public void run() {		
 		this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
 		this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
 		this.getTab().getCbRecordVtxt().setSelected(this.getSettings().isRecordVtxt());
@@ -198,10 +196,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				this.getSettings().setShutdownAfterRecord(((JCheckBox) e.getSource()).isSelected());
 				break;
 			}
-			if (action.equals("startStreamingServer")) {
-				this.getSettings().setStartStreamingServer(((JCheckBox) e.getSource()).isSelected());
-				break;
-			}
 			if (action.equals("Tags")) {
 				openTagWindow(getTab().getTfDirPattern());
 				break;
@@ -299,10 +293,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	public void keyReleased(KeyEvent event) {
 		JTextField tf = (JTextField) event.getSource();
 		while (true) {
-			if (tf.getName().equals("serverPort")) {
-				this.getSettings().setStreamingServerPort(tf.getText());
-				break;
-			}
 			if (tf.getName().equals("udrecPath")) {
 				ControlMain.getSettingsPath().setUdrecPath(tf.getText());
 				break;
@@ -317,11 +307,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			}
 			break;
 		}
-	}
-
-	private void actionSetServerPort(ActionEvent event) {
-		JTextField tf = (JTextField) event.getSource();
-		this.getSettings().setStreamingServerPort(tf.getText());
 	}
 
 	/*
