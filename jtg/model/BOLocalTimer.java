@@ -17,6 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.util.StringTokenizer;
+
 import org.dom4j.Node;
 
 import control.ControlMain;
@@ -44,6 +46,10 @@ public class BOLocalTimer {
 	private Node timerNode;
 	
 	private BOTimer mainTimer;
+	
+	public BOLocalTimer() {
+	    
+	}
 	
 	public BOLocalTimer(BOTimer mainTimer) {
 		this.setMainTimer(mainTimer);
@@ -73,6 +79,37 @@ public class BOLocalTimer {
 		return timer;
 	}
 
+	public static BOLocalTimer getDefaultLocaleTimer() {
+		BOLocalTimer timer = new BOLocalTimer();
+		timer.setAc3ReplaceStereo(ControlMain.getSettingsRecord().isAc3ReplaceStereo());
+		timer.setDirPattern(ControlMain.getSettingsRecord().getDirPattern());
+		timer.setFilePattern(ControlMain.getSettingsRecord().getFilePattern());
+		timer.setJgrabberStreamType(ControlMain.getSettingsRecord().getJgrabberStreamType());
+		timer.setRecordAllPids(ControlMain.getSettingsRecord().isRecordAllPids());
+		timer.setRecordVtxt(ControlMain.getSettingsRecord().isRecordVtxt());
+		timer.setShutdownAfterRecord(ControlMain.getSettingsRecord().isShutdownAfterRecord());
+		timer.setStartPX(ControlMain.getSettingsRecord().isStartPX());
+		timer.setStereoReplaceAc3(ControlMain.getSettingsRecord().isStereoReplaceAc3());
+		timer.setStopPlaybackAtRecord(ControlMain.getSettingsRecord().isStopPlaybackAtRecord());
+		timer.setStoreEPG(ControlMain.getSettingsRecord().isStoreEPG());
+		timer.setStoreLogAfterRecord(ControlMain.getSettingsRecord().isStoreLogAfterRecord());
+		timer.setStreamingEngine(ControlMain.getSettingsRecord().getStreamingEngine());
+		timer.setUdrecOptions(ControlMain.getSettingsRecord().getUdrecOptions());
+		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
+		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
+		return timer;
+	}
+	
+	public String getShortJGrabberStreamType() {
+		StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
+		return st.nextToken();
+	}
+	
+	public String getShortUdrecStreamType() {
+		StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
+		return st.nextToken().toLowerCase();
+	}
+	
 	/**
 	 * @return Returns the ac3ReplaceStereo.
 	 */

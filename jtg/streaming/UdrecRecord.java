@@ -22,14 +22,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import model.*;
+import model.BOExternalProcess;
 import model.BOPid;
 import model.BOPids;
 import model.BORecordArgs;
 import service.SerExternalProcessHandler;
 import service.SerHelper;
 import control.ControlMain;
-
 
 public class UdrecRecord  extends Record {
 
@@ -63,10 +62,10 @@ public class UdrecRecord  extends Record {
 	    cmd.add("-buf");
 	    cmd.add(Integer.toString(spktBufNum));
 	    cmd.add("-now");
-	    cmd.add("-"+ControlMain.getSettingsRecord().getShortUdrecStreamType());
+	    cmd.add("-"+recordArgs.getLocalTimer().getShortUdrecStreamType());
 	    cmd.add("-o");
 	    cmd.add((new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()));
-	    StringTokenizer udrecOptions = new StringTokenizer(ControlMain.getSettingsRecord().getUdrecOptions());
+	    StringTokenizer udrecOptions = new StringTokenizer(recordArgs.getLocalTimer().getUdrecOptions());
 	    while (udrecOptions.hasMoreTokens()) {
 	    	cmd.add(udrecOptions.nextToken());
 	    }

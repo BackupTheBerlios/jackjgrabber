@@ -23,14 +23,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.MessageFormat;
 
+import model.BOPid;
+import model.BOPids;
+import model.BORecordArgs;
+
 import org.apache.log4j.Logger;
 
 import service.SerAlertDialog;
 import control.ControlMain;
-
-import model.BOPid;
-import model.BOPids;
-import model.BORecordArgs;
 
 
 public class UdpRecord  extends Record {
@@ -133,7 +133,7 @@ public class UdpRecord  extends Record {
 		} else {
 			cmd.append("AUDIO");
 		}
-		if (ControlMain.getSettingsRecord().getShortJGrabberStreamType().equals("TS")) {
+		if (recordArgs.getLocalTimer().getShortJGrabberStreamType().equals("TS")) {
 			cmd.append("TS");
 		}
 		Object[] args = {Integer.toString(udpPort), Integer.toString(spktBufNum)};
@@ -169,7 +169,7 @@ public class UdpRecord  extends Record {
 		int pidNum = Integer.parseInt(dboxArgs[2]);
 		if (pidNum + 3 > dboxArgs.length) return -3;
 
-		if (ControlMain.getSettingsRecord().getShortJGrabberStreamType().equals("TS")) {
+		if (recordArgs.getLocalTimer().getShortJGrabberStreamType().equals("TS")) {
 			writeStream = new DataWriteStream[1];
 			writeStream[0] = new DataWriteStream('t', 0, recordControl);
 		}  else {

@@ -1,6 +1,5 @@
 package model;
 
-import java.util.StringTokenizer;
 
 /*
  * BOSettingsRecords.java by Geist Alexander
@@ -170,15 +169,6 @@ public class BOSettingsRecord {
 		}
 	}
 
-	public String getShortJGrabberStreamType() {
-		StringTokenizer st = new StringTokenizer(this.getJgrabberStreamType());
-		return st.nextToken();
-	}
-
-	public String getShortUdrecStreamType() {
-		StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
-		return st.nextToken().toLowerCase();
-	}
 	/**
 	 * @return Returns the recordAllPids.
 	 */

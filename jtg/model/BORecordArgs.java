@@ -20,7 +20,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.util.ArrayList;
 
 import service.SerTimerHandler;
-import control.ControlMain;
 
 public class BORecordArgs {
 
@@ -181,7 +180,7 @@ public class BORecordArgs {
      * Checken ob Videotext aufgenommen werden soll
      */
     public void checkSettings() {
-        if (ControlMain.getSettings().getRecordSettings().isAc3ReplaceStereo()) {
+        if (this.getLocalTimer().isAc3ReplaceStereo()) {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
                 if (aPid.getName().indexOf("AC3")>-1) {
@@ -192,7 +191,7 @@ public class BORecordArgs {
                 }
             }    
         }
-        if (ControlMain.getSettings().getRecordSettings().isStereoReplaceAc3()) {
+        if (this.getLocalTimer().isStereoReplaceAc3()) {
             for (int i=this.getPids().getAPids().size()-1; 0<=i; i--) {
                 BOPid aPid = (BOPid)this.getPids().getAPids().get(i);
                 if (aPid.getName().indexOf("AC3")>-1) {
@@ -200,7 +199,7 @@ public class BORecordArgs {
                 }
             }
         }
-        if (!ControlMain.getSettingsRecord().isRecordVtxt()) {
+        if (!this.getLocalTimer().isRecordVtxt()) {
 		    this.getPids().setVtxtPid(null);
 		}
     }
@@ -208,6 +207,9 @@ public class BORecordArgs {
      * @return Returns the localTimer.
      */
     public BOLocalTimer getLocalTimer() {
+        if (localTimer==null) {
+            localTimer = BOLocalTimer.getDefaultLocaleTimer();
+        }
         return localTimer;
     }
     /**

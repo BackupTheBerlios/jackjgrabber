@@ -49,11 +49,11 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 	}
 
 	private boolean detectRecord() {
-		if (controlProgramTab.isTvMode() && ControlMain.getSettingsRecord().getStreamingEngine() == 0) {
+		if (controlProgramTab.isTvMode() && recordArgs.getLocalTimer().getStreamingEngine() == 0) {
 			record = new UdpRecord(recordArgs, this);
 			return true;
 		}
-		if (controlProgramTab.isTvMode() && ControlMain.getSettingsRecord().getStreamingEngine() == 1) {
+		if (controlProgramTab.isTvMode() && recordArgs.getLocalTimer().getStreamingEngine() == 1) {
 			record = new UdrecRecord(recordArgs, this);
 			return true;
 		} else {
@@ -67,13 +67,13 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 	 */
 	public void run() {
 
-		if (ControlMain.getSettingsRecord().isStoreEPG()) {
+		if (recordArgs.getLocalTimer().isStoreEPG()) {
 			saveEPGInfos();
 		}
 
 		try {
 
-			if (ControlMain.getSettings().getRecordSettings().isStopPlaybackAtRecord()) {
+			if (recordArgs.getLocalTimer().isStopPlaybackAtRecord()) {
 				ControlMain.getBoxAccess().setRecordModusWithPlayback();
 			} else {
 				ControlMain.getBoxAccess().setRecordModus();
@@ -163,7 +163,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 
 	public void stopRecord() {
 		record.stop();
-		if (ControlMain.getSettingsRecord().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
+		if (recordArgs.getLocalTimer().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
 			Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
 			this.startProjectX();
 		} else {
@@ -181,7 +181,7 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 		if (recordArgs.isQuickRecord() && controlProgramTab.isShutdownAfterRecord()) {
 			ControlMain.shutdownPC();
 		}
-		if (!recordArgs.isQuickRecord() && ControlMain.getSettingsRecord().isShutdownAfterRecord()) {
+		if (!recordArgs.isQuickRecord() && recordArgs.getLocalTimer().isShutdownAfterRecord()) {
 			ControlMain.shutdownPC();
 		}
 	}
@@ -213,18 +213,18 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 			 * date + "_" + args.getSenderName(); }
 			 */
 
-			String pattern = ControlMain.getSettingsRecord().getFilePattern();
+			String pattern = recordArgs.getLocalTimer().getFilePattern();
 
 			if (pattern == null || pattern.length() == 0) {
-				pattern = ControlMain.getSettingsRecord().getDirPattern();
+				pattern = recordArgs.getLocalTimer().getDirPattern();
 			}
 
 			fileName = SerHelper.createFileName(recordArgs, pattern);
 
 			// create directory
-			String dirName = SerHelper.createFileName(recordArgs, ControlMain.getSettingsRecord().getDirPattern());
+			String dirName = SerHelper.createFileName(recordArgs, recordArgs.getLocalTimer().getDirPattern());
 
-			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(dirName));
+			directory = new File(recordArgs.getLocalTimer().getSavePath(), SerFormatter.removeInvalidCharacters(dirName));
 			directory.mkdir();
 		}
 		return SerFormatter.removeInvalidCharacters(fileName);

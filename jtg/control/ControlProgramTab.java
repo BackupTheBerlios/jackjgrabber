@@ -348,7 +348,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	/**
 	 * @param recordArgsl
-	 *            Start der Aufnahme und Versetzung der GUI in den Aufnahme-Modus Setzt die EPG Informationen in den Record Args
+	 * Start der Aufnahme und Versetzung der GUI in den Aufnahme-Modus 
+	 * Setzt die EPG Informationen in den Record Args
 	 */
 	public void startRecord(BORecordArgs recordArgs) {
 		this.setRecordArgs(recordArgs);

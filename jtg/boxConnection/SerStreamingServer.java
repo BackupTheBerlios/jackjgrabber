@@ -74,12 +74,12 @@ public class SerStreamingServer extends Thread {
 //		writer.write( document );
 		
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
-		recordArgs.setQuickRecord(false);
-		recordArgs.checkSettings();
 		if (recordArgs.getCommand().equals("stop") ) {
 			controlProgramTab.stopRecord();
 		}
 		if (recordArgs.getCommand().equals("record")) {
+		    recordArgs.setQuickRecord(false);
+			recordArgs.checkSettings();
 			controlProgramTab.startRecord(recordArgs);
 		}
 		server.close();  //server restart
