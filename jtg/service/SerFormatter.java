@@ -13,7 +13,12 @@ import java.text.DateFormat;
  */
 public class SerFormatter {
 
-	public static String ersetzeUmlaute(String input) {
+	/** entferne alle unerlaubten Zeichen
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String removeInvalidCharacters(String input) {
 
 		StringBuffer umlBuf = new StringBuffer();
 		for (int i = 0; i < input.length(); i++) {
@@ -47,6 +52,7 @@ public class SerFormatter {
 					umlBuf.append("Ae");
 					break;
 				}
+				case '?':
 				case '\\' :
 				case ':' :
 				case '/' : {
