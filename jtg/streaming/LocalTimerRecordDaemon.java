@@ -36,15 +36,12 @@ public class LocalTimerRecordDaemon extends Thread {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
-            BOLocalTimer timer = ControlMain.getBoxAccess().detectNextLocalRecordTimer(false);
+            BOLocalTimer timer = ControlMain.getBoxAccess().detectRunningLocalRecordTimer();
             
             if (timer!=null) {
-                long now = new GregorianCalendar().getTimeInMillis();
-                if (now>timer.getStartTime() && now<timer.getStopTime()) {
                     this.startRecord(timer);
                     running = true;
                     this.waitForStop(timer);
-                }
             }
         }
     }
@@ -59,7 +56,6 @@ public class LocalTimerRecordDaemon extends Thread {
             if (now>timer.getStopTime()) {
                 ControlMain.getControl().getView().getTabProgramm().getControl().stopRecord();
                 ControlMain.getBoxAccess().getTimerList(true);
-                ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
                 running=false;
                 this.run();
             }

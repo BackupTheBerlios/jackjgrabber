@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import service.SerFormatter;
 
@@ -51,25 +52,15 @@ public class BOTimerList {
         return null;
     }
     
-    public BOLocalTimer getFirstLocalRecordTimer() {
-        if (this.getRecordTimerList().size()>0) {
-            BOTimer timer=null;
-            
-            for (int i=1; i<this.getRecordTimerList().size(); i++) {
-                if (timer==null) {
-                    if (((BOTimer)this.getRecordTimerList().get(i)).getLocalTimer().isLocal())
-                    timer = (BOTimer)this.getRecordTimerList().get(i);
-                } else {
-                    BOTimer compareTimer = (BOTimer)this.getRecordTimerList().get(i);
-                    if (compareTimer.getLocalTimer().isLocal()) {
-                        if (SerFormatter.compareDates(compareTimer.getUnformattedStartTime(), timer.getUnformattedStartTime())==-1) {
-                            timer=compareTimer;
-                        }   
-                    }
+    public BOLocalTimer getRunningLocalRecordTimer() {
+        BOTimer timer=null;
+        long now = new GregorianCalendar().getTimeInMillis();
+        for (int i=1; i<this.getRecordTimerList().size(); i++) {
+            timer = (BOTimer)this.getRecordTimerList().get(i);
+            if (timer.getLocalTimer().isLocal()) {
+                if (now>timer.getLocalTimer().getStartTime() && now<timer.getLocalTimer().getStopTime()) {
+                    return timer.getLocalTimer();
                 }
-            }
-            if (timer!=null) {
-                return timer.getLocalTimer();   
             }
         }
         return null;

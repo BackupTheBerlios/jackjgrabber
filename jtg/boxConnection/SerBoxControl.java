@@ -38,14 +38,10 @@ import control.ControlMain;
 public abstract class SerBoxControl {
         
     public boolean newTimerAdded=true;
-    public BOTimerList timerList;
-    public BOLocalTimer nextLocalRecordTimer;
+    public BOTimerList timerList = new BOTimerList();
     
-    public BOLocalTimer detectNextLocalRecordTimer(boolean newRead) {
-        if (newRead || nextLocalRecordTimer==null) {
-            nextLocalRecordTimer = timerList.getFirstLocalRecordTimer();
-        }
-        return nextLocalRecordTimer;
+    public BOLocalTimer detectRunningLocalRecordTimer() {
+        return timerList.getRunningLocalRecordTimer();
     }
     
     public BOTimerList getTimerList(boolean newRead) {
