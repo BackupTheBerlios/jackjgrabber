@@ -23,6 +23,10 @@ public class BOSettingsLayout {
 
 	private Point location;
 
+	private Dimension logSize;
+
+	private Point logLocation;
+
 	private int recordInfoDirectorySplitPos;
 
 	public BOSettingsLayout(BOSettings settings) {
@@ -75,4 +79,24 @@ public class BOSettingsLayout {
 			setSettingsChanged(true);
 		}
 	}
+
+	public Point getLogLocation() {
+		return logLocation;
+	}
+	public void setLogLocation(Point logPosition) {
+		if (this.logLocation == null || !logPosition.equals(this.logLocation)) {
+			this.logLocation = logPosition;
+			setSettingsChanged(true);
+		}
+	}
+	public Dimension getLogSize() {
+		return logSize;
+	}
+	public void setLogSize(Dimension logSize) {
+		if (this.logSize == null || !logSize.equals(this.logSize)) {
+			this.logSize = logSize;
+			setSettingsChanged(true);
+		}
+	}
+	
 }

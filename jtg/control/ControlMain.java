@@ -17,6 +17,7 @@ package control;
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
  */
+import java.awt.*;
 import java.beans.*;
 import java.io.*;
 import java.net.*;
@@ -58,8 +59,9 @@ public class ControlMain {
 		startLogger();
 		logWindow = new GuiLogWindow();
 		readSettings();
-		logWindow.setShouldBeVisible(ControlMain.getSettingsMain().isShowLogWindow());
-		logWindow.setVisible(ControlMain.getSettingsMain().isShowLogWindow());
+
+		initLogWindow();
+		
 		if (ControlMain.getSettingsMain().isShowLogo()) {
 			screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application...");
 		}
@@ -75,28 +77,36 @@ public class ControlMain {
 			}
 			screen.dispose();
 		}
-		
-		
-		if (getSettings().getMainSettings().isStartMinimized())
-		{
-			if (getSettings().getMainSettings().isUseSysTray())
-			{
-				control.getView().setVisible(false);	
-			}
-			else
-			{
+
+		if (getSettings().getMainSettings().isStartMinimized()) {
+			if (getSettings().getMainSettings().isUseSysTray()) {
+				control.getView().setVisible(false);
+			} else {
 				control.getView().setVisible(true);
 				control.getView().setExtendedState(JFrame.ICONIFIED);
 				logWindow.setExtendedState(JFrame.ICONIFIED);
 			}
-		}
-		else
-		{
+		} else {
 			control.getView().setVisible(true);
 		}
-		
-		
+
 	};
+
+	/**
+	 * 
+	 */
+	private static void initLogWindow() {
+		logWindow.setShouldBeVisible(ControlMain.getSettingsMain().isShowLogWindow());
+		Point logLoc = getSettings().getLayoutSettings().getLogLocation();
+		Dimension logSize = getSettings().getLayoutSettings().getLogSize();
+		if (logLoc != null) {
+			logWindow.setLocation(logLoc);
+		}
+		if (logSize != null) {
+			logWindow.setSize(logSize);
+		}
+		logWindow.setVisible(ControlMain.getSettingsMain().isShowLogWindow());
+	}
 
 	public static void startLogger() {
 		PatternLayout layout = new PatternLayout();
@@ -299,6 +309,8 @@ public class ControlMain {
 	public static void endProgram() {
 		SerExternalProcessHandler.closeAll();
 		try {
+			//save log layout settings
+			saveLogLayout();
 			if (ControlMain.getSettings().isSettingsChanged()) {
 				SerSettingsHandler.saveAllSettings();
 				Logger.getLogger("ControlMainView").info("Settings saved");
@@ -307,5 +319,15 @@ public class ControlMain {
 			Logger.getLogger("ControlMainView").error("Error while save Settings");
 		}
 		System.exit(0);
+	}
+
+	/**
+	 *  
+	 */
+	private static void saveLogLayout() {
+		if (logWindow != null) {
+			getSettings().getLayoutSettings().setLogLocation(logWindow.getLocation());
+			getSettings().getLayoutSettings().setLogSize(logWindow.getSize());
+		}
 	}
 }
