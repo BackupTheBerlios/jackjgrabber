@@ -1,9 +1,22 @@
-/*
- * Created on 08.08.2004
- *
- */
 package boxConnection;
+/*
+SerBoxControlNeutrino.java by Geist Alexander 
 
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,7 +38,7 @@ import model.BOTimer;
 import control.ControlMain;
 
 /**
- * @author AlexG
+ * Schnittstelle zum NeutrinoImage
  */
 public class SerBoxControlNeutrino extends SerBoxControl{
 			
@@ -110,7 +123,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 				name += st.nextToken();
 				name += " ";
 			}
-			senderList.add(new BOSender(nummer,channelId, name));
+			senderList.add(new BOSender(nummer,channelId, name.substring(0, name.length()-1)));
 		}
 		return senderList;
 	}	 
