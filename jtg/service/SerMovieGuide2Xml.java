@@ -13,6 +13,8 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import control.ControlMain;
+
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -35,10 +37,11 @@ public class SerMovieGuide2Xml {
         root = doc.addElement("movieguide");
     }
     
-    public static void saveXMLFile(Document doc) throws IOException {
+    public static void saveXMLFile(File path) throws IOException {
         OutputFormat format = OutputFormat.createPrettyPrint();
-        XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
-        writer.write(doc);
+        //XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
+        XMLWriter writer = new XMLWriter(new FileWriter(path), format);
+        writer.write(ControlMain.getMovieGuideDocument());
         writer.close();
     }
     
@@ -192,7 +195,7 @@ public class SerMovieGuide2Xml {
         } catch (IOException e) {
             System.out.println("IOException: " + e);
         }
-        saveXMLFile(doc);
+        saveXMLFile(new File(ControlMain.movieGuideFileName));
     }
     
     /**

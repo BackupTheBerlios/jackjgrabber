@@ -53,6 +53,7 @@ public class ControlMain {
 	
 	static BOSettings settings;
 	static Document settingsDocument;
+	static Document movieGuideDocument;
 	static SerBoxControl boxAccess;
 	static SerLogAppender logAppender;
 	static ControlMainView control;
@@ -64,6 +65,8 @@ public class ControlMain {
     private static Locale locale = new Locale("");    
     
     public static String filename = "settings.xml";
+    public static String movieGuideFileName ="movieguide.xml";
+    
 	public static String version[] = { 
 		"Jack the JGrabber 0.1.2",
 		"26.10.2004",
@@ -94,6 +97,7 @@ public class ControlMain {
 	public static void main( String args[] ) {
 		startLogger();
 		readSettings();
+		checkMovieGuide();
 		detectActiveBox();
 		control = new ControlMainView();
 	};
@@ -155,6 +159,24 @@ public class ControlMain {
 				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
 			}
 	}
+	
+	public static void checkMovieGuide() {	
+		try {
+			File pathToXMLFile = new File(movieGuideFileName).getAbsoluteFile();
+			if (pathToXMLFile.exists()) {
+				movieGuideDocument = SerXMLHandling.readDocument(pathToXMLFile);				
+				Logger.getLogger("ControlMain").info("MovieGuide found");
+			} else {								
+				Logger.getLogger("ControlMain").info("MovieGuide not found");
+			}			
+		} catch (MalformedURLException e) {
+			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
+		} catch (DocumentException e) {
+			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
+		} catch (IOException e) {
+			Logger.getLogger("ControlMain").error("Fehler beim lesen der MovieGuide!");
+		}
+}
 
 	public static String getBoxIpOfActiveBox() {
 		BOBox box = getActiveBox();
@@ -231,6 +253,19 @@ public class ControlMain {
 	public static void setSettingsDocument(Document settingsDocument) {
 		ControlMain.settingsDocument = settingsDocument;
 	}
+	/**
+	 * @return Returns the movieGuideDocument.
+	 */
+	public static Document getMovieGuideDocument() {
+		return movieGuideDocument;
+	}
+	/**
+	 * @param movieGuideDocument The movieGuideDocument to set.
+	 */
+	public static void setMovieGuideDocument(Document movieGuideDocument) {
+		ControlMain.movieGuideDocument = movieGuideDocument;
+	}
+	
 	/**
 	 * @return Returns the box.
 	 */
