@@ -43,7 +43,7 @@ public class BOLocalTimer {
 	private long startTime;
 	private long stopTime;
 	private Node timerNode;
-
+	private boolean locked;
 	private BOTimer mainTimer;
 
 	private BOLocalTimer() {
@@ -422,5 +422,15 @@ public class BOLocalTimer {
 	 */
 	public void setLocal(boolean local) {
 		this.local = local;
+	}
+
+	
+	
+	
+	public boolean isLocked() {
+		return locked;
+	}
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 }
