@@ -9,6 +9,8 @@ package boxConnection;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
+import control.ControlMain;
+
 /**
  * @author Treito
  *
@@ -19,8 +21,8 @@ public class SerBoxAuthenticator extends Authenticator
 {
 	protected PasswordAuthentication getPasswordAuthentication()
 	{
-			String UserName="root";
-			String Password="dbox2";
+			String UserName=ControlMain.getSelecteddBox().getLogin();
+			String Password=ControlMain.getSelecteddBox().getPassword();
 			return new PasswordAuthentication(UserName, Password.toCharArray());
 		
 	}
