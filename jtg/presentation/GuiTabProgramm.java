@@ -74,13 +74,17 @@ public class GuiTabProgramm extends GuiTab {
 	
 	public GuiTabProgramm(ControlProgramTab control) {
 		this.setControl(control);
+		initialize();
+	}
+	
+	private void initialize(){
 		this.setLayout(new GridBagLayout());
+		
 		java.awt.GridBagConstraints gridBagConstraintsAusgabe = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraintsButtonsAktionen = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraintsButtonsInfo = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraintsProgram = new GridBagConstraints();
 		java.awt.GridBagConstraints gridBagConstraintsProgramInfo = new GridBagConstraints();
-		
 		gridBagConstraintsProgram.gridx = 0;
 		gridBagConstraintsProgram.gridy = 0;
 		gridBagConstraintsProgram.anchor = java.awt.GridBagConstraints.CENTER;
@@ -98,16 +102,13 @@ public class GuiTabProgramm extends GuiTab {
 		gridBagConstraintsAusgabe.gridy = 4;
 		gridBagConstraintsAusgabe.gridwidth = 2;
 		gridBagConstraintsAusgabe.fill = java.awt.GridBagConstraints.BOTH;
-		this.setPreferredSize(new java.awt.Dimension(630,400));
+		//this.setPreferredSize(new java.awt.Dimension(630,400));
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		this.add(getJPanelProgramm(), gridBagConstraintsProgram);
 		this.add(getJPanelAktionen(), gridBagConstraintsButtonsAktionen);
 		this.add(getJPanelButtonsInformationen(), gridBagConstraintsButtonsInfo);
 		this.add(getJPanelProgramInfo(), gridBagConstraintsProgramInfo);
 		this.add(getJPanelAusgabe(), gridBagConstraintsAusgabe);
-		
-		
-
 	}
 	
 	private JPanel getJPanelProgramm() {
@@ -436,7 +437,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonToTimer = new JButton();
 			jButtonToTimer.setPreferredSize(new java.awt.Dimension(105,25));
 			jButtonToTimer.setText("add to timer");
-			jButtonToTimer.setToolTipText("ausgewählte Dateien zum Timer hinzufügen.");
+			jButtonToTimer.setToolTipText("ausgewï¿½hlte Dateien zum Timer hinzufï¿½gen.");
 		}
 		return jButtonToTimer;
 	}
@@ -593,9 +594,9 @@ public class GuiTabProgramm extends GuiTab {
 	 * This method initializes jDateChooser	
 	 * 
 	 * Achtung modifizierter DateChooser!!!	
-	 * Es wird das Control ControlProgramTab als "Listener" übergeben
-	 * wird das Datum geändert wird das aktuelle Datum automatisch
-	 * über setDateChooserDate(Date) gesetzt
+	 * Es wird das Control ControlProgramTab als "Listener" ï¿½bergeben
+	 * wird das Datum geï¿½ndert wird das aktuelle Datum automatisch
+	 * ï¿½ber setDateChooserDate(Date) gesetzt
 	 */    
 	public JDateChooser getJDateChooser() {
 	      if (jDateChooser == null) {
