@@ -39,6 +39,7 @@ public class GuiTabSettings extends JPanel {
 	private JLabel jLabel1 = null;
 	private JComboBox jComboBoxLocale = null;
 	private JPanel jPanel1 = null;
+	private JLabel jLabel2 = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -120,6 +121,8 @@ public class GuiTabSettings extends JPanel {
 	 */    
 	private JPanel getPanelLayoutSettings() {
 		if (panelLayoutSettings == null) {
+			jLabel2 = new JLabel();
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			jLabel1 = new JLabel();
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
@@ -136,6 +139,7 @@ public class GuiTabSettings extends JPanel {
 			gridBagConstraints7.weightx = 2.0;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints7.gridwidth = 2;
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
 			gridBagConstraints8.weightx = 1.0;
@@ -149,15 +153,23 @@ public class GuiTabSettings extends JPanel {
 			gridBagConstraints2.weightx = 1.0;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints2.gridwidth = 2;
 			gridBagConstraints31.gridx = 1;
 			gridBagConstraints31.gridy = 3;
 			gridBagConstraints31.weightx = 3.0D;
 			gridBagConstraints31.weighty = 3.0D;
+			gridBagConstraints31.gridwidth = 3;
+			gridBagConstraints12.gridx = 1;
+			gridBagConstraints12.gridy = 4;
+			gridBagConstraints12.gridwidth = 3;
+			jLabel2.setText("(Anwendungs-Neustart erforderlich)");
+			jLabel2.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD | java.awt.Font.ITALIC, 10));
 			panelLayoutSettings.add(getJComboBoxTheme(), gridBagConstraints7);
 			panelLayoutSettings.add(jLabel, gridBagConstraints8);
 			panelLayoutSettings.add(jLabel1, gridBagConstraints11);
 			panelLayoutSettings.add(getJComboBoxLocale(), gridBagConstraints2);
 			panelLayoutSettings.add(getJPanel1(), gridBagConstraints31);
+			panelLayoutSettings.add(jLabel2, gridBagConstraints12);
 		}
 		return panelLayoutSettings;
 	}
