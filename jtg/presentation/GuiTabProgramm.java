@@ -95,7 +95,6 @@ public class GuiTabProgramm extends GuiTab {
 		gridBagConstraintsAusgabe.gridy = 4;
 		gridBagConstraintsAusgabe.gridwidth = 2;
 		gridBagConstraintsAusgabe.fill = java.awt.GridBagConstraints.BOTH;
-		//this.setPreferredSize(new java.awt.Dimension(630,400));
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		this.add(getJPanelProgramm(), gridBagConstraintsProgram);
 		this.add(getJPanelAktionen(), gridBagConstraintsButtonsAktionen);
