@@ -2,6 +2,7 @@ package presentation;
 
 import javax.swing.JPanel;
 
+import control.ControlDefaultTimerTab;
 import control.ControlNeutrinoTimerTab;
 import control.ControlTab;
 
@@ -17,11 +18,17 @@ public abstract class GuiTimerPanel extends JPanel {
 			ControlNeutrinoTimerTab control = new ControlNeutrinoTimerTab(view);
 			GuiNeutrinoTimerPanel panel = new GuiNeutrinoTimerPanel(control);
 			return panel;
-		} else { 
+		}
+		if (boxName.equals("Neutrino")) {
 			ControlNeutrinoTimerTab control = new ControlNeutrinoTimerTab(view);
 			GuiNeutrinoTimerPanel panel = new GuiNeutrinoTimerPanel(control);
 			return panel;
+		} else {
+			ControlDefaultTimerTab control = new ControlDefaultTimerTab(view);
+			return new GuiDafaultTimerPanel(control);
 		}
+		
+			
 	}
 	
 	public abstract ControlTab getControl();

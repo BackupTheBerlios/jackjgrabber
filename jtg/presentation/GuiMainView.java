@@ -1,7 +1,11 @@
 package presentation;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -46,6 +50,7 @@ public class GuiMainView extends JFrame {
 		initialize();
 		SerGUIUtils.center(this);
 		setVisible(true);	
+		setResizable(true);
 	}
 	
 	private void setLookAndFeel() {
@@ -61,8 +66,8 @@ public class GuiMainView extends JFrame {
 	 */
 	private void initialize() {
 		this.setForeground(java.awt.SystemColor.windowText);
-		this.setResizable(false);
 		this.setSize(785, 555);
+		this.setLayout(new FlowLayout());
 		this.setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
 				" "+ControlMain.version[2]+" "+ControlMain.version[3]);
 		this.setContentPane(getMainTabPane());
