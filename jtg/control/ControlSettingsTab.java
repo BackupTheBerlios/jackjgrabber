@@ -23,22 +23,28 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 import model.BOBox;
 import model.BOSettings;
 
 import presentation.GuiMainView;
+import presentation.GuiStreamTypeComboModel;
 
 
 public class ControlSettingsTab extends ControlTab implements KeyListener, ActionListener, ItemListener {
 
 	GuiMainView mainView;
 	BOSettings settings;
+	
+	public final String[] streamTypesJGrabber = { "PES MPEG-Packetized Elementary", "TS MPEG-Transport"	};
+	public final String[] streamTypesUdrec = { "PES MPEG-Packetized Elementary", "TS MPEG-Transport", "ES MPEG-Elementary"	};
 	
 	public ControlSettingsTab(GuiMainView view) {
 		this.setMainView(view);
@@ -56,8 +62,36 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 		this.getMainView().getTabSettings().getJTextFieldRecordSavePath().setText(settings.getSavePath());
 		this.getMainView().getTabSettings().getCbStartStreamingServer().setSelected(settings.isStartStreamingServer());
 		this.getMainView().getTabSettings().getJTextFieldPlaybackString().setText(settings.getPlaybackString());
-		this.getMainView().getTabSettings().getJComboBoxStreamType().setSelectedItem(settings.getStreamType());
+		this.getMainView().getTabSettings().getJComboBoxStreamType().setSelectedItem(settings.getJgrabberStreamType());
 		this.getMainView().getTabSettings().getCbStartPX().setSelected(settings.isStartPX());
+		this.initializeStreamingEngine();
+	}
+	
+	private void initializeStreamingEngine() {
+		String streamType;
+		if (this.getSettings().getStreamingEngine()==0) {
+			this.initializeJGrabberEngine();
+		} else {
+			this.initializeUdrecEngine();
+		}
+	}
+	
+	private void initializeJGrabberEngine() {
+		this.getMainView().getTabSettings().getJRadioButtonJGrabber().setSelected(true);
+		GuiStreamTypeComboModel streamTypeComboModel = new GuiStreamTypeComboModel(streamTypesJGrabber);
+		String streamType = this.getSettings().getJgrabberStreamType();
+		this.getMainView().getTabSettings().getJComboBoxStreamType().setModel(streamTypeComboModel);
+		this.getMainView().getTabSettings().getStreamTypeComboModel().setSelectedItem(streamType);
+		this.getMainView().getTabSettings().getJTextFieldUdrecPath().setText(settings.getUdrecPath());
+	}
+	
+	private void initializeUdrecEngine() {
+		this.getMainView().getTabSettings().getJRadioButtonUdrec().setSelected(true);
+		GuiStreamTypeComboModel streamTypeComboModel = new GuiStreamTypeComboModel(streamTypesUdrec);
+		String streamType = this.getSettings().getUdrecStreamType();
+		this.getMainView().getTabSettings().getJComboBoxStreamType().setModel(streamTypeComboModel);
+		this.getMainView().getTabSettings().getStreamTypeComboModel().setSelectedItem(streamType);
+		this.getMainView().getTabSettings().getJTextFieldUdrecPath().setText(settings.getUdrecPath());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -69,7 +103,18 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 			this.actionAddBox();
 		}
 		if (action == "recordPath") {
-			this.openFileChooser();
+			this.openRecordPathFileChooser();
+		}
+		if (action == "udrecPath") {
+			this.openUdrecPathFileChooser();
+		}
+		if (action == "jgrabber") {
+			this.getSettings().setStreamingEngine(0);
+			this.initializeJGrabberEngine();
+		}
+		if (action == "udrec") {
+			this.getSettings().setStreamingEngine(1);
+			this.initializeUdrecEngine();
 		}
 	}
 	public void keyTyped(KeyEvent event) {}
@@ -83,6 +128,9 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 		}
 		if (tf.getName().equals("serverPort")){
 			settings.setStreamingServerPort(tf.getText());
+		}
+		if (tf.getName().equals("udrecPath")){
+			settings.setUdrecPath(tf.getText());
 		}
 	}
 	
@@ -109,18 +157,20 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 			}
 		} else {
 			JComboBox comboBox = (JComboBox)event.getSource();
-			if (comboBox.getName().equals("theme")) {
-				settings.setThemeLayout((String)comboBox.getSelectedItem());
-			}
-			if (comboBox.getName().equals("locale")) {
-				settings.setLocale((String)comboBox.getSelectedItem());
-			}
-			if (comboBox.getName().equals("playbackDevice")) {
-				settings.setPlaybackString((String)comboBox.getSelectedItem());
-			}
-			if (comboBox.getName().equals("streamType")) {
-				settings.setStreamType((String)comboBox.getSelectedItem());
-			}
+			if (event.getStateChange()==1) {
+				if (comboBox.getName().equals("theme")) {
+					settings.setThemeLayout((String)comboBox.getSelectedItem());
+				}
+				if (comboBox.getName().equals("locale")) {
+					settings.setLocale((String)comboBox.getSelectedItem());
+				}
+				if (comboBox.getName().equals("playbackDevice")) {
+					settings.setPlaybackString((String)comboBox.getSelectedItem());
+				}
+				if (comboBox.getName().equals("streamType")) {
+					settings.setStreamType((String)comboBox.getSelectedItem());
+				}
+			}	
 		}
 	}
 	
@@ -134,7 +184,7 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 		this.getMainView().getTabSettings().getModelBoxTable().removeRow(selectedRow);
 	}
 
-	private void openFileChooser() {
+	private void openRecordPathFileChooser() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -151,6 +201,28 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 			}
 	}
 	
+	private void openUdrecPathFileChooser() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setApproveButtonText( "Auswählen");
+		chooser.setApproveButtonToolTipText( "Pfad zur udrec.exe auswählen");
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		FileFilter filter = new FileFilter(){
+			public boolean accept(File f){
+				return (f.getName().endsWith("udrec.exe") || f.isDirectory() );
+			}
+			public String getDescription(){
+				return "udrec.exe";
+			}
+		};
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showSaveDialog( null ) ;
+	
+		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+			String path = chooser.getSelectedFile().toString();
+			this.getMainView().getTabSettings().getJTextFieldUdrecPath().setText(path);
+			ControlMain.getSettings().setUdrecPath(path);	
+		}
+	}
 	/**
 	 * @return Returns the mainView.
 	 */
