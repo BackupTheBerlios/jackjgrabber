@@ -185,8 +185,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				this.actionTvMode();
 				break;
 			}
+			if (action == "refresh"){
+				this.actionRefresh();
+				break;
+			}
 			break;
 		}
+	}
+	
+	private void actionRefresh() {
+		ControlMain.detectImage();
+		this.reInitialize();
 	}
 	
 	private void actionTvMode() {
@@ -213,6 +222,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Steuerung der 2 Zustaende. 
 	 * Aufnahme läuft bereits ->stop
 	 * Aufnahme läuft nicht->start
+	 * 
+	 * Beim Start der Aufnahme vorher auf den selektierten Sender zappen
+	 * im TV-Modus falls erwünscht auf die aufzunehmenden Pids abfragen
 	 */
 	private void actionRecord() {
 		try {
@@ -220,12 +232,12 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				BORecordArgs args;
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
-					new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
-					if (this.getPids().getVPid()!=null || this.getPids().getAPids().size()>0) {
-					    this.startRecord(this.buildTVRecordArgs());
+					if (!ControlMain.getSettings().isRecordAllPids()) {
+						new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
 					}
-				} else {
-				    this.startRecord(this.buildRadioRecordArgs());
+				} 
+				if (this.getPids().getPidCount()>0) {
+				    this.startRecord(this.buildRecordArgs());
 				}
 			} else {
 				this.stopRecord();
@@ -278,21 +290,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.getMainView().getTabProgramm().startRecordModus();
 		recordControl.start();
 	}
-	
 
 	/**
 	 * @return BORecordArgs
-	 * Erstellen des Objektes BORecordArgs aus den Sender und EPG-Informationen
+	 * Erstellen des Objektes BORecordArgs und Setzen der Pids
+	 * 
 	 */
-	private BORecordArgs buildRadioRecordArgs() throws IOException {
-		BORecordArgs args = new BORecordArgs();
-		args.setAPids(this.getPids().getAPids());
-			
-		this.fillRecordArgsWithEpgData(args);
-		return args;
-	}
-	
-	private BORecordArgs buildTVRecordArgs() throws IOException {
+	private BORecordArgs buildRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
 		if (this.getPids().getVPid() != null) {
 		    args.setVPid(this.getPids().getVPid()[0]);  
@@ -301,7 +305,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		this.fillRecordArgsWithEpgData(args);
 		return args;
 	}
-	
+	/*
+	 * Füllen der RecordArgs mit EPG- und Sender-Informationen
+	 */
 	private void fillRecordArgsWithEpgData(BORecordArgs args) throws IOException {
 		args.setSenderName(this.getSelectedSender().getName());
 		BOEpg epg = this.getSelectedSender().getRunnigEpgWithUpdate();

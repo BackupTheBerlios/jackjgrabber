@@ -64,6 +64,7 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 		this.getMainView().getTabSettings().getJTextFieldPlaybackString().setText(settings.getPlaybackString());
 		this.getMainView().getTabSettings().getJComboBoxStreamType().setSelectedItem(settings.getJgrabberStreamType());
 		this.getMainView().getTabSettings().getCbStartPX().setSelected(settings.isStartPX());
+		this.getMainView().getTabSettings().getCbRecordAllPids().setSelected(settings.isRecordAllPids());
 		this.initializeStreamingEngine();
 	}
 	
@@ -147,31 +148,46 @@ public class ControlSettingsTab extends ControlTab implements KeyListener, Actio
 	//Change-Events der Combos und der Checkbox
 	public void itemStateChanged (ItemEvent event) {
 		String comp = event.getSource().getClass().getName();
-		if (comp.equals("javax.swing.JCheckBox")) {
-			JCheckBox checkBox = (JCheckBox)event.getSource();
-			if (checkBox.getName().equals("startStreamingServer")) {
-				settings.setStartStreamingServer(checkBox.isSelected());
-			}
-			if (checkBox.getName().equals("startPX")) {
-				settings.setStartPX(checkBox.isSelected());
-			}
-		} else {
-			JComboBox comboBox = (JComboBox)event.getSource();
-			if (event.getStateChange()==1) {
-				if (comboBox.getName().equals("theme")) {
-					settings.setThemeLayout((String)comboBox.getSelectedItem());
+		while (true) {
+			if (comp.equals("javax.swing.JCheckBox")) {
+				JCheckBox checkBox = (JCheckBox)event.getSource();
+				if (checkBox.getName().equals("startStreamingServer")) {
+					settings.setStartStreamingServer(checkBox.isSelected());
+					break;
 				}
-				if (comboBox.getName().equals("locale")) {
-					settings.setLocale((String)comboBox.getSelectedItem());
+				if (checkBox.getName().equals("startPX")) {
+					settings.setStartPX(checkBox.isSelected());
+					break;
 				}
-				if (comboBox.getName().equals("playbackDevice")) {
-					settings.setPlaybackString((String)comboBox.getSelectedItem());
+				if (checkBox.getName().equals("recordAllPids")) {
+					settings.setRecordAllPids(checkBox.isSelected());
+					break;
 				}
-				if (comboBox.getName().equals("streamType")) {
-					settings.setStreamType((String)comboBox.getSelectedItem());
-				}
+				break;
+			} else {
+				JComboBox comboBox = (JComboBox)event.getSource();
+				if (event.getStateChange()==1) {
+					if (comboBox.getName().equals("theme")) {
+						settings.setThemeLayout((String)comboBox.getSelectedItem());
+						break;
+					}
+					if (comboBox.getName().equals("locale")) {
+						settings.setLocale((String)comboBox.getSelectedItem());
+						break;
+					}
+					if (comboBox.getName().equals("playbackDevice")) {
+						settings.setPlaybackString((String)comboBox.getSelectedItem());
+						break;
+					}
+					if (comboBox.getName().equals("streamType")) {
+						settings.setStreamType((String)comboBox.getSelectedItem());
+						break;
+					}
+				}	
+				break;
 			}	
 		}
+		
 	}
 	
 	private void actionAddBox() {

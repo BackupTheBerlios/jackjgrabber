@@ -69,6 +69,7 @@ public class GuiTabSettings extends JPanel {
 	private JFormattedTextField tfServerPort = null;
 	private JFormattedTextField tfBoxIp = null;
 	private JCheckBox cbStartStreamingServer;
+	private JCheckBox cbRecordAllPids;
 	private JCheckBox cbStartPX;
 	private ControlSettingsTab control;
 	private GuiBoxSettingsTableModel modelBoxTable;
@@ -120,9 +121,10 @@ public class GuiTabSettings extends JPanel {
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 7, 1));
-			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 5, 1));
-			builder.add(new JLabel("Streamingserver-Port"),	  					cc.xy	(1, 3));
-			builder.add(this.getTfServerPort(),									cc.xy	(3, 3));			
+			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 4, 1));
+			builder.add(new JLabel("Streamingserver-Port"),	  					cc.xywh	(5, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
+			builder.add(this.getTfServerPort(),									cc.xy	(7, 2));
+			builder.add(this.getCbRecordAllPids(),								cc.xy	(1, 3));
 			builder.add(this.getCbStartPX(),									cc.xywh	(1, 5, 5, 1));
 			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),				cc.xy	(1, 6));
 			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(4, 6, 2, 1));
@@ -415,6 +417,17 @@ public class GuiTabSettings extends JPanel {
 			cbStartPX.addItemListener(control);
 		}
 		return cbStartPX;
+	}
+	/**
+	 * @return Returns the cbRecordAllPids.
+	 */
+	public JCheckBox getCbRecordAllPids() {
+		if (cbRecordAllPids == null) {
+			cbRecordAllPids = new JCheckBox("Immer alle Pids aufnehmen");
+			cbRecordAllPids.setName("recordAllPids");
+			cbRecordAllPids.addItemListener(control);
+		}
+		return cbRecordAllPids;
 	}
 	/**
 	 * @return Returns the jRadioButtonJGrabber.

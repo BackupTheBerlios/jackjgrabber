@@ -54,6 +54,7 @@ public class SerXMLConverter {
 		getSettingsStartPX(root, settings);
 		getSettingsStreamingEngine(root, settings);
 		getSettingsUdrecPath(root, settings);
+		getSettingsRecordAllPids(root, settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		return settings;
@@ -87,6 +88,16 @@ public class SerXMLConverter {
 		} else {
 			SerXMLHandling.setElementInElement(root,"startPX", "true");
 			settings.setStartPX(true);
+		}
+	}
+	
+	private static void getSettingsRecordAllPids(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/recordAllPids");
+		if (node != null) {
+			settings.recordAllPids=node.getText().equals("true");
+		} else {
+			SerXMLHandling.setElementInElement(root,"recordAllPids", "true");
+			settings.setRecordAllPids(true);
 		}
 	}
 	
@@ -242,7 +253,9 @@ public class SerXMLConverter {
 		Node startPx = settingsDocument.selectSingleNode("/settings/startPX");
 		Node engine = settingsDocument.selectSingleNode("/settings/engine");
 		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
+		Node recordAllPids = settingsDocument.selectSingleNode("/settings/recordAllPids");
 
+		recordAllPids.setText(Boolean.toString(ControlMain.getSettings().isRecordAllPids()));
 		engine.setText(Integer.toString(ControlMain.getSettings().getStreamingEngine()));
 		udrecPath.setText(ControlMain.getSettings().getUdrecPath());
 		startPx.setText(Boolean.toString(ControlMain.getSettings().isStartPX()));

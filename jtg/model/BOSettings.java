@@ -37,6 +37,7 @@ public class BOSettings {
 	public String streamingServerPort;
 	public boolean startStreamingServer;
 	public boolean startPX;
+	public boolean recordAllPids;
 	public String savePath;
 	public String udrecPath;
 	public String playbackString;
@@ -277,5 +278,20 @@ public class BOSettings {
 	public String getShortUdrecStreamType() {
 	    StringTokenizer st = new StringTokenizer(this.getUdrecStreamType());
 	    return st.nextToken().toLowerCase();
+	}
+	/**
+	 * @return Returns the recordAllPids.
+	 */
+	public boolean isRecordAllPids() {
+		return recordAllPids;
+	}
+	/**
+	 * @param recordAllPids The recordAllPids to set.
+	 */
+	public void setRecordAllPids(boolean recordPids) {
+		if (this.recordAllPids != recordPids) {
+			setSettingsChanged(true);
+			this.recordAllPids = recordPids;
+		}
 	}
 }

@@ -53,6 +53,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"startPX", "true");
 		setElementInElement(root,"udrecPath", new File("udrec.exe").getAbsolutePath());
 		setElementInElement(root,"engine", "0");
+		setElementInElement(root,"recordAllPids", "true");
 
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);
