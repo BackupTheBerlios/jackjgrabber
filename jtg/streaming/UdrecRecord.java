@@ -52,10 +52,12 @@ public class UdrecRecord  extends Record {
 	    ArrayList cmd = new ArrayList();
 	    BOPids pids = recordArgs.getPids();
 	    String cmdReturn[];
-	    if ((System.getProperty("os.name")).equalsIgnoreCase("Linux")) {
+	    if (ControlMain.getSettingsPath().getUdrecPath().substring(0,4).equalsIgnoreCase("mono")) {
 	    	cmd.add("mono");
+	    	cmd.add(ControlMain.getSettingsPath().getUdrecPath().substring(5));
+	    } else {
+	    	cmd.add(ControlMain.getSettingsPath().getUdrecPath());
 	    }
-	    cmd.add(ControlMain.getSettingsPath().getUdrecPath());
 	    cmd.add("-host");
 	    cmd.add(boxIp);
 	    cmd.add("-buf");
