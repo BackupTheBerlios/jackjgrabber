@@ -21,8 +21,8 @@ public class SerBoxAuthenticator extends Authenticator
 {
 	protected PasswordAuthentication getPasswordAuthentication()
 	{
-			String UserName=ControlMain.getSelecteddBox().getLogin();
-			String Password=ControlMain.getSelecteddBox().getPassword();
+			String UserName=ControlMain.getSelectedBox().getLogin();
+			String Password=ControlMain.getSelectedBox().getPassword();
 			return new PasswordAuthentication(UserName, Password.toCharArray());
 		
 	}
