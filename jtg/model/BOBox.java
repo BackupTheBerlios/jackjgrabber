@@ -10,18 +10,16 @@ package model;
 public class BOBox {
 
 	private String dboxIp;
-	private String login;
-	private String password;
+	private String login="root";
+	private String password="dbox2";
 	private Boolean standard = Boolean.FALSE;
 	private boolean selected;
 	
 	
 	public BOBox() {}
 	
-	public BOBox (String ip, String login, String password) {
+	public BOBox (String ip) {
 		this.setDboxIp(ip);
-		this.setLogin(login);
-		this.setPassword(password);
 	}
 	/**
 	 * @return Returns the dboxIp.
