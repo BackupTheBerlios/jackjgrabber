@@ -45,7 +45,7 @@ public class SerMovieGuide2Xml {
         writer.close();    
     }
     
-    public static void setElementInElement(Element parentElement, String childElementName, String childElementValue) {
+    private static void setElementInElement(Element parentElement, String childElementName, String childElementValue) {
         Element element = DocumentHelper.createElement(childElementName);
         element.setText(childElementValue);
         parentElement.add(element);
@@ -53,12 +53,10 @@ public class SerMovieGuide2Xml {
     
     private static String getAktuellDateString() {
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-        String monat = String.valueOf((cal.get(Calendar.MONTH) + 1));
-        String jahr = String.valueOf((cal.get(Calendar.YEAR))).substring(2);
-        return "mguide_d_s_" + monat + "_" + jahr + ".txt";
+        return "mguide_d_s_" + String.valueOf((cal.get(Calendar.MONTH) + 1)) + "_" + String.valueOf((cal.get(Calendar.YEAR))).substring(2) + ".txt";        
     }
     
-    private static void createHashTable() {
+    private static final void createHashTable() {
         htToken.put((String) "Titel", new Integer(1));
         htToken.put((String) "Episode", new Integer(2));
         htToken.put((String) "Produktionsland", new Integer(3));
@@ -136,9 +134,7 @@ public class SerMovieGuide2Xml {
             String input = new String();
             StringBuffer inhalt = new StringBuffer();
             createHashTable();
-            boolean[] lineCounter = new boolean[3];
-            int number = 0;
-            String[] out;
+            boolean[] lineCounter = new boolean[2];            
             while ((input = in.readLine()) != null) {
                 lineCounter = getLineCounter(input);
                 if (lineCounter[0]) {
