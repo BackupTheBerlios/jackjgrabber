@@ -286,7 +286,7 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 		return jListDontForget;
 	}
 	/**
-	 * @return Returns the jScrollPanePlayerList.
+	 * @return Returns the getJScrollPanePlayerList.
 	 */
 	public JScrollPane getJScrollPanePlayerList() {
 		if (jScrollPaneDontForgetList == null) {
@@ -298,7 +298,7 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 	}
 
 	/**
-	 * @return Returns the jButtonAddPlayer.
+	 * @return Returns the jButtonAddDontForget.
 	 */
 	public JButton getJButtonAddPlayer() {
 		if (jButtonAddDontForget == null) {
@@ -311,7 +311,7 @@ public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 		return jButtonAddDontForget;
 	}
 	/**
-	 * @return Returns the jButtonDeletePlayer.
+	 * @return Returns the jButtonDeleteDontForget.
 	 */
 	public JButton getJButtonDeletePlayer() {
 		if (jButtonDeleteDontForget == null) {
