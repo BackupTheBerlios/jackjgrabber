@@ -41,8 +41,9 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabTimer == null) {
 			if (ControlMain.getBoxAccess() != null) {
 				tabTimer = GuiTimerPanel.getTimerPanel(ControlMain.getBoxAccess().getName(), this.getView());
+			} else {
+			    tabTimer = GuiTimerPanel.getTimerPanel("Default", this.getView());
 			}
-			tabTimer = GuiTimerPanel.getTimerPanel("Default", this.getView());
 		}
 		return tabTimer;
 	}
