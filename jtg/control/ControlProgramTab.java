@@ -64,7 +64,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(0));		
 			this.getMainView().getTabProgramm().getJComboBoxBouquets().setSelectedIndex(0);
 		} catch (IOException e) {			
-			SerAlertDialog.alert(ControlMainView.getProperty("no_connect"), this.getMainView());
+			SerAlertDialog.alert(ControlMain.getProperty("no_connect"), this.getMainView());
 		}
 	}
 	

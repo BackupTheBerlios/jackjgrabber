@@ -12,15 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import presentation.GuiTerms;
-import service.SerLogAppender;
-
 
 /**
  * @author Alexander Geist
@@ -31,14 +26,6 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	
 	GuiMainView view;
 	GuiTerms guiTerms;
-	private Logger mainLogger;
-	private SerLogAppender logAppender;
-
-	private static final String _MESSAGE_BUNDLE = "/locale/messages";
-	private Locale locale = new Locale("de","DE");
-    private static Properties prop = new Properties();    
-
-	
 	
 	public ControlMainView() {
 		//this.showTerms();
@@ -52,20 +39,21 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	
 	private void runAfterTerms() {
 		this.setView(new GuiMainView(this));
-		this.startLogger();
-		this.getLogAppender().setView(this.getView());
+		ControlMain.startLogger();
+		ControlMain.getLogAppender().setView(this.getView());
 		this.initialize();
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
-		this.getMainLogger().info("Anwendung gestartet");		
+		this.log("Anwendung gestartet");		
 	}
 	
 	private void initialize() {
 		this.logSystemInfo();
 		ControlMain.readSettings();
 		ControlMain.detectImage();
-		this.setResourceBundle(locale);
+		ControlMain.setResourceBundle(ControlMain.locale);
 	}
 	private void logSystemInfo() {
+		Logger mainLogger = Logger.getLogger("ControlMainView");
 		mainLogger.info(ControlMain.version[0]+"/"+ControlMain.version[1]+" "
 				+ControlMain.version[2]+" "+ControlMain.version[3]);
 		mainLogger.info("java.version\t"+System.getProperty("java.version"));
@@ -79,37 +67,24 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	}
 	
 	public void javaEV() {
-		mainLogger.info("  "+java.text.DateFormat.getTimeInstance(java.text.DateFormat.FULL).format(new Date()));
-		mainLogger.info("\njava.version\t"+System.getProperty("java.version"));
-		mainLogger.info("\njava.vendor\t"+System.getProperty("java.vendor"));
-		mainLogger.info("\njava.home\t"+System.getProperty("java.home"));
-		mainLogger.info("\njava.vm.version\t"+System.getProperty("java.vm.version"));
-		mainLogger.info("\njava.vm.vendor\t"+System.getProperty("java.vm.vendor"));
-		mainLogger.info("\njava.vm.name\t"+System.getProperty("java.vm.name"));
-		mainLogger.info("\njava.class.vers\t"+System.getProperty("java.class.version"));
-		mainLogger.info("\njava.class.path\t"+System.getProperty("java.class.path"));
-		mainLogger.info("\nos.name\t"+System.getProperty("os.name"));
-		mainLogger.info("\nos.arch\t"+System.getProperty("os.arch"));
-		mainLogger.info("\nos.version\t"+System.getProperty("os.version"));
-		mainLogger.info("\nuser.name\t"+System.getProperty("user.name"));
-		mainLogger.info("\nuser.home\t"+System.getProperty("user.home"));
+		this.log("  "+java.text.DateFormat.getTimeInstance(java.text.DateFormat.FULL).format(new Date()));
+		this.log("\njava.version\t"+System.getProperty("java.version"));
+		this.log("\njava.vendor\t"+System.getProperty("java.vendor"));
+		this.log("\njava.home\t"+System.getProperty("java.home"));
+		this.log("\njava.vm.version\t"+System.getProperty("java.vm.version"));
+		this.log("\njava.vm.vendor\t"+System.getProperty("java.vm.vendor"));
+		this.log("\njava.vm.name\t"+System.getProperty("java.vm.name"));
+		this.log("\njava.class.vers\t"+System.getProperty("java.class.version"));
+		this.log("\njava.class.path\t"+System.getProperty("java.class.path"));
+		this.log("\nos.name\t"+System.getProperty("os.name"));
+		this.log("\nos.arch\t"+System.getProperty("os.arch"));
+		this.log("\nos.version\t"+System.getProperty("os.version"));
+		this.log("\nuser.name\t"+System.getProperty("user.name"));
+		this.log("\nuser.home\t"+System.getProperty("user.home"));
 	}
-
 	
-	public void startLogger() {
-		PatternLayout layout = new PatternLayout();
-		
-		//http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html
-		layout.setConversionPattern("%d{HH:mm:ss} %-5p %c - %m%n");
-		
-		mainLogger = Logger.getLogger("ControlMain");
-		SerLogAppender logApp;
-		try {
-			setLogAppender(new SerLogAppender(layout));
-			getLogAppender().setMaxBackupIndex(3); //Number of max Backup-Files
-			getLogAppender().setMaxFileSize("500KB");
-			BasicConfigurator.configure(getLogAppender());
-		} catch (IOException e) {}
+	private void log(String logtext) {
+		Logger.getLogger("ControlMainView").info(logtext);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -184,30 +159,6 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.guiTerms = guiTerms;
 	}
 	/**
-	 * @return Returns the logAppender.
-	 */
-	public SerLogAppender getLogAppender() {
-		return logAppender;
-	}
-	/**
-	 * @param logAppender The logAppender to set.
-	 */
-	public void setLogAppender(SerLogAppender logAppender) {
-		this.logAppender = logAppender;
-	}
-	/**
-	 * @return Returns the mainLogger.
-	 */
-	public Logger getMainLogger() {
-		return mainLogger;
-	}
-	/**
-	 * @param mainLogger The mainLogger to set.
-	 */
-	public void setMainLogger(Logger mainLogger) {
-		this.mainLogger = mainLogger;
-	}
-	/**
 	 * @return Returns the view.
 	 */
 	public GuiMainView getView() {
@@ -219,23 +170,4 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	public void setView(GuiMainView view) {
 		this.view = view;
 	}	
-	private void setLocale(String sprache, String land){
-        locale = new Locale(sprache,land);    	
-    }
-
-    private Locale getLocale(){
-        return locale;
-    }
-
-    public static String getProperty(String key){
-    	return prop.getProperty(key);
-    }
-
-    private void setResourceBundle(Locale locale){
-        this.locale = locale;    	    	  
-        try{    	                       
-        	InputStream is=getClass().getResourceAsStream(_MESSAGE_BUNDLE+"_"+locale.getLanguage()+".properties");                    	        	
-        	prop.load(is);                    	
-        }catch (IOException ex){}       	        
-    }    
 }
