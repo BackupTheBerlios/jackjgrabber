@@ -49,22 +49,16 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public String getChanIdOfRunningSender() throws IOException {
-		BufferedReader input = getConnection("/cgi-bin/streaminfo");
+	    BufferedReader input = getConnection("/cgi-bin/currentService");
 		String line;
-		int startpos, endpos;
 		while((line=input.readLine())!=null) {
-		    startpos=line.indexOf("<td>Service reference");
-		    if (startpos>0) {
-		        startpos=line.indexOf("<td>",startpos+1);
-		        endpos=line.indexOf("</td>", startpos+1);
-		        return line.substring(startpos+4, endpos);
-		    }
+			return line;
 		}
-		return "error";
+		return line;
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
-		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"UTF-8"));
+	    return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"UTF-8"));
 	}
 		
 	public BOPids getPids(boolean tvMode) throws IOException {
@@ -97,24 +91,19 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public ArrayList getBouquetList() throws IOException {
 		ArrayList bouquetList = new ArrayList();
 		String line;
-		String name;
-		int bouquetStart=0;
-		int bouquetEnd=0;
-		int bouquetNr=0;
-		BufferedReader in = getConnection("/body");
+		int seperator;
+		boolean tvMode=isTvMode();
+		BufferedReader in;
+		if (tvMode) {
+		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:6:0:0:0:0:0:0:");
+		} else {
+		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:4:0:0:0:0:0:0:");
+		}
 		while ((line = in.readLine()) != null) {
-			if (line.indexOf("bouquets = new Array")>0) {
-				line = in.readLine();
-				bouquetStart=0;
-				bouquetEnd=0;
-   		 		while ((bouquetStart=line.indexOf("\"",bouquetEnd+1))>0)
-   		 		{
-   		 			bouquetEnd=line.indexOf("\"",bouquetStart+1);
-   		 			name=line.substring(bouquetStart+1, bouquetEnd);
-   		 			bouquetList.add(new BOBouquet(""+bouquetNr, name));
-   		 			bouquetNr++;
-   		 		}
-   			}
+		    seperator=line.indexOf(";");
+		    if (seperator>0) {
+		        bouquetList.add(new BOBouquet(line.substring(0,seperator), line.substring(seperator+1)));
+		    }
 		}
    		return bouquetList;
 	}
@@ -122,101 +111,46 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public ArrayList getAllSender() throws IOException {
 	    ArrayList senderList = new ArrayList();
 		String line;
-		String line2="";
-		int channelStart=0;
-		int channelEnd=0;
-		int channelLength=0;
-		ArrayList readEChannels= new ArrayList();
-		ArrayList readEChannelsRef= new ArrayList();
-		BufferedReader in = getConnection("/body");
-		while ((line = in.readLine()) != null) {
-			if (line.indexOf("channels[0]")>0) {
-   		 		channelStart=0;
-   		 		channelEnd=0;
-   		 		while ((channelStart=line.indexOf("\"",channelEnd+1))>0) {
-   		 			channelLength=line.indexOf(" - ",channelStart+1);
-   		 			if ((channelLength<=0)|(channelLength>line.indexOf("\"",channelStart+1)))
-   		 				channelLength=line.indexOf("\"",channelStart+1);
-   		 			line2=line.substring(channelStart+1, channelLength);
-   		 			readEChannels.add(line2);
-   		 			channelEnd=line.indexOf("\"",channelStart+1);
-   		 		}
-   			}
-   		 	if (line.indexOf("channelRefs[0]")>0) {
-   		 		channelStart=0;
-   		 		channelEnd=0;
-   		 		while ((channelStart=line.indexOf("\"",channelEnd+1))>0) {
-   		 			channelLength=line.indexOf("\"",channelStart+1);
-   		 			line2=line.substring(channelStart+1, channelLength);
-   		 			readEChannelsRef.add(line2);
-   		 			channelEnd=line.indexOf("\"",channelStart+1);
-   		 		}
-   		 	}
+		int seperator;
+		boolean tvMode=isTvMode();
+		BufferedReader in;
+		long countChannels = 0;
+		if (tvMode=true) {
+		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:6:0:0:0:0:0:0:&listContent=true");
+		} else {
+		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:4:0:0:0:0:0:0:&listContent=true");
 		}
-		if (readEChannels.size()==readEChannelsRef.size()) {
-    		for (int i = 0; i < readEChannels.size(); ++i) {
-    			senderList.add(new BOSender(""+(i+1),(String)readEChannelsRef.get(i),(String)readEChannels.get(i)));
-    		}
-    	}
+		while ((line = in.readLine()) != null) {
+		    if (line.substring(0,4).equals("4097")) {
+		    } else {
+		        seperator=line.indexOf(";");
+		        if (seperator>0) {
+		            countChannels++;
+		            senderList.add(new BOSender(""+(countChannels),line.substring(0,seperator),line.substring(seperator+1,line.indexOf(";",seperator+1))));
+		        }
+		    }
+		}
         return senderList;
 	}
 	
 	public ArrayList getSender(BOBouquet bouquet) throws IOException {
 		ArrayList senderList = new ArrayList();
 		String line;
-		String line2="";
-		int channelStart=0;
-		int channelEnd=0;
-		int channelLength=0;
-		int bouquetStart=0;
-		int countChannels=0;
-		ArrayList readEChannels= new ArrayList();
-		ArrayList readEChannelsRef= new ArrayList();
-		BufferedReader in = getConnection("/body");
+		int seperator;
+		BufferedReader in = getConnection("/cgi-bin/getServices?ref="+bouquet.getBouquetNummer());
+		long countChannels = 0;
 		while ((line = in.readLine()) != null) {
-			if (line.indexOf("channels["+bouquet.getBouquetNummer()+"]")>0) {
-   		 		channelStart=0;
-   		 		channelEnd=0;  		 		
-   		 		bouquetStart=line.indexOf("channels["+bouquet.getBouquetNummer()+"]");
-   		 		while (((channelStart=line.indexOf("\"",channelEnd+1))>0)&(channelStart<bouquetStart)) {
-   		 			countChannels++;
-   		 			channelEnd=line.indexOf("\"",channelStart+1);
-   		 		}
-   		 		channelStart=0;
-   		 		channelEnd=bouquetStart;
-   		 		while (((channelStart=line.indexOf("\"",channelEnd+1))>0)&(channelStart<line.indexOf(");",bouquetStart))) {
-   		 			channelLength=line.indexOf(" - ",channelStart+1);
-   		 			if ((channelLength<=0)|(channelLength>line.indexOf("\"",channelStart+1)))
-   		 				channelLength=line.indexOf("\"",channelStart+1);
-   		 			line2=line.substring(channelStart+1, channelLength);
-   		 			readEChannels.add(line2);
-   		 			channelEnd=line.indexOf("\"",channelStart+1);
-   		 		}
-   			}
-			if (line.indexOf("channelRefs["+bouquet.getBouquetNummer()+"]")>0) {
-   		 		channelStart=0;
-   		 		bouquetStart=line.indexOf("channelRefs["+bouquet.getBouquetNummer()+"]");
-   		 		channelEnd=bouquetStart;
-   		 		while (((channelStart=line.indexOf("\"",channelEnd+1))>0)&(channelStart<line.indexOf(");",bouquetStart))) {
-   		 			channelLength=line.indexOf("\"",channelStart+1);
-   		 			line2=line.substring(channelStart+1, channelLength);
-   		 			readEChannelsRef.add(line2);
-   		 			channelEnd=line.indexOf("\"",channelStart+1);
-   		 		}
-   		 	}
+		    seperator=line.indexOf(";");
+		    if (seperator>0) {
+		        countChannels++;
+		        senderList.add(new BOSender(""+(countChannels),line.substring(0,seperator),line.substring(seperator+1,line.indexOf(";",seperator+1))));
+		    }
 		}
-		if (readEChannels.size()==readEChannelsRef.size()) {
-    		for (int i = 0; i < readEChannels.size(); ++i) {
-    			countChannels++;
-    			senderList.add(new BOSender(""+(countChannels),(String)readEChannelsRef.get(i),(String)readEChannels.get(i)));
-    		}
-    	}		
 		return senderList;
 	}	 
 
 	public String zapTo(String channelId) throws IOException {
 		String status = "ok";
-		//BufferedReader input = SerBoxControl.getConnection("/fb/switch.dbox2?zapto="+channelId);
 		BufferedReader input = getConnection("/cgi-bin/zapTo?path="+channelId);
 		String line;
 		while((line=input.readLine())!=null) {
@@ -228,15 +162,15 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
-		ArrayList epgList=new ArrayList();
+	    ArrayList epgList=new ArrayList();
 		BufferedReader input;
 		input=null;
 		try {
-		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
+		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
 		}
 		 catch (IOException e) {}
 		if (input==null) {
-		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
+		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
 		}
 		int startEpgInfo;
 		int endEpgInfo;
@@ -269,16 +203,16 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public BOEpgDetails getEpgDetail(BOEpg epg) throws IOException {
-		BOEpgDetails epgDetail = new BOEpgDetails();
+	    BOEpgDetails epgDetail = new BOEpgDetails();
 		BOSender sender=epg.getSender();
 		BufferedReader input;
 		input=null;
 		try {
-		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
+		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
 		}
 		 catch (IOException e) {}
 		if (input==null) {
-		    input = getConnection("/getcurrentepg?type=extended&ref="+sender.getChanId());
+		    input = getConnection("/getcurrentepg2?ref="+sender.getChanId());
 		}
 		String text = new String();
 		String line;
@@ -380,33 +314,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					endTime = SerFormatter.getShortTime((Long.parseLong(valueStart) + Long.parseLong(valueDuration)));
 					endDate = SerFormatter.formatUnixDate((Long.parseLong(valueStart) + Long.parseLong(valueDuration)));
 					if (recurring) {
-					    /*long typeValue=0;
-					    String recurringDays;
-					    startpos=line.indexOf("nbsp;</td><td>",endpos);
-					    endpos=line.indexOf("</td>",startpos+10);
-					    recurringDays=line.substring(startpos+13,endpos);
-					    if (recurringDays.indexOf("Mo")>0) {
-					        typeValue+=256;
-					    }
-					    if (recurringDays.indexOf("Tu")>0) {
-					        typeValue+=512;
-					    }
-					    if (recurringDays.indexOf("We")>0) {
-					        typeValue+=1024;
-					    }
-					    if (recurringDays.indexOf("Th")>0) {
-					        typeValue+=2048;
-					    }
-					    if (recurringDays.indexOf("Fr")>0) {
-					        typeValue+=4096;
-					    }
-					    if (recurringDays.indexOf("Sa")>0) {
-					        typeValue+=8192;
-					    }
-					    if (recurringDays.indexOf("Su")>0) {
-					        typeValue+=16384;
-					    }
-					    System.out.println(recurringDays+" "+typeValue);*/
 					    long typeValue=Long.parseLong(timerType);
 					    long typeValue2=0;
 					    if ((typeValue&1048576)==1048576) {
@@ -539,14 +446,14 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public boolean isTvMode() throws IOException{
-		BufferedReader input = getConnection("/body");
+		BufferedReader input = getConnection("/cgi-bin/status");
 		String line;
 		String zapmode;
 		boolean tvMode;
 		int startpos;
 		while((line=input.readLine())!=null) {
-		    if (line.indexOf("zapMode")>0) {
-		        startpos=(line.indexOf("zapMode")+10);
+		    if (line.indexOf("Mode:</td><td>")>0) {
+		        startpos=(line.indexOf("Mode:</td><td>")+14);
 		        zapmode=line.substring(startpos,startpos+1);
 		        if (zapmode.equals("0")) {
 		            tvMode=true;
@@ -563,6 +470,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	public String setRadioTvMode(String mode) throws IOException {
 		String zapmode;
 		String status ="ok";
+		int firstChannelStart;
 		if (mode.equalsIgnoreCase("radio")) {
 		    zapmode="1";
 		} else {
@@ -573,6 +481,10 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		while((line=input.readLine())!=null) {
 			if (line.equalsIgnoreCase("error")) {
 			    status="error";
+			}
+			firstChannelStart = line.indexOf("\"1:0");
+			if (firstChannelStart > 0) {
+			    return zapTo(line.substring(firstChannelStart+1,line.indexOf("\"",firstChannelStart+1)));
 			}
 		}
 		return status;
