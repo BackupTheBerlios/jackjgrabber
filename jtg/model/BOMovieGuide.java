@@ -101,7 +101,7 @@ public class BOMovieGuide {
     public BOMovieGuide() {  
     	
     }
-    public BOMovieGuide(String sender, String datum , GregorianCalendar start, GregorianCalendar ende, String titel, String episode,
+    public BOMovieGuide(String sender, GregorianCalendar datum , GregorianCalendar start, GregorianCalendar ende, String titel, String episode,
             String genre, String dauer, String land, String jahr, String regie,
             String bild, String ton, String darsteller, String inhalt){
     		this.sender = new ArrayList();
@@ -175,7 +175,7 @@ public class BOMovieGuide {
      * Setter for property datum.
      * @param datum New value of property datum.
      */
-    public void setDatum(String datum) {
+    public void setDatum(GregorianCalendar datum) {
         this.datum.add(datum);
     }
     
@@ -405,7 +405,7 @@ public class BOMovieGuide {
 	    	sucheList.add(LIST_ENTRYS[9]);
     	}catch(Exception ex){}
     }
-    public boolean booleanArrayTest(ArrayList value,String search){
+    public boolean isValueInArray(ArrayList value,String search){
     	boolean retVal = false;
     	for (Iterator i = value.iterator(); i.hasNext();) {   			
     			if(i.next().toString().toLowerCase().indexOf(search)>=0){
@@ -414,18 +414,6 @@ public class BOMovieGuide {
     	}
     	return retVal;
     }
-    
-    public boolean booleanArrayDate(ArrayList value,String search){
-    	boolean retVal = false;    	
-    	for (Iterator i = value.iterator(); i.hasNext();) {   			
-    			long a = Long.parseLong(i.next().toString());
-    			if(a>=Long.parseLong(search)){
-    				retVal = true;
-    			}
-    	}
-    	return retVal;
-    }
-    
     
     public boolean getIfStringInObject(String search){
     	boolean value = false;
@@ -441,9 +429,9 @@ public class BOMovieGuide {
     		value = true;
     	}else if(this.getJahr().toLowerCase().indexOf(search)>=0){
     		value = true;
-    	}else if(this.booleanArrayTest(this.getBild(),search.toLowerCase())){
+    	}else if(this.isValueInArray(this.getBild(),search.toLowerCase())){
     		value = true;
-    	}else if(this.booleanArrayTest(this.getTon(),search.toLowerCase())){
+    	}else if(this.isValueInArray(this.getTon(),search.toLowerCase())){
     		value = true;
     	}else if(this.getRegie().toLowerCase().indexOf(search)>=0){
     		value = true;
