@@ -34,7 +34,8 @@ import service.SerAlertDialog;
 
 
 /**
- * Control-Klasse der Main-Gui
+ * Control-Klasse des Haupt-Fensters, beinhaltet und verwaltet das MainTabPane
+ * Klasse wird beim Start der Anwendung initialisiert und ist immer verfügbar
  */
 public class ControlMainView implements ActionListener, ChangeListener {
 	
@@ -59,10 +60,11 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.startProgramControl();		
 		this.log("Anwendung gestartet");		
 	}
-	
+	/*
+	 * erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
+	 * manuell erfolgen
+	 */
 	private void startProgramControl() {
-		//erster Tab wird automatisch gestartet, darum muss die Initialisierung des Controls
-		//manuell erfolgen
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();	
 		
 		int index = ControlMain.getIndexOfActiveBox();
@@ -77,7 +79,6 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.logSystemInfo();
 
 		ControlMain.detectImage();
-  	    //ControlMain.loadHashTable();
         ControlMain.setResourceBundle(ControlMain.getLocale());
 	}
 	private void logSystemInfo() {
@@ -127,7 +128,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	}
 	
 	/**
-	 * Change-Events des TabPane
+	 * Change-Events of the MainTabPane
 	 */
 	public void stateChanged(ChangeEvent event) {
 		GuiMainTabPane pane = (GuiMainTabPane)event.getSource();
@@ -136,34 +137,19 @@ public class ControlMainView implements ActionListener, ChangeListener {
 				
 		//Change-Events bei betreten neuer Tabs
 		if (count == 0) { //ProgrammTab
-			try {
-				comp.getComponent(0);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				comp.add(pane.getTabProgramm());
-			}
+			pane.setComponentAt(count, pane.getTabProgramm());
 		}
 		if (count == 1) { //TimerTab
-			try {
-				comp.getComponent(0);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				comp.add(pane.getTabTimer());
-			}
+			pane.setComponentAt(count, pane.getTabTimer());
 			pane.getTabTimer().getControl().initialize();
 		}
 		if (count == 2) { //ProjectXTab
 			ControlMain.getSettings().setProjectXSettingsChanged(true);
-			try {
-				comp.getComponent(0);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				comp.add(pane.getTabProjectX());
-			}
+			pane.setComponentAt(count, pane.getTabProjectX());
 		}
 		if (count == 3) { //SettingsTab
-			try {
-				comp.getComponent(0);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				comp.add(pane.getTabSettings());
-			}
+			pane.setComponentAt(count, pane.getTabSettings());
+			pane.getTabTimer().getControl().initialize();
 		}
 		pane.setIndex(count);
 	}
