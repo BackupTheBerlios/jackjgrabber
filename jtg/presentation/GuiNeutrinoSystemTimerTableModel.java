@@ -57,26 +57,22 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
+		BOTimer timer = (BOTimer)control.getTimerList()[1].get(row);
 		if (col == 0) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventTypeId(control.convertLongEventType((String)value));
 		}
 		if (col == 1) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
 			try {
 				Date newDate = sdf.parse((String)value);
 				timer.setUnformattedStartTime(newDate.getTime());
-				if (timer.getModifiedId() == null) {
-					timer.setModifiedId("modify");
-				}
 			} catch (ParseException e) {}
 		}
 		if (col == 2) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.selectRepeatDaysForSystemTimer(timer);
 		}
+		timer.setModifiedId("modify");
     }
 
 	public String getColumnName( int columnIndex ) {
@@ -91,6 +87,10 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	
 	public boolean isCellEditable (int row, int col) {
 	    Class columnClass = getColumnClass(col);
+	    BOTimer timer = (BOTimer)control.getTimerList()[1].get(row);
+	    if (col==0 && timer.getModifiedId()==null) {
+	    	return false;
+	    }
 	    return true;
 	}
 	

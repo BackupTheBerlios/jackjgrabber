@@ -65,15 +65,14 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	}
 
 	public void setValueAt(Object value, int row, int col) {
+		BOTimer timer = (BOTimer)control.getTimerList()[0].get(row);
 		if (col == 0) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			int senderIndex = this.getControl().getTab().getComboBoxSender().getSelectedIndex();
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
 			timer.setChannelId(sender.getChanId());
 			timer.setSenderName((String)value);
 		}
 		if (col == 1) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
 			try {
 				Date newDate = sdf.parse((String)value);
@@ -81,7 +80,6 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			} catch (ParseException e) {}
 		}
 		if (col == 2) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			GregorianCalendar oldcal = timer.getUnformattedStopTime();
 			Calendar newcal = new GregorianCalendar();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -90,16 +88,13 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 				newcal.setTime(newDate);
 				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
 				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
-				if (timer.getModifiedId() == null) {
-					timer.setModifiedId("modify");
-				}
 			} catch (ParseException e) {}
 		}
 		if (col == 3) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.selectRepeatDaysForRecordTimer(timer);
 		}
+		timer.setModifiedId("modify");
     }
 
 	public String getColumnName( int columnIndex ) {
@@ -119,6 +114,10 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public boolean isCellEditable (int row, int col) {
 	    Class columnClass = getColumnClass(col);
 	    if (col==4) {
+	    	return false;
+	    }
+	    BOTimer timer = (BOTimer)control.getTimerList()[0].get(row);
+	    if (col==0 && timer.getModifiedId()==null) {
 	    	return false;
 	    }
 	    return true;

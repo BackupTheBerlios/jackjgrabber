@@ -58,7 +58,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JButton jButtonDeleteAllSystemTimer = null;
 	private JButton jButtonDeleteSelectedSystemTimer = null;
 	private JButton jButtonSenden = null;
-	private JButton jButtonNewProgramtimer = null;
+	private JButton jButtonNewRecordTimer = null;
 	private JButton jButtonNewSystemtimer = null;
 	private JButton jButtonDeleteAll = null;
 	private JComboBox comboBoxSender = null;
@@ -220,7 +220,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsRecordTimer, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getJButtonNewProgramtimer(),  				cc.xy	(1, 1));
+			builder.add(this.getJButtonNewRecordTimer(),  				cc.xy	(1, 1));
 			builder.add(this.getJButtonDeleteSelectedRecordTimer(),	cc.xy	(1, 2));
 			builder.add(this.getJButtonDeleteAllRecordTimer(),			cc.xy	(1, 3));
 			builder.add(new JLabel(this.getImageIconNeutrino()),		cc.xy	(1, 5));
@@ -273,9 +273,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			for(int i = 0 ; i< 7; i++){
 				if (jRadioButtonWhtage[i]== null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
-					jRadioButtonWhtage[i].addItemListener(control);
-					jRadioButtonWhtage[i].setName("recordTimer");
-					jRadioButtonWhtage[i].setActionCommand(Integer.toString(control.WOCHENTAGE_VALUE[i]));
+					jRadioButtonWhtage[i].addActionListener(control);
+					jRadioButtonWhtage[i].setName(Integer.toString(control.WOCHENTAGE_VALUE[i]));
+					jRadioButtonWhtage[i].setActionCommand("recordTimer");
 					jRadioButtonWhtage[i].setEnabled(false);					
 					jRadioButtonWhtage[i].setText(control.WOCHENTAGE[i]);
 				}
@@ -299,9 +299,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 				if (jRadioButtonWhtage2[i]== null) {
 					jRadioButtonWhtage2[i] = new JRadioButton();
 					jRadioButtonWhtage2[i].setEnabled(false);
-					jRadioButtonWhtage2[i].setName("systemTimer");
-					jRadioButtonWhtage2[i].setActionCommand(Integer.toString(control.WOCHENTAGE_VALUE[i]));
-					jRadioButtonWhtage2[i].addItemListener(control);
+					jRadioButtonWhtage2[i].setActionCommand("systemTimer");
+					jRadioButtonWhtage2[i].setName(Integer.toString(control.WOCHENTAGE_VALUE[i]));
+					jRadioButtonWhtage2[i].addActionListener(control);
 					jRadioButtonWhtage2[i].setText(control.WOCHENTAGE[i]);
 				}
 				builder.add(jRadioButtonWhtage2[i],cc.xy(1, a));
@@ -353,14 +353,14 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	}
 
 
-	public JButton getJButtonNewProgramtimer() {
-		if (jButtonNewProgramtimer == null) {
-			jButtonNewProgramtimer = new JButton("Anlegen");
-			jButtonNewProgramtimer.setActionCommand("addProgramTimer");
-			jButtonNewProgramtimer.setPreferredSize(new Dimension(150,25));
-			jButtonNewProgramtimer.addActionListener(control);
+	public JButton getJButtonNewRecordTimer() {
+		if (jButtonNewRecordTimer == null) {
+			jButtonNewRecordTimer = new JButton("Anlegen");
+			jButtonNewRecordTimer.setActionCommand("addRecordTimer");
+			jButtonNewRecordTimer.setPreferredSize(new Dimension(150,25));
+			jButtonNewRecordTimer.addActionListener(control);
 		}
-		return jButtonNewProgramtimer;
+		return jButtonNewRecordTimer;
 	}
 
 	public JButton getJButtonSenden() {
