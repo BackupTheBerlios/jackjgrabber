@@ -65,7 +65,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 			}
 		}
 		if (col == 1) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
 			try {
 				Date newDate = sdf.parse((String)value);
