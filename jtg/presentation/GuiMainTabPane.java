@@ -23,10 +23,12 @@ import javax.swing.JTabbedPane;
 import presentation.about.GuiTabAbout;
 import presentation.movieguide.GuiTabMovieGuide;
 import presentation.program.GuiTabProgramm;
+import presentation.recordInfo.*;
 import presentation.recordInfo.GuiTabRecordInfo;
 import presentation.settings.GuiTabSettings;
 import presentation.start.GuiTabStart;
 import presentation.timer.GuiBoxTimerPanel;
+import control.*;
 import control.ControlAboutTab;
 import control.ControlMain;
 import control.ControlMovieGuideTab;
@@ -46,6 +48,7 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
 	private GuiTabRecordInfo tabRecordInfo;
+	private GuiTabRecordEdit tabRecordEdit;
 	int index;
 	
 	public GuiMainTabPane(GuiMainView mainView) {
@@ -128,6 +131,19 @@ public class GuiMainTabPane extends JTabbedPane {
 		}
 		return tabRecordInfo;
 	}
+
+	/**
+	 * @return Returns the tabRecordInfo.
+	 */
+	public GuiTabRecordEdit getTabRecordEdit() {
+		if (tabRecordEdit == null) {
+			ControlRecordEditTab control = new ControlRecordEditTab(this.getView());
+			tabRecordEdit = new GuiTabRecordEdit(control);
+			control.setRecordView(tabRecordEdit);
+		}
+		return tabRecordEdit;
+	}
+
 	
 	/**
      * @return Returns the tabStart.

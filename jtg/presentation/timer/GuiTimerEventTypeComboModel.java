@@ -31,7 +31,7 @@ public class GuiTimerEventTypeComboModel extends DefaultComboBoxModel { //implem
 	}
 	
 	public Object getElementAt(int index) {
-		return control.getTimerType()[index];
+		return control.getTimerType()[index][0];
 	}
 
 	public int getSize() {

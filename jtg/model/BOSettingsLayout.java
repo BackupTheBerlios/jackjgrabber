@@ -32,6 +32,8 @@ public class BOSettingsLayout {
 
 	private Point locationOfTimerDialog = new Point(0, 0);
 
+	private Point locationOfSystemTimerDialog = new Point(0, 0);
+
 	public BOSettingsLayout(BOSettings settings) {
 		this.setSettings(settings);
 	}
@@ -124,6 +126,26 @@ public class BOSettingsLayout {
 			return new Point(10, 10);
 		}
 		return locationOfTimerDialog;
+	}
+
+	/**
+	 * @param location2
+	 */
+	public void setLocationOfSystemTimerDialog(Point systemLocation) {
+		if (locationOfSystemTimerDialog == null || !locationOfSystemTimerDialog.equals(systemLocation))
+		{
+			setSettingsChanged(true);
+			locationOfSystemTimerDialog = systemLocation;
+		}
+	}
+	/**
+	 * @return Returns the locationOfTimerDialog.
+	 */
+	public Point getLocationOfSystemTimerDialog() {
+		if (locationOfSystemTimerDialog == null) {
+			return new Point(10, 10);
+		}
+		return locationOfSystemTimerDialog;
 	}
 
 }

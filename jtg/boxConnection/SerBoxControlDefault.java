@@ -29,7 +29,6 @@ import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
 import model.BOTimerList;
-import presentation.timer.*;
 import presentation.timer.GuiEnigmaRecordTimerTableModel;
 import presentation.timer.GuiEnigmaSystemTimerTableModel;
 import presentation.timer.GuiRecordTimerTableModel;

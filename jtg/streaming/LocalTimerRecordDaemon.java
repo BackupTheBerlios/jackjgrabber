@@ -18,6 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.io.IOException;
+import java.util.*;
 import java.util.GregorianCalendar;
 
 import model.BOLocalTimer;
@@ -43,8 +44,10 @@ public class LocalTimerRecordDaemon extends Thread {
             BOTimer timer = ControlMain.getBoxAccess().detectNextLocalRecordTimer(false);
             
             if (timer!=null && !timer.getLocalTimer().isLocked()) {
-                long now = new GregorianCalendar().getTimeInMillis();
-                if (now>timer.getLocalTimer().getStartTime() && now<timer.getLocalTimer().getStopTime()) {
+                //long now = new GregorianCalendar().getTimeInMillis();
+                
+                if (checkTimer(timer,new GregorianCalendar()))
+                {
                     Logger.getLogger("LocalTimerRecordDaemon").info(ControlMain.getProperty("msg_startRecord")+" "+timer.getLocalTimer().getDescription());
                     this.startRecord(timer.getLocalTimer());
                     running = true;
@@ -54,7 +57,60 @@ public class LocalTimerRecordDaemon extends Thread {
         }
     }
     
-    private void waitForStop(BOLocalTimer timer) {
+    /** überprüft ob der Timer ausgeführt werden muss
+	 * @param timer
+	 * @param calendar
+	 * @return
+	 */
+	private boolean checkTimer(BOTimer timer, GregorianCalendar calendar) {
+		
+		
+		Calendar timerDate = new GregorianCalendar();
+		timerDate.setTime(new Date(timer.getLocalTimer().getStartTime()));
+		String strRepeatType = timer.getEventRepeatId();
+		if (strRepeatType.equals("0"))
+		{
+			//Einmal Timer
+			long now = calendar.getTimeInMillis();
+			return (now > timer.getLocalTimer().getStartTime() && now < timer.getLocalTimer().getStopTime());
+		}
+		else if (strRepeatType.equals("1"))
+		{
+			// Täglich
+			int hours = calendar.get(Calendar.HOUR_OF_DAY);
+			int min = calendar.get(Calendar.MINUTE);
+			if (hours > timerDate.get(Calendar.HOUR_OF_DAY))
+			{
+				return true;
+			}
+			if (hours == timerDate.get(Calendar.HOUR_OF_DAY) && min >= timerDate.get(Calendar.MINUTE))
+			{
+				return true;
+			}
+			
+			
+		}
+		else if (strRepeatType.equals("2"))
+		{
+			// Wöchentlich
+		}
+		else if (strRepeatType.equals("3"))
+		{
+			// 2-Wöchentlich
+		}
+		else if (strRepeatType.equals("4"))
+		{
+			// 4-Wöchentlich
+		}
+		else if (Integer.parseInt(strRepeatType) > 5)
+		{
+			// Wochentage
+		}
+		
+		return false;
+	}
+
+	private void waitForStop(BOLocalTimer timer) {
         while (running) {
             try {
                 Thread.sleep(2000);

@@ -63,7 +63,6 @@ public class GuiBoxTimerPanel extends JPanel {
 	private JButton jButtonDeleteSelectedRecordTimer = null;
 	private JButton jButtonDeleteAllSystemTimer = null;
 	private JButton jButtonDeleteSelectedSystemTimer = null;
-	private JButton jButtonSenden = null;
 	private JButton jButtonNewRecordTimer = null;
 	private JButton jButtonNewSystemtimer = null;
 	private JButton jButtonDeleteAll = null;
@@ -101,7 +100,7 @@ public class GuiBoxTimerPanel extends JPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
 			      "f:320:grow, 10, 100:grow, 160:grow, 7, pref",							// columns
-			      "pref, t:220:grow, pref, 10, pref, t:100, b:100:grow, pref");				// rows
+			      "pref, t:220:grow, pref, 10, pref, t:180:grow, 20, pref,60");				// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -109,9 +108,9 @@ public class GuiBoxTimerPanel extends JPanel {
 		builder.addSeparator(ControlMain.getProperty("label_recordTimer"),						cc.xyw  (1, 1, 4));
 		builder.add(this.getJScrollPaneRecordTimerTable(),   									cc.xyw  (1, 2, 4));
 		builder.add(this.getJPanelDauerTimer(),	 												cc.xyw  (1, 3, 4, CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addSeparator(ControlMain.getProperty("label_systemTimer"),						cc.xyw  (1, 5, 3));
-		builder.add(this.getJScrollPaneSystemTimerTable(),  									cc.xywh (1, 6, 1, 2));
-		builder.add(this.getJPanelDauerTimer2(), 												cc.xywh (3, 6, 1, 2, CellConstraints.LEFT, CellConstraints.TOP));
+		builder.addSeparator(ControlMain.getProperty("label_systemTimer"),						cc.xyw  (1, 5, 4));
+		builder.add(this.getJScrollPaneSystemTimerTable(),  									cc.xyw (1, 6, 4));
+		builder.add(this.getJPanelDauerTimer2(), 												cc.xyw (1, 7, 4, CellConstraints.CENTER, CellConstraints.TOP));
 		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),							cc.xy     (6, 1));
 		builder.add(this.getJPanelButtonsRecordTimer(), 										cc.xywh (6, 2, 1, 1,  CellConstraints.FILL, CellConstraints.TOP));
 		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),							cc.xy   (6, 5, CellConstraints.CENTER, CellConstraints.DEFAULT));
@@ -204,16 +203,14 @@ public class GuiBoxTimerPanel extends JPanel {
 			jTableSystemTimer.setName("systemTimerTable");
 			jTableSystemTimer.addMouseListener(control);
 			jTableSystemTimer.setRowHeight(20);
-			jTableSystemTimer.getColumnModel().getColumn(1).setPreferredWidth(120);
-			jTableSystemTimer.getColumnModel().getColumn(1).setMaxWidth(120);
-
-			TableColumn columnEventType = jTableSystemTimer.getColumnModel().getColumn(0);
-			TableColumn columnStartTime = jTableSystemTimer.getColumnModel().getColumn(1);
-			TableColumn columnRepeat = jTableSystemTimer.getColumnModel().getColumn(2);
-
-			columnEventType.setCellEditor(new DefaultCellEditor(this.getComboBoxEventType()));
-			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfSystemTimerStartTime()));
-			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatSystemTimer()));
+			if (jTableSystemTimer.getColumnCount() > 3)
+			{
+				jTableSystemTimer.getColumnModel().getColumn(0).setPreferredWidth(70);
+				jTableSystemTimer.getColumnModel().getColumn(1).setPreferredWidth(103);
+				jTableSystemTimer.getColumnModel().getColumn(2).setPreferredWidth(113);
+				jTableSystemTimer.getColumnModel().getColumn(3).setPreferredWidth(87);
+				jTableSystemTimer.getColumnModel().getColumn(4).setPreferredWidth(227);
+			}
 		}
 		return jTableSystemTimer;
 	}
@@ -303,13 +300,12 @@ public class GuiBoxTimerPanel extends JPanel {
 			jPanelButtonsGui = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "Fill:pref",	 		//columna
-		      "pref, pref, pref, ");	//rows
+		      "pref, pref ");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsGui, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.add(this.getJButtonDeleteAl(),					cc.xy(1, 1));
 			builder.add(this.getJButtonReload(),					cc.xy(1, 2));
-			builder.add(this.getJButtonSenden(),					cc.xy(1, 3));
 		}
 		return jPanelButtonsGui;
 	}
@@ -344,28 +340,29 @@ public class GuiBoxTimerPanel extends JPanel {
 		if (jPanelDauerTimer2 == null) {
 			jPanelDauerTimer2 = new JPanel();
 			FormLayout layout = new FormLayout(
-					 "pref",	 		//columna
-			  "pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref");	//rows
+				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columns
+				      "pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer2, layout);
 			CellConstraints cc = new CellConstraints();
+			
 			int a= 1;
 			for(int i = 0 ; i< 7; i++){
 				if (jRadioButtonWhtage2[i]== null) {
 					jRadioButtonWhtage2[i] = new JRadioButton();
-					jRadioButtonWhtage2[i].setEnabled(false);
-					jRadioButtonWhtage2[i].setActionCommand("systemTimer");
-					jRadioButtonWhtage2[i].setName(Integer.toString(ControlTimerTab.weekdays_value[i]));
 					jRadioButtonWhtage2[i].addActionListener(control);
+					jRadioButtonWhtage2[i].setName(Integer.toString(ControlTimerTab.weekdays_value[i]));
+					jRadioButtonWhtage2[i].setActionCommand("systemTimer");
+					jRadioButtonWhtage2[i].setEnabled(false);					
 					jRadioButtonWhtage2[i].setText(ControlTimerTab.weekdays[i]);
 				}
-				builder.add(jRadioButtonWhtage2[i],cc.xy(1, a));
+				builder.add(jRadioButtonWhtage2[i],cc.xy(a, 1));
 				a = a+2;
-				
 			}
 		}
 		return jPanelDauerTimer2;
 	}
-
+	
+	
 	public JButton getJButtonDeleteAllRecordTimer() {
 		if (jButtonDeleteAllRecordTimer == null) {
 			jButtonDeleteAllRecordTimer = new JButton(ControlMain.getProperty("button_delete"));
@@ -417,16 +414,6 @@ public class GuiBoxTimerPanel extends JPanel {
 		return jButtonNewRecordTimer;
 	}
 
-	public JButton getJButtonSenden() {
-		if (jButtonSenden == null) {
-			jButtonSenden = new JButton("<HTML><font color=red>"+ControlMain.getProperty("button_send")+"</font></HTML>");
-			jButtonSenden.setActionCommand("send");
-			jButtonSenden.addActionListener(control);
-			jButtonSenden.setPreferredSize(new Dimension(150,25));
-		}
-		return jButtonSenden;
-	}
-
 	public JButton getJButtonDeleteAl() {
 		if (jButtonDeleteAll == null) {
 			jButtonDeleteAll =new JButton(ControlMain.getProperty("button_deleteAll"));
@@ -474,15 +461,7 @@ public class GuiBoxTimerPanel extends JPanel {
 	public GuiSystemTimerTableModel getSystemTimerTableModel() {
 		return systemTimerTableModel;
 	}
-	/**
-	 * @return Returns the comboBoxEventType.
-	 */
-	public JComboBox getComboBoxEventType() {
-		if (comboBoxEventType == null) {
-			comboBoxEventType = new JComboBox(new GuiTimerEventTypeComboModel(control));
-		}
-		return comboBoxEventType;
-	}
+
 	/**
 	 * @return Returns the comboBoxRepeatRecordTimer.
 	 */
