@@ -20,13 +20,13 @@ import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
-import presentation.GuiTab;
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -35,27 +35,23 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlSettingsTabMovieGuide;
+import control.ControlTabSettings;
 
-public class GuiSettingsTabMovieGuide extends GuiTab {
+public class GuiSettingsTabMovieGuide extends JPanel implements GuiSettingsTab {
 
+    private Icon menuIcon;
 	private ControlSettingsTabMovieGuide control;
-
 	private JPanel panelMovieguideSettings = null;
-
 	private ButtonGroup downloadGroup = new ButtonGroup();
-	
 	private ButtonGroup dateRangeGroup = new ButtonGroup();
 
 	private JRadioButton downloadAuto;
 	private JRadioButton downloadQuestion;
-
 	private JRadioButton completeMG;
 	private JRadioButton dayMG;
 
 	private JCheckBox storeOriginal;
-
 	private JList channelList;
-
 	private SerIconManager iconManager = SerIconManager.getInstance();
 
 	private JPanel defaultShowPanel;
@@ -67,7 +63,7 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 		initialize();
 	}
 
-	protected void initialize() {
+	public void initialize() {
 		FormLayout layout = new FormLayout("f:pref:grow", // columns
 				"f:pref"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
@@ -195,12 +191,12 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 		}
 		return channelList;
 	}
-	/**
-	 * @return Returns the control.
-	 */
-	public ControlSettingsTabMovieGuide getControl() {
-		return control;
-	}
+    /**
+     * @return Returns the control.
+     */
+    public ControlTabSettings getControl() {
+        return (ControlTabSettings)control;
+    }
 	/**
 	 * @param control
 	 *            The control to set.
@@ -221,4 +217,17 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 	public JRadioButton getDownloadQuestion() {
 		return downloadQuestion;
 	}	
+    /**
+     * @return Returns the menuIcon.
+     */
+    public Icon getIcon() {
+        if (menuIcon==null) {
+            menuIcon=SerIconManager.getInstance().getIcon("video.gif");
+        }
+        return menuIcon;
+    }
+    
+    public String getMenuText() {
+        return ControlMain.getProperty("tab_movieGuide");
+    }
 }

@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.text.ParseException;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -34,7 +35,6 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiTab;
 import presentation.program.GuiBoxSettingsTableCellRenderer;
 import service.SerIconManager;
 
@@ -44,9 +44,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlSettingsTabMain;
+import control.ControlTabSettings;
 
-public class GuiSettingsTabMain extends GuiTab {
+public class GuiSettingsTabMain extends JPanel implements GuiSettingsTab {
 
+    private Icon menuIcon;
 	private ControlSettingsTabMain control;
 	private JPanel panelBoxSettings = null;
 	private JPanel panelLayoutSettings = null;
@@ -74,7 +76,7 @@ public class GuiSettingsTabMain extends GuiTab {
 		initialize();
 	}
 
-	protected void initialize() {
+	public void initialize() {
 
 		FormLayout layout = new FormLayout("f:pref:grow, 100", // columns
 				"f:pref, 10, pref, 10, pref"); // rows
@@ -197,7 +199,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	 */
 	public JComboBox getJComboBoxLookAndFeel() {
 		if (jComboBoxLookAndFeel == null) {
-			jComboBoxLookAndFeel = new JComboBox(this.getControl().initLookAndFeels());
+			jComboBoxLookAndFeel = new JComboBox(control.initLookAndFeels());
 			jComboBoxLookAndFeel.addItemListener(control);
 			jComboBoxLookAndFeel.setName("lookAndFeel");
 		}
@@ -341,8 +343,8 @@ public class GuiSettingsTabMain extends GuiTab {
 	/**
 	 * @return Returns the control.
 	 */
-	public ControlSettingsTabMain getControl() {
-		return control;
+	public ControlTabSettings getControl() {
+		return (ControlTabSettings)control;
 	}
 	/**
 	 * @param control
@@ -364,4 +366,17 @@ public class GuiSettingsTabMain extends GuiTab {
 	public void setModelBoxTable(GuiBoxSettingsTableModel modelBoxTable) {
 		this.modelBoxTable = modelBoxTable;
 	}
+    /**
+     * @return Returns the menuIcon.
+     */
+    public Icon getIcon() {
+        if (menuIcon==null) {
+            menuIcon=SerIconManager.getInstance().getIcon("configure.png");
+        }
+        return menuIcon;
+    }
+    
+    public String getMenuText() {
+        return ControlMain.getProperty("label_general");
+    }
 }

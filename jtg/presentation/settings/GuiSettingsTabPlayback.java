@@ -20,6 +20,7 @@ package presentation.settings;
 
 import java.awt.Dimension;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -27,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import presentation.GuiTab;
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -36,9 +36,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlSettingsTabPlayback;
+import control.ControlTabSettings;
 
-public class GuiSettingsTabPlayback extends GuiTab{
+public class GuiSettingsTabPlayback extends JPanel implements GuiSettingsTab {
     
+    private Icon menuIcon;
     private ControlSettingsTabPlayback control;
     private JPanel panelPlaybackSettings = null;
 	private JButton jButtonAnlegen = null;
@@ -56,7 +58,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 		initialize();
 	}
     
-    protected void initialize() {
+    public void initialize() {
         FormLayout layout = new FormLayout(
 				  "f:pref:grow",  		// columns 
 				  "f:pref"); 			// rows
@@ -158,8 +160,8 @@ public class GuiSettingsTabPlayback extends GuiTab{
     /**
      * @return Returns the control.
      */
-    public ControlSettingsTabPlayback getControl() {
-        return control;
+    public ControlTabSettings getControl() {
+        return (ControlTabSettings)control;
     }
     /**
      * @param control The control to set.
@@ -183,5 +185,18 @@ public class GuiSettingsTabPlayback extends GuiTab{
             cbUseStandardOption.addItemListener(control);
 		}
         return cbUseStandardOption;
+    }
+    /**
+     * @return Returns the menuIcon.
+     */
+    public Icon getIcon() {
+        if (menuIcon==null) {
+            menuIcon=SerIconManager.getInstance().getIcon("xeyes.png");
+        }
+        return menuIcon;
+    }
+    
+    public String getMenuText() {
+        return ControlMain.getProperty("label_playback");
     }
 }

@@ -20,11 +20,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import java.awt.Dimension;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import presentation.GuiTab;
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -33,9 +34,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlSettingsTabPath;
+import control.ControlTabSettings;
 
-public class GuiSettingsTabPath extends GuiTab {
+public class GuiSettingsTabPath extends JPanel implements GuiSettingsTab {
     
+    private Icon menuIcon;
 	private ControlSettingsTabPath control;
 	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldUdrecPath;
@@ -59,7 +62,7 @@ public class GuiSettingsTabPath extends GuiTab {
 		initialize();
 	}
     
-    protected void initialize() {
+    public void initialize() {
         FormLayout layout = new FormLayout(
 				  "pref, 10, f:pref:grow, 5, pref",  		// columns 
 				  "pref, 10, pref, pref, pref, pref, pref, pref"); 			// rows
@@ -186,8 +189,8 @@ public class GuiSettingsTabPath extends GuiTab {
     /**
      * @return Returns the control.
      */
-    public ControlSettingsTabPath getControl() {
-        return control;
+    public ControlTabSettings getControl() {
+        return (ControlTabSettings)control;
     }
     /**
      * @param control The control to set.
@@ -264,5 +267,18 @@ public class GuiSettingsTabPath extends GuiTab {
             jTextFieldWorkDirectory.setPreferredSize(new Dimension(340, 19));
 		}
         return jTextFieldWorkDirectory;
+    }
+    /**
+     * @return Returns the menuIcon.
+     */
+    public Icon getIcon() {
+        if (menuIcon==null) {
+            menuIcon = SerIconManager.getInstance().getIcon("floppy.png");
+        }
+        return menuIcon;
+    }
+    
+    public String getMenuText() {
+        return ControlMain.getProperty("tab_path");
     }
 }

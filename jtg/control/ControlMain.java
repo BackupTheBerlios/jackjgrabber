@@ -36,6 +36,7 @@ import model.BOSettingsMain;
 import model.BOSettingsMovieGuide;
 import model.BOSettingsPath;
 import model.BOSettingsPlayback;
+import model.BOSettingsProxy;
 import model.BOSettingsRecord;
 
 import org.apache.log4j.BasicConfigurator;
@@ -270,6 +271,9 @@ public class ControlMain {
 	}
 	public static BOSettingsMain getSettingsMain() {
 		return settings.getMainSettings();
+	}
+	public static BOSettingsProxy getSettingsProxy() {
+		return settings.getProxySettings();
 	}
 	public static BOSettingsRecord getSettingsRecord() {
 		return settings.getRecordSettings();

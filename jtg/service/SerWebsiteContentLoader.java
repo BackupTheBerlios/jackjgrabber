@@ -24,7 +24,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import model.BOSettingsProxy;
+
 import org.apache.log4j.Logger;
+
+import control.ControlMain;
 
 public abstract class SerWebsiteContentLoader {
 
@@ -32,19 +36,17 @@ public abstract class SerWebsiteContentLoader {
         StringBuffer htmlContent = new StringBuffer();
         try {
             String tmpUrl = website + ":" + port + pfadAndparameters;
-//            BOSettingsProxy proxySettings = ProxyManagerImpl.getInstance().getProxySettings();
-//            if (proxySettings.isUse()) {
-//                System.getProperties().put("proxyHost", proxySettings.getHost());
-//                System.getProperties().put("proxyPort",
-//                                           Integer.toString(proxySettings.
-//                    getPort()));
-//            }
+            BOSettingsProxy proxySettings = ControlMain.getSettingsProxy();
+            if (proxySettings.isUse()) {
+                System.getProperties().put("proxyHost", proxySettings.getHost());
+                System.getProperties().put("proxyPort", proxySettings.getPort());
+            }
             URL url = new URL(tmpUrl);
             URLConnection uc = url.openConnection();
-//            if (proxySettings.isUse()) {
-//                uc.setRequestProperty("Proxy-Authorization",
-//                                      "Basic " + proxySettings.getUserpass());
-//            }
+            if (proxySettings.isUse()) {
+                uc.setRequestProperty("Proxy-Authorization",
+                                      "Basic " + proxySettings.getUserPass());
+            }
             InputStream content = uc.getInputStream();
             BufferedReader in =
                 new BufferedReader(new InputStreamReader(content));
@@ -52,10 +54,10 @@ public abstract class SerWebsiteContentLoader {
             while ( (line = in.readLine()) != null) {
                 htmlContent.append(line);
             }
-//            if (proxySettings.isUse()) {
-//                System.getProperties().remove("proxyHost");
-//                System.getProperties().remove("proxyPort");
-//            }
+            if (proxySettings.isUse()) {
+                System.getProperties().remove("proxyHost");
+                System.getProperties().remove("proxyPort");
+            }
         }
         catch (IOException e) {
             Logger.getLogger("SerWebsiteContentLoader").error(e.getMessage()); 

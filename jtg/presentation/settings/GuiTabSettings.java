@@ -17,19 +17,36 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.CardLayout;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import presentation.GuiTab;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import control.ControlMain;
 import control.ControlSettingsTab;
+import control.ControlSettingsTabMain;
+import control.ControlSettingsTabMovieGuide;
+import control.ControlSettingsTabPath;
+import control.ControlSettingsTabPlayback;
+import control.ControlSettingsTabProxy;
+import control.ControlSettingsTabRecord;
+
 
 public class GuiTabSettings extends GuiTab {
 
 	private ControlSettingsTab control;
-	private GuiSettingsTabPane settingsTabPane;
+    private GuiSettingsTab[] optionPanels;
+    private CardLayout registerLayout = new CardLayout();
+    private JPanel registerPanel = new JPanel(registerLayout);
+    private JList menuList;
 
 	public GuiTabSettings(ControlSettingsTab ctrl) {
 		super();
@@ -38,47 +55,68 @@ public class GuiTabSettings extends GuiTab {
 	}
 
 	protected void initialize() {
-		FormLayout layout = new FormLayout( "f:pref:grow", "f:pref:grow");
+        optionPanels = new GuiSettingsTab[6];
+        ControlSettingsTabMain control = new ControlSettingsTabMain(this);
+        optionPanels[0] = new GuiSettingsTabMain(control);
+        
+        ControlSettingsTabRecord control1 = new ControlSettingsTabRecord(this);
+        optionPanels[1] = new GuiSettingsTabRecord(control1);
+        
+        ControlSettingsTabPlayback control2 = new ControlSettingsTabPlayback(this);
+        optionPanels[2] = new GuiSettingsTabPlayback(control2);
+        
+        ControlSettingsTabMovieGuide control3 = new ControlSettingsTabMovieGuide(this);
+        optionPanels[3] = new GuiSettingsTabMovieGuide(control3);
+        
+        ControlSettingsTabPath control4 = new ControlSettingsTabPath(this);
+        optionPanels[4] = new GuiSettingsTabPath(control4);
+        
+        ControlSettingsTabProxy control5 = new ControlSettingsTabProxy(this);
+        optionPanels[5] = new GuiSettingsTabProxy(control5);
+        
+        menuList = new JList(optionPanels);
+        
+        menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        menuList.setCellRenderer(new GuiMenuListCellRenderer());
+        for (int i = 0; i < optionPanels.length; i++) {
+            registerPanel.add(optionPanels[i].getMenuText(),
+                              (JPanel) optionPanels[i]);
+        }
+        menuList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                Object selected = menuList.getSelectedValue();
+                registerLayout.show(registerPanel,
+                                    ( (GuiSettingsTab) selected).getMenuText());
+            }
+        });
+        menuList.setSelectedValue(optionPanels[0], true);
+          
+		FormLayout layout = new FormLayout( "f:pref:grow, f:pref:grow", "f:pref:grow");
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		CellConstraints cc = new CellConstraints();
 		
-		builder.add(this.getSettingsTabPane(),		   		cc.xy(1,1));
+        builder.add(menuList,                   cc.xy(1,1));
+		builder.add(registerPanel,		   		cc.xy(2,1));
 	}
-	
-	/**
-	 * Haupt-TabPane. Neue Tabs werden hier angemeldet.
-	 */    
-	public GuiSettingsTabPane getSettingsTabPane() {
-		if (settingsTabPane == null) {
-		    settingsTabPane = new GuiSettingsTabPane(this);
-		    settingsTabPane.addChangeListener(control);
-			
-		    settingsTabPane.addTab(ControlMain.getProperty("label_general"), settingsTabPane.getTabSettingsMain());
-		    settingsTabPane.addTab(ControlMain.getProperty("label_record"), settingsTabPane.getTabSettingsRecord());
-		    settingsTabPane.addTab(ControlMain.getProperty("label_playback"), settingsTabPane.getTabSettingsPlayback());
-		    settingsTabPane.addTab(ControlMain.getProperty("tab_movieGuide"), settingsTabPane.getTabSettingsMovieguide());
-		    settingsTabPane.addTab(ControlMain.getProperty("tab_path"), settingsTabPane.getTabSettingsPath());
-		    
-		}
-		return settingsTabPane;
-	}
-	
-	public GuiSettingsTabMain getSettingsTabMain() {
-	    return this.getSettingsTabPane().getTabSettingsMain();
-	}
-	public GuiSettingsTabRecord getSettingsTabRecord() {
-	    return this.getSettingsTabPane().getTabSettingsRecord();
-	}
-	public GuiSettingsTabPlayback getSettingsTabPlayback() {
-	    return this.getSettingsTabPane().getTabSettingsPlayback();
-	}
-	public GuiSettingsTabMovieGuide getSettingsTabMovieGuide() {
-	    return this.getSettingsTabPane().getTabSettingsMovieguide();
-	}
-	public GuiSettingsTabPath getSettingsTabPath() {
-	    return this.getSettingsTabPane().getTabSettingsPath();
-	}
-	
+    
+    public GuiSettingsTabMain getSettingsTabMain() {
+        return (GuiSettingsTabMain)optionPanels[0];
+    }
+    public GuiSettingsTabRecord getSettingsTabRecord() {
+        return (GuiSettingsTabRecord)optionPanels[1];
+    }
+    public GuiSettingsTabPlayback getSettingsTabPlayback() {
+        return (GuiSettingsTabPlayback)optionPanels[2];
+    }
+    public GuiSettingsTabMovieGuide getSettingsTabMovieGuide() {
+        return (GuiSettingsTabMovieGuide)optionPanels[3];
+    }
+    public GuiSettingsTabPath getSettingsTabPath() {
+        return (GuiSettingsTabPath)optionPanels[4];
+    }
+    public GuiSettingsTabProxy getSettingsTabProxy() {
+        return (GuiSettingsTabProxy)optionPanels[5];
+    }
 	/**
 	 * @return Returns the control.
 	 */
@@ -91,4 +129,10 @@ public class GuiTabSettings extends GuiTab {
 	public void setControl(ControlSettingsTab control) {
 		this.control = control;
 	}
+    /**
+     * @return Returns the optionPanels.
+     */
+    public GuiSettingsTab[] getOptionPanels() {
+        return optionPanels;
+    }
 }

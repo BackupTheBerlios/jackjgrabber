@@ -90,7 +90,7 @@ public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 		} else if (columnIndex == 1) {
 			return "Login";
 		} else if (columnIndex == 2) {
-			return "Passwort";
+			return ControlMain.getProperty("label_password");
 		}
 		return "Standard";
 	}

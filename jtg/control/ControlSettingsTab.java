@@ -17,15 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import model.BOSettings;
 import presentation.GuiMainView;
-import presentation.settings.GuiSettingsTabPane;
+import presentation.settings.GuiSettingsTab;
 
 
-public class ControlSettingsTab extends ControlTab implements ChangeListener {
+public class ControlSettingsTab extends ControlTab  {
 
 	GuiMainView mainView;
 	BOSettings settings;
@@ -34,30 +31,12 @@ public class ControlSettingsTab extends ControlTab implements ChangeListener {
 		this.setMainView(view);
 	}
 	
-	public void stateChanged(ChangeEvent event) {
-		GuiSettingsTabPane pane = (GuiSettingsTabPane)event.getSource();
-		int count = pane.getSelectedIndex(); //number of selected Tab
-				
-		//Change-Events bei betreten neuer Tabs
-		if (count == 0) {
-			pane.setComponentAt(count, pane.getTabSettingsMain());
-		}
-		if (count == 1) {
-			pane.setComponentAt(count, pane.getTabSettingsRecord());
-		}
-		if (count == 2) {
-			pane.setComponentAt(count, pane.getTabSettingsPlayback());
-		}
-		if (count == 3) {
-				pane.setComponentAt(count, pane.getTabSettingsMovieguide());
-			}
-		if (count == 4) {
-			pane.setComponentAt(count, pane.getTabSettingsPath());
-		}
-		pane.setIndex(count);
-	}
-	
-	public void run() {};
+	public void run() {
+	    GuiSettingsTab[] settingTabs = this.getMainView().getTabSettings().getOptionPanels();
+        for (int i=0; i<settingTabs.length; i++) {
+            new Thread(settingTabs[i].getControl()).start();
+        }
+    };
 	
 	/**
 	 * @return Returns the mainView.

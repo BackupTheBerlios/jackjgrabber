@@ -17,6 +17,7 @@ import java.awt.Dimension;
 import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -31,7 +32,6 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiTab;
 import service.SerIconManager;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -40,9 +40,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlSettingsTabRecord;
+import control.ControlTabSettings;
 
-public class GuiSettingsTabRecord extends GuiTab {
+public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 
+    private Icon menuIcon;
 	private ControlSettingsTabRecord control;
 	private JPanel panelEngineSettings = null;
 	private JPanel panelRecordSettings = null;
@@ -91,7 +93,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 		initialize();
 	}
 
-	protected void initialize() {
+	public void initialize() {
 		FormLayout layout = new FormLayout("f:pref:grow, 10 f:pref:grow", // columns
 				"pref, 15, pref, 25, pref, 25, pref, 15, t:pref"); // rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
@@ -574,12 +576,12 @@ public class GuiSettingsTabRecord extends GuiTab {
 		GuiStreamTypeComboModel model = (GuiStreamTypeComboModel) this.getJComboBoxStreamType().getModel();
 		return model;
 	}
-	/**
-	 * @return Returns the control.
-	 */
-	public ControlSettingsTabRecord getControl() {
-		return control;
-	}
+    /**
+     * @return Returns the control.
+     */
+    public ControlTabSettings getControl() {
+        return (ControlTabSettings)control;
+    }
 	/**
 	 * @param control
 	 *            The control to set.
@@ -587,4 +589,17 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public void setControl(ControlSettingsTabRecord control) {
 		this.control = control;
 	}
+    /**
+     * @return Returns the menuIcon.
+     */
+    public Icon getIcon() {
+        if (menuIcon==null) {
+            menuIcon=SerIconManager.getInstance().getIcon("xine.png");
+        }
+        return menuIcon;
+    }
+    
+    public String getMenuText() {
+        return ControlMain.getProperty("label_record");
+    }
 }

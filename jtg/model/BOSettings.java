@@ -31,6 +31,7 @@ public class BOSettings {
 	private BOSettingsMovieGuide movieGuideSettings;
 	private BOSettingsPath pathSettings;
 	private BOSettingsLayout layoutSettings;
+	private BOSettingsProxy proxySettings;
 	private boolean settingsChanged = false;
 	public boolean standardSettings = false;
 
@@ -135,5 +136,20 @@ public class BOSettings {
 	}
 	public void setLayoutSettings(BOSettingsLayout layoutSettings) {
 		this.layoutSettings = layoutSettings;
+	}
+	/**
+	 * @return Returns the proxySettings.
+	 */
+	public BOSettingsProxy getProxySettings() {
+		if (proxySettings == null) {
+			proxySettings = new BOSettingsProxy(this);
+		}
+		return proxySettings;
+	}
+	/**
+	 * @param proxySettings The proxySettings to set.
+	 */
+	public void setProxySettings(BOSettingsProxy proxySettings) {
+		this.proxySettings = proxySettings;
 	}
 }
