@@ -2,6 +2,12 @@ package presentation;
 
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
@@ -31,24 +37,47 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
 		if (columnIndex == 0) {
-			return control.convertEventType(timer.getEventType());
+			return control.convertShortEventType(timer.getEventTypeId());
 		} if (columnIndex == 1) {
 			return timer.getStartDate();
 		} if (columnIndex == 2) {
 			return timer.getStartTime();
 		} else {
-			return control.convertShortEventRepeat(timer.getEventRepeat());
+			return control.convertShortEventRepeat(timer.getEventRepeatId());
 		}
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
 		if (col == 0) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			timer.setEventType((String)value);
+			timer.setEventTypeId(control.convertLongEventType((String)value));
+		}
+		if (col == 1) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
+			GregorianCalendar oldcal = timer.getUnformattedStartTime();
+			Calendar newcal = new GregorianCalendar();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+			try {
+				Date newDate = sdf.parse((String)value);
+				newcal.setTime(newDate);
+				oldcal.set(newcal.get(Calendar.YEAR), newcal.get(Calendar.MONTH), newcal.get(Calendar.DATE));
+			} catch (ParseException e) {}
+		}
+		if (col == 2) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
+			GregorianCalendar oldcal = timer.getUnformattedStartTime();
+			Calendar newcal = new GregorianCalendar();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			try {
+				Date newDate = sdf.parse((String)value);
+				newcal.setTime(newDate);
+				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
+				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
+			} catch (ParseException e) {}
 		}
 		if (col == 3) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			timer.setEventRepeat(control.convertLongEventRepeat((String)value));
+			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.getTab().selectRepeatDaysForSystemTimer(timer);
 		}
     }

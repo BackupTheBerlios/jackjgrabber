@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
+
+import model.BOSender;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
 
@@ -44,7 +46,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		} if (columnIndex == 3) {
 			return timer.getStopTime();
 		} if (columnIndex == 4) {
-			return control.convertShortEventRepeat(timer.getEventRepeat());
+			return control.convertShortEventRepeat(timer.getEventRepeatId());
 		} else {
 			return timer.getDescription(); 
 		}
@@ -53,6 +55,9 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	public void setValueAt(Object value, int row, int col) {
 		if (col == 0) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+			int senderIndex = this.getControl().getTab().getComboBoxSender().getSelectedIndex();
+			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
+			timer.setChannelId(sender.getChanId());
 			timer.setSenderName((String)value);
 		}
 		if (col == 1) {
@@ -92,7 +97,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		}
 		if (col == 4) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
-			timer.setEventRepeat(control.convertLongEventRepeat((String)value));
+			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.getTab().selectRepeatDaysForRecordTimer(timer);
 		}
     }
