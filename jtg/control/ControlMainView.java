@@ -145,6 +145,7 @@ public class ControlMainView implements ActionListener, ChangeListener, SysTrayM
 		}
 		if (count == 2) { //MovieGuideTab
 			pane.setComponentAt(count, pane.getTabMovieGuide());
+			pane.getTabMovieGuide().getControl().initialize();
 		}
 		if (count == 3) { //ProjectXTab
 			ControlMain.getSettings().setProjectXSettingsChanged(true);

@@ -56,6 +56,7 @@ import service.SerXMLHandling;
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener  {
 	
 	GuiMainView mainView;
+	boolean initialized = false;
 
 	static Hashtable titelList;
 	static Hashtable controlMap;
@@ -68,7 +69,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private static Element root;
 	private static Document movieGuideDocument;
 
-	public static String movieGuideFileName = "movieguide.xml";
+	public static File movieGuideFileName = new File("movieguide.xml");
 	private static String SelectedItemJComboBox;
 	private static int SelectedItemJComboBoxSucheNach;
     public static int timerTableSize;
@@ -76,27 +77,18 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     
 	public ControlMovieGuideTab(GuiMainView view) {
 		this.setMainView(view);		
-		try{
-			if(getRootElement() == null){							
-				setRootElement();
-			}
-			if(this.getTitelMap()==null){				
-				setTitelMap();
-			}
-		}catch (Exception ex){}
 	}
 
-	public void initialize() {							
-		/*
-		try{
-			if(getRootElement() == null){							
+	public void initialize() {
+		if (!initialized) {
+			try{
+				initialized = true;
 				setRootElement();
-			}
-			if(this.getTitelMap()==null){				
-				setTitelMap();
-			}			
-		}catch (Exception ex){}
-		*/
+				if(this.getTitelMap()==null){				
+					setTitelMap();
+				}
+			}catch (Exception ex){}
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -258,14 +250,15 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = fc.getSelectedFile().toString();		
 			try{
-				SerMovieGuide2Xml.readGuide(path,1);
+				movieGuideFileName=new File(path);
+				this.initialize();
 			}catch(Exception ex){}			
 		}
 	}
 
 	public static void checkMovieGuide() {
 		try {
-			File pathToXMLFile = new File(movieGuideFileName).getAbsoluteFile();
+			File pathToXMLFile = movieGuideFileName.getAbsoluteFile();
 			if (pathToXMLFile.exists()) {
 				movieGuideDocument = SerXMLHandling.readDocument(pathToXMLFile);
 				Logger.getLogger("ControlMovieGuide").info("MovieGuide found");
@@ -282,11 +275,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 	}
 	
-	private static String getMovieGuideFileName(){
+	private static File getMovieGuideFileName(){
 		return movieGuideFileName;
 	}
 	
-	private static void setMovieGuideFileName(String filename){
+	private static void setMovieGuideFileName(File filename){
 		movieGuideFileName = filename;		
 	}
 	
@@ -299,7 +292,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	private static void setRootElement() throws Exception{
-		Document doc = SerXMLHandling.readDocument(new File(getMovieGuideFileName()));
+		Document doc = SerXMLHandling.readDocument(getMovieGuideFileName());
 		root = doc.getRootElement();
 	}
     private static Element getRootElement() throws Exception{

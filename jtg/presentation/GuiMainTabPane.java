@@ -116,7 +116,6 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabMovieGuide == null) {
 			ControlMovieGuideTab control = new ControlMovieGuideTab(this.getView());
 			tabMovieGuide = new GuiTabMovieGuide(control);
-			control.initialize();
 		}
 		return tabMovieGuide;
 	}
