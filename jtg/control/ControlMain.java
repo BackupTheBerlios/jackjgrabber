@@ -1,5 +1,6 @@
 package control;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -134,9 +135,15 @@ public class ControlMain {
 			setSettings(SerXMLConverter.buildSettings(getSettingsDocument()));
 		} catch (Exception ex) {Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");}
 	}
-	
+	/**
+	 * Wenn nur ein Box angelegt, diese als Standard benutzen
+	 */
 	public static String getBoxIpOfSelectedBox() {
 		ArrayList boxList = getSettings().getBoxList();
+		if (boxList.size()==1) {
+			BOBox box = (BOBox)boxList.get(0);
+			return box.getDboxIp();
+		}
 		for (int i=0; boxList.size()>i; i++) {
 			BOBox box = (BOBox)boxList.get(i);
 			if (box.isSelected()) {
@@ -156,9 +163,15 @@ public class ControlMain {
 		}
 		return new BOBox();
 	}
-	
+	/**
+	 * Wenn nur ein Box angelegt, diese als Standard benutzen
+	 */
 	public static BOBox getSelectedBox() {
 		ArrayList boxList = getSettings().getBoxList();
+		if (boxList.size()==1) {
+			return (BOBox)boxList.get(0);
+		
+		}
 		for (int i=0; boxList.size()>i; i++) {
 			BOBox box = (BOBox)boxList.get(i);
 			if (box.isSelected()) {
