@@ -14,12 +14,11 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import java.util.*;
-import java.text.*;
 import java.io.*;
 import java.net.*;
 
 /**
- * @author ralph
+ * @author ralix
  * 
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
@@ -63,8 +62,7 @@ public class SerMovieGuide2Xml {
 
 	public static void saveXMLFile(Document doc) throws IOException {
 		OutputFormat format = OutputFormat.createPrettyPrint();
-		XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"),
-				format);
+		XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"),	format);
 		//writer.write( ControlMain.getSettingsDocument() );
 		writer.write(doc);
 		writer.close();
@@ -75,7 +73,7 @@ public class SerMovieGuide2Xml {
 	}
 
 	private static String getAktuellDateString() {
-		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
 		String monat = String.valueOf((cal.get(Calendar.MONTH) + 1));
 		String jahr = String.valueOf((cal.get(Calendar.YEAR))).substring(2);
 		return "mguide_d_s_" + monat + "_" + jahr + ".txt";
@@ -129,20 +127,20 @@ public class SerMovieGuide2Xml {
 		try {
 			value[0] = false;
 			value[0] = SerFormatter.isCorrectDate(input.substring(input.indexOf(":") + 2));
-		} catch (Exception ex) {
-			value[0] = false;
-		}
+		} catch (Exception ex) {}
 		try {
 			value[1] = false;
 			value[1] = htToken.containsKey(input.substring(0, input.indexOf(":")));
-		} catch (Exception ex) {
-			value[1] = false;
-		}
+		} catch (Exception ex) {}		
 		return value;
 	}
 
 	public static int getNumber(String input) {
-		return ((Integer) htToken.get((String) input.substring(0, input.indexOf(":")))).intValue();
+		int value = 0;
+		try{
+			value = ((Integer) htToken.get((String) input.substring(0, input.indexOf(":")))).intValue();
+		} catch (Exception ex) {}
+		return value;
 	}
 
 	public static void readGuide(String datei,int quelle) throws FileNotFoundException, IOException {		
