@@ -463,6 +463,9 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				BOPlaybackOption play = BOPlaybackOption.detectPlaybackOption();
 				if (play != null) {
 					String exec = play.getExecString();
+					exec = getExecStringWithoutParam(exec);
+					
+					
 					exec += " " + file.getAbsolutePath();
 
 					try {
@@ -504,6 +507,22 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		}
 	}
 
+	/** 
+	 * @param exec
+	 * @return
+	 */
+	private String getExecStringWithoutParam(String exec) {
+		String[] knownEnd = {".exe ",".bin ",".cmd ",".bat "};
+		for (int i = 0; i < knownEnd.length; i++) {
+			int index = exec.indexOf(knownEnd[i]);
+			if (index > -1)
+			{
+				exec = exec.substring(0,index + 5);
+			}
+		}
+		return exec;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -526,7 +545,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				}
 				if (SwingUtilities.isRightMouseButton(e)) {
 					if (e.getSource() instanceof JTree) {
-						showTreePopup((JTree) e.getSource(), e);	
+						showTreePopup((JTree) e.getSource(), e);
 					}
 				}
 			}
@@ -553,12 +572,9 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 			if (SerHelper.isVideo(file.getName())) {
 
 				// deactivated currently only for personal use of crazyreini
-				/*m.add(new JMenuItem(new AbstractAction("Muxxi") {
-					public void actionPerformed(ActionEvent e) {
-						startMuxxi(file);
-					}
-				}));
-				*/
+				/*
+				 * m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) { startMuxxi(file); } }));
+				 */
 
 			}
 
@@ -578,16 +594,14 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 					}));
 				}
 			}
-			
+
 			m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_delete")) {
 				public void actionPerformed(ActionEvent e) {
 					deleteSelectedFromTable(table);
 				}
 			}));
-			
-		}
-		else if (count > 0)
-		{
+
+		} else if (count > 0) {
 			m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_delete")) {
 				public void actionPerformed(ActionEvent e) {
 					deleteSelectedFromTable(table);
@@ -598,30 +612,41 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 			m.show(table, e.getX(), e.getY());
 		}
 	}
-	
-	
-	
+
 	/**
 	 * @param table
 	 */
 	protected void deleteSelectedFromTable(JTable table) {
-		ArrayList toDelete = new ArrayList();
-		int[] aiRows = table.getSelectedRows();
-		for (int i = 0; i < aiRows.length; i++) {
-			toDelete.add(table.getModel().getValueAt(aiRows[i],2));
+		if (askToDelete()) {
+
+			ArrayList toDelete = new ArrayList();
+			int[] aiRows = table.getSelectedRows();
+			for (int i = 0; i < aiRows.length; i++) {
+				toDelete.add(table.getModel().getValueAt(aiRows[i], 2));
+			}
+			deleteFiles(toDelete);
+			reloadAvailableFiles();
 		}
-		deleteFiles(toDelete);
-		reloadAvailableFiles();				
 	}
-	
-	
-	private void deleteFiles(Object[] files)
-	{
+
+	/**
+	 * @return
+	 */
+	private boolean askToDelete() {
+		int res = JOptionPane.showOptionDialog(guiTabRecordInfo,ControlMain.getProperty("msg_deleteFiles"),
+				ControlMain.getProperty("button_cancel"),0,JOptionPane.QUESTION_MESSAGE,null,
+				new String[] {ControlMain.getProperty("button_delete"),ControlMain.getProperty("button_cancel")},"");
+		return res == 0;
+	}
+
+	private void deleteFiles(Object[] files) {
 		ArrayList l = new ArrayList(Arrays.asList(files));
 		deleteFiles(l);
 	}
 
-	/** delete all the given files
+	/**
+	 * delete all the given files
+	 * 
 	 * @param toDelete
 	 */
 	private void deleteFiles(ArrayList toDelete) {
@@ -629,18 +654,17 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 
 		while (iter.hasNext()) {
 			File element = (File) iter.next();
-			if (element.delete())
-			{
+			if (element.delete()) {
 				Logger.getLogger("ControlProgramTab").info(element.getAbsolutePath() + " " + ControlMain.getProperty("msg_deleted"));
-			}
-			else
-			{
+			} else {
 				Logger.getLogger("ControlProgramTab").error(element.getAbsolutePath() + " " + ControlMain.getProperty("msg_cantdelete"));
-			}					
+			}
 		}
 	}
 
-	/** not activated yet
+	/**
+	 * not activated yet
+	 * 
 	 * @param tree
 	 */
 	private void showTreePopup(JTree table, MouseEvent e) {
@@ -648,20 +672,18 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		JPopupMenu m = new JPopupMenu();
 		int count = table.getSelectionCount();
 		if (count > 0) {
-		
+
 			m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_delete")) {
 				public void actionPerformed(ActionEvent e) {
 					deleteSelectedOfDirectoryTree();
 				}
 			}));
 
-			
 		}
 		if (m.getComponentCount() > 0) {
 			m.show(table, e.getX(), e.getY());
 		}
 	}
-
 
 	/**
 	 * @param absoluteFile
@@ -725,7 +747,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
-		
+
 	}
 
 	/*
@@ -752,9 +774,8 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 				int row = guiTabRecordInfo.getFileTable().getSelectedRow();
 				if (row > -1) {
 					File info = (File) guiTabRecordInfo.getFileTable().getModel().getValueAt(row, 2);
-					
+
 					String values = SerHelper.createFileInfo(info);
-					
 
 					guiTabRecordInfo.setFileInfo(values);
 				} else {
@@ -768,31 +789,34 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 *  
 	 */
 	protected void deleteSelectedOfDirectoryTree() {
-		ArrayList filesToDelete = new ArrayList();
-		ArrayList dirToDelete = new ArrayList();
-	
-		// Delete all selected files
-		JTree tree = guiTabRecordInfo.getTree();
-		TreePath[] sel = tree.getSelectionPaths();
-		for (int i = 0; i < sel.length; i++) {
-			DefaultMutableTreeNode nodeToDelete = (DefaultMutableTreeNode) sel[i].getLastPathComponent();
-			Object obj = nodeToDelete.getUserObject();
-			if (obj instanceof BOFileWrapper)
-			{
-				File dirToDel = ((BOFileWrapper)obj).getAbsoluteFile();
-				addAllFiles(dirToDel,filesToDelete,dirToDelete);
+
+		if (askToDelete()) {
+
+			ArrayList filesToDelete = new ArrayList();
+			ArrayList dirToDelete = new ArrayList();
+
+			// Delete all selected files
+			JTree tree = guiTabRecordInfo.getTree();
+			TreePath[] sel = tree.getSelectionPaths();
+			for (int i = 0; i < sel.length; i++) {
+				DefaultMutableTreeNode nodeToDelete = (DefaultMutableTreeNode) sel[i].getLastPathComponent();
+				Object obj = nodeToDelete.getUserObject();
+				if (obj instanceof BOFileWrapper) {
+					File dirToDel = ((BOFileWrapper) obj).getAbsoluteFile();
+					addAllFiles(dirToDel, filesToDelete, dirToDelete);
+				}
 			}
+
+			// Delete files
+
+			deleteFiles(filesToDelete);
+
+			// Delete directories
+			deleteFiles(dirToDelete);
+
+			reloadAvailableFiles();
 		}
-	
-		// Delete files
-		
-		deleteFiles(filesToDelete);
-		
-		// Delete directories
-		deleteFiles(dirToDelete);
-		
-		reloadAvailableFiles();
-	
+
 	}
 
 	/**
@@ -801,20 +825,17 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 	 * @param dirToDelete
 	 */
 	private void addAllFiles(File dirToDel, ArrayList filesToDelete, ArrayList dirToDelete) {
-		dirToDelete.add(0,dirToDel);
-		
+		dirToDelete.add(0, dirToDel);
+
 		File[] files = dirToDel.listFiles();
 		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory())
-			{
-				addAllFiles(files[i],filesToDelete,dirToDelete);
-			}
-			else
-			{
+			if (files[i].isDirectory()) {
+				addAllFiles(files[i], filesToDelete, dirToDelete);
+			} else {
 				filesToDelete.add(files[i]);
 			}
 		}
-		
+
 	}
 
 }
