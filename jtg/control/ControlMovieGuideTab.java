@@ -30,6 +30,7 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Collections;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -76,8 +77,12 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	Element root;
 
 	public static File movieGuideFile = new File("movieguide.xml");
+	ArrayList aboList = new BOMovieGuide().getAboList();
+	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
+	private static final String GENRE  = "...Genre";
+	private static final String SENDER = "...Sender";
 	
 	String SelectedItemJComboBox;
 	int SelectedItemJComboBoxSucheNach;
@@ -91,21 +96,31 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	public void run() {
 			try {
           this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
+          if(SerMovieGuide2Xml.checkNewMovieGuide()){
+			SerAlertDialog.alert("Es ist ein neuer MovieGuide für: "+SerFormatter.getAktuellDateString(1,"MMMM")+" verfügbar!",this.getMainView()); 					
+		  }
           setRootElement();
           if(this.getTitelMap()==null){				
           	setTitelMap();
           }
-          this.getTab().getComboBoxGenre().setSelectedIndex(0);
-          this.getTab().getComboBoxSender().setSelectedIndex(0);
-          this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getFormatGreCal());			
-          this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
+          beautifyGui();          
+          
       } catch (MalformedURLException e) {
           Logger.getLogger("ControlMovieGuideTab").error(movieGuideFile.getName()+" not found");
       } catch (DocumentException e) {
           e.printStackTrace();
       }		
 	}
-
+	
+	private void beautifyGui(){
+    	setTitelMapSelected(SerFormatter.getFormatGreCal(),1);  // TitelMap für den heutigen Tag          
+        Collections.sort(getSenderList());		//alphabetisch geordnet 
+        Collections.sort(getGenreList());		//alphabetisch geordnet
+        this.getTab().getComboBoxGenre().setSelectedIndex(0);          
+        this.getTab().getComboBoxSender().setSelectedIndex(0);          
+        this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getFormatGreCal());	          
+        this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
+    }
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action == "download") {
@@ -123,13 +138,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		        SerAlertDialog.alert("Kein Timer ausgewählt!", this.getMainView());
 		    }
 		}
-		if (action == "suchen") {					
-			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());	
-			reInitFilmTable(getSelectedItemJComboBoxSucheNach());						
+		if (action == "suchen") {			
+			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
+			if(getSelectedItemJComboBoxSucheNach()==0) {								
+				reInitFilmTable(11);
+			}else{					
+				reInitFilmTable(getSelectedItemJComboBoxSucheNach());
+			}			
 		}
-		if (action == "allDates") {
-			setSelectedItemJComboBox("all");
-			reInitFilmTable(1);
+		if (action == "allDates") {		
+			reInitFilmTable(13);
 		}
 		if (action == "movieGuidePath") {
 			this.openFileChooser();
@@ -152,15 +170,19 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				reInitFilmTable(1);				
 			}	
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
-				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-				reInitFilmTable(2);		
+				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
+					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+					reInitFilmTable(2);		
+				}
 			}
 			if (comboBox.getName().equals("jComboBoxSucheNach")) {		
 				SelectedItemJComboBoxSucheNach = (comboBox.getSelectedIndex()+2);			
 			}
 			if (comboBox.getName().equals("jComboBoxSender")) {		
-				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-				reInitFilmTable(12);		
+				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
+					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+					reInitFilmTable(12);
+				}
 			}
 		}
 	}
@@ -393,19 +415,26 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     	return (a++);
     }
     
-    public void setTitelMapSelected(String search,int value){  //bauen der AnzeigeMap nach Suchkriterien
+    public void setTitelMapSelected(Object searchValue,int value){  //bauen der AnzeigeMap nach Suchkriterien    	
+    	String search = "";
+    	GregorianCalendar searchGC = new GregorianCalendar();
     	titelListAktuell = new Hashtable();    	
     	Iterator i = titelList.entrySet().iterator();
     	int a = 0;
+    	if(value != 1){
+    		search = (String)searchValue;    		
+    	}else if(value==1){
+    		searchGC = SerFormatter.convString2GreCal((String)searchValue,DATE_FULL);
+    	}
     	while (i.hasNext()){
     		Map.Entry entry = (Map.Entry)i.next();
     		BOMovieGuide bomovieguide = (BOMovieGuide)entry.getValue();    		
     		switch (value){
-    		case 1: //datum    				    				
-				if(bomovieguide.getDatum().contains(SerFormatter.convString2GreCal(search,DATE_FULL))){	
-	    			titelListAktuell.put(new Integer(a++),bomovieguide);
-	    		}
-				break;
+    			case 1: //datum    				    				    			
+    				if(bomovieguide.getDatum().contains(searchGC)){
+    	    			titelListAktuell.put(new Integer(a++),bomovieguide);
+    	    		}
+    				break;
     			case 2: //genre
     				a = doItSearch(bomovieguide,bomovieguide.getGenre(),search,a);    				
     				break;
@@ -442,11 +471,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     				if(bomovieguide.getSender().contains(search)){
     					a = setEntryInTitelMap(bomovieguide,a);    					
     	    		}    	    		
-    				break;    						
-    		};    		
-    		if(search.equals("all")){
-    			titelListAktuell.put(new Integer(a++),bomovieguide);
-    		}    		
+    				break;    
+    			case 13:
+    					titelListAktuell.put(new Integer(a++),bomovieguide);
+    				break;
+    		};    		    			
     	}    
     }
     
@@ -455,17 +484,20 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     			titelList = new Hashtable();
     			controlMap = new Hashtable();
     	}    	
-    	setGenreList("Genre...");
-    	setSenderList("Sender...");
+    	setGenreList(GENRE);
+    	setSenderList(SENDER);
     	try {						
 			for (Iterator i = root.elementIterator("entry"); i.hasNext();) {
 				Element entry = (Element) i.next();						
+				String sender = entry.element("sender").getStringValue();
+				if( (aboList.contains(sender)) || (aboList.size()<=0)  ){			
+								
 				String datum = entry.element("datum").getStringValue();						
 				if(SerFormatter.compareDates( datum,"today")) {				
 				setDatumList(datum);
-				String sender = entry.element("sender").getStringValue();
 				String titel  = entry.element("titel").getStringValue();
 				String dauer = entry.element("dauer").getStringValue();
+				
 				setSenderList(sender);
 				if(!controlMap.containsKey(titel)){ //prüfen ob titel schon vorhanden ist, wenn ja nur neue Daten hinzugügen´			
 				String start = entry.element("start").getStringValue();			
@@ -504,6 +536,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
                      titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
 			}
+				}
 			}
 		} catch (Exception ex) {System.out.println(ex);}				
 	}
