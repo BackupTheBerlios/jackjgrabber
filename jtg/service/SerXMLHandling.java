@@ -48,6 +48,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"streamingServerPort", "4000");
 		setElementInElement(root,"theme", "Silver");
 		setElementInElement(root,"locale", "DE");
+		setElementInElement(root,"streamType", "PES");
 
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);

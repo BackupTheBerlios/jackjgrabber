@@ -39,6 +39,7 @@ public class BOSettings {
 	public boolean startStreamingServer;
 	public String savePath;
 	public String playbackString;
+    public String streamType; //PES, TS
     
     public void removeBox(int number) {
     	setSettingsChanged(true);
@@ -192,4 +193,20 @@ public class BOSettings {
 		setSettingsChanged(true);
 		this.playbackString = playbackPlayer;
 	}
+	/**
+	 * @return int
+	 */
+	public String getStreamType() {
+		return streamType;
+	}
+
+	/**
+	 * Sets the streamType.
+	 * @param streamType The streamType to set
+	 */
+	public void setStreamType(String streamType) {
+		setSettingsChanged(true);
+		this.streamType = streamType;
+	}
+
 }

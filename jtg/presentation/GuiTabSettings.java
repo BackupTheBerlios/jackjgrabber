@@ -50,6 +50,7 @@ public class GuiTabSettings extends JPanel {
 	private JPanel panelLayoutSettings = null;
 	private JPanel panelRecordSettings = null;
 	private JComboBox jComboBoxTheme = null;
+	private JComboBox jComboBoxStreamType = null;
 	private JTextField jTextFieldPlaybackString = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
@@ -111,13 +112,15 @@ public class GuiTabSettings extends JPanel {
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",						cc.xywh	(1, 1, 6, 1));
+			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 6, 1));
 			builder.add(this.getCbStartStreamingServer(),					cc.xywh	(1, 2, 5, 1));
 			builder.add(new JLabel("Streamingserver-Port"),	  			cc.xy	(1, 3));
-			builder.add(this.getTfServerPort(),							cc.xy	(3, 3));
-			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),			cc.xy	(1, 4));
-			builder.add(this.getJTextFieldRecordSavePath(),				cc.xywh	(3, 4, 2, 1));
-			builder.add(this.getJButtonRecordPathFileChooser(),			cc.xy	(6, 4));
+			builder.add(this.getTfServerPort(),										cc.xy	(3, 3));
+			builder.add(new JLabel("Stream-Typ"),					  			cc.xy	(1, 4));
+			builder.add(this.getJComboBoxStreamType(),						cc.xy	(3, 4));
+			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),		cc.xy	(1, 5));
+			builder.add(this.getJTextFieldRecordSavePath(),					cc.xywh	(3, 5, 2, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(),			cc.xy	(6, 5));
 		}
 		return panelRecordSettings;
 	}
@@ -170,6 +173,21 @@ public class GuiTabSettings extends JPanel {
 			jComboBoxTheme.setPreferredSize(new java.awt.Dimension(105,25));
 		}
 		return jComboBoxTheme;
+	}
+	
+	/**
+	 * This method initializes jComboBoxStreamType	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	public JComboBox getJComboBoxStreamType() {
+		if (jComboBoxStreamType == null) {
+			jComboBoxStreamType = new JComboBox(ControlMain.streamTypes);
+			jComboBoxStreamType.addItemListener(control);
+			jComboBoxStreamType.setName("streamType");
+			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(50,25));
+		}
+		return jComboBoxStreamType;
 	}
 	/**
 	 * This method initializes jButtonAnlegen	
@@ -345,6 +363,7 @@ public class GuiTabSettings extends JPanel {
 			jTextFieldPlaybackString = new JTextField();
 			jTextFieldPlaybackString.setActionCommand("playbackString");
 			jTextFieldPlaybackString.addActionListener(this.getControl());
+			jTextFieldPlaybackString.addFocusListener(control);
 			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 22));
 		}
 		return jTextFieldPlaybackString;
