@@ -49,9 +49,10 @@ public class TcpReceiver extends Thread {
 				
 				String[] replyString = new String(reply, 0, len).split("\n");
 				for (int i=0; i<replyString.length; i++) {
-					Logger.getLogger("TcpReceiver").info(replyString[i]);
+					Logger.getLogger("TcpReceiver").info("From DBox: "+replyString[i]);
 					if (replyString[i].indexOf("EXIT") != -1) {
 						closeSocket();
+						record.udpReceiver.closeSocket();
 					}
 				}
 			}
