@@ -80,7 +80,7 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 		if (panelMovieguideSettings == null) {
 			panelMovieguideSettings = new JPanel();
 			FormLayout layout = new FormLayout("445,10,pref", //columna
-					"pref, 5, pref,10,pref,5,pref,10,pref"); //rows
+					"pref, 5, pref,10,pref,5,pref,15,pref,pref,10,pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelMovieguideSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -90,10 +90,10 @@ public class GuiSettingsTabMovieGuide extends GuiTab {
 			builder.addSeparator("Download MG", cc.xywh(1, 5, 1, 1));
 			builder.add(getDownloadPanel(), cc.xywh(1, 7, 1, 1));
 
-			builder.addSeparator(ControlMain.getProperty("label_mgdefaultshow"), cc.xywh(3, 5, 1, 1));
-			builder.add(getDefaultShowPanel(), cc.xywh(3, 7, 1, 1));
+			builder.addSeparator(ControlMain.getProperty("label_mgdefaultshow"), cc.xywh(1, 9, 1, 1));
+			builder.add(getDefaultShowPanel(), cc.xywh(1, 10, 1, 1));
 
-			builder.add(getStoreOriginal(), cc.xywh(1, 9, 1, 1));
+			builder.add(getStoreOriginal(), cc.xywh(1, 12, 1, 1));
 
 		}
 		return panelMovieguideSettings;
