@@ -3,25 +3,20 @@ package model;
 import java.util.ArrayList;
 
 /*
-BOSettingsPlayback.java by Geist Alexander 
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-*/
+ * BOSettingsPlayback.java by Geist Alexander
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 public class BOSettingsPlayback {
-	
+
 	private BOSettings settings;
 	public ArrayList playbackOptions;
 	public boolean alwaysUseStandardPlayback;
@@ -30,11 +25,11 @@ public class BOSettingsPlayback {
 	public BOSettingsPlayback(BOSettings settings) {
 		this.setSettings(settings);
 	}
-	
+
 	private void setSettingsChanged(boolean value) {
 		this.getSettings().setSettingsChanged(value);
 	}
-	
+
 	/**
 	 * @return Returns the settings.
 	 */
@@ -42,7 +37,8 @@ public class BOSettingsPlayback {
 		return settings;
 	}
 	/**
-	 * @param settings The settings to set.
+	 * @param settings
+	 *            The settings to set.
 	 */
 	public void setSettings(BOSettings settings) {
 		this.settings = settings;
@@ -66,7 +62,7 @@ public class BOSettingsPlayback {
 			this.playbackString = playbackString;
 		}
 	}
-	
+
 	/**
 	 * @return Returns the playbackOptions.
 	 */
@@ -96,7 +92,7 @@ public class BOSettingsPlayback {
 			this.alwaysUseStandardPlayback = alwaysUseStandardPlayback;
 		}
 	}
-	
+
 	public void addPlaybackOption(BOPlaybackOption playbackOption) {
 		setSettingsChanged(true);
 		this.getPlaybackOptions().add(playbackOption);
@@ -106,19 +102,16 @@ public class BOSettingsPlayback {
 		setSettingsChanged(true);
 		this.getPlaybackOptions().remove(number);
 	}
-	
+
 	/**
-	 * if more Options available, return the standard-option if no
-	 * standard-option declared, return 1st Option
+	 * if more Options available, return the standard-option if no standard-option declared, return 1st Option
 	 */
 	public BOPlaybackOption getStandardPlaybackOption() {
-		if (this.getPlaybackOptions() == null
-				|| this.getPlaybackOptions().size() == 0) {
+		if (this.getPlaybackOptions() == null || this.getPlaybackOptions().size() == 0) {
 			return null;
 		}
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
-			BOPlaybackOption option = (BOPlaybackOption) this
-					.getPlaybackOptions().get(i);
+			BOPlaybackOption option = (BOPlaybackOption) this.getPlaybackOptions().get(i);
 			if (option.isStandard().booleanValue()) {
 				return option;
 			}
@@ -129,36 +122,39 @@ public class BOSettingsPlayback {
 	public Object[] getPlaybackOptionNames() {
 		String[] names = new String[this.getPlaybackOptions().size()];
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
-			names[i] = ((BOPlaybackOption) this.getPlaybackOptions().get(i))
-					.getName();
+			names[i] = ((BOPlaybackOption) this.getPlaybackOptions().get(i)).getName();
 		}
 		return names;
 	}
 
+	/**
+	 * 
+	 * @return the default option or the first one if no one found
+	 */
+	public BOPlaybackOption getPlaybackOptionDefault() {
+		ArrayList options = getPlaybackOptions();
+		for (int i = 0; i < options.size(); i++) {
+			BOPlaybackOption option = (BOPlaybackOption) options.get(i);
+			if (option.isStandard().booleanValue()) {
+				return option;
+			}
+		}
+
+		if (options.size() > 0)
+		{
+			return (BOPlaybackOption) options.get(0);
+		}
+		return null; // only when no player is set
+	}
+
 	public BOPlaybackOption getPlaybackOption(String searchName) {
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
-			BOPlaybackOption option = (BOPlaybackOption) this
-					.getPlaybackOptions().get(i);
+			BOPlaybackOption option = (BOPlaybackOption) this.getPlaybackOptions().get(i);
 			if (option.getName().equals(searchName)) {
 				return option;
 			}
 		}
 		return null; //should not happen
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

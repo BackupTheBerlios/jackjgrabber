@@ -134,7 +134,7 @@ public class BOPlaybackOption {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 getPlaybackSettings().getPlaybackOptionNames(),
-                getPlaybackSettings().getPlaybackOptionNames()[0]
+                getPlaybackSettings().getPlaybackOptionDefault().getName()
               );
 	    if (ret!=null) {
 	        return getPlaybackSettings().getPlaybackOption(ret);
