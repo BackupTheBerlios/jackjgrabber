@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -73,6 +74,8 @@ public class GuiTabMovieGuide extends JPanel {
 	
 	private JTextField tfSuche;
 	private JTextField tfGenre;	
+	
+	private JCheckBox  jCheckBoxAbAktuell;
 	
 	private JPanel jPanelSuche = null;
 	private JPanel jPanelSucheErw = null;
@@ -166,7 +169,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelSuche, layout);
 			CellConstraints cc = new CellConstraints();					
 			builder.add(this.getTfSuche(),			 cc.xyw	(1, 1, 1));	
-			builder.add(this.getJButtonSuche(),		 cc.xyw	(2, 1, 1));											
+			builder.add(this.getJButtonSuche(),		 cc.xyw	(2, 1, 1));			
 		}
 		return jPanelSuche;
 	}
@@ -179,6 +182,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelSucheErw, layout);
 			CellConstraints cc = new CellConstraints();										
 			builder.add(this.getComboBoxSucheNach(), 	cc.xyw	(1, 1, 1));
+			builder.add(this.getCheckBoxAbAktuell(), 	cc.xyw	(3, 1, 1));
 			builder.addSeparator("Suche nach Genre", 	cc.xyw	(1, 2, 1));
 			builder.add(this.getComboBoxGenre(), 	 	cc.xyw	(1, 3, 1));
 			builder.addSeparator("Suche nach Sendern", 	cc.xyw	(3, 2, 1));
@@ -237,7 +241,7 @@ public class GuiTabMovieGuide extends JPanel {
 	public JProgressBar getJProgressBarDownload(){
 		if (jProgressBarDownload == null){
 			jProgressBarDownload = new JProgressBar(JProgressBar.HORIZONTAL, 0, 0);
-			jProgressBarDownload.setStringPainted(true);
+			jProgressBarDownload.setStringPainted(true);			
 		}
 		return jProgressBarDownload;
 	}
@@ -302,7 +306,16 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jButtonSuche;
 	}
-		
+	
+	public JCheckBox getCheckBoxAbAktuell() {
+		if (jCheckBoxAbAktuell == null) {
+			jCheckBoxAbAktuell = new JCheckBox("Erst ab heutigen Datum");
+			jCheckBoxAbAktuell.setName("showAbHeute");
+			jCheckBoxAbAktuell.addItemListener(control);
+		}
+		return jCheckBoxAbAktuell;
+	}
+	
 	private JScrollPane getJScrollPaneChannels() {
 		if (jScrollPaneChannel == null) {
 			jScrollPaneChannel = new JScrollPane();
@@ -447,7 +460,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taAudioVideo.setLineWrap(true);
 			taAudioVideo.setWrapStyleWord(true);
 			taAudioVideo.setAutoscrolls(true);
-			taAudioVideo.setText("Audio/Video: ");
+			taAudioVideo.setText("Audio: / Video: ");
 		}
 		return taAudioVideo;
 	}
