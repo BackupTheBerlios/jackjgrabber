@@ -94,7 +94,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	
 	public void run() {
           this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());          
-          if(getSettings().getMgLoadType()==1){          	
+          if(getSettings().getMgLoadType()==0){          	
           	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){
           		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
           	}else{
@@ -115,14 +115,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         		}
           	}
           }
-          if(this.getTitelMap()==null){				          	
-          	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	                	
+          if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
+          	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
+          	beautifyGui(); 
           }           
           if(movieGuideFileNext.exists()){          	
           	setMovieGuideFile(movieGuideFileNext);          	
-          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());	        	
+          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());
+          	beautifyGui(); 
           }                   
-          beautifyGui();          
+                   
 	}
 	
 	
