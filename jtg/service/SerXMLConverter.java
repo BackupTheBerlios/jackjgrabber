@@ -42,22 +42,92 @@ public class SerXMLConverter {
 		BOSettings settings = new BOSettings();	
 		Element root = document.getRootElement();
 		
-		//Auswertung der User-Settings
-		settings.setThemeLayout(root.selectSingleNode("/settings/theme").getText());
-		settings.setStreamingServerPort(root.selectSingleNode("/settings/streamingServerPort").getText());
-		settings.setStartStreamingServer(Boolean.parseBoolean(root.selectSingleNode("/settings/startStremingServer").getText()));
-		settings.setSavePath(root.selectSingleNode("/settings/savePath").getText());
-		settings.setLocale(root.selectSingleNode("/settings/locale").getText());
+//		Auswertung der User-Settings
+		getSettingsTheme(root, settings);
+		getSettingsStreamingServerPort(root, settings);
+		getSettingsStartStreamingServer(root, settings);
+		getSettingsSavePath(root, settings);
+		getSettingsLocale(root, settings);
+		getSettingsPlaybackPlayer(root, settings);
 		
-		//Auswertund der Box-Settings
-		List boxListNodes = root.selectNodes("//box"); //All Box-Nodes
+		settings.setBoxList(buildBoxSettings(root));
+		return settings;
+	}
+	
+	private static void getSettingsTheme(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/theme");
+		if (node != null) {
+			settings.themeLayout=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root,"theme", "Silver");
+			settings.setThemeLayout("Silver");
+		}
+	}
+	
+	private static void getSettingsStreamingServerPort(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/streamingServerPort");
+		if (node != null) {
+			settings.streamingServerPort=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root,"streamingServerPort", "4000");
+			settings.setStreamingServerPort("4000");
+		}
+	}
+		
+	private static void getSettingsStartStreamingServer(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/startStreamingServer");
+		if (node != null) {
+			settings.startStreamingServer=Boolean.parseBoolean(node.getText());
+		} else {
+			SerXMLHandling.setElementInElement(root,"startStreamingServer", "true");
+			settings.setStartStreamingServer(true);
+		}
+	}
+		
+	private static void getSettingsSavePath(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/savePath");
+		if (node != null) {
+			settings.savePath=node.getText();
+		} else {
+			String path = new File(System.getProperty("user.home")).getAbsolutePath();
+			SerXMLHandling.setElementInElement(root,"savePath", path);
+			settings.setSavePath(path);
+		}
+	}
+		
+	private static void getSettingsLocale(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/locale");
+		if (node != null) {
+			settings.locale=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root,"locale", "DE");
+			settings.setLocale("DE");
+		}
+	}
+	
+	private static void getSettingsPlaybackPlayer(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/playbackPlayer");
+		if (node != null) {
+			settings.playbackString=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root,"playbackPlayer", "vlc");
+			settings.setPlaybackString("vlc");
+		}
+	}
+	
+	/**
+	 * @param rootElement of the Settings-Document
+	 * @return ArrayList of BOBox-Objects
+	 */
+	private static ArrayList buildBoxSettings(Element rootElement) {
+		List boxListNodes = rootElement.selectNodes("//box"); //All Box-Nodes
 		ArrayList boxList = new ArrayList(boxListNodes.size());
-
+	
 		for (int i=0; i<boxListNodes.size(); i++) { //Schleife über die Box-Elemente
 			BOBox box = new BOBox();
 			Node boxElement = (Node)boxListNodes.get(i);
 			List boxValueNodes = boxElement.selectNodes("descendant::*");
-			
+	
 			for (int i2=0; i2<boxValueNodes.size(); i2++) { //Schleife über die BoxValue-Elemente
 				Node value = (Node)boxValueNodes.get(i2);
 				switch(i2) {
@@ -76,9 +146,9 @@ public class SerXMLConverter {
 			}
 			boxList.add(box);
 		}
-		settings.setBoxList(boxList);
-		return settings;
+		return boxList;
 	}
+	
 	/*
 	 * Erstellen eines XML-Settings-Dokuments und spreichern diesen
 	 */
@@ -108,9 +178,11 @@ public class SerXMLConverter {
 		Node theme = settingsDocument.selectSingleNode("/settings/theme");
 		Node locale = settingsDocument.selectSingleNode("/settings/locale");
 		Node serverPort = settingsDocument.selectSingleNode("/settings/streamingServerPort");
-		Node startServer = settingsDocument.selectSingleNode("/settings/startStremingServer");
+		Node startServer = settingsDocument.selectSingleNode("/settings/startStreamingServer");
 		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
+		Node playbackPlayer = settingsDocument.selectSingleNode("/settings/playbackPlayer");
 		
+		playbackPlayer.setText(ControlMain.getSettings().getPlaybackString());
 		startServer.setText(Boolean.toString(ControlMain.getSettings().isStartStreamingServer()));
 		savePath.setText(ControlMain.getSettings().getSavePath());
 		serverPort.setText(ControlMain.getSettings().getStreamingServerPort());
