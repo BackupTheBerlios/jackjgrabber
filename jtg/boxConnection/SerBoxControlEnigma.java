@@ -18,6 +18,7 @@ import control.ControlMain;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
+import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
 import service.SerFormatter;
@@ -66,17 +67,23 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream()));
 	}
 		
-	public ArrayList getPids() throws IOException {
-		ArrayList pidList = new ArrayList();
-		String line;	
+	public BOPids getPids(boolean tvMode) throws IOException {
+	    BOPids pids = new BOPids();
+		String line;
 	
 		BufferedReader input = getConnection("/control/zapto?getallpids");
-
+		if (tvMode) {
+		    String[] vPid = new String[1];
+		    vPid[0]=Integer.toHexString(Integer.parseInt(input.readLine()));
+		    pids.setVPid(vPid);
+		} 
 		while((line=input.readLine())!=null) {
-			pidList.add((Integer.toHexString(Integer.parseInt(line))));
+		    String[] aPid = new String[1];
+		    aPid[0]=Integer.toHexString(Integer.parseInt(line));
+			pids.getAPids().add(aPid);
 		}
 
-		return pidList;
+		return pids;
 	}	 
 	
 	public ArrayList getBouquetList() throws IOException {
