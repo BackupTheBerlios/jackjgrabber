@@ -88,6 +88,7 @@ public class BOMovieGuide {
     private String inhalt;
     
     private ArrayList genreList = new ArrayList();
+    private ArrayList sucheList = new ArrayList();
     private SerMovieGuide2Xml guide = new SerMovieGuide2Xml();
     /** Creates a new instance of BOMovieGuide */
     public BOMovieGuide() {
@@ -347,14 +348,26 @@ public class BOMovieGuide {
     	setValueList("titel");
     	return genreList;
     }
-    public ArrayList getSenderList(){
-    	setValueList("sender");
-    	return genreList;
-    }
+    
     public void  setValueList(String value){
     	try{
     		this.genreList = guide.getGenryList(value);
     	}catch(Exception ex){}
+    }
+    
+    public ArrayList getSucheList(){    	
+    	setSucheList();
+    	return sucheList;
+    }
+    public void setSucheList(){    	
+    	sucheList.add("Titel");
+    	sucheList.add("Darsteller");    	
+    	sucheList.add("Episode");
+    	sucheList.add("Bild");
+    	sucheList.add("Ton");
+    	sucheList.add("Produktionsland");
+    	sucheList.add("Produktionsjahr");
+    	sucheList.add("Regie");
     }
     
     public void toOut(){
