@@ -20,7 +20,6 @@ package model;
 
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -54,20 +53,31 @@ public class BOPids {
         return aPid[1];
     }
     
+    private ArrayList getAllPids() {
+        ArrayList list = new ArrayList();
+        list.add(this.getVPid());
+        for (int i=0; i<this.getAPids().size(); i++) {
+            list.add(this.getAPids().get(i));
+        }
+        if (this.getVtxtPid()!=null) {
+            list.add(this.getVtxtPid());
+        }
+        return list;
+    }
+    
+    private int[] getIndices() {
+        int count = this.getPidCount();
+        int[] ind = new int[count];
+        for (int i=0; i<count; i++) {
+            ind[i]=i;
+        }
+        return ind;
+    }
+    
     public static BOPids startPidsQuestDialog(BOPids pids) {
-		DefaultListModel m = new DefaultListModel();
-		JList list = new JList(m);
+		JList list = new JList(pids.getAllPids().toArray());
 		list.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		
-		m.addElement(pids.getVPid());
-		list.setSelectedIndex(0);
-		for (int i = 0; i < pids.getAPids().size(); i++) {
-			BOPid pid = (BOPid) pids.getAPids().get(i);
-			m.addElement(pid);
-			list.setSelectedIndex(i+1);
-		}
-		m.addElement(pids.getVtxtPid());
-		list.setSelectedIndex(pids.getPidCount());
+		list.setSelectedIndices(pids.getIndices());
 
 		int res = JOptionPane.showOptionDialog(
 				ControlMain.getControl().getView(), 

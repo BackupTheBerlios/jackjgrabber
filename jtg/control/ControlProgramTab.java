@@ -50,7 +50,6 @@ import model.BOTimer;
 import org.apache.log4j.Logger;
 
 import presentation.GuiMainView;
-import presentation.GuiPidsQuestionDialog;
 import presentation.program.GuiEpgTableModel;
 import presentation.program.GuiSenderTableModel;
 import presentation.program.GuiTabProgramm;
@@ -261,11 +260,10 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.zapToSelectedSender();
 				if (this.isTvMode()) {
 					if (!ControlMain.getSettings().getRecordSettings().isRecordAllPids()) {
-					   new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
-						//this.setPids(BOPids.startPidsQuestDialog(this.getPids()));
+						this.setPids(BOPids.startPidsQuestDialog(this.getPids()));
 					}
 				}
-				if (this.getPids().getPidCount() > 0) {
+				if (this.getPids()!=null && this.getPids().getPidCount() > 0) {
 					this.startRecord(this.buildRecordArgs());
 				}
 			} else {
@@ -380,6 +378,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	private BORecordArgs buildRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
+		if (ControlMain.getSettingsRecord().isRecordAllPids() && !ControlMain.getSettingsRecord().isRecordVtxt()) {
+		    this.getPids().setVtxtPid(null);
+		}
 		args.setPids(this.getPids());
 		this.fillRecordArgsWithEpgData(args);
 		return args;
@@ -562,8 +563,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(modelIndex, modelIndex);
 			BOEpg selEpg = (BOEpg) this.getSelectedSender().getEpg().get(modelIndex);
 			this.setSelectedEpg(selEpg);
+		} else {
+		    this.reInitEpgDetail();  
 		}
-		this.reInitEpgDetail();
 	}
 
 	/**
