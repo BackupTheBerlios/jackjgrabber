@@ -17,7 +17,6 @@ import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
-import service.SerAlertDialog;
 import service.SerLogAppender;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
@@ -43,9 +42,9 @@ public class ControlMain {
 	
 	static Locale locale = new Locale("de","DE");
     private static Properties prop = new Properties();
+        public static String _MESSAGE_BUNDLE = "locale/messages_"+locale.getLanguage()+".properties";
     
     public static String filename = "settings.xml";
-    public static String _MESSAGE_BUNDLE = "locale/messages_"+locale.getLanguage()+".properties";
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
 		"18.09.2004",
@@ -63,6 +62,10 @@ public class ControlMain {
 		"(5) there is NO WARRANTY of any kind attached to this software",
 		"(6) use it at your own risk and for your own education as it was meant",
 		" ",
+	};
+	
+	public static final String[] themes = {
+		"Silver", "BrownSugar", "DarkStar", "DesertBlue", "ExperienceBlue", "SkyBluerTahoma"
 	};
 
 	public static void main( String args[] ) {
@@ -110,13 +113,13 @@ public class ControlMain {
 			File pathToXMLFile = new File(filename).getAbsoluteFile();
 			if (pathToXMLFile.exists()) {
 				settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
-				//mainLogger.info("Settings found");
+				Logger.getLogger("ControlMain").info("Settings found");
 			} else {
 				settingsDocument = SerXMLHandling.buildEmptyXMLFile(pathToXMLFile);
 				Logger.getLogger("ControlMain").info("Settings not found, created empty document");
 			}
 			setSettings(SerXMLConverter.buildSettings(getSettingsDocument()));
-		} catch (Exception ex) {SerAlertDialog.alert("Fehler beim Zugriff auf die "+filename+" Datei", control.getView());}
+		} catch (Exception ex) {Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");}
 	}
 	
 	public static String getBoxIp() {
