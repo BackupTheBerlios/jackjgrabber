@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
+import javax.swing.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,6 +41,7 @@ import snoozesoft.systray4j.SysTrayMenuItem;
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticTheme;
+import com.sun.org.apache.xerces.internal.impl.*;
 
 import control.ControlMain;
 import control.ControlMainView;
@@ -82,6 +84,9 @@ public class GuiMainView extends JFrame {
 			    }
 			}
 		});
+		
+		initPlasticLookAndFeel();
+		
 		setLookAndFeel();
 		control = ctrl;
 		initialize();
@@ -96,12 +101,42 @@ public class GuiMainView extends JFrame {
 		setVisible(true);	
 	}
 	
-	private void setLookAndFeel() {
+	/**
+	 * 
+	 */
+	private void initPlasticLookAndFeel() {
 		try {
-			PlasticTheme inst = (PlasticTheme)(Class.forName("com.jgoodies.plaf.plastic.theme."+ControlMain.getSettings().getThemeLayout())).newInstance();
+			// Installiere das Plastic Look And Feel
+			PlasticTheme inst = (PlasticTheme) (Class
+					.forName("com.jgoodies.plaf.plastic.theme."
+							+ ControlMain.getSettings().getThemeLayout()))
+					.newInstance();
 			PlasticLookAndFeel.setMyCurrentTheme(inst);
-			UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-		} catch (Exception e) {e.printStackTrace();}
+			PlasticLookAndFeel l = new PlasticLookAndFeel();
+			UIManager.LookAndFeelInfo info = new UIManager.LookAndFeelInfo(l
+					.getName(), PlasticLookAndFeel.class.getName());
+			UIManager.installLookAndFeel(info);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public void setLookAndFeel() {
+		try {
+			String lookAndFeel = ControlMain.getSettings().getLookAndFeel();
+			PlasticTheme inst = (PlasticTheme) (Class
+					.forName("com.jgoodies.plaf.plastic.theme."
+							+ ControlMain.getSettings().getThemeLayout()))
+					.newInstance();
+			PlasticLookAndFeel.setMyCurrentTheme(inst);
+			UIManager.setLookAndFeel(lookAndFeel);
+			dispose();
+			SwingUtilities.updateComponentTreeUI(this);
+			setVisible(true);
+			validate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
