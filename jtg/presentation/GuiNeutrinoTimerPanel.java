@@ -79,6 +79,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
 	public GuiNeutrinoSystemTimerTableModel systemTimerTableModel;
 	private GuiTimerSenderComboModel senderComboModel = null;
+	public GuiTimerTableSorter recordTimerSorter = null;
+	public GuiTimerTableSorter systemTimerSorter = null;
 
 
 	public GuiNeutrinoTimerPanel(ControlNeutrinoTimerTab control) {
@@ -129,9 +131,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JTable getJTableRecordTimer() {
 		if (jTableRecordTimer == null) {
-			recordTimerTableModel = new GuiNeutrinoRecordTimerTableModel(control);
+			recordTimerTableModel = new GuiNeutrinoRecordTimerTableModel(control);			
+			recordTimerSorter = new GuiTimerTableSorter(recordTimerTableModel);
+			jTableRecordTimer = new JTable(recordTimerSorter);
+			recordTimerSorter.setTableHeader(jTableRecordTimer.getTableHeader());
 
-			jTableRecordTimer = new JTable(recordTimerTableModel);
 			jTableRecordTimer.setName("recordTimerTable");
 			jTableRecordTimer.addMouseListener(control);
 			jTableRecordTimer.setRowHeight(20);
@@ -159,8 +163,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JTable getJTableSystemTimer() {
 		if (jTableSystemTimer == null) {
-			systemTimerTableModel = new GuiNeutrinoSystemTimerTableModel(control);
-			jTableSystemTimer = new JTable(systemTimerTableModel);
+			systemTimerTableModel = new GuiNeutrinoSystemTimerTableModel(control);			
+			systemTimerSorter = new GuiTimerTableSorter(systemTimerTableModel);
+			jTableSystemTimer = new JTable(systemTimerSorter);
+			systemTimerSorter.setTableHeader(jTableSystemTimer.getTableHeader());
+			
 			jTableSystemTimer.setName("systemTimerTable");
 			jTableSystemTimer.addMouseListener(control);
 			jTableSystemTimer.setRowHeight(20);
