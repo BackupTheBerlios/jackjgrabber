@@ -338,8 +338,15 @@ public class SerBoxControlNeutrino extends SerBoxControl{
             botimer.timerNumber=st.nextToken();
             botimer.eventTypeId=st.nextToken();
             botimer.eventRepeatId=st.nextToken();
-            
-            valueAnno=st.nextToken(); 
+            //Abwärtskompatibilität gewährleisten. repeatCount erst in Images seit 12.2004 vorhanden
+            String temp = st.nextToken();
+            if (temp.length()>5) {
+                botimer.announceTime=temp;
+            } else {
+                botimer.repeatCount=temp;
+                
+            }
+
 		    valueStart=st.nextToken();
 		    valueStop=st.nextToken();
 		    if (!valueStop.equals("0")) {
@@ -350,7 +357,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    	botimer.senderName=valueSenderName.trim();
 		    }
 
-		    botimer.announceTime=valueAnno;
+		    
 		    botimer.unformattedStartTime=SerFormatter.formatUnixDate(valueStart);  
 			botimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop); 
 		    

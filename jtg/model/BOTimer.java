@@ -32,7 +32,8 @@ public class BOTimer extends java.lang.Object{
     public String timerNumber; 
     private String modifiedId;
     public String eventTypeId;
-    public String eventRepeatId; 
+    public String eventRepeatId;
+    public String repeatCount; 
     public String announceTime; 
     public String senderName;
     public String description;
@@ -41,6 +42,16 @@ public class BOTimer extends java.lang.Object{
     
     public GregorianCalendar unformattedStartTime, unformattedStopTime;
 
+    public String getRepeatCount(){
+        return this.repeatCount;
+    }
+
+    public void setRepeatCount(String count){
+        if(repeatCount!=null && !repeatCount.equals(count) ) {
+            this.setModifiedId("modify");
+        }
+        this.repeatCount = count;
+    }
     
     public String getTimerNumber (){
         return this.timerNumber;
@@ -75,7 +86,7 @@ public class BOTimer extends java.lang.Object{
 
     public void setAnnounceTime(String time){
         if(announceTime!=null && !announceTime.equals(time) ) {
-            this.setModifiedId("midify");
+            this.setModifiedId("modify");
         }
         this.announceTime = time;
     }
