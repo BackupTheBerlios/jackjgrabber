@@ -325,9 +325,21 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
         }
         this.getMainView().getTabProgramm().stopRecordModus();
         this.getMainView().setSystrayDefaultIcon();
+        
+        stopRecordInInfoTab();        
     }
 
-    /**
+    /** stoppt die Aufnahmeinfos im Infotab
+	 * 
+	 */
+	private void stopRecordInInfoTab() {
+		//      Stoppe Record auch im Info Tab
+		if (ControlMain.recordInfo != null) {
+			ControlMain.recordInfo.stopRecord();
+		}
+	}
+
+	/**
      * @param recordArgsl
      * Start der Aufnahme und Versetzung der GUI in den
      * Aufnahme-Modus Setzt die EPG Informationen in den Record Args
@@ -337,10 +349,34 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
         recordControl = new RecordControl(recordArgs, this);
         this.getMainView().getTabProgramm().startRecordModus();
         this.getMainView().setSystrayRecordIcon();
+        
+//      Starte Record auch im Infotab
+		startRecordInInfoTab(recordArgs);
+        
         recordControl.start();
     }
 
-    /**
+    /** setzt die Daten der Aufnahme im Aufnahmeinfo Tab
+	 * @param recordArgs
+	 */
+	private void startRecordInInfoTab(BORecordArgs recordArgs) {
+		if (ControlMain.recordInfo == null) {
+			getMainView().getTabRecordInfo();
+		}
+
+		int stream = ControlMain.getSettings().getStreamingEngine();
+		String engine = "";
+		if (stream == 0) // JGrabber Engine
+		{
+			engine = "JGrabber " + ControlMain.getSettings().getJgrabberStreamType();
+		} else if (stream == 1) {
+			engine = "Udrec " + ControlMain.getSettings().getUdrecStreamType();
+		}
+		ControlMain.recordInfo.startRecord(recordArgs.getSenderName() + ": " + recordArgs.getEpgTitle(), engine, recordControl
+				.getDirectory(), !recordArgs.isQuickRecord());
+	}
+
+	/**
      * @return BORecordArgs 
      * Erstellen des Objektes BORecordArgs und Setzen der Pids
      */
