@@ -69,18 +69,19 @@ public class GuiMuxxerView extends JDialog{
         this.setTitle("Demultiplex/Multiplex Options");
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
+                int result=0;
                 if (getControl().isMuxing()) {
-                    int result = JOptionPane.showConfirmDialog(
+                    result = JOptionPane.showConfirmDialog(
                             getControl().getView(),
                             ControlMain.getProperty("msg_abortMux"),
                             "",
                             JOptionPane.YES_NO_OPTION
                     );
-                    if (result==0) {
-                        getControl().stopAllProcesses();
-                        dispose();
-                    }
-                }   
+                }
+                if (result==0) {
+                    getControl().stopAllProcesses();
+                    dispose();
+                }
             }
         });
 		initialize();
