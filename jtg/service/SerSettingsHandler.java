@@ -530,7 +530,7 @@ public class SerSettingsHandler {
 				}
 			}
 			if ((box.isStandard())) {
-				box.setSelected(true);
+				box.setSelectedBox(true);
 			}
 			boxList.add(box);
 		}
