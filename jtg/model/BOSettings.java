@@ -54,6 +54,17 @@ public class BOSettings {
 	public String recordTimeBefore;
 	public String recordTimeAfter;
 	public String lookAndFeel;
+	public boolean storeEPG;
+	public boolean storeLogAfterRecord;
+	
+	// Movieguide Settings
+	public ArrayList mgSelectedChannels;
+	public int mgLoadType;
+	public int mgDefault;
+	public boolean mgStoreOriginal;
+	
+	
+	
 
 	public void removeBox(int number) {
 		setSettingsChanged(true);
@@ -533,5 +544,41 @@ public class BOSettings {
 			setSettingsChanged(true);
 			this.projectXPath = projectXPath;
 		}
+	}
+	public boolean isStoreEPG() {
+		return storeEPG;
+	}
+	public void setStoreEPG(boolean storeEPG) {
+		this.storeEPG = storeEPG;
+	}
+	public boolean isStoreLogAfterRecord() {
+		return storeLogAfterRecord;
+	}
+	public void setStoreLogAfterRecord(boolean storeLogAfterRecord) {
+		this.storeLogAfterRecord = storeLogAfterRecord;
+	}
+	public int getMgDefault() {
+		return mgDefault;
+	}
+	public void setMgDefault(int mgDefault) {
+		this.mgDefault = mgDefault;
+	}
+	public int getMgLoadType() {
+		return mgLoadType;
+	}
+	public void setMgLoadType(int mgLoadType) {
+		this.mgLoadType = mgLoadType;
+	}
+	public ArrayList getMgSelectedChannels() {
+		return mgSelectedChannels;
+	}
+	public void setMgSelectedChannels(ArrayList mgSelectedChannels) {
+		this.mgSelectedChannels = mgSelectedChannels;
+	}
+	public boolean isMgStoreOriginal() {
+		return mgStoreOriginal;
+	}
+	public void setMgStoreOriginal(boolean mgStoreOriginal) {
+		this.mgStoreOriginal = mgStoreOriginal;
 	}
 }
