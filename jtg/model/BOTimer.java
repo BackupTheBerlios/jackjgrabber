@@ -253,6 +253,7 @@ public class BOTimer extends java.lang.Object{
 	        stopMillis=stopMillis+86400000;
 	    }
 	    this.getUnformattedStopTime().setTimeInMillis(stopMillis);
+        this.getLocalTimer().setStopTime(this.getUnformattedStopTime());
 	}
     
     /**
@@ -270,6 +271,7 @@ public class BOTimer extends java.lang.Object{
 		long stopMillis = this.getUnformattedStopTime().getTimeInMillis();
 		if ((stopMillis-startMillis)<0) {
 			this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay+1);
+            this.getLocalTimer().setStopTime(this.getUnformattedStopTime().getTimeInMillis());
 		}
 		this.setModifiedId("modify");
 	}
@@ -282,6 +284,7 @@ public class BOTimer extends java.lang.Object{
 	    stopCal.set(Calendar.HOUR_OF_DAY, endDate.get(Calendar.HOUR_OF_DAY));
         stopCal.set(Calendar.MINUTE, endDate.get(Calendar.MINUTE));
 		this.unformattedStopTime = stopCal;
+        this.getLocalTimer().setStopTime(this.getUnformattedStopTime().getTimeInMillis());
 		this.checkStopTime();
 		this.setModifiedId("modify");
 	}

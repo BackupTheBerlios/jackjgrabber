@@ -140,7 +140,6 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	  		}
 		    if (action.equals("cancel")) {
 		        this.getView().dispose();
-		        this.getControlTimer().reReadTimerList();
 	  			break;
 	  		}
 		    if (action.equals("recordPath")) {

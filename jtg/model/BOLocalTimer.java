@@ -46,6 +46,7 @@ public class BOLocalTimer {
 	private String dirPattern;
 	private String filePattern;
 	private long startTime;
+    private long stopTime;
 	private Node timerNode;
 	
 	
@@ -80,6 +81,7 @@ public class BOLocalTimer {
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		timer.setStartTime(mainTimer.getUnformattedStartTime().getTimeInMillis());
+        timer.setStopTime(mainTimer.getUnformattedStopTime().getTimeInMillis());
 		timer.setDescription(mainTimer.getDescription());
 		return timer;
 	}
@@ -350,6 +352,21 @@ public class BOLocalTimer {
     }
     public void setStartTime(GregorianCalendar startTime) {
         this.startTime = startTime.getTimeInMillis();
+    }
+    /**
+     * @return Returns the startTime.
+     */
+    public long getStopTime() {
+        return stopTime;
+    }
+    /**
+     * @param startTime The startTime to set.
+     */
+    public void setStopTime(long stopTime) {
+        this.stopTime = stopTime;
+    }
+    public void setStopTime(GregorianCalendar stopTime) {
+        this.stopTime = stopTime.getTimeInMillis();
     }
     /**
      * @return Returns the timerNode.

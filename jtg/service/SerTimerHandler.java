@@ -49,8 +49,7 @@ public class SerTimerHandler {
     public static BOLocalTimer getRunningLocalTimer() {
         try {
             BOTimerList timerList = ControlMain.getBoxAccess().getTimerList(true);
-            synchroniseTimer(timerList);
-            BOLocalTimer timer = timerList.getFirstLocalTimer();
+            BOLocalTimer timer = timerList.getFirstLocalBoxTimer();
             if (isValidTimer(timer)) {
                 return timer;
             }
@@ -72,38 +71,29 @@ public class SerTimerHandler {
             return false;
         }
     }
-     
-    /**
-     * @param timerList
-     * Zuordnen der Local-Timer zu den Box-Timern
-     * Ist zu einem local-timer kein Box-Timer verfügbar, wird die Node geläscht
-     */
-    private static void synchroniseTimer(BOTimerList timerList) {
+    
+    public static void deleteOldTimer() {
         Element root = getTimerDocument().getRootElement();
-        List nodes = SerXPathHandling.getNodes("/timerList/localTimer/startTime", getTimerDocument());
+        List nodes = SerXPathHandling.getNodes("/timerList/localTimer/stopTime", getTimerDocument());
+        boolean edited = false;
         
-        for (int i = 0; i<nodes.size(); i++) { //Schleife über die Startzeit-Nodes
-		    Node node = (Node) nodes.get(i);		    
-		    long localTimerStart=Long.parseLong(node.getText());
-		        
-		    for (int i2=0; i2<timerList.getRecordTimerList().size(); i2++) { //Schleife über die Timer-Liste
-		        BOTimer mainTimer=(BOTimer)timerList.getRecordTimerList().get(i2);
-		        long mainTimerStart=mainTimer.getUnformattedStartTime().getTimeInMillis();
-		        
-		        if (mainTimerStart==localTimerStart) { //passenden BoxTimer gefunden
-		            buildLocalTimer(node.getParent(), new BOLocalTimer(mainTimer));
-		            break;
-		        }
-		        if (i2+1==timerList.getRecordTimerList().size()){
-		            root.remove(node.getParent()); //kein BoxTimer zu LocalTimer vorhanden>>LocalTimer löschen    
-		        }
-		    }
-		}
-        try {
-            SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
-        } catch (IOException e) {
-            Logger.getLogger("SerTimerHandler").error(e.getMessage());
+        for (int i=0; i<nodes.size(); i++) {
+            Node node = (Node) nodes.get(i);
+            long localTimerStop=Long.parseLong(node.getText());
+            long now = new GregorianCalendar().getTimeInMillis();
+            if (now-localTimerStop>0) {
+                root.remove(node.getParent()); //Timer zu alt>>loeschen
+                edited=true;
+            }
         }
+        if (edited) {
+            try {
+                SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
+            } catch (IOException e) {
+                Logger.getLogger("SerTimerHandler").error(e.getMessage());
+            }
+        }
+        
     }
     
     private static void deleteLocalTimer(BOLocalTimer timer) {
@@ -140,6 +130,7 @@ public class SerTimerHandler {
 		localTimer.addElement("dirPattern").addText(timer.getDirPattern());
 		localTimer.addElement("filePattern").addText(timer.getFilePattern());
 		localTimer.addElement("startTime").addText(timer.getMainTimer().getLongStartTime());
+        localTimer.addElement("stopTime").addText(timer.getMainTimer().getLongStopTime());
 		localTimer.addElement("local").addText(Boolean.toString(timer.isLocal()));
         
         if (timer.isLocal()) {
@@ -179,6 +170,7 @@ public class SerTimerHandler {
         timerNode.selectSingleNode("shutdownAfterRecord").setText(Boolean.toString(timer.isShutdownAfterRecord()));
         timerNode.selectSingleNode("startPX").setText(Boolean.toString(timer.isStartPX()));
         timerNode.selectSingleNode("startTime").setText(timer.getMainTimer().getLongStartTime());
+        timerNode.selectSingleNode("stopTime").setText(timer.getMainTimer().getLongStopTime());
         timerNode.selectSingleNode("stereoReplaceAc3").setText(Boolean.toString(timer.isStereoReplaceAc3()));
         timerNode.selectSingleNode("stopPlaybackAtRecord").setText(Boolean.toString(timer.isStopPlaybackAtRecord()));
         timerNode.selectSingleNode("storeEpg").setText(Boolean.toString(timer.isStoreEPG()));
@@ -264,6 +256,7 @@ public class SerTimerHandler {
         localTimer.setShutdownAfterRecord(timerNode.selectSingleNode("shutdownAfterRecord").getText().equals("true"));
         localTimer.setStartPX(timerNode.selectSingleNode("startPX").getText().equals("true"));
         localTimer.setStartTime(Long.parseLong(timerNode.selectSingleNode("startTime").getText()));
+        localTimer.setStopTime(Long.parseLong(timerNode.selectSingleNode("stopTime").getText()));
         localTimer.setStereoReplaceAc3(timerNode.selectSingleNode("stereoReplaceAc3").getText().equals("true"));
         localTimer.setStopPlaybackAtRecord(timerNode.selectSingleNode("stopPlaybackAtRecord").getText().equals("true"));
         localTimer.setStoreEPG(timerNode.selectSingleNode("storeEpg").getText().equals("true"));
