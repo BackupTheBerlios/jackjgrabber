@@ -166,7 +166,8 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
     
     private void handleMplexProgress(ArrayList muxxFiles) {
         for (int i=0; i<muxxFiles.size(); i++) {
-            mplexProgressMax=mplexProgressMax+(int)((File)muxxFiles.get(i)).length()/100;
+            long fileLength=((File)muxxFiles.get(i)).length()/1000;
+            mplexProgressMax=mplexProgressMax+(int)fileLength;
         }
         this.getView().getProgressMplex().setMaximum(mplexProgressMax);
         
@@ -174,8 +175,8 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
             public void run() {
                 while (mplexStarted) {
                     if (mplexOutputFile.exists()) {
-                        int outSize=(int)mplexOutputFile.length();
-                        getView().getProgressMplex().setValue(outSize/100);
+                        long outSize=mplexOutputFile.length()/1000;
+                        getView().getProgressMplex().setValue((int)outSize);
                     }
                     try {
                         Thread.sleep(1000);
