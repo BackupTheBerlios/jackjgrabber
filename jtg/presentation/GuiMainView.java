@@ -156,7 +156,7 @@ public class GuiMainView extends JFrame {
 
 			mainTabPane.addTab(ControlMain.getProperty("tab_program"), iconManager.getIcon("main.png"), mainTabPane.getTabProgramm());
 			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), iconManager.getIcon("clock.png"), new JPanel());
-			mainTabPane.addTab("MovieGuide", iconManager.getIcon("download.png"), new JPanel());
+			mainTabPane.addTab(ControlMain.getProperty("tab_movieGuide"), iconManager.getIcon("download.png"), new JPanel());
 			mainTabPane.addTab(ControlMain.getProperty("tab_recordInfo"), iconManager.getIcon("help.png"), new JPanel());
 			mainTabPane.addTab(ControlMain.getProperty("tab_settings"), iconManager.getIcon("configure.png"), new JPanel());
 			mainTabPane.addTab(ControlMain.getProperty("tab_about"), iconManager.getIcon("info.gif"), new JPanel());
