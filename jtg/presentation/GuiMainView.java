@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.*;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
@@ -128,6 +129,12 @@ public class GuiMainView extends JFrame {
 			if (lfChanged || themeChanged)
 			{
 				UIManager.setLookAndFeel(lookAndFeel);
+				if (lookAndFeel.indexOf("WindowsLookAndFeel") > -1 || lookAndFeel.indexOf("WindowsClassicLookAndFeel") > -1)
+				{
+					Font f = (Font) UIManager.get("TextArea.font");
+					UIManager.put("TextArea.font",new Font("Tahoma",Font.PLAIN,11));
+				}
+				
 				dispose();
 				SwingUtilities.updateComponentTreeUI(this);
 				setVisible(true);
