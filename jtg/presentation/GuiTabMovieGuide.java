@@ -24,6 +24,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import javax.swing.JButton;
 //import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
@@ -81,6 +82,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private JTextField tfGenre;	
 	
 	private JPanel jPanelSuche = null;
+	private JPanel jPanelSucheErw = null;
 	private JPanel jPanelChannel = null;
 	private JPanel jPanelInfo = null;
 	private JPanel jPanelDownload = null;
@@ -88,7 +90,8 @@ public class GuiTabMovieGuide extends JPanel {
 	private JPanel jPanelProgressBar= null;	
 	
 	private JProgressBar jProgressBarDownload = null;
-	
+	private JLabel jLabelMovieGuide = null;
+	//public GuiMovieGuideTimerTableModel mgTimerTableModel;
 	public MovieGuideTimerTableModel mgTimerTableModel;
 	public GuiTableSorter sorter = null;	
 	
@@ -104,8 +107,11 @@ public class GuiTabMovieGuide extends JPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  							// columns 
-			      "pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow,pref");	// rows
+			   //   "pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  					
+		 	//	"pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow,pref");	// rows
+				// columns 
+			      "320px:grow,10, 400px:grow",  							// columns
+			      "pref, 200px:grow, 10, pref, pref, pref");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -113,16 +119,17 @@ public class GuiTabMovieGuide extends JPanel {
 		builder.addSeparator("Datum",		   		    cc.xywh	(1, 1, 1, 1));
 		builder.add(this.getJPanelChannels(),  			cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		
-		builder.addSeparator("Programm Info",			cc.xywh	(3, 1, 7, 1));						
-		builder.add(this.getJPanelInfo(),				cc.xywh	(3, 2, 7, 1));
+		builder.addSeparator("Programm Info",			cc.xywh	(3, 1, 1, 1));						
+		builder.add(this.getJPanelInfo(),				cc.xywh	(3, 2, 1, 1));
 		
-		builder.addSeparator("Suche",					cc.xywh	(1, 5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
-		builder.add(this.getJPanelSuche(),  			cc.xywh	(1, 8, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator("Suche",					cc.xywh	(1, 4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
+		builder.add(this.getJPanelSuche(),  			cc.xywh	(1, 5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.add(this.getJPanelSucheErw(),  			cc.xywh	(1, 6, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		
-		builder.addSeparator("Aktionen MovieGuide",		cc.xywh	(3, 5, 7, 1));
-		builder.add(this.getJPanelDownload(),  			cc.xywh	(3, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));			
-		
-		//builder.add(this.getJPanelProgressBar(), 	 	cc.xywh	(3, 9, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator("Aktionen MovieGuide",		cc.xywh	(3, 4, 1, 1));
+		builder.add(this.getJPanelDownload(),  			cc.xywh	(3, 5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));			
+			
+		builder.add(this.getJPanelProgressBar(), 	 	cc.xywh	(3, 6, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		
 		
 		/*
@@ -164,7 +171,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"120px:grow, 60px:grow, 32px:grow, pref,pref,pref,pref");		//rows
+						"140px:grow, 105px:grow, 32px:grow, pref,pref,pref,pref");		//rows
 					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
@@ -184,34 +191,61 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelSuche = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "240px:grow,80px:grow",	 		//columna 
-				      "pref,pref,pref,pref");	//rows					
+				      "pref");	//rows					
 			PanelBuilder builder = new PanelBuilder(jPanelSuche, layout);
 			CellConstraints cc = new CellConstraints();					
 			builder.add(this.getTfSuche(),			 cc.xyw	(1, 1, 1));	
-			builder.add(this.getJButtonSuche(),		 cc.xyw	(2, 1, 1));			
-			builder.add(this.getComboBoxSucheNach(), cc.xyw	(1, 2, 1));
-			builder.addSeparator("Suche nach Genre",      cc.xyw	(1, 3, 1));
-			builder.add(this.getComboBoxGenre(), cc.xyw	(1, 4, 1));					
+			builder.add(this.getJButtonSuche(),		 cc.xyw	(2, 1, 1));											
 		}
 		return jPanelSuche;
+	}
+	private JPanel getJPanelSucheErw() {
+		if (jPanelSucheErw == null) {
+			jPanelSucheErw = new JPanel();
+			FormLayout layout = new FormLayout(
+				      "320:grow",	 		//columna 
+				      "pref,pref,pref");	//rows					
+			PanelBuilder builder = new PanelBuilder(jPanelSucheErw, layout);
+			CellConstraints cc = new CellConstraints();										
+			builder.add(this.getComboBoxSucheNach(), cc.xyw	(1, 1, 1));
+			builder.addSeparator("Suche nach Genre", cc.xyw	(1, 2, 1));
+			builder.add(this.getComboBoxGenre(), 	 cc.xyw	(1, 3, 1));					
+		}
+		return jPanelSucheErw;
+	}
+	private JPanel getJPanelProgressBar() {
+		if (jPanelProgressBar == null) {
+			jPanelProgressBar = new JPanel();
+			FormLayout layout = new FormLayout(
+				      "320px:grow",	 		//columna 
+				      "20,pref,5,pref");	//rows					
+			PanelBuilder builder = new PanelBuilder(jPanelProgressBar, layout);
+			CellConstraints cc = new CellConstraints();	
+			builder.addSeparator("Fortschritt", cc.xyw	(1, 2, 1));			
+			builder.add(this.getJProgressBarDownload(),	 cc.xyw	(1, 4, 1));												
+		}
+		return jPanelProgressBar;
 	}
 	private JPanel getJPanelDownload() {
 		if (jPanelDownload == null) {
 			jPanelDownload = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "220px:grow,80px:grow,pref",	 		//columna 
-				      "pref,pref,pref");	//rows					
+				      "pref");	//rows					
 			PanelBuilder builder = new PanelBuilder(jPanelDownload, layout);
 			CellConstraints cc = new CellConstraints();														
 			builder.add(this.getJButtonDownload(),			 cc.xyw	(1, 1, 1));	
 			builder.add(this.getJButtonMovieGuideFileChooser(),	 cc.xyw	(2, 1, 1));			
-			builder.add(this.getJButtonNeuEinlesen(),	 cc.xyw	(3, 1, 1));
-			builder.addSeparator("Fortschritt",      cc.xyw	(1, 2, 1));
-			builder.add(this.getJProgressBarDownload(),	 cc.xyw	(1, 3, 1));
+			builder.add(this.getJButtonNeuEinlesen(),	 cc.xyw	(3, 1, 1));						
 		}
 		return jPanelDownload;
 	}
-	
+	private JLabel getJLabelMovieGuide(){
+		if (jLabelMovieGuide == null) {
+			jLabelMovieGuide = new JLabel("MovieGuide für: Monat");
+		}
+		return jLabelMovieGuide;
+	}
 	private JPanel getJPanelDatum() {
 		if (jPanelDatum == null) {
 			jPanelDatum = new JPanel();
@@ -225,18 +259,7 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jPanelDatum;
 	}
-	private JPanel getJPanelProgressBar() {
-		if (jPanelProgressBar == null) {
-			jPanelProgressBar = new JPanel();
-			FormLayout layout = new FormLayout(
-				      "320px:grow",	 		//columna 
-				      "pref");	//rows					
-			PanelBuilder builder = new PanelBuilder(jPanelProgressBar, layout);
-			CellConstraints cc = new CellConstraints();														
-			builder.add(this.getJProgressBarDownload(),	 cc.xyw	(1, 1, 1));												
-		}
-		return jPanelProgressBar;
-	}
+
 	private JProgressBar getJProgressBarDownload(){
 		if (jProgressBarDownload == null){
 			jProgressBarDownload = new JProgressBar(1,100);			
