@@ -71,6 +71,7 @@ public class SerFormatter {
 		}
 		String s = umlBuf.toString();
 		s = s.replaceAll("'", "");
+		s = s.replaceAll("\"","");
 		return s;
 	}
 	/**
