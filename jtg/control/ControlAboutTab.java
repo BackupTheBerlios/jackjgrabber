@@ -45,9 +45,8 @@ public class ControlAboutTab extends ControlTab implements MouseListener {
 	}
 	
 	private void showVersion() {
-		for (int i=0; i<ControlMain.version.length; i++) {
-			this.getMainView().getTabAbout().getTaVersion().append(ControlMain.version[i]+"\n");
-		}
+		this.getMainView().getTabAbout().getTaVersion().append(ControlMain.version[0]+"\n");
+		this.getMainView().getTabAbout().getTaVersion().append(ControlMain.version[1]+"\n");
 	}
 	private void showOther() {
 		
