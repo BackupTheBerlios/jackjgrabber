@@ -175,7 +175,7 @@ public class SerTimerHandler {
         if (timerNode != null) {
             return buildLocalTimer(timerNode, new BOLocalTimer(timer));    
         } else {
-            return BOLocalTimer.getDefaultLocaleTimer(timer);
+            return BOLocalTimer.getDefaultLocalTimer(timer);
         }
         
     }

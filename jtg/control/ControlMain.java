@@ -75,7 +75,7 @@ public class ControlMain {
 
 	private static String settingsFilename;
 
-	public static String version[] = {"Jack the JGrabber 0.2.1", "05.12.2004", "User: " + System.getProperty("user.name")};
+	public static String version[] = {"Jack the JGrabber 0.2.2", "19.12.2004", "User: " + System.getProperty("user.name")};
 
 	public static void main(String args[]) {
 		startLogger();

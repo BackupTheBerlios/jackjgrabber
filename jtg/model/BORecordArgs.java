@@ -214,7 +214,7 @@ public class BORecordArgs {
      */
     public BOLocalTimer getLocalTimer() {
         if (localTimer==null) {
-            localTimer = BOLocalTimer.getDefaultLocaleTimer();
+            localTimer = BOLocalTimer.getDefaultLocalTimer();
         }
         return localTimer;
     }

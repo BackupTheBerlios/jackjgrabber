@@ -56,7 +56,7 @@ public class BOLocalTimer {
 		mainTimer.setLocalTimer(this);
 	}
 
-	public static BOLocalTimer getDefaultLocaleTimer(BOTimer mainTimer) {
+	public static BOLocalTimer getDefaultLocalTimer(BOTimer mainTimer) {
 		BOLocalTimer timer = new BOLocalTimer(mainTimer);
 		timer.setAc3ReplaceStereo(ControlMain.getSettingsRecord().isAc3ReplaceStereo());
 		timer.setDirPattern(ControlMain.getSettingsRecord().getDirPattern());
@@ -75,10 +75,11 @@ public class BOLocalTimer {
 		timer.setUdrecStreamType(ControlMain.getSettingsRecord().getUdrecStreamType());
 		timer.setSavePath(ControlMain.getSettingsPath().getSavePath());
 		timer.setStartTime(mainTimer.getUnformattedStartTime().getTimeInMillis());
+		timer.setDescription(mainTimer.getDescription());
 		return timer;
 	}
 
-	public static BOLocalTimer getDefaultLocaleTimer() {
+	public static BOLocalTimer getDefaultLocalTimer() {
 		BOLocalTimer timer = new BOLocalTimer();
 		timer.setAc3ReplaceStereo(ControlMain.getSettingsRecord().isAc3ReplaceStereo());
 		timer.setDirPattern(ControlMain.getSettingsRecord().getDirPattern());

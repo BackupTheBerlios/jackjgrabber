@@ -403,7 +403,7 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 		timer.setEventRepeatId("0");
 		timer.setEventTypeId("5");
 		
-		BOLocalTimer.getDefaultLocaleTimer(timer);
+		BOLocalTimer.getDefaultLocalTimer(timer);
 		return timer;
 	}
 	
