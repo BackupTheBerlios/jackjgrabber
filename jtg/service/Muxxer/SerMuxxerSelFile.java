@@ -19,7 +19,13 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 package service.Muxxer;
 
+import java.util.ArrayList;
+
 public class SerMuxxerSelFile {
-	
+
+
+	public void checkFilesToMux (ArrayList fileList) {
+		
+	}
 
 }
