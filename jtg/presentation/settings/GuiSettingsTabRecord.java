@@ -74,7 +74,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	private JButton testButton;
 	private JButton tagButton;
-	private JCheckBox cbOtherFile;
+
 	private JTextField dirPattern;
 	private JTextField filePattern;
 	private JPanel panelFileNameSettings;
@@ -221,7 +221,6 @@ public class GuiSettingsTabRecord extends GuiTab {
 
 			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 4));
 			builder.add(getFilePattern(), cc.xy(3, 4));
-			builder.add(getCbOtherFile(), cc.xy(5, 4));
 
 		}
 		return panelFileNameSettings;
@@ -244,8 +243,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JButton getTagButton() {
 		if (tagButton == null) {
-			tagButton = new JButton("Tags");
-			tagButton.setName("Tags");
+			tagButton = new JButton(ControlMain.getProperty("filep_tagName"));
+			tagButton.setActionCommand("Tags");
 			tagButton.addActionListener(control);
 		}
 		return tagButton;
@@ -254,22 +253,10 @@ public class GuiSettingsTabRecord extends GuiTab {
 	/**
 	 * @return
 	 */
-	public JCheckBox getCbOtherFile() {
-		if (cbOtherFile == null) {
-			cbOtherFile = new JCheckBox(ControlMain.getProperty("filep_fileDifferent"));
-			cbOtherFile.setActionCommand("fileDifferent");
-			cbOtherFile.addActionListener(control);
-		}
-		return cbOtherFile;
-	}
-
-	/**
-	 * @return
-	 */
 	public JTextField getDirPattern() {
 
 		if (dirPattern == null) {
-			dirPattern = new JTextField(50);
+			dirPattern = new JTextField(40);
 			dirPattern.setName("dirPattern");
 			dirPattern.addKeyListener(control);
 		}
@@ -282,9 +269,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JTextField getFilePattern() {
 
 		if (filePattern == null) {
-			filePattern = new JTextField(50);
+			filePattern = new JTextField(40);
 			filePattern.setName("filePattern");
-			filePattern.setEditable(false);
 			filePattern.addKeyListener(control);
 		}
 		return filePattern;
