@@ -362,6 +362,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    }
 		}
 		setTimerDesctiptionName(timerList.getRecordTimerList());
+        newTimerAdded=false;
 		return timerList;
 	}
 	
@@ -440,6 +441,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&channel_id="+timer.getChannelId());
 		} 
 		if (modifiedId.equals("new")) {
+            this.newTimerAdded=true;
 			buffer.append("/control/timer?action="+modifiedId);
 			buffer.append("&alarm="+alarm);
 			buffer.append("&stop="+stop);

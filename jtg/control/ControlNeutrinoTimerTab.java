@@ -63,19 +63,27 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);
+        try {
+            this.setSenderList(ControlMain.getBoxAccess().getAllSender());
+        } catch (IOException e) {
+            Logger.getLogger("ControlNeutrinoTimerTab").error(e.getMessage());
+        }
 	}
 	
 	public void run() {
 	    this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
-			try {
-				this.setSenderList(ControlMain.getBoxAccess().getAllSender());
-				this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
-				this.refreshTables();
-				this.getView().recordTimerSorter.setSortingStatus(1, 1);
-				this.getView().systemTimerSorter.setSortingStatus(1, 1);
-			} catch (IOException e) {
-				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
-			}
+        try {
+            if (ControlMain.getBoxAccess().newTimerAdded) {    
+                this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
+            } else {
+                this.setTimerList(ControlMain.getBoxAccess().getTimerList());
+            }
+            this.refreshTables();
+            this.getView().recordTimerSorter.setSortingStatus(1, 1);
+            this.getView().systemTimerSorter.setSortingStatus(1, 1);
+        } catch (IOException e) {
+            SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+        }	
 	}
 	
 	public void actionPerformed(ActionEvent e) {

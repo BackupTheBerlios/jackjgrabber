@@ -34,6 +34,7 @@ import control.ControlMain;
 
 public abstract class SerBoxControl {
         
+    public boolean newTimerAdded=true;
     public abstract BOTimerList getTimerList() throws IOException;
     public abstract BOTimerList reReadTimerList() throws IOException;
 
