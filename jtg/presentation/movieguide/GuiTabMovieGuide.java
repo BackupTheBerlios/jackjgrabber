@@ -95,10 +95,10 @@ public class GuiTabMovieGuide extends JPanel {
 	private JProgressBar jProgressBarDownload = null;
 	private JLabel jLabelMovieGuide = null;
 	
-	public MovieGuideTimerTableModel mgTimerTableModel;
+	public GuiMovieGuideTimerTableModel mgTimerTableModel;
 	public GuiMovieGuideTimerTableSorter mgTimerTableSorter = null;
 	
-	public MovieGuideFilmTableModel filmTableModel;
+	public GuiMovieGuideFilmTableModel filmTableModel;
 	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
 
 	private static String HTML_ON  = "<HTML><font size=3><u>";
@@ -402,13 +402,13 @@ public class GuiTabMovieGuide extends JPanel {
 		return jScrollPaneGenre;
 	}	
 	
-	public MovieGuideTimerTableModel getGuiMovieGuideTimerTableModel() {
+	public GuiMovieGuideTimerTableModel getGuiMovieGuideTimerTableModel() {
 		return mgTimerTableModel;
 	}
 	
 	public JTable getJTableTimer() {
 		if (jTableTimer == null) {
-			mgTimerTableModel = new MovieGuideTimerTableModel(control);
+			mgTimerTableModel = new GuiMovieGuideTimerTableModel(control);
 			mgTimerTableSorter = new GuiMovieGuideTimerTableSorter(mgTimerTableModel);
 			jTableTimer = new JTable(mgTimerTableSorter);
 			mgTimerTableSorter.setTableHeader(jTableTimer.getTableHeader());									 
@@ -555,12 +555,12 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return comboBoxDatum;
 	}
-	public MovieGuideFilmTableModel getMovieGuideFilmTableModel() {
+	public GuiMovieGuideFilmTableModel getMovieGuideFilmTableModel() {
 		return filmTableModel;
 	}
 	public JTable getJTableFilm() {
 		if (jTableFilm == null) {				
-			filmTableModel = new MovieGuideFilmTableModel(control);			
+			filmTableModel = new GuiMovieGuideFilmTableModel(control);			
 			mgFilmTableSorter = new GuiMovieGuideFilmTableSorter(filmTableModel);				 
 			jTableFilm = new JTable(mgFilmTableSorter);
 			//jTableFilm.getColumnModel().getColumn(0).setCellRenderer( new GuiMovieGuideColorCellRenderer(control)); //sinnvoll ?

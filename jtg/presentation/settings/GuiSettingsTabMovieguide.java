@@ -37,7 +37,7 @@ import control.ControlSettingsTabPlayback;
 
 public class GuiSettingsTabMovieguide extends GuiTab {
 
-	private ControlSettingsTabMovieguide control;
+	private ControlSettingsTabMovieGuide control;
 
 	private JPanel panelMovieguideSettings = null;
 
@@ -60,7 +60,7 @@ public class GuiSettingsTabMovieguide extends GuiTab {
 	private JPanel defaultShowPanel;
 	private JPanel downloadPanel;
 
-	public GuiSettingsTabMovieguide(ControlSettingsTabMovieguide ctrl) {
+	public GuiSettingsTabMovieguide(ControlSettingsTabMovieGuide ctrl) {
 		super();
 		this.setControl(ctrl);
 		initialize();
@@ -196,14 +196,14 @@ public class GuiSettingsTabMovieguide extends GuiTab {
 	/**
 	 * @return Returns the control.
 	 */
-	public ControlSettingsTabMovieguide getControl() {
+	public ControlSettingsTabMovieGuide getControl() {
 		return control;
 	}
 	/**
 	 * @param control
 	 *            The control to set.
 	 */
-	public void setControl(ControlSettingsTabMovieguide control) {
+	public void setControl(ControlSettingsTabMovieGuide control) {
 		this.control = control;
 	}
 	

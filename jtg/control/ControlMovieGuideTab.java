@@ -53,8 +53,8 @@ import org.dom4j.Element;
 
 import presentation.GuiMainView;
 import presentation.movieguide.GuiTabMovieGuide;
-import presentation.movieguide.MovieGuideFilmTableModel;
-import presentation.movieguide.MovieGuideTimerTableModel;
+import presentation.movieguide.GuiMovieGuideFilmTableModel;
+import presentation.movieguide.GuiMovieGuideTimerTableModel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
@@ -786,7 +786,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		return this.getTab().getJTableTimer();
 	}
     
-    private MovieGuideTimerTableModel getMovieGuideTimerTableModel() {
+    private GuiMovieGuideTimerTableModel getMovieGuideTimerTableModel() {
 		return this.getTab().getGuiMovieGuideTimerTableModel();
 	}
     
@@ -802,7 +802,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	/**
 	 * @return
 	 */
-	private MovieGuideFilmTableModel getMovieGuideFilmTableModel() {
+	private GuiMovieGuideFilmTableModel getMovieGuideFilmTableModel() {
 		return this.getTab().getMovieGuideFilmTableModel();
 	}
 	

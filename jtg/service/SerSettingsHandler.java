@@ -331,16 +331,16 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.setMgLoadType(Integer.parseInt(node.getText()));
 		} else {
-			SerXMLHandling.setElementInElement(root, "mgloadtype", ControlSettingsTabMovieguide.MGLOADTYPE_AUTO + "");
-			settings.setMgLoadType(ControlSettingsTabMovieguide.MGLOADTYPE_AUTO);
+			SerXMLHandling.setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_AUTO + "");
+			settings.setMgLoadType(ControlSettingsTabMovieGuide.MGLOADTYPE_AUTO);
 		}
 		
 		node = root.selectSingleNode("/settings/mgdefault");
 		if (node != null) {
 			settings.setMgDefault(Integer.parseInt(node.getText()));
 		} else {
-			SerXMLHandling.setElementInElement(root, "mgdefault", ControlSettingsTabMovieguide.MGDEFAULTDATE_ALL + "");
-			settings.setMgDefault(ControlSettingsTabMovieguide.MGDEFAULTDATE_ALL);
+			SerXMLHandling.setElementInElement(root, "mgdefault", ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL + "");
+			settings.setMgDefault(ControlSettingsTabMovieGuide.MGDEFAULTDATE_ALL);
 		}
 		
 		node = root.selectSingleNode("/settings/mgstoreoriginal");

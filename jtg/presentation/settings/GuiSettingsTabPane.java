@@ -74,7 +74,7 @@ public class GuiSettingsTabPane extends JTabbedPane {
 	
 	public GuiSettingsTabMovieguide getTabSettingsMovieguide() {
 		if (tabSettingsMovieguide == null) {
-		    ControlSettingsTabMovieguide control = new ControlSettingsTabMovieguide(this.getTabSettings());
+		    ControlSettingsTabMovieGuide control = new ControlSettingsTabMovieGuide(this.getTabSettings());
 		    tabSettingsMovieguide = new GuiSettingsTabMovieguide(control);
 			control.run();
 		}
