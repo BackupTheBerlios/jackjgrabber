@@ -97,18 +97,18 @@ public class GuiTabProgramm extends GuiTab {
 	
 	protected  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "f:pref, 10, f:160, 10, f:pref, 10, f:250:grow",  							// columns 
+			      "f:pref, 10, f:170, 10, f:pref, 10, f:250:grow",  							// columns 
 			      "f:290:grow, 10, f:pref, 5, f:120:grow");	// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 	
 		builder.add(this.getJPanelChannels(),  										cc.xy		(1, 1));
-		builder.add(this.getJPanelEpg(),												cc.xywh	(3, 1, 5, 1));
-		builder.add(this.getJPanelButtonsAktionen(),  							cc.xywh	(1, 3, 3, 1));
-		builder.add(this.getJPanelRecordInfo(), 						    		cc.xywh	(5, 3, 1, 1));
+		builder.add(this.getJPanelEpg(),														cc.xywh	(3, 1, 5, 1));
+		builder.add(this.getJPanelButtonsAktionen(),  					cc.xywh	(1, 3, 3, 1));
+		builder.add(this.getJPanelRecordInfo(), 						   		cc.xywh	(5, 3, 1, 1));
 		builder.add(this.getJPanelEpgDetails(),										cc.xywh	(7, 3, 1, 3));
-		builder.add(this.getJPanelOutput(), 	 										cc.xywh	(1, 5, 5, 1));
+		builder.add(this.getJPanelOutput(), 	 											cc.xywh	(1, 5, 5, 1));
 	}
 	
 	/**
@@ -180,8 +180,8 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "f:pref, 2, f:95, 2, f:110, 2, f:90",	 		//columna 
-				      "pref, pref, 2, pref");	//rows
+				      "f:pref, 2, f:105, 2, f:110, 2, f:90",	 		//columna 
+				      "pref, f:22, 2, f:22");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
 			
@@ -591,6 +591,7 @@ public class GuiTabProgramm extends GuiTab {
 	public void stopRecordModus() {
 		this.getJButtonAufnahme().setText(ControlMain.getProperty("button_record"));
 		this.getJButtonAufnahme().setToolTipText(ControlMain.getProperty("buttontt_record"));
+		this.getJButtonAufnahme().setIcon(null);
 	}
 	
 	/**
@@ -599,6 +600,8 @@ public class GuiTabProgramm extends GuiTab {
 	public void startRecordModus() {
 		this.getJButtonAufnahme().setText(ControlMain.getProperty("button_stopRecord"));
 		this.getJButtonAufnahme().setToolTipText(ControlMain.getProperty("buttontt_stopRecord"));
+		ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/stop.png"));
+		this.getJButtonAufnahme().setIcon(icon);
 	}
 	/**
 	 * @return Returns the dateModelSpinnerStopTime.

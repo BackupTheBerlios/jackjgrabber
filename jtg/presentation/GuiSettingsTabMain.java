@@ -275,10 +275,12 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton getJButtonAnlegen() {
 		if (jButtonAnlegen == null) {
 			jButtonAnlegen = new JButton();
+			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/new.png"));
+			jButtonAnlegen.setIcon(icon);
 			jButtonAnlegen.setText(ControlMain.getProperty("button_create"));
 			jButtonAnlegen.setActionCommand("add");
 			jButtonAnlegen.addActionListener(control);
-			jButtonAnlegen.setPreferredSize(new java.awt.Dimension(90, 25));
+			jButtonAnlegen.setPreferredSize(new java.awt.Dimension(100, 25));
 		}
 		return jButtonAnlegen;
 	}
@@ -290,6 +292,8 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JButton getJButtonLoeschen() {
 		if (jButtonLoeschen == null) {
 			jButtonLoeschen = new JButton();
+			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/trash.png"));
+			jButtonLoeschen.setIcon(icon);
 			jButtonLoeschen.setText(ControlMain.getProperty("button_delete"));
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);
