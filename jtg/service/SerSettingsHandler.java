@@ -414,8 +414,8 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.getMovieGuideSettings().setMgLoadType(Integer.parseInt(node.getText()));
 		} else {
-			SerXMLHandling.setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_AUTO + "");
-			settings.getMovieGuideSettings().setMgLoadType(ControlSettingsTabMovieGuide.MGLOADTYPE_AUTO);
+			SerXMLHandling.setElementInElement(root, "mgloadtype", ControlSettingsTabMovieGuide.MGLOADTYPE_ASK + "");
+			settings.getMovieGuideSettings().setMgLoadType(ControlSettingsTabMovieGuide.MGLOADTYPE_ASK);
 		}
 
 		node = root.selectSingleNode("/settings/mgdefault");
