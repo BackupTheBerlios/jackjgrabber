@@ -24,6 +24,7 @@ public class BOPids {
 
     String[] vPid; //erste Position Pid, 2. Position Beschreibung
     ArrayList aPids = new ArrayList(); //ArrayList von String[] Objekten, erste Position Pid, 2. Position Beschreibung
+    String[] vtxtPid;
    
     /**
      * @return Returns the aPids.
@@ -50,13 +51,35 @@ public class BOPids {
         vPid = pid;
     }
     public int getPidCount() {
-        if (this.getVPid()!=null) {
-            return this.getAPids().size()+1;
+        int count = 0;
+        if (this.getVPid()!= null) {
+            count++;
         }
-        return this.getAPids().size();
+        if (this.getVtxtPid()!= null) {
+            count++;
+        }
+        return this.getAPids().size()+count;
     }
     public String getAPidNumber(int index) {
         String[] aPid = (String[])this.getAPids().get(index);
         return aPid[0];
+    }
+    
+    public String getAPidDescription(int index) {
+        String[] aPid = (String[])this.getAPids().get(index);
+        return aPid[1];
+    }
+    
+    /**
+     * @return Returns the vtxtPid.
+     */
+    public String[] getVtxtPid() {
+        return vtxtPid;
+    }
+    /**
+     * @param vtxtPid The vtxtPid to set.
+     */
+    public void setVtxtPid(String[] vtxtPid) {
+        this.vtxtPid = vtxtPid;
     }
 }

@@ -22,7 +22,6 @@ import java.awt.Dimension;
 import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -70,10 +69,11 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private JCheckBox cbRecordAllPids;
 	private JCheckBox cbStartPX;
 	private JCheckBox cbAC3ReplaceStereo;
+	private JCheckBox cbRecordVtxt;
 	private JSpinner recordMinsBefore, recordMinsAfter; 
 	
-	private JCheckBox storeEPG;
-	private JCheckBox storeLogAfterRecord;
+	private JCheckBox cbStoreEPG;
+	private JCheckBox cbStoreLogAfterRecord;
 	private SerIconManager iconManager = SerIconManager.getInstance();
        
     public GuiSettingsTabRecord(ControlSettingsTabRecord ctrl) {
@@ -102,7 +102,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
 					"pref, 10, pref:grow, 5, pref",	 		//columns 
-			  		"pref, pref, pref, pref,pref,pref");		//rows
+			  		"pref, pref, pref, pref, pref, pref, 5, pref");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
@@ -114,9 +114,9 @@ public class GuiSettingsTabRecord extends GuiTab {
 			builder.add(new JLabel(ControlMain.getProperty("label_projectXPath")),		cc.xy	(1, 4));
 			builder.add(this.getJTextFieldProjectXPath(),											cc.xy	(3, 4));
 			builder.add(this.getJButtonProjectXPathFileChooser(),								cc.xy	(5, 4));
-			
-			builder.add(this.getStoreEPG(),cc.xy(1,5));
-			builder.add(this.getStoreLogAfterRecord(),cc.xy(1,6));
+			builder.add(this.getCbStoreEPG(),cc.xy(1,5));
+			builder.add(this.getCbStoreLogAfterRecord(),cc.xy(1,6));
+			builder.add(this.getCbRecordVtxt(),cc.xy(1,8));
 			
 			
 		}
@@ -236,8 +236,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JCheckBox getCbStartStreamingServer() {
 		if (cbStartStreamingServer == null) {
 			cbStartStreamingServer = new JCheckBox(ControlMain.getProperty("cbStartServer"));
-			cbStartStreamingServer.setName("startStreamingServer");
-			cbStartStreamingServer.addItemListener(control);
+			cbStartStreamingServer.setActionCommand("startStreamingServer");
+			cbStartStreamingServer.addActionListener(control);
 		}
 		return cbStartStreamingServer;
 	}
@@ -267,25 +267,25 @@ public class GuiSettingsTabRecord extends GuiTab {
 	/**
 	 * @return Returns the checkbox for storing epg.
 	 */
-	public JCheckBox getStoreEPG() {
-		if (storeEPG == null) {
-			storeEPG = new JCheckBox(ControlMain.getProperty("cbStoreEPG"));
-			storeEPG.setActionCommand("storeEPG");
-			storeEPG.addActionListener(control);
+	public JCheckBox getCbStoreEPG() {
+		if (cbStoreEPG == null) {
+			cbStoreEPG = new JCheckBox(ControlMain.getProperty("cbStoreEPG"));
+			cbStoreEPG.setActionCommand("storeEPG");
+			cbStoreEPG.addActionListener(control);
 		}
-		return storeEPG;
+		return cbStoreEPG;
 	}	
 	
 	/**
 	 * @return Returns the checkbox for storing epg.
 	 */
-	public JCheckBox getStoreLogAfterRecord() {
-		if (storeLogAfterRecord == null) {
-			storeLogAfterRecord = new JCheckBox(ControlMain.getProperty("cbStoreLogAfterRecord"));
-			storeLogAfterRecord.setActionCommand("storeLogAfterRecord");
-			storeLogAfterRecord.addActionListener(control);
+	public JCheckBox getCbStoreLogAfterRecord() {
+		if (cbStoreLogAfterRecord == null) {
+			cbStoreLogAfterRecord = new JCheckBox(ControlMain.getProperty("cbStoreLogAfterRecord"));
+			cbStoreLogAfterRecord.setActionCommand("storeLogAfterRecord");
+			cbStoreLogAfterRecord.addActionListener(control);
 		}
-		return storeLogAfterRecord;
+		return cbStoreLogAfterRecord;
 	}	
 
 	
@@ -388,8 +388,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JCheckBox getCbStartPX() {
 		if (cbStartPX == null) {
 			cbStartPX = new JCheckBox(ControlMain.getProperty("cbStartPX"));
-			cbStartPX.setName("startPX");
-			cbStartPX.addItemListener(control);
+			cbStartPX.setActionCommand("startPX");
+			cbStartPX.addActionListener(control);
 		}
 		return cbStartPX;
 	}
@@ -399,8 +399,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JCheckBox getCbAC3ReplaceStereo() {
 		if (cbAC3ReplaceStereo == null) {
 			cbAC3ReplaceStereo = new JCheckBox(ControlMain.getProperty("cbAC3ReplaceStereo"));
-			cbAC3ReplaceStereo.setName("cbAC3ReplaceStereo");
-			cbAC3ReplaceStereo.addItemListener(control);
+			cbAC3ReplaceStereo.setActionCommand("cbAC3ReplaceStereo");
+			cbAC3ReplaceStereo.addActionListener(control);
 		}
 		return cbAC3ReplaceStereo;
 	}
@@ -410,11 +410,23 @@ public class GuiSettingsTabRecord extends GuiTab {
 	public JCheckBox getCbRecordAllPids() {
 		if (cbRecordAllPids == null) {
 			cbRecordAllPids = new JCheckBox(ControlMain.getProperty("cbRecordAllPids"));
-			cbRecordAllPids.setName("recordAllPids");
-			cbRecordAllPids.addItemListener(control);
+			cbRecordAllPids.setActionCommand("recordAllPids");
+			cbRecordAllPids.addActionListener(control);
 		}
 		return cbRecordAllPids;
 	}
+	
+	/**
+   * @return Returns the cbRecordAllPids.
+   */
+  public JCheckBox getCbRecordVtxt() {
+      if (cbRecordVtxt == null) {
+          cbRecordVtxt = new JCheckBox(ControlMain.getProperty("cbRecordVtxt"));
+          cbRecordVtxt.setActionCommand("recordVtxt");
+          cbRecordVtxt.addActionListener(control);
+      }
+      return cbRecordVtxt;
+  }
 	/**
 	 * @return Returns the jRadioButtonJGrabber.
 	 */

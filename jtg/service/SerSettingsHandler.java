@@ -63,6 +63,8 @@ public class SerSettingsHandler {
 		getSettingsStoreEPG(root,settings);
 		getSettingsStoreLogAfterRecord(root,settings);
 		getSettingsMovieguide(root,settings);
+		getSettingsRecordVtxt(root,settings);
+		
 		
 		settings.setBoxList(buildBoxSettings(root));
 		settings.setPlaybackOptions(buildPlaybackSettings(root));
@@ -199,6 +201,16 @@ public class SerSettingsHandler {
 			settings.setRecordAllPids(true);
 		}
 	}
+	
+	private static void getSettingsRecordVtxt(Element root, BOSettings settings) {
+			Node node = root.selectSingleNode("/settings/recordVtxt");
+			if (node != null) {
+				settings.recordVtxt = node.getText().equals("true");
+			} else {
+				SerXMLHandling.setElementInElement(root, "recordVtxt", "false");
+				settings.setRecordVtxt(false);
+			}
+		}
 
 	private static void getJGrabberStreamType(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/jgrabberStreamType");
@@ -510,12 +522,13 @@ public class SerSettingsHandler {
 		Node udrecOptions = settingsDocument.selectSingleNode("/settings/udrecOptions");
 		Node storeEPG = settingsDocument.selectSingleNode("/settings/storeepg");
 		Node storeLogAfterRecord = settingsDocument.selectSingleNode("/settings/storelogafterrecord");
-
+		Node recordVtxt = settingsDocument.selectSingleNode("/settings/recordVtxt");
 		Node mgSelectedChannels = settingsDocument.selectSingleNode("/settings/mgselectedchannels");
 		Node mgLoadType = settingsDocument.selectSingleNode("/settings/mgloadtype");
 		Node mgDefault = settingsDocument.selectSingleNode("/settings/mgdefault");
 		Node mgStoreOriginal = settingsDocument.selectSingleNode("/settings/mgstoreoriginal");
 		
+		recordVtxt.setText(Boolean.toString(ControlMain.getSettings().isRecordVtxt()));
 		projectXPath.setText(ControlMain.getSettings().getProjectXPath());
 		ac3ReplaceStereo.setText(Boolean.toString(ControlMain.getSettings().isAc3ReplaceStereo()));
 		udrecOptions.setText(ControlMain.getSettings().getUdrecOptions());

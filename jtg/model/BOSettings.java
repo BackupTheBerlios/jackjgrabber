@@ -56,6 +56,7 @@ public class BOSettings {
 	public String lookAndFeel;
 	public boolean storeEPG;
 	public boolean storeLogAfterRecord;
+	public boolean recordVtxt;
 	
 	// Movieguide Settings
 	public ArrayList mgSelectedChannels;
@@ -579,6 +580,24 @@ public class BOSettings {
 		return mgStoreOriginal;
 	}
 	public void setMgStoreOriginal(boolean mgStoreOriginal) {
-		this.mgStoreOriginal = mgStoreOriginal;
+	    if (this.mgStoreOriginal != mgStoreOriginal) {
+    			setSettingsChanged(true);
+    			this.mgStoreOriginal = mgStoreOriginal;
+    		}
 	}
+    /**
+     * @return Returns the recordVtxt.
+     */
+    public boolean isRecordVtxt() {
+        return recordVtxt;
+    }
+    /**
+     * @param recordVtxt The recordVtxt to set.
+     */
+    public void setRecordVtxt(boolean recordVtxt) {
+        if (this.recordVtxt != recordVtxt) {
+      			setSettingsChanged(true);
+      			this.recordVtxt = recordVtxt;
+      		}
+    }
 }

@@ -46,6 +46,7 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 	
 	private JButton jButtonOk;
 	private static JRadioButton jRadioButtonVPid;
+	private static JRadioButton jRadioButtonVtxtPid;
 	private static JRadioButton[] jRadioButtonAPids;
 	private static BOPids pidList;
 	private JPanel panelPidButtons;
@@ -79,21 +80,27 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 			
 			builder.addSeparator(ControlMain.getProperty("label_selectPids"), cc.xy(1, 1));
 			int counter = 0;
-			if (pidList.getVPid()!= null) {
-			    jRadioButtonVPid = new JRadioButton();			
-			    jRadioButtonVPid.setText(pidList.getVPid()[0]);
-			    jRadioButtonVPid.setSelected(true);
-				builder.add(jRadioButtonVPid,		cc.xy(1, 2));
-				counter=1;
-			}
+			//Radiobutton for vpid
+			jRadioButtonVPid = new JRadioButton();			
+			jRadioButtonVPid.setText(pidList.getVPid()[0]+" "+pidList.getVPid()[1]);
+			jRadioButtonVPid.setSelected(true);
+			builder.add(jRadioButtonVPid,		cc.xy(1, 2));
+			counter=1;
+			//Radiobuttons vor audiopids
 			for(int i = 0 ; i<pidList.getAPids().size(); i++){
 				jRadioButtonAPids[i] = new JRadioButton();			
-				jRadioButtonAPids[i].setText(pidList.getAPidNumber(i));
+				jRadioButtonAPids[i].setText(pidList.getAPidNumber(i)+" "+pidList.getAPidDescription(i));
 				jRadioButtonAPids[i].setSelected(true);
 				builder.add(jRadioButtonAPids[i],cc.xy(1, counter+2));
 				counter++;
-			}	 
-		    builder.add(this.getJButtonOk(),cc.xy(1, pidsCount+2));
+			}
+			//Radiobutton for vtxt-pid
+			jRadioButtonVtxtPid = new JRadioButton();			
+			jRadioButtonVtxtPid.setText(pidList.getVtxtPid()[0]+" "+pidList.getVtxtPid()[1]);
+			jRadioButtonVtxtPid.setSelected(true);
+			builder.add(jRadioButtonVtxtPid,		cc.xy(1,  counter+2));
+			
+			builder.add(this.getJButtonOk(),cc.xy(1, pidsCount+2));
 		}
 		return panelPidButtons;
 	}
@@ -109,19 +116,28 @@ public class GuiPidsQuestionDialog extends JDialog implements ActionListener{
 		return layout;
 	}
 	
+	/**
+	 * @param clear
+	 * remove all Pids when Dialog is closed or
+	 * find selected Pids when Dialog button "Ok" was pressed
+	 */
 	private static void checkPidList(boolean clear){
 	    if (!clear) {
-	        if (pidList.getVPid()!=null && !jRadioButtonVPid.isSelected()) {
+	        if (!jRadioButtonVPid.isSelected()) {
 	            pidList.setVPid(null);
 	        }
+	        if (!jRadioButtonVtxtPid.isSelected()) {
+	            pidList.setVtxtPid(null);
+	        }
 	        for (int i=pidList.getAPids().size()-1; 0<=i; i--) {
-				if (!jRadioButtonAPids[i].isSelected()) {
-					pidList.getAPids().remove(i);
-				}
-			}
+	            if (!jRadioButtonAPids[i].isSelected()) {
+	                pidList.getAPids().remove(i);
+	            }
+	        }
 	    } else {
 	        pidList.setVPid(null);
 	        pidList.setAPids(new ArrayList());
+	        pidList.setVtxtPid(null);
         }
 	}
 	/**

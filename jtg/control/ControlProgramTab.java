@@ -378,6 +378,10 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			args.setVPid(this.getPids().getVPid()[0]);
 		}
 		args.setAPids(this.getPids().getAPids());
+		
+		if (ControlMain.getSettings().isRecordVtxt() && this.getPids().getVtxtPid()!=null) {
+		    args.setVideotextPid(this.getPids().getVtxtPid()[0]);  
+		}
 		this.fillRecordArgsWithEpgData(args);
 		return args;
 	}
@@ -431,9 +435,11 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 * Zapping zum selektierten Sender und Ermittlung der Pids
 	 */
 	private void zapToSelectedSender() throws IOException {
-		if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
-			this.setPids(ControlMain.getBoxAccess().getPids(this.isTvMode()));
-		}
+	    Logger.getLogger("ConrolProgramTab").info(ControlMain.getProperty("msg_zapTo")+this.getSelectedSender().getName());
+	    if (ControlMain.getBoxAccess().zapTo(this.getSelectedSender().getChanId()).equals("ok")) {
+	        Logger.getLogger("ConrolProgramTab").info(ControlMain.getProperty("msg_getPids"));
+	        this.setPids(ControlMain.getBoxAccess().getPids(this.isTvMode()));
+	    }
 	}
 
 	/**

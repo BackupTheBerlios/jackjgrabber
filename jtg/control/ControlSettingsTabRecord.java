@@ -49,12 +49,13 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
         this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
         this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
         this.getTab().getCbRecordAllPids().setSelected(this.getSettings().isRecordAllPids());
+        this.getTab().getCbRecordVtxt().setSelected(this.getSettings().isRecordVtxt());
         this.getTab().getJSpinnerRecordMinsBefore().setValue(Integer.valueOf(this.getSettings().getRecordTimeBefore()));
         this.getTab().getJSpinnerRecordMinsAfter().setValue(Integer.valueOf(this.getSettings().getRecordTimeAfter()));
         this.getTab().getJTextFieldUdrecOptions().setText(this.getSettings().getUdrecOptions());
         this.getTab().getCbAC3ReplaceStereo().setSelected(this.getSettings().isAc3ReplaceStereo());
-        this.getTab().getStoreEPG().setSelected(this.getSettings().isStoreEPG());
-        this.getTab().getStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
+        this.getTab().getCbStoreEPG().setSelected(this.getSettings().isStoreEPG());
+        this.getTab().getCbStoreLogAfterRecord().setSelected(this.getSettings().isStoreLogAfterRecord());
 		this.initializeStreamingEngine();
     }
 
@@ -87,30 +88,58 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action.equals("recordPath")) {
-			this.openRecordPathFileChooser();
-		}
-		if (action.equals("udrecPath")) {
-			this.openUdrecPathFileChooser();
-		}
-		if (action.equals("jgrabber")) {
-			this.getSettings().setStreamingEngine(0);
-			this.initializeJGrabberEngine();
-		}
-		if (action.equals("udrec")) {
-			this.getSettings().setStreamingEngine(1);
-			this.initializeUdrecEngine();
-		}
-		if (action.equals("projectxPath")) {
-			this.openProjectXPathFileChooser();
-		}
-		if (action.equals("storeEPG"))
-		{
-			this.getSettings().setStoreEPG(((JCheckBox)e.getSource()).isSelected());
-		}
-		if (action.equals("storeLogAfterRecord"))
-		{
-			this.getSettings().setStoreLogAfterRecord(((JCheckBox)e.getSource()).isSelected());
+		while (true) {
+		    if (action.equals("recordPath")) {
+		  			this.openRecordPathFileChooser();
+		  			break;
+		  		}
+		  		if (action.equals("udrecPath")) {
+		  			this.openUdrecPathFileChooser();
+		  			break;
+		  		}
+		  		if (action.equals("jgrabber")) {
+		  			this.getSettings().setStreamingEngine(0);
+		  			this.initializeJGrabberEngine();
+		  			break;
+		  		}
+		  		if (action.equals("udrec")) {
+		  			this.getSettings().setStreamingEngine(1);
+		  			this.initializeUdrecEngine();
+		  			break;
+		  		}
+		  		if (action.equals("projectxPath")) {
+		  			this.openProjectXPathFileChooser();
+		  			break;
+		  		}
+		  		if (action.equals("storeEPG")) {
+		  			this.getSettings().setStoreEPG(((JCheckBox)e.getSource()).isSelected());
+		  			break;
+		  		}
+		  		if (action.equals("storeLogAfterRecord")) {
+		  			this.getSettings().setStoreLogAfterRecord(((JCheckBox)e.getSource()).isSelected());
+		  			break;
+		  		}
+		  		if (action.equals("cbAC3ReplaceStereo")) {
+		  				this.getSettings().setAc3ReplaceStereo(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("recordAllPids")) {
+		  				this.getSettings().setRecordAllPids(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("recordVtxt")) {
+		  				this.getSettings().setRecordVtxt(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("startPX")) {
+		  				this.getSettings().setStartPX(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}
+		  		if (action.equals("startStreamingServer")) {
+		  				this.getSettings().setStartStreamingServer(((JCheckBox)e.getSource()).isSelected());
+		  				break;
+		  		}  
+		  		break;
 		}
 	}
 	public void keyTyped(KeyEvent event) {}
@@ -161,39 +190,12 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 
 	//Change-Events der Combos und der Checkbox
 	public void itemStateChanged (ItemEvent event) {
-		String comp = event.getSource().getClass().getName();
-		while (true) {
-			if (comp.equals("javax.swing.JCheckBox")) {
-				JCheckBox checkBox = (JCheckBox)event.getSource();
-				if (checkBox.getName().equals("startStreamingServer")) {
-					this.getSettings().setStartStreamingServer(checkBox.isSelected());
-					break;
-				}
-				if (checkBox.getName().equals("startPX")) {
-				    this.getSettings().setStartPX(checkBox.isSelected());
-					break;
-				}
-				if (checkBox.getName().equals("recordAllPids")) {
-				    this.getSettings().setRecordAllPids(checkBox.isSelected());
-					break;
-				}
-				if (checkBox.getName().equals("cbAC3ReplaceStereo")) {
-				    this.getSettings().setAc3ReplaceStereo(checkBox.isSelected());
-					break;
-				}
-				break;
-			} else {
 				JComboBox comboBox = (JComboBox)event.getSource();
 				if (event.getStateChange()==1) {
 					if (comboBox.getName().equals("streamType")) {
 					    this.getSettings().setStreamType((String)comboBox.getSelectedItem());
-						break;
 					}
 				}	
-				break;
-			}	
-		}
-		
 	}
 
 	private void openRecordPathFileChooser() {

@@ -58,7 +58,7 @@ public class SerXMLConverter {
 		recordArgs.setEpgId(epgid.getText());
 		recordArgs.setMode(mode.getText());
 		recordArgs.setVPid(Integer.toHexString(Integer.parseInt(videopid.getText())));
-		recordArgs.setVideotextPid(vtxtpid.getText());
+		recordArgs.setVideotextPid(Integer.toHexString(Integer.parseInt(vtxtpid.getText())));
 		
 		ArrayList pidList = new ArrayList();
 		for( int i=0; i<aPidNodes.size(); i++ ) {

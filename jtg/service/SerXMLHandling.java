@@ -63,6 +63,7 @@ public class SerXMLHandling {
 		setElementInElement(root,"recordTimeAfter", "0");
 		setElementInElement(root,"ac3ReplaceStereo", "false");
 		setElementInElement(root,"udrecOptions", "");
+		setElementInElement(root,"recordVtxt", "false");
 
 		root.addElement("boxList");
 		root.addElement("playbackList");

@@ -123,6 +123,8 @@ public class UdpRecord  extends Record {
 	
 	public String getRequestString() {
 		StringBuffer cmd = new StringBuffer();
+		String avString = new String();
+		String pidString= new String();
 		if (recordControl.controlProgramTab.isTvMode()) {
 			cmd.append("VIDEO");
 		} else {
@@ -136,18 +138,26 @@ public class UdpRecord  extends Record {
 		cmd.append(form.format(args));
 		
 		if (recordArgs.getVPid() != null) {
-		    cmd.append("v");
+		    avString+="v";
+		    pidString+=recordArgs.getVPid();
 		}
 		for (int i=0; i<recordArgs.getAPids().size(); i++){
-		    cmd.append("a");
+		    avString+="a";
+		    pidString+= " "+((String[])recordArgs.getAPids().get(i))[0];
 		}
-		if (recordArgs.getVPid() != null) {
-			cmd.append(" "+recordArgs.getVPid());
-		}
-		for (int i=0; i<recordArgs.getAPids().size(); i++){
-		    String[] aPid = (String[])recordArgs.getAPids().get(i);
-		    cmd.append(" "+aPid[0]);
-		}
+		if (recordArgs.getVideotextPid() != null) {
+		    avString+="a";
+		    pidString+=" "+recordArgs.getVideotextPid();
+		} 
+		cmd.append(avString);
+		cmd.append(" "+pidString);
+//		if (recordArgs.getVPid() != null) {
+//			cmd.append(" "+recordArgs.getVPid());
+//		}
+//		for (int i=0; i<recordArgs.getAPids().size(); i++){
+//		    String[] aPid = (String[])recordArgs.getAPids().get(i);
+//		    cmd.append(" "+aPid[0]);
+//		}
 		return cmd.toString();
 	}
 	
