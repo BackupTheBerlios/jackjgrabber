@@ -1,24 +1,20 @@
 package presentation.timer;
 /*
-GuiTimerEditView.java by Geist Alexander 
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-*/
+ * GuiTimerEditView.java by Geist Alexander
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  
+ */
 
 import java.awt.Dimension;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 
 import javax.swing.ButtonGroup;
@@ -44,9 +40,9 @@ import control.ControlMain;
 import control.ControlTimerEditView;
 import control.ControlTimerTab;
 
-public class GuiTimerEditView extends JFrame{
-    
-    ControlTimerEditView control;
+public class GuiTimerEditView extends JFrame {
+
+	ControlTimerEditView control;
 	private JPanel panelEngineSettings;
 	private JPanel panelRecordSettings;
 	private JPanel panelRecordPath;
@@ -54,38 +50,38 @@ public class GuiTimerEditView extends JFrame{
 	private JPanel panelMainOptions;
 	private JPanel mainPanel;
 	private JPanel jPanelDauerTimer;
-	
+
 	private JComboBox jComboBoxStreamType;
 	private JComboBox jComboBoxBoxSender;
 	private JComboBox jComboBoxRepeatRecordTimer;
-	
+
 	private JTextField jTextFieldUdrecOptions;
 	private JTextField jTextFieldRecordSavePath;
 	private JTextField jTextFieldDirPattern;
 	private JTextField jTextFieldFilePattern;
 	private JTextField jTextFieldDescription;
-	
+
 	private JFormattedTextField tfRecordTimerStartDate;
 	private JFormattedTextField tfRecordTimerStartTime;
 	private JFormattedTextField tfRecordTimerStopTime;
-	
+
 	private JRadioButton jRadioButtonUdrec;
-    private JRadioButton jRadioButtonVlc;
+	private JRadioButton jRadioButtonVlc;
 	private JRadioButton jRadioButtonJGrabber;
 	private JRadioButton jRadioButtonRecordAllPids;
 	private JRadioButton jRadioButtonAC3ReplaceStereo;
 	private JRadioButton jRadioButtonStereoReplaceAc3;
-	
+
 	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
 	private ButtonGroup buttonGroupAudioOptions = new ButtonGroup();
-	
+
 	private JCheckBox cbStartPX;
 	private JCheckBox cbRecordVtxt;
 	private JCheckBox cbShutdownAfterRecord;
 	private JCheckBox cbStopPlaybackAtRecord;
 	private JCheckBox cbStoreEPG;
 	private JCheckBox cbStoreLogAfterRecord;
-	
+
 	private JButton jButtonTest;
 	private JButton jButtonDirTag;
 	private JButton jButtonFileTag;
@@ -93,27 +89,40 @@ public class GuiTimerEditView extends JFrame{
 	private JButton jButtonCancel;
 	private JButton jButtonRecordPathFileChooser;
 	private JButton jButtonUdrecOptions;
-	
+
 	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
 
 	private SerIconManager iconManager = SerIconManager.getInstance();
-	
-	
-    
-    public GuiTimerEditView(ControlTimerEditView control) {
+
+	public GuiTimerEditView(ControlTimerEditView control) {
 		this.setControl(control);
 		initialize();
 		this.setResizable(false);
-		this.setTitle(control.getTimer().getMainTimer().getSenderName()+" "+control.getTimer().getMainTimer().getStartDate());
+		this.setTitle(control.getTimer().getMainTimer().getSenderName() + " " + control.getTimer().getMainTimer().getStartDate());
 		pack();
+
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				saveDialogPosition();
+			}
+		});
+		setLocation(ControlMain.getSettings().getLayoutSettings().getLocationOfTimerDialog());
+		
 	}
-    
-    public void initialize() {
-        this.getContentPane().add(this.getMainPanel());
-    }
-    
-    
-    private JPanel getMainPanel() {
+
+	/** speichert die aktuelle Position des Fensters
+	 * 
+	 */
+	protected void saveDialogPosition() {
+		ControlMain.getSettings().getLayoutSettings().setLocationOfTimerDialog(getLocation());
+		
+	}
+
+	public void initialize() {
+		this.getContentPane().add(this.getMainPanel());
+	}
+
+	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			mainPanel = new JPanel();
 			FormLayout layout = new FormLayout("pref, 25, pref:grow", //columns
@@ -122,13 +131,13 @@ public class GuiTimerEditView extends JFrame{
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 
-			builder.add(this.getPanelMainOptions(),			cc.xyw(1, 1, 3));
-			builder.add(this.getPanelDauerTimer(),				cc.xyw(1, 3, 3));
-			builder.add(this.getPanelRecordSettings(), 		cc.xy(1, 5));
-			builder.add(this.getPanelEngineSettings(),		cc.xy(3, 5));
-			builder.add(this.getPanelRecordPath(), 			cc.xyw(1, 7, 3));
-			builder.add(this.getPanelFileNameSettings(), 	cc.xyw(1, 9, 3));
-			builder.add(ButtonBarFactory.buildOKCancelBar(this.getJButtonCancel(), this.getJButtonOk()),  cc.xyw(1, 11, 3));
+			builder.add(this.getPanelMainOptions(), cc.xyw(1, 1, 3));
+			builder.add(this.getPanelDauerTimer(), cc.xyw(1, 3, 3));
+			builder.add(this.getPanelRecordSettings(), cc.xy(1, 5));
+			builder.add(this.getPanelEngineSettings(), cc.xy(3, 5));
+			builder.add(this.getPanelRecordPath(), cc.xyw(1, 7, 3));
+			builder.add(this.getPanelFileNameSettings(), cc.xyw(1, 9, 3));
+			builder.add(ButtonBarFactory.buildOKCancelBar(this.getJButtonCancel(), this.getJButtonOk()), cc.xyw(1, 11, 3));
 		}
 		return mainPanel;
 	}
@@ -156,23 +165,23 @@ public class GuiTimerEditView extends JFrame{
 	}
 
 	private JPanel getPanelEngineSettings() {
-        if (panelEngineSettings == null) {
-            panelEngineSettings = new JPanel();
-            FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
-                    "pref, pref, pref, pref, pref, 10, pref"); //rows
-            PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
-            CellConstraints cc = new CellConstraints();
+		if (panelEngineSettings == null) {
+			panelEngineSettings = new JPanel();
+			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
+					"pref, pref, pref, pref, pref, 10, pref"); //rows
+			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
+			CellConstraints cc = new CellConstraints();
 
-            builder.addSeparator(ControlMain.getProperty("label_engine"), cc.xywh(1, 1, 5, 1));
-            builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
-            builder.add(this.getJRadioButtonVlc(), cc.xy(1, 3));
-            builder.add(this.getJRadioButtonUdrec(), cc.xy(1, 4));            
-            builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 5, 1));
-            builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 5, 3));
-            
-            builder.addLabel(ControlMain.getProperty("label_recordType"), cc.xywh(1, 7, 3, 1));
-            builder.add(this.getJComboBoxStreamType(), cc.xy(5, 7));
-        }
+			builder.addSeparator(ControlMain.getProperty("label_engine"), cc.xywh(1, 1, 5, 1));
+			builder.add(this.getJRadioButtonJGrabber(), cc.xy(1, 2));
+			builder.add(this.getJRadioButtonVlc(), cc.xy(1, 3));
+			builder.add(this.getJRadioButtonUdrec(), cc.xy(1, 4));
+			builder.add(this.getJButtonUdrecOptions(), cc.xyw(1, 5, 1));
+			builder.add(this.getJTextFieldUdrecOptions(), cc.xyw(3, 5, 3));
+
+			builder.addLabel(ControlMain.getProperty("label_recordType"), cc.xywh(1, 7, 3, 1));
+			builder.add(this.getJComboBoxStreamType(), cc.xy(5, 7));
+		}
 		return panelEngineSettings;
 	}
 
@@ -197,80 +206,77 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return panelFileNameSettings;
 	}
-	
+
 	private JPanel getPanelRecordPath() {
-	    if (panelRecordPath==null) {
-	        panelRecordPath = new JPanel();
-	        FormLayout layout = new FormLayout(
-					  "pref, 10, f:pref:grow, 5, pref",  		// columns 
-					  "pref"); 			// rows
-	        PanelBuilder builder = new PanelBuilder(panelRecordPath, layout);
-	        builder.setDefaultDialogBorder();
-	        CellConstraints cc = new CellConstraints();
-					
-	        builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),		cc.xy	(1, 1));
-	        builder.add(this.getJTextFieldRecordSavePath(),								cc.xy	(3, 1));
-	        builder.add(this.getJButtonRecordPathFileChooser(),							cc.xy	(5, 1));    
-	    }
-	    return panelRecordPath;
+		if (panelRecordPath == null) {
+			panelRecordPath = new JPanel();
+			FormLayout layout = new FormLayout("pref, 10, f:pref:grow, 5, pref", // columns
+					"pref"); // rows
+			PanelBuilder builder = new PanelBuilder(panelRecordPath, layout);
+			builder.setDefaultDialogBorder();
+			CellConstraints cc = new CellConstraints();
+
+			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")), cc.xy(1, 1));
+			builder.add(this.getJTextFieldRecordSavePath(), cc.xy(3, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(), cc.xy(5, 1));
+		}
+		return panelRecordPath;
 	}
-	
+
 	private JPanel getPanelMainOptions() {
-	    if (panelMainOptions==null) {
-	    	panelMainOptions = new JPanel();
-	        FormLayout layout = new FormLayout(
-					  "100, 5, 60, 3, 40, 5, 40, 5, 90, 5, pref:grow",  		// columns 
-					  "pref, 5, pref"); 			// rows
-	        PanelBuilder builder = new PanelBuilder(panelMainOptions, layout);
-	        CellConstraints cc = new CellConstraints();
-					
-	        builder.add(new JLabel(ControlMain.getProperty("sender")),		cc.xy	(1, 1));
-	        builder.add(this.getJComboBoxBoxSender(),						cc.xy	(1, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("start")),		cc.xy	(3, 1));
-	        builder.add(this.getTfRecordTimerStartDate(),					cc.xy	(3, 3));
-	        builder.add(this.getTfRecordTimerStartTime(),					cc.xy	(5, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("end")),			cc.xy	(7, 1));
-	        builder.add(this.getTfRecordTimerStopTime(),					cc.xy	(7, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("repeat")),		cc.xy	(9, 1));
-	        builder.add(this.getJComboBoxRepeatRecordTimer(),				cc.xy	(9, 3));
-	        builder.add(new JLabel(ControlMain.getProperty("title")),		cc.xy	(11, 1));
-	        builder.add(this.getJTextFieldDescription(),					cc.xy	(11, 3));
-	    }
-	    return panelMainOptions;
+		if (panelMainOptions == null) {
+			panelMainOptions = new JPanel();
+			FormLayout layout = new FormLayout("100, 5, 60, 3, 40, 5, 40, 5, 90, 5, pref:grow", // columns
+					"pref, 5, pref"); // rows
+			PanelBuilder builder = new PanelBuilder(panelMainOptions, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.add(new JLabel(ControlMain.getProperty("sender")), cc.xy(1, 1));
+			builder.add(this.getJComboBoxBoxSender(), cc.xy(1, 3));
+			builder.add(new JLabel(ControlMain.getProperty("start")), cc.xy(3, 1));
+			builder.add(this.getTfRecordTimerStartDate(), cc.xy(3, 3));
+			builder.add(this.getTfRecordTimerStartTime(), cc.xy(5, 3));
+			builder.add(new JLabel(ControlMain.getProperty("end")), cc.xy(7, 1));
+			builder.add(this.getTfRecordTimerStopTime(), cc.xy(7, 3));
+			builder.add(new JLabel(ControlMain.getProperty("repeat")), cc.xy(9, 1));
+			builder.add(this.getJComboBoxRepeatRecordTimer(), cc.xy(9, 3));
+			builder.add(new JLabel(ControlMain.getProperty("title")), cc.xy(11, 1));
+			builder.add(this.getJTextFieldDescription(), cc.xy(11, 3));
+		}
+		return panelMainOptions;
 	}
-	
+
 	public JPanel getPanelDauerTimer() {
 		if (jPanelDauerTimer == null) {
 			jPanelDauerTimer = new JPanel();
-			FormLayout layout = new FormLayout(
-				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columna
-				      "pref");	//rows
+			FormLayout layout = new FormLayout("pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref", //columna
+					"pref"); //rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer, layout);
 			CellConstraints cc = new CellConstraints();
-			
-			int a= 1;
-			for(int i = 0 ; i< 7; i++){
-				if (jRadioButtonWhtage[i]== null) {
+
+			int a = 1;
+			for (int i = 0; i < 7; i++) {
+				if (jRadioButtonWhtage[i] == null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
 					jRadioButtonWhtage[i].addActionListener(control);
 					jRadioButtonWhtage[i].setName(Integer.toString(ControlTimerTab.weekdays_value[i]));
 					jRadioButtonWhtage[i].setActionCommand("recordTimer");
-					jRadioButtonWhtage[i].setEnabled(false);					
+					jRadioButtonWhtage[i].setEnabled(false);
 					jRadioButtonWhtage[i].setText(ControlTimerTab.weekdays[i]);
 				}
-				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
-				a = a+2;
+				builder.add(jRadioButtonWhtage[i], cc.xy(a, 1));
+				a = a + 2;
 			}
 		}
 		return jPanelDauerTimer;
 	}
-	
-	public void enableRecordTimerWeekdays(boolean enabled) {		
-		for (int i = 0; i<7; i++){
+
+	public void enableRecordTimerWeekdays(boolean enabled) {
+		for (int i = 0; i < 7; i++) {
 			jRadioButtonWhtage[i].setEnabled(enabled);
 		}
 	}
-	
+
 	/**
 	 * @return jButtonFileTag
 	 */
@@ -282,7 +288,7 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return jButtonUdrecOptions;
 	}
-	
+
 	/**
 	 * @return jButtonTest
 	 */
@@ -306,7 +312,7 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return jButtonDirTag;
 	}
-	
+
 	public JButton getJButtonFileTag() {
 		if (jButtonFileTag == null) {
 			jButtonFileTag = new JButton(ControlMain.getProperty("filep_tagName"));
@@ -315,7 +321,7 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return jButtonFileTag;
 	}
-	
+
 	/**
 	 * @return jButtonOk
 	 */
@@ -327,7 +333,7 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return jButtonOk;
 	}
-	
+
 	/**
 	 * @return jButtonCancel
 	 */
@@ -526,17 +532,17 @@ public class GuiTimerEditView extends JFrame{
 		return jRadioButtonUdrec;
 	}
 	/**
-     * @return Returns the jRadioButtonVlc.
-     */
-    public JRadioButton getJRadioButtonVlc() {
-        if (jRadioButtonVlc == null) {
-            jRadioButtonVlc = new JRadioButton("VLC");
-            jRadioButtonVlc.addActionListener(control);
-            jRadioButtonVlc.setActionCommand("vlc");
-            buttonGroupStreamingEngine.add(jRadioButtonVlc);
-        }
-        return jRadioButtonVlc;
-    }
+	 * @return Returns the jRadioButtonVlc.
+	 */
+	public JRadioButton getJRadioButtonVlc() {
+		if (jRadioButtonVlc == null) {
+			jRadioButtonVlc = new JRadioButton("VLC");
+			jRadioButtonVlc.addActionListener(control);
+			jRadioButtonVlc.setActionCommand("vlc");
+			buttonGroupStreamingEngine.add(jRadioButtonVlc);
+		}
+		return jRadioButtonVlc;
+	}
 	/**
 	 * @return Returns the jButtonRecordPathFileChooser.
 	 */
@@ -586,8 +592,8 @@ public class GuiTimerEditView extends JFrame{
 			jComboBoxBoxSender = new JComboBox(new GuiTimerSenderComboModel(control.getControlTimer()));
 			jComboBoxBoxSender.addItemListener(control);
 			jComboBoxBoxSender.setName("sender");
-			if (control.getTimer().getMainTimer().getModifiedId()==null) {
-			    jComboBoxBoxSender.setEnabled(false);
+			if (control.getTimer().getMainTimer().getModifiedId() == null) {
+				jComboBoxBoxSender.setEnabled(false);
 			}
 		}
 		return jComboBoxBoxSender;
@@ -615,16 +621,16 @@ public class GuiTimerEditView extends JFrame{
 		return tfRecordTimerStopTime;
 	}
 	/**
-     * @return Returns the tfRecordTimerStartDate.
-     */
-    public JFormattedTextField getTfRecordTimerStartDate() {
-        if (tfRecordTimerStartDate == null) {
-            tfRecordTimerStartDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
-            tfRecordTimerStartDate.addKeyListener(control);
-            tfRecordTimerStartDate.setName("startDate");
+	 * @return Returns the tfRecordTimerStartDate.
+	 */
+	public JFormattedTextField getTfRecordTimerStartDate() {
+		if (tfRecordTimerStartDate == null) {
+			tfRecordTimerStartDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
+			tfRecordTimerStartDate.addKeyListener(control);
+			tfRecordTimerStartDate.setName("startDate");
 		}
-        return tfRecordTimerStartDate;
-    }
+		return tfRecordTimerStartDate;
+	}
 
 	/**
 	 * @return Returns the tfRecordTimerStopTime.
@@ -637,16 +643,17 @@ public class GuiTimerEditView extends JFrame{
 		}
 		return jTextFieldDescription;
 	}
-    /**
-     * @return Returns the control.
-     */
-    public ControlTimerEditView getControl() {
-        return control;
-    }
-    /**
-     * @param control The control to set.
-     */
-    public void setControl(ControlTimerEditView control) {
-        this.control = control;
-    }
+	/**
+	 * @return Returns the control.
+	 */
+	public ControlTimerEditView getControl() {
+		return control;
+	}
+	/**
+	 * @param control
+	 *            The control to set.
+	 */
+	public void setControl(ControlTimerEditView control) {
+		this.control = control;
+	}
 }
