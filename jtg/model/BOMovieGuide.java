@@ -17,8 +17,8 @@ import java.util.Iterator;
  */
 public class BOMovieGuide {
 	
-	private static final String[] LIST_ENTRYS = {"Suche in...","Titel","Darsteller","Episode","Bild","Ton","Produktionsland","Produktionsjahr","Regie","Alles"};
-	
+	private static final String[] LIST_ENTRYS = {"Alles","Titel","Darsteller","Episode","Bild","Ton","Produktionsland","Produktionsjahr","Regie"};
+	private static final String[] ABO_ENTRYS = {"PREMIERE START","PREMIERE NOSTALGIE"};
 	/**
      * Holds value of property sender.
      */
@@ -95,6 +95,7 @@ public class BOMovieGuide {
     private String inhalt;
   
     private ArrayList sucheList = new ArrayList();
+    private ArrayList aboList = new ArrayList();
     
     /** Creates a new instance of BOMovieGuide */
     
@@ -439,5 +440,21 @@ public class BOMovieGuide {
     		value = true;
     	}
     	return value;
+    }
+    
+    public ArrayList getAboList(){    	
+    	if(aboList.isEmpty()){
+    		setAboList();
+    	}
+    	return aboList;
+    }
+    public void setAboList(ArrayList aboList){    
+    	this.aboList = aboList;
+    }
+    public void setAboList(){    
+    	try{
+	    	//aboList.add(ABO_ENTRYS[0]);
+	    	//aboList.add(ABO_ENTRYS[1]);	    	
+    	}catch(Exception ex){}
     }
 }
