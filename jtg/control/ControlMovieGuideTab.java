@@ -193,8 +193,49 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		 	}
 		}
 	}
+	/*
+	private BOTimer buildTimer(BOEpg epg) {
+		BOTimer timer = new BOTimer();		
+		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60;
+		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60;
+		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
+		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
+		long endtime = unformattedStart+unformattedDuration;
+		long announce = unformattedStart-(120);
+		
+		timer.setModifiedId("new");
+		timer.setChannelId(this.getSelectedSender().getChanId());
+		timer.setSenderName(this.getSelectedSender().getName());
+		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
+		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart-timeBefore));
+		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime+timeAfter));
+		
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("5");
+		timer.setDescription(epg.getTitle());
+		return timer;
+	}
+	*/
+	
 	private void getTimerTableSelectToTimer(){
 		BOTimer botimer = new BOTimer();  //FIXME timer aufbauen
+		BOTimer timer = new BOTimer();		
+		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60;
+		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60;
+		
+		
+		// timer
+			botimer.setModifiedId("new");
+		//	botimer.setChannelId(this.getSelectedSender().getChanId());
+		//	botimer.setSenderName(this.getSelectedSender().getName());
+		//	botimer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
+		//	botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart-timeBefore));
+		//	botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime+timeAfter));
+			botimer.setEventRepeatId("0");
+			botimer.setEventTypeId("5");
+			botimer.setDescription(getBOMovieGuide4Timer().getTitel()); 
+		//
+		
 		int modelIndexTimer=getSelectRowTimerTable();
 		System.out.println(getBOMovieGuide4Timer().getTitel());
 		System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
