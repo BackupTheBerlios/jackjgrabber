@@ -134,19 +134,39 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 	
 	private void buildMG() {
-	    if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
+	    if(this.getTitelMap()==null && (movieGuideFile.exists())){	
+	    	System.out.println("1");
+          	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
+          	if(!movieGuideFileNext.exists() && (!SerMovieGuide2Xml.checkNewMovieGuide())){
+          		beautifyGui(); 
+          	}          
+          	if(movieGuideFileNext.exists() && (movieGuideFile.exists()) ){			
+		    	System.out.println("2");
+	          	setMovieGuideFile(movieGuideFileNext);                  
+	          	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());                            	
+	          	beautifyGui(); 
+          	}
+	    }
+	}
+	/*
+	 * private void buildMG() {
+	    if(this.getTitelMap()==null && (movieGuideFile.exists())){	
+	    	System.out.println("1");
           	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
           	if(!movieGuideFileNext.exists() && (!SerMovieGuide2Xml.checkNewMovieGuide())){
           		beautifyGui(); 
           	}
-	    }           
-	    if(movieGuideFileNext.exists() && (movieGuideFile.exists())){			
+	   // }           
+	    if(movieGuideFileNext.exists() && (movieGuideFile.exists()) ){			
+	    	System.out.println("2");
           	setMovieGuideFile(movieGuideFileNext);                  
           	movieList.importXML(movieGuideFileNext,getSettings().getMgSelectedChannels());                            	
           	beautifyGui(); 
 	    }
 	}
-	
+	}
+
+	 */
 	/** 
 	 * @param keine
 	 * Es wird mit setTitelMapSelected die titelListAktuell für den heutigen Tag gebaut,
