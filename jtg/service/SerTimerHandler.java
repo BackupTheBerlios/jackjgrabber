@@ -365,7 +365,8 @@ public class SerTimerHandler {
     /*
      * liest MainTimer und LocalTimer
      */
-    public static void readLocalTimer(BOTimerList list) {
+    public static BOTimerList readLocalTimer() {
+        BOTimerList list = new BOTimerList();
         Element root = getTimerDocument().getRootElement();
         List nodes = SerXPathHandling.getNodes("/timerList/localTimer/mainTimer", getTimerDocument());
         
@@ -377,5 +378,6 @@ public class SerTimerHandler {
             buildLocalTimer(localTimerNode, new BOLocalTimer(timer));
             list.getRecordTimerList().add(timer);
         }
+        return list;
     }
 }
