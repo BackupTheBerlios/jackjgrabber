@@ -201,7 +201,6 @@ public X()	//DM20032004 081.6 int18 changed
 
 	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-	buildMenus();  //DM20032004 081.6 int18 add
 	buildPopupMenu();  //DM26032004 081.6 int18 add
 	buildAutoloadPanel();  //DM26032004 081.6 int18 add
 
@@ -259,211 +258,8 @@ protected void buildPopupMenu()
 }
 
 //DM20032004 081.6 int18 add
-protected void buildMenus()
-{
-	menuBar = new JMenuBar();
 
-	JMenu file = buildFileMenu();
-	file.setMnemonic('f');
-	menuBar.add(file);
 
-	JMenu preview = buildViewerMenu();
-	preview.setMnemonic('o');
-	menuBar.add(preview);
-/**
-	JMenu settings = buildSettingsMenu();
-	settings.setMnemonic('s');
-	menuBar.add(settings);
-**/
-	JMenu general = buildGeneralMenu();
-	general.setMnemonic('e');
-	menuBar.add(general);
-
-	JMenu language = buildLanguageMenu();
-	language.setMnemonic('l');
-	menuBar.add(language);
-
-	JMenu help = buildHelpMenu();
-	help.setMnemonic('h');
-	menuBar.add(help);
-
-	//TODO
-	//guiTabProjectX.setJMenuBar(menuBar);	
-}
-
-//DM20032004 081.6 int18 add
-protected JMenu buildFileMenu()
-{
-	JMenu file = new JMenu("File");
-
-	JMenuItem add = new JMenuItem("Add..");
-	add.setActionCommand("add");
-	add.setMnemonic('a');
-
-	JMenuItem remove = new JMenuItem("Remove");
-	remove.setActionCommand("remove");
-	remove.setMnemonic('r');
-
-	JMenuItem rename = new JMenuItem("Rename..");
-	rename.setActionCommand("rename");
-	rename.setMnemonic('n');
-
-	JMenuItem exit = new JMenuItem("Exit");
-	exit.setActionCommand("exit");
-	exit.setMnemonic('x');
-
-	file.add(add);
-	file.add(remove);
-	file.addSeparator();
-	file.add(rename);
-	file.addSeparator();
-	file.add(exit);
-
-	add.addActionListener(menulistener);
-	remove.addActionListener(menulistener);
-	rename.addActionListener(menulistener);
-	exit.addActionListener(menulistener);
-
-	return file;
-}
-
-//DM20032004 081.6 int18 add
-protected JMenu buildLanguageMenu()
-{
-	JMenu language = new JMenu("Language");
-	JMenuItem english = new JMenuItem("English");
-	english.setMnemonic('e');
-	english.setEnabled(false);
-
-	language.add(english);
-
-	return language;
-}
-
-//DM20032004 081.6 int18 add
-protected JMenu buildSettingsMenu()
-{
-	JMenu setting = new JMenu("Settings");
-	JMenuItem open = new JMenuItem("Settings..");
-	open.setMnemonic('s');
-
-	setting.add(open);
-
-	return setting;
-}
-
-//DM20032004 081.6 int18 add
-protected JMenu buildGeneralMenu()
-{
-	JMenu general = new JMenu("General");
-
-	ActionListener Al = new ActionListener()
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			String lnfName = e.getActionCommand();
-
-			try 
-			{
-				UIManager.setLookAndFeel(lnfName);
-				SwingUtilities.updateComponentTreeUI(guiTabProjectX);
-				comBox[16].setSelectedItem(lnfName);
-
-				if(chooser != null) 
-					SwingUtilities.updateComponentTreeUI(chooser);
-			} 
-			catch (Exception exc)
-			{
-				comBox[16].removeItemAt(comBox[16].getSelectedIndex());
-				System.err.println("Could not load LookAndFeel: " + lnfName);
-			}
-		}
-	};
-
-	UIManager.LookAndFeelInfo[] lf_info =  UIManager.getInstalledLookAndFeels();
-
-	JRadioButtonMenuItem lf_item[] = new JRadioButtonMenuItem[lf_info.length];
-	ButtonGroup lfgroup = new ButtonGroup();
-
-	for (int a=0; a < lf_info.length; a++) 
-	{
-		lf_item[a] = new JRadioButtonMenuItem(lf_info[a].getClassName());
-		general.add(lf_item[a]);
-		lfgroup.add(lf_item[a]);
-		lf_item[a].addActionListener(Al);
-	}
-
-	return general;
-}
-
-//DM20032004 081.6 int18 add
-protected JMenu buildViewerMenu()
-{
-	JMenu preview = new JMenu("Options");
-
-	JMenuItem video = new JMenuItem("open VideoCut/Specials..");
-	video.setActionCommand("openCut");
-	video.setMnemonic('v');
-
-	preview.add(video);
-	preview.addSeparator();
-
-	JMenuItem hex = new JMenuItem("open in HexViewer..");
-	hex.setActionCommand("viewAsHex");
-	hex.setMnemonic('h');
-
-	preview.add(hex);
-	preview.addSeparator();
-
-	JMenuItem basic = new JMenuItem("patch VideoBasics..");
-	basic.setActionCommand("editBasics");
-	basic.setMnemonic('p');
-
-	preview.add(basic);
-	preview.addSeparator();
-
-	JMenuItem subtitle = new JMenuItem("open SubtitlePreview..");
-	subtitle.setActionCommand("subpreview");
-	subtitle.setMnemonic('s');
-
-	preview.add(subtitle);
-
-	video.addActionListener(menulistener);
-	subtitle.addActionListener(menulistener);
-	hex.addActionListener(menulistener);
-	basic.addActionListener(menulistener);
-
-	return preview;
-}
-
-//DM20032004 081.6 int18 add
-protected JMenu buildHelpMenu()
-{
-	JMenu help = new JMenu("Help");
-
-	JMenuItem about = new JMenuItem("About..");
-	about.setActionCommand("about");
-	about.setMnemonic('a');
-
-	JMenuItem openHtml = new JMenuItem("Help..");
-	openHtml.setActionCommand("helphtml");
-	openHtml.setMnemonic('h');
-
-	help.add(about);
-	help.addSeparator();
-	help.add(openHtml);
-
-	about.addActionListener(menulistener);
-	openHtml.addActionListener(menulistener);
-
-	return help;
-}
-
-//DM20032004 081.6 int18 add
-protected void showAboutBox()
-{
-	JOptionPane.showMessageDialog(this, terms, "About..", JOptionPane.INFORMATION_MESSAGE);
-}
 
 // file panel
 protected JPanel buildFilePanel()
@@ -2096,35 +1892,6 @@ protected JPanel buildoptionPanel() {
 	op0.setLayout( new ColumnLayout() );
 	op0.setBorder( BorderFactory.createTitledBorder("various") );
 
-	comBox[16] = new JComboBox();
-	comBox[16].setPreferredSize(new Dimension(250,25));
-	op0.add(new JLabel("installed look & feels:"));
-	op0.add(comBox[16]);
-	op0.add(new JLabel("choose your preferred look & feel"));
-	op0.add(new JLabel("sometimes a l&f crashes internally"));
-
-	comBox[16].addActionListener( new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (!comchange) {
-				String lnfName = comBox[16].getSelectedItem().toString();
-				if (lnfName!=null && !lnfName.equals("")) {
-					try 
-					{
-					UIManager.setLookAndFeel(lnfName);
-					SwingUtilities.updateComponentTreeUI(guiTabProjectX);
-					if(chooser != null) 
-						SwingUtilities.updateComponentTreeUI(chooser);
-					} 
-					catch (Exception exc) {
-						comBox[16].removeItemAt(comBox[16].getSelectedIndex());
-						System.err.println("Could not load LookAndFeel: " + lnfName);
-					}
-				}
-			}
-		}
- 	});
-
-
 	cBox[11] = new JCheckBox("big log file");
 	cBox[11].setToolTipText("reduce speed, only for test purposes");
 	cBox[11].setActionCommand("biglog");
@@ -2236,12 +2003,6 @@ class MenuListener implements ActionListener
 				} 
 			}
 		}
-
-		else if (actName.equals("helphtml"))
-			new Html().show();
-
-		else if (actName.equals("about"))
-			showAboutBox();
 
 		else if (actName.equals("openCut"))
 		{
@@ -4438,7 +4199,9 @@ public void iniload()    //DM26032004 081.6 int18 changed
 			int lfn = Integer.parseInt(path.substring( 1, path.indexOf("*")));
 
 			if (lfn < comBox.length)
-				comBox[lfn].setSelectedItem(ck);
+				if (comBox[lfn] != null) {
+					comBox[lfn].setSelectedItem(ck);
+				}
 
 			outchange=false;
 		}
@@ -4515,7 +4278,11 @@ public static void inisave() //DM26012004 081.6 int12 changed, //DM26032004 081.
 	for (int a=0; a<comBox.length; a++)
 	{
 		inis.print("p"+a+"*"); 
-		inis.println(comBox[a].getSelectedItem());
+		if (comBox[a] != null) {
+			inis.println(comBox[a].getSelectedItem());
+		} else {
+			inis.println("handled by jtjg");
+		}		
 	}
 	inis.close();
 	} 
@@ -4697,12 +4464,6 @@ public static JPanel start(GuiTabProjectX tab) {
 
 	guiTabProjectX = tab;
 	X panel = new X();
-
-	comchange=true;
-	UIManager.LookAndFeelInfo[] lfi =  UIManager.getInstalledLookAndFeels();
-
-	for (int a=0;a<lfi.length;a++) 
-		comBox[16].addItem(lfi[a].getClassName());
 
 	comchange=false;
 
