@@ -44,7 +44,14 @@ import control.ControlNeutrinoTimerTab;
 import control.ControlTab;
 
 public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
+	
+	private JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
+	private JRadioButton[] jRadioButtonWhtage2 = new JRadioButton[7];
+	private static String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
+	public static final int[] WOCHENTAGE_VALUE = {256, 512, 1024, 2048, 4096, 8192, 16384};
 
+	
+	/*
 	private JRadioButton jRadioButtonSon = null;
 	private JRadioButton jRadioButtonSam = null;
 	private JRadioButton jRadioButtonFri = null;
@@ -59,6 +66,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JRadioButton jRadioButtonMit2 = null;
 	private JRadioButton jRadioButtonDie2 = null;
 	private JRadioButton jRadioButtonMon2 = null;
+	*/
+	
+	
 	private JPanel jPanelDauerTimer = null;
 	private JPanel jPanelDauerTimer2 = null;
 	private JPanel jPanelTimerListe = null;
@@ -217,7 +227,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public void setRecordTimerTableModel(GuiNeutrinoRecordTimerTableModel TimerTableModel) {
 		this.recordTimerTableModel = TimerTableModel;
 	}
-
+/*
 	private JRadioButton getJRadioButtonSon() {
 		if (jRadioButtonSon == null) {
 			jRadioButtonSon = new JRadioButton();
@@ -280,7 +290,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonMon;
 	}
-
+*/
 	public JPanel getJPanelButtonsRecordTimer() {
 		if (jPanelButtonsRecordTimer == null) {
 			jPanelButtonsRecordTimer = new JPanel();
@@ -338,7 +348,18 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 				      "pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer, layout);
 			CellConstraints cc = new CellConstraints();
-
+			
+			int a= 1;
+			for(int i = 0 ; i< 7; i++){
+				if (jRadioButtonWhtage[i]== null) {
+					jRadioButtonWhtage[i] = new JRadioButton();
+					jRadioButtonWhtage[i].setEnabled(false);					
+					jRadioButtonWhtage[i].setText(WOCHENTAGE[i]);
+				}
+				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
+				a = a+2;
+			}
+/*
 			builder.add(this.getJRadioButtonMon(),  					cc.xy	(1, 1));
 			builder.add(this.getJRadioButtonDie(),						cc.xy	(3, 1));
 			builder.add(this.getJRadioButtonMit(),						cc.xy	(5, 1));
@@ -346,10 +367,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			builder.add(this.getJRadioButtonFri(),  						cc.xy	(9, 1));
 			builder.add(this.getJRadioButtonSam(),	  				cc.xy	(11, 1));
 			builder.add(this.getJRadioButtonSon(),	  					cc.xy	(13, 1));
-		}
+	*/
+			}
 		return jPanelDauerTimer;
 	}
-
+/*
 	private JRadioButton getJRadioButtonSon2() {
 		if (jRadioButtonSon2 == null) {
 			jRadioButtonSon2 = new JRadioButton();
@@ -412,7 +434,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonMon2;
 	}
-
+*/
 	public JPanel getJPanelDauerTimer2() {
 		if (jPanelDauerTimer2 == null) {
 			jPanelDauerTimer2 = new JPanel();
@@ -421,14 +443,26 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			  "pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer2, layout);
 			CellConstraints cc = new CellConstraints();
-
+			int a= 1;
+			for(int i = 0 ; i< 7; i++){
+				if (jRadioButtonWhtage2[i]== null) {
+					jRadioButtonWhtage2[i] = new JRadioButton();
+					jRadioButtonWhtage2[i].setEnabled(false);
+					jRadioButtonWhtage2[i].setText(WOCHENTAGE[i]);
+				}
+				builder.add(jRadioButtonWhtage2[i],cc.xy(1, a));
+				a = a+2;
+				
+			}
+/*
 			builder.add(this.getJRadioButtonMon2(),  					cc.xy	(1, 1));
 			builder.add(this.getJRadioButtonDie2(),					cc.xy	(1, 3));
 			builder.add(this.getJRadioButtonMit2(),					cc.xy	(1, 5));
 			builder.add(this.getJRadioButtonDon2(),					cc.xy	(1, 7));
 			builder.add(this.getJRadioButtonFri2(),  					cc.xy	(1, 9));
-			builder.add(this.getJRadioButtonSam2(),	  				cc.xy	(1, 11));
+			builder.add(this.getJRadioButtonSam2(),	  				cc.xy	(1, 11));	
 			builder.add(this.getJRadioButtonSon2(),					cc.xy	(1, 13));
+		*/
 		}
 		return jPanelDauerTimer2;
 	}
@@ -587,7 +621,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 * 32768 = Sonntags
 	 */
 	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
-		int result;
+		int result;		
 		if (Integer.parseInt((String)timer.getEventRepeatId())>5) {
 			result = Integer.parseInt((String)timer.getEventRepeatId())-256;
 			this.enableRecordTimerWeekdays();
@@ -595,6 +629,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			result = Integer.parseInt((String)timer.getEventRepeatId());
 			this.disableRecordTimerWeekdays();
 		}
+		for (int i = 0; i<7; i++){
+			jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+		}
+
+		/*
 		while (result>=0) {
 			if (result>=32768) {
 				this.getJRadioButtonSon().setSelected(true);
@@ -638,8 +677,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			} else {
 				this.getJRadioButtonMon().setSelected(false);
 			}
-			result = result-5;
-		}
+			result = result-5;	
+			}
+			*/
 	}
 
 	public void selectRepeatDaysForSystemTimer(BOTimer timer) {
@@ -651,6 +691,10 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			result = Integer.parseInt((String)timer.getEventRepeatId());
 			this.disableSystemTimerWeekdays();
 		}
+		for (int i = 0; i<7; i++){
+			jRadioButtonWhtage2[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+		}
+/*
 		while (result>0) {
 			if (result>=32768) {
 				this.getJRadioButtonSon2().setSelected(true);
@@ -696,9 +740,16 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			}
 			result = result-5;
 		}
+	*/
 	}
-
-	public void enableRecordTimerWeekdays() {
+	public void enableRecordTimerWeekdays() {		
+		enableRecordTimerWeekdays(true);
+	}
+	public void enableRecordTimerWeekdays(boolean enabled) {		
+		for (int i = 0; i<7; i++){
+			jRadioButtonWhtage[i].setEnabled(enabled);
+		}
+/*
 		this.getJRadioButtonSon().setEnabled(true);
 		this.getJRadioButtonSam().setEnabled(true);
 		this.getJRadioButtonFri().setEnabled(true);
@@ -706,9 +757,17 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonMit().setEnabled(true);
 		this.getJRadioButtonDie().setEnabled(true);
 		this.getJRadioButtonMon().setEnabled(true);
+	*/
 	}
-
 	public void enableSystemTimerWeekdays() {
+		enableSystemTimerWeekdays(true);
+	}
+	public void enableSystemTimerWeekdays(boolean enabled) {
+		for (int i = 0; i<7; i++){
+			jRadioButtonWhtage2[i].setEnabled(enabled);
+	}
+	/*
+
 		this.getJRadioButtonSon2().setEnabled(true);
 		this.getJRadioButtonSam2().setEnabled(true);
 		this.getJRadioButtonFri2().setEnabled(true);
@@ -716,9 +775,12 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonMit2().setEnabled(true);
 		this.getJRadioButtonDie2().setEnabled(true);
 		this.getJRadioButtonMon2().setEnabled(true);
+		*/
 	}
 
 	public void disableRecordTimerWeekdays() {
+		enableRecordTimerWeekdays(false);
+		/*
 		this.getJRadioButtonSon().setEnabled(false);
 		this.getJRadioButtonSam().setEnabled(false);
 		this.getJRadioButtonFri().setEnabled(false);
@@ -726,9 +788,12 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonMit().setEnabled(false);
 		this.getJRadioButtonDie().setEnabled(false);
 		this.getJRadioButtonMon().setEnabled(false);
+		*/
 	}
 
 	public void disableSystemTimerWeekdays() {
+		enableSystemTimerWeekdays(false);
+/*
 		this.getJRadioButtonSon2().setEnabled(false);
 		this.getJRadioButtonSam2().setEnabled(false);
 		this.getJRadioButtonFri2().setEnabled(false);
@@ -736,6 +801,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonMit2().setEnabled(false);
 		this.getJRadioButtonDie2().setEnabled(false);
 		this.getJRadioButtonMon2().setEnabled(false);
+		*/
 	}
 	/**
 	 * @return Returns the tfRecordTimerEndTime.
