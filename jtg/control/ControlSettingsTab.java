@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
 
 import model.BOSettings;
 import presentation.GuiMainView;
-import presentation.GuiSettingsTabPane;
+import presentation.settings.GuiSettingsTabPane;
 
 
 public class ControlSettingsTab extends ControlTab implements ChangeListener {

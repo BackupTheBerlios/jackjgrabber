@@ -17,16 +17,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import java.awt.*;
-
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import control.*;
+import presentation.about.GuiTabAbout;
+import presentation.movieguide.GuiTabMovieGuide;
+import presentation.program.GuiTabProgramm;
+import presentation.recordInfo.GuiTabRecordInfo;
+import presentation.settings.GuiTabSettings;
+import presentation.timer.GuiTimerPanel;
 import control.ControlAboutTab;
 import control.ControlMain;
 import control.ControlMovieGuideTab;
 import control.ControlProgramTab;
+import control.ControlRecordInfoTab;
 import control.ControlSettingsTab;
 
 public class GuiMainTabPane extends JTabbedPane {

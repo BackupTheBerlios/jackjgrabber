@@ -30,6 +30,7 @@ import javax.swing.event.*;
 import org.apache.log4j.*;
 
 import presentation.*;
+import presentation.recordInfo.GuiTabRecordInfo;
 import service.SerLogAppender;
 
 /**

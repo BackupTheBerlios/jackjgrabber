@@ -49,9 +49,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import presentation.GuiMainView;
-import presentation.GuiTabMovieGuide;
-import presentation.MovieGuideFilmTableModel;
-import presentation.MovieGuideTimerTableModel;
+import presentation.movieguide.GuiTabMovieGuide;
+import presentation.movieguide.MovieGuideFilmTableModel;
+import presentation.movieguide.MovieGuideTimerTableModel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;

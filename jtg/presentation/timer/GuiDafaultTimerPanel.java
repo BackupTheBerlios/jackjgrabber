@@ -1,5 +1,6 @@
+package presentation.timer;
 /*
-ControlTabSettings.java by Geist Alexander 
+GuiDafaultTimerPanel.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,13 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-package control;
+import control.ControlDefaultTimerTab;
+import control.ControlTabTimer;
 
-import presentation.settings.GuiTabSettings;
+public class GuiDafaultTimerPanel extends GuiTimerPanel {
 
-public abstract class ControlTabSettings implements Runnable {
-    
-    public abstract GuiTabSettings getSettingsTab();
-    public abstract void setSettingsTab(GuiTabSettings view);
-
+	ControlDefaultTimerTab control;
+	
+	public GuiDafaultTimerPanel(ControlDefaultTimerTab ctrl) {
+		control = ctrl;
+	}
+	
+	public ControlTabTimer getControl() {
+		return control;
+	}
 }

@@ -28,6 +28,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import presentation.about.GuiTabAbout;
+import presentation.movieguide.GuiTabMovieGuide;
+import presentation.program.GuiTabProgramm;
+import presentation.recordInfo.GuiTabRecordInfo;
+import presentation.settings.GuiTabSettings;
+
 import service.SerGUIUtils;
 import snoozesoft.systray4j.SysTrayMenu;
 import snoozesoft.systray4j.SysTrayMenuIcon;

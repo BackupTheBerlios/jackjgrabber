@@ -34,7 +34,7 @@ import model.BOTimer;
 
 
 import presentation.GuiMainView;
-import presentation.GuiNeutrinoTimerPanel;
+import presentation.timer.GuiNeutrinoTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 

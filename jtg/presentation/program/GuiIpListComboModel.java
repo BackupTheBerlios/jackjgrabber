@@ -1,5 +1,6 @@
+package presentation.program;
 /*
-ControlTabSettings.java by Geist Alexander 
+GuiIpListComboModel.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,13 +17,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-package control;
 
-import presentation.settings.GuiTabSettings;
+import javax.swing.DefaultComboBoxModel;
 
-public abstract class ControlTabSettings implements Runnable {
-    
-    public abstract GuiTabSettings getSettingsTab();
-    public abstract void setSettingsTab(GuiTabSettings view);
+import model.BOBox;
+import control.ControlMain;
 
+/**
+ * ComboBoxModel der JCombobox IP-Auswahl im Programm-Tab
+ */
+public class GuiIpListComboModel extends DefaultComboBoxModel { //implements ComboBoxModel {
+	
+	public Object getElementAt(int index) {
+		BOBox box = (BOBox)ControlMain.getSettings().getBoxList().get(index);
+		return box.getDboxIp();
+	}
+
+	public int getSize() {
+		return ControlMain.getSettings().getBoxList().size();
+	}
 }

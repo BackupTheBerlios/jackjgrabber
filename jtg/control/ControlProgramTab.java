@@ -29,12 +29,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.swing.*;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.event.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -50,11 +48,11 @@ import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
 import presentation.GuiPidsQuestionDialog;
-import presentation.GuiSenderTableModel;
-import presentation.GuiTabProgramm;
+import presentation.program.GuiEpgTableModel;
+import presentation.program.GuiSenderTableModel;
+import presentation.program.GuiTabProgramm;
 import service.SerAlertDialog;
 import service.SerErrorStreamReadThread;
 import service.SerFormatter;

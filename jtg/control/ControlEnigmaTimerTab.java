@@ -18,8 +18,8 @@ import model.BOTimer;
 
 import org.apache.log4j.Logger;
 
-import presentation.GuiEnigmaTimerPanel;
 import presentation.GuiMainView;
+import presentation.timer.GuiEnigmaTimerPanel;
 import service.SerAlertDialog;
 import service.SerFormatter;
 

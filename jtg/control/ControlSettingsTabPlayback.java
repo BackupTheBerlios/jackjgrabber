@@ -28,8 +28,8 @@ import javax.swing.JCheckBox;
 import model.BOPlaybackOption;
 import model.BOSettings;
 import presentation.GuiMainView;
-import presentation.GuiSettingsTabPlayback;
-import presentation.GuiTabSettings;
+import presentation.settings.GuiSettingsTabPlayback;
+import presentation.settings.GuiTabSettings;
 
 public class ControlSettingsTabPlayback extends ControlTabSettings implements ActionListener, ItemListener{
     

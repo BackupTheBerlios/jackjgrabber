@@ -36,9 +36,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 
 import model.BOSettings;
-import presentation.GuiSettingsTabRecord;
-import presentation.GuiStreamTypeComboModel;
-import presentation.GuiTabSettings;
+import presentation.settings.GuiSettingsTabRecord;
+import presentation.settings.GuiStreamTypeComboModel;
+import presentation.settings.GuiTabSettings;
 
 public class ControlSettingsTabRecord extends ControlTabSettings implements KeyListener, ActionListener, ItemListener, ChangeListener {
 

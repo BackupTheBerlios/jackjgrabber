@@ -23,10 +23,10 @@ import javax.swing.JComboBox;
 
 import model.BOBox;
 import model.BOSettings;
-import presentation.GuiLookAndFeelHolder;
 import presentation.GuiMainView;
-import presentation.GuiSettingsTabMain;
-import presentation.GuiTabSettings;
+import presentation.settings.GuiLookAndFeelHolder;
+import presentation.settings.GuiSettingsTabMain;
+import presentation.settings.GuiTabSettings;
 
 public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener {
 
