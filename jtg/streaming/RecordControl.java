@@ -126,7 +126,9 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 
 			String title = getRecordArgs().getEpgTitle();
 			if (title != null) {
+				
 				String info1 = getRecordArgs().getEpgInfo1();
+				
 				if (info1 == null) {
 					info1 = "";
 				}
@@ -187,8 +189,8 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 	public void stopRecord() {
         isRunning = false;
         BOTimer timer = getRecordArgs().getLocalTimer().getMainTimer();
-        if (timer != null) {  //Lokal-Timer Aufnahme
-            timer.setModifiedId("remove");
+        if (timer != null && timer.getEventRepeatId().equals("0")) {  //Lokal-Timer Aufnahme
+        	timer.setModifiedId("remove");
             SerTimerHandler.saveTimer(timer, false, true);
             LocalTimerRecordDaemon.running=false;   
         }
