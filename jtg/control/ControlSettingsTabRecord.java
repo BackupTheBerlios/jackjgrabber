@@ -18,15 +18,24 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package control;
 
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.filechooser.FileFilter;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import model.*;
-import presentation.settings.*;
+import model.BOSettingsRecord;
+import presentation.settings.GuiSettingsTabRecord;
+import presentation.settings.GuiStreamTypeComboModel;
+import presentation.settings.GuiTabSettings;
 
 public class ControlSettingsTabRecord extends ControlTabSettings implements KeyListener, ActionListener, ItemListener, ChangeListener {
 
@@ -43,8 +52,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
      */
     public void run() {
         this.getTab().getTfServerPort().setText(this.getSettings().getStreamingServerPort());
-        this.getTab().getJTextFieldRecordSavePath().setText(this.getSettings().getSavePath());
-        this.getTab().getJTextFieldProjectXPath().setText(this.getSettings().getProjectXPath());
         this.getTab().getCbStartStreamingServer().setSelected(this.getSettings().isStartStreamingServer());
         this.getTab().getJComboBoxStreamType().setSelectedItem(this.getSettings().getJgrabberStreamType());
         this.getTab().getCbStartPX().setSelected(this.getSettings().isStartPX());
@@ -74,7 +81,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		String streamType = this.getSettings().getJgrabberStreamType();
 		this.getTab().getJComboBoxStreamType().setModel(streamTypeComboModel);
 		this.getTab().getStreamTypeComboModel().setSelectedItem(streamType);
-		this.getTab().getJTextFieldUdrecPath().setText(this.getSettings().getUdrecPath());
 	}
 	
 	private void initializeUdrecEngine() {
@@ -83,20 +89,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		String streamType = this.getSettings().getUdrecStreamType();
 		this.getTab().getJComboBoxStreamType().setModel(streamTypeComboModel);
 		this.getTab().getStreamTypeComboModel().setSelectedItem(streamType);
-		this.getTab().getJTextFieldUdrecPath().setText(this.getSettings().getUdrecPath());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		while (true) {
-		    if (action.equals("recordPath")) {
-		  			this.openRecordPathFileChooser();
-		  			break;
-		  		}
-		  		if (action.equals("udrecPath")) {
-		  			this.openUdrecPathFileChooser();
-		  			break;
-		  		}
 		  		if (action.equals("jgrabber")) {
 		  			this.getSettings().setStreamingEngine(0);
 		  			this.initializeJGrabberEngine();
@@ -105,10 +102,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 		  		if (action.equals("udrec")) {
 		  			this.getSettings().setStreamingEngine(1);
 		  			this.initializeUdrecEngine();
-		  			break;
-		  		}
-		  		if (action.equals("projectxPath")) {
-		  			this.openProjectXPathFileChooser();
 		  			break;
 		  		}
 		  		if (action.equals("storeEPG")) {
@@ -154,7 +147,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				break;
 			}
 			if (tf.getName().equals("udrecPath")){
-			    this.getSettings().setUdrecPath(tf.getText());
+			    ControlMain.getSettingsPath().setUdrecPath(tf.getText());
 			    break;
 			}
 			if (tf.getName().equals("udrecOptions")){
@@ -193,70 +186,6 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				}	
 	}
 
-	private void openRecordPathFileChooser() {
-		JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setDialogType(JFileChooser.SAVE_DIALOG);
-
-		fc.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		fc.setApproveButtonToolTipText( ControlMain.getProperty("msg_chooseDirectory"));
-		int returnVal = fc.showSaveDialog( null ) ;
-
-		if ( returnVal == JFileChooser.APPROVE_OPTION )
-			{
-				String path = fc.getSelectedFile().toString();
-				this.getTab().getJTextFieldRecordSavePath().setText(path);
-				this.getSettings().setSavePath(path);
-			}
-	}
-	
-	private void openProjectXPathFileChooser() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathProjectX"));
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		FileFilter filter = new FileFilter(){
-			public boolean accept(File f){
-				return (f.getName().endsWith("ProjectX.jar") || f.isDirectory() );
-			}
-			public String getDescription(){
-				return "ProjectX.jar";
-			}
-		};
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showSaveDialog( null ) ;
-	
-		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-			String path = chooser.getSelectedFile().toString();
-			this.getTab().getJTextFieldProjectXPath().setText(path);
-			this.getSettings().setProjectXPath(path);	
-		}
-	}
-	
-	
-	private void openUdrecPathFileChooser() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(ControlMain.getProperty("msg_choose"));
-		chooser.setApproveButtonToolTipText(ControlMain.getProperty("msg_pathUdrec"));
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		FileFilter filter = new FileFilter(){
-			public boolean accept(File f){
-				return (f.getName().endsWith("udrec.exe") || f.isDirectory() );
-			}
-			public String getDescription(){
-				return "udrec.exe";
-			}
-		};
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showSaveDialog( null ) ;
-	
-		if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-			String path = chooser.getSelectedFile().toString();
-			this.getTab().getJTextFieldUdrecPath().setText(path);
-			this.getSettings().setUdrecPath(path);	
-		}
-	}
-    
     /* (non-Javadoc)
      * @see control.ControlTab#getMainView()
      */

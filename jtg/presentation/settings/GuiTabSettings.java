@@ -57,7 +57,7 @@ public class GuiTabSettings extends GuiTab {
 		    settingsTabPane.addTab(ControlMain.getProperty("label_record"), settingsTabPane.getTabSettingsRecord());
 		    settingsTabPane.addTab(ControlMain.getProperty("label_playback"), settingsTabPane.getTabSettingsPlayback());
 		    settingsTabPane.addTab(ControlMain.getProperty("tab_movieGuide"), settingsTabPane.getTabSettingsMovieguide());
-		    settingsTabPane.addTab("Tools", settingsTabPane.getTabSettingsTools());
+		    settingsTabPane.addTab(ControlMain.getProperty("tab_path"), settingsTabPane.getTabSettingsPath());
 		    
 		}
 		return settingsTabPane;
@@ -75,8 +75,8 @@ public class GuiTabSettings extends GuiTab {
 	public GuiSettingsTabMovieGuide getSettingsTabMovieGuide() {
 	    return this.getSettingsTabPane().getTabSettingsMovieguide();
 	}
-	public GuiSettingsTabTools getSettingsTabTools() {
-	    return this.getSettingsTabPane().getTabSettingsTools();
+	public GuiSettingsTabPath getSettingsTabPath() {
+	    return this.getSettingsTabPane().getTabSettingsPath();
 	}
 	
 	/**

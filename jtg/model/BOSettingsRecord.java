@@ -28,10 +28,6 @@ public class BOSettingsRecord {
 	public boolean startPX;
 	public boolean recordAllPids;
 	public boolean ac3ReplaceStereo;
-	public String savePath;
-	public String udrecPath;
-	
-	public String projectXPath;
 	public String udrecOptions;
 	
 	public String jgrabberStreamType; //PES, TS, ES
@@ -98,23 +94,6 @@ public class BOSettingsRecord {
 		}
 	}
 	/**
-	 * @return Returns the savePath.
-	 */
-	public String getSavePath() {
-		return savePath;
-	}
-	/**
-	 * @param savePath
-	 *            The savePath to set.
-	 */
-	public void setSavePath(String savePath) {
-		if (!this.savePath.equals(savePath)) {
-			setSettingsChanged(true);
-			this.savePath = savePath;
-		}
-	}
-	
-	/**
 	 * @return int
 	 */
 	public String getJgrabberStreamType() {
@@ -173,22 +152,6 @@ public class BOSettingsRecord {
 			this.streamingEngine = engine;
 		}
 
-	}
-	/**
-	 * @return Returns the udrecPath.
-	 */
-	public String getUdrecPath() {
-		return udrecPath;
-	}
-	/**
-	 * @param udrecPath
-	 *            The udrecPath to set.
-	 */
-	public void setUdrecPath(String path) {
-		if (this.udrecPath == null || !this.udrecPath.equals(path)) {
-			setSettingsChanged(true);
-			this.udrecPath = path;
-		}
 	}
 	/**
 	 * @return Returns the jUdrecStreamType.
@@ -306,22 +269,6 @@ public class BOSettingsRecord {
 				|| !this.udrecOptions.equals(udrecOptions)) {
 			setSettingsChanged(true);
 			this.udrecOptions = udrecOptions;
-		}
-	}
-	
-	/**
-	 * @return Returns the projectXPath.
-	 */
-	public String getProjectXPath() {
-		return projectXPath;
-	}
-	/**
-	 * @param projectXPath The projectXPath to set.
-	 */
-	public void setProjectXPath(String projectXPath) {
-		if (this.projectXPath == null || !this.projectXPath.equals(projectXPath)) {
-			setSettingsChanged(true);
-			this.projectXPath = projectXPath;
 		}
 	}
 	public boolean isStoreEPG() {

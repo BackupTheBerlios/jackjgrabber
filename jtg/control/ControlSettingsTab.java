@@ -49,7 +49,10 @@ public class ControlSettingsTab extends ControlTab implements ChangeListener {
 			pane.setComponentAt(count, pane.getTabSettingsPlayback());
 		}
 		if (count == 3) {
-			pane.setComponentAt(count, pane.getTabSettingsTools());
+				pane.setComponentAt(count, pane.getTabSettingsMovieguide());
+			}
+		if (count == 4) {
+			pane.setComponentAt(count, pane.getTabSettingsPath());
 		}
 		pane.setIndex(count);
 	}

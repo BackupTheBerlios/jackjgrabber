@@ -103,7 +103,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 		TreePath[] selNodes = tree.getSelectionPaths();
 		root.removeAllChildren();
 
-		String savePath = ControlMain.getSettingsRecord().getSavePath();
+		String savePath = ControlMain.getSettingsPath().getSavePath();
 		if (savePath != null && savePath.length() > 0) {
 			File f = new File(savePath);
 

@@ -27,7 +27,6 @@ public class BOSettingsMain {
 	public String themeLayout;
 	public ArrayList boxList;
 	public String lookAndFeel;
-	public String vlcPath;
 	public boolean startFullscreen = false;
 	public boolean useSysTray = false;
 	public boolean showLogo = false;
@@ -183,21 +182,6 @@ public class BOSettingsMain {
         if (this.startVlcAtStart != startVlcAtStart) {
       			setSettingsChanged(true);
       			this.startVlcAtStart = startVlcAtStart;
-      		}
-    }
-    /**
-     * @return Returns the vlcPath.
-     */
-    public String getVlcPath() {
-        return vlcPath;
-    }
-    /**
-     * @param vlcPath The vlcPath to set.
-     */
-    public void setVlcPath(String vlcPath) {
-        if (this.vlcPath == null || !this.vlcPath.equals(vlcPath)) {
-      			setSettingsChanged(true);
-      			this.vlcPath = vlcPath;
       		}
     }
 }

@@ -168,7 +168,7 @@ public class RecordControl extends Thread {
 		}
 		try {
 			Object[] args = {System.getProperty("java.home") + separator + "bin" + separator + "java -jar",
-					ControlMain.getSettingsRecord().getProjectXPath(),
+					ControlMain.getSettingsPath().getProjectXPath(),
 					//"-g",
 					fileString};
 			MessageFormat form = new MessageFormat("{0} {1} {2}");
@@ -202,7 +202,7 @@ public class RecordControl extends Thread {
 
 	public File getDirectory() {
 		if (directory == null) {
-			directory = new File(ControlMain.getSettingsRecord().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName().replace(' ',
+			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName().replace(' ',
 					'_')));
 			directory.mkdir();
 		}

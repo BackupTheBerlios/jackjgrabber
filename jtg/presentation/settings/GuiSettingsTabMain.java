@@ -53,10 +53,8 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JPanel panelStartOptions = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
-	
 	private JButton jButtonStartVlc = null;
 	private JFormattedTextField tfBoxIp = null;
-	
 	private JComboBox jComboBoxTheme = null;
 	private JComboBox jComboBoxLookAndFeel = null;
 	private JComboBox jComboBoxLocale = null;
@@ -129,18 +127,17 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JPanel getPanelStartOptions() {
 			if (panelStartOptions == null) {
 			    panelStartOptions = new JPanel();
-				FormLayout layout = new FormLayout(  "pref, 10,  pref:grow, 5, pref, pref", //columna
+				FormLayout layout = new FormLayout(  "pref, 10,  pref", //columna
 						"pref, 5, pref, pref, pref, pref, pref"); //rows
 				PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
 				CellConstraints cc = new CellConstraints();
 
-				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 6));
-				builder.add(this.getCbStartFullscreen(), 									cc.xyw(1, 3, 6));
-				builder.add(this.getCbShowLogo(),											cc.xyw(1, 4, 6));
-				builder.add(this.getCbUseSysTray(), 										cc.xyw(1, 5, 6));
-				builder.add(this.getCbStartVlcAtStart(), 									cc.xyw(1, 6, 3));
-				builder.add(new JLabel(ControlMain.getProperty("label_vlcPath")),			cc.xy	(1, 7));
-				builder.add(this.getJButtonStartVlc(),										cc.xy	(6, 7));
+				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 3));
+				builder.add(this.getCbStartFullscreen(), 									cc.xyw(1, 3, 3));
+				builder.add(this.getCbShowLogo(),												cc.xyw(1, 4, 3));
+				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 5, 3));
+				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 6, 1));
+				builder.add(this.getJButtonStartVlc(),										cc.xy	(3, 6));
 			}
 			return panelStartOptions;
 		}

@@ -56,7 +56,7 @@ public class UdrecRecord  extends Record {
 	    StringBuffer cmd = new StringBuffer();
 	    BOPids pids = recordArgs.getPids();
 	    Object[] args = {
-	            ControlMain.getSettingsRecord().getUdrecPath(), 
+	            ControlMain.getSettingsPath().getUdrecPath(), 
 	            boxIp, 
 	            Integer.toString(spktBufNum), 
 	            ControlMain.getSettingsRecord().getShortUdrecStreamType(),

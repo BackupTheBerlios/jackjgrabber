@@ -179,22 +179,22 @@ public class SerSettingsHandler {
 	private static void getSettingsUdrecPath(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/udrecPath");
 		if (node != null) {
-			settings.getRecordSettings().udrecPath = node.getText();
+			settings.getPathSettings().udrecPath = node.getText();
 		} else {
 			String path = new File("udrec.exe").getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "udrecPath", path);
-			settings.getRecordSettings().setUdrecPath(path);
+			settings.getPathSettings().setUdrecPath(path);
 		}
 	}
 
 	private static void getSettingsProjectXPath(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/projectXPath");
 		if (node != null) {
-			settings.getRecordSettings().projectXPath = node.getText();
+			settings.getPathSettings().projectXPath = node.getText();
 		} else {
 			String path = new File("ProjectX.jar").getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "projectXPath", path);
-			settings.getRecordSettings().setProjectXPath(path);
+			settings.getPathSettings().setProjectXPath(path);
 		}
 	}
 
@@ -254,7 +254,7 @@ public class SerSettingsHandler {
 			settings.getRecordSettings().udrecStreamType = node.getText();
 		} else {
 			SerXMLHandling.setElementInElement(root, "udrecStreamType", "PES MPEG-Packetized Elementary");
-			settings.getRecordSettings().setUdrecPath("PES");
+			settings.getPathSettings().setUdrecPath("PES");
 		}
 	}
 
@@ -322,11 +322,11 @@ public class SerSettingsHandler {
 	private static void getSettingsSavePath(Element root, BOSettings settings) {
 		Node node = root.selectSingleNode("/settings/savePath");
 		if (node != null) {
-			settings.getRecordSettings().savePath = node.getText();
+			settings.getPathSettings().savePath = node.getText();
 		} else {
 			String path = new File(System.getProperty("user.home")) .getAbsolutePath();
 			SerXMLHandling.setElementInElement(root, "savePath", path);
-			settings.getRecordSettings().setSavePath(path);
+			settings.getPathSettings().setSavePath(path);
 		}
 	}
 
@@ -624,9 +624,9 @@ public class SerSettingsHandler {
 		Node projectXPath = settingsDocument.selectSingleNode("/settings/projectXPath");
 		Node vlcPath = settingsDocument.selectSingleNode("/settings/vlcPath");
 
-		projectXPath.setText(ControlMain.getSettings().getRecordSettings().getProjectXPath());
-		udrecPath.setText(ControlMain.getSettings().getRecordSettings().getUdrecPath());
-		savePath.setText(ControlMain.getSettings().getRecordSettings().getSavePath());
+		projectXPath.setText(ControlMain.getSettings().getPathSettings().getProjectXPath());
+		udrecPath.setText(ControlMain.getSettings().getPathSettings().getUdrecPath());
+		savePath.setText(ControlMain.getSettings().getPathSettings().getSavePath());
 		vlcPath.setText(ControlMain.getSettings().getPathSettings().getVlcPath());
 	}
 	
