@@ -1,11 +1,10 @@
 package model;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import service.SerErrorStreamReadThread;
 import service.SerInputStreamReadThread;
+import service.SerProcessStopListener;
 
 /*
  * BOExternalProcess.java by Geist Alexander
@@ -24,18 +23,26 @@ import service.SerInputStreamReadThread;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
-public class BOExternalProcess {
+public class BOExternalProcess extends Thread {
 	
-	private String name;
+	private String progName;
 	private String execString;
 	private String[] execStringArray;
 	private Process process;
+	private SerProcessStopListener listener;
 	private boolean logging=false;
 	private boolean logErrorAsInfo=false;
 	private boolean closeWithoutPrompt=true;
 
+	public BOExternalProcess(SerProcessStopListener listener, String name, String[] execString, boolean logging) {
+	    this.setListener(listener);
+		this.setProgName(name);
+		this.setExecStringArray(execString);
+		this.setLogging(logging);
+	}
+	
 	public BOExternalProcess(String name, String execString, boolean logging) {
-		this.setName(name);
+		this.setProgName(name);
 		this.setExecString(execString);
 		this.setLogging(logging);
 	}
@@ -43,34 +50,46 @@ public class BOExternalProcess {
 	public BOExternalProcess(String name, String execString, boolean logging, boolean logErrorAsInfo) {
 	    this.setLogErrorAsInfo(logErrorAsInfo);
 	    this.setLogging(logging);
-			this.setName(name);
-			this.setExecString(execString);
-		}
+		this.setProgName(name);
+		this.setExecString(execString);
+	}
 	
 	public BOExternalProcess(String name, String[] execStringArray, boolean logging) {
-		this.setName(name);
+		this.setProgName(name);
 		this.setExecStringArray(execStringArray);
 		this.setLogging(logging);
 	}
 	
-	public void start() {
+	public void run() {
+	    this.logExecString();
 		try {
 		    if (this.getExecString()==null) {
-		    		String logString="";
-		    		for (int i = 0;i < execStringArray.length; i++) {
-		    		    logString += " "+ execStringArray[i];
-		    		}
-		        this.setProcess(Runtime.getRuntime().exec(this.getExecStringArray()));
-		        Logger.getLogger("BOExternalProcess").info(logString.trim());
+		    	this.setProcess(Runtime.getRuntime().exec(this.getExecStringArray()));
 		    } else {
 		        this.setProcess(Runtime.getRuntime().exec(this.getExecString()));
-		        Logger.getLogger("BOExternalProcess").info(this.getExecString());
 		    }
 		    new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
 		    new SerErrorStreamReadThread(this.isLogging(), this.isLogErrorAsInfo(), this.getProcess().getErrorStream()).start();
-		} catch (IOException e) {
+		    
+		    if (this.getListener()!=null) {
+		        int exitValue = this.getProcess().waitFor();
+		        this.getListener().processStopped(exitValue);
+		    }
+		} catch (Exception e) {
 		    Logger.getLogger("BOExternalProcess").error(e.getMessage());
-		}
+		} 
+	}
+	
+	private void logExecString() {
+	    if (this.getExecString()==null) {
+    		String logString="";
+    		for (int i = 0;i < execStringArray.length; i++) {
+    		    logString += " "+ execStringArray[i];
+    		}
+    		Logger.getLogger("BOExternalProcess").info(logString.trim());
+	    } else {
+	        Logger.getLogger("BOExternalProcess").info(this.getExecString());
+	    }
 	}
 	
 	/**
@@ -100,14 +119,14 @@ public class BOExternalProcess {
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() {
-		return name;
+	public String getProgName() {
+		return progName;
 	}
 	/**
 	 * @param name The name to set.
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setProgName(String name) {
+		this.progName = name;
 	}
 	/**
 	 * @return Returns the process.
@@ -156,5 +175,17 @@ public class BOExternalProcess {
      */
     public void setCloseWithoutPrompt(boolean closeWithoutPrompt) {
         this.closeWithoutPrompt = closeWithoutPrompt;
+    }
+    /**
+     * @return Returns the listener.
+     */
+    public SerProcessStopListener getListener() {
+        return listener;
+    }
+    /**
+     * @param listener The listener to set.
+     */
+    public void setListener(SerProcessStopListener listener) {
+        this.listener = listener;
     }
 }
