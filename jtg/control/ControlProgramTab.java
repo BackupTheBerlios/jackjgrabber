@@ -773,6 +773,10 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	public Date getRecordStopTime() {
 		return this.getMainView().getTabProgramm().getDateModelSpinnerStopTime().getDate();
 	}
+	
+	public boolean isShutdownAfterRecord() {
+	    return this.getMainView().getTabProgramm().getCbShutdownAfterRecord().isSelected();
+	}
 
 	/**
 	 * @return BOBouquet
