@@ -120,8 +120,8 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelOutput == null) {
 			jPanelOutput = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "d",	 		//columna 
-				      "f:pref, d");	//rows
+				      "f:d:grow",	 		//columna 
+				      "f:pref, f:d:grow");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelOutput, layout);
 			CellConstraints cc = new CellConstraints();
 			
