@@ -68,7 +68,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	private static Element root;
 	private static Document movieGuideDocument;
 
-	public static String movieGuideFileName = "movieguide.all";
+	public static String movieGuideFileName = "movieguide.xml";
 	private static String SelectedItemJComboBox;
 	private static int SelectedItemJComboBoxSucheNach;
     public static int timerTableSize;
