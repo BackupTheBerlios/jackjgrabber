@@ -33,15 +33,15 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		try{
 		Integer selectRow = this.getControl().getSelectRowFilmTable();				
 		if (columnIndex == 0) {							
-			value = (SerFormatter.getShortDate(Long.parseLong(((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().toArray()[rowIndex].toString())));
+			value = (SerFormatter.getShortDate(Long.parseLong(((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().get(rowIndex).toString())));
 		}else if (columnIndex == 1) {			
-			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().toArray()[rowIndex] );
+			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().get(rowIndex) );
 		}else if (columnIndex == 2) {	
-			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().toArray()[rowIndex] );
+			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().get(rowIndex) );
 		}else if (columnIndex == 3) {
-			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDauer().toArray()[rowIndex];
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDauer().get(rowIndex);
 		}else if (columnIndex == 4) {
-			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getSender().toArray()[rowIndex];
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getSender().get(rowIndex);
 		} 
 		}catch(Exception ex){}
 		return value;

@@ -200,7 +200,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 			reInitTable(new Integer(this.getTab().mgFilmTableSorter.modelIndex(table.getSelectedRow())));			
 		}
 		if (tableName == "timerTable") {				
-			this.getTab().getTaAudioVideo().setText("Audio: "+getBOMovieGuide4Timer().getTon().toArray()[getSelectRowTimerTable()]+" / Video: "+getBOMovieGuide4Timer().getBild().toArray()[getSelectRowTimerTable()]);
+			this.getTab().getTaAudioVideo().setText("Audio: "+getBOMovieGuide4Timer().getTon().get(getSelectRowTimerTable())+" / Video: "+getBOMovieGuide4Timer().getBild().get(getSelectRowTimerTable()));
 			if(me.getClickCount()>=2){ 						
 				getTimerTableSelectToTimer();
 		 	}
@@ -269,8 +269,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             botimer.setModifiedId("new");
             botimer.setChannelId(sender.getChanId());
             botimer.setSenderName(sender.getName());		
-            botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore));
-            botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter));			
+            botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().get(modelIndexTimer),timeBefore));
+            botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().get(modelIndexTimer),timeAfter));			
             botimer.setAnnounceTime( String.valueOf((SerFormatter.getGC(botimer.getUnformattedStartTime(),2)).getTimeInMillis()) );
             botimer.setEventRepeatId("0");
             botimer.setEventTypeId("5");
@@ -281,11 +281,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
                 SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
             }
             System.out.println(getBOMovieGuide4Timer().getTitel());
-            System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
-            System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);
-            System.out.println(getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer]);
-            System.out.println(getBOMovieGuide4Timer().getDauer().toArray()[modelIndexTimer]);
-            System.out.println(getBOMovieGuide4Timer().getSender().toArray()[modelIndexTimer]);
+            System.out.println(getBOMovieGuide4Timer().getDatum().get(modelIndexTimer));
+            System.out.println(getBOMovieGuide4Timer().getStart().get(modelIndexTimer));
+            System.out.println(getBOMovieGuide4Timer().getEnde().get(modelIndexTimer));
+            System.out.println(getBOMovieGuide4Timer().getDauer().get(modelIndexTimer));
+            System.out.println(getBOMovieGuide4Timer().getSender().get(modelIndexTimer));
         } catch (IOException e) {
             Logger.getLogger("ControlMovieGuideTab").error("Keinen passenden Sender in der Box gefunden");
         }
