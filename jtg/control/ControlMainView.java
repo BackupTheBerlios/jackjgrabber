@@ -3,7 +3,10 @@ package control;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Properties;
 
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -31,9 +34,16 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	private Logger mainLogger;
 	private SerLogAppender logAppender;
 
+	private static final String _MESSAGE_BUNDLE = "/locale/messages";
+	private Locale locale = new Locale("de","DE");
+    private static Properties prop = new Properties();    
+
+	
+	
 	public ControlMainView() {
 		//this.showTerms();
 		this.runAfterTerms();
+				
 	}
 	private void showTerms() {
 		guiTerms = new GuiTerms(this);
@@ -46,7 +56,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.getLogAppender().setView(this.getView());
 		this.initialize();
 		this.getView().getMainTabPane().getTabProgramm().getControl().initialize();
-		this.getMainLogger().info("Anwendung gestartet");
+		this.getMainLogger().info("Anwendung gestartet");		
 	}
 	
 	private void initialize() {
@@ -55,6 +65,7 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		mainLogger.info("Searching Box-Image");
 		ControlMain.detectImage();
 		mainLogger.info(ControlMain.getBox().getName()+"-Access loaded");
+		this.setResourceBundle(locale);
 	}
 	private void logSystemInfo() {
 		mainLogger.info(ControlMain.version[0]+"/"+ControlMain.version[1]+" "
@@ -200,5 +211,24 @@ public class ControlMainView implements ActionListener, ChangeListener {
 	 */
 	public void setView(GuiMainView view) {
 		this.view = view;
-	}
+	}	
+	private void setLocale(String sprache, String land){
+        locale = new Locale(sprache,land);    	
+    }
+
+    private Locale getLocale(){
+        return locale;
+    }
+
+    public static String getProperty(String key){
+    	return prop.getProperty(key);
+    }
+
+    private void setResourceBundle(Locale locale){
+        this.locale = locale;    	    	  
+        try{    	                       
+        	InputStream is=getClass().getResourceAsStream(_MESSAGE_BUNDLE+"_"+locale.getLanguage()+".properties");                    	        	
+        	prop.load(is);                    	
+        }catch (IOException ex){}       	        
+    }    
 }
