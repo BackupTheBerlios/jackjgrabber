@@ -27,6 +27,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -392,12 +393,14 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 			}
 		    if (tf.getName().equals("startTime")){
 		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
-				timer.getMainTimer().setUnformattedStartTime(newDate);
+				newDate.set(Calendar.SECOND,0);
+		        timer.getMainTimer().setUnformattedStartTime(newDate);
 			    break;
 			}
 		    if (tf.getName().equals("stopTime")){
 		        GregorianCalendar newDate = SerFormatter.getDateFromString(tf.getText(), "HH:mm");
-				timer.getMainTimer().setUnformattedStopTime(newDate);
+		        newDate.set(Calendar.SECOND,0);
+		        timer.getMainTimer().setUnformattedStopTime(newDate);
 			    break;
 			}
 			if (tf.getName().equals("jTextFieldFilePattern")) {
