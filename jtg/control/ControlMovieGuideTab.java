@@ -108,7 +108,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
       	}
       	this.buildMG();
       	if ( (movieList.getAnnounceList().size()> 0) && (getSettings().isMgInfoDontForget()) ){      		
-	    	infoNewMovieGuide("Es kommen Filme aus deiner Liste.\n Zur Auswahl auf den RecordListeButton drücken.");
+	    	infoNewMovieGuide("Es kommen Filme aus deiner Liste.\n Zur Auswahl auf den RecordListeButton drücken.");	    	
 	    }	  	 
 	}
 	
@@ -193,7 +193,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         try{
         	this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         	getJTableFilm().getSelectionModel().setSelectionInterval(0,0); //1 Row selected
-        }catch(ArrayIndexOutOfBoundsException ex){System.out.println(ex);}                 
+        }catch(ArrayIndexOutOfBoundsException ex){System.out.println(ex);}                        
    }
 	
 	
@@ -282,46 +282,22 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (action == "clickONDatumComboBox"){
 			JComboBox comboBox = this.getTab().getComboBoxDatum();
 			if(comboBox.getItemCount()>=1){
-				this.getTab().getTfSuche().setText("");
-				this.getTab().getTfZeitab().setText("");
-				searchString = "";
 				this.getTab().getJLabelSearchCount().setText("");
 				this.getTab().getComboBoxGenre().setSelectedIndex(0);          
-				this.getTab().getComboBoxSender().setSelectedIndex(0); 
-				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-				reInitFilmTable(1);						
-				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
-				getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+				this.getTab().getComboBoxSender().setSelectedIndex(0);
+				setGui4SelectionSearch(1, "",comboBox);			
 			}
 		}
 		if (action == "clickONGenreComboBox"){
 			JComboBox comboBox = this.getTab().getComboBoxGenre();
 			if(comboBox.getItemCount()>=1){
-				this.getTab().getTfSuche().setText("");
-				this.getTab().getTfZeitab().setText("");
-				searchString = "";
-				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
-					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-					reInitFilmTable(11);		
-					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
-					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
-					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
-				}
+				setGui4SelectionSearch(11, GENRE,comboBox);							
 			}
 		}
 		if (action == "clickONSenderComboBox"){
 			JComboBox comboBox = this.getTab().getComboBoxSender();
-			if(comboBox.getItemCount()>=1){
-				this.getTab().getTfSuche().setText("");
-				this.getTab().getTfZeitab().setText("");
-				searchString = "";				
-				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
-					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-					reInitFilmTable(12);
-					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
-					getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
-					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
-				}
+			if(comboBox.getItemCount()>=1){				
+				setGui4SelectionSearch(12, SENDER,comboBox);				
 			}
 		}
 	}
@@ -361,41 +337,39 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}else{	
 			JComboBox comboBox = (JComboBox)event.getSource();			
 			if (comboBox.getName().equals("jComboBoxDatum")) {	
-				this.getTab().getTfSuche().setText("");
-				this.getTab().getTfZeitab().setText("");		
-				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-				reInitFilmTable(1);						
-				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
-				this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
-			}	
+				setGui4SelectionSearch(1, "",comboBox);				
+			}else	
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
-				this.getTab().getTfSuche().setText("");
-				this.getTab().getTfZeitab().setText("");
-				searchString = "";
-				if(!comboBox.getSelectedItem().toString().equals(GENRE)){
-					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-					reInitFilmTable(11);		
-					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
-					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
-				}
-			}
+				setGui4SelectionSearch(11, GENRE,comboBox);				
+			}else
 			if (comboBox.getName().equals("jComboBoxSucheNach")) {		
 				SelectedItemJComboBoxSucheNach = (comboBox.getSelectedIndex()+2);					
-			}
+			}else
 			if (comboBox.getName().equals("jComboBoxSender")) {	
-				this.getTab().getTfSuche().setText("");
-				this.getTab().getTfZeitab().setText("");
-				searchString = "";
-				if(!comboBox.getSelectedItem().toString().equals(SENDER)){
-					setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
-					reInitFilmTable(12);
-					getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
-					this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
-				}
+				setGui4SelectionSearch(12, SENDER,comboBox);				
 			}
 		}
 	}
-
+    private void setGui4SelectionSearch(int reInitTable, String selectedItem, JComboBox comboBox){
+    	this.getTab().getTfSuche().setText("");
+		this.getTab().getTfZeitab().setText("");
+		searchString = "";
+		if(selectedItem.length()<1){
+			setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+			reInitFilmTable(reInitTable);
+			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);	
+			getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+			this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
+		}else{
+			if(!comboBox.getSelectedItem().toString().equals(selectedItem)){
+				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
+				reInitFilmTable(reInitTable);		
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);
+				getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+				this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
+			}			
+		}				
+    }
 	/**
 	 * @return int
 	 * Gib den selectierten Eintrag der SucheNach-ComboBox zurück
