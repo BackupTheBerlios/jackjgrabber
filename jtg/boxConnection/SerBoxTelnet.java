@@ -106,4 +106,15 @@ public class SerBoxTelnet  {
         Thread.sleep(1000);	 
         closeTelnetSession();      
 	}
+	public static void enableSPTSMode() throws IOException, InterruptedException{
+		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("Enable SPTS-Mode"));
+		createTelnetSession("touch /var/etc/.spts_mode");	
+		runReboot();
+	}
+	public static void disableSPTSMode() throws IOException, InterruptedException{
+		Logger.getLogger("SerBoxTelnet").info(ControlMain.getProperty("Disable SPTS-Mode"));
+		createTelnetSession("rm -f /var/etc/.spts_mode");	
+		runReboot();
+	}
+	
 }
