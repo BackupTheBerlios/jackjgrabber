@@ -671,8 +671,6 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
      */
     public void setTitelMapSelected(Object searchValue,int value){    	
     	String search = (String)searchValue;
-    	System.out.println(search);
-    	System.out.println(value);
     	GregorianCalendar searchGC = new GregorianCalendar();
     	titelListAktuell = new HashMap();    	
     	Iterator i = titelList.entrySet().iterator();
