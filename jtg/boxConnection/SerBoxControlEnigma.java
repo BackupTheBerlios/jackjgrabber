@@ -43,6 +43,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 public class SerBoxControlEnigma extends SerBoxControl {
+    
+    String oldRequest="";
+    BufferedReader bf;
 	
 	public String getName() {
 		return "Enigma";
@@ -58,7 +61,13 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
-	    return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"UTF-8"));
+	    if (request.equals(oldRequest)) {
+	        
+	    } else {
+	        bf = new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"UTF-8"));
+	    }
+	    oldRequest=request;
+	    return bf;
 	}
 		
 	public BOPids getPids(boolean tvMode) throws IOException {
