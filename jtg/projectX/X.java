@@ -4460,7 +4460,7 @@ public static void loadIDs(String nIDs) {  //DM28112003 081.5++
 	return;
 }
 
-public static JPanel start(GuiTabProjectX tab) {
+public static JPanel start(GuiTabProjectX tab, String[] args) {
 
 	guiTabProjectX = tab;
 	X panel = new X();
@@ -4471,16 +4471,110 @@ public static JPanel start(GuiTabProjectX tab) {
 	boolean IDsLoaded=false;
 	boolean CutsLoaded=false;
 	int ac3f=0;
+	
+	if (args.length > 0) {
+
+			int aaa1=0;
+			if ( args[0].equalsIgnoreCase("-c") ) {
+				if ( args.length==1) {
+					System.out.println("stopped, no config file ...");
+					System.exit(0);
+				}
+				inifile = args[1];
+				if ( !(new File(inifile).exists()) ) {
+					System.out.println("stopped, config file "+inifile+" not found ...");
+					System.exit(0);
+				} 
+				System.out.println("use config file "+inifile+" ...");
+				aaa1=2;
+				panel.iniload();
+				iniLoaded=true;
+			} else if ( args[0].equalsIgnoreCase("-dvx1") ) {
+				aaa1=1;
+				cBox[30].setSelected(true);
+			} else if ( args[0].equalsIgnoreCase("-dvx2") ) {
+				aaa1=1;
+				cBox[30].setSelected(true);
+				cBox[12].setSelected(true);
+			} else if ( args[0].equalsIgnoreCase("-dvx3") ) {
+				aaa1=1;
+				cBox[30].setSelected(true);
+				cBox[4].setSelected(true);
+			} else if ( args[0].equalsIgnoreCase("-dvx4") ) {
+				aaa1=1;
+				cBox[30].setSelected(true);
+				cBox[12].setSelected(true);
+				cBox[4].setSelected(true);
+			} else {
+				System.out.println("use last config or standard ...");
+				panel.iniload();
+				iniLoaded=true;
+			}
+
+			if (RButton[0].isSelected() || !RButton[1].isSelected()) {
+				System.out.println("-> to agree to these terms you have to start the GUI first");
+				//System.exit(0);
+			}
+
+			for (int f=aaa1;f<args.length-1;f++) {
+				if ( args[f].equalsIgnoreCase("-o") ) {
+					outchange=true;
+					if (new File(args[f+1]).exists()) 
+						comBox[13].insertItemAt(args[f+1],0);
+					outchange=false;
+					aaa1+=2;
+				} else if ( args[f].equalsIgnoreCase("-n") ) {
+					newOutName = args[f+1];
+					aaa1+=2;
+				} else if ( args[f].equalsIgnoreCase("-l") ) {
+					cBox[21].setSelected(true);
+					aaa1++;
+				} else if ( args[f].equalsIgnoreCase("-p") ) {
+					if (new File(args[f+1]).exists())
+						loadCutPoints(args[f+1]);
+					CutsLoaded=true;
+					aaa1+=2;
+				} else if ( args[f].equalsIgnoreCase("-i") ) {
+					loadIDs(args[f+1]);
+					IDsLoaded=true;
+					aaa1+=2;
+				}
+			}
+
+			panel.updateState();
+
+			if ((ac3f=loadAC3())>0) 
+				Msg(""+ac3f+" additional AC3 frames loaded..");
+				System.out.println(""+ac3f+" additional AC3 frames loaded..");
+
+			cBox[11].setSelected(false);
+			options[30]=0;
+			comchange=true;
+			comBox[0].addItem("0"); 
+			collfiles = new ArrayList[1];
+			collfiles[0] = new ArrayList();
+
+			for (int a=aaa1; a < args.length; a++) 
+				collfiles[0].add(args[a]);
+
+			if (comBox[13].getItemCount()>0) 
+				collout.add(comBox[13].getItemAt(0));
+			else 
+				collout.add(outalias);
+
+			if (!IDsLoaded)
+				speciallist.add(new ArrayList());
+			if (!CutsLoaded)
+				cutlist.add(new ArrayList());
+			comchange=false;
+			comBox[0].setSelectedIndex(comBox[0].getItemCount()-1); //DM26032004 081.6 int18 changed
+
+			running = true;
+			doitButton.doClick();
+	}
+
 
 	/***** loading GUI ******/
-
-//		TODO inisave??
-//	frame.addWindowListener (new WindowAdapter() {  
-//		public void windowClosing(WindowEvent e) { 
-//			X.inisave();
-//			System.exit(0); 
-//		}
-//	});
 
 	guiTabProjectX.addComponentListener(new ComponentListener() {
 		public void componentHidden(ComponentEvent e) {} 
