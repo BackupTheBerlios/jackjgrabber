@@ -643,7 +643,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		if (count > 0) {
 			m.addSeparator();
 
-			m.add(new JMenuItem(new AbstractAction("Muxxi") {
+			m.add(new JMenuItem(new AbstractAction("Demultiplex/Multiplex") {
 				public void actionPerformed(ActionEvent e) {
 
 					ArrayList l = new ArrayList();
