@@ -1,6 +1,8 @@
 package control;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import org.apache.log4j.Logger;
@@ -42,7 +45,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
+public class ControlEnigmaTimerTab extends ControlTimerTab implements ItemListener, ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
@@ -50,6 +53,8 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 	GuiEnigmaTimerPanel tab;
 	public String[] repeatOptions = { "einmal", "Wochentage" };
 	public String[] timerType = { "Nichts", "Standby", "Shutdown"};
+	public final String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
+	public final int[] WOCHENTAGE_VALUE = {512, 1024, 2048, 4096, 8192, 16384, 32768};
 	
 	public ControlEnigmaTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -59,7 +64,8 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 		this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
 		try {
 			this.setTimerList(ControlMain.getBoxAccess().readTimer());
-			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			this.refreshTables();
+			//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
@@ -91,6 +97,35 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 		}
 	}
 	
+	/*
+	 * wird aufgerufen wenn ein Wochentag selektiert wird.
+	 * Es wird die zugehoerige Table des Radiobuttons ermittelt
+	 * um den selektierten Timer zu bekommen.
+	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
+	 * Wochentage festgestellt und gesetzt
+	 */
+	public void itemStateChanged (ItemEvent event) {
+		JRadioButton radioButton = (JRadioButton)event.getSource();
+		if (radioButton.getName().equals("recordTimer")){
+			JTable table = this.getTab().getJTableRecordTimer();
+			int selectedRow = table.getSelectedRow();
+			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
+			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
+		}
+	}
+	/*
+	 * Beim jeweiligen RadioButton ist als ActionCommand die RepeatId eingestellt
+	 */
+	private String getRepeatOptionValue(JRadioButton[] buttons) {
+		int result=0;
+		for (int i=0; i<buttons.length; i++) {
+			if (buttons[i].isSelected()) {
+				result+=Integer.parseInt(buttons[i].getActionCommand());
+			}
+		}
+		return Integer.toString(result);
+	}
 	
 	private void actionDeleteAllRecordTimer() {
 		try {
@@ -190,7 +225,7 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 	}
 	private void rereadTimerList() throws IOException {
 		this.setTimerList(ControlMain.getBoxAccess().readTimer());
-		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		this.refreshTables();
 	}
 	private void actionSend() {
 		//this.setChanId(this.getTimerList()[0]);
@@ -205,15 +240,13 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 	 * Klick-Events der Tables
 	 */
 	public void mousePressed(MouseEvent me) {
-		JTable table = (JTable)me.getSource();
+	    JTable table = (JTable)me.getSource();
 		String tableName = table.getName();
-		int selectedRow = table.getSelectedRow();
+		int selectedRow = table.getSelectedRow();		
 		if (tableName == "recordTimerTable") {
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(selectedRow);
-			this.getTab().selectRepeatDaysForRecordTimer(timer);
-			if (me.getClickCount()==2) { 
-				
-			}
+			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
+			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
+			this.selectRepeatDaysForRecordTimer(timer);
 		}
 		
 	}
@@ -302,6 +335,22 @@ public class ControlEnigmaTimerTab extends ControlTimerTab implements ActionList
 		timer.setEventRepeatId("0");
 		timer.setEventTypeId("44");
 		return timer;
+	}
+	
+	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
+		int result = Integer.parseInt((String)timer.getEventRepeatId());		
+		if (result>5) {
+			this.getTab().enableRecordTimerWeekdays();
+			for (int i = 0; i<7; i++){
+				this.getTab().jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+			}
+		} else {
+			this.getTab().disableRecordTimerWeekdays();
+		}
+	}
+		
+	private void refreshTables() {
+		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 	}
 	
 	/**

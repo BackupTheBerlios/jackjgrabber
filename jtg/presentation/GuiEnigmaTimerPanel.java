@@ -1,17 +1,20 @@
 package presentation;
 
 import java.awt.Dimension;
+import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
+import javax.swing.text.DateFormatter;
 
 import model.BOTimer;
 
@@ -45,7 +48,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 public class GuiEnigmaTimerPanel extends GuiTimerPanel {
     private static String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
 	public static final int[] WOCHENTAGE_VALUE = {256, 512, 1024, 2048, 4096, 8192, 16384};
-	private JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
+	public JRadioButton[] jRadioButtonWhtage = new JRadioButton[7];
 	private JPanel jPanelDauerTimer = null;
 	private JPanel jPanelTimerListe = null;
 	private JPanel jPanelButtonsProgramTimer = null;
@@ -65,8 +68,10 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	private JTable jTableRecordTimer = null;
 	private JTable jTableSystemTimer = null;
 	private JScrollPane jScrollPaneRecordTimerTable = null;
+	private JFormattedTextField tfRecordTimerStartTime = null;
+	private JFormattedTextField tfRecordTimerEndTime = null;
 	private GuiTimerSenderComboModel senderComboModel = null;
-	
+	public GuiTimerTableSorter recordTimerSorter = null;
 
 	public GuiEnigmaTimerPanel(ControlEnigmaTimerTab control) {
 		this.setControl(control);
@@ -112,23 +117,29 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 	public JTable getJTableRecordTimer() {
 		if (jTableRecordTimer == null) {		
 			recordTimerTableModel = new GuiEnigmaRecordTimerTableModel(control);	
-			
-			jTableRecordTimer = new JTable(recordTimerTableModel);
+			recordTimerSorter = new GuiTimerTableSorter(recordTimerTableModel);
+			jTableRecordTimer = new JTable(recordTimerSorter);
+			recordTimerSorter.setTableHeader(jTableRecordTimer.getTableHeader());
 			jTableRecordTimer.setName("recordTimerTable");
 			jTableRecordTimer.addMouseListener(control);
 			jTableRecordTimer.setRowHeight(20);
 			jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(70);
-			jTableRecordTimer.getColumnModel().getColumn(1).setPreferredWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(2).setPreferredWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(80);
+			jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(110);
+			jTableRecordTimer.getColumnModel().getColumn(1).setPreferredWidth(110);
+			jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(110);
+			jTableRecordTimer.getColumnModel().getColumn(2).setPreferredWidth(110);
 			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(45);
 			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(80);
 			jTableRecordTimer.getColumnModel().getColumn(5).setMaxWidth(80);
-			jTableRecordTimer.getColumnModel().getColumn(6).setPreferredWidth(110);
+			jTableRecordTimer.getColumnModel().getColumn(6).setPreferredWidth(80);
 			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(1);			
+			TableColumn columnStartTime = jTableRecordTimer.getColumnModel().getColumn(2);
+			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(3);
 			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
 			TableColumn columnEvent = jTableRecordTimer.getColumnModel().getColumn(5);
 			columnSender.setCellEditor(new DefaultCellEditor(this.getComboBoxSender()));
+			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerStartTime()));
+			columnEndTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerEndTime()));
 			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatProgramTimer()));
 			columnEvent.setCellEditor(new DefaultCellEditor(this.getComboBoxEventType()));
 		}
@@ -202,12 +213,15 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 			for(int i = 0 ; i< 7; i++){
 				if (jRadioButtonWhtage[i]== null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
+					jRadioButtonWhtage[i].addItemListener(control);
+					jRadioButtonWhtage[i].setName("recordTimer");
+					jRadioButtonWhtage[i].setActionCommand(Integer.toString(control.WOCHENTAGE_VALUE[i]));
 					jRadioButtonWhtage[i].setEnabled(false);					
-					jRadioButtonWhtage[i].setText(WOCHENTAGE[i]);
+					jRadioButtonWhtage[i].setText(control.WOCHENTAGE[i]);
 				}
 				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
 				a = a+2;
-			}  
+			}
 		}
 		return jPanelDauerTimer;
 	}	
@@ -360,5 +374,30 @@ public class GuiEnigmaTimerPanel extends GuiTimerPanel {
 		enableRecordTimerWeekdays(false);
 	}
 
+	/**
+	 * @return Returns the tfRecordTimerEndTime.
+	 */
+	public JFormattedTextField getTfRecordTimerEndTime() {
+		if (tfRecordTimerEndTime == null) {
+			tfRecordTimerEndTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+			((DateFormatter)tfRecordTimerEndTime.getFormatter()).setAllowsInvalid(false);
+			((DateFormatter)tfRecordTimerEndTime.getFormatter()).setOverwriteMode(true);
+		}
+		return tfRecordTimerEndTime;
+	}
+
+	/**
+	 * @return Returns the tfRecordTimerStartTime.
+	 */
+	public JFormattedTextField getTfRecordTimerStartTime() {
+		if (tfRecordTimerStartTime == null) {
+			tfRecordTimerStartTime = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy   HH:mm"));
+			((DateFormatter)tfRecordTimerStartTime.getFormatter()).setAllowsInvalid(false);
+			((DateFormatter)tfRecordTimerStartTime.getFormatter()).setOverwriteMode(true);
+		}
+		return tfRecordTimerStartTime;
+	}
+
+	
 	
 }
