@@ -405,11 +405,11 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				timer.getMainTimer().setUnformattedStopTime(newDate);
 			    break;
 			}
-			if (tf.getName().equals("filePattern")) {
+			if (tf.getName().equals("jTextFieldFilePattern")) {
 			    this.getTimer().setFilePattern(tf.getText());
 				break;
 			}
-			if (tf.getName().equals("dirPattern")) {
+			if (tf.getName().equals("jTextFieldDirPattern")) {
 			    this.getTimer().setDirPattern(tf.getText());
 				break;
 			}
