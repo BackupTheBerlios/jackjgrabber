@@ -134,8 +134,8 @@ public class SerMovieGuide2Xml extends Thread{
         	URLConnection con = this.getConnection();
         	int fileLength = con.getContentLength();
             bar.setMaximum(fileLength);
-            BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream()));
-            
+            BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream(),"ISO8859-1"));
+                        
             String input = new String();
             StringBuffer inhalt = new StringBuffer();
             boolean[] lineCounter = new boolean[2];
