@@ -313,14 +313,18 @@ public class SerTimerHandler {
         if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
             saveBoxTimer(timer, reloadList); 
         }
-        if (timer.getModifiedId().equals("new")) {
-            ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
-        } else if (timer.getModifiedId().equals("remove")) {
-            ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
+        if (timer.getModifiedId() != null) {
+            if (timer.getModifiedId().equals("new")) {
+                ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
+            } else if (timer.getModifiedId().equals("remove")) {
+                ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
+            }   
         }
         timer.setModifiedId(null);
         //ermittle naechsten faelligen lokalen-RecordTimer neu
-        ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
+        if (timer.getLocalTimer().isLocal()) {
+            ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);   
+        }
     } 
     
     /*
