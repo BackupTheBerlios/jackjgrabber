@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
@@ -82,7 +83,7 @@ public class GuiTabStart extends JPanel {
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
 						  "pref",  		// columns 
-						  "20, pref, 20, pref, 40, pref, 40, pref"); 			// rows
+						  "10, pref, 5, pref, 5, pref, 5, pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -138,13 +139,16 @@ public class GuiTabStart extends JPanel {
         if (panelNews == null) {
             panelNews = new JPanel();
 			FormLayout layout = new FormLayout("40, 10, pref", //columna
-					"pref, 5, pref, 5, pref, pref"); //rows
+					"pref, 5, 100, 5, pref, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelNews, layout);
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(new JLabel(iconManager.getIcon("browser.png")),			cc.xy(1, 1));
 			builder.addTitle("<HTML><font size=5>"+ControlMain.getProperty("label_news")+"</font><HTML>",	cc.xy(3, 1));
-			builder.add(this.getPaneNews(),    cc.xy(3, 3));
+			
+			JScrollPane scrollPane = new JScrollPane(this.getPaneNews());
+			scrollPane.setBorder(null);
+			builder.add(scrollPane,    cc.xy(3, 3));
 		}
         return panelNews;
     }
