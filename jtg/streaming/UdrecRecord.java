@@ -81,18 +81,16 @@ public class UdrecRecord  extends Record {
             new SerErrorStreamReadThread(true, run.getErrorStream()).start();
         } catch (IOException e) {
             Logger.getLogger("UdrecRecord").error(ControlMain.getProperty("err_udrec")+e.getLocalizedMessage());
+            recordControl.controlProgramTab.stopRecord();
         }
 	}	
 	
 	public void stop() {
-		PrintWriter out = new PrintWriter(run.getOutputStream());
-		out.write("\n");
-		out.flush();
-		try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+	    if (run != null) {
+	        PrintWriter out = new PrintWriter(run.getOutputStream());
+	    		out.write("\n");
+	    		out.flush();  
+	    }
 	}
 	/**
      * @return Returns the writeStream.

@@ -42,7 +42,7 @@ public class UdpReceiver extends Thread {
         } catch (SocketException e) {
             Logger.getLogger("UdpReceiver").error(ControlMain.getProperty("err_udpSocket")+" "+record.udpPort);
             e.printStackTrace();
-            record.recordControl.stopRecord();
+            record.recordControl.controlProgramTab.stopRecord();
         }
 	}
 	
@@ -63,7 +63,7 @@ public class UdpReceiver extends Thread {
 				//Do nothing, regulaerer Stop
 			} else {
 				SerAlertDialog.alertConnectionLost("UdpReceiver", ControlMain.getControl().getView());
-			    record.recordControl.stopRecord();
+			    record.recordControl.controlProgramTab.stopRecord();
 			}
 		}
 	}

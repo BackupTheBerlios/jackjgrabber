@@ -61,7 +61,7 @@ public class UdpRecord  extends Record {
             Logger.getLogger("UdpRecord").info(ControlMain.getProperty("msg_con"));
         } catch (IOException e) {
             SerAlertDialog.alertConnectionLost("UdpRecord", ControlMain.getControl().getView());
-            control.stopRecord();
+            control.controlProgramTab.stopRecord();
         }
 	}
 	
@@ -104,7 +104,7 @@ public class UdpRecord  extends Record {
             	    String s = replyString[i];
             		if (s == "") continue;
             		if (s == "EXIT") {
-            			recordControl.stopRecord();
+            			recordControl.controlProgramTab.stopRecord();
             		}
             		Logger.getLogger("UdpRecord").info("from DBox: "+s);
             		if (0 < this.parseDBoxReply(s, spktBufNum)) isPid = true;

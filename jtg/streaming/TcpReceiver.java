@@ -60,7 +60,7 @@ public class TcpReceiver extends Thread {
 				//Do nothing, Socket wurde regulaer geschlossen
 			} else {
 				SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
-				record.recordControl.stopRecord();
+				record.recordControl.controlProgramTab.stopRecord();
 			}
 		} 
 	}

@@ -145,15 +145,14 @@ public class RecordControl extends Thread {
 				running = false;
 			}
 		}
-		stopRecord();
+		controlProgramTab.stopRecord();
 	}
 
 	public void stopRecord() {
 		record.stop();
-		controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
-		controlProgramTab.getMainView().setSystrayDefaultIcon();
 		if (ControlMain.getSettings().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
-			this.startProjectX();
+		    Logger.getLogger("RecordControl").info(ControlMain.getProperty("msg_startPX"));
+		    this.startProjectX();
 		}
 		isRunning = false;
 	}

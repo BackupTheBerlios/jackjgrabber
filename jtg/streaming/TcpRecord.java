@@ -72,7 +72,7 @@ public class TcpRecord extends Record{
 				//Do nothing, Socket wurde regulaer geschlossen
 			} else {
 				SerAlertDialog.alertConnectionLost("TcpReceiver", ControlMain.getControl().getView());
-				recordControl.stopRecord();
+				recordControl.controlProgramTab.stopRecord();
 			}
 		} 
 	}
@@ -90,7 +90,7 @@ public class TcpRecord extends Record{
 			
 			writeStream[0].write(buffer);
 		} while (running);
-		recordControl.stopRecord();
+		recordControl.controlProgramTab.stopRecord();
 	}
 	
 	public void stop() {

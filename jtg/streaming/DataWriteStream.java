@@ -76,7 +76,7 @@ public class DataWriteStream {
             fileList.add(fileNumber, currentFile);
         } catch (FileNotFoundException e) {
             Logger.getLogger("UdpRecord").error(ControlMain.getProperty("err_createFiles"));
-            recordControl.stopRecord();
+            recordControl.controlProgramTab.stopRecord();
         }
 	}
 	
@@ -131,7 +131,7 @@ public class DataWriteStream {
 	            fileOut.write(udpPacket.buffer, udpPacket.dataOffset, udpPacket.UsedLength - udpPacket.dataOffset);
 	        } catch (IOException e) {
 	            Logger.getLogger("DataWriteStream").error(ControlMain.getProperty("err_writeOutput"));
-	            recordControl.stopRecord();
+	            recordControl.controlProgramTab.stopRecord();
 	        }
 	    }
 	}
@@ -141,7 +141,7 @@ public class DataWriteStream {
             fileOut.write(data);
         } catch (IOException e) {
             Logger.getLogger("DataWriteStream").error(ControlMain.getProperty("err_writeOutput"));
-            recordControl.stopRecord();
+            recordControl.controlProgramTab.stopRecord();
         }
 	}
 	
