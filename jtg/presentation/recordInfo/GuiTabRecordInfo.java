@@ -51,9 +51,13 @@ public class GuiTabRecordInfo extends GuiTab {
 	private JTextArea minBitRate;
 	private JTextArea maxBitRate;
 
+	private JTabbedPane tab = new JTabbedPane();
+
+	private GuiTabRecordInfoOverview guiRecordOverview;
+
 	private JComponent recordState;
 
-		public GuiTabRecordInfo(ControlRecordInfoTab control) {
+	public GuiTabRecordInfo(ControlRecordInfoTab control) {
 		this.setControl(control);
 		initialize();
 	}
@@ -63,9 +67,20 @@ public class GuiTabRecordInfo extends GuiTab {
 	 *  
 	 */
 	protected void initialize() {
+
+		setLayout(new BorderLayout());
+		add(tab);
+
+		guiRecordOverview = new GuiTabRecordInfoOverview(getControl());
+
+		JPanel currentRec = new JPanel();
+
+		tab.addTab(ControlMain.getProperty("tab_currentRecord"), currentRec);
+		tab.addTab(ControlMain.getProperty("tab_oldRecords"), guiRecordOverview);
+
 		FormLayout layout = new FormLayout("pref:grow", // columns
 				"55,75,pref, f:150:grow"); // rows
-		PanelBuilder builder = new PanelBuilder(this, layout);
+		PanelBuilder builder = new PanelBuilder(currentRec, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 
@@ -92,7 +107,7 @@ public class GuiTabRecordInfo extends GuiTab {
 		CellConstraints cc = new CellConstraints();
 
 		recordState = builder.addSeparator(ControlMain.getProperty("label_recordTitle"));
-		
+
 		builder.add(recordTitle, cc.xywh(1, 3, 1, 1));
 		return p;
 	}
@@ -237,10 +252,10 @@ public class GuiTabRecordInfo extends GuiTab {
 	 * @param timer
 	 *            true, wenn es eine Timeraufnahme ist
 	 */
-	public void startRecord(Date start,String title, String engine) {
+	public void startRecord(Date start, String title, String engine) {
 
 		clear();
-		setRecordText(start,-1,-1);
+		setRecordText(start, -1, -1);
 
 		recordState.getComponent(0).setForeground(Color.red);
 		recordState.getComponent(0).setFont(recordState.getComponent(0).getFont().deriveFont(Font.BOLD));
@@ -251,24 +266,20 @@ public class GuiTabRecordInfo extends GuiTab {
 	}
 
 	/**
-	 * 
+	 *  
 	 */
-	public void setRecordText(Date d,int min,int remain) {
-		
-		String title = ControlMain.getProperty("label_recordInProgress") + " "
-		+ DateFormat.getTimeInstance().format(d);
-		
-		if (min > -1)
-		{
-			title += "  ( " + min; 
+	public void setRecordText(Date d, int min, int remain) {
+
+		String title = ControlMain.getProperty("label_recordInProgress") + " " + DateFormat.getTimeInstance().format(d);
+
+		if (min > -1) {
+			title += "  ( " + min;
 		}
-		
-		if (remain > -1)
-		{
-			title += " / " + remain + " )"; 
+
+		if (remain > -1) {
+			title += " / " + remain + " )";
 		}
-		
-		
+
 		((JLabel) recordState.getComponent(0)).setText(title);
 	}
 
@@ -369,6 +380,43 @@ public class GuiTabRecordInfo extends GuiTab {
 		minBitRate.setText(min);
 		maxBitRate.setText(max);
 
+	}
+
+	public JTextArea getEngine() {
+		return engine;
+	}
+	public GuiTabRecordInfoOverview getGuiRecordOverview() {
+		return guiRecordOverview;
+	}
+	
+	public String getVideoList()
+	{
+		StringBuffer b = new StringBuffer();
+		int iSize = video.getModel().getSize();
+		for (int i = 0; i < iSize; i++) {
+			b.append(video.getModel().getElementAt(i));
+		}
+		return b.toString();
+	}
+
+	public String getAudioList()
+	{
+		StringBuffer b = new StringBuffer();
+		int iSize = audio.getModel().getSize();
+		for (int i = 0; i < iSize; i++) {
+			b.append(audio.getModel().getElementAt(i));
+		}
+		return b.toString();
+	}
+
+	public String getOtherList()
+	{
+		StringBuffer b = new StringBuffer();
+		int iSize = other.getModel().getSize();
+		for (int i = 0; i < iSize; i++) {
+			b.append(other.getModel().getElementAt(i));
+		}
+		return b.toString();
 	}
 
 }
