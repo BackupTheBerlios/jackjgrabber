@@ -33,6 +33,7 @@ public class BORecordArgs {
 	ArrayList aPids;
 	String VideotextPid;
 	String command;
+	boolean quickRecord=true;
 	/**
 	 * @return Returns the aPids.
 	 */
@@ -177,4 +178,16 @@ public class BORecordArgs {
 	public void setBouquetNr(String bouquetNr) {
 		this.bouquetNr = bouquetNr;
 	}
+    /**
+     * @return Returns the quickRecord.
+     */
+    public boolean isQuickRecord() {
+        return quickRecord;
+    }
+    /**
+     * @param quickRecord The quickRecord to set.
+     */
+    public void setQuickRecord(boolean quickRecord) {
+        this.quickRecord = quickRecord;
+    }
 }

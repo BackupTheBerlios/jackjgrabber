@@ -54,7 +54,7 @@ public class RecordControl extends Thread
 	 */
 	public void run() {
 		record.start();
-		if (recordArgs.getBouquetNr() != null) { //Timer-UdpRecord hat keine bouquetNr 
+		if (recordArgs.isQuickRecord()) { //Timer-UdpRecord hat keine bouquetNr 
 			long millis = new Date().getTime();
 			stopTime = new Date(millis+1500000);
 			controlProgramTab.setRecordStoptTime(stopTime);

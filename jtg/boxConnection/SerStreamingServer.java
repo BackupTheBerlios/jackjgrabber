@@ -63,7 +63,7 @@ public class SerStreamingServer extends Thread {
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(socket.getInputStream());
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
-		
+		recordArgs.setQuickRecord(false);
 		if (recordArgs.getCommand().equals("stop") ) {
 			controlProgramTab.stopRecord();
 		}
