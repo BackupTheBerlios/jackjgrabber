@@ -28,8 +28,9 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-import control.ControlProgramTab;
+
 import service.SerXMLConverter;
+import control.ControlProgramTab;
 
 
 public class SerStreamingServer extends Thread {
@@ -62,6 +63,12 @@ public class SerStreamingServer extends Thread {
 	public void record(Socket socket) throws IOException, DocumentException {		
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(socket.getInputStream());
+
+//		Pretty print the document to System.out
+//		OutputFormat format = OutputFormat.createPrettyPrint();
+//		XMLWriter writer = new XMLWriter( System.out, format );
+//		writer.write( document );
+		
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		recordArgs.setQuickRecord(false);
 		if (recordArgs.getCommand().equals("stop") ) {
