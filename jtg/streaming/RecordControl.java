@@ -21,6 +21,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
@@ -58,6 +60,9 @@ public class RecordControl extends Thread
 	private void waitForStop() {
 		boolean running = true;
 		while (running) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {}
 			if (new Date().getTime()-stopTime.getTime()>0) {
 				running=false;
 			}
@@ -70,6 +75,7 @@ public class RecordControl extends Thread
     	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
     	if (ControlMain.getSettings().isStartPX()) {
     		this.startProjectX();
+    		Logger.getLogger("RecordControl").info("Start ProjectX for demuxing");
     	}
     	isRunning = false;
 	}
