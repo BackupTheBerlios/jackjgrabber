@@ -19,10 +19,13 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 import java.awt.Dimension;
+
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -62,6 +65,9 @@ public class GuiTabProgramm extends GuiTab {
 	private JButton jButtonEPGReset = null;
 	private JButton jButtonToTimer = null;
 	private JButton jButtonStartServer = null;
+	private JRadioButton jRadioButtonTVMode = null;
+	private JRadioButton jRadioButtonRadioMode = null;
+	private ButtonGroup tvRadioButtonGroup = new ButtonGroup();
 	private JTextArea jTextAreaEPG = null;
 	private JSpinner jSpinnerRecordStopTime;
 	private JComboBox jComboBoxBoxIP = null;
@@ -69,7 +75,7 @@ public class GuiTabProgramm extends GuiTab {
 	public GuiSenderTableModel senderTableModel;
 	public GuiBoquetsComboModel boquetsComboModel;
 	public GuiEpgTableModel epgTableModel;
-	private JScrollPane jScrollPane = null;
+	private JScrollPane jScrollPaneChannels = null;
 	private JTable jTableChannels = null;
 	private ControlProgramTab control;
 	private JComboBox JComboBoxBouquets = null;
@@ -116,17 +122,19 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 1dlu, pref, 1dlu, pref",	 		//columna 
+				      "pref, 1dlu, pref, 1dlu, pref, 1dlu, pref",	 		//columna 
 				      "pref, 1dlu, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
 			
-			builder.add(this.getJButtonStartServer(),					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonPlayback(),		  					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonReboot(), 	 						cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonNhttpdReset(),  					cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.add(this.getJButtonEpgReset(),	  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJRadioButtonTVMode(),					cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonStartServer(),					cc.xyw	(3, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonPlayback(),		  					cc.xyw	(5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonAufnahme(),	  					cc.xyw	(7, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJRadioButtonRadioMode(),			cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonReboot(), 	 						cc.xyw	(3, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonNhttpdReset(),  					cc.xyw	(5, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
+			builder.add(this.getJButtonEpgReset(),	  					cc.xyw	(7, 3, 1, CellConstraints.FILL, CellConstraints.FILL));
 		}
 		return jPanelButtonsAktionen;
 	}
@@ -236,7 +244,6 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonAufnahme() {
 		if (jButtonQuickRecord == null) {
 			jButtonQuickRecord = new JButton();
-			jButtonQuickRecord.setPreferredSize(new java.awt.Dimension(115,25));
 			jButtonQuickRecord.setText("Record");
 			jButtonQuickRecord.setActionCommand("record");
 			jButtonQuickRecord.setToolTipText("Sofortaufnahme starten");
@@ -252,7 +259,6 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonReboot() {
 		if (jButtonReboot == null) {
 			jButtonReboot = new JButton();
-			jButtonReboot.setPreferredSize(new java.awt.Dimension(115,25));
 			jButtonReboot.setText("Box Reboot");
 			jButtonReboot.setToolTipText("Box neu starten");
 			jButtonReboot.addActionListener(this.getControl());
@@ -267,7 +273,6 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonPlayback() {
 		if (jButtonPlayback == null) {
 			jButtonPlayback = new JButton();
-			jButtonPlayback.setPreferredSize(new java.awt.Dimension(115,25));
 			jButtonPlayback.setText("Playback");
 			jButtonPlayback.setActionCommand("playback");
 			jButtonPlayback.setToolTipText("AKtuelles Programm abspielen.");
@@ -283,7 +288,6 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonNhttpdReset() {
 		if (jButtonNhttpdReset == null) {
 			jButtonNhttpdReset = new JButton();
-			jButtonNhttpdReset.setPreferredSize(new java.awt.Dimension(115,25));
 			jButtonNhttpdReset.setText("nhttpd reset");
 			jButtonNhttpdReset.setToolTipText("nhttpd resetten");
 			jButtonNhttpdReset.addActionListener(this.getControl());
@@ -298,7 +302,7 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonEpgReset() {
 		if (jButtonEPGReset == null) {
 			jButtonEPGReset = new JButton();
-			jButtonEPGReset.setPreferredSize(new java.awt.Dimension(115,25));
+			jButtonEPGReset.setPreferredSize(new java.awt.Dimension(100,25));
 			jButtonEPGReset.setText("EPG Reset");
 			jButtonEPGReset.setToolTipText("EPG resetten");
 			jButtonEPGReset.addActionListener(this.getControl());
@@ -344,7 +348,6 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonStartServer() {
 		if (jButtonStartServer == null) {
 			jButtonStartServer = new JButton();
-			jButtonStartServer.setPreferredSize(new java.awt.Dimension(115,25));
 			jButtonStartServer.setActionCommand("startServer");
 			jButtonStartServer.setText("Start Server");
 			jButtonStartServer.setToolTipText("Streamingserver starten");
@@ -388,11 +391,11 @@ public class GuiTabProgramm extends GuiTab {
 	}
 
 	private JScrollPane getJScrollPaneChannels() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getJTableChannels());
+		if (jScrollPaneChannels == null) {
+			jScrollPaneChannels = new JScrollPane();
+			jScrollPaneChannels.setViewportView(getJTableChannels());
 		}
-		return jScrollPane;
+		return jScrollPaneChannels;
 	}
 	/**
 	 * This method initializes jTableChannels	
@@ -536,5 +539,29 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public SpinnerDateModel getDateModelSpinnerStopTime() {
 		return dateModelSpinnerStopTime;
+	}
+	/**
+	 * @return Returns the jRadioButtonRadioMode.
+	 */
+	public JRadioButton getJRadioButtonRadioMode() {
+		if (jRadioButtonRadioMode == null) {
+			jRadioButtonRadioMode = new JRadioButton("Radio");
+			jRadioButtonRadioMode.addActionListener(control);
+			jRadioButtonRadioMode.setActionCommand("radioMode");
+			tvRadioButtonGroup.add(jRadioButtonRadioMode);
+		}
+		return jRadioButtonRadioMode;
+	}
+	/**
+	 * @return Returns the jRadioButtonTVMode.
+	 */
+	public JRadioButton getJRadioButtonTVMode() {
+		if (jRadioButtonTVMode == null) {
+			jRadioButtonTVMode = new JRadioButton("TV");
+			jRadioButtonTVMode.addActionListener(control);
+			jRadioButtonTVMode.setActionCommand("tvMode");
+			tvRadioButtonGroup.add(jRadioButtonTVMode);
+		}
+		return jRadioButtonTVMode;
 	}
 }
