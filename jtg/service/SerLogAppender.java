@@ -34,11 +34,11 @@ public class SerLogAppender extends RollingFileAppender {
 	GuiMainView view;
 	PatternLayout customlayout;
 	
-	private Vector logDestination;
+	private ArrayList logDestination;
 	
 	public SerLogAppender(PatternLayout layout) throws IOException {
 		super(layout, "jackLog.log");
-		logDestination = new Vector();
+		logDestination = new ArrayList();
 	}
 	
 	public void doAppend(LoggingEvent event) {
@@ -46,7 +46,7 @@ public class SerLogAppender extends RollingFileAppender {
 			
 			if (logDestination.size() == 0)
 			{
-				logDestination.addElement(view.getTabProgramm().getJTextPaneAusgabe());
+				logDestination.add(view.getTabProgramm().getJTextPaneAusgabe());
 			}
 			PatternLayout layout = new PatternLayout();
 			//Set outputformat for textpane
@@ -96,11 +96,11 @@ public class SerLogAppender extends RollingFileAppender {
 	 */ 
 	public void addTextArea(JTextArea area)
 	{
-		logDestination.addElement(area);
+		logDestination.add(area);
 	}
 	
 	public void removeTextArea(JTextArea area)
 	{
-		logDestination.removeElement(area);
+		logDestination.remove(area);
 	}
 }
