@@ -374,24 +374,26 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     
     private int doItSearch(BOMovieGuide bomovieguide ,String value, String search, int a){
     	if(value.indexOf(search)!=-1){    	
-    		a = searchValue(bomovieguide,a);    		
+    		//a = searchValue(bomovieguide,a);  
+    		titelListAktuell.put(new Integer(a++),bomovieguide);
 		}		
     	return (a);
     }
     private int doItSearchArray(BOMovieGuide bomovieguide ,ArrayList value, String search, int a){
     	if(bomovieguide.booleanArrayTest(value,search.toLowerCase())){
-    		a = searchValue(bomovieguide,a);    	
+    		//a = searchValue(bomovieguide,a);    
+    		titelListAktuell.put(new Integer(a++),bomovieguide);
 		}
     	return (a);
     }
     private int searchValue(BOMovieGuide bomovieguide,int a){
-    	if(searchAbHeute){
+    	/*if(searchAbHeute){
 			if(checkSearchToday(bomovieguide)){
 				titelListAktuell.put(new Integer(a++),bomovieguide);
 			}
-		}else{
+		}else{*/
 			titelListAktuell.put(new Integer(a++),bomovieguide);
-		}
+	//	}
     	return (a++);
     }
     
