@@ -1,5 +1,5 @@
 /*
-SerInputStreamReadThread.java by Geist Alexander 
+SerErrorStreamReadThread.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,8 +27,10 @@ import org.apache.log4j.Logger;
 
 public class SerErrorStreamReadThread extends Thread {
     BufferedReader input;
+    boolean logging;
     
-    public SerErrorStreamReadThread(InputStream in) {
+    public SerErrorStreamReadThread(boolean log, InputStream in) {
+    	logging=log;
         input = new BufferedReader(new InputStreamReader(in));
     }
     
@@ -36,7 +38,10 @@ public class SerErrorStreamReadThread extends Thread {
         String line;
         try {
             while((line=input.readLine())!=null) {
-                Logger.getLogger("SerInputStreamReadThread").error(line);
+            	if (logging) {
+            		Logger.getLogger("SerErrorStreamReadThread").error(line);
+            	}
+            	line=null;
             }
         } catch (IOException e) {
         }

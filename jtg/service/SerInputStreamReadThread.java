@@ -26,17 +26,21 @@ import java.io.InputStreamReader;
 import org.apache.log4j.Logger;
 
 public class SerInputStreamReadThread extends Thread {
-    
     BufferedReader input;
+    boolean logging;
     
-    public SerInputStreamReadThread(InputStream in) {
+    public SerInputStreamReadThread(boolean log, InputStream in) {
+    	logging=log;
         input = new BufferedReader(new InputStreamReader(in));
     }
     public void run() {
         String line;
         try {
             while((line=input.readLine())!=null) {
-                Logger.getLogger("SerInputStreamReadThread").info(line);
+            	if (logging) {
+            		Logger.getLogger("SerErrorStreamReadThread").error(line);
+            	}
+            	line=null;
             }
         } catch (IOException e) {
         }
