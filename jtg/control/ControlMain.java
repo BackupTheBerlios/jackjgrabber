@@ -80,7 +80,7 @@ public class ControlMain {
 
 	private static String settingsFilename;
 
-	public static String version[] = {"Jack the JGrabber 0.2.7", "28.01.2005", "User: " + System.getProperty("user.name")};
+	public static String version[] = {"Jack the JGrabber 0.2.8", "30.01.2005", "User: " + System.getProperty("user.name")};
 
 	public static void main(String args[]) {
 	    startSplash();
@@ -378,7 +378,7 @@ public class ControlMain {
         if (record!=null && record.isRunning ) {
             result = JOptionPane.showConfirmDialog(
                     getControl().getView(),
-                    getProperty("msg_warnRecord2")+": "+record.recordArgs.getEpgTitle(),
+                    getProperty("msg_warnRecord2")+": "+record.getRecordArgs().getEpgTitle(),
                     getProperty("msg_warnRecord1"),
                     JOptionPane.YES_NO_OPTION
             );
