@@ -46,7 +46,8 @@ public class GuiMainView extends JFrame {
 		this.setForeground(java.awt.SystemColor.windowText);
 		this.setResizable(false);
 		this.setSize(785, 555);
-		this.setTitle("Jack (the Grabber) Jr. 0.1");
+		this.setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
+				" "+ControlMain.version[2]+" "+ControlMain.version[3]);
 		this.setContentPane(getMainTabPane());
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		
