@@ -318,7 +318,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					eventRepeatId="0";
 				    endpos=line.indexOf("javascript:editTimerEvent", startpos);
 					startpos=line.indexOf("(\'ref=",endpos);
-					if (startpos==0) {
+					if ((startpos==0)|(startpos<endpos+1)) {
 					    startpos2=line.indexOf("(\"ref=",endpos);
 					    if (startpos2>0) {
 					        startpos=startpos2;
