@@ -36,7 +36,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	 */
 	public void initialize() {
 		this.getMainView().getTabSettings().getJComboBoxTheme().setSelectedItem(ControlMain.getSettings().getThemeLayout());
-		this.getMainView().getTabSettings().getJComboBoxLocale().setSelectedItem(ControlMain.getSettings().getLocale());
+		this.getMainView().getTabSettings().getJComboBoxLocale().setSelectedItem(ControlMain.bolocale.getLocale());
 	}
 	
 	public void actionPerformed(ActionEvent e) {

@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
+import model.BOLocale;
+
 import control.ControlMain;
 import control.ControlSettingsTab;
 /**
@@ -343,7 +345,7 @@ public class GuiTabSettings extends JPanel {
 	 */    
 	public JComboBox getJComboBoxLocale() {
 		if (jComboBoxLocale == null) {
-			jComboBoxLocale = new JComboBox(ControlMain.localeSet);
+			jComboBoxLocale = new JComboBox(new BOLocale().getLocaleList().toArray());
 			jComboBoxLocale.addItemListener(control);
 			jComboBoxLocale.setName("locale");
 			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,25));

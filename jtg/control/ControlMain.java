@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import model.BOBox;
+import model.BOLocale;
 import model.BOSettings;
 
 import org.apache.log4j.BasicConfigurator;
@@ -24,7 +25,6 @@ import service.SerXMLHandling;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Hashtable;
 
 /**
  * @author Alexander Geist
@@ -40,17 +40,12 @@ public class ControlMain {
 	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static int CurrentBox=0;
+	static BOLocale bolocale = new BOLocale();
 	
 	
-    private static Properties prop = new Properties();
-    static Hashtable ht_locale = new Hashtable();    
-    private static Locale locale;
-    public static final String[] localeSet = {"Deutsch", "Englisch","Finisch"};
-    static{
-    	  ht_locale.put("Deutsch","de");
-          ht_locale.put("Englisch","en");
-          ht_locale.put("Finisch","fi");              
-    }
+    private static Properties prop = new Properties();   
+    private static Locale locale = new Locale("");    
+    
     public static String filename = "settings.xml";
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
@@ -267,29 +262,20 @@ public class ControlMain {
 	public static void setLogAppender(SerLogAppender logAppender) {
 		ControlMain.logAppender = logAppender;
 	}
-	/*
-	public static void loadHashTable(){             
-        ht_locale.put("Deutsch","de");
-        ht_locale.put("Englisch","en");
-        ht_locale.put("Finisch","fi");
-	}
-	*/
-	private static void setLocale(String sprache){       		
-        if (!sprache.equals("de")){        	
-                locale = new Locale(ht_locale.get(sprache).toString());
-        }
+	
+	private static void setLocale(String sprache){       		              
+	     if (!bolocale.getLocale().equals("de")){        	
+                locale = new Locale(bolocale.getLocale().substring(0,2));
+         }
 	}
 
-	public static Locale getLocale(){           
-		//if ( getSettings().getLocale().toLowerCase().equals("de")){
-			// getSettings().setLocale("Deutsch");
-		//}		
-		setLocale((String)getSettings().getLocale());
+	public static Locale getLocale(){           			
+		bolocale.setLocale(settings.getLocale().toString());
+		setLocale(bolocale.getLocale().substring(0,2));		
         return locale;
 	}
 
-	public static String getProperty(String key){
-		
+	public static String getProperty(String key){		
 		return prop.getProperty(key);
 	}
 
