@@ -78,7 +78,7 @@ public class ControlSettingsTab extends ControlTab implements ActionListener, Mo
 	{}
 	
 	private void actionAddBox() {
-		this.getMainView().getTabSettings().getModelBoxTable().addRow(new BOBox("","",""));
+		this.getMainView().getTabSettings().getModelBoxTable().addRow(new BOBox(""));
 	}
 	private void actionRemoveBox() {
 		int selectedRow = this.getMainView().getTabSettings().getJTableBoxSettings().getSelectedRow();
