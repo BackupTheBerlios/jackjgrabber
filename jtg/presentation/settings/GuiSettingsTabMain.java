@@ -127,7 +127,7 @@ public class GuiSettingsTabMain extends GuiTab {
 	private JPanel getPanelStartOptions() {
 			if (panelStartOptions == null) {
 			    panelStartOptions = new JPanel();
-				FormLayout layout = new FormLayout(  "pref, 10,  pref", //columna
+				FormLayout layout = new FormLayout(  "pref, 10,  pref, pref:grow", //columna
 						"pref, 5, pref, pref, pref, pref, pref"); //rows
 				PanelBuilder builder = new PanelBuilder(panelStartOptions, layout);
 				CellConstraints cc = new CellConstraints();
@@ -135,7 +135,7 @@ public class GuiSettingsTabMain extends GuiTab {
 				builder.addSeparator(ControlMain.getProperty("label_startOptions"), 		cc.xyw(1, 1, 3));
 				builder.add(this.getCbStartFullscreen(), 									cc.xyw(1, 3, 3));
 				builder.add(this.getCbShowLogo(),												cc.xyw(1, 4, 3));
-				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 5, 3));
+				builder.add(this.getCbUseSysTray(), 											cc.xyw(1, 5, 4));
 				builder.add(this.getCbStartVlcAtStart(), 								cc.xyw(1, 6, 1));
 				builder.add(this.getJButtonStartVlc(),										cc.xy	(3, 6));
 			}
