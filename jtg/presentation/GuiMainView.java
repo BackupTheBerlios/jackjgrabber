@@ -12,15 +12,20 @@ package presentation;
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.*;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import presentation.about.GuiTabAbout;
@@ -64,7 +69,28 @@ public class GuiMainView extends JFrame {
 		setTitle(ControlMain.version[0] + "/" + ControlMain.version[1] + " " + ControlMain.version[2]);
 		pack();
 		SerGUIUtils.centerTop(this);
-		if (ControlMain.getSettingsMain().isStartFullscreen()) {
+		checkSettings();
+		registerKeys();
+
+		addComponentListener(new ComponentAdapter() {
+			public void componentMoved(ComponentEvent e) {
+				ControlMain.getSettingsLayout().setLocation(GuiMainView.this.getLocation());
+			}
+
+			public void componentResized(ComponentEvent e) {
+				ControlMain.getSettingsLayout().setSize(GuiMainView.this.getSize());
+
+			}
+		});
+	}
+	
+	private void registerKeys() {
+	    final KeyStroke keyStroke = KeyStroke.getKeyStroke(76, InputEvent.CTRL_MASK, true);
+		getRootPane().registerKeyboardAction(control, keyStroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+	}
+	
+	private void checkSettings() {
+	    if (ControlMain.getSettingsMain().isStartFullscreen()) {
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			device.setFullScreenWindow(this);
 		}
@@ -77,17 +103,6 @@ public class GuiMainView extends JFrame {
 		if (dim != null) {
 			//setSize(dim);
 		}
-
-		addComponentListener(new ComponentAdapter() {
-			public void componentMoved(ComponentEvent e) {
-				ControlMain.getSettingsLayout().setLocation(GuiMainView.this.getLocation());
-			}
-
-			public void componentResized(ComponentEvent e) {
-				ControlMain.getSettingsLayout().setSize(GuiMainView.this.getSize());
-
-			}
-		});
 	}
 
 	public void repaintGui() {

@@ -19,6 +19,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -28,6 +30,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
+import presentation.GuiLogWindow;
 import presentation.GuiMainTabPane;
 import presentation.GuiMainView;
 import service.SerExternalProcessHandler;
@@ -44,7 +47,7 @@ import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
  * Control-Klasse des Haupt-Fensters, beinhaltet und verwaltet das MainTabPane
  * Klasse wird beim Start der Anwendung initialisiert und ist immer verfügbar
  */
-public class ControlMainView implements ChangeListener, SysTrayMenuListener {
+public class ControlMainView implements ChangeListener, SysTrayMenuListener, ActionListener {
 	
 	GuiMainView view;
 	
@@ -58,6 +61,10 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener {
 	    this.logSystemInfo();
 	    this.checkStartVlc();
 	    this.log(ControlMain.getProperty("msg_app_starting"));		
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+	    GuiLogWindow.switchLogVisiblity();
 	}
 	
 	private void checkStartVlc() {

@@ -20,12 +20,17 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 import service.SerLogAppender;
 
@@ -47,6 +52,14 @@ public class GuiLogWindow extends JFrame {
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(600 , 150);
+        
+        final ActionListener listener = new ActionListener() {
+            public final void actionPerformed(final ActionEvent e) {
+                switchLogVisiblity();
+            }
+        };
+        final KeyStroke keyStroke = KeyStroke.getKeyStroke(76, InputEvent.CTRL_MASK, true);
+		getRootPane().registerKeyboardAction(listener, keyStroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
     
     /**
