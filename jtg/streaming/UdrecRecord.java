@@ -100,11 +100,11 @@ public class UdrecRecord  extends Record {
         return null;
     }
 	
-		public ArrayList getFiles() {
-		    File[] files = recordControl.getDirectory().listFiles();
-		    ArrayList udrecFiles = new ArrayList(files.length);
-		    udrecFiles.add(SerHelper.getVideoFile(files));
-		    SerHelper.fillArrayWithAudioFiles(files, udrecFiles);
-		    return udrecFiles;
-		}
+	public ArrayList getFiles() {
+	    File[] files = recordControl.getDirectory().listFiles();
+	    ArrayList udrecFiles = new ArrayList(files.length);
+	    udrecFiles.add(SerHelper.getVideoFile(files));
+	    SerHelper.fillArrayWithAudioFiles(files, udrecFiles);
+	    return udrecFiles;
+	}
 }

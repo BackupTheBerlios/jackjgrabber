@@ -62,26 +62,26 @@ public class SerHelper {
   	 * @param files
   	 * @return the first Video-File in the Array
   	 */
-  	public static File getVideoFile(File[] files) {
-		    for (int i=0; i<files.length; i++) {
-		        if (isVideo(files[i].getName())) {
-		            return files[i];
-		        }
-		    }
-		    return null;
-		}
+  	public static String getVideoFile(File[] files) {
+	    for (int i=0; i<files.length; i++) {
+	        if (isVideo(files[i].getName())) {
+	            return files[i].getAbsolutePath();
+	        }
+	    }
+	    return null;
+	}
   	
   	/**
   	 * @param files, fileList
   	 * @return the fileList filled with Audio-Files from files-Array
   	 */
   	public static ArrayList fillArrayWithAudioFiles(File[] files, ArrayList fileList) {
-		    for (int i=0; i<files.length; i++) {
-		        if (isAudio(files[i].getName())) {
-		            fileList.add(files[i]);
-		        }
-		    }
-		    return fileList;
-		}
+	    for (int i=0; i<files.length; i++) {
+	        if (isAudio(files[i].getName())) {
+	            fileList.add(files[i].getAbsolutePath());
+	        }
+	    }
+	    return fileList;
+	}
 
 }
