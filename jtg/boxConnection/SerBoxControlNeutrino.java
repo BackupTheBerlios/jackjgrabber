@@ -157,41 +157,48 @@ public class SerBoxControlNeutrino extends SerBoxControl{
               message = (st.nextToken());
         }         
        return message;  
-  }
+	}
   
-  public String sendMessage(String message) throws IOException {                                         
-      Logger.getLogger("SerBoxControlNeutrino").info("Sende Message zur Box...");
-      return sendCommand("message?popup="+message); 
-  } 
-  public String standbyBox(String modus) throws IOException {
-  	  Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird in den StandbyModus gebracht.");
-      return sendCommand("standby?"+modus);
-  }
-  public String shutdownBox() throws IOException {
-  	  Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird runtegefahren.");         
-      return sendCommand("shutdown");
-  }       
-  public ArrayList getTimer() throws IOException {
-  	ArrayList timerList = new ArrayList();
-  	BOTimer botimer = new BOTimer();
-	BufferedReader input = getConnection("/control/timer");	
-	String text = new String();
-	String line, valueStart, valueStop, valueAnno;
-	 while ((line = input.readLine()) != null) {  
-        StringTokenizer st = new StringTokenizer(line);    
+	public String sendMessage(String message) throws IOException {                                         
+		Logger.getLogger("SerBoxControlNeutrino").info("Sende Message zur Box...");
+		return sendCommand("message?popup="+message); 
+	}
+	
+	public String standbyBox(String modus) throws IOException {
+		Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird in den StandbyModus gebracht.");
+		return sendCommand("standby?"+modus);
+	}
+	
+	public String shutdownBox() throws IOException {
+		Logger.getLogger("SerBoxControlNeutrino").info("Ihre Dbox wird runtegefahren.");         
+		return sendCommand("shutdown");
+	}
+	
+	public ArrayList getTimer() throws IOException {
+		ArrayList timerList = new ArrayList();
+	  	BOTimer botimer = new BOTimer();
+		BufferedReader input = getConnection("/control/timer");	
+		String text = new String();
+		String line, valueStart, valueStop, valueAnno;
+		while ((line = input.readLine()) != null) {  
+	        StringTokenizer st = new StringTokenizer(line);    
             botimer.setEventId(st.nextToken());
             botimer.setEventType(st.nextToken());
             botimer.setEventRepeat(st.nextToken());
             valueAnno=st.nextToken();
             botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)+" "+SerFormatter.formatUnixTime(valueAnno));
-            valueStart=st.nextToken(st.nextToken());
-            botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //start
-            botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));
-            valueStop=st.nextToken(st.nextToken());
-            botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
+		    valueStart=st.nextToken(st.nextToken());
+		    botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //start
+		    botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));
+		    valueStop=st.nextToken(st.nextToken());
+		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
             botimer.setSender(st.nextToken());  
             timerList.add(botimer);  
-      }   	
-	return timerList;
-}
+		}   	
+		return timerList;
+	}
+	
+	public String setTimer(BOTimer timer) throws IOException {
+		return new String();
+	}
 }

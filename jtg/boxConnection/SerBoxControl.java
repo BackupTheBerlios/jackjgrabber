@@ -7,12 +7,13 @@ import java.net.Authenticator;
 import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
-
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOSender;
+import model.BOTimer;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -31,7 +32,8 @@ public abstract class SerBoxControl {
 		int imageType=0; //Defaultwert!!!
 		URL url;
 		Authenticator.setDefault(new SerBoxAuthenticator());
-		try {
+		
+		try {		
 			url= new URL ("http://"+ConnectBoxIP);
 			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));														
 			String inputLine;
@@ -71,6 +73,7 @@ public abstract class SerBoxControl {
     public abstract String sendMessage(String message) throws IOException;
     public abstract String standbyBox(String modus) throws IOException;
 	public abstract String shutdownBox() throws IOException;
-	public abstract ArrayList getTimer() throws IOException;		
+	public abstract ArrayList getTimer() throws IOException;
+	public abstract String setTimer(BOTimer timer) throws IOException;		
 
 }

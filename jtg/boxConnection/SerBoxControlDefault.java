@@ -16,6 +16,7 @@ import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOSender;
+import model.BOTimer;
 
 /**
  * 
@@ -73,7 +74,9 @@ public class SerBoxControlDefault extends SerBoxControl {
 	public ArrayList getTimer() throws IOException {
 		throw new IOException();
 	}
-
+	public String setTimer(BOTimer timer) throws IOException {
+		throw new IOException();
+	}
 
 
 }
