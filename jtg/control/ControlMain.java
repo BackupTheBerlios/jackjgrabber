@@ -24,6 +24,7 @@ import service.SerXMLHandling;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Hashtable;
 
 /**
  * @author Alexander Geist
@@ -40,9 +41,11 @@ public class ControlMain {
 	static ControlMainView control;
 	static int CurrentBox=0;
 	
-	static Locale locale = new Locale("de","DE");
+	
     private static Properties prop = new Properties();
-        public static String _MESSAGE_BUNDLE = "locale/messages_"+locale.getLanguage()+".properties";
+    static Hashtable ht_locale = new Hashtable();    
+    private static Locale locale;
+    public static final String[] localeSet = {"Deutsch", "Englisch","Finisch"};
     
     public static String filename = "settings.xml";
 	public static String version[] = { 
@@ -260,24 +263,41 @@ public class ControlMain {
 	public static void setLogAppender(SerLogAppender logAppender) {
 		ControlMain.logAppender = logAppender;
 	}
-	private void setLocale(String sprache, String land){
-        locale = new Locale(sprache,land);    	
-    }
+	public static void loadHashTable(){             
+        ht_locale.put("Deutsch","de");
+        ht_locale.put("Englisch","en");
+        ht_locale.put("Finisch","fi");
+}
 
-    private Locale getLocale(){
+	private static void setLocale(String sprache){       		
+        if (!sprache.equals("de")){        	
+                locale = new Locale(ht_locale.get(sprache).toString());
+        }
+	}
+
+	public static Locale getLocale(){           
+		if ( getSettings().getLocale().toLowerCase().equals("de")){
+			 getSettings().setLocale("Deutsch");
+		}		
+		setLocale((String)getSettings().getLocale());
         return locale;
-    }
+	}
 
-    public static String getProperty(String key){
-    	return prop.getProperty(key);
-    }
+	public static String getProperty(String key){
+		
+		return prop.getProperty(key);
+	}
 
-    public static void setResourceBundle(Locale loc){
-        ControlMain.locale=loc;
-        try{    	                 	
-        	File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();            	
-        	InputStream is = new FileInputStream(f);
-        	prop.load(is);                    	
-        }catch (IOException ex){}       	        
-    }    
+	public static void setResourceBundle(Locale loc){		
+		String _MESSAGE_BUNDLE ="locale/messages_"+locale.getLanguage()+".properties";
+		ControlMain.locale=loc;        
+		try{                            
+			if (locale.getLanguage().equalsIgnoreCase("de") || locale.getLanguage().length() < 1   ){      
+                	_MESSAGE_BUNDLE="locale/messages.properties";
+			}                               
+        File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();       
+        InputStream is = new FileInputStream(f);                
+        prop.load(is);                          
+		}catch (IOException ex){}                       
+	}    
 }

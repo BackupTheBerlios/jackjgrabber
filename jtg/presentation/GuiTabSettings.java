@@ -343,7 +343,7 @@ public class GuiTabSettings extends JPanel {
 	 */    
 	public JComboBox getJComboBoxLocale() {
 		if (jComboBoxLocale == null) {
-			jComboBoxLocale = new JComboBox();
+			jComboBoxLocale = new JComboBox(ControlMain.localeSet);
 			jComboBoxLocale.addItemListener(control);
 			jComboBoxLocale.setName("locale");
 			jComboBoxLocale.setPreferredSize(new java.awt.Dimension(105,25));
