@@ -112,7 +112,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		  	 
 			if (name!= null && name.equals("vtxt")) {
 		  	 	pids.setVtxtPid(new BOPid(number, name, 2));
-		  	} else {
+		  	} else if (name!= null && name.equals("pmt")) {
+                pids.setPmtPid(new BOPid(number, name, 3));
+            } else {
 			    pids.getAPids().add(new BOPid(number, name, 1));  
 		  	}
 		}

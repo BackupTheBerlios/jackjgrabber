@@ -60,7 +60,6 @@ import service.SerAlertDialog;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
 import service.SerTimerHandler;
-import service.pat.ProgramAssociationSection;
 import streaming.RecordControl;
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
@@ -310,15 +309,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		String execString = option.getExecString();
 		String vPid = "0x" + this.getPids().getVPid().getNumber();
 		String ip = ControlMain.getBoxIpOfActiveBox();
-		if (execString.indexOf("pmt")>0) {
-		    Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_pmt"));
-		    String pmt = ProgramAssociationSection.GetPmtPid(getServiceId());
-		    execString = SerFormatter.replace(execString, "$pmt", pmt);
-		    try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e1) {}
-		}
-		
+        String pmt = "0x"+this.getPids().getPmtPid().getNumber();
+
+		execString = SerFormatter.replace(execString, "$pmt", pmt);
 		execString = SerFormatter.replace(execString, "$ip", ip);
 		execString = SerFormatter.replace(execString, "$vPid", vPid);
 		int aPidStringIndex = execString.indexOf("aPid");

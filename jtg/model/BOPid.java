@@ -20,7 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 public class BOPid {
 
 	private String number, name;
-	private int id; //0=video, 1=audio, 2=vtxt
+	private int id; //0=video, 1=audio, 2=vtxt, 3=pmt
 	
 	public BOPid(String number, String name, int id) { 
 		this.setName(name);

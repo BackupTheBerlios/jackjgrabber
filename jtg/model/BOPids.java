@@ -27,6 +27,7 @@ public class BOPids {
     private BOPid vPid; //erste Position Pid, 2. Position Beschreibung
     private ArrayList aPids = new ArrayList(); //ArrayList von String[] Objekten, erste Position Pid, 2. Position Beschreibung
     private BOPid vtxtPid;
+    private BOPid pmtPid;
     private ArrayList allPids;
    
     public int getPidCount() {
@@ -161,5 +162,17 @@ public class BOPids {
      */
     public void setVPid(BOPid pid) {
         vPid = pid;
+    }
+    /**
+     * @return Returns the pmtPid.
+     */
+    public BOPid getPmtPid() {
+        return pmtPid;
+    }
+    /**
+     * @param pmtPid The pmtPid to set.
+     */
+    public void setPmtPid(BOPid pmtPid) {
+        this.pmtPid = pmtPid;
     }
 }
