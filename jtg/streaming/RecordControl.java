@@ -28,6 +28,7 @@ import model.BORecordArgs;
 public class RecordControl extends Thread
 {
 	Record record;
+	public boolean isRunning = true;
 	ControlProgramTab controlProgramTab;
 
 	public RecordControl(BORecordArgs args, ControlProgramTab control) {
@@ -41,8 +42,7 @@ public class RecordControl extends Thread
 	
 	public void stopRecord() {
 	    record.stop();
-	    if (controlProgramTab != null) {
-	    	controlProgramTab.stopRecordModus();
-	    }
+    	controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
+    	isRunning = false;
 	}
 }

@@ -30,6 +30,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableColumn;
 
+import model.BORecordArgs;
+import streaming.RecordControl;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -342,6 +345,7 @@ public class GuiTabProgramm extends GuiTab {
 		if (jButtonStartServer == null) {
 			jButtonStartServer = new JButton();
 			jButtonStartServer.setPreferredSize(new java.awt.Dimension(105,25));
+			jButtonStartServer.setActionCommand("startServer");
 			jButtonStartServer.setText("Start Server");
 			jButtonStartServer.setToolTipText("Streamingserver starten");
 			jButtonStartServer.addActionListener(this.getControl());
@@ -546,5 +550,30 @@ public class GuiTabProgramm extends GuiTab {
 		this.getJButtonSelectedToTimer().setEnabled(true);
 		this.getJButtonStartServer().setEnabled(true);
 		this.getJButtonPlayback().setEnabled(true);
+	}
+	
+	public void stopStreamingServerModus() {
+		this.getJButtonStartServer().setText("Start Server");
+		this.getJButtonStartServer().setToolTipText("Streamingserver starten");
+	}
+
+	public void startStreamingServerModus() {
+		this.getJButtonStartServer().setText("Stop Server");
+		this.getJButtonStartServer().setToolTipText("Streamingserver stoppen");
+	}
+	/**
+	 * Versetzen des Aufnahme-Buttons in den Aufnahme-Warte-Modus
+	 */
+	public void stopRecordModus() {
+		this.getJButtonAufnahme().setText("Aufnahme");
+		this.getJButtonAufnahme().setToolTipText("Sofortaufnahme starten");
+	}
+	
+	/**
+	 * Versetzen des Aufnahme-Buttons in den in den Aufnahme-Modus
+	 */
+	public void startRecordModus() {
+		this.getJButtonAufnahme().setText("Stop");
+		this.getJButtonAufnahme().setToolTipText("Sofortaufname stoppen");
 	}
 }

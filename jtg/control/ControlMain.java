@@ -37,7 +37,6 @@ import boxConnection.SerBoxControl;
 import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
-import boxConnection.SerStreamingServer;
 import service.SerLogAppender;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
@@ -58,7 +57,6 @@ public class ControlMain {
 	static SerLogAppender logAppender;
 	static ControlMainView control;
 	static BOLocale bolocale = new BOLocale();
-	static SerStreamingServer streamingServerThread;
 	static BOBox activeBox;
 	
 	
@@ -94,9 +92,6 @@ public class ControlMain {
 		readSettings();
 		detectActiveBox();
 		control = new ControlMainView();
-		if (settings.isStartStreamingServer()) {
-			startStreamingSever();
-		}
 	};
 	
 	public static void startLogger() {
@@ -113,12 +108,7 @@ public class ControlMain {
 		} catch (IOException e) {}
 	}
 	
-	public static void startStreamingSever() {
-		int port = Integer.parseInt(getSettings().getStreamingServerPort());
-		Logger.getLogger("ControlMain").info("Start Streaming-Server");
-		setStreamingServerThread(new SerStreamingServer(port));
-		getStreamingServerThread().start();	
-	}
+	
 		
 	public static void detectImage() {
 		Logger.getLogger("ControlMain").info("Searching Box-Image");
@@ -310,19 +300,6 @@ public class ControlMain {
         prop.load(is);                          
 		}catch (IOException ex){}                       
 	}    
-	/**
-	 * @return Returns the streamingServerThread.
-	 */
-	public static SerStreamingServer getStreamingServerThread() {
-		return streamingServerThread;
-	}
-	/**
-	 * @param streamingServerThread The streamingServerThread to set.
-	 */
-	public static void setStreamingServerThread(
-			SerStreamingServer streamingServerThread) {
-		ControlMain.streamingServerThread = streamingServerThread;
-	}
 	/**
 	 * @return Returns the control.
 	 */

@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 
 import boxConnection.SerBoxControl;
 import boxConnection.SerBoxTelnet;
+import boxConnection.SerStreamingServer;
 
 import model.BOBouquet;
 import model.BOBox;
@@ -65,6 +66,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	Date dateChooserDate;
 	GuiMainView mainView;	
 	RecordControl recordControl;
+	SerStreamingServer streamingServerThread;
 	
 	public ControlProgramTab(GuiMainView view) {
 		this.setMainView(view);		
@@ -75,6 +77,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			this.setBouquetList(this.getBoxAccess().getBouquetList());
 			this.selectRunningSender();
 			this.getMainView().getTabProgramm().setConnectModus();
+			this.reInitStreamingServer();
 		} catch (IOException e) {			
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -151,6 +154,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 				SerBoxTelnet.runSectiondReset();
 			}catch (Exception ex){}
 		}
+		if (action == "startServer"){
+			this.actionStreamingServer();
+		}
 	}
 		
 	/*
@@ -159,12 +165,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Aufnahme läuft nicht->start
 	 */
 	private void actionRecord() {
-		if (recordControl ==  null) {
-			this.startRecordModus(this.buildRecordArgs());                          
-			recordControl.start();
+		if (recordControl ==  null || !recordControl.isRunning) {
+			this.startRecord(this.buildRecordArgs());                          
 		} else {
-			recordControl.stopRecord();
-			this.stopRecordModus();
+			this.stopRecord();
 		}
 	}
 	/*
@@ -191,22 +195,19 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	/**
 	 * Stop der Aufnahme und Versetzung der GUI in den Aufnahme-Warte-Modus
 	 */
-	public void stopRecordModus() {
-		recordControl=null;
-		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Aufnahme");
-		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufnahme starten");
+	public void stopRecord() {
+		recordControl.stopRecord();
+		this.getMainView().getTabProgramm().stopRecordModus();
 	}
 	
 	/**
-	 * @param recordArgs
-	 * @return RecordControl
+	 * @param recordArgsl
 	 * Start der Aufnahme und Versetzung der GUI in den Aufnahme-Modus
 	 */
-	public RecordControl startRecordModus(BORecordArgs recordArgs) {
+	public void startRecord(BORecordArgs recordArgs) {
 		recordControl = new RecordControl(recordArgs, this);
-		this.getMainView().getTabProgramm().getJButtonAufnahme().setText("Stop");
-		this.getMainView().getTabProgramm().getJButtonAufnahme().setToolTipText("Sofortaufname stoppen");
-		return recordControl;
+		this.getMainView().getTabProgramm().startRecordModus();
+		recordControl.start();
 	}
 	
 
@@ -490,6 +491,38 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		timer.setDescription(epg.getTitle());
 		return timer;
 	}
+	
+	private void startStreamingSever() {
+		int port = Integer.parseInt(ControlMain.getSettings().getStreamingServerPort());
+		setStreamingServerThread(new SerStreamingServer(port, this));
+		getStreamingServerThread().start();
+		this.getMainView().getTabProgramm().startStreamingServerModus();
+	}
+	
+	private void stopStreamingServer() {
+		if (streamingServerThread!=null) {
+			streamingServerThread.stopServer();
+			this.getMainView().getTabProgramm().stopStreamingServerModus();
+			streamingServerThread=null;
+		}
+	}
+	
+	private void reInitStreamingServer() {
+		if (ControlMain.getSettings().isStartStreamingServer()) {
+			startStreamingSever();
+		}
+	}
+	/*
+	 * Kontroller der 2 Zustaende
+	 * Streamingserver on>off, off>on
+	 */
+	private void actionStreamingServer() {
+		if (streamingServerThread!=null) {
+			this.stopStreamingServer();
+		} else {
+			this.startStreamingSever();
+		}
+	}
 	/**
 	 * @return BOBouquet
 	 */
@@ -565,5 +598,18 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void setPids(ArrayList pids) {
 		this.pids = pids;
+	}
+	/**
+	 * @return Returns the streamingServerThread.
+	 */
+	public SerStreamingServer getStreamingServerThread() {
+		return streamingServerThread;
+	}
+	/**
+	 * @param streamingServerThread The streamingServerThread to set.
+	 */
+	public void setStreamingServerThread(
+			SerStreamingServer streamingServerThread) {
+		this.streamingServerThread = streamingServerThread;
 	}
 }

@@ -28,29 +28,32 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-
-import control.ControlMain;
-
+import control.ControlProgramTab;
 import service.SerXMLConverter;
-import streaming.RecordControl;
+
 
 public class SerStreamingServer extends Thread {
 	
 	int port = 4000;
 	ServerSocket server;
-	RecordControl recordControl;
+	public boolean isRunning = true;
+	ControlProgramTab controlProgramTab;
 	
-	public SerStreamingServer(int port) {
+	public SerStreamingServer(int port, ControlProgramTab control) {
 		this.setPort(port);
+		controlProgramTab = control;
 	}
 	
 	public void run() {
 		try {
 			server = new ServerSocket(this.getPort());
+			Logger.getLogger("SerStreamingServer").info("Start Streaming-Server");
 			Socket socket = server.accept();
 			this.record(socket);
 		} catch (IOException e) {
-			Logger.getLogger("SerStreamingServer").error("StreamingServer start failed");	
+			if (!isRunning) {
+				Logger.getLogger("SerStreamingServer").error("StreamingServer not running");
+			}	
 		} catch (DocumentException e) {
 			Logger.getLogger("SerStreamingServer").error("Recording failed");	
 		}
@@ -61,13 +64,11 @@ public class SerStreamingServer extends Thread {
 		Document document = reader.read(socket.getInputStream());
 		BORecordArgs recordArgs = SerXMLConverter.parseRecordDocument(document);
 		
-		if (recordArgs.getCommand().equals("stop") && this.recordControl != null) {
-			recordControl.stopRecord();
-			ControlMain.getControl().getView().getTabProgramm().getControl().stopRecordModus();
+		if (recordArgs.getCommand().equals("stop") ) {
+			controlProgramTab.stopRecord();
 		}
 		if (recordArgs.getCommand().equals("record")) {
-			recordControl = ControlMain.getControl().getView().getTabProgramm().getControl().startRecordModus(recordArgs);
-			recordControl.start();
+			controlProgramTab.startRecord(recordArgs);
 		}
 		server.close();  //server restart
 		this.run();
@@ -85,4 +86,17 @@ public class SerStreamingServer extends Thread {
 	public void setPort(int port) {
 		this.port = port;
 	}
+	public boolean stopServer() {
+		try {
+			if (server.isBound()) {
+				server.close();
+				Logger.getLogger("SerStreamingServer").info("StreamingServer stopped");	
+				return true;
+			}
+		} catch (IOException e) {
+			Logger.getLogger("SerStreamingServer").error("StreamingServer stop failed");	
+		}
+		return false;
+	}
+	
 }
