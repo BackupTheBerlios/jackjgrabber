@@ -1,15 +1,7 @@
-/*
- * Created on 13.09.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package boxConnection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 
 import model.BOBouquet;
@@ -19,9 +11,8 @@ import model.BOSender;
 import model.BOTimer;
 
 /**
- * 
  * Default-Schnittstellen-Definition
- * Rückgabe von Defaultwerten
+ * 
  */
 public class SerBoxControlDefault extends SerBoxControl {
 	
@@ -29,8 +20,12 @@ public class SerBoxControlDefault extends SerBoxControl {
 		return "Default";
 	}
 	
+	public String getChanIdOfRunningSender() throws IOException {
+		throw new IOException();
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
-		return new BufferedReader(new InputStreamReader(new URL("http://nobox").openStream()));
+		throw new IOException();
 	}
 		
 	public ArrayList getPids() throws IOException {

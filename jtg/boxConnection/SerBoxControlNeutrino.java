@@ -32,6 +32,16 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return "Neutrino";
 	}
 	
+	public String getChanIdOfRunningSender() throws IOException {
+		BufferedReader input = getConnection("/control/zapto");
+		
+		String line;
+		while((line=input.readLine())!=null) {
+			return line;
+		}
+		return line;
+	}
+	
 	public BufferedReader getConnection(String request) throws IOException {
 		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfSelectedBox()+request).openStream()));
 	}
@@ -212,6 +222,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		return timerList;
 	}
 	
+	/**
+	 * Passenden Titel im Web-Interface-Aufruf finden (dirty!)
+	 */
 	private void setTimerDesctiptionName(ArrayList timerList) throws IOException {
 		BufferedReader inputWebInf = getConnection("/fb/timer.dbox2");
 		
