@@ -43,6 +43,7 @@ import javax.swing.event.ChangeListener;
 
 import model.BOMovieGuide;
 import model.BOSender;
+import model.BOSettings;
 import model.BOTimer;
 
 import org.apache.log4j.Logger;
@@ -60,18 +61,6 @@ import service.SerMovieGuide2Xml;
 import service.SerXMLHandling;
 
 
-/**
- * @author ralph
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-/**
- * @author ralph
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 /**
  * @author ralph
  *
@@ -97,7 +86,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	Element root;
 
 	public static File movieGuideFile = new File("movieguide.xml");
-	ArrayList aboList = new BOMovieGuide().getAboList();
+	ArrayList aboList = getSettings().getMgSelectedChannels();
 	
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
 	private static final String DATE_FULL_TIME = "EEEE, dd. MMMM yyyy,HH:mm";	
@@ -118,9 +107,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	public void run() {
 			try {
           this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());
-          if(SerMovieGuide2Xml.checkNewMovieGuide()){
-			SerAlertDialog.alert("Es ist ein neuer MovieGuide für: "+SerFormatter.getAktuellDateString(1,"MMMM")+" verfügbar!",this.getMainView()); 					
-		  }
+          if(getSettings().getMgLoadType()==1){
+          	if(SerMovieGuide2Xml.checkNewMovieGuide()){
+          		SerAlertDialog.alert("Es ist ein neuer MovieGuide für: "+SerFormatter.getAktuellDateString(1,"MMMM")+" verfügbar!",this.getMainView()); 					
+          	}
+          }
           setRootElement();
           if(this.getTitelMap()==null){				
           	setTitelMap();
@@ -143,12 +134,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	 * erste Row selectiert.
 	 */
 	private void beautifyGui(){
-    	setTitelMapSelected(SerFormatter.getFormatGreCal(),1);  // TitelMap für den heutigen Tag          
+		if(getSettings().getMgDefault()==0){
+			setTitelMapSelected(SerFormatter.getFormatGreCal(),13);   // TitelMap Alles      
+		}else{
+			setTitelMapSelected(SerFormatter.getFormatGreCal(),1);  // TitelMap für den heutigen Tag   
+			this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getFormatGreCal());	 
+		}      
         Collections.sort(getSenderList());		//alphabetisch geordnet 
         Collections.sort(getGenreList());		//alphabetisch geordnet
         this.getTab().getComboBoxGenre().setSelectedIndex(0);          
         this.getTab().getComboBoxSender().setSelectedIndex(0);          
-        this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getFormatGreCal());	          
         this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         getJTableFilm().getSelectionModel().setSelectionInterval(0,0); //1 Row selected
     }
@@ -250,7 +245,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				this.getTab().getTfSuche().setText("");
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
 				reInitFilmTable(1);						
-				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);								
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);						
 			}	
 			if (comboBox.getName().equals("jComboBoxGenre")) {		
 				this.getTab().getTfSuche().setText("");
@@ -879,5 +874,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     public void keyTyped(KeyEvent ke){     
     }
     public void keyReleased(KeyEvent ke){     	
+    }
+    private BOSettings getSettings() {
+        return ControlMain.getSettings();
     }
 }
