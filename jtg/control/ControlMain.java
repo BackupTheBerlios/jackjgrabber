@@ -40,7 +40,7 @@ import boxConnection.SerBoxControlDefault;
 import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
 import service.SerLogAppender;
-import service.SerXMLConverter;
+import service.SerSettingsHandler;
 import service.SerXMLHandling;
 
 import java.util.ArrayList;
@@ -69,8 +69,8 @@ public class ControlMain {
     public static String settingsFilename = "settings.xml";
     
 	public static String version[] = { 
-		"Jack the JGrabber 0.1.4a",
-		"12.11.2004",
+		"Jack the JGrabber 0.1.5a",
+		"14.11.2004",
 		"TEST PROJECT ONLY",
 		"User: "+System.getProperty("user.name")
 	};
@@ -147,10 +147,10 @@ public class ControlMain {
 					settingsDocument = SerXMLHandling.readDocument(pathToXMLFile);
 					Logger.getLogger("ControlMain").info("Settings found");
 				} else {
-					settingsDocument = SerXMLHandling.buildEmptyXMLFile(pathToXMLFile);
+					settingsDocument = SerXMLHandling.createStandardSettingsFile(pathToXMLFile);
 					Logger.getLogger("ControlMain").info("Settings not found, created empty document");
 				}
-				setSettings(SerXMLConverter.buildSettings(getSettingsDocument()));
+				setSettings(SerSettingsHandler.buildSettings(getSettingsDocument()));
 			} catch (MalformedURLException e) {
 				Logger.getLogger("ControlMain").error("Fehler beim lesen der Settings!");
 			} catch (DocumentException e) {

@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 import projectX.common.X;
 import service.SerGUIUtils;
-import service.SerXMLConverter;
+import service.SerSettingsHandler;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
@@ -51,7 +51,7 @@ public class GuiMainView extends JFrame {
 			public void windowClosing(WindowEvent e) { 
 				try {
 					if (ControlMain.getSettings().isSettingsChanged()) {
-						SerXMLConverter.saveAllSettings();
+						SerSettingsHandler.saveAllSettings();
 						Logger.getLogger("ControlMainView").info("Settings saved");
 					}
 					if (ControlMain.getSettings().isProjectXSettingsChanged()) {
