@@ -59,7 +59,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	}
 	
 	public BufferedReader getConnection(String request) throws IOException {
-		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream()));
+		return new BufferedReader(new InputStreamReader(new URL("http://"+ControlMain.getBoxIpOfActiveBox()+request).openStream(),"ISO-8859-1"));
 	}
 		
 	public BOPids getPids(boolean tvMode) throws IOException {
