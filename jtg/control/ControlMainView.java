@@ -138,7 +138,6 @@ public class ControlMainView implements ChangeListener, SysTrayMenuListener, Act
 		this.log("java.vm.vendor\t"+System.getProperty("java.vm.vendor"));
 		this.log("java.vm.name\t"+System.getProperty("java.vm.name"));
 		this.log("java.class.vers\t"+System.getProperty("java.class.version"));
-		this.log("java.class.path\t"+System.getProperty("java.class.path"));
 		this.log(ControlMain.getBoxAccess().getName()+"-"+ControlMain.getProperty("msg_accessLoaded"));
 	}
 		
