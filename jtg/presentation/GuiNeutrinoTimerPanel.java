@@ -109,7 +109,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		builder.add(this.getJPanelDauerTimer2(), 															cc.xywh (2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
 		builder.addTitle(ControlMain.getProperty("label_actRecTimer"),								cc.xy   (5, 1));
 		builder.add(this.getJPanelButtonsRecordTimer(), 												cc.xywh (5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),								cc.xy   (5, 5));
+		builder.addTitle(ControlMain.getProperty("label_actSysTimer"),								cc.xy  (5, 5, CellConstraints.CENTER, CellConstraints.DEFAULT));
 		builder.add(this.getJPanelButtonsSystemTimer(),												cc.xywh (5, 6, 1, 1, CellConstraints.CENTER, CellConstraints.TOP));
 		builder.add(this.getJPanelButtonsGui(),																cc.xywh (5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
@@ -315,7 +315,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteAllRecordTimer() {
 		if (jButtonDeleteAllRecordTimer == null) {
-			jButtonDeleteAllRecordTimer = new JButton(ControlMain.getProperty("button_deleteRecTimer"));
+			jButtonDeleteAllRecordTimer = new JButton(ControlMain.getProperty("button_delete"));
 			jButtonDeleteAllRecordTimer.setActionCommand("deleteAllRecordTimer");
 			jButtonDeleteAllRecordTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllRecordTimer.addActionListener(control);
@@ -325,7 +325,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	public JButton getJButtonDeleteAllSystemTimer() {
 		if (jButtonDeleteAllSystemTimer == null) {
-			jButtonDeleteAllSystemTimer = new JButton(ControlMain.getProperty("button_deleteSysTimer"));
+			jButtonDeleteAllSystemTimer = new JButton(ControlMain.getProperty("button_delete"));
 			jButtonDeleteAllSystemTimer.setActionCommand("deleteAllSystemTimer");
 			jButtonDeleteAllSystemTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllSystemTimer.addActionListener(control);
