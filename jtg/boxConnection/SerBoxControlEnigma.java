@@ -50,6 +50,19 @@ public class SerBoxControlEnigma extends SerBoxControl {
     private BOTimerList timerList;
     
     public GregorianCalendar getBoxTime() throws IOException {
+    	BufferedReader input = getConnection("/cgi-bin/status");
+		String line;
+		String boxTime;
+		boolean Recording=true;
+		int startpos;
+		while((line=input.readLine())!=null) {
+		    if (line.indexOf("Current Time:</td><td>")>0) {
+		        startpos=(line.indexOf("Recording:</td><td>")+19);
+		        boxTime=line.substring(startpos,startpos+2);
+		        return SerFormatter.getDateFromString(boxTime,"EEE, MMM dd HH:mm:ss yyyy");
+		    }
+			
+		}
 	    return new GregorianCalendar();
 	}
     
@@ -66,14 +79,37 @@ public class SerBoxControlEnigma extends SerBoxControl {
     }
     
     public ArrayList getBoxVersion() throws IOException {
-        //FIXME
-        throw new IOException();
+    	ArrayList version = new ArrayList();
+    	int startpos, endpos;
+	    BufferedReader input = getConnection("/body?mode=updates");
+	    String line;
+		while((line=input.readLine())!=null) {
+		    if ((startpos=line.indexOf("Version</td><td>"))>0) {
+		    	startpos+=16;
+		    	endpos=line.indexOf("</td>", startpos+1);
+		    	version.add(line.substring(startpos, endpos));
+		    }
+		    if ((startpos=line.indexOf("Comment</td><td>"))>0) {
+		    	startpos+=16;
+		    	endpos=line.indexOf("</td>", startpos+1);
+		    	version.add(line.substring(startpos, endpos));
+		    }
+		}
+        return version;
     }
     
     public BOSender getRunningSender() throws IOException {
-        //FIXME
-        throw new IOException();
-	}
+    	 ArrayList senderList = getAllSender();
+ 	    String runningChanId = getChanIdOfRunningSender();
+
+ 	    for (int i = 0; i < senderList.size(); i++) { 
+ 	        BOSender sender = (BOSender) senderList.get(i);
+ 			if (sender.getChanId().equals(runningChanId)) {
+ 				    return sender;
+ 			}
+ 		}
+ 	    return null;
+ 	}
 	
 	public String getName() {
 		return "Enigma";
@@ -253,7 +289,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                endDateString=line2.substring(startpos, endpos)+".";
 		                startpos=endpos+3;
 		                endpos=line2.indexOf(" ", startpos+1);
-		                
+		                endTime=line2.substring(startpos, endpos);
 		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime, "dd.MM./HH:mm");
 		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
 		                valueStart=""+(startDate.getTimeInMillis()/1000);
