@@ -22,6 +22,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import javax.swing.*;
+
 import model.*;
 
 import org.apache.log4j.*;
@@ -73,8 +75,27 @@ public class ControlMain {
 			}
 			screen.dispose();
 		}
-		control.getView().setVisible(true);
-
+		
+		
+		if (getSettings().getMainSettings().isStartMinimized())
+		{
+			if (getSettings().getMainSettings().isUseSysTray())
+			{
+				control.getView().setVisible(false);	
+			}
+			else
+			{
+				control.getView().setVisible(true);
+				control.getView().setExtendedState(JFrame.ICONIFIED);
+				logWindow.setExtendedState(JFrame.ICONIFIED);
+			}
+		}
+		else
+		{
+			control.getView().setVisible(true);
+		}
+		
+		
 	};
 
 	public static void startLogger() {
