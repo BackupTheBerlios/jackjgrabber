@@ -79,7 +79,7 @@ public class GuiTabStart extends JPanel {
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-						  "200:grow, 10, 230:grow, 30, 190",  		// columns 
+						  "250:grow, 10, 180:grow, 30, 190",  		// columns 
 						  "10, t:130, pref, pref"); 			// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
