@@ -51,13 +51,11 @@ public class RecordControl extends Thread {
 	}
 
 	private boolean detectRecord() {
-		if (controlProgramTab.isTvMode()
-				&& ControlMain.getSettings().getStreamingEngine() == 0) {
+		if (controlProgramTab.isTvMode() && ControlMain.getSettings().getStreamingEngine() == 0) {
 			record = new UdpRecord(recordArgs, this);
 			return true;
 		}
-		if (controlProgramTab.isTvMode()
-				&& ControlMain.getSettings().getStreamingEngine() == 1) {
+		if (controlProgramTab.isTvMode() && ControlMain.getSettings().getStreamingEngine() == 1) {
 			record = new UdrecRecord(recordArgs, this);
 			return true;
 		} else {
@@ -92,37 +90,35 @@ public class RecordControl extends Thread {
 		try {
 
 			StringBuffer epg = new StringBuffer();
-			
+
 			String title = recordArgs.getEpgTitle();
-			if (title != null)
-			{
+			if (title != null) {
 				String info1 = recordArgs.getEpgInfo1();
-				if (!info1.startsWith(title))
-				{
+				if (info1 == null) {
+					info1 = "";
+				}
+				if (!info1.startsWith(title)) {
 					epg.append(title);
 					epg.append("\n");
 				}
 			}
-			
+
 			String info1 = recordArgs.getEpgInfo1();
-			if (info1 != null && !info1.equals(title))
-			{
+			if (info1 != null && !info1.equals(title)) {
 				epg.append(info1);
 				epg.append("\n");
 			}
 			String info2 = recordArgs.getEpgInfo2();
-			if (info2 != null)
-			{
+			if (info2 != null) {
 				epg.append(info2);
 			}
-			
-			String file = getDirectory().toString() + File.separatorChar
-					+ EPGFILENAME;
+
+			String file = getDirectory().toString() + File.separatorChar + EPGFILENAME;
 
 			File f = new File(file);
-			
+
 			print = new PrintStream(file);
-			
+
 			StringTokenizer tok = new StringTokenizer(epg.toString(), "\n");
 			while (tok.hasMoreTokens()) {
 				print.println(tok.nextToken());
@@ -156,49 +152,46 @@ public class RecordControl extends Thread {
 		record.stop();
 		controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
 		controlProgramTab.getMainView().setSystrayDefaultIcon();
-		if (ControlMain.getSettings().isStartPX() && record.getFiles() != null
-				&& record.getFiles().size() > 0) {
+		if (ControlMain.getSettings().isStartPX() && record.getFiles() != null && record.getFiles().size() > 0) {
 			this.startProjectX();
 		}
 		isRunning = false;
 	}
 
 	public void startProjectX() {
-	    String separator = System.getProperty("file.separator");
-	    ArrayList files = record.getFiles();
-	    String fileString=new String();
-	    for (int i=0; i<files.size(); i++) {
-	        fileString+=((String)files.get(i))+" ";
-	    }
-	    try {
-            Object[] args = {
-                    System.getProperty("java.home")+separator+"bin"+separator+"java -jar",
-                    ControlMain.getSettings().getProjectXPath(),
-                    //"-g",
-                    fileString
-            };
-            MessageFormat form = new MessageFormat("{0} {1} {2}");
-            Logger.getLogger("RecordControl").info(form.format(args));
-            Process run = Runtime.getRuntime().exec(form.format(args));
-            
+		String separator = System.getProperty("file.separator");
+		ArrayList files = record.getFiles();
+		String fileString = new String();
+		for (int i = 0; i < files.size(); i++) {
+			fileString += ((String) files.get(i)) + " ";
+		}
+		try {
+			Object[] args = {System.getProperty("java.home") + separator + "bin" + separator + "java -jar",
+					ControlMain.getSettings().getProjectXPath(),
+					//"-g",
+					fileString};
+			MessageFormat form = new MessageFormat("{0} {1} {2}");
+			Logger.getLogger("RecordControl").info(form.format(args));
+			Process run = Runtime.getRuntime().exec(form.format(args));
+
 			new SerInputStreamReadThread(true, run.getInputStream()).start();
 			new SerErrorStreamReadThread(true, run.getErrorStream()).start();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Logger.getLogger("RecordControl").error(ControlMain.getProperty("err_startPX")+e.getMessage());
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+			Logger.getLogger("RecordControl").error(ControlMain.getProperty("err_startPX") + e.getMessage());
+		}
 	}
 
 	public String getFileName() {
 		if (this.fileName == null) {
 			SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy_HH-mm");
-			String date = f.format( new Date());
+			String date = f.format(new Date());
 
 			BORecordArgs args = this.recordArgs;
 			if (args.getEpgTitle() != null) {
-			    Object[] obj = {date, args.getSenderName(), args.getEpgTitle()};
+				Object[] obj = {date, args.getSenderName(), args.getEpgTitle()};
 				MessageFormat form = new MessageFormat("{0}_{1}_{2}");
-				fileName=form.format(obj);
+				fileName = form.format(obj);
 			} else {
 				fileName = date + "_" + args.getSenderName();
 			}
@@ -208,8 +201,8 @@ public class RecordControl extends Thread {
 
 	public File getDirectory() {
 		if (directory == null) {
-			directory = new File(ControlMain.getSettings().getSavePath(),
-					SerFormatter.removeInvalidCharacters(getFileName().replace(' ', '_')));
+			directory = new File(ControlMain.getSettings().getSavePath(), SerFormatter.removeInvalidCharacters(getFileName().replace(' ',
+					'_')));
 			directory.mkdir();
 		}
 		return directory;
