@@ -60,9 +60,6 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		if (col == 0) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventTypeId(control.convertLongEventType((String)value));
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
 		}
 		if (col == 1) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
@@ -78,10 +75,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		if (col == 2) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			control.getTab().selectRepeatDaysForSystemTimer(timer);
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
+			control.selectRepeatDaysForSystemTimer(timer);
 		}
     }
 
@@ -106,5 +100,10 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	
 	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
+	}
+	
+	public void fireTableDataChanged() {
+		super.fireTableDataChanged();
+		this.getControl().getTab().enableSystemTimerWeekdays(false);
 	}
 }

@@ -71,9 +71,6 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
 			timer.setChannelId(sender.getChanId());
 			timer.setSenderName((String)value);
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
 		}
 		if (col == 1) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
@@ -81,10 +78,6 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			try {
 				Date newDate = sdf.parse((String)value);
 				timer.setUnformattedStartTime(newDate.getTime());
-				
-				if (timer.getModifiedId() == null) {
-					timer.setModifiedId("modify");
-				}
 			} catch (ParseException e) {}
 		}
 		if (col == 2) {
@@ -105,10 +98,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		if (col == 3) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			control.getTab().selectRepeatDaysForRecordTimer(timer);
-			if (timer.getModifiedId() == null) {
-				timer.setModifiedId("modify");
-			}
+			control.selectRepeatDaysForRecordTimer(timer);
 		}
     }
 
@@ -140,5 +130,10 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 
 	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
+	}
+	
+	public void fireTableDataChanged() {
+		super.fireTableDataChanged();
+		this.getControl().getTab().enableRecordTimerWeekdays(false);
 	}
 }
