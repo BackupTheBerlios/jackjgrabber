@@ -39,14 +39,17 @@ public class MovieGuideSenderTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
-		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList()[1].size();
-		}
+		//if (this.getControl().getTimerList() != null) {
+		//	return this.getControl().getTimerList()[1].size();
+		//}
 		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
+		
+		/*
+		  
+		 BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
 		if (columnIndex == 0) {
 			return control.convertShortEventType(timer.getEventTypeId());
 		} if (columnIndex == 1) {
@@ -77,6 +80,8 @@ public class MovieGuideSenderTableModel extends AbstractTableModel
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.selectRepeatDaysForSystemTimer(timer);
 		}
+		*/
+		return new BOMovieGuide();
     }
 
 	public String getColumnName() {		
@@ -97,7 +102,7 @@ public class MovieGuideSenderTableModel extends AbstractTableModel
 	}
 	
 	public void fireTableDataChanged() {
-		super.fireTableDataChanged();
-		this.getControl().getTab().enableSystemTimerWeekdays(false);
+	//	super.fireTableDataChanged();
+	//	this.getControl().getTab().enableSystemTimerWeekdays(false);
 	}
 }

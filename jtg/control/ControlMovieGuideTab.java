@@ -43,7 +43,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener, 
 	GuiMainView mainView;
 	ArrayList filmeList = new ArrayList();
 	private static Document movieGuideDocument;
-	private static String movieGuideFileName ="movieguide.xml";
+	public static String movieGuideFileName ="movieguide.xml";
 	
 	public ControlMovieGuideTab(GuiMainView view ) {
 		this.setMainView(view);

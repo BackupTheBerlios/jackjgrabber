@@ -39,44 +39,12 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
-		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList()[1].size();
-		}
+		
 		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
-		if (columnIndex == 0) {
-			return control.convertShortEventType(timer.getEventTypeId());
-		} if (columnIndex == 1) {
-			return timer.getStartTime();
-		} else {
-			return control.convertShortEventRepeat(timer.getEventRepeatId());
-		}
-	}
-	
-	public void setValueAt(Object value, int row, int col) {
-		if (col == 0) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			timer.setEventTypeId(control.convertLongEventType((String)value));
-		}
-		if (col == 1) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
-			try {
-				Date newDate = sdf.parse((String)value);
-				timer.setUnformattedStartTime(newDate.getTime());
-				if (timer.getModifiedId() == null) {
-					timer.setModifiedId("modify");
-				}
-			} catch (ParseException e) {}
-		}
-		if (col == 2) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			control.selectRepeatDaysForSystemTimer(timer);
-		}
+		return new BOMovieGuide();
     }
 
 	public String getColumnName( int columnIndex ) {
@@ -103,7 +71,6 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 	}
 	
 	public void fireTableDataChanged() {
-		super.fireTableDataChanged();
-		this.getControl().getTab().enableSystemTimerWeekdays(false);
+		
 	}
 }
