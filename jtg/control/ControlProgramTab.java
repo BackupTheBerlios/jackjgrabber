@@ -216,6 +216,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void actionRefresh() {
+	    this.stopStreamingServer();
 		ControlMain.detectImage();
 		this.reInitialize();
 	}
