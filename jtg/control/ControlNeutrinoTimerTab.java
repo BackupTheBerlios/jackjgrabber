@@ -185,7 +185,10 @@ public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionLi
 	private void actionDeleteAll() {
 		try {
 			this.deleteAllTimer(this.getTimerList().getRecordTimerList());
+			this.getTimerList().setRecordTimerList(new ArrayList());
 			this.deleteAllTimer(this.getTimerList().getSystemTimerList());
+			this.getTimerList().setSystemTimerList(new ArrayList());
+			this.refreshTables();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
