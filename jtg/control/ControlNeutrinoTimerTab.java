@@ -192,7 +192,7 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemList
 		int[] rows = this.getTab().getJTableSystemTimer().getSelectedRows();
 		ArrayList timerList = this.getTimerList()[1];
 		for (int i=rows.length-1; 0<=i; i--) {
-		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
+		    int modelIndex = this.getTab().systemTimerSorter.modelIndex(rows[i]);
 			BOTimer timer = (BOTimer)timerList.get(modelIndex);
 			try {
 				this.deleteTimer(timer);
