@@ -135,7 +135,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		return SelectedItemJComboBoxSucheNach;
 	}
 	
-	private static void setSelectedItemJComboBox(String value){
+	private void setSelectedItemJComboBox(String value){
 		SelectedItemJComboBox = value;
 	}
 	
