@@ -21,7 +21,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 
 import model.BOBox;
 import model.BOLocale;
@@ -163,7 +165,11 @@ public class ControlMain {
 		if (box==null) {
 			return "";
 		}
-		return box.getDboxIp();
+		try {
+            return (InetAddress.getByName(box.getDboxIp())).getHostAddress();
+        } catch (UnknownHostException e) {
+            return box.getDboxIp();
+        }
 	}
 	
 	/**
