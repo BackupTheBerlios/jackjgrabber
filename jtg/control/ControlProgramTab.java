@@ -29,10 +29,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.swing.*;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -442,16 +444,13 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			String tableName = table.getName();
 			//Neuer Sender selektiert
 			if (tableName == "Sender") {
-				this.setSelectedSender((BOSender) this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
+				//this.setSelectedSender((BOSender) this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
 				if (me.getClickCount() == 2) { //Zapping
 					this.zapToSelectedSender();
 				}
 			}
 			//Neue Epg-Zeile selektiert
 			if (tableName == "Epg") {
-				int selectedRow = table.getSelectedRow();
-				int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(selectedRow);
-				this.setSelectedEpg((BOEpg) this.getEpgTableModel().getEpgList().get(modelIndex));
 				if (me.getClickCount() == 2) {
 					BOTimer timer = this.buildTimer(this.getSelectedEpg());
 					ControlMain.getBoxAccess().writeTimer(timer);
@@ -888,5 +887,27 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 */
 	public void setTvMode(boolean mode) {
 		tvMode = mode;
+	}
+	
+	/** called by the gui class, when selected channel has been changed
+	 * 
+	 */
+	public void channelChanged(JTable table) {
+		if (table.getSelectedRow() > -1)
+		{
+			this.setSelectedSender((BOSender) this.getSelectedBouquet().getSender().get(table.getSelectedRow()));
+		}			
+	}
+
+	/** called by the gui class, when selected epg entry has been changed
+	 * @param tableEPG
+	 */
+	public void epgChanged(JTable tableEPG) {
+		int selectedRow = tableEPG.getSelectedRow();
+		if (selectedRow > -1)
+		{
+			int modelIndex = this.getMainView().getTabProgramm().sorter.modelIndex(selectedRow);
+			this.setSelectedEpg((BOEpg) this.getEpgTableModel().getEpgList().get(modelIndex));
+		}
 	}
 }
