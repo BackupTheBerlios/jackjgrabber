@@ -75,14 +75,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
     private static BOMovieGuide boMovieGuide4Timer; 
     
 	public ControlMovieGuideTab(GuiMainView view) {
-		this.setMainView(view);	
-		try{
-			initialized = true;
-			setRootElement();
-			if(this.getTitelMap()==null){				
-				setTitelMap();
-			}
-		}catch (Exception ex){}
+		this.setMainView(view);			
 	}
 
 	public void initialize() {
