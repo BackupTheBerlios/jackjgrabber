@@ -62,9 +62,15 @@ public class SerXMLHandling {
 		root.addElement("boxList");
 		root.addElement("playbackList");
 		ControlMain.setSettingsDocument(doc);
-		saveSettingsFile(path);
+		saveXMLFile(path, doc);
 		return doc;
 	}
+	
+	 public static Document createEmptyMovieguideFile() throws IOException {
+        Document doc = DocumentHelper.createDocument();
+        doc.addElement("movieguide");
+        return doc;
+    }
 	
 	/**
 	 * @param parentElement
@@ -77,10 +83,10 @@ public class SerXMLHandling {
 		parentElement.add(element);
 	}
 		
-	public static void saveSettingsFile(File path) throws IOException {
+	public static void saveXMLFile(File path, Document doc ) throws IOException {
 		OutputFormat format = OutputFormat.createPrettyPrint(); 
 		XMLWriter writer = new XMLWriter( new FileWriter( path ), format );
-		writer.write( ControlMain.getSettingsDocument() );
+		writer.write( doc );
 		writer.close();
 	}
 	
