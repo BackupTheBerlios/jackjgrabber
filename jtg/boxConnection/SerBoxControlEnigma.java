@@ -22,9 +22,25 @@ import model.BOSender;
 import model.BOTimer;
 import service.SerFormatter;
 
-/**
- * @author Treito
- */
+/*
+SerBoxControlEnigma.java by Geist Alexander, Treito
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+*/ 
+
 public class SerBoxControlEnigma extends SerBoxControl {
 	
 	public String getName() {
@@ -304,6 +320,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		GregorianCalendar startDate=new GregorianCalendar(), endDate=new GregorianCalendar();
 		String line, channelID=new String(), eventId=new String(), startTime=new String(), endTime=new String(), duration=new String(), title=new String(), channel=new String();
 		String valueStart, valueDuration, timerType;
+		String eventRepeatId="0";
 		int startpos, endpos;
 		while ((line = input.readLine()) != null) {
 			if ((line.indexOf("Recurring Timer Events")>0)|(line.indexOf("Repeating Timer Events")>0)) {
@@ -317,7 +334,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			if (line.indexOf("javascript:editTimerEvent")>0) {
 				startpos=0;
 				while (line.indexOf("javascript:editTimerEvent", startpos)>0) {
-					endpos=line.indexOf("javascript:editTimerEvent", startpos);
+					eventRepeatId="0";
+				    endpos=line.indexOf("javascript:editTimerEvent", startpos);
 					startpos=line.indexOf("(\'ref=",endpos);
 					endpos=line.indexOf("&start=", startpos);
 					channelID=line.substring(startpos+6,endpos);
@@ -337,30 +355,73 @@ public class SerBoxControlEnigma extends SerBoxControl {
 					startpos=endpos;
 					endpos=line.indexOf("\')", startpos);
 					timerType=line.substring(startpos+6,endpos);
-					startTime=SerFormatter.getShortTime(Long.parseLong(valueStart)*1000);
+					startTime=SerFormatter.getShortTime(Long.parseLong(valueStart));
 					startDate =	SerFormatter.formatUnixDate(valueStart);
-					endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
-					endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) * 1000+Long.parseLong(valueDuration) * 1000);
+					endTime = SerFormatter.getShortTime((Long.parseLong(valueStart) + Long.parseLong(valueDuration)));
+					endDate = SerFormatter.formatUnixDate((Long.parseLong(valueStart) + Long.parseLong(valueDuration)));
+					if (recurring) {
+					    /*long typeValue=0;
+					    String recurringDays;
+					    startpos=line.indexOf("nbsp;</td><td>",endpos);
+					    endpos=line.indexOf("</td>",startpos+10);
+					    recurringDays=line.substring(startpos+13,endpos);
+					    if (recurringDays.indexOf("Mo")>0) {
+					        typeValue+=256;
+					    }
+					    if (recurringDays.indexOf("Tu")>0) {
+					        typeValue+=512;
+					    }
+					    if (recurringDays.indexOf("We")>0) {
+					        typeValue+=1024;
+					    }
+					    if (recurringDays.indexOf("Th")>0) {
+					        typeValue+=2048;
+					    }
+					    if (recurringDays.indexOf("Fr")>0) {
+					        typeValue+=4096;
+					    }
+					    if (recurringDays.indexOf("Sa")>0) {
+					        typeValue+=8192;
+					    }
+					    if (recurringDays.indexOf("Su")>0) {
+					        typeValue+=16384;
+					    }
+					    System.out.println(recurringDays+" "+typeValue);*/
+					    long typeValue=Long.parseLong(timerType);
+					    if ((typeValue&1048576)==1048576) {
+					        typeValue+=256;
+					    }
+					    if ((typeValue&2097152)==2097152) {
+					        typeValue+=512;
+					    }
+					    if ((typeValue&4194304)==4194304) {
+					        typeValue+=1024;
+					    }
+					    if ((typeValue&8388608)==8388608) {
+					        typeValue+=2048;
+					    }
+					    if ((typeValue&16777216)==16777216) {
+					        typeValue+=4096;
+					    }
+					    if ((typeValue&33554432)==33554432) {
+					        typeValue+=8192;
+					    }
+					    if ((typeValue&524288)==524288) {
+					        typeValue+=16384;
+					    }
+					    eventRepeatId=""+typeValue;
+					}
 					BOTimer botimer = new BOTimer();
-					if (timerType.equalsIgnoreCase("44")) {
-						botimer.setEventTypeId("offen");
-					}
-					else if (timerType.equalsIgnoreCase("256")|timerType.equalsIgnoreCase("268")) {
-						botimer.setEventTypeId("erfolgreich");
-					}
-					else if (timerType.equalsIgnoreCase("76")) {
-						botimer.setEventTypeId("Aufnahme läuft");
-					}
-					else {
-						botimer.setEventTypeId("Fehler");
-					}
+					botimer.setEventTypeId(timerType);
 					botimer.setTimerNumber("");
-					botimer.setEventRepeatId("0");
+					botimer.setEventRepeatId(eventRepeatId);
 	    			botimer.setSenderName(channel);
+	    			botimer.setChannelId(channelID);
 	    			botimer.setAnnounceTime(""); //vorwarnzeit
 	    			botimer.setUnformattedStartTime(startDate);  //startDatum
 	    			botimer.setUnformattedStopTime(endDate);
 	    			botimer.setDescription(title);
+	    			botimer.setTimerNumber("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
 	    			timerList[0].add(botimer);
 	    			startpos=endpos;
 				} 
@@ -370,31 +431,82 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		return timerList;
 	}
 	public String writeTimer(BOTimer timer) throws IOException {
-		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis());
-		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis());
-		String announce = timer.getAnnounceTime();
-		String modifiedId = timer.getModifiedId();
-		String type = timer.getEventTypeId();
+	    String modifiedId = timer.getModifiedId();
+	    String title = timer.getDescription();
+	    String announce = timer.getAnnounceTime();			
+	    String eventType = timer.getEventTypeId();
 		String repeat = timer.getEventRepeatId();
-		String chanId = timer.getSenderName();
-		String title = timer.getDescription();
+		String chanId = timer.getChannelId();
+		String success;
+		success="failed";
 		int startpos;
 		if (title==null) {
-			title="";
+		    title="";
 		}
 		String line;
-		title=title.replaceAll(" ","%20");
-		title=title.replaceAll("&","_");
-		String success;
-		int a=Integer.parseInt(stop)-Integer.parseInt(alarm);
-		success="failed";
-		if (modifiedId.equalsIgnoreCase("new")) {
-			String requestString = "/addTimerEvent?timer=regular&ref="+chanId+"&start="+alarm+"&duration="+a+"&descr="+title;
-			BufferedReader input = getConnection(requestString);
-			while((line=input.readLine())!=null) {
-				if ((line.indexOf("success")>0)^(line.indexOf("erfolgreich")>0)) {
-					success="ok";
-				}
+		if (modifiedId.equalsIgnoreCase("deleteall")) {
+		    String requestString = "/clearTimerList";
+		    BufferedReader input = getConnection(requestString); 
+		}
+		if (modifiedId.equalsIgnoreCase("cleanup")) {
+		    String requestString = "/cleanupTimerList";
+		    BufferedReader input = getConnection(requestString); 
+		}
+		if (modifiedId.equalsIgnoreCase("remove")|modifiedId.equalsIgnoreCase("modify")) {
+		    String requestString = "/deleteTimerEvent?"+timer.getTimerNumber();
+		    BufferedReader input = getConnection(requestString); 
+		}
+		if (modifiedId.equalsIgnoreCase("new")|modifiedId.equalsIgnoreCase("modify")) {
+		    long alarm = (timer.getUnformattedStartTime().getTimeInMillis())/1000;
+			long stop = (timer.getUnformattedStopTime().getTimeInMillis())/1000;
+			title=title.replaceAll(" ","%20");
+			title=title.replaceAll("&","und");
+		    long duration=stop-alarm;
+		    long repeatId=Long.parseLong(repeat);
+		    System.out.println (repeatId);
+		    if (repeatId<30) {
+		        repeatId=0;
+		    }
+		    String requestString;
+		    if (repeatId==0) {
+		        requestString = "/addTimerEvent?timer=regular&ref="+chanId+"&start="+alarm+"&duration="+duration+"&descr="+title+"&after_event="+eventType;
+		    } else {
+		        String mo="off";
+		        String tu="off";
+		        String we="off";
+		        String th="off";
+		        String fr="off";
+		        String sa="off";
+		        String su="off";
+		        if ((repeatId&512)==512) {
+		            mo="on";
+		        }
+		        if ((repeatId&1024)==1024) {
+		            tu="on";
+		        }
+		        if ((repeatId&2048)==2048) {
+		            we="on";
+		        }
+		        if ((repeatId&4096)==4096) {
+		            th="on";
+		        }
+		        if ((repeatId&8192)==8192) {
+		            fr="on";
+		        }
+		        if ((repeatId&16384)==16384) {
+		            sa="on";
+		        }
+		        if ((repeatId&32768)==32768) {
+		            su="on";
+		        } 
+		        requestString = "/addTimerEvent?timer=repeating&ref="+chanId+"&shour="+timer.getShortStartTime().substring(0,2)+"&smin="+timer.getShortStartTime().substring(3,5)+"&ehour="+timer.getStopTime().substring(0,2)+"&emin=" +timer.getStopTime().substring(3,5)+ "&mo=" + mo + "&tu=" + tu + "&we=" + we + "&th=" + th + "&fr=" + fr + "&sa=" + sa + "&su=" + su +"&duration="+duration+"&descr="+title+"&after_event="+eventType;
+		    }
+		    System.out.println (requestString);
+		    BufferedReader input = getConnection(requestString);
+		    while((line=input.readLine())!=null) {
+		       	if ((line.indexOf("success")>0)^(line.indexOf("erfolgreich")>0)) {
+		       	    success="ok";
+		        }
 			}
 		}
 		return success;
