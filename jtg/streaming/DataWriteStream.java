@@ -54,6 +54,10 @@ public class DataWriteStream {
 				fileNameExtension = ".ts";
 				foundHeader=true;
 				break;
+            case 'v':
+                fileNameExtension = ".vpes";
+                foundHeader=true;
+                break;
 			default:
 				return;
 		}
@@ -97,19 +101,19 @@ public class DataWriteStream {
             		if (queue[0] == 0 && queue[1] == 0 && queue[2] == 1) {
             		    if ((input[counter] & 0xE0) == 0xC0) {
             		        foundHeader=true;
-            		        fileNameExtension = ".mp2";
+            		        fileNameExtension = ".apes";
             		        Logger.getLogger("DataWriteStream").info("Found Audio-Stream");
             		        break;
             		    }    
             		    if ((input[counter] & 0xff) == 0xbd) {
             		        foundHeader=true;
-            		        fileNameExtension = ".ac3";
+            		        fileNameExtension = "(ac3).apes";
             		        Logger.getLogger("DataWriteStream").info("Found AC3-Stream");
             		        break;
             		    }
             		    if ((input[counter] & 0xf0) == 0xE0) {
             		        foundHeader=true;
-            		        fileNameExtension = ".mpv";
+            		        fileNameExtension = ".vpes";
             		        Logger.getLogger("DataWriteStream").info("Found Video-Stream");
             		        break;
             		    }
