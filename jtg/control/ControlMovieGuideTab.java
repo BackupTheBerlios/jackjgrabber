@@ -80,15 +80,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	}
 
 	public void initialize() {
-		if (!initialized) {
-			try{
-				initialized = true;
-				setRootElement();
-				if(this.getTitelMap()==null){				
-					setTitelMap();
-				}
-			}catch (Exception ex){}
-		}
+		try{
+			initialized = true;
+			setRootElement();
+			if(this.getTitelMap()==null){				
+				setTitelMap();
+			}
+		}catch (Exception ex){}
 	}
 
 	public void actionPerformed(ActionEvent e) {
