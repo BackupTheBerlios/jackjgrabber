@@ -147,7 +147,7 @@ public class ControlMain {
 		return new BOBox();
 	}
 	
-	public static BOBox getSelecteddBox() {
+	public static BOBox getSelectedBox() {
 		ArrayList boxList = getSettings().getBoxList();
 		for (int i=0; boxList.size()>i; i++) {
 			BOBox box = (BOBox)boxList.get(i);
