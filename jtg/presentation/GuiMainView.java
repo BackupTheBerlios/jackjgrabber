@@ -7,7 +7,7 @@ import service.SerGUIUtils;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-import com.jgoodies.plaf.plastic.theme.DesertBlue;
+import com.jgoodies.plaf.plastic.theme.Silver;
 
 import control.ControlMain;
 import control.ControlProgramTab;
@@ -29,7 +29,7 @@ public class GuiMainView extends JFrame {
 	
 	public GuiMainView(ControlMain ctrl) {
 		super();
-		PlasticLookAndFeel.setMyCurrentTheme(new DesertBlue());
+		PlasticLookAndFeel.setMyCurrentTheme(new Silver());
 		try {
 			  UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
 		} catch (Exception e) {}
