@@ -13,10 +13,11 @@ package presentation.program;
  *  
  */
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.text.*;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -32,10 +33,10 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.*;
-import javax.swing.table.TableColumn;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import presentation.GuiTab;
 import presentation.GuiTableSorter;
@@ -283,8 +284,6 @@ public class GuiTabProgramm extends GuiTab {
 			jTableEPG = new JTable(sorter);
 			sorter.setTableHeader(jTableEPG.getTableHeader());
 
-			TableColumn eventIdColumnt = jTableEPG.getColumnModel().getColumn(0);
-			jTableEPG.getTableHeader().getColumnModel().removeColumn(eventIdColumnt); //eventId ausblenden
 			jTableEPG.setDefaultRenderer(Date.class, new DefaultTableCellRenderer() {
 			
 				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
@@ -292,12 +291,35 @@ public class GuiTabProgramm extends GuiTab {
 
 					JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 					l.setText(timeFormat.format((Date) value));
+					if (column==0){
+					    l.setForeground(new Color(47,103,165));
+					    l.setHorizontalAlignment(SwingConstants.CENTER);
+					} else if (column==1) {
+					    l.setForeground(new Color(212,69,65));
+					    l.setHorizontalAlignment(SwingConstants.CENTER);
+					}
 					return l;
 				}
 			});
 
-			jTableEPG.getColumnModel().getColumn(0).setMaxWidth(50);
-			jTableEPG.getColumnModel().getColumn(1).setMaxWidth(50);
+			jTableEPG.setDefaultRenderer(String.class, new DefaultTableCellRenderer() {
+				
+					public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
+							int column) {
+
+						JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+						l.setText((String) value);
+						if (column==2){
+						    l.setHorizontalAlignment(SwingConstants.CENTER);
+						} else if (column==3) {
+						    l.setHorizontalAlignment(SwingConstants.LEFT);
+						}
+						return l;
+					}
+			});
+			
+			jTableEPG.getColumnModel().getColumn(0).setMaxWidth(55);
+			jTableEPG.getColumnModel().getColumn(1).setMaxWidth(55);
 			jTableEPG.getColumnModel().getColumn(2).setMaxWidth(60);
 			jTableEPG.getColumnModel().getColumn(3).setPreferredWidth(280);
 			jTableEPG.addMouseListener(control);

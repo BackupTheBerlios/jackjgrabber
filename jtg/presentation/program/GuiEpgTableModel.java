@@ -18,8 +18,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-import java.io.*;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -45,7 +43,7 @@ public class GuiEpgTableModel extends AbstractTableModel
 	}
 
 	public int getColumnCount() {
-		return 5;	
+		return 4;	
 	}	
 
 	public int getRowCount() {
@@ -59,12 +57,10 @@ public class GuiEpgTableModel extends AbstractTableModel
 		BOEpg epg = (BOEpg)this.getEpgList().get(rowIndex);
 
 		if (columnIndex == 0) {
-			return epg.getEventId();
-		} if (columnIndex == 1) {
 			return epg.getStartdate().getTime();
+		} if (columnIndex == 1) {
+			return epg.getEndDate().getTime();
 		} if (columnIndex == 2) {
-			return epg.getEndTime();
-		} if (columnIndex == 3) {
 			return epg.getDuration();
 		} else {
 			return epg.getTitle();
@@ -76,12 +72,10 @@ public class GuiEpgTableModel extends AbstractTableModel
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
-			return "Event-ID"; 
-		} if (columnIndex == 1) {
 			return ControlMain.getProperty("start");
-		} if (columnIndex == 2) {
+		} if (columnIndex == 1) {
 			return ControlMain.getProperty("end");
-		} if (columnIndex == 3) {
+		} if (columnIndex == 2) {
 			return ControlMain.getProperty("duration");
 		} else {
 			return ControlMain.getProperty("title");
