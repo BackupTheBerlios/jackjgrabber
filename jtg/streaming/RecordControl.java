@@ -13,21 +13,23 @@ package streaming;
  *  
  */
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.StringTokenizer;
 
-import model.*;
 import model.BOExternalProcess;
 import model.BORecordArgs;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import service.*;
-import control.*;
-import service.SerProcessStopListener;
 import service.SerExternalProcessHandler;
 import service.SerFormatter;
+import service.SerHelper;
+import service.SerProcessStopListener;
 import control.ControlMain;
 import control.ControlProgramTab;
 
@@ -222,11 +224,10 @@ public class RecordControl extends Thread implements SerProcessStopListener {
 			// create directory
 			String dirName = SerHelper.createFileName(recordArgs, ControlMain.getSettingsRecord().getDirPattern());
 
-			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(dirName
-					.replace(' ', '_')));
+			directory = new File(ControlMain.getSettingsPath().getSavePath(), SerFormatter.removeInvalidCharacters(dirName));
 			directory.mkdir();
 		}
-		return SerFormatter.removeInvalidCharacters(fileName.replace(' ', '_'));
+		return SerFormatter.removeInvalidCharacters(fileName);
 	}
 
 	public File getDirectory() {
