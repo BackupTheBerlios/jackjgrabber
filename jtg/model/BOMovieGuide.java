@@ -328,4 +328,20 @@ public class BOMovieGuide {
     public void setInhalt(String inhalt) {
         this.inhalt = inhalt;
     }
+    public void toOut(){
+    	System.out.println("this.sender     = "+sender);
+    	System.out.println("this.datum      = "+datum);
+    	System.out.println("this.start      = "+start);
+		System.out.println("this.titel      = "+titel);        
+		System.out.println("this.episode    = "+episode);
+		System.out.println("this.genre      = "+genre);
+		System.out.println("this.dauer      = "+dauer);
+		System.out.println("this.land       = "+land);
+		System.out.println("this.jahr       = "+jahr);
+		System.out.println("this.regie      = "+regie);
+		System.out.println("this.bild       = "+bild);
+		System.out.println("this.ton        = "+ton);
+		System.out.println("this.darsteller = "+darsteller);
+		System.out.println("this.inhalt     = "+inhalt);              
+    }
 }

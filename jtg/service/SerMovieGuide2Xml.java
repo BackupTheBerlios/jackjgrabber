@@ -198,7 +198,7 @@ public class SerMovieGuide2Xml {
                             bomovie.setInhalt(input);
                         }
                     }else{
-                        //bomovie.toOut();
+                        bomovie.toOut();
                         addElement(bomovie);
                     }
                 }
@@ -217,7 +217,7 @@ public class SerMovieGuide2Xml {
      */
     public static void main(String[] args) {
         try {
-            readGuide("/tmp/1.txt",1);
+            readGuide("/tmp/1.txt",2);
         } catch (Exception e) {
         }
     }
