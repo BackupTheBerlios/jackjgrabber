@@ -44,9 +44,6 @@ public class GuiTimerTableModel extends AbstractTableModel
 			return timer.getEventType(); //FIXME: Sendungsnamen auslesen , noch Dummywert
 		}
 	}
-	public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
 
 	public String getColumnName( int columnIndex ) {
 		if (columnIndex == 0) {
