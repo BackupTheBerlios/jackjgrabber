@@ -1,8 +1,11 @@
 package presentation;
 
 
-
+import java.util.Calendar;
+import java.util.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
@@ -54,15 +57,38 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 		}
 		if (col == 1) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
-			System.out.println(value);
+			GregorianCalendar oldcal = timer.getUnformattedStartTime();
+			Calendar newcal = new GregorianCalendar();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+			try {
+				Date newDate = sdf.parse((String)value);
+				newcal.setTime(newDate);
+				oldcal.set(newcal.get(Calendar.YEAR), newcal.get(Calendar.MONTH), newcal.get(Calendar.DATE));
+			} catch (ParseException e) {}
 		}
 		if (col == 2) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
-			System.out.println(value);
+			GregorianCalendar oldcal = timer.getUnformattedStartTime();
+			Calendar newcal = new GregorianCalendar();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			try {
+				Date newDate = sdf.parse((String)value);
+				newcal.setTime(newDate);
+				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
+				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
+			} catch (ParseException e) {}
 		}
 		if (col == 3) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
-			System.out.println(value);
+			GregorianCalendar oldcal = timer.getUnformattedStopTime();
+			Calendar newcal = new GregorianCalendar();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			try {
+				Date newDate = sdf.parse((String)value);
+				newcal.setTime(newDate);
+				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
+				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
+			} catch (ParseException e) {}
 		}
 		if (col == 4) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);

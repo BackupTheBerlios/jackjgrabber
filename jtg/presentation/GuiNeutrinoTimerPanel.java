@@ -1,7 +1,6 @@
 package presentation;
 
 import java.awt.Dimension;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultCellEditor;
@@ -16,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
-import javax.swing.text.NumberFormatter;
 
 import model.BOTimer;
 
@@ -147,7 +145,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);
 			TableColumn columnStartDate = jTableRecordTimer.getColumnModel().getColumn(1);
 			TableColumn columnStartTime = jTableRecordTimer.getColumnModel().getColumn(2);
-			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(2);
+			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(3);
 			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
 			
 			columnSender.setCellEditor(new DefaultCellEditor(this.getComboBoxSender()));
@@ -729,8 +727,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public JFormattedTextField getTfEndTime() {
 		if (tfEndTime == null) {
-			tfEndTime = new JFormattedTextField(new DecimalFormat("00:00"));
-			((NumberFormatter)tfEndTime.getFormatter()).setAllowsInvalid(false);
+			tfEndTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+			((DateFormatter)tfEndTime.getFormatter()).setAllowsInvalid(false);
+			((DateFormatter)tfEndTime.getFormatter()).setOverwriteMode(true);
 		}
 		return tfEndTime;
 	}
@@ -750,8 +749,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	 */
 	public JFormattedTextField getTfStartTime() {
 		if (tfStartTime == null) {
-			tfStartTime = new JFormattedTextField(new DecimalFormat("00:00"));
-			((NumberFormatter)tfStartTime.getFormatter()).setAllowsInvalid(false);
+			tfStartTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+			((DateFormatter)tfStartTime.getFormatter()).setAllowsInvalid(false);
+			((DateFormatter)tfStartTime.getFormatter()).setOverwriteMode(true);
 		}
 		return tfStartTime;
 	}
