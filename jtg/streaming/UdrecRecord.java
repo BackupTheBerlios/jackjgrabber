@@ -54,7 +54,7 @@ public class UdrecRecord  extends Record {
 	            boxIp, 
 	            Integer.toString(spktBufNum), 
 	            ControlMain.getSettings().getShortUdrecStreamType(),
-	            '"'+new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath()+'"',
+	            new File(recordControl.getDirectory(), recordControl.getFileName()).getAbsolutePath(),
 	            ControlMain.getSettings().getUdrecOptions()
 	    };
 	    

@@ -114,12 +114,12 @@ public class RecordControl extends Thread
 				fileName = date+" "+args.getSenderName();
 			}
 		}
-		return fileName;
+		return fileName.replace(' ', '_');
 	}
 	
 	public File getDirectory() {
 	    if (directory == null) {
-	        directory = new File(ControlMain.getSettings().getSavePath(), this.getFileName());
+	        directory = new File(ControlMain.getSettings().getSavePath(), this.getFileName().replace(' ', '_'));
             directory.mkdir();
 	    }
 	    return directory;
