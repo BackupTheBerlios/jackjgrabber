@@ -176,7 +176,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 	private JPanel getPanelEngineSettings() {
 		if (panelEngineSettings == null) {
 			panelEngineSettings = new JPanel();
-			FormLayout layout = new FormLayout("pref, 5, pref, 5, 150:grow", //columns
+			FormLayout layout = new FormLayout("pref, 5, pref, 5, pref:grow", //columns
 					"pref, pref, pref, pref, pref, 10, pref, 20, pref"); //rows
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
@@ -318,7 +318,6 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 			jComboBoxStreamType = new JComboBox();
 			jComboBoxStreamType.addItemListener(control);
 			jComboBoxStreamType.setName("streamType");
-			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(40, 19));
 		}
 		return jComboBoxStreamType;
 	}
@@ -379,7 +378,7 @@ public class GuiSettingsTabRecord extends JPanel implements GuiSettingsTab {
 			jTextFieldUdrecOptions.addKeyListener(control);
 			jTextFieldUdrecOptions.setEditable(false);
 			jTextFieldUdrecOptions.setName("udrecOptions");
-			jTextFieldUdrecOptions.setPreferredSize(new Dimension(280, 19));
+            jTextFieldUdrecOptions.setPreferredSize(new Dimension(50, 23));
 		}
 		return jTextFieldUdrecOptions;
 	}
