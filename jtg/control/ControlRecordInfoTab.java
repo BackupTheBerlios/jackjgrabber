@@ -38,6 +38,7 @@ import org.apache.log4j.*;
 import presentation.*;
 import presentation.recordInfo.*;
 import service.*;
+import service.Muxxer.*;
 
 /**
  * Controlklasse des Programmtabs.
@@ -59,7 +60,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 
 	private static final int REFRESH_TIME = 1000; // Refresh time of fileinfos
 	private static final int REFRESH_TIME_READALLFILES = 30000; // Refresh time of fileinfos
-	private static final int BITRATECALCSTART = 5; // seconds after record start the birate will be calculated
+	private static final int BITRATECALCSTART = 15; // seconds after record start the birate will be calculated
 
 	private static final String LOGFILENAME = "log.txt";
 
@@ -68,7 +69,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 	private boolean currentlyDirectoryRefresh;
 
 	private String currentSavePath = "";
-	
+
 	public ControlRecordInfoTab(GuiMainView view) {
 		this.setMainView(view);
 
@@ -96,11 +97,11 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 		if (currentlyDirectoryRefresh) {
 			return;
 		}
-		
+
 		currentSavePath = ControlMain.getSettingsPath().getSavePath();
 		DefaultTreeModel model = guiTabRecordInfo.getTreeModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-		
+
 		final JTree tree = guiTabRecordInfo.getTree();
 		final Enumeration enNodes = tree.getExpandedDescendants(new TreePath(root));
 		final TreePath[] selNodes = tree.getSelectionPaths();
@@ -114,8 +115,6 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 				currentlyDirectoryRefresh = true;
 				DefaultTreeModel model = guiTabRecordInfo.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-
-				
 
 				String savePath = ControlMain.getSettingsPath().getSavePath();
 				if (savePath != null && savePath.length() > 0) {
@@ -481,7 +480,7 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 			if (player.size() > 0) {
 				BOPlaybackOption play = BOPlaybackOption.detectPlaybackOption();
 				if (play != null) {
-					String exec = play.getPlaybackPlayer() + " "+play.getPlaybackPlayer();
+					String exec = play.getPlaybackPlayer() + " " + play.getPlaybackPlayer();
 					exec = getExecStringWithoutParam(exec);
 
 					if (file.getAbsolutePath().indexOf(" ") > -1) {
@@ -489,7 +488,6 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 					} else {
 						exec += " " + file.getAbsolutePath();
 					}
-
 					SerExternalProcessHandler.startProcess(play.getName(), exec, play.isLogOutput());
 				}
 			}
@@ -578,19 +576,6 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 				}
 			}));
 
-			if (SerHelper.isVideo(file.getName())) {
-
-				// deactivated currently only for personal use of crazyreini
-
-				/*m.add(new JMenuItem(new AbstractAction("Muxxi") {
-					public void actionPerformed(ActionEvent e) {
-						startMuxxi(file);
-					}
-				}));
-				*/
-
-			}
-
 			String name = file.getName();
 			if (SerHelper.isVideo(name) || SerHelper.isAudio(name)) {
 				m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_playback")) {
@@ -621,11 +606,29 @@ public class ControlRecordInfoTab extends ControlTab implements MouseListener, L
 				}
 			}));
 		}
+
+		if (count > 0) {
+			m.addSeparator();
+
+			m.add(new JMenuItem(new AbstractAction("Muxxi") {
+				public void actionPerformed(ActionEvent e) {
+
+					ArrayList l = new ArrayList();
+					int[] aiSel = table.getSelectedRows();
+					for (int i = 0; i < aiSel.length; i++) {
+						File file = (File) guiTabRecordInfo.getTableModel().getValueAt(table.getSelectedRow(), 2);
+						l.add(file.getAbsolutePath());
+					}
+
+					SerMuxxerSelFile.checkFilesToMux(l);
+				}
+			}));
+		}
+
 		if (m.getComponentCount() > 0) {
 			m.show(table, e.getX(), e.getY());
 		}
 	}
-
 	/**
 	 * @param table
 	 */
