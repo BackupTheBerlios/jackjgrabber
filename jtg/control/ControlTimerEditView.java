@@ -27,7 +27,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -50,9 +49,9 @@ import presentation.GuiUdrecOptionsDialog;
 import presentation.settings.GuiStreamTypeComboModel;
 import presentation.settings.GuiTagFrame;
 import presentation.timer.GuiTimerEditView;
-import service.SerAlertDialog;
 import service.SerFormatter;
 import service.SerHelper;
+import service.SerTimerHandler;
  
 
 public class ControlTimerEditView implements ActionListener, KeyListener, ItemListener, MouseListener{
@@ -220,12 +219,8 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 	}
 	
 	private void actionSaveRecordTimer() {
-	    try {
-	        this.getControlTimer().writeTimer(this.getTimer().getMainTimer());
-	        this.getControlTimer().refreshRecordTimerTable();
-        } catch (IOException e) {
-            SerAlertDialog.alertConnectionLost("ControlTimerEditView", this.getView());
-        }
+	    SerTimerHandler.saveTimer(this.getTimer().getMainTimer(), true);
+	    this.getControlTimer().refreshRecordTimerTable();
 		this.getView().dispose();
 	}
 	

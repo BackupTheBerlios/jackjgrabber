@@ -150,10 +150,10 @@ public class SerTimerHandler {
 
             localTimer.add(mainTimer);
         }
-        
 		root.add(localTimer);
 		try {
             SerXMLHandling.saveXMLFile(new File(timerFile), getTimerDocument());
+            timer.setTimerNode(localTimer);
         } catch (IOException e) {
             Logger.getLogger("SerTimerHandler").error(e.getMessage());
         }
@@ -313,13 +313,15 @@ public class SerTimerHandler {
         if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
             saveBoxTimer(timer, reloadList); 
         }
+
         if (timer.getModifiedId() != null) {
-            if (timer.getModifiedId().equals("new")) {
+//          nur bei lokalen Timern manuell erledigen, Box-Timer muessen automatisch nachgelesen werden
+            if (timer.getModifiedId().equals("new") && timer.getLocalTimer().isLocal()) {
                 ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().add(timer);
-            } else if (timer.getModifiedId().equals("remove")) {
+            } else if (timer.getModifiedId().equals("remove") && timer.getLocalTimer().isLocal()) {
                 ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().remove(timer);
-            }   
-        }
+            }
+        } 
         timer.setModifiedId(null);
         //ermittle naechsten faelligen lokalen-RecordTimer neu
         if (timer.getLocalTimer().isLocal()) {

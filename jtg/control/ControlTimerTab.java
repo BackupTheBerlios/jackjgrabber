@@ -1,6 +1,6 @@
 package control;
 /*
-ControlNeutrinoTimerTab.java by Geist Alexander, Zielke Sven
+ControlNeutrinoTimerTab.java by Geist Alexander
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -142,7 +142,6 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	private void actionDeleteAllRecordTimer() {
 		try {
 			this.deleteAllTimer(this.getTimerList().getRecordTimerList());
-			this.getTimerList().setRecordTimerList(new ArrayList());
 			this.getView().getRecordTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
@@ -160,19 +159,24 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	}
 	
 	private void actionDeleteSelectedRecordTimer() {
+        ArrayList timerList = this.getTimerList().getRecordTimerList();
+        int modelIndex;
+        
 		int[] rows = this.getView().getJTableRecordTimer().getSelectedRows();
-		ArrayList timerList = this.getTimerList().getRecordTimerList();
-		for (int i=rows.length-1; 0<=i; i--) {
-		    int modelIndex = this.getView().recordTimerSorter.modelIndex(rows[i]);
-			BOTimer timer = (BOTimer)timerList.get(modelIndex);
+        BOTimer[] timerArray = new BOTimer[rows.length];
+        for (int i=0; i<rows.length; i++) {
+            modelIndex = this.getView().recordTimerSorter.modelIndex(rows[i]);
+            timerArray[i] = (BOTimer)timerList.get(modelIndex);
+        }
+
+		for (int i=timerArray.length-1; 0<=i; i--) {
 			try {
-				this.deleteTimer(timer);
-				timerList.remove(modelIndex);
+				this.deleteTimer(timerArray[i]);
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 			}
 		}
-        this.getView().getRecordTimerTableModel().fireTableDataChanged();
+        this.refreshRecordTimerTable();
 	}
 	
 	private void actionDeleteSelectedSystemTimer() {
@@ -203,7 +207,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	}
 	
 	private void deleteAllTimer(ArrayList timerList) throws IOException {
-		for (int i=0; i<timerList.size(); i++) {
+        for (int i=timerList.size()-1; 0<=i; i--) {
 			BOTimer timer = (BOTimer)timerList.get(i);
 			this.deleteTimer(timer);
 		}
@@ -211,7 +215,7 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
 	
 	private void deleteTimer(BOTimer timer) throws IOException {
 		timer.setModifiedId("remove");
-		this.writeTimer(timer);
+        SerTimerHandler.saveTimer(timer, false); 
 	}
 	
 	/**
@@ -222,13 +226,9 @@ public class ControlTimerTab extends Thread implements ActionListener, MouseList
         this.refreshTables();
 	}
 	
-	public void writeTimer(BOTimer timer) throws IOException {
-        SerTimerHandler.saveTimer(timer, true);    
-	}
-	
 	private void writeAllTimer(ArrayList timerList) throws IOException {
 		for (int i=0; i<timerList.size(); i++) {
-			this.writeTimer((BOTimer)timerList.get(i));
+            SerTimerHandler.saveTimer((BOTimer)timerList.get(i), true);
 		}
 	}
 	
