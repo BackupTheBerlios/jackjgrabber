@@ -41,7 +41,8 @@ public class ControlStartTab extends ControlTab {
 	    File udrec;
 	    String warnText=new String();
 	    File save = new File(ControlMain.getSettingsPath().getSavePath());
-	    if (ControlMain.getSettingsPath().getUdrecPath().substring(0,4).equalsIgnoreCase("mono")) {
+	    if (ControlMain.getSettingsPath().getUdrecPath()==null &&
+	            ControlMain.getSettingsPath().getUdrecPath().substring(0,4).equalsIgnoreCase("mono")) {
 		    udrec = new File(ControlMain.getSettingsPath().getUdrecPath().substring(5));
 	    } else {
 		    udrec = new File(ControlMain.getSettingsPath().getUdrecPath());
