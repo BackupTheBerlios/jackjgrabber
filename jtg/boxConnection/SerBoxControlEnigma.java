@@ -115,7 +115,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		boolean tvMode=isTvMode();
 		BufferedReader in;
 		long countChannels = 0;
-		if (tvMode=true) {
+		if (tvMode) {
 		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:6:0:0:0:0:0:0:&listContent=true");
 		} else {
 		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:4:0:0:0:0:0:0:&listContent=true");
@@ -152,7 +152,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		boolean tvMode=isTvMode();
 		BufferedReader in;
 		long countChannels = 0;
-		if (tvMode=true) {
+		if (tvMode) {
 		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:6:0:0:0:0:0:0:&listContent=true");
 		} else {
 		    in = getConnection("/cgi-bin/getServices?ref=4097:7:0:4:0:0:0:0:0:0:&listContent=true");
