@@ -50,8 +50,8 @@ import presentation.GuiMainView;
 import presentation.GuiPidsQuestionDialog;
 import presentation.GuiSenderTableModel;
 import presentation.GuiTabProgramm;
-import service.ErrorStreamReadThread;
-import service.InputStreamReadThread;
+import service.SerErrorStreamReadThread;
+import service.SerInputStreamReadThread;
 import service.SerAlertDialog;
 import service.SerFormatter;
 import streaming.RecordControl;
@@ -251,8 +251,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			execString = SerFormatter.replace(execString, "$aPid", aPid);
 			
 			Process run = Runtime.getRuntime().exec(execString);
-			new InputStreamReadThread(run.getInputStream()).start();
-            new ErrorStreamReadThread(run.getErrorStream()).start();
+			new SerInputStreamReadThread(run.getInputStream()).start();
+            new SerErrorStreamReadThread(run.getErrorStream()).start();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}

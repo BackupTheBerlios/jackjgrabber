@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 import model.BORecordArgs;
-import service.ErrorStreamReadThread;
-import service.InputStreamReadThread;
+import service.SerErrorStreamReadThread;
+import service.SerInputStreamReadThread;
 import control.ControlMain;
 
 
@@ -68,8 +68,8 @@ public class UdrecRecord  extends Record {
 	public void start() {
 	    try {
             Process run = Runtime.getRuntime().exec(requestString);
-            new InputStreamReadThread(run.getInputStream()).start();
-            new ErrorStreamReadThread(run.getErrorStream()).start();
+            new SerInputStreamReadThread(run.getInputStream()).start();
+            new SerErrorStreamReadThread(run.getErrorStream()).start();
             UdrecOutputStreamThread outputStream = new UdrecOutputStreamThread(run.getOutputStream());
         } catch (IOException e) {
             // TODO Auto-generated catch block
