@@ -23,22 +23,15 @@ package presentation.recordInfo;
  * @author Reinhard Achleitner
  */
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.text.*;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
 import javax.swing.tree.*;
 
 import presentation.*;
-import presentation.GuiTab;
-
-import service.*;
-import service.SerHelper;
 
 import com.jgoodies.forms.builder.*;
 import com.jgoodies.forms.layout.*;

@@ -18,8 +18,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 package model;
 
+import java.util.*;
 import java.util.ArrayList;
 
+import javax.swing.*;
 import javax.swing.JOptionPane;
 
 import service.SerAlertDialog;
@@ -126,18 +128,21 @@ public class BOPlaybackOption {
 	
 	private static BOPlaybackOption startPlaybackOptionsQuestDialog() {
 	    ArrayList options = getPlaybackSettings().getPlaybackOptions();
+	    JList list = new JList(options.toArray());
+	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    BOPlaybackOption def = getPlaybackSettings().getStandardPlaybackOption();
+	    if (def != null)
+	    {
+	    	list.setSelectedValue(def,true);
+	    }
 	    
-	    String ret = (String)JOptionPane.showInputDialog(
-	    		ControlMain.getControl().getView(),
-                ControlMain.getProperty("msg_choosePlayback2"),
-                ControlMain.getProperty("msg_choose"),
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                getPlaybackSettings().getPlaybackOptionNames(),
-                getPlaybackSettings().getPlaybackOptionDefault().getName()
-              );
-	    if (ret!=null) {
-	        return getPlaybackSettings().getPlaybackOption(ret);
+	    
+	    int ret = JOptionPane.showConfirmDialog(ControlMain.getControl().getView(),new Object[] {ControlMain.getProperty("msg_choosePlayback2"),new JScrollPane(list)},
+                ControlMain.getProperty("msg_choose"),JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+	    if (ret == JOptionPane.OK_OPTION) {
+	        BOPlaybackOption opt = (BOPlaybackOption)list.getSelectedValue();
+	        return opt;
 	    }
 	    return null;
 	}

@@ -127,26 +127,6 @@ public class BOSettingsPlayback {
 		return names;
 	}
 
-	/**
-	 * 
-	 * @return the default option or the first one if no one found
-	 */
-	public BOPlaybackOption getPlaybackOptionDefault() {
-		ArrayList options = getPlaybackOptions();
-		for (int i = 0; i < options.size(); i++) {
-			BOPlaybackOption option = (BOPlaybackOption) options.get(i);
-			if (option.isStandard().booleanValue()) {
-				return option;
-			}
-		}
-
-		if (options.size() > 0)
-		{
-			return (BOPlaybackOption) options.get(0);
-		}
-		return null; // only when no player is set
-	}
-
 	public BOPlaybackOption getPlaybackOption(String searchName) {
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
 			BOPlaybackOption option = (BOPlaybackOption) this.getPlaybackOptions().get(i);
