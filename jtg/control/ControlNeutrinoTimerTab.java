@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 
-import model.BOBox;
 
 import presentation.GuiMainView;
 import presentation.GuiNeutrinoTimerPanel;
@@ -24,6 +23,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	ArrayList timerList;
 	ArrayList senderList;
 	GuiNeutrinoTimerPanel tab;
+	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "wochentage" };
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);

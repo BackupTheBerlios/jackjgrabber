@@ -1,10 +1,8 @@
 package presentation;
 
 
-import javax.swing.JComboBox;
-import javax.swing.table.AbstractTableModel;
 
-import model.BOSender;
+import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;
 
@@ -40,6 +38,8 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			return timer.getStartTime();
 		} if (columnIndex == 3) {
 			return timer.getStopTime();
+		} if (columnIndex == 4) {
+			return timer.getEventRepeat();
 		} else {
 			return timer.getDescription(); 
 		}
@@ -51,9 +51,11 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			timer.setSenderName((String)value);
 			this.fireTableDataChanged();
 		}
-		
-        //data[row][col] = value;
-        //fireTableCellUpdated(row, col);
+		if (col == 4) {
+			BOTimer timer = (BOTimer)this.getControl().getTimerList().get(row);
+			timer.setEventRepeat((String)value);
+			this.fireTableDataChanged();
+		}
     }
 
 	public String getColumnName( int columnIndex ) {

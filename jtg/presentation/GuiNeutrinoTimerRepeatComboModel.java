@@ -2,11 +2,8 @@ package presentation;
 
 
 import javax.swing.DefaultComboBoxModel;
-
-import model.BOBouquet;
-import model.BOSender;
 import control.ControlNeutrinoTimerTab;
-import control.ControlProgramTab;
+
 
 /**
  * @author Alexander Geist
@@ -20,15 +17,11 @@ public class GuiNeutrinoTimerRepeatComboModel extends DefaultComboBoxModel { //i
 	}
 	
 	public Object getElementAt(int index) {
-		BOSender bouquet = (BOSender)this.getControl().getSenderList().get(index);
-		return bouquet.getName();
+		return control.repeatOptions[index];
 	}
 
 	public int getSize() {
-		if (this.getControl().getSenderList()!=null){
-			return this.getControl().getSenderList().size();
-		}
-		return 0;
+		return control.repeatOptions.length;
 	}
 	
 	/**
