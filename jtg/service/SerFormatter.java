@@ -65,6 +65,17 @@ public class SerFormatter {
         return cal.getTime();
     }
     
+	public static String getCorrectEndTime(String start, String ende){
+		SimpleDateFormat formatter  = new SimpleDateFormat("hh:mm");         
+        GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );        
+        try{              
+            cal.setTimeInMillis(formatter.parse(start).getTime());                                    
+            cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+Integer.parseInt(ende.substring(0,2)));
+            cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+Integer.parseInt(ende.substring(3,5)));
+        }catch(Exception ex){}
+            return out(cal.get(GregorianCalendar.HOUR_OF_DAY))+":"+out(cal.get(GregorianCalendar.MINUTE));        
+    }
+	
 	public static String getCorrectDate(String datum){
         SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");         
         GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );        
@@ -95,21 +106,15 @@ public class SerFormatter {
         while(t.hasMoreTokens()) b.append(t.nextToken());
         return b.toString();
     }
-        
-    
+            
     public static String getAktuellDateString() {
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
         return "mguide_d_s_" + String.valueOf((cal.get(GregorianCalendar.MONTH) + 1)) + "_" + String.valueOf((cal.get(GregorianCalendar.YEAR))).substring(2) + ".txt";        
     }
     
-    public static String getCorrectEndTime(String start, String ende){
-		SimpleDateFormat formatter  = new SimpleDateFormat("hh:mm");         
-        GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );        
-        try{              
-            cal.setTimeInMillis(formatter.parse(start).getTime());                                    
-            cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+Integer.parseInt(ende.substring(0,2)));
-            cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+Integer.parseInt(ende.substring(3,5)));
-        }catch(Exception ex){}
-            return out(cal.get(GregorianCalendar.HOUR_OF_DAY))+":"+out(cal.get(GregorianCalendar.MINUTE));        
+    public static String getDatumToday(){
+    	GregorianCalendar cal = new GregorianCalendar( TimeZone.getTimeZone("ECT") );           
+    	DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
+    	return formater2.format(cal.getTime()).toString();
     }
 }
