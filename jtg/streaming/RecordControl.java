@@ -17,25 +17,6 @@ package streaming;
  *  
  */
 
-//TODO Wird Programm beendet muss auch die Aufnahme beendet werden, oder?
-
-//TODO Fehler wenn Aufnahme nicht gestartet werden kann und noch mal auf den
-// Aufnahmebutton gedrückt wird
-
-//TODO Es kommt ein Fehler bei Pfadlängen größer 256, muss überprüft werden
-
-//TODO Laufende Programme werden nicht selektiert wenn sie der letzte Eintrag in der Liste sind --------- erledigt
-
-//TODO EPG Reset funkt nicht
-
-//TODO Aufnahme Tab in der alle Informationen stehen (Log, Dateien inkl. Größe
-
-// usw.)
-/*
- * Kennzeichen ob Aufnahme läuft oder nicht Ordner Log Video Dateien (Größe)
- * Audio Dateien (Größe und Typ)
- */
-
 import java.io.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
