@@ -71,7 +71,7 @@ public class GuiTabSettings extends GuiTab {
 	public GuiSettingsTabPlayback getSettingsTabPlayback() {
 	    return this.getSettingsTabPane().getTabSettingsPlayback();
 	}
-	public GuiSettingsTabMovieguide getSettingsTabMovieGuide() {
+	public GuiSettingsTabMovieGuide getSettingsTabMovieGuide() {
 	    return this.getSettingsTabPane().getTabSettingsMovieguide();
 	}
 

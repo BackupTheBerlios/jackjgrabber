@@ -159,7 +159,7 @@ public class ControlSettingsTabMovieGuide extends ControlTabSettings implements 
         return ControlMain.getSettings();
     }
     
-    private GuiSettingsTabMovieguide getTab() {
+    private GuiSettingsTabMovieGuide getTab() {
         return this.getSettingsTab().getSettingsTabMovieGuide();
     }
 
