@@ -222,4 +222,26 @@ public class SerFormatter {
     public static String getGC2String(GregorianCalendar gc){
     	return ( out(gc.get(GregorianCalendar.HOUR_OF_DAY))+":"+out(gc.get(GregorianCalendar.MINUTE)));
     }
+    
+    /**
+     * @param cal1
+     * @param cal2
+     * @return the value 0 if the time represented by the argument
+     *  is equal to the time represented by first Calendar; a value less
+     *  than 0 if the time of first Calendar is before the time represented
+     *  by the argument; and a value greater than 0 if the time of first
+     *  Calendar is after the time represented by the argument.
+     */
+    public static int compareDates (GregorianCalendar cal1, GregorianCalendar cal2) {
+        long date1 = cal1.getTimeInMillis();
+        long date2 = cal2.getTimeInMillis();
+        if (date1==date2) {
+            return 0;
+        }
+        if (date1<date2) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 }
