@@ -23,10 +23,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -45,7 +48,7 @@ import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticXPLookAndFeel;
 import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
-public class ControlSettingsTabMain extends ControlTabSettings implements ActionListener, ItemListener {
+public class ControlSettingsTabMain extends ControlTabSettings implements KeyListener, ActionListener, ItemListener {
 
 	GuiTabSettings			settingsTab;
 	public final String[]	localeNames	= {"de,Deutsch", "en,Englisch", "fi,Finisch"};
@@ -62,6 +65,8 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	 * @see control.ControlTab#initialize()
 	 */
 	public void run() {
+		this.getTab().getTfServerPort().setText(ControlMain.getSettingsRecord().getStreamingServerPort());
+		this.getTab().getCbStartStreamingServer().setSelected(ControlMain.getSettingsRecord().isStartStreamingServer());
 		this.getTab().getJComboBoxTheme().setSelectedItem(this.getSettings().getPlasticTheme());
 		this.getTab().getJComboBoxLocale().setSelectedItem(this.getSettings().getLocale());
 		this.getTab().getCbStartFullscreen().setSelected(this.getSettings().isStartFullscreen());
@@ -122,10 +127,27 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 		  		if (action.equals("startMinimized")) {
 	  				this.getSettings().setStartMinimized(((JCheckBox)e.getSource()).isSelected());
 	  				break;
-	  		}
+		  		}
+				if (action.equals("startStreamingServer")) {
+					ControlMain.getSettingsRecord().setStartStreamingServer(((JCheckBox) e.getSource()).isSelected());
+					break;
+				}
 		    	break;
 		}
 	}
+	public void keyTyped(KeyEvent event) {
+	}
+
+	public void keyPressed(KeyEvent event) {
+	}
+
+	public void keyReleased(KeyEvent event) {
+		JTextField tf = (JTextField) event.getSource();
+		if (tf.getName().equals("serverPort")) {
+			ControlMain.getSettingsRecord().setStreamingServerPort(tf.getText());
+		}
+	}	
+	
 	/**
 	 * Change-Events der Combos und der Checkbox
 	 * 
@@ -204,8 +226,10 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	}
 	
 	private void actionAddBox() {
-		BOBox box = new BOBox();
-		this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);
+		BOBox box = this.startBoxIpDialog();
+		if (box!=null) {
+			this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);
+		}
 	}
 	private void actionRemoveBox() {
 		int selectedRow = this.getSettingsTab().getSettingsTabMain().getJTableBoxSettings().getSelectedRow();
@@ -213,18 +237,24 @@ public class ControlSettingsTabMain extends ControlTabSettings implements Action
 	}
 	
 	public void startWizard() {
+		BOBox box = this.startBoxIpDialog();
+		if (box!=null) {
+			this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);
+			
+		    ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
+		    ControlMain.getControl().getView().getMainTabPane().tabProgramm=null;
+		    ControlMain.getControl().getView().getMainTabPane().reInitTimerPanel();
+		}
+	}
+	
+	private BOBox startBoxIpDialog() {
 		String ip = JOptionPane.showInputDialog(this.getMainView(), "Bitte die IP der Box angeben");
 		if (ip!=null) {
 			BOBox box = new BOBox();
 			box.setDboxIp(ip);
-			box.setDboxIp(ip);
-			this.getSettingsTab().getSettingsTabMain().getModelBoxTable().addRow(box);
-			
-		    ControlMain.setActiveBox(box);
-		    ControlMain.newBoxSelected((BOBox)ControlMain.getSettingsMain().getBoxList().get(0));
-		    ControlMain.getControl().getView().getMainTabPane().tabProgramm=null;
-		    ControlMain.getControl().getView().getMainTabPane().reInitTimerPanel();	
+			return box;
 		}
+		return null;
 	}
 	
 	public void refreshIpComboBox() {
