@@ -28,6 +28,7 @@ public class BOExternalProcess {
 	
 	private String name;
 	private String execString;
+	private String[] execStringArray;
 	private Process process;
 	private boolean logging;
 
@@ -37,9 +38,31 @@ public class BOExternalProcess {
 		this.setLogging(logging);
 	}
 	
+	public BOExternalProcess(String name, String[] execStringArray, boolean logging) {
+		this.setName(name);
+		execString="";
+		for (int i = 0;i < execStringArray.length; i++) {
+			execString += " "+ execStringArray[i];
+		}
+		this.setExecString(execString.trim());
+		this.setExecStringArray(execStringArray);
+		this.setLogging(logging);
+	}
+	
 	public void start() {
 		try {
 			this.setProcess(Runtime.getRuntime().exec(this.getExecString()));
+			new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
+			new SerErrorStreamReadThread(this.isLogging(), this.getProcess().getErrorStream()).start();
+			Logger.getLogger("BOExternalProcess").info(this.getExecString());
+		} catch (IOException e) {
+			Logger.getLogger("BOExternalProcess").error(e.getMessage());
+		}
+	}
+	
+	public void startArray() {
+		try {
+			this.setProcess(Runtime.getRuntime().exec(this.getExecStringArray()));
 			new SerInputStreamReadThread(this.isLogging(), this.getProcess().getInputStream()).start();
 			new SerErrorStreamReadThread(this.isLogging(), this.getProcess().getErrorStream()).start();
 			Logger.getLogger("BOExternalProcess").info(this.getExecString());
@@ -59,6 +82,18 @@ public class BOExternalProcess {
 	 */
 	public void setExecString(String execString) {
 		this.execString = execString;
+	}
+	/**
+	 * @return Returns the execString.
+	 */
+	public String[] getExecStringArray() {
+		return execStringArray;
+	}
+	/**
+	 * @param execString The execString to set.
+	 */
+	public void setExecStringArray(String[] execStringArray) {
+		this.execStringArray = execStringArray;
 	}
 	/**
 	 * @return Returns the name.
