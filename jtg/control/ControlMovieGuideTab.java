@@ -248,8 +248,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = fc.getSelectedFile().toString();		
 			try{
-				movieGuideFileName=new File(path);
-				this.initialize();
+				SerMovieGuide2Xml.readGuide(path,1);
 			}catch(Exception ex){}			
 		}
 	}
