@@ -19,12 +19,16 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import org.apache.log4j.Logger;
@@ -39,14 +43,18 @@ import service.SerAlertDialog;
 import service.SerFormatter;
 
 
-public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
+public class ControlNeutrinoTimerTab extends ControlTimerTab implements ItemListener, ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;
 	ArrayList senderList;
 	GuiNeutrinoTimerPanel tab;
-	public String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "Wochentage" };
-	public String[] timerType = { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "REMIND", "SLEEPTIMER"};
+	Hashtable repeatOptionsHashTable;
+	Hashtable timerTypeHashTable;
+	public final String[] repeatOptions = { "einmal", "täglich", "wöchentlich", "2-wöchentlich", "4-wöchentlich", "monatlich", "Wochentage" };
+	public static final String[] timerType = { "SHUTDOWN", "NEXTPROGRAM", "ZAPTO", "STANDBY", "RECORD", "REMIND", "SLEEPTIMER"};
+	public final String[] WOCHENTAGE = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
+	public final int[] WOCHENTAGE_VALUE = {512, 1024, 2048, 4096, 8192, 16384, 32768};
 	
 	public ControlNeutrinoTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -55,9 +63,9 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 	public void initialize() {
 		this.setTab((GuiNeutrinoTimerPanel)this.getMainView().getTabTimer());
 		try {
-			this.setTimerList(ControlMain.getBoxAccess().readTimer());
-			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			this.setSenderList(ControlMain.getBoxAccess().getAllSender());
+			this.setTimerList(ControlMain.getBoxAccess().readTimer());
+			this.refreshTables();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
 		}
@@ -95,6 +103,40 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 			this.actionSend();
 		}
 	}
+	/*
+	 * wird aufgerufen wenn ein Wochentag selektiert wird.
+	 * Es wird die zugehoerige Table des Radiobuttons ermittelt
+	 * um den selektierten Timer zu bekommen.
+	 * Der neue RepeatId-Wert wird dann aufgrund der selektierten
+	 * Wochentage festgestellt und gesetzt
+	 */
+	public void itemStateChanged (ItemEvent event) {
+		JRadioButton radioButton = (JRadioButton)event.getSource();
+		if (radioButton.getName().equals("recordTimer")){
+			JTable table = this.getTab().getJTableRecordTimer();
+			int selectedRow = table.getSelectedRow();
+			BOTimer timer = (BOTimer)this.getTimerList()[0].get(selectedRow);
+			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
+		} else {
+			JTable table = this.getTab().getJTableSystemTimer();
+			int selectedRow = table.getSelectedRow();
+			BOTimer timer = (BOTimer)this.getTimerList()[1].get(selectedRow);
+			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage2));
+		}
+	}
+	/*
+	 * Beim jeweiligen RadioButton ist als ActionCommand die RepeatId eingestellt
+	 */
+	private String getRepeatOptionValue(JRadioButton[] buttons) {
+		int result=0;
+		for (int i=0; i<buttons.length; i++) {
+			if (buttons[i].isSelected()) {
+				result+=Integer.parseInt(buttons[i].getActionCommand());
+			}
+		}
+		return Integer.toString(result);
+	}
+	
 	
 	private void actionDeleteAll() {
 		try {
@@ -133,7 +175,7 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 			BOTimer timer = (BOTimer)timerList.get(rows[i]);
 			try {
 				this.deleteTimer(timer);
-				timerList.remove(i);
+				timerList.remove(rows[i]);
 				this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
@@ -148,7 +190,7 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 			BOTimer timer = (BOTimer)timerList.get(rows[i]);
 			try {
 				this.deleteTimer(timer);
-				timerList.remove(i);
+				timerList.remove(rows[i]);
 				this.getTab().getSystemTimerTableModel().fireTableDataChanged();
 			} catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
@@ -194,13 +236,12 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 	 */
 	private void rereadTimerList() throws IOException {
 		this.setTimerList(ControlMain.getBoxAccess().readTimer());
-		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
-		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+		this.refreshTables();
 	}
 	
 	private void writeTimer(BOTimer timer) throws IOException {
 		if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
-			Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
+			Logger.getLogger("ControlProgramTab").info("Timer uebertragen "+timer.getInfo());
 		} else {
 			Logger.getLogger("ControlProgramTab").error(timer.getInfo());
 			throw new IOException();
@@ -245,17 +286,11 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 		int selectedRow = table.getSelectedRow();
 		if (tableName == "recordTimerTable") {
 			BOTimer timer = (BOTimer)this.getTimerList()[0].get(selectedRow);
-			this.getTab().selectRepeatDaysForRecordTimer(timer);
-			if (me.getClickCount()==2) { 
-				
-			}
+			this.selectRepeatDaysForRecordTimer(timer);
 		}
 		if (tableName == "systemTimerTable") {
 			BOTimer timer = (BOTimer)this.getTimerList()[1].get(selectedRow);
-			this.getTab().selectRepeatDaysForSystemTimer(timer);
-			if (me.getClickCount()==2) {
-				
-			}
+			this.selectRepeatDaysForSystemTimer(timer);
 		}
 	}
 	
@@ -268,86 +303,54 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 	public void mouseEntered(MouseEvent me)
 	{}
 	
-	
+	/*
+	 * Methode wird aufgerufen, wenn in der Repeat-Combo-Box ein Eintrag geaendert wurde
+	 * Der Wert wird in den Timer geschrieben.
+	 * Bei Wochentagen wird der Montag vorselektiert. 
+	 */
 	public String convertLongEventRepeat (String longString) {
-		if (longString.equals("einmal")) {
-			return "0";
+		if (longString.equals("Wochentage")) {
+			return "512";
 		}
-		if (longString.equals("täglich")){
-			return "1";
-		}
-		if (longString.equals("wöchentlich")){
-			return "2";
-		}
-		if (longString.equals("2-wöchentlich")){
-			return "3";
-		}
-		if (longString.equals("4-wöchentlich")){
-			return "4";
-		}
-		if (longString.equals("monatlich")) {
-			return  "5";
-		} else {
-			return "768";
-		}
+		return (String)this.getRepeatOptionsHashTable().get(longString);
 	}
 	
 	public String convertShortEventRepeat(String shortString){
-		int repeatNumber = Integer.parseInt(shortString);
-    	switch(repeatNumber) {
-			case 0:
-			return "einmal";
-			case 1:
-			return "täglich";
-			case 2:
-			return "wöchentlich";
-			case 3:
-			return "2-wöchentlich";
-			case 4:
-			return "4-wöchentlich";
-			case 5:
-			return "monatlich";
-    	}
-    	if (repeatNumber >5) {
+		int number = Integer.parseInt(shortString);
+    	if (number >5) {
     		return "Wochentage"; 
     	}
-    	return new String();
+		return this.getRepeatOptions()[number];
 	}
 	
-	public String convertShortEventType(String eventType) {
-		switch(Integer.parseInt(eventType)) {
-			case 1: return "SHUTDOWN";
-			case 2: return "NEXTPROGRAM";
-			case 3: return "ZAPTO";
-			case 4: return "STANDBY";
-			case 5: return "RECORD";
-			case 6: return "REMIND";
-			case 7: return "SLEEPTIMER";										
-		}
-		return new String();
+	public String convertLongEventType(String longString) {	
+		return (String)this.getTimerTypeHashTable().get(longString);
 	}
 	
-	public String convertLongEventType(String longString) {
-		if (longString.equals("SHUTDOWN")){
-			return "1";
+	public String convertShortEventType(String timerType) {
+		return this.getTimerType()[Integer.parseInt(timerType)-1];
+	}
+	
+	private Hashtable getRepeatOptionsHashTable() {
+		if (repeatOptionsHashTable == null) {
+			repeatOptionsHashTable = new Hashtable();
+			for (int i=0; i<this.getRepeatOptions().length; i++) {
+				String repeatOption = this.getRepeatOptions()[i];
+				repeatOptionsHashTable.put(repeatOption, Integer.toString(i));
+			}
 		}
-		if (longString.equals("NEXTPROGRAM")){
-			return "2";
+		return repeatOptionsHashTable;
+	}
+	
+	private Hashtable getTimerTypeHashTable() {
+		if (timerTypeHashTable == null) {
+			timerTypeHashTable = new Hashtable();
+			for (int i=0; i<this.getTimerType().length; i++) {
+				String timerType = this.getTimerType()[i];
+				timerTypeHashTable.put(timerType, Integer.toString(i+1));
+			}
 		}
-		if (longString.equals("ZAPTO")){
-			return "3";
-		}
-		if (longString.equals("STANDBY")){
-			return "4";
-		}
-		if (longString.equals("RECORD")){
-			return "5";
-		}
-		if (longString.equals("REMIND")) {
-			return  "6";
-		} else {
-			return "7";
-		}
+		return timerTypeHashTable;
 	}
 	
 	private BOTimer buildRecordTimer() {
@@ -356,12 +359,13 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 		BOSender defaultSender = (BOSender)this.getSenderList().get(0);
 		long now = new Date().getTime();
 		
+		timer.setModifiedId("new");
 		timer.setSenderName( defaultSender.getName() );
 		timer.setChannelId(defaultSender.getChanId());
 		timer.setAnnounceTime(Long.toString(new Date().getTime()/1000));
 		timer.setUnformattedStartTime(SerFormatter.formatDate(now));  
 		timer.setUnformattedStopTime(SerFormatter.formatDate(now)); 
-		timer.setModifiedId("new");
+		
 				
 		timer.setEventRepeatId("0");
 		timer.setEventTypeId("5");
@@ -383,6 +387,45 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 		timer.setEventTypeId("1");
 		return timer;
 	}
+	
+	/**
+	 * 512 = Montags
+	 * 1024 = Dienstags
+	 * 2048 = Mittwochs
+	 * 4096 = Donnerstags
+	 * 8192 = Freitags
+	 * 16384 = Samstags
+	 * 32768 = Sonntags
+	 */
+	public void selectRepeatDaysForRecordTimer(BOTimer timer) {
+		int result = Integer.parseInt((String)timer.getEventRepeatId());		
+		if (result>5) {
+			this.getTab().enableRecordTimerWeekdays();
+			for (int i = 0; i<7; i++){
+				this.getTab().jRadioButtonWhtage[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+			}
+		} else {
+			this.getTab().disableRecordTimerWeekdays();
+		}
+	}
+
+	public void selectRepeatDaysForSystemTimer(BOTimer timer) {
+		int result = Integer.parseInt((String)timer.getEventRepeatId());
+		if (result>5) {
+			this.getTab().enableSystemTimerWeekdays();
+			for (int i = 0; i<7; i++){
+				this.getTab().jRadioButtonWhtage2[i].setSelected((result&WOCHENTAGE_VALUE[i])==WOCHENTAGE_VALUE[i]);
+			}
+		} else {
+			this.getTab().disableSystemTimerWeekdays();
+		}
+	}
+		
+	private void refreshTables() {
+		this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+		this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+	}
+		
 	/**
 	 * @return Returns the mainView.
 	 */
@@ -439,21 +482,9 @@ public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionLi
 		return repeatOptions;
 	}
 	/**
-	 * @param repeatOptions The repeatOptions to set.
-	 */
-	public void setRepeatOptions(String[] repeatOptions) {
-		this.repeatOptions = repeatOptions;
-	}
-	/**
 	 * @return Returns the timerType.
 	 */
 	public String[] getTimerType() {
 		return timerType;
-	}
-	/**
-	 * @param timerType The timerType to set.
-	 */
-	public void setTimerType(String[] timerType) {
-		this.timerType = timerType;
 	}
 }
