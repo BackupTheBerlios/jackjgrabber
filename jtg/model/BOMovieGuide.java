@@ -413,6 +413,19 @@ public class BOMovieGuide {
     	}
     	return retVal;
     }
+    
+    public boolean booleanArrayDate(ArrayList value,String search){
+    	boolean retVal = false;    	
+    	for (Iterator i = value.iterator(); i.hasNext();) {   			
+    			long a = Long.parseLong(i.next().toString());
+    			if(a>=Long.parseLong(search)){
+    				retVal = true;
+    			}
+    	}
+    	return retVal;
+    }
+    
+    
     public boolean getIfStringInObject(String search){
     	boolean value = false;
     	if (this.getGenre().toLowerCase().indexOf(search)>=0){
