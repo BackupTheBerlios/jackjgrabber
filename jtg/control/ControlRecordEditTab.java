@@ -385,7 +385,7 @@ public class ControlRecordEditTab extends ControlTab implements MouseListener, L
 			if (p != null) {
 				if (e.isControlDown() || e.isShiftDown()) {
 					guiTabRecordEdit.getTree().addSelectionPath(p);
-				} else {
+				} else if (SwingUtilities.isLeftMouseButton(e)) {
 					guiTabRecordEdit.getTree().setSelectionPath(p);
 				}
 				if (SwingUtilities.isRightMouseButton(e)) {
