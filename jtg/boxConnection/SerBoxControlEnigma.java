@@ -208,7 +208,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    startpos=line.indexOf("ID: ");
 		    if (startpos > 0){
 		        while ((line2=input.readLine())!=null) {
-		            if ((startpos=line2.indexOf("ID: "))>0) {
+		            if (line2.indexOf("ID: ")>0) {
 		                startpos+=4;
 		                endpos=line.indexOf(" ", startpos+1);
 		                eventId=line.substring(startpos, endpos);
@@ -238,6 +238,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 						endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);    
 						epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));
 		                line=line2;
+		                startpos=line2.indexOf("ID: ");
 		            }
 		        }
 		    }
