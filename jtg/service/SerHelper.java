@@ -47,7 +47,7 @@ public class SerHelper {
 	 * @return
 	 */
 	public static boolean isVideo(String file) {
-		String[] videoEndings = new String[]{"mpv", "mpg", "ts", "vpes", "vob", "mpeg"};
+		String[] videoEndings = new String[]{"mpv", "mpg", "ts", "vpes", "vob", "mpeg","m2v"};
 		file = file.toLowerCase();
 		for (int i = 0; i < videoEndings.length; i++) {
 			if (file.endsWith(videoEndings[i])) {
