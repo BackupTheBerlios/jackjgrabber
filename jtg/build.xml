@@ -55,6 +55,8 @@
 		<copy file="start.sh" todir="${targetDir}"/>
 		<copy file="start.bat" todir="${targetDir}"/>
 		<copy file="udrec.exe" todir="${targetDir}"/>
+		<copy file="grabber1.ico" todir="${targetDir}"/>
+		<copy file="grabber2.ico" todir="${targetDir}"/>
 		<copy file="jackTheJGrabber.ico" todir="${targetDir}"/>
 	</target>
 	
