@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import javax.swing.JTabbedPane;
 
+import control.*;
 import control.ControlSettingsTabMain;
 import control.ControlSettingsTabPlayback;
 import control.ControlSettingsTabRecord;
@@ -29,6 +30,8 @@ public class GuiSettingsTabPane extends JTabbedPane {
 	public GuiSettingsTabMain tabSettingsMain = null;
 	public GuiSettingsTabRecord tabSettingsRecord = null;
 	public GuiSettingsTabPlayback tabSettingsPlayback = null;
+	public GuiSettingsTabMovieguide tabSettingsMovieguide = null;
+	
 	public GuiTabSettings tabSettings;
 	int index;
 
@@ -68,6 +71,15 @@ public class GuiSettingsTabPane extends JTabbedPane {
 		}
 		return tabSettingsPlayback;
 	}
+	
+	public GuiSettingsTabMovieguide getTabSettingsMovieguide() {
+		if (tabSettingsMovieguide == null) {
+		    ControlSettingsTabMovieguide control = new ControlSettingsTabMovieguide(this.getTabSettings());
+		    tabSettingsMovieguide = new GuiSettingsTabMovieguide(control);
+			control.run();
+		}
+		return tabSettingsMovieguide;
+	}	
 	
 	/**
 	 * @return Returns the tabSettings.
