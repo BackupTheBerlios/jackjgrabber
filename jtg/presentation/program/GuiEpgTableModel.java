@@ -18,6 +18,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
+import java.io.*;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -59,7 +61,7 @@ public class GuiEpgTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return epg.getEventId();
 		} if (columnIndex == 1) {
-			return epg.getStartTime();
+			return epg.getStartdate().getTime();
 		} if (columnIndex == 2) {
 			return epg.getEndTime();
 		} if (columnIndex == 3) {
@@ -103,8 +105,7 @@ public class GuiEpgTableModel extends AbstractTableModel
 			
 			for (int i=0; i<fullList.size(); i++) {
 				BOEpg epg = (BOEpg)fullList.get(i);
-				if (epg.getStartdate().get(Calendar.DATE)==chooserDate.get(Calendar.DATE) && 
-					epg.getStartdate().get(Calendar.MONTH)==chooserDate.get(Calendar.MONTH)){
+				if (checkDate(epg,chooserDate)){
 						this.getEpgList().add(epg);
 				}
 			}
@@ -115,6 +116,33 @@ public class GuiEpgTableModel extends AbstractTableModel
 		}
 	}
 	
+	/**
+	 * @param epg
+	 * @return
+	 */
+	private boolean checkDate(BOEpg epg,GregorianCalendar chooserDate) {
+	
+		int day = epg.getStartdate().get(Calendar.DATE);
+		int month = epg.getStartdate().get(Calendar.MONTH);					
+		if (month == chooserDate.get(Calendar.MONTH))
+		{
+			if (day == chooserDate.get(Calendar.DATE))
+			{
+				return true;
+			}
+			else if (day == chooserDate.get(Calendar.DATE) + 1)
+			{
+				if (epg.getStartdate().get(Calendar.HOUR_OF_DAY) < 7)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+//		return  (day == chooserDate.get(Calendar.DATE) && 
+	//			month == chooserDate.get(Calendar.MONTH));
+	}
+
 	/**
 	 * update the own EPG-list
 	 */
