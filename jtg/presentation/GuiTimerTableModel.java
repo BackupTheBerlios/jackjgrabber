@@ -1,7 +1,7 @@
 package presentation;
 
 
-import java.util.ArrayList;
+
 
 import javax.swing.table.AbstractTableModel;
 
@@ -13,12 +13,10 @@ import control.ControlTimerTab;
 public class GuiTimerTableModel extends AbstractTableModel 
 {
 	ControlTimerTab control;
-	ArrayList timerList = new ArrayList();
 	SerBoxControl box;
 	
 	public GuiTimerTableModel(ControlTimerTab ctrl){
 		this.setControl(ctrl);
-		this.createTimerList();
 	}
 
 	public int getColumnCount() {
@@ -26,11 +24,14 @@ public class GuiTimerTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
-		return this.getTimerList().size();
+		if (this.getControl().getTimerList() != null) {
+			return this.getControl().getTimerList().size();
+		}
+		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getTimerList().get(rowIndex);
+		BOTimer timer = (BOTimer)this.getControl().getTimerList().get(rowIndex);
 		if (columnIndex == 0) {
 			return timer.getChannelId();
 		} if (columnIndex == 1) {
@@ -65,25 +66,6 @@ public class GuiTimerTableModel extends AbstractTableModel
 		return false;
 	}
 	
-	public void createTimerList(){
-		try{
-			this.setTimerList(box.getTimer());
-		}catch(Exception ex){}		
-	}
-	
-	public void fireTableDataChanged() {
-		this.createTimerList();
-		super.fireTableDataChanged();
-	}
-	
-	public ArrayList getTimerList() {
-		return timerList;
-	}
-
-	public void setTimerList(ArrayList timerList) {
-		this.timerList = timerList;
-	}
-
 	public ControlTimerTab getControl() {
 		return control;
 	}
