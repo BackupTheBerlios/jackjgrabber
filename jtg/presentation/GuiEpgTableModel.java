@@ -57,9 +57,9 @@ public class GuiEpgTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return "Event-ID"; 
 		} if (columnIndex == 1) {
-			return "Ende";
-		} if (columnIndex == 2) {
 			return "Start";
+		} if (columnIndex == 2) {
+			return "Ende";
 		} if (columnIndex == 3) {
 			return "Dauer";
 		} else {
