@@ -57,10 +57,14 @@ public class BOUdrecOptions implements Serializable {
 	
 	public ArrayList toStringList() {
 	    ArrayList ret = new ArrayList(5+optionList.length);
-	    ret.add("-asplit");
-	    ret.add(getASplit());
-	    ret.add("-vsplit");
-	    ret.add(getVSplit());
+        if (!getASplit().equals("-1")) {
+            ret.add("-asplit");
+            ret.add(getASplit());   
+        }
+        if (!getVSplit().equals("-1")) {
+            ret.add("-vsplit");
+            ret.add(getVSplit());   
+        }
 	    ret.add("-buf");
 	    ret.add(getBuffer());
 	    ret.add("-tcp");
