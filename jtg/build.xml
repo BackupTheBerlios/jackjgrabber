@@ -5,7 +5,7 @@
 	
 	<property name="targetJarName" 		value="jackTheJGrabber.jar" />
 	<property name="zipFileName" 		value="jackTheJGrabber.zip" />
-	<property name="targetDir" 			value="f:\jtg" />
+	<property name="targetDir" 			value="/home/alexg/jackTheJGrabber" />
 	<property name="mainclass" 			value="JackTheJGrabber.ControlMain" />
 	<property name="classpath1" 		value="./lib/dom4j.jar" />
 	<property name="classpath2" 		value="./lib/log4j-1.2.8.jar" />
@@ -16,6 +16,7 @@
 	<property name="classpath7" 		value="./lib/systray4j.jar" />
 	<property name="sourcedir1" 		value="**\*.class" />
 	<property name="resourcedir1" 		value="ico\*.*" />
+	<property name="resourcedir2" 		value="locale\*.*" />
 	
 	 <!-- Aufräumen der alten Files -->
 	<target name="cleanup">
@@ -29,6 +30,8 @@
 			<fileset dir="">
 				<include name="${sourcedir1}"/>
 				<include name="${resourcedir1}"/>
+				<include name="${resourcedir2}"/>
+				<include name="Authors"/>
 				<exclude name="**\*.java"/>
 				<exclude name="**\*.ini"/>
 			</fileset>
@@ -44,10 +47,6 @@
 		<copy todir="${targetDir}/lib">
 			<fileset dir="lib"/>
 		</copy>	
-		<copy todir="${targetDir}/locale">
-			<fileset dir="locale"/>
-		</copy>	
-		<copy file="Authors" todir="${targetDir}"/>
 		<copy file="COPYING" todir="${targetDir}"/>
 		<copy file="README" todir="${targetDir}"/>
 		<copy file="systray4j.dll" todir="${targetDir}"/>
@@ -55,8 +54,6 @@
 		<copy file="start.sh" todir="${targetDir}"/>
 		<copy file="start.bat" todir="${targetDir}"/>
 		<copy file="udrec.exe" todir="${targetDir}"/>
-		<copy file="grabber1.ico" todir="${targetDir}"/>
-		<copy file="grabber2.ico" todir="${targetDir}"/>
 		<copy file="jackTheJGrabber.ico" todir="${targetDir}"/>
 	</target>
 	
