@@ -578,6 +578,13 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 					}));
 				}
 			}
+			
+			m.add(new JMenuItem(new AbstractAction(ControlMain.getProperty("button_delete")) {
+				public void actionPerformed(ActionEvent e) {
+					deleteSelectedFromTable(table);
+				}
+			}));
+			
 		}
 		else if (count > 0)
 		{
