@@ -17,9 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.awt.*;
+
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import control.*;
 import control.ControlAboutTab;
 import control.ControlMain;
 import control.ControlMovieGuideTab;
@@ -34,7 +37,10 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiTimerPanel tabTimer=null;
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
+	private GuiTabRecordInfo tabRecordInfo;
+	
 	int index;
+	
 
 	
 	public GuiMainTabPane(GuiMainView mainView) {
@@ -109,6 +115,19 @@ public class GuiMainTabPane extends JTabbedPane {
 	}
 	
 	/**
+	 * @return
+	 */
+	public GuiTabRecordInfo getTabRecordInfo() {
+		if (tabRecordInfo == null) {
+			ControlRecordInfoTab control = new ControlRecordInfoTab(this.getView());
+			ControlMain.recordInfo = control;
+			tabRecordInfo = new GuiTabRecordInfo(control);
+			control.setRecordView(tabRecordInfo);
+		}
+		return tabRecordInfo;
+	}	
+	
+	/**
 	 * @return Returns the tabSettings.
 	 */
 	public GuiMainView getView() {
@@ -132,4 +151,6 @@ public class GuiMainTabPane extends JTabbedPane {
 	public void setIndex(int index) {
 		this.index = index;
 	}
+
+	
 }
