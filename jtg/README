@@ -1,4 +1,4 @@
-ReadMe zu JtJG 0.1.6c, Stand 26.11.2004
+ReadMe zu JtJG 0.1.6c, Stand 04.12.2004
 
 1.Voraussetzungen
 2.Download und Installation von JtJG
@@ -18,7 +18,7 @@ Die aktuelle Version ist 5.0 aka Tiger.
 Nach dem Download muss JtJG in ein Verzeichnis nach Wahl entpackt werden.
 In diesem Verzeichnis befinden sich 2 vorbereitete Startscripte (start.bat für Win32, 
 start.sh für Linux)! Falls kein Startscript benutzt wird, ist es zwingend erfoderlich 
-das Programm aus dem Verzeichnis auszuführen, in dem sich die DateijackTheJGrabber.jar 
+das Programm aus dem Verzeichnis auszuführen, in dem sich die Datei jackTheJGrabber.jar 
 befindet. Wird dies nicht getan, können Einstellungen, Icons 
 sowie Sprachdateien nicht geladen werden. 
 
@@ -27,7 +27,7 @@ In diesen Scripten sind 2 Einstellungen nach eigenen Bedürfnissen anzupassen
 2. Pfad zum JtJG-Verzeichnis
 
 Unter Linux muss das Script gegebenfalls ausführbar gemacht werden.
-JtJG kann dann über die modifiziert Start-Datei gestartet werden.
+JtJG kann dann über die modifizierte Start-Datei gestartet werden.
 
 3.Allgemeine Einstellungen
 
@@ -40,10 +40,9 @@ Diesen Eintrag durch Klick darauf editieren und die eigene Box-IP eintragen.
 Die anderen Einstellungen auf dieser Seite nach eigenem Geschmack vornehmen.
 
 Zur Nutzung des Systemtray-Icons unter Linux ist die Datei 'libsystray4j.so'
-(befindet sich im Jack-Verzeichnis) ins JAVA-Home kopieren.
+(befindet sich im Jack-Verzeichnis) ins JAVA-Home Lib-Verzeichnis zu kopieren.
 Genauere Auskunft über den Zielpfad gibt der Button 'Hilfe' in dem kleinen Fenster,
-welches bei aktiviertem SystemTray-Icon zusammen mit Jack erscheint,
-wenn diese Datei nicht im JAVA-Home liegt.
+welches bei aktiviertem SystemTray-Icon zusammen mit Jack erscheint.
 
 
 3.2 Aufnahmeeinstellungen
