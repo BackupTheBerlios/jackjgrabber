@@ -41,13 +41,13 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 
 	public int getRowCount() {
 		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList()[1].size();
+			return this.getControl().getTimerList().getSystemTimerList().size();
 		}
 		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(rowIndex);
+		BOTimer timer = (BOTimer)this.getControl().getTimerList().getSystemTimerList().get(rowIndex);
 		if (columnIndex == 0) {
 			return control.convertShortEventType(timer.getEventTypeId());
 		} if (columnIndex == 1) {
@@ -58,7 +58,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
-		BOTimer timer = (BOTimer)control.getTimerList()[1].get(row);
+		BOTimer timer = (BOTimer)control.getTimerList().getSystemTimerList().get(row);
 		if (col == 0) {
 			timer.setEventTypeId(control.convertLongEventType((String)value));
 		}
@@ -85,7 +85,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	
 	public boolean isCellEditable (int row, int col) {
 	    Class columnClass = getColumnClass(col);
-	    BOTimer timer = (BOTimer)control.getTimerList()[1].get(row);
+	    BOTimer timer = (BOTimer)control.getTimerList().getSystemTimerList().get(row);
 	    if (col==0 && timer.getModifiedId()==null) {
 	    	return false;
 	    }

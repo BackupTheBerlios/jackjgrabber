@@ -1,7 +1,7 @@
 
 package model;
 
-import control.*;
+import control.ControlMain;
 
 /**
  * @author Reinhard Achleitner

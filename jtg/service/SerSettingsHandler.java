@@ -367,7 +367,7 @@ public class SerSettingsHandler {
 		if (node != null) {
 			settings.getPathSettings().savePath = node.getText();
 		} else {
-			String path = new File(System.getProperty("user.home")).getAbsolutePath();
+			String path = ControlMain.userHomeDirectory;
 			SerXMLHandling.setElementInElement(root, "savePath", path);
 			settings.getPathSettings().setSavePath(path);
 		}

@@ -22,10 +22,8 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import presentation.program.GuiIpListComboModel;
-
-
 import model.BOBox;
+import presentation.program.GuiIpListComboModel;
 import service.SerAlertDialog;
 import control.ControlMain;
 import control.ControlSettingsTabMain;

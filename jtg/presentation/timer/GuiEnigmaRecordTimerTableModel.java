@@ -45,13 +45,13 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 
 	public int getRowCount() {
 		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList()[0].size();
+			return this.getControl().getTimerList().getRecordTimerList().size();
 		}
 		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(rowIndex);
+		BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
 		if (columnIndex == 0) {
 		    return control.convertShortTimerType(timer.getEventTypeId());
 		} if (columnIndex == 1) {
@@ -72,7 +72,7 @@ public class GuiEnigmaRecordTimerTableModel extends AbstractTableModel
 	}
 	
 	public void setValueAt(Object value, int row, int col) {
-	    BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+	    BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(row);
 		if (col == 1) {
 			int senderIndex = this.getControl().getTab().getComboBoxSender().getSelectedIndex();
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);

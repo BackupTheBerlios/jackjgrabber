@@ -5,27 +5,23 @@
  * Window - Preferences - Java - Code Style - Code Templates
  */
 package model;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.io.File;
-import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.dom4j.DocumentException;
-
-import control.ControlMain;
-
-import java.net.MalformedURLException;
+import org.dom4j.Element;
 
 import service.SerFormatter;
 import service.SerXMLHandling;
-
-import model.BOMovieGuide;
+import control.ControlMain;
 
 /**
  * @author ralph

@@ -1,9 +1,10 @@
 
 package presentation.settings;
 
-import java.awt.*;
+import java.awt.HeadlessException;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 /**
  * @author Reinhard Achleitner

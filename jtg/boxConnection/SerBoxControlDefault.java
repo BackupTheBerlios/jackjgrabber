@@ -20,6 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import model.BOBouquet;
 import model.BOEpg;
@@ -27,13 +28,26 @@ import model.BOEpgDetails;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
+import model.BOTimerList;
 
 /**
  * Default-Schnittstellen-Definition
  * 
  */
 public class SerBoxControlDefault extends SerBoxControl {
+    
+    public GregorianCalendar getBoxTime() throws IOException {
+	    return null;
+	}
 	
+    public BOTimerList getTimerList() throws IOException{
+        throw new IOException();
+    }
+    public BOTimerList reReadTimerList() throws IOException{
+        throw new IOException();
+    }
+    
+    
 	public String getName() {
 		return "Default";
 	}
@@ -88,7 +102,7 @@ public class SerBoxControlDefault extends SerBoxControl {
 	public String standbyBox(String modus) throws IOException {
         throw new IOException();
 	}  
-	public ArrayList[] readTimer() throws IOException {
+	public BOTimerList readTimer() throws IOException {
 		throw new IOException();
 	}
 	public String writeTimer(BOTimer timer) throws IOException {

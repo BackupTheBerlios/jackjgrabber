@@ -23,12 +23,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import service.SerFormatter;
+import service.SerTimerHandler;
 import control.ControlNeutrinoTimerTab;
 
 public class BOTimer extends java.lang.Object{
-    public String channelId, timerNumber, modifiedId, eventTypeId, eventRepeatId, announceTime, senderName, description;
-    private GregorianCalendar unformattedStartTime, unformattedStopTime;
+    private String channelId; 
+    public String timerNumber; 
+    private String modifiedId;
+    public String eventTypeId;
+    public String eventRepeatId; 
+    public String announceTime; 
+    public String senderName;
+    public String description;
+    private BOSender sender;
+    private BOLocalTimer localTimer;
+    
+    public GregorianCalendar unformattedStartTime, unformattedStopTime;
 
+    
     public String getTimerNumber (){
         return this.timerNumber;
     }
@@ -49,16 +62,22 @@ public class BOTimer extends java.lang.Object{
         return this.eventRepeatId;
     }
 
-    public void setEventRepeatId(String eventRepeat){
-        this.eventRepeatId = eventRepeat;
+    public void setEventRepeatId(String id){
+        if(eventRepeatId!=null && !eventRepeatId.equals(id) ) {
+            this.setModifiedId("modify");
+        }
+        this.eventRepeatId = id;
     }
 
     public String getAnnounceTime (){
         return this.announceTime;
     }
 
-    public void setAnnounceTime(String announceTime){
-        this.announceTime = announceTime;
+    public void setAnnounceTime(String time){
+        if(announceTime!=null && !announceTime.equals(time) ) {
+            this.setModifiedId("midify");
+        }
+        this.announceTime = time;
     }
 
     public String getStartTime (){
@@ -109,6 +128,7 @@ public class BOTimer extends java.lang.Object{
 	 */
 	public void setUnformattedStartTime(long startMillis) {
 		this.getUnformattedStartTime().setTimeInMillis(startMillis);
+		this.getLocalTimer().setStartTime(startMillis);
 		
 		int startDay = this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH);
 		this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay);
@@ -117,13 +137,19 @@ public class BOTimer extends java.lang.Object{
 		if ((stopMillis-startMillis)<0) {
 			this.getUnformattedStopTime().set(Calendar.DAY_OF_MONTH, startDay+1);
 		}
+		this.setModifiedId("modify");
 	}
 	
 	/**
 	 * @param unformattedStartTime The unformattedStartTime to set.
 	 */
-	public void setUnformattedStartTime(GregorianCalendar startDate) {
-		this.unformattedStartTime = startDate;
+	public void setUnformattedStartTime(GregorianCalendar date) {
+	    if(unformattedStartTime!=null && (SerFormatter.compareDates(date,unformattedStartTime)!=0)) {
+	        this.setModifiedId("modify");
+	    }
+	    this.unformattedStartTime = date;
+	    this.getLocalTimer().setStartTime(date.getTimeInMillis());
+		
 	}
 
 	/**
@@ -151,7 +177,14 @@ public class BOTimer extends java.lang.Object{
 	 * @param unformattedStopTime The unformattedStopTime to set.
 	 */
 	public void setUnformattedStopTime(GregorianCalendar endDate) {
-		this.unformattedStopTime = endDate;
+	    GregorianCalendar stopCal = (GregorianCalendar)this.getUnformattedStartTime().clone();
+	    stopCal.set(Calendar.HOUR_OF_DAY, endDate.get(Calendar.HOUR_OF_DAY));
+        stopCal.set(Calendar.MINUTE, endDate.get(Calendar.MINUTE));
+	    if (this.getUnformattedStartTime().getTimeInMillis()-stopCal.getTimeInMillis()>0) {
+	        stopCal.set(Calendar.DAY_OF_MONTH, stopCal.get(Calendar.DAY_OF_MONTH)+1);
+	    } 
+		this.unformattedStopTime = stopCal;
+		this.setModifiedId("modify");
 	}
 	/**
 	 * @return Returns the startDate.
@@ -171,7 +204,7 @@ public class BOTimer extends java.lang.Object{
 	 * Beu neuen Timern keine modified-Id setzen!!
 	 */
 	public void setModifiedId(String id) {
-		if (modifiedId == null || modifiedId.equals("modify")) {
+		if (id==null || modifiedId == null || modifiedId.equals("modify")) {
 			this.modifiedId = id;
 		}
 	}
@@ -184,7 +217,37 @@ public class BOTimer extends java.lang.Object{
 	/**
 	 * @param channelId The channelId to set.
 	 */
-	public void setChannelId(String channelId) {
-		this.channelId = channelId;
+	public void setChannelId(String id) {
+	    if (channelId!=null && !channelId.equals(id)) {
+	        this.setModifiedId("modify");
+	    }
+		this.channelId = id;
 	}
+	/**
+	 * @return Returns the localTimer.
+	 */
+	public BOLocalTimer getLocalTimer() {
+		if (localTimer==null) {
+		    localTimer= SerTimerHandler.findLocalTimer(this);
+		}
+		return localTimer;
+	}
+	/**
+	 * @param localTimer The localTimer to set.
+	 */
+	public void setLocalTimer(BOLocalTimer localeTimer) {
+		this.localTimer = localeTimer;
+	}
+    /**
+     * @return Returns the sender.
+     */
+    public BOSender getSender() {
+        return sender;
+    }
+    /**
+     * @param sender The sender to set.
+     */
+    public void setSender(BOSender sender) {
+        this.sender = sender; 
+    }
 }

@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.Authenticator;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import model.BOBouquet;
 import model.BOEpg;
@@ -25,12 +26,16 @@ import model.BOEpgDetails;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
+import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
 import control.ControlMain;
 
 public abstract class SerBoxControl {
+        
+    public abstract BOTimerList getTimerList() throws IOException;
+    public abstract BOTimerList reReadTimerList() throws IOException;
 
 	/**
 	 * Detect the Image of the Box Rückgabe von 0 (default), 1 (Neutrino), 2 (Enigma), 3 (Sonstige)
@@ -68,6 +73,7 @@ public abstract class SerBoxControl {
 	}
 
 	public abstract String getName();
+	public abstract GregorianCalendar getBoxTime() throws IOException;
 	public abstract BufferedReader getConnection(String request) throws IOException;
 	public abstract BOPids getPids(boolean tvMode) throws IOException;
 	public abstract ArrayList getBouquetList() throws IOException;
@@ -79,7 +85,7 @@ public abstract class SerBoxControl {
 	public abstract String sendMessage(String message) throws IOException;
 	public abstract String standbyBox(String modus) throws IOException;
 	public abstract String shutdownBox() throws IOException;
-	public abstract ArrayList[] readTimer() throws IOException;
+	protected abstract BOTimerList readTimer() throws IOException;
 	public abstract String writeTimer(BOTimer timer) throws IOException;
 	public abstract String getChanIdOfRunningSender() throws IOException;
 	public abstract boolean isTvMode() throws IOException;

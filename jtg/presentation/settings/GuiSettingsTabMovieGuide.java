@@ -13,16 +13,18 @@
  */
 package presentation.settings;
 
-import java.awt.*;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
-import javax.swing.*;
-import javax.swing.JButton;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import presentation.GuiTab;
 import service.SerIconManager;
@@ -31,9 +33,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import control.*;
 import control.ControlMain;
-import control.ControlSettingsTabPlayback;
+import control.ControlSettingsTabMovieGuide;
 
 public class GuiSettingsTabMovieGuide extends GuiTab {
 

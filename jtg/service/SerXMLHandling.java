@@ -46,7 +46,7 @@ public class SerXMLHandling {
 		Element root = doc.addElement( "settings" );	
 		
 		setElementInElement(root,"playbackPlayer", "d: http://$ip:31339/$vPid,$aPid");
-		setElementInElement(root,"savePath", new File(System.getProperty("user.home")).getAbsolutePath());
+		setElementInElement(root,"savePath", ControlMain.userHomeDirectory);
 		setElementInElement(root,"startStreamingServer", "true");
 		setElementInElement(root,"streamingServerPort", "4000");
 		setElementInElement(root,"theme", "ExperienceBlue");
@@ -90,7 +90,14 @@ public class SerXMLHandling {
 		return doc;
 	}
 	
-	 public static Document createEmptyMovieguideFile() throws IOException {
+	public static Document createEmptyTimerFile(File path) throws IOException {
+	    Document doc = DocumentHelper.createDocument();
+		Element root = doc.addElement( "timerList" );
+		saveXMLFile(path, doc);
+		return doc;
+	}
+	
+	public static Document createEmptyMovieguideFile() throws IOException {
         Document doc = DocumentHelper.createDocument();
         doc.addElement("movieguide");
         return doc;

@@ -1,9 +1,8 @@
 package presentation.recordInfo;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.Icon;
 
-import service.*;
+import service.SerIconManager;
 
 /**
  * @author Reinhard Achleitner

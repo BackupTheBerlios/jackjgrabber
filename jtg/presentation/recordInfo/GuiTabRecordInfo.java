@@ -22,21 +22,40 @@ package presentation.recordInfo;
  * 
  * @author Reinhard Achleitner
  */
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.tree.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.tree.DefaultTreeModel;
 
-import presentation.*;
+import presentation.GuiTab;
 
-import com.jgoodies.forms.builder.*;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
-import control.*;
+import control.ControlMain;
+import control.ControlRecordInfoTab;
 
 public class GuiTabRecordInfo extends GuiTab {
 

@@ -13,39 +13,43 @@
  */
 package control;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.logging.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.event.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import model.*;
+import model.BOPatternTag;
+import model.BORecordArgs;
 import model.BOSettingsRecord;
-import presentation.settings.*;
 import presentation.settings.GuiSettingsTabRecord;
 import presentation.settings.GuiStreamTypeComboModel;
 import presentation.settings.GuiTabSettings;
-import service.*;
+import presentation.settings.GuiTagFrame;
+import service.SerFormatter;
+import service.SerHelper;
 
 public class ControlSettingsTabRecord extends ControlTabSettings implements KeyListener, ActionListener, ItemListener, ChangeListener {
 
 	GuiTabSettings settingsTab;
-	public final String[] streamTypesJGrabber = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport"};
-	public final String[] streamTypesUdrec = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport", "ES MPEG-Elementary"};
+	public static final String[] streamTypesJGrabber = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport"};
+	public static final String[] streamTypesUdrec = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport", "ES MPEG-Elementary"};
 	private GuiTagFrame tagFrame;
 
 	public ControlSettingsTabRecord(GuiTabSettings tabSettings) {
@@ -181,9 +185,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 
 		}
 	}
-	/**
-	 *  
-	 */
+
 	private void testPattern() {
 
 		// test directory pattern

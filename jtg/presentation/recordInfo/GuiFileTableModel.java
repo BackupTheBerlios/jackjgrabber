@@ -1,15 +1,16 @@
 package presentation.recordInfo;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.JTable;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
-import service.*;
-
-import model.*;
+import model.BOFileWrapper;
+import service.SerHelper;
 
 /**
  * @author Reinhard Achleitner

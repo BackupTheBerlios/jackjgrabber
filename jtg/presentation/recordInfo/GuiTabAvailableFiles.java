@@ -19,16 +19,23 @@ package presentation.recordInfo;
  * 
  * @author Reinhard Achleitner
  */
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
 
-import model.*;
-
-import presentation.*;
-import control.*;
+import model.BOFileWrapper;
+import presentation.GuiTab;
+import presentation.GuiTableSorter;
+import control.ControlMain;
+import control.ControlRecordInfoTab;
 
 public class GuiTabAvailableFiles extends GuiTab {
 

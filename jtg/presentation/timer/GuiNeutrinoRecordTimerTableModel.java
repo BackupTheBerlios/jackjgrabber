@@ -18,7 +18,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
@@ -43,13 +42,13 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 
 	public int getRowCount() {
 		if (this.getControl().getTimerList() != null) {
-			return this.getControl().getTimerList()[0].size();
+			return this.getControl().getTimerList().getRecordTimerList().size();
 		}
 		return 0;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(rowIndex);
+		BOTimer timer = (BOTimer)this.getControl().getTimerList().getRecordTimerList().get(rowIndex);
 		if (columnIndex == 0) {
 			return timer.getSenderName();
 		} if (columnIndex == 1) {
@@ -64,7 +63,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 	}
 
 	public void setValueAt(Object value, int row, int col) {
-		BOTimer timer = (BOTimer)control.getTimerList()[0].get(row);
+		BOTimer timer = (BOTimer)control.getTimerList().getRecordTimerList().get(row);
 		if (col == 0) {
 			int senderIndex = this.getControl().getTab().getComboBoxSender().getSelectedIndex();
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
@@ -76,14 +75,12 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			timer.setUnformattedStartTime(newDate.getTimeInMillis());
 		}
 		if (col == 2) {
-			GregorianCalendar oldcal = timer.getUnformattedStopTime();
 			GregorianCalendar newDate = SerFormatter.getDateFromString((String)value, "HH:mm");
-			oldcal.set(Calendar.HOUR_OF_DAY, newDate.get(Calendar.HOUR_OF_DAY));
-			oldcal.set(Calendar.MINUTE, newDate.get(Calendar.MINUTE));
+			timer.setUnformattedStopTime(newDate);
 		}
 		if (col == 3) {
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
-			control.selectRepeatDaysForRecordTimer(timer);
+			ControlNeutrinoTimerTab.selectRepeatDaysForRecordTimer(timer, control.getTab().jRadioButtonWhtage);
 		}
 		timer.setModifiedId("modify");
     }
@@ -104,14 +101,14 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 
 	public boolean isCellEditable (int row, int col) {
 	    Class columnClass = getColumnClass(col);
-	    if (col==4) {
-	    	return false;
-	    }
-	    BOTimer timer = (BOTimer)control.getTimerList()[0].get(row);
-	    if (col==0 && timer.getModifiedId()==null) {
-	    	return false;
-	    }
-	    return true;
+//	    if (col==4) {
+//	    	return false;
+//	    }
+//	    BOTimer timer = (BOTimer)control.getTimerList().getRecordTimerList().get(row);
+//	    if (col==0 && timer.getModifiedId()==null) {
+//	    	return false;
+//	    }
+	    return false;
 	}
 
 	public ControlNeutrinoTimerTab getControl() {

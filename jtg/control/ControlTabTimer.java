@@ -16,14 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 */ 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import model.BOTimer;
+import model.BOTimerList;
 /*
  * Superklasse fuer die Timer-Controls
  */
-public abstract class ControlTabTimer extends ControlTab {
+public abstract class ControlTabTimer implements Runnable {
 
+    public abstract void reReadTimerList();
 	public abstract ArrayList getSenderList();
 	public abstract String[] getRepeatOptions();
 	public abstract String[] getTimerType();
+	public abstract String convertShortEventRepeat(String shortString);
+	public abstract String convertLongEventRepeat(String longString);
+	public abstract BOTimerList getTimerList();
+	public abstract void addRecordTimer (BOTimer timer);
+	public abstract void writeTimer (BOTimer timer) throws IOException;
 	
 }

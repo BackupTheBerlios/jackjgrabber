@@ -1,13 +1,12 @@
 package presentation.recordInfo;
 
-import java.awt.*;
+import java.awt.Component;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.JLabel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
-import model.*;
-
-import service.*;
+import service.SerIconManager;
 
 /**
  * @author Reinhard Achleitner

@@ -33,6 +33,7 @@ import model.BOPid;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
+import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
@@ -45,6 +46,20 @@ import control.ControlProgramTab;
  */
 public class SerBoxControlNeutrino extends SerBoxControl{
 			
+    private BOTimerList timerList;
+    
+    public BOTimerList getTimerList() throws IOException {
+        if (timerList==null) {
+            timerList=this.readTimer();
+        }
+        return timerList;
+    }
+    
+    public BOTimerList reReadTimerList() throws IOException {
+        timerList=this.readTimer();
+        return timerList;
+    }
+    
 	public String getName() {
 		return "Neutrino";
 	}
@@ -280,14 +295,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		Logger.getLogger("SerBoxControlNeutrino").info(ControlMain.getProperty("msg_shutdown"));         
 		return sendCommand("shutdown");
 	}
-	/**
-	 * Rückgabe eines Arrays mit 2 ArrayListen. An 1. Postion Programm-Timer
-	 * 2. Position ArrayList mit SystemTimer
-	 */
-	public ArrayList[] readTimer() throws IOException {
-		ArrayList[] timerList = new ArrayList[2];
-		timerList[0] = new ArrayList();
-		timerList[1] = new ArrayList();
+
+	public BOTimerList readTimer() throws IOException {
+	    BOTimerList timerList = new BOTimerList();
 		
 		BufferedReader inputNhttpd = getConnection("/control/timer");
 		String line;
@@ -313,17 +323,22 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    }
 
 		    botimer.announceTime=valueAnno;
-		    botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(valueStart));  
-			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(valueStop)); 
+		    botimer.unformattedStartTime=SerFormatter.formatUnixDate(valueStart);  
+			botimer.unformattedStopTime=SerFormatter.formatUnixDate(valueStop); 
 		    
 		    if (botimer.getEventTypeId().equals("5")) {
-		    	timerList[0].add(botimer);
+		    	timerList.getRecordTimerList().add(botimer);
 		    } else {
-		    	timerList[1].add(botimer);   	
+		        timerList.getSystemTimerList().add(botimer);   	
 		    }
 		}
-		setTimerDesctiptionName(timerList[0]);
+		setTimerDesctiptionName(timerList.getRecordTimerList());
 		return timerList;
+	}
+	
+	public GregorianCalendar getBoxTime() throws IOException {
+	    BufferedReader input = getConnection("/control/gettime?rawtime");
+	    return SerFormatter.formatUnixDate(input.readLine());
 	}
 	
 	/**

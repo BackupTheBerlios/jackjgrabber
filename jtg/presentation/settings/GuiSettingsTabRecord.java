@@ -16,8 +16,8 @@ package presentation.settings;
 import java.awt.Dimension;
 import java.text.ParseException;
 
-import javax.swing.*;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;

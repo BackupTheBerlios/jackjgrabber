@@ -17,14 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import model.BOTimer;
+import model.BOTimerList;
 import presentation.GuiMainView;
 
 public class ControlDefaultTimerTab extends ControlTabTimer {
 	
 	GuiMainView mainView;
 
+	public void reReadTimerList() {}
 	
 	public ControlDefaultTimerTab(GuiMainView view) {
 		this.setMainView(view);
@@ -43,7 +47,17 @@ public class ControlDefaultTimerTab extends ControlTabTimer {
 	public String[] getTimerType() {
 		  return null;  
 	}
+	public String convertShortEventRepeat(String shortString) {
+		return null;	
+	};
+	
+	public String convertLongEventRepeat(String longString) {
+		return null;	
+	};
+	
+	public void writeTimer(BOTimer timer) throws IOException {}
 
+	public void addRecordTimer(BOTimer timer) {}
 	/**
 	 * @return Returns the mainView.
 	 */
@@ -55,5 +69,9 @@ public class ControlDefaultTimerTab extends ControlTabTimer {
 	 */
 	public void setMainView(GuiMainView mainView) {
 		this.mainView = mainView;
+	}
+	
+	public BOTimerList getTimerList() {
+	    return null;
 	}
 }

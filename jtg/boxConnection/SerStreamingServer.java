@@ -68,7 +68,7 @@ public class SerStreamingServer extends Thread {
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(socket.getInputStream());
 
-//		Pretty print the document to System.out
+		//Pretty print the document to System.out
 //		OutputFormat format = OutputFormat.createPrettyPrint();
 //		XMLWriter writer = new XMLWriter( System.out, format );
 //		writer.write( document );

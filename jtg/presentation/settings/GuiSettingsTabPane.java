@@ -19,8 +19,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import javax.swing.JTabbedPane;
 
-import control.*;
 import control.ControlSettingsTabMain;
+import control.ControlSettingsTabMovieGuide;
+import control.ControlSettingsTabPath;
 import control.ControlSettingsTabPlayback;
 import control.ControlSettingsTabRecord;
 

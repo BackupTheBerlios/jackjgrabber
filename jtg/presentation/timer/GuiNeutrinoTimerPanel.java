@@ -264,7 +264,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		if (jPanelDauerTimer == null) {
 			jPanelDauerTimer = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columna
+				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columns
 				      "pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer, layout);
 			CellConstraints cc = new CellConstraints();
@@ -274,10 +274,10 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 				if (jRadioButtonWhtage[i]== null) {
 					jRadioButtonWhtage[i] = new JRadioButton();
 					jRadioButtonWhtage[i].addActionListener(control);
-					jRadioButtonWhtage[i].setName(Integer.toString(control.weekdays_value[i]));
+					jRadioButtonWhtage[i].setName(Integer.toString(ControlNeutrinoTimerTab.weekdays_value[i]));
 					jRadioButtonWhtage[i].setActionCommand("recordTimer");
 					jRadioButtonWhtage[i].setEnabled(false);					
-					jRadioButtonWhtage[i].setText(control.weekdays[i]);
+					jRadioButtonWhtage[i].setText(ControlNeutrinoTimerTab.weekdays[i]);
 				}
 				builder.add(jRadioButtonWhtage[i],cc.xy(a, 1));
 				a = a+2;
@@ -300,9 +300,9 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 					jRadioButtonWhtage2[i] = new JRadioButton();
 					jRadioButtonWhtage2[i].setEnabled(false);
 					jRadioButtonWhtage2[i].setActionCommand("systemTimer");
-					jRadioButtonWhtage2[i].setName(Integer.toString(control.weekdays_value[i]));
+					jRadioButtonWhtage2[i].setName(Integer.toString(ControlNeutrinoTimerTab.weekdays_value[i]));
 					jRadioButtonWhtage2[i].addActionListener(control);
-					jRadioButtonWhtage2[i].setText(control.weekdays[i]);
+					jRadioButtonWhtage2[i].setText(ControlNeutrinoTimerTab.weekdays[i]);
 				}
 				builder.add(jRadioButtonWhtage2[i],cc.xy(1, a));
 				a = a+2;
@@ -456,32 +456,19 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return comboBoxSender;
 	}
-	
-	public void enableRecordTimerWeekdays() {		
-		enableRecordTimerWeekdays(true);
-	}
+
 	public void enableRecordTimerWeekdays(boolean enabled) {		
 		for (int i = 0; i<7; i++){
 			jRadioButtonWhtage[i].setEnabled(enabled);
 		}
 	}
-	
-	public void enableSystemTimerWeekdays() {
-		enableSystemTimerWeekdays(true);
-	}
+
 	public void enableSystemTimerWeekdays(boolean enabled) {
 		for (int i = 0; i<7; i++){
 			jRadioButtonWhtage2[i].setEnabled(enabled);
 		}
 	}
 
-	public void disableRecordTimerWeekdays() {
-		enableRecordTimerWeekdays(false);
-	}
-
-	public void disableSystemTimerWeekdays() {
-		enableSystemTimerWeekdays(false);
-	}
 	/**
 	 * @return Returns the tfRecordTimerEndTime.
 	 */

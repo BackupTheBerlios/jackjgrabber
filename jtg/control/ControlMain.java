@@ -67,6 +67,8 @@ public class ControlMain {
 	static BOBox activeBox;
 
 	private static Properties properties = new Properties();
+	public static String separator =  System.getProperty("file.separator");
+	public static String userHomeDirectory = System.getProperty("user.home")+separator+".JtJG";
 	private static Locale locale = new Locale("");
 	public static GuiSplashScreen screen;
 	public static GuiLogWindow logWindow;
@@ -342,17 +344,17 @@ public class ControlMain {
 			getSettings().getLayoutSettings().setLogSize(logWindow.getSize());
 		}
 	}
+
     /**
      * @return Returns the settingsFilename.
      */
     public static String getSettingsFilename() {
         if (settingsFilename==null) {
-            String sep = System.getProperty("file.separator");
-            File dir = new File(System.getProperty("user.home")+sep+".JtJG");
-            if (!dir.exists()) {
-                dir.mkdir();
+            File userHome = new File(userHomeDirectory);
+            if (!userHome.exists()) {
+                userHome.mkdir();
             }
-            settingsFilename = dir.getAbsolutePath()+sep+"settings.xml";    
+            settingsFilename = userHomeDirectory+separator+"settings.xml";    
         }
         return settingsFilename;
     }

@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.util.ArrayList;
 
+import service.SerTimerHandler;
 import control.ControlMain;
 
 public class BORecordArgs {
@@ -33,6 +34,7 @@ public class BORecordArgs {
 	String mode;
 	String command;
 	BOPids pids;
+	BOLocalTimer localTimer;
 	boolean quickRecord=true;
 	/**
 	 * @return Returns the aPids.
@@ -153,8 +155,13 @@ public class BORecordArgs {
     }
     /**
      * @param quickRecord The quickRecord to set.
+     * wenn es sich um eine Timer-Aufnahme handelt,
+     * den zugehoerigen Local-Timer suchen
      */
     public void setQuickRecord(boolean quickRecord) {
+        if (!quickRecord) {
+            this.setLocalTimer(SerTimerHandler.getRunningLocalTimer());
+        }
         this.quickRecord = quickRecord;
     }
 	/**
@@ -196,5 +203,17 @@ public class BORecordArgs {
         if (!ControlMain.getSettingsRecord().isRecordVtxt()) {
 		    this.getPids().setVtxtPid(null);
 		}
+    }
+    /**
+     * @return Returns the localTimer.
+     */
+    public BOLocalTimer getLocalTimer() {
+        return localTimer;
+    }
+    /**
+     * @param localTimer The localTimer to set.
+     */
+    public void setLocalTimer(BOLocalTimer localTimer) {
+        this.localTimer = localTimer;
     }
 }

@@ -1,6 +1,6 @@
 package presentation.recordInfo;
 
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * @author Reinhard Achleitner

@@ -15,6 +15,7 @@ import javax.swing.JTable;
 
 import model.BOSender;
 import model.BOTimer;
+import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
@@ -45,7 +46,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListener, ActionListener, MouseListener {
 	
 	GuiMainView mainView;
-	ArrayList[] timerList;
+	BOTimerList timerList;
 	ArrayList senderList;
 	GuiEnigmaTimerPanel tab;
 	public String[] repeatOptions = { ControlMain.getProperty("once"), ControlMain.getProperty("weekdays")  };
@@ -64,7 +65,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	    this.setTab((GuiEnigmaTimerPanel)this.getMainView().getTabTimer());
 			try {
 			    this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				this.setTimerList(ControlMain.getBoxAccess().readTimer());
+				this.setTimerList(ControlMain.getBoxAccess().reReadTimerList());
 				this.refreshTables();
 				//this.getTab().recordTimerSorter.setSortingStatus(2, 1);
 				this.setSenderList(ControlMain.getBoxAccess().getAllSender());
@@ -86,14 +87,14 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		}
 		
 		if (action == "addProgramTimer") {
-			this.getTimerList()[0].add(this.buildRecordTimer());
+			this.getTimerList().getRecordTimerList().add(this.buildRecordTimer());
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "cleanup") {
 		    this.actionCleanUpRecordTimer();
 		}
 		if (action == "reload") {
-			this.actionReload();
+			this.reReadTimerList();
 		}
 		if (action == "send") {
 			this.actionSend();
@@ -113,7 +114,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 			JTable table = this.getTab().getJTableRecordTimer();
 			int selectedRow = table.getSelectedRow();
 			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
+			BOTimer timer = (BOTimer)this.getTimerList().getRecordTimerList().get(modelIndex);
 			timer.setEventRepeatId(this.getRepeatOptionValue(this.getTab().jRadioButtonWhtage));
 		}
 	}
@@ -133,7 +134,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	private void actionDeleteAllRecordTimer() {
 		try {
 			this.deleteAllTimer();
-			this.getTimerList()[0] = new ArrayList();
+			this.getTimerList().setRecordTimerList(new ArrayList());
 			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
@@ -156,7 +157,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	        timer.setModifiedId("cleanup");
 	        try {
 	            this.writeTimer(timer);
-	            this.rereadTimerList();
+	            this.reReadTimerList();
 	        } catch (IOException e) {
 				SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
 	        }
@@ -164,7 +165,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	
 	private void actionDeleteSelectedRecordTimer() {
 	    int[] rows = this.getTab().getJTableRecordTimer().getSelectedRows();
-		ArrayList timerList = this.getTimerList()[0];
+		ArrayList timerList = this.getTimerList().getRecordTimerList();
 		for (int i=rows.length-1; 0<=i; i--) {
 		    int modelIndex = this.getTab().recordTimerSorter.modelIndex(rows[i]);
 			BOTimer timer = (BOTimer)timerList.get(modelIndex);
@@ -178,24 +179,15 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		}
 	}
 	
-	
-	private void actionReload() {
-		try {
-			this.rereadTimerList();
-		} catch (IOException e) {
-			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
-		}
-	}
-	
 	private void deleteTimer(BOTimer timer) throws IOException {
 		if (timer.getTimerNumber() != null) {  //Neu angelegte Timer muessen nicht geloescht werden
 			timer.setModifiedId("remove");
 			this.writeTimer(timer);
-			this.rereadTimerList();
+			this.reReadTimerList();
 		}
 	}
 	
-	private void writeTimer(BOTimer timer) throws IOException {
+	public void writeTimer(BOTimer timer) throws IOException {
 		if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
 			if (timer.getModifiedId().equals("cleanup")) {
 			    Logger.getLogger("ControlProgramTab").info(ControlMain.getProperty("msg_timerCleanup"));
@@ -228,17 +220,21 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 			}
 		}
 	}
-	private void rereadTimerList() throws IOException {
-	    this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		this.setTimerList(ControlMain.getBoxAccess().readTimer());
-		this.getTab().setCursor(Cursor.getDefaultCursor());
-		this.refreshTables();
+	public void reReadTimerList(){
+	    try {
+            this.getTab().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            this.setTimerList(ControlMain.getBoxAccess().getTimerList());
+            this.getTab().setCursor(Cursor.getDefaultCursor());
+            this.refreshTables();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	private void actionSend() {
 		//this.setChanId(this.getTimerList()[0]);
 		try {
-			this.writeAllTimer(this.getTimerList()[0]);
-			this.rereadTimerList();
+			this.writeAllTimer(this.getTimerList().getRecordTimerList());
+			this.reReadTimerList();
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlEnigmaTimerTab", this.getMainView());
 		}
@@ -252,7 +248,7 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 		int selectedRow = table.getSelectedRow();		
 		if (tableName == "recordTimerTable") {
 			int modelIndex = this.getTab().recordTimerSorter.modelIndex(selectedRow);
-			BOTimer timer = (BOTimer)this.getTimerList()[0].get(modelIndex);
+			BOTimer timer = (BOTimer)this.getTimerList().getRecordTimerList().get(modelIndex);
 			this.selectRepeatDaysForRecordTimer(timer);
 		}
 		
@@ -326,6 +322,8 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	    }
 	}
 	
+	public void addRecordTimer(BOTimer timer) {}
+	
 	private BOTimer buildRecordTimer() {
 	    BOTimer timer = new BOTimer();
 		
@@ -376,13 +374,13 @@ public class ControlEnigmaTimerTab extends ControlTabTimer implements ItemListen
 	/**
 	 * @return Returns the timerList.
 	 */
-	public ArrayList[] getTimerList() {
+	public BOTimerList getTimerList() {
 		return timerList;
 	}
 	/**
 	 * @param timerList The timerList to set.
 	 */
-	public void setTimerList(ArrayList[] timerList) {
+	public void setTimerList(BOTimerList timerList) {
 		this.timerList = timerList;
 	}
 	/**

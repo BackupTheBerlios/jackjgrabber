@@ -19,6 +19,7 @@ import model.BOPid;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
+import model.BOTimerList;
 
 import org.apache.log4j.Logger;
 
@@ -45,6 +46,24 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 
 public class SerBoxControlEnigma extends SerBoxControl {
+    
+    private BOTimerList timerList;
+    
+    public GregorianCalendar getBoxTime() throws IOException {
+	    return new GregorianCalendar();
+	}
+    
+    public BOTimerList getTimerList() throws IOException {
+        if (timerList==null) {
+            timerList=this.readTimer();
+        }
+        return timerList;
+    }
+    
+    public BOTimerList reReadTimerList() throws IOException {
+        timerList=this.readTimer();
+        return timerList;
+    }
     
 	
 	public String getName() {
@@ -298,10 +317,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		Logger.getLogger("SerBoxControlEnigma").info("Ihre Dbox wird in den StandbyModus gebracht.");
 		return sendCommand("standby");
 	}
-	public ArrayList[] readTimer() throws IOException {
-		ArrayList[] timerList = new ArrayList[2];
-		timerList[0] = new ArrayList();
-		timerList[1] = new ArrayList();
+	public BOTimerList readTimer() throws IOException {
+	    BOTimerList timerList = new BOTimerList();
 		BufferedReader input=getConnection("/body?mode=controlTimerList");
 		boolean recurring = false;
 		boolean onetimer=false;
@@ -390,11 +407,11 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	    			botimer.setSenderName(channel);
 	    			botimer.setChannelId(channelID);
 	    			botimer.setAnnounceTime(""); //vorwarnzeit
-	    			botimer.setUnformattedStartTime(startDate);  //startDatum
-	    			botimer.setUnformattedStopTime(endDate);
+	    			botimer.unformattedStartTime=startDate;  //startDatum
+	    			botimer.unformattedStopTime=endDate;
 	    			botimer.setDescription(title);
 	    			botimer.setTimerNumber("ref="+channelID+"&start="+valueStart+"&type="+timerType+"&force=no");
-	    			timerList[0].add(botimer);
+	    			timerList.getRecordTimerList().add(botimer);
 	    			startpos=endpos;
 				} 
 			}

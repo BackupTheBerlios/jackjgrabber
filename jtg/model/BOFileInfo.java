@@ -1,10 +1,9 @@
 package model;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.File;
+import java.util.Date;
 
-import service.*;
+import service.SerHelper;
 
 /**
  * create all infos of the given file

@@ -1,7 +1,11 @@
 package model;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 public class BOFileWrapper {
 	private File file;
