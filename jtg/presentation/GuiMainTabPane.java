@@ -2,16 +2,16 @@ package presentation;
 
 import javax.swing.JTabbedPane;
 
+import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
 import control.ControlSettingsTab;
-import control.ControlTimerTab;
 
 public class GuiMainTabPane extends JTabbedPane {
 
 	public GuiTabProgramm tabProgramm = null;
 	public GuiTabSettings tabSettings = null;
-	public GuiTabTimer tabTimer=null;
+	public GuiTimerPanel tabTimer=null;
 	public GuiTabProjectX tabProjectX=null;
 	public GuiMainView view;
 	int index;
@@ -35,12 +35,11 @@ public class GuiMainTabPane extends JTabbedPane {
 		return tabProgramm;
 	}
 	/**
-	 * Aufbau des Tabs Timerliste		
+	 * Image-spezifische Timer-Gui		
 	 */    
-	public GuiTabTimer getTabTimer() {
+	public GuiTimerPanel getTabTimer() {
 		if (tabTimer == null) {
-			ControlTimerTab control = new ControlTimerTab(this.getView());
-			tabTimer = new GuiTabTimer(control);
+			tabTimer = GuiTimerPanel.getTimerPanel(ControlMain.getBoxAccess().getName(), this.getView());
 		}
 		return tabTimer;
 	}

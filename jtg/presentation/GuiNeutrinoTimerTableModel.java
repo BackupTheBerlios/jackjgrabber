@@ -8,14 +8,14 @@ import javax.swing.table.AbstractTableModel;
 import boxConnection.SerBoxControl;
 
 import model.BOTimer;
-import control.ControlTimerTab;
+import control.ControlNeutrinoTimerTab;
 
-public class GuiTimerTableModel extends AbstractTableModel 
+public class GuiNeutrinoTimerTableModel extends AbstractTableModel 
 {
-	ControlTimerTab control;
+	ControlNeutrinoTimerTab control;
 	SerBoxControl box;
 	
-	public GuiTimerTableModel(ControlTimerTab ctrl){
+	public GuiNeutrinoTimerTableModel(ControlNeutrinoTimerTab ctrl){
 		this.setControl(ctrl);
 	}
 
@@ -63,11 +63,11 @@ public class GuiTimerTableModel extends AbstractTableModel
 		return false;
 	}
 	
-	public ControlTimerTab getControl() {
+	public ControlNeutrinoTimerTab getControl() {
 		return control;
 	}
 	
-	public void setControl(ControlTimerTab control) {
+	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
 	}
 	

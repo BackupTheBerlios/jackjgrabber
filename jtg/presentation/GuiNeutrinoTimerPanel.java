@@ -1,30 +1,24 @@
-/*
- * Created on 17.09.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package presentation;
 
-import javax.swing.JPanel;
-
-import control.ControlTimerTab;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
+import java.awt.GridBagLayout;
+
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import control.ControlNeutrinoTimerTab;
+import control.ControlTab;
+
 /**
- * @author Treito
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Aleander Geist
  */
-public class GuiTabTimer extends GuiTab {
+public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 
 	private JPanel jPanelTimerListe = null;
-	private ControlTimerTab control;
-	public GuiTimerTableModel timerTableModel;
+	private ControlNeutrinoTimerTab control;
+	public GuiNeutrinoTimerTableModel timerTableModel;
 	private JPanel jPanelAktionen = null;
 	private JTable jTableTimer = null;
 	private JScrollPane jScrollPaneTimerTable = null;
@@ -36,7 +30,7 @@ public class GuiTabTimer extends GuiTab {
 	/**
 	 * This is the default constructor
 	 */
-	public GuiTabTimer(ControlTimerTab control) {
+	public GuiNeutrinoTimerPanel(ControlNeutrinoTimerTab control) {
 		this.setControl(control);
 		initialize();
 	}
@@ -86,7 +80,7 @@ public class GuiTabTimer extends GuiTab {
 	/**
 	 * @return ControlTimerTab
 	 */
-	public ControlTimerTab getControl() {
+	public ControlTab getControl() {
 		return control;
 	}
 
@@ -94,7 +88,7 @@ public class GuiTabTimer extends GuiTab {
 	 * Sets the control.
 	 * @param control The control to set
 	 */
-	public void setControl(ControlTimerTab control) {
+	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
 	}
 	/**
@@ -131,7 +125,7 @@ public class GuiTabTimer extends GuiTab {
 	 */    
 	public JTable getJTableTimer() {
 		if (jTableTimer == null) {
-			timerTableModel = new GuiTimerTableModel(control);
+			timerTableModel = new GuiNeutrinoTimerTableModel(control);
 			jTableTimer = new JTable(timerTableModel);
 		}
 		return jTableTimer;
@@ -220,13 +214,13 @@ public class GuiTabTimer extends GuiTab {
 		}
 		return jPanelPids;
 	}
-	public GuiTimerTableModel getTimerTableModel() {
+	public GuiNeutrinoTimerTableModel getTimerTableModel() {
 		return timerTableModel;
 	}
 	/**
 	 * @param senderTableModel The senderTableModel to set.
 	 */
-	public void setTimerTableModel(GuiTimerTableModel TimerTableModel) {
+	public void setTimerTableModel(GuiNeutrinoTimerTableModel TimerTableModel) {
 		this.timerTableModel = TimerTableModel;
 	}
        }

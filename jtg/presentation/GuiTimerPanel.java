@@ -2,18 +2,27 @@ package presentation;
 
 import javax.swing.JPanel;
 
+import control.ControlNeutrinoTimerTab;
+import control.ControlTab;
+
 /**
  * @author Alexander Geist
- *
+ * 
+ * Imagespezifische Timer-Gui's und Controls werden hier angelegt
  */
-public abstract class GuiTimerPanel {
+public abstract class GuiTimerPanel extends JPanel {
 	
-	public static JPanel getTimerPanel(String boxName) {
+	public static GuiTimerPanel getTimerPanel(String boxName, GuiMainView view) {
 		if (boxName.equals("Enigma")) {
-			return new JPanel();
+			ControlNeutrinoTimerTab control = new ControlNeutrinoTimerTab(view);
+			GuiNeutrinoTimerPanel panel = new GuiNeutrinoTimerPanel(control);
+			return panel;
+		} else { 
+			ControlNeutrinoTimerTab control = new ControlNeutrinoTimerTab(view);
+			GuiNeutrinoTimerPanel panel = new GuiNeutrinoTimerPanel(control);
+			return panel;
 		}
-		//return new GuiTimerPanelNeutrino()
-		return new JPanel();
-	
 	}
+	
+	public abstract ControlTab getControl();
 }

@@ -91,7 +91,7 @@ public class GuiMainView extends JFrame {
 		return this.getMainTabPane().getTabProgramm();
 	}
 	    
-	public GuiTabTimer getTabTimer() {
+	public JPanel getTabTimer() {
 		return this.getMainTabPane().getTabTimer();
 	}
 	    
