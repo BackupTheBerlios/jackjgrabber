@@ -78,6 +78,9 @@ public class BOSettingsMovieGuide {
 			}
 	}
 	public ArrayList getMgDontForgetListe() {
+		if (mgDontForgetListe==null) {
+			mgDontForgetListe=new ArrayList();
+		}
 		return mgDontForgetListe;
 	}
 	public void setMgDontForgetListe(ArrayList mgDontForgetListe) {
