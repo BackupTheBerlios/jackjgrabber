@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
+import control.ControlMain;
+
 /**
  * @author ralix
  *
@@ -17,8 +19,7 @@ import java.util.Iterator;
  */
 public class BOMovieGuide {
 	
-	private static final String[] LIST_ENTRYS = {"Alles","Titel","Darsteller","Episode","Bild","Ton","Produktionsland","Produktionsjahr","Regie"};
-	private static final String[] ABO_ENTRYS = {"PREMIERE START","PREMIERE NOSTALGIE"};
+	private static final String[] LIST_ENTRYS = {ControlMain.getProperty("table_txt_all"),ControlMain.getProperty("table_txt_titel"),ControlMain.getProperty("table_txt_darsteller"),ControlMain.getProperty("table_txt_epi"),ControlMain.getProperty("table_txt_bild"),ControlMain.getProperty("table_txt_ton"),ControlMain.getProperty("table_txt_land"),ControlMain.getProperty("table_txt_jahr"),ControlMain.getProperty("table_txt_regie")};	
 	/**
      * Holds value of property sender.
      */
@@ -441,21 +442,5 @@ public class BOMovieGuide {
     		value = true;
     	}
     	return value;
-    }
-    
-    public ArrayList getAboList(){    	
-    	if(aboList.isEmpty()){
-    		setAboList();
-    	}
-    	return aboList;
-    }
-    public void setAboList(ArrayList aboList){    
-    	this.aboList = aboList;
-    }
-    public void setAboList(){    
-    	try{
-	    	//aboList.add(ABO_ENTRYS[0]);
-	    	//aboList.add(ABO_ENTRYS[1]);	    	
-    	}catch(Exception ex){}
     }
 }

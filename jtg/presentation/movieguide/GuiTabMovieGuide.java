@@ -101,7 +101,7 @@ public class GuiTabMovieGuide extends JPanel {
 	public GuiMovieGuideFilmTableModel filmTableModel;
 	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
 
-	private static String HTML_ON  = "<HTML><font size=3><u>";
+	private static String HTML_ON  = "<HTML><font face='System' size='3'><u>";
 	private static String HTML_OFF = "</u></font></HTML>";
 			
 	public GuiTabMovieGuide(ControlMovieGuideTab ctrl) {
@@ -117,18 +117,17 @@ public class GuiTabMovieGuide extends JPanel {
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
-	
-		builder.addSeparator("Datum",		   		    cc.xywh	(1, 1, 1, 1));
+		builder.addSeparator(ControlMain.getProperty("datum"),  cc.xywh	(1, 1, 1, 1));
 		builder.add(this.getJPanelChannels(),  			cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		
-		builder.addSeparator("Programm Info, Doppelklick 2 Timer",	cc.xywh	(3, 1, 1, 1));						
+		builder.addSeparator(ControlMain.getProperty("prog_info"),	cc.xywh	(3, 1, 1, 1));						
 		builder.add(this.getJPanelInfo(),				cc.xywh	(3, 2, 1, 1));
 		
-		builder.addSeparator("Suche",					cc.xywh	(1, 4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
+		builder.addSeparator(ControlMain.getProperty("suche"),	cc.xywh	(1, 4, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
 		builder.add(this.getJPanelSuche(),  			cc.xywh	(1, 5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		builder.add(this.getJPanelSucheErw(),  			cc.xywh	(1, 6, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 		
-		builder.addSeparator("Aktionen MovieGuide",		cc.xywh	(3, 4, 1, 1));
+		builder.addSeparator(ControlMain.getProperty("akt_mg"),		cc.xywh	(3, 4, 1, 1));
 		builder.add(this.getJPanelDownload(),  			cc.xywh	(3, 5, 1, 1, CellConstraints.FILL, CellConstraints.FILL));			
 			
 		builder.add(this.getJPanelProgressBar(), 	 	cc.xywh	(3, 6, 1, 1, CellConstraints.FILL, CellConstraints.FILL));		
@@ -143,7 +142,7 @@ public class GuiTabMovieGuide extends JPanel {
 			PanelBuilder builder = new PanelBuilder(jPanelChannel, layout);
 			CellConstraints cc = new CellConstraints();			
 			builder.add(this.getJPanelDatum(),		  		cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-			builder.addSeparator("Titel",	cc.xyw	(1, 2, 1));
+			builder.addSeparator(ControlMain.getProperty("titel"),	cc.xyw	(1, 2, 1));
 			builder.add(this.getJScrollPaneChannels(), 			cc.xyw	(1, 3, 1, CellConstraints.FILL, CellConstraints.FILL));			
 			builder.add(this.getJButtonSelectedToTimer(), 	    cc.xyw	(1, 4, 1, CellConstraints.FILL, CellConstraints.FILL));								
 		}
@@ -193,9 +192,9 @@ public class GuiTabMovieGuide extends JPanel {
 			CellConstraints cc = new CellConstraints();										
 			builder.add(this.getComboBoxSucheNach(), 	cc.xyw	(1, 1, 1));
 			//builder.add(this.getCheckBoxAbAktuell(), 	cc.xyw	(3, 1, 1));
-			builder.addSeparator("Suche nach Genre", 	cc.xyw	(1, 2, 1));
+			builder.addSeparator(ControlMain.getProperty("suche_genre"), 	cc.xyw	(1, 2, 1));
 			builder.add(this.getComboBoxGenre(), 	 	cc.xyw	(1, 3, 1));
-			builder.addSeparator("Suche nach Sendern", 	cc.xyw	(3, 2, 1));
+			builder.addSeparator(ControlMain.getProperty("suche_sender"), 	cc.xyw	(3, 2, 1));
 			builder.add(this.getComboBoxSender(), 	 	cc.xyw	(3, 3, 1));
 		}
 		return jPanelSucheErw;
@@ -209,7 +208,7 @@ public class GuiTabMovieGuide extends JPanel {
 				      "20,pref,5,pref");	//rows					
 			PanelBuilder builder = new PanelBuilder(jPanelProgressBar, layout);
 			CellConstraints cc = new CellConstraints();	
-			builder.addSeparator("Fortschritt", cc.xyw	(1, 2, 1));			
+			builder.addSeparator(ControlMain.getProperty("fortschritt"), cc.xyw	(1, 2, 1));			
 			builder.add(this.getJProgressBarDownload(),	 cc.xyw	(1, 4, 1));												
 		}
 		return jPanelProgressBar;
@@ -261,9 +260,9 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonMovieGuideFileChooser = new JButton();
 			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Open16.gif"));
 			jButtonMovieGuideFileChooser.setIcon(icon);			
-			jButtonMovieGuideFileChooser.setText("Öffnen");
-			jButtonMovieGuideFileChooser.setToolTipText("Öffnen der MovieGuide Datei von einem localen Datenträger");
-			jButtonMovieGuideFileChooser.setActionCommand("movieGuidePath");
+			jButtonMovieGuideFileChooser.setText(ControlMain.getProperty("open"));
+			jButtonMovieGuideFileChooser.setToolTipText(ControlMain.getProperty("open_mg_local"));
+			jButtonMovieGuideFileChooser.setActionCommand(ControlMain.getProperty("open"));
 			jButtonMovieGuideFileChooser.addActionListener(this.getControl());
 		}
 		return jButtonMovieGuideFileChooser;
@@ -272,9 +271,9 @@ public class GuiTabMovieGuide extends JPanel {
 	public JButton getJButtonDatumAll() {
 		if (jButtonDatumAll == null) {
 			jButtonDatumAll = new JButton();
-			jButtonDatumAll.setText("Alles");
+			jButtonDatumAll.setText(ControlMain.getProperty("button_all"));
 			jButtonDatumAll.setActionCommand("allDates");
-			jButtonDatumAll.setToolTipText("Alle Daten zeigen.");
+			jButtonDatumAll.setToolTipText(ControlMain.getProperty("button_all_txt"));
 			jButtonDatumAll.addActionListener(this.getControl());
 		}
 		return jButtonDatumAll;
@@ -297,8 +296,8 @@ public class GuiTabMovieGuide extends JPanel {
 			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/new.png"));
 			jButtonDownload.setIcon(icon);						
 			jButtonDownload.setActionCommand("download");
-			jButtonDownload.setText("PMG Download");			
-			jButtonDownload.setToolTipText("Aktuellen MovieGuide runterladen.");
+			jButtonDownload.setText(ControlMain.getProperty("button_pmg_download"));			
+			jButtonDownload.setToolTipText(ControlMain.getProperty("button_pmg_download_txt"));
 			jButtonDownload.addActionListener(this.getControl());
 		}
 		return jButtonDownload;
@@ -308,9 +307,9 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonNeuEinlesen = new JButton();
 			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Refresh16.gif"));
 			jButtonNeuEinlesen.setIcon(icon);		
-			jButtonNeuEinlesen.setText("Neu einlesen");
+			jButtonNeuEinlesen.setText(ControlMain.getProperty("button_new_read"));
 			jButtonNeuEinlesen.setActionCommand("neuEinlesen");
-			jButtonNeuEinlesen.setToolTipText("Neueinlesen des aktuellen MovieGuide.");
+			jButtonNeuEinlesen.setToolTipText(ControlMain.getProperty("button_new_read_txt"));
 			jButtonNeuEinlesen.addActionListener(this.getControl());		
 			jButtonNeuEinlesen.setEnabled(false);
 		}
@@ -321,9 +320,9 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonSuche = new JButton();
 			//ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/suche.png"));
 			//jButtonSuche.setIcon(icon);						
-			jButtonSuche.setText("Suchen");
+			jButtonSuche.setText(ControlMain.getProperty("button_new_suche"));
 			jButtonSuche.setActionCommand("suchen");
-			jButtonSuche.setToolTipText("Durchsucht den MovieGuide mit aktueller Auswahl.");
+			jButtonSuche.setToolTipText(ControlMain.getProperty("button_new_suche_txt"));
 			jButtonSuche.addActionListener(this.getControl());
 			jButtonSuche.addKeyListener(this.getControl());
 		}
@@ -466,7 +465,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taGenre.setEditable(false);			
 			taGenre.setAutoscrolls(true);
 			taGenre.setContentType("text/html");				
-			taGenre.setText(HTML_ON+"Genre: "+HTML_OFF);			
+			taGenre.setText(HTML_ON+ControlMain.getProperty("txt_genre")+HTML_OFF);			
 		}
 		return taGenre;
 	}
@@ -477,7 +476,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taBeschreibung.setEditable(false);
 			taBeschreibung.setAutoscrolls(true);
 			taBeschreibung.setContentType("text/html");				
-			taBeschreibung.setText(HTML_ON+"Inhalt: "+HTML_OFF);
+			taBeschreibung.setText(HTML_ON+ControlMain.getProperty("txt_inhalt")+HTML_OFF);
 		}
 		return taBeschreibung;
 	}
@@ -486,7 +485,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taLand = new JTextPane();
 			taLand.setEditable(false);
 			taLand.setContentType("text/html");				
-			taLand.setText(HTML_ON+"Produktion: "+HTML_OFF);
+			taLand.setText(HTML_ON+ControlMain.getProperty("txt_prod")+HTML_OFF);
 			taLand.setAutoscrolls(true);			
 		}
 		return taLand;
@@ -497,7 +496,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taAudioVideo.setEditable(false);			
 			taAudioVideo.setAutoscrolls(true);
 			taAudioVideo.setContentType("text/html");				
-			taAudioVideo.setText(HTML_ON+"Audio:</u> / <u>Video:"+HTML_OFF);			
+			taAudioVideo.setText(HTML_ON+ControlMain.getProperty("txt_audio")+"</u> / <u>"+ControlMain.getProperty("txt_video")+HTML_OFF);			
 		}
 		return taAudioVideo;
 	}
@@ -507,7 +506,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taDarsteller.setEditable(false);			
 			taDarsteller.setAutoscrolls(true);
 			taDarsteller.setContentType("text/html");				
-			taDarsteller.setText(HTML_ON+"Darsteller: "+HTML_OFF);			
+			taDarsteller.setText(HTML_ON+ControlMain.getProperty("txt_darsteller")+HTML_OFF);			
 		}
 		return taDarsteller;
 	}
@@ -517,7 +516,7 @@ public class GuiTabMovieGuide extends JPanel {
 			taEpisode.setEditable(false);			
 			taEpisode.setAutoscrolls(true);
 			taEpisode.setContentType("text/html");				
-			taEpisode.setText(HTML_ON+"Episode: "+HTML_OFF);			
+			taEpisode.setText(HTML_ON+ControlMain.getProperty("txt_episode")+HTML_OFF);			
 		}
 		return taEpisode;
 	}

@@ -3,13 +3,14 @@ package presentation.movieguide;
 import javax.swing.table.AbstractTableModel;
 
 import model.BOMovieGuide;
+import control.ControlMain;
 import control.ControlMovieGuideTab;
 
 
 public class GuiMovieGuideFilmTableModel extends AbstractTableModel 
 {
 	ControlMovieGuideTab control;	    			
-	private static final String[] COLUMN_NAME = {"Titel"};
+	private static final String[] COLUMN_NAME = {ControlMain.getProperty("table_txt_titel")};
 	
 	public GuiMovieGuideFilmTableModel(ControlMovieGuideTab ctrl){
 		this.setControl(ctrl);			
@@ -34,8 +35,8 @@ public class GuiMovieGuideFilmTableModel extends AbstractTableModel
 	public Object getValueAt( int rowIndex, int columnIndex ) {
 		Object value = null;
 		try{
-		if (columnIndex == 0) {				
-			value = ((BOMovieGuide)this.getControl().getTitelMap().get(new Integer(rowIndex))).getTitel();
+		if (columnIndex == 0) {					
+				value= ((BOMovieGuide)this.getControl().getTitelMap().get(new Integer(rowIndex))).getTitel();
 		}
 		}catch (Exception ex){}
 		return value;	

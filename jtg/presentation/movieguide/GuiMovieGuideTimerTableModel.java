@@ -4,13 +4,14 @@ import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
 import model.BOMovieGuide;
+import control.ControlMain;
 import control.ControlMovieGuideTab;
 import service.SerFormatter;
 
 public class GuiMovieGuideTimerTableModel extends AbstractTableModel 
 {
 	ControlMovieGuideTab control;
-	private static final String[] COLUMN_NAME = {"Datum","Start","Ende","Dauer","Programm"};
+	private static final String[] COLUMN_NAME = {ControlMain.getProperty("table_txt_datum"),ControlMain.getProperty("table_txt_start"),ControlMain.getProperty("table_txt_ende"),ControlMain.getProperty("table_txt_dauer"),ControlMain.getProperty("table_txt_programm")};
 	private static final String DATE_SHORT = "EEEE, dd.MMM.yy";
 	private static final String DATE_TIME = "HH:mm";
 	
