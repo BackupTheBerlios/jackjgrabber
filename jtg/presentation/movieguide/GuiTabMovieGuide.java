@@ -338,7 +338,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jButtonNeuEinlesen.setToolTipText(ControlMain.getProperty("button_new_read_txt"));
 			//jButtonNeuEinlesen.setToolTipText("Liste der nicht zu verpassenden Filme");
 			jButtonNeuEinlesen.addActionListener(this.getControl());		
-			//jButtonNeuEinlesen.setEnabled(false);
+			jButtonNeuEinlesen.setEnabled(false);
 		}
 		return jButtonNeuEinlesen;
 	}
