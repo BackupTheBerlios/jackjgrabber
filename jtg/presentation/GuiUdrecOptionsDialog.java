@@ -243,7 +243,7 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
     public JSpinner getJSpinnerVSPlit() {
         if (jSpinnerVSPlit==null) {
         	int value = Integer.parseInt(this.getUdrecOptions().getVSplit());
-            SpinnerNumberModel model = new SpinnerNumberModel(value, 0, 10, 1);
+            SpinnerNumberModel model = new SpinnerNumberModel(value, -1, 10, 1);
             jSpinnerVSPlit = new JSpinner(model);	   
         }
         return jSpinnerVSPlit;
@@ -260,7 +260,7 @@ public class GuiUdrecOptionsDialog extends JFrame implements ActionListener{
 	public JSpinner getJSpinnerASPlit() {
 		if (jSpinnerASPlit==null) {
 			int value = Integer.parseInt(this.getUdrecOptions().getASplit());
-            SpinnerNumberModel model = new SpinnerNumberModel(value, 0, 10, 1);
+            SpinnerNumberModel model = new SpinnerNumberModel(value, -1, 10, 1);
             jSpinnerASPlit = new JSpinner(model);	   
         }
         return jSpinnerASPlit;
