@@ -38,7 +38,7 @@ public class SerXMLHandling {
 	/**
 	 * Erstellen eines neuen XML-Settingsdokumentes mit Defaultwerten
 	 */
-	public static Document buildEmptyXMLFile(File path) throws IOException {
+	public static Document createStandardSettingsFile(File path) throws IOException {
 		Document doc = DocumentHelper.createDocument();
 		Element root = doc.addElement( "settings" );	
 		
@@ -54,8 +54,10 @@ public class SerXMLHandling {
 		setElementInElement(root,"udrecPath", new File("udrec.exe").getAbsolutePath());
 		setElementInElement(root,"engine", "0");
 		setElementInElement(root,"recordAllPids", "true");
+		setElementInElement(root,"useStandardPlayback", "false");
 
 		root.addElement("boxList");
+		root.addElement("playbackList");
 		ControlMain.setSettingsDocument(doc);
 		saveSettingsFile(path);
 		return doc;

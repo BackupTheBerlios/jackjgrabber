@@ -32,6 +32,8 @@ public class BOSettings {
 	public String locale;
 	public String themeLayout;
 	public ArrayList boxList;
+	public ArrayList playbackOptions;
+	public boolean alwaysUseStandardPlayback;
 	public boolean settingsChanged = false;
 	public boolean projectXSettingsChanged = false;
 	public String streamingServerPort;
@@ -48,6 +50,16 @@ public class BOSettings {
     public void removeBox(int number) {
     	setSettingsChanged(true);
     	getBoxList().remove(number);
+    }
+    
+    public void addPlaybackOption(BOPlaybackOption playbackOption) {
+    	setSettingsChanged(true);
+    	this.getPlaybackOptions().add(playbackOption);
+    }
+    
+    public void removePlaybackOption(int number) {
+    	setSettingsChanged(true);
+    	this.getPlaybackOptions().remove(number);
     }
     
     public void addBox(BOBox box) {
@@ -294,4 +306,66 @@ public class BOSettings {
 			this.recordAllPids = recordPids;
 		}
 	}
+    /**
+     * @return Returns the playbackOptions.
+     */
+    public ArrayList getPlaybackOptions() {
+        return playbackOptions;
+    }
+    /**
+     * @param playbackOptions The playbackOptions to set.
+     */
+    public void setPlaybackOptions(ArrayList playbackOptions) {
+        this.playbackOptions = playbackOptions;
+    }
+    /**
+     * @return Returns the alwaysUseStandardPlayback.
+     */
+    public boolean isAlwaysUseStandardPlayback() {
+        return alwaysUseStandardPlayback;
+    }
+    /**
+     * @param alwaysUseStandardPlayback The alwaysUseStandardPlayback to set.
+     */
+    public void setAlwaysUseStandardPlayback(boolean alwaysUseStandardPlayback) {
+        if (this.alwaysUseStandardPlayback != alwaysUseStandardPlayback) {
+			setSettingsChanged(true);
+			this.alwaysUseStandardPlayback = alwaysUseStandardPlayback;
+		}
+    }
+    
+    /**
+     * if more Options available, return the standard-option
+     * if no standard-option declared, return 1st Option
+     */
+    public BOPlaybackOption getStandardPlaybackOption() {
+        if (this.getPlaybackOptions()==null) {
+            return null;
+        }
+        for (int i=0; i<this.getPlaybackOptions().size(); i++) {
+            BOPlaybackOption option = (BOPlaybackOption)this.getPlaybackOptions().get(i);
+            if (option.isStandard().booleanValue()) {
+                return option;
+            }
+        }
+        return (BOPlaybackOption)this.getPlaybackOptions().get(0);
+    }
+    
+    public Object[] getPlaybackOptionNames () {
+        String[] names = new String[this.getPlaybackOptions().size()];
+        for (int i=0; i<this.getPlaybackOptions().size(); i++) {
+            names[i] = ((BOPlaybackOption)this.getPlaybackOptions().get(i)).getName();
+        }
+        return names;
+    }
+    
+    public BOPlaybackOption getPlaybackOption(String searchName) {
+        for (int i=0; i<this.getPlaybackOptions().size(); i++) {
+            BOPlaybackOption option = (BOPlaybackOption)this.getPlaybackOptions().get(i);
+            if (option.getName().equals(searchName)) {
+                return option;
+            }
+        }
+        return null; //should not happen
+    }
 }

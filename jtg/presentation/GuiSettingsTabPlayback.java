@@ -20,9 +20,12 @@ package presentation;
 
 import java.awt.Dimension;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -34,7 +37,13 @@ public class GuiSettingsTabPlayback extends GuiTab{
     
     private ControlSettingsTabPlayback control;
     private JPanel panelPlaybackSettings = null;
-	private JTextField jTextFieldPlaybackString = null;
+	private JButton jButtonAnlegen = null;
+	private JButton jButtonLoeschen = null;
+	private JCheckBox cbUseStandardOption = null;
+	
+	private JScrollPane jScrollPanePlaybackSettings = null;
+	private JTable jTablePlaybackSettings = null;
+	private GuiPlaybackSettingsTableModel playbackSettingsTableModel;
     
     public GuiSettingsTabPlayback(ControlSettingsTabPlayback ctrl) {
 		super();
@@ -57,31 +66,86 @@ public class GuiSettingsTabPlayback extends GuiTab{
 		if (panelPlaybackSettings == null) {
 			panelPlaybackSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref, 10, pref",	 		//columna 
-			  "pref, 10, pref, pref, 15, pref");	//rows
+			        "pref:grow, 5, pref",	 		//columna 
+			  "pref, 10, pref, pref, 15, pref, pref, 80, 10, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(panelPlaybackSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator("Wiedergabe-Optionen",										cc.xywh	(1, 1, 3, 1));
 			builder.add(new JLabel("z.B. xine http://$ip:31339/$vPid,$aPid"),				cc.xywh	(1, 3, 3, 1));
 			builder.add(new JLabel("z.B. d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid"),	cc.xywh	(1, 4, 3, 1));
-			builder.add(new JLabel("Execute"),												cc.xy	(1, 6));
-			builder.add(this.getJTextFieldPlaybackString(),									cc.xy	(3, 6));
+			builder.add(this.getJScrollPanePlaybackSettings(),								cc.xywh	(1, 6, 1, 3));
+			builder.add(this.getJButtonAnlegen(),											cc.xy	(3, 6));
+			builder.add(this.getJButtonLoeschen(),											cc.xy	(3, 7));
+			builder.add(this.getCbUseStandardOption(),										cc.xy	(1, 10));
 		}
 		return panelPlaybackSettings;
 	}
+    
     /**
-	 * @return Returns the jTextFieldPlaybackString.
-	 */
-	public JTextField getJTextFieldPlaybackString() {
-		if (jTextFieldPlaybackString == null) {
-			jTextFieldPlaybackString = new JTextField();
-			jTextFieldPlaybackString.addKeyListener(control);
-			jTextFieldPlaybackString.setName("playbackString");
-			jTextFieldPlaybackString.setPreferredSize(new Dimension(340, 19));
+	 * This method initializes jScrollPanePlaybackSettings	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */    
+	private JScrollPane getJScrollPanePlaybackSettings() {
+		if (jScrollPanePlaybackSettings == null) {
+			jScrollPanePlaybackSettings = new JScrollPane();
+			jScrollPanePlaybackSettings.setPreferredSize(new Dimension(350, 150));
+			jScrollPanePlaybackSettings.setViewportView(getJTablePlaybackSettings());
 		}
-		return jTextFieldPlaybackString;
+		return jScrollPanePlaybackSettings;
 	}
+	
+	/**
+	 * This method initializes jTablePlaybackSettings	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */    
+	public JTable getJTablePlaybackSettings() {
+		if (jTablePlaybackSettings == null) {
+			playbackSettingsTableModel = new GuiPlaybackSettingsTableModel(control);
+			jTablePlaybackSettings = new JTable(playbackSettingsTableModel);
+			jTablePlaybackSettings.setName("playbackSettings");
+			jTablePlaybackSettings.getColumnModel().getColumn(0).setPreferredWidth(100);
+			jTablePlaybackSettings.getColumnModel().getColumn(0).setMaxWidth(100);
+			jTablePlaybackSettings.getColumnModel().getColumn(1).setPreferredWidth(120);
+			jTablePlaybackSettings.getColumnModel().getColumn(2).setMaxWidth(80);
+			jTablePlaybackSettings.getColumnModel().getColumn(2).setCellRenderer( new GuiPlaybackSettingsTableCellRenderer());
+		}
+		return jTablePlaybackSettings;
+	}
+    
+	/**
+	 * This method initializes jButtonAnlegen	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getJButtonAnlegen() {
+		if (jButtonAnlegen == null) {
+			jButtonAnlegen = new JButton();
+			jButtonAnlegen.setText("Anlegen");
+			jButtonAnlegen.setActionCommand("add");
+			jButtonAnlegen.addActionListener(control);
+			jButtonAnlegen.setPreferredSize(new java.awt.Dimension(90,25));
+		}
+		return jButtonAnlegen;
+	}
+	/**
+	 * This method initializes getJButtonLoeschen	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getJButtonLoeschen() {
+		if (jButtonLoeschen == null) {
+			jButtonLoeschen = new JButton();
+			jButtonLoeschen.setText("Löschen");
+			jButtonLoeschen.setActionCommand("delete");
+			jButtonLoeschen.addActionListener(control);
+			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
+		}
+		return jButtonLoeschen;
+	}
+	
     /**
      * @return Returns the control.
      */
@@ -93,5 +157,22 @@ public class GuiSettingsTabPlayback extends GuiTab{
      */
     public void setControl(ControlSettingsTabPlayback control) {
         this.control = control;
+    }
+    /**
+     * @return Returns the playbackSettingsTableModel.
+     */
+    public GuiPlaybackSettingsTableModel getPlaybackSettingsTableModel() {
+        return playbackSettingsTableModel;
+    }
+    /**
+     * @return Returns the cbUseStandardOption.
+     */
+    public JCheckBox getCbUseStandardOption() {
+        if (cbUseStandardOption == null) {
+            cbUseStandardOption = new JCheckBox("Immer Standard-Option verwenden");
+            cbUseStandardOption.setName("useStandard");
+            cbUseStandardOption.addItemListener(control);
+		}
+        return cbUseStandardOption;
     }
 }
