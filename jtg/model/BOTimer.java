@@ -22,8 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import control.ControlNeutrinoTimerTab;
+
 public class BOTimer extends java.lang.Object{
-    private String channelId, timerNumber, modifiedId, eventTypeId, eventRepeatId, announceTime, senderName, description;
+    public String channelId, timerNumber, modifiedId, eventTypeId, eventRepeatId, announceTime, senderName, description;
     private GregorianCalendar unformattedStartTime, unformattedStopTime;
 
     public String getTimerNumber (){
@@ -39,6 +41,7 @@ public class BOTimer extends java.lang.Object{
     }
 
     public void setEventTypeId(String eventType){
+		this.setModifiedId("modify");
         this.eventTypeId = eventType;
     }
 
@@ -47,6 +50,7 @@ public class BOTimer extends java.lang.Object{
     }
 
     public void setEventRepeatId(String eventRepeat){
+    	this.setModifiedId("modify");
         this.eventRepeatId = eventRepeat;
     }
 
@@ -75,7 +79,14 @@ public class BOTimer extends java.lang.Object{
 
 
 	public String getInfo() {
-		return this.getStartTime()+" "+this.getSenderName()+" "+this.getDescription();
+		String outputString;
+		if (this.getSenderName() == null) {
+			int type = Integer.parseInt(this.getEventTypeId())-1;
+			outputString = ControlNeutrinoTimerTab.timerType[type];
+		} else {
+			outputString = this.getSenderName();
+		}
+		return this.getStartTime()+" "+outputString+" "+this.getDescription();
 	}
 
     public String getSenderName (){
@@ -83,6 +94,7 @@ public class BOTimer extends java.lang.Object{
     }
 
     public void setSenderName(String sender){
+    	this.setModifiedId("modify");
         this.senderName = sender;
     }
     /**
@@ -96,6 +108,7 @@ public class BOTimer extends java.lang.Object{
 	 * Bei Setzen eines neuen Start-Datum, muss das Stop-Datum angepasst werden
 	 */
 	public void setUnformattedStartTime(long startMillis) {
+		this.setModifiedId("modify");
 		this.getUnformattedStartTime().setTimeInMillis(startMillis);
 		
 		int startDay = this.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH);
@@ -118,6 +131,9 @@ public class BOTimer extends java.lang.Object{
 	 * @return Returns the description.
 	 */
 	public String getDescription() {
+		if (description==null) {
+			return "";
+		}
 		return description;
 	}
 	/**
@@ -153,9 +169,12 @@ public class BOTimer extends java.lang.Object{
 	}
 	/**
 	 * @param modifiedId The modifiedId to set.
+	 * Beu neuen Timern keine modified-Id setzen!!
 	 */
-	public void setModifiedId(String timerId) {
-		this.modifiedId = timerId;
+	public void setModifiedId(String id) {
+		if (modifiedId == null || modifiedId.equals("modify")) {
+			this.modifiedId = id;
+		}
 	}
 	/**
 	 * @return Returns the channelId.
