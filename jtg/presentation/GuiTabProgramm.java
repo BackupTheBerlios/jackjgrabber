@@ -124,7 +124,7 @@ public class GuiTabProgramm extends GuiTab {
 		if (jPanelButtonsAktionen == null) {
 			jPanelButtonsAktionen = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 15, pref, 1dlu, pref, 1dlu, pref",	 		//columna 
+				      "pref, 2, 95, 2, 110, 2, 90",	 		//columna 
 				      "pref, 1dlu, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsAktionen, layout);
 			CellConstraints cc = new CellConstraints();
@@ -250,7 +250,6 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonQuickRecord = new JButton();
 			jButtonQuickRecord.setText(ControlMain.getProperty("button_record"));
 			jButtonQuickRecord.setActionCommand("record");
-			jButtonQuickRecord.setPreferredSize(new Dimension(85,25));
 			jButtonQuickRecord.setToolTipText(ControlMain.getProperty("buttontt_record"));
 			jButtonQuickRecord.addActionListener(this.getControl());
 		}
