@@ -27,8 +27,12 @@ public class SerLogAppender extends RollingFileAppender {
 	}
 	
 	public void doAppend(LoggingEvent event) {
-		if (this.getView() != null) {
+		if (this.getView() != null) {		
+			PatternLayout layout = new PatternLayout();
+			//Set outputformat for textpane
+			layout.setConversionPattern("%d{HH:mm:ss} %-5p - %m%n");			
 			String outputString = layout.format(event);
+			
 			view.getTabProgramm().getJTextPaneAusgabe().append(outputString);
 		}
 		super.doAppend(event);
