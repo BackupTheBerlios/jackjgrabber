@@ -25,7 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import org.apache.log4j.Logger;
-import projectX.X;
+
+import projectX.common.X;
 import service.SerGUIUtils;
 import service.SerXMLConverter;
 
