@@ -104,7 +104,7 @@ public class DataWriteStream {
             		        Logger.getLogger("DataWriteStream").info("Found AC3-Stream");
             		        break;
             		    }
-            		    if ((input[counter] & 0xE0) == 0xE0) {
+            		    if ((input[counter] & 0xf0) == 0xE0) {
             		        foundHeader=true;
             		        fileNameExtension = ".mpv";
             		        Logger.getLogger("DataWriteStream").info("Found Video-Stream");
