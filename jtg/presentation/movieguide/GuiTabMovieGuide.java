@@ -24,7 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -33,7 +33,6 @@ import javax.swing.JTextField;
 import javax.swing.JProgressBar; 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import service.SerFormatter;
 
 import model.BOMovieGuide;
 
@@ -55,12 +54,12 @@ public class GuiTabMovieGuide extends JPanel {
 	private JButton jButtonMovieGuideFileChooser = null;
 	private JButton jButtonToTimer = null;
 	
-	private JTextPane taBeschreibung;
-	private JTextPane taDarsteller;
-	private JTextPane taEpisode;
-	private JTextPane taLand;
-	private JTextPane taAudioVideo;
-	private JTextPane taGenre;
+	private JTextArea taBeschreibung;
+	private JTextArea taDarsteller;
+	private JTextArea taEpisode;
+	private JTextArea taLand;
+	private JTextArea taAudioVideo;
+	private JTextArea taGenre;
 	
 	private JComboBox comboBoxGenre = null;
 	private JComboBox comboBoxDatum = null;
@@ -100,9 +99,6 @@ public class GuiTabMovieGuide extends JPanel {
 	
 	public GuiMovieGuideFilmTableModel filmTableModel;
 	public GuiMovieGuideFilmTableSorter mgFilmTableSorter = null;	
-
-	private static String HTML_ON  = SerFormatter.getHTML_ON_OFF(0)+"<u>";
-	private static String HTML_OFF = "</u>"+SerFormatter.getHTML_ON_OFF(1);
 			
 	public GuiTabMovieGuide(ControlMovieGuideTab ctrl) {
 		super();
@@ -154,7 +150,7 @@ public class GuiTabMovieGuide extends JPanel {
 			jPanelInfo = new JPanel();
 			FormLayout layout = new FormLayout(
 				      "400px:grow",									//column 				
-						"f:125:grow, f:90px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
+						"f:115:grow, f:100px:grow, f:42px:grow, f:pref:grow, f:pref:grow, f:pref:grow, f:pref:grow");		//rows
 					
 			PanelBuilder builder = new PanelBuilder(jPanelInfo, layout);
 			CellConstraints cc = new CellConstraints();														
@@ -458,65 +454,71 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return tfSuche;
 	}
-
-	public JTextPane getTaGenre() {
+	
+	public JTextArea getTaGenre() {
 		if (taGenre == null) {
-			taGenre = new JTextPane();
-			taGenre.setEditable(false);			
-			taGenre.setAutoscrolls(true);
-			taGenre.setContentType("text/html");				
-			taGenre.setText(HTML_ON+ControlMain.getProperty("txt_genre")+HTML_OFF);			
+			taGenre = new JTextArea();
+			taGenre.setEditable(false);
+			taGenre.setLineWrap(true);
+			taGenre.setWrapStyleWord(true);
+			taGenre.setAutoscrolls(true);	
+			taGenre.setText(ControlMain.getProperty("txt_genre"));			
 		}
 		return taGenre;
 	}
 	
-	public JTextPane getTaBeschreibung() {
+	public JTextArea getTaBeschreibung() {
 		if (taBeschreibung == null) {
-			taBeschreibung = new JTextPane();
+			taBeschreibung = new JTextArea();
 			taBeschreibung.setEditable(false);
-			taBeschreibung.setAutoscrolls(true);
-			taBeschreibung.setContentType("text/html");				
-			taBeschreibung.setText(HTML_ON+ControlMain.getProperty("txt_inhalt")+HTML_OFF);
+			taBeschreibung.setLineWrap(true);
+			taBeschreibung.setWrapStyleWord(true);
+			taBeschreibung.setAutoscrolls(true);		
+			taBeschreibung.setText(ControlMain.getProperty("txt_inhalt"));
 		}
 		return taBeschreibung;
 	}
-	public JTextPane getTaLand() {
+	public JTextArea getTaLand() {
 		if (taLand == null) {
-			taLand = new JTextPane();
+			taLand = new JTextArea();
 			taLand.setEditable(false);
-			taLand.setContentType("text/html");				
-			taLand.setText(HTML_ON+ControlMain.getProperty("txt_prod")+HTML_OFF);
-			taLand.setAutoscrolls(true);			
+			taLand.setLineWrap(true);
+			taLand.setWrapStyleWord(true);
+			taLand.setAutoscrolls(true);
+			taLand.setText(ControlMain.getProperty("txt_prod"));			
 		}
 		return taLand;
 	}
-	public JTextPane getTaAudioVideo() {
+	public JTextArea getTaAudioVideo() {
 		if (taAudioVideo == null) {
-			taAudioVideo = new JTextPane();
-			taAudioVideo.setEditable(false);			
-			taAudioVideo.setAutoscrolls(true);
-			taAudioVideo.setContentType("text/html");				
-			taAudioVideo.setText(HTML_ON+ControlMain.getProperty("txt_audio")+"</u> / <u>"+ControlMain.getProperty("txt_video")+HTML_OFF);			
+			taAudioVideo = new JTextArea();
+			taAudioVideo.setEditable(false);
+			taAudioVideo.setLineWrap(true);
+			taAudioVideo.setWrapStyleWord(true);
+			taAudioVideo.setAutoscrolls(true);				
+			taAudioVideo.setText(ControlMain.getProperty("txt_audio")+" / "+ControlMain.getProperty("txt_video"));			
 		}
 		return taAudioVideo;
 	}
-	public JTextPane getTaDarsteller() {
+	public JTextArea getTaDarsteller() {
 		if (taDarsteller == null) {
-			taDarsteller = new JTextPane();
-			taDarsteller.setEditable(false);			
-			taDarsteller.setAutoscrolls(true);
-			taDarsteller.setContentType("text/html");				
-			taDarsteller.setText(HTML_ON+ControlMain.getProperty("txt_darsteller")+HTML_OFF);			
+			taDarsteller = new JTextArea();
+			taDarsteller.setEditable(false);
+			taDarsteller.setLineWrap(true);
+			taDarsteller.setWrapStyleWord(true);
+			taDarsteller.setAutoscrolls(true);				
+			taDarsteller.setText(ControlMain.getProperty("txt_darsteller"));			
 		}
 		return taDarsteller;
 	}
-	public JTextPane getTaEpisode() {
+	public JTextArea getTaEpisode() {
 		if (taEpisode == null) {
-			taEpisode = new JTextPane();
-			taEpisode.setEditable(false);			
-			taEpisode.setAutoscrolls(true);
-			taEpisode.setContentType("text/html");				
-			taEpisode.setText(HTML_ON+ControlMain.getProperty("txt_episode")+HTML_OFF);			
+			taEpisode = new JTextArea();
+			taEpisode.setEditable(false);
+			taEpisode.setLineWrap(true);
+			taEpisode.setWrapStyleWord(true);
+			taEpisode.setAutoscrolls(true);				
+			taEpisode.setText(ControlMain.getProperty("txt_episode"));			
 		}
 		return taEpisode;
 	}
@@ -563,6 +565,7 @@ public class GuiTabMovieGuide extends JPanel {
 			mgFilmTableSorter = new GuiMovieGuideFilmTableSorter(filmTableModel);				 
 			jTableFilm = new JTable(mgFilmTableSorter);
 			//jTableFilm.getColumnModel().getColumn(0).setCellRenderer( new GuiMovieGuideColorCellRenderer(control)); //sinnvoll ?
+			//jTableFilm.getColumnModel().getColumn(0).setCellEditor(new GuiMovieGuideFilmTableCellEditor());
 			mgFilmTableSorter.setTableHeader(jTableFilm.getTableHeader());
 			jTableFilm.setName("filmTable");
 			jTableFilm.addMouseListener(control);		

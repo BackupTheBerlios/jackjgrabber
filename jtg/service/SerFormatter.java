@@ -7,8 +7,8 @@ import java.util.TimeZone;
 import java.util.GregorianCalendar;
 import java.text.ParseException;
 import java.util.regex.*;
-import java.util.Enumeration;
-import javax.swing.UIManager;
+import javax.swing.text.*;
+import java.awt.Color;
 /**
  * @author ralix
  */
@@ -245,33 +245,33 @@ public class SerFormatter {
             return 1;
         }
     }
-    public static String replaceFind(String value, String search){      
-    	if (search.length() >=1){
-    		Pattern find = Pattern.compile(search, Pattern.CASE_INSENSITIVE);              
-    		Matcher m = find.matcher(value);                           
-    		while(m.find()) {                   
-    			value = value.replaceAll(m.group(0),"<HTML><font color=#FF0000><b>"+m.group(0)+"</b></font><HTML>");    			
-    		}
-    	}
-        return value;
-    }   
-    public static String getHTML_ON_OFF(int value){
-        if(value==0){
-            return "<HTML><font face="+getUIFontDefault()+" size='-1'>";
-        }else{
-            return "</font></HTML>";
+    public static void highlight(JTextComponent textComp, String pattern) {
+    	Pattern find = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);              
+        Matcher m = find.matcher(textComp.getText());      
+    	removeHighlights(textComp);    
+    	 try {
+            Highlighter hilite = textComp.getHighlighter();            
+            while(m.find()) {                       		
+                hilite.addHighlight(m.start(0), m.start(0)+pattern.length(), myHighlightPainter);        
+    	    }              
+        } catch (BadLocationException e) {
         }
     }
-    private static String getUIFontDefault(){
-    	Enumeration keys = UIManager.getDefaults().keys();
-    	String t = "";
-        while (keys.hasMoreElements()) {           
-           Object value = UIManager.get (keys.nextElement());        
-            if (value instanceof javax.swing.plaf.FontUIResource){            
-                t = value.toString();
-                t = t.substring( (t.indexOf("name")+5), (t.indexOf("style")-1));         
+    public static void removeHighlights(JTextComponent textComp) {
+        Highlighter hilite = textComp.getHighlighter();
+        Highlighter.Highlight[] hilites = hilite.getHighlights();    
+        for (int i=0; i<hilites.length; i++) {
+            if (hilites[i].getPainter() instanceof MyHighlightPainter) {
+                hilite.removeHighlight(hilites[i]);
             }
         }
-        return t;
-    }    
+    }
+        
+    static Highlighter.HighlightPainter myHighlightPainter = new MyHighlightPainter(new Color(255,204,51));
+    
+    static class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
+        public MyHighlightPainter(Color color) {
+            super(color);
+        }
+    }
 }
