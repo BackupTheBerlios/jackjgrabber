@@ -27,9 +27,6 @@ public class GuiMainView extends JFrame {
 	private GuiTabTimer tabTimer=null;
 	private ControlMain control;    
 	
-	/**
-	 * This is the default constructor
-	 */
 	public GuiMainView(ControlMain ctrl) {
 		super();
 		PlasticLookAndFeel.setMyCurrentTheme(new DesertBlue());
@@ -39,7 +36,7 @@ public class GuiMainView extends JFrame {
 		control = ctrl;
 		initialize();
 		SerGUIUtils.center(this);
-		this.setVisible(true);
+		setVisible(true);
 		
 	}
 	/**
@@ -68,14 +65,12 @@ public class GuiMainView extends JFrame {
 			mainTabPane.addTab("Programm", null, getTabProgramm(), null);
 			mainTabPane.addTab("Timerliste", null, getTabTimer(), null);
 			mainTabPane.addTab("Settings", null, getTabSettings(), null);
-			
 		}
 		return mainTabPane;
 	}
 	/**
 	 * Aufbau der Tabs "Programm"
-	 * 1. Beim Start des Controls werden die ben�tigen Objekte aufgebaut
-	 * 2. Anzeige der aufgebauten Objekte	
+	 * Aufbau der Gui, Start des Controls
 	 */    
 	public GuiTabProgramm getTabProgramm() {
 		if (tabProgramm == null) {
