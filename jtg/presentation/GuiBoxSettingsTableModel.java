@@ -3,8 +3,6 @@ package presentation;
 
 import javax.swing.table.AbstractTableModel ;
 import java.util.*;
-import javax.swing.*;
-
 import model.BOBox;
 
 import service.SerAlertDialog;
