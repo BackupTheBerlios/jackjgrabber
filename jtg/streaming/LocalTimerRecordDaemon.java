@@ -23,6 +23,10 @@ import java.util.GregorianCalendar;
 import model.BOLocalTimer;
 import model.BOPids;
 import model.BORecordArgs;
+import model.BOTimer;
+
+import org.apache.log4j.Logger;
+
 import control.ControlMain;
 import control.ControlProgramTab;
 
@@ -36,12 +40,16 @@ public class LocalTimerRecordDaemon extends Thread {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
-            BOLocalTimer timer = ControlMain.getBoxAccess().detectRunningLocalRecordTimer();
+            BOTimer timer = ControlMain.getBoxAccess().detectNextLocalRecordTimer(false);
             
             if (timer!=null) {
-                    this.startRecord(timer);
+                long now = new GregorianCalendar().getTimeInMillis();
+                if (now>timer.getLocalTimer().getStartTime() && now<timer.getLocalTimer().getStopTime()) {
+                    Logger.getLogger("LocalTimerRecordDaemon").info(ControlMain.getProperty("msg_startRecord")+" "+timer.getLocalTimer().getDescription());
+                    this.startRecord(timer.getLocalTimer());
                     running = true;
-                    this.waitForStop(timer);
+                    this.waitForStop(timer.getLocalTimer());
+                }
             }
         }
     }
@@ -57,6 +65,7 @@ public class LocalTimerRecordDaemon extends Thread {
                 ControlMain.getControl().getView().getTabProgramm().getControl().stopRecord();
                 ControlMain.getBoxAccess().getTimerList(true);
                 running=false;
+                ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
                 this.run();
             }
         }

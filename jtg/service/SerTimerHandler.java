@@ -82,7 +82,7 @@ public class SerTimerHandler {
             long localTimerStop=Long.parseLong(node.getText());
             long now = new GregorianCalendar().getTimeInMillis();
             if (now>localTimerStop) {
-                root.remove(node.getParent()); //Timer zu alt>>loeschen
+                root.remove(node.getParent()); //Timer zu alt->loeschen
                 edited=true;
             }
         }
@@ -93,7 +93,6 @@ public class SerTimerHandler {
                 Logger.getLogger("SerTimerHandler").error(e.getMessage());
             }
         }
-        
     }
     
     private static void deleteLocalTimer(BOLocalTimer timer) {
@@ -203,26 +202,6 @@ public class SerTimerHandler {
         }
     }
     
-    private static int saveLocalTimer(BOTimer timer) {
-        if (timer.getModifiedId() !=null && timer.getModifiedId().equals("remove")) {
-            if (timer.localTimer==null) {
-                return 0;
-            }
-            deleteLocalTimer(timer.getLocalTimer());
-            return 0;
-        }
-        
-        if (timer.localTimer==null) {
-            BOLocalTimer.getDefaultLocalTimer(timer);
-        }
-        if (timer.getLocalTimer().getTimerNode()==null){
-            saveNewTimer(timer.getLocalTimer());
-        } else {
-            editOldTimer(timer.getLocalTimer());
-        }
-        return 1;
-    }
-    
     /**
      * @param Main-Timer
      * @return Local-Timer
@@ -253,6 +232,30 @@ public class SerTimerHandler {
 		    }
 		}
 		return null;
+    }
+    
+    private static BOTimer buildMainTimer(Node mainTimerNode) {
+        BOTimer botimer = new BOTimer();
+        
+        botimer.eventTypeId=mainTimerNode.selectSingleNode("eventTypeId").getText();
+        botimer.eventRepeatId=mainTimerNode.selectSingleNode("eventRepeatId").getText();
+        botimer.repeatCount=mainTimerNode.selectSingleNode("repeatCount").getText();
+        botimer.channelId=mainTimerNode.selectSingleNode("channelId").getText();
+        botimer.senderName=mainTimerNode.selectSingleNode("senderName").getText();
+        botimer.announceTime=mainTimerNode.selectSingleNode("announceMainTimer").getText();       
+  
+        long startMillis = Long.parseLong(mainTimerNode.selectSingleNode("startMainTimer").getText());
+        GregorianCalendar startTime = new GregorianCalendar();
+        startTime.setTimeInMillis(startMillis);
+        
+        long stopMillis = Long.parseLong(mainTimerNode.selectSingleNode("stopMainTimer").getText());
+        GregorianCalendar stopTime = new GregorianCalendar();
+        stopTime.setTimeInMillis(stopMillis);
+        
+        botimer.unformattedStartTime=startTime;
+        botimer.unformattedStopTime=stopTime;
+        
+        return botimer;
     }
     
     public static BOLocalTimer buildLocalTimer(Node timerNode, BOLocalTimer localTimer) {
@@ -305,25 +308,60 @@ public class SerTimerHandler {
      * zentrale Methode um neue/geänderte Timer zu speichern
      */
     public static void saveTimer(BOTimer timer, boolean reloadList) {
-        try {
-            //lokaler Teil muss immer gespeichert werden
-            saveLocalTimer(timer); 
+           //lokaler Teil muss immer gespeichert werden
+        saveLocalTimer(timer); 
+        
             
-            if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue/modifizierte timer bearbeiten
-                if (timer.getModifiedId().equals("new")) {
-                    ControlMain.getBoxAccess().writeTimer(timer);
-                    if (reloadList) { //nur bei neuen timern neu laden
-                        ControlMain.getBoxAccess().getTimerList(true);  
-                    }
-                } else {
-                    ControlMain.getBoxAccess().writeTimer(timer);
-                } 
-            } 
-            timer.setModifiedId(null);
-        } catch (IOException e) {
-            
-        }   
+        if (timer.getModifiedId()!=null && !timer.getLocalTimer().isLocal()) {  //nur neue|modifizierte Box-Timer speichern
+            saveBoxTimer(timer, reloadList); 
+        }
+        timer.setModifiedId(null);
+        //ermittle naechsten faelligen lokalen-RecordTimer neu
+        ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
     } 
+    
+    /*
+     * Speichert Box-Timer
+     * Liste muss neu gelesen werden, wenn ein neuer Box-Timer gespeichert wird
+     * 
+     * Parameter reloadList wird benoetigt damit bei mehreren neuen Timern
+     * die Liste nicht sofort neu gelesen wird, sondern nur nach dem letzten
+     */
+    private static void saveBoxTimer (BOTimer timer, boolean reloadList) {
+        try {
+            if (timer.getModifiedId().equals("new")) {
+                ControlMain.getBoxAccess().writeTimer(timer);
+                if (reloadList) {
+                    ControlMain.getBoxAccess().getTimerList(true);  
+                }
+            } else {
+                ControlMain.getBoxAccess().writeTimer(timer);
+            }
+        } catch (IOException e) {
+            Logger.getLogger("SerTimerHandler").error(e.getMessage());
+        }
+    }
+    
+    private static int saveLocalTimer(BOTimer timer) {
+        if (timer.getModifiedId() !=null && timer.getModifiedId().equals("remove")) {
+            if (timer.localTimer==null) {
+                return 0;
+            }
+            deleteLocalTimer(timer.getLocalTimer());
+            return 0;
+        }
+        
+        if (timer.localTimer==null) {
+            BOLocalTimer.getDefaultLocalTimer(timer);
+        }
+        if (timer.getLocalTimer().getTimerNode()==null){
+            saveNewTimer(timer.getLocalTimer());
+        } else {
+            editOldTimer(timer.getLocalTimer());
+        }
+        return 1;
+    }
+    
     /*
      * liest MainTimer und LocalTimer
      */
@@ -339,29 +377,5 @@ public class SerTimerHandler {
             buildLocalTimer(localTimerNode, new BOLocalTimer(timer));
             list.getRecordTimerList().add(timer);
         }
-    }
-    
-    private static BOTimer buildMainTimer(Node mainTimerNode) {
-        BOTimer botimer = new BOTimer();
-        
-        botimer.eventTypeId=mainTimerNode.selectSingleNode("eventTypeId").getText();
-        botimer.eventRepeatId=mainTimerNode.selectSingleNode("eventRepeatId").getText();
-        botimer.repeatCount=mainTimerNode.selectSingleNode("repeatCount").getText();
-        botimer.channelId=mainTimerNode.selectSingleNode("channelId").getText();
-        botimer.senderName=mainTimerNode.selectSingleNode("senderName").getText();
-        botimer.announceTime=mainTimerNode.selectSingleNode("announceMainTimer").getText();       
-  
-        long startMillis = Long.parseLong(mainTimerNode.selectSingleNode("startMainTimer").getText());
-        GregorianCalendar startTime = new GregorianCalendar();
-        startTime.setTimeInMillis(startMillis);
-        
-        long stopMillis = Long.parseLong(mainTimerNode.selectSingleNode("stopMainTimer").getText());
-        GregorianCalendar stopTime = new GregorianCalendar();
-        stopTime.setTimeInMillis(stopMillis);
-        
-        botimer.unformattedStartTime=startTime;
-        botimer.unformattedStopTime=stopTime;
-        
-        return botimer;
     }
 }

@@ -52,8 +52,34 @@ public class BOTimerList {
         return null;
     }
     
+    public BOTimer getFirstLocalRecordTimer() {
+        if (this.getRecordTimerList().size()>0) {
+            long now = new GregorianCalendar().getTimeInMillis();
+            BOTimer timer=null;
+            BOTimer temp;
+            
+            for (int i=0; i<this.getRecordTimerList().size(); i++) {
+                temp = (BOTimer)this.getRecordTimerList().get(i);
+                if (timer==null) {
+                    if (temp.getLocalTimer().isLocal() && now<temp.getLocalTimer().getStopTime()) {
+                        timer = (BOTimer)this.getRecordTimerList().get(i);    
+                    }
+                } else {
+                    if (temp.getLocalTimer().isLocal() && now<temp.getLocalTimer().getStopTime()) {
+                        BOTimer compareTimer = (BOTimer)this.getRecordTimerList().get(i);    
+                        if (SerFormatter.compareDates(compareTimer.getUnformattedStartTime(), timer.getUnformattedStartTime())==-1) {
+                            timer=compareTimer;
+                        }
+                    }
+                }
+            }
+            return timer;
+        }
+        return null;
+    }
+    
     public BOLocalTimer getRunningLocalRecordTimer() {
-        BOTimer timer=null;
+        BOTimer timer;
         long now = new GregorianCalendar().getTimeInMillis();
         for (int i=1; i<this.getRecordTimerList().size(); i++) {
             timer = (BOTimer)this.getRecordTimerList().get(i);
