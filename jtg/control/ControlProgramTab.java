@@ -516,7 +516,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 		//      Konstellation möglich, wenn erste Box angelegt wird
 		if (oldSelectedBox == null || oldSelectedBox.isSelected() != newSelectedBox.isSelected()) {
 			if (oldSelectedBox != null) {
-				oldSelectedBox.setSelected(false); //alte Box zurücksetzen!
+				oldSelectedBox.setSelectedBox(false); //alte Box zurücksetzen!
 			}
 			ControlMain.newBoxSelected(newSelectedBox);
 			this.reInitialize();
