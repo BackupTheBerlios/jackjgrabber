@@ -608,52 +608,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
      * bauen der AnzeigeMap nach Suchkriterien  
      */
     public void setTitelMapSelected(Object searchValue,int value){    	
-    	String search = (String)searchValue;
-    	GregorianCalendar searchGC = new GregorianCalendar();	    	 
-    	if(value==1){
-    		searchGC = SerFormatter.convString2GreCal(search,DATE_FULL);
-    	}    	
-		switch (value){
-			case 1: //datum    	
-				titelListAktuell=movieList.searchByDate(searchGC);				
-				break;			
-			case 2: //in allen
-				titelListAktuell=movieList.searchByAll(search);  
-				break;				
-			case 3: //titel
-				titelListAktuell=movieList.searchByTitle(search);       				
-				break;
-			case 4: //darsteller
-				titelListAktuell=movieList.searchByActor(search);       				
-				break;
-			case 5: // episode
-				titelListAktuell=movieList.searchByEpisode(search);      				
-				break;
-			case 6: // bild    			
-				titelListAktuell=movieList.searchByPicture(search);       				
-				break; 				
-			case 7: // ton
-				titelListAktuell=movieList.searchByAudio(search);       				
-				break;
-			case 8: // Prodland
-				titelListAktuell=movieList.searchByCountry(search);      				
-				break;
-			case 9: //Prodjahr
-				titelListAktuell=movieList.searchByYear(search);       				
-				break;
-			case 10: //regie
-				titelListAktuell=movieList.searchByRegie(search);       				
-				break;
-			case 11: //genre
-				titelListAktuell=movieList.searchByGenre(search);    				
-				break;				
-			case 12: //sender    			
-				titelListAktuell=movieList.searchBySender(search);    	    		
-				break;    				
-			case 13: // ALLES kopletten mg					
-					titelListAktuell = movieList.getAllMovies();  
-				break;
-		};    		
+    	titelListAktuell=movieList.search(searchValue,value);
     }
   
     public JTable getJTableFilm() {

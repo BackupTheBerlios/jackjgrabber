@@ -169,150 +169,6 @@ public class BOMovieGuideContainer{
 		senderList.clear();
 	}
 	
-	public ArrayList searchByDate(GregorianCalendar search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();
-			if(bomovieguide.getDatum().contains(search)){
-			    returnList.add(bomovieguide);
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByGenre(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getGenre().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByTitle(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getTitel().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByActor(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getDarsteller().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByEpisode(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getEpisode().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByCountry(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getLand().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByYear(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getJahr().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByRegie(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();			
-			if(bomovieguide.getRegie().toLowerCase().indexOf(search.toLowerCase())!=-1){    
-				returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchBySender(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
-			 if(isValueInArray(bomovieguide.getSender(),search.toLowerCase())){
-			 	returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList searchByPicture(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
-			 if(isValueInArray(bomovieguide.getBild(),search.toLowerCase())){
-			 	returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	
-	public ArrayList searchByAudio(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
-			 if(isValueInArray(bomovieguide.getTon(),search.toLowerCase())){
-			 	returnList.add(bomovieguide);    
-			}
-		}
-		return returnList;
-	}
-	public ArrayList getAllMovies(){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			returnList.add((BOMovieGuide)((Map.Entry)i.next()).getValue());
-		}
-		return returnList;
-	}
-	
-	public ArrayList searchByAll(String search){
-		returnList.clear();
-		Iterator i = titelList.entrySet().iterator();
-		while(i.hasNext()){
-			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
-			if(getIfStringInObject(bomovieguide,search)){
-				returnList.add(bomovieguide); 
-			}
-		}
-		return returnList;
-	}
-	
-	
 	public boolean isValueInArray(ArrayList value,String search){
     	boolean retVal = false;
     	for (Iterator i = value.iterator(); i.hasNext();) {   			
@@ -322,6 +178,7 @@ public class BOMovieGuideContainer{
     	}
     	return retVal;
     }
+	
 	public boolean getIfStringInObject(BOMovieGuide bomovieguide, String search){
     	boolean value = false;
     	search = search.toLowerCase();
@@ -348,4 +205,82 @@ public class BOMovieGuideContainer{
     	}
     	return value;
     }
+	public ArrayList search(Object searchValue, int value){
+		returnList.clear();
+		String search = (String)searchValue;
+    	GregorianCalendar searchGC = new GregorianCalendar();	    	 
+    	if(value==1){
+    		searchGC = SerFormatter.convString2GreCal(search,DATE_FULL);
+    	} 
+		Iterator i = titelList.entrySet().iterator();
+		while(i.hasNext()){
+			BOMovieGuide bomovieguide = (BOMovieGuide)((Map.Entry)i.next()).getValue();						
+			switch(value){ 
+				case 1:
+					if(bomovieguide.getDatum().contains(searchGC)){
+					    returnList.add(bomovieguide);
+					}
+					break;
+				case 2:					
+					if(getIfStringInObject(bomovieguide,search)){
+						returnList.add(bomovieguide); 
+					}
+					break;
+				case 3:
+					if(bomovieguide.getTitel().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 4:
+					if(bomovieguide.getDarsteller().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 5:
+					if(bomovieguide.getEpisode().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 6:
+					if(isValueInArray(bomovieguide.getBild(),search.toLowerCase())){
+					 	returnList.add(bomovieguide);    
+					}
+					break;
+				case 7:
+					if(isValueInArray(bomovieguide.getTon(),search.toLowerCase())){
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 8:
+					if(bomovieguide.getLand().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 9:
+					if(bomovieguide.getJahr().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}					
+					break;
+				case 10:
+					if(bomovieguide.getRegie().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 11:
+					if(bomovieguide.getGenre().toLowerCase().indexOf(search.toLowerCase())!=-1){    
+						returnList.add(bomovieguide);    
+					}
+					break;
+				case 12:
+					if(isValueInArray(bomovieguide.getSender(),search.toLowerCase())){
+					 	returnList.add(bomovieguide);    
+					}
+					break;
+				case 13:
+					returnList.add(bomovieguide);
+					break;							
+			}
+		}
+		return returnList;
+	}
 }
