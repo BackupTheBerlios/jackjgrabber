@@ -56,9 +56,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader input = getConnection("/control/getbouquets");
 			
 		while((line=input.readLine())!=null) {
-			int blankIndex = line.indexOf(" ");
-			String nummer = line.substring(0, blankIndex);
-			String name = line.substring(blankIndex, line.length());
+        	StringTokenizer st = new StringTokenizer(line);
+			String nummer = st.nextToken();
+			String name = st.nextToken();
 			bouquetList.add(new BOBouquet(nummer, name));
 		}
 		return bouquetList;
@@ -70,9 +70,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	
 		BufferedReader in = getConnection("/control/channellist");
         while ((line = in.readLine()) != null) {
-        	int blankIndex = line.indexOf(" ");
-			String chanId = line.substring(0, blankIndex);
-			String name = line.substring(blankIndex, line.length());
+        	StringTokenizer st = new StringTokenizer(line);
+			String chanId = st.nextToken();
+			String name = st.nextToken();
 			senderList.add(new BOSender("1",chanId, name)); //TODO no Number available here
         }
         return senderList;
@@ -85,11 +85,15 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		BufferedReader input = getConnection("/control/getbouquet?bouquet="+bouquet.getBouquetNummer()+"&mode=TV");
 		
 		while((line=input.readLine())!=null) {
-			int firstBlank = line.indexOf(" ");
-			int secondBlank = line.indexOf(" ", firstBlank+1);
-			String nummer = line.substring(0, firstBlank);
-			String channelId = line.substring(firstBlank+1, secondBlank);
-			String name = line.substring(secondBlank+1, line.length());
+			StringTokenizer st = new StringTokenizer(line);
+			String nummer = st.nextToken();
+			String channelId = st.nextToken();
+			
+			String name = new String();
+			while (st.hasMoreTokens()) {
+				name += st.nextToken();
+				name += " ";
+			}
 			senderList.add(new BOSender(nummer,channelId, name));
 		}
 		return senderList;
@@ -109,28 +113,30 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public ArrayList getEpg(BOSender sender) throws IOException {
 		ArrayList epgList=new ArrayList();
 		BufferedReader input = getConnection("/control/epg?"+sender.getChanId());
-		String line, eventId=new String(), startTime=new String(), duration=new String(), title=new String(),
-		endTime=new String();
-		Date startDate=new Date(), endDate=new Date();
-		String valueStart, valueDuration;
+		String line, eventId, startTime, duration, title, endTime, valueStart, valueDuration;;
+		Date startDate, endDate;
                 
 		while((line=input.readLine())!=null) {
-			int firstBlank = line.indexOf(" ");
-			int secondBlank = line.indexOf(" ", firstBlank+1);
-			int thirdBlank = line.indexOf(" ", secondBlank+1);
-			eventId = line.substring(0, firstBlank);
+			StringBuffer buffer = new StringBuffer(line);
+			StringTokenizer st = new StringTokenizer(line);
 			
-			valueStart=line.substring(firstBlank+1, secondBlank);
-			valueDuration=line.substring(secondBlank+1, thirdBlank);
+			eventId = st.nextToken();
+			valueStart=st.nextToken();
+			valueDuration=st.nextToken();
 			
+			title = new String();
+		    while (st.hasMoreTokens()) {
+		    	title += st.nextToken();
+		    	title += " ";
+			}
+
 			startTime = SerFormatter.formatUnixTime(valueStart);
 			startDate = SerFormatter.formatUnixDate(valueStart);                        
 			duration = SerFormatter.formatedEndTime(valueDuration);
 			endTime = SerFormatter.formatUnixTime(valueStart,valueDuration);
 			endDate = SerFormatter.formatUnixDate(valueStart,valueDuration);                        
-			title = line.substring(thirdBlank+1, line.length());
 			
-			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration ));                        
+			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));                        
 		}
 		return epgList;
 	} 
@@ -175,27 +181,56 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public ArrayList getTimer() throws IOException {
 		
 		ArrayList timerList = new ArrayList();
-		BufferedReader input = getConnection("/control/timer");	
-		String text = new String();
+		BufferedReader inputNhttpd = getConnection("/control/timer");
+		
 		String line, valueStart, valueStop, valueAnno;
-		while ((line = input.readLine()) != null) {
+		while ((line = inputNhttpd.readLine()) != null) {
 			BOTimer botimer = new BOTimer();
-	        StringTokenizer st = new StringTokenizer(line);    
+						
+	        StringTokenizer st = new StringTokenizer(line);
+	        
             botimer.setEventId(st.nextToken());
             botimer.setEventType(st.nextToken());
             botimer.setEventRepeat(st.nextToken());
+            
             valueAnno=st.nextToken(); 
-            botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)); 
 		    valueStart=st.nextToken();
-		    botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //start
-		    botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));
 		    valueStop=st.nextToken();
+		    		    
+		    if (!valueStop.equals("0")) {
+		    	int index = line.indexOf(valueStop)+valueStop.length()+1;
+			    botimer.setSenderName( line.substring(index, line.length()));
+		    }		   
+		    botimer.setAnnounceTime(SerFormatter.formatUnixTime(valueAnno)); //vorwarnzeit
+		    botimer.setStartTime(SerFormatter.formatUnixTime(valueStart)); //startZeit
+			botimer.setStartDate(SerFormatter.formatUnixDate(valueStart));  //startDatum
 		    botimer.setStopTime(SerFormatter.formatUnixTime(valueStop)); //ende
-            botimer.setChannelId(st.nextToken()); 
+		    
             timerList.add(botimer); 
-		}   	
+		}
+		setTimerDesctiptionName(timerList);
 		return timerList;
 	}
+	
+	private void setTimerDesctiptionName(ArrayList timerList) throws IOException {
+		BufferedReader inputWebInf = getConnection("/fb/timer.dbox2");
+		
+		String line;
+		String searchString="&startzeit=";
+		int indexSearchString, indexIdentifier;
+		
+		while ((line = inputWebInf.readLine()) != null) {
+			if ((indexSearchString = line.indexOf(searchString))>0) {
+				for (int i=0; i<timerList.size(); i++) {
+					BOTimer timer = (BOTimer)timerList.get(i);
+					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0) {
+						indexIdentifier= line.indexOf(">", indexSearchString);
+						timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
+					}
+				}
+			}
+		}	
+	} 
 	
 	public String setTimer(String action, BOTimer timer) throws IOException {
 		String alarm = timer.getStartTime();
@@ -203,10 +238,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		String announce = timer.getAnnounceTime();
 		String type = timer.getEventType();
 		String repeat = timer.getEventRepeat();
-		String chanId = timer.getChannelId();
+		String chanId = timer.getSenderName();
 
 		String requestString = "/control/timer?action="+action+"&alarm="+alarm+
-			"&stop="+stop+"&announce="+announce+"&type="+type+"&rep="+repeat+"&channel_id="+chanId;
+			"&stop="+stop+"&announce="+announce+"&type="+type+"&rep="+repeat+"&channel_id="+chanId+"&msg=blabla";
 		BufferedReader input = getConnection(requestString);
 		String line;
 		while((line=input.readLine())!=null) {
