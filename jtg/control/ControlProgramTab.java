@@ -664,7 +664,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener,Mous
         long unformattedStart = Long.parseLong(epg.getUnformattedStart());
         long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
         long endtime = unformattedStart + unformattedDuration;
-        long announce = unformattedStart - (120);
+        long announce = unformattedStart - (120+timeBefore);
 
         timer.setModifiedId("new");
         timer.setChannelId(this.getSelectedSender().getChanId());
