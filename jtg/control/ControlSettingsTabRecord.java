@@ -188,7 +188,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				break;
 			}
 			if (action.equals("afterRecordOptions")) {
-               // new ControlMuxxerView(ControlMain.getSettingsRecord().getAfterRecordOptions());
+                new ControlMuxxerView(ControlMain.getSettingsRecord().getAfterRecordOptions());
                 break;
             }
 			if (action.equals("shutdownAfterRecord")) {

@@ -226,7 +226,7 @@ public class ControlTimerEditView implements ActionListener, KeyListener, ItemLi
 				break;
 			}
 			if (action.equals("afterRecordOptions")) {
-			//	new ControlMuxxerView(this.getTimer().getAfterRecordOptions());
+				new ControlMuxxerView(this.getTimer().getAfterRecordOptions());
 				break;
 			}
 			if (action.equals("shutdownAfterRecord")) {
