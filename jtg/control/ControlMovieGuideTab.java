@@ -477,8 +477,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 					BOMovieGuide bomovieguide = new BOMovieGuide(
 						entry.element("sender").getStringValue(), 
 						String.valueOf(SerFormatter.getStringToLong(datum)),
-						SerFormatter.getString2Cal(datum,start),
-						SerFormatter.getString2Cal(datum,SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue())),					
+						SerFormatter.getDateFromString(datum+","+start, "EEEE, dd. MMMM yyyy,HH:mm"),
+						SerFormatter.getDateFromString(
+						        datum+","+SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue()), 
+						        "EEEE, dd. MMMM yyyy,HH:mm"),					
 						entry.element("titel").getStringValue(),
 						entry.element("episode").getStringValue(),
 						entry.element("genre").getStringValue(),
@@ -500,12 +502,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				     String start = entry.element("start").getStringValue();
 					 BOMovieGuide bomovieguide = (BOMovieGuide)titelList.get(controlMap.get(entry.element("titel").getStringValue()));
                      bomovieguide.setDatum(String.valueOf(SerFormatter.getStringToLong(datum)));
-                     bomovieguide.setStart(SerFormatter.getString2Cal(datum,start));
+                     bomovieguide.setStart(SerFormatter.getDateFromString(datum+","+start, "EEEE, dd. MMMM yyyy,HH:mm"));
                      bomovieguide.setDauer(entry.element("dauer").getStringValue());
                      bomovieguide.setSender(entry.element("sender").getStringValue());                             
                      bomovieguide.setBild(entry.element("bild").getStringValue());
                      bomovieguide.setTon(entry.element("ton").getStringValue());
-                     bomovieguide.setEnde(SerFormatter.getString2Cal(datum,SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue())));
+                     bomovieguide.setEnde(SerFormatter.getDateFromString(
+                        datum+","+SerFormatter.getCorrectEndTime(start,entry.element("dauer").getStringValue()), 
+                     	"EEEE, dd. MMMM yyyy,HH:mm"));	
                      titelList.put(controlMap.get(bomovieguide.getTitel()),bomovieguide);
 				}
 			}
