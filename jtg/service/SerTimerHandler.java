@@ -471,9 +471,5 @@ public class SerTimerHandler {
 			saveBoxTimer(timer, reloadList);
 		}
 		timer.setModifiedId(null);
-		//ermittle naechsten faelligen lokalen-RecordTimer neu
-		if (timer.getLocalTimer().isLocal()) {
-			ControlMain.getBoxAccess().detectNextLocalRecordTimer(true);
-		}
 	}
 }
