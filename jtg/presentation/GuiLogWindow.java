@@ -131,7 +131,8 @@ public class GuiLogWindow extends JFrame {
     }
     public void setVisible(boolean value) {
         if (isShouldBeVisible()) {
-            super.setVisible(value);   
+            super.setVisible(value);
+            this.getLogArea().setCaretPosition(getLogArea().getDocument().getLength()-1);
         }
     }
     public static void switchLogVisiblity() {
