@@ -102,7 +102,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 			}
 			//Neue Epg-Zeile selektiert
 			if (tableName == "Epg") {
-				this.setSelectedEpg((BOEpg)this.getEpgTableModel().getEpgList().get(table.getSelectedRow()));
+				String eventId = (String)this.getMainView().getTabProgramm().sorter.getValueAt(table.getSelectedRow(), 0);
+				this.setSelectedEpg(eventId); 
 				if (me.getClickCount()==2) {
 					//TODO add to TimerList
 				}
@@ -227,11 +228,20 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return selectedEpg;
 	}
 	/**
-	 * Setzen des aktuellen Epgï¿½s, refreshen der Dazugehï¿½rigen Epg-Details
+	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details
+	 * Durch die Sortierung geht die Objektidentität verloren
+	 * Passendes EPG durch Event-ID finden
 	 */
-	public void setSelectedEpg(BOEpg selectedEpg) {
-		this.selectedEpg = selectedEpg;
-		this.reInitEpgDetail();
+	public void setSelectedEpg(String eventId) {
+		ArrayList epgList = this.getEpgTableModel().getEpgList();
+		for (int i = 0; i<epgList.size(); i++) {
+			BOEpg epg = (BOEpg)epgList.get(i);
+			if (epg.getEventId().equals(eventId)) {
+				this.selectedEpg = epg;
+				this.reInitEpgDetail();
+				break;
+			}
+		}
 	}
 	/**
 	 * @return Returns the pids.
