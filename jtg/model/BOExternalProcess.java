@@ -32,7 +32,7 @@ public class BOExternalProcess {
 	private Process process;
 	private boolean logging=false;
 	private boolean logErrorAsInfo=false;
-	private boolean closeWithoutPrompt=false;
+	private boolean closeWithoutPrompt=true;
 
 	public BOExternalProcess(String name, String execString, boolean logging) {
 		this.setName(name);
@@ -40,8 +40,7 @@ public class BOExternalProcess {
 		this.setLogging(logging);
 	}
 	
-	public BOExternalProcess(String name, String execString, boolean logging, boolean logErrorAsInfo, boolean closeWithoutPrompt) {
-	    this.setCloseWithoutPrompt(closeWithoutPrompt);
+	public BOExternalProcess(String name, String execString, boolean logging, boolean logErrorAsInfo) {
 	    this.setLogErrorAsInfo(logErrorAsInfo);
 	    this.setLogging(logging);
 			this.setName(name);
