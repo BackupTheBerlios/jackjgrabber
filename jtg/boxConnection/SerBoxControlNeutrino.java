@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
@@ -263,10 +264,21 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	} 
 	
 	public String writeTimer(BOTimer timer) throws IOException {
+		StringBuffer buffer = this.fillRequestString(timer);
+		BufferedReader input = getConnection(buffer.toString());
+		System.out.println(buffer.toString());
+		String line;
+		while((line=input.readLine())!=null) {
+			timer.setModifiedId(null);
+			return line;
+		}
+		return line;
+	}
+	
+	private StringBuffer fillRequestString(BOTimer timer) {
 		String modifiedId = timer.getModifiedId();
 		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis()/1000);
 		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis()/1000);
-
 		StringBuffer buffer = new StringBuffer();
 		if (modifiedId.equals("remove")) {
 			buffer.append("/fb/timer.dbox2?action="+modifiedId);
@@ -276,13 +288,25 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("/fb/timer.dbox2?action="+modifiedId);
 			//buffer.append("/control/timer?action="+modifiedId);
 			buffer.append("&id="+timer.getTimerNumber());
-			buffer.append("&alarm="+alarm);
-			buffer.append("&stop="+stop);
+			
+			buffer.append("&ad="+timer.getUnformattedStartTime().get(Calendar.DAY_OF_MONTH));
+			buffer.append("&amo="+(timer.getUnformattedStartTime().get(Calendar.MONTH)+1));
+			buffer.append("&ay="+timer.getUnformattedStartTime().get(Calendar.YEAR));
+			buffer.append("&ah="+timer.getUnformattedStartTime().get(Calendar.HOUR));
+			buffer.append("&ami="+timer.getUnformattedStartTime().get(Calendar.MINUTE));
+			
+			buffer.append("&sd="+timer.getUnformattedStopTime().get(Calendar.DAY_OF_MONTH));
+			buffer.append("&smo="+(timer.getUnformattedStopTime().get(Calendar.MONTH)+1));
+			buffer.append("&sy="+timer.getUnformattedStopTime().get(Calendar.YEAR));
+			buffer.append("&sh="+timer.getUnformattedStopTime().get(Calendar.HOUR));
+			buffer.append("&smi="+timer.getUnformattedStopTime().get(Calendar.MINUTE));
+			
 			buffer.append("&announce="+timer.getAnnounceTime());
 			buffer.append("&type="+timer.getEventTypeId());
 			buffer.append("&rep="+timer.getEventRepeatId());
 			buffer.append("&channel_id="+timer.getChannelId());
-		} else {
+		} 
+		if (modifiedId.equals("new")) {
 			buffer.append("/control/timer?action="+modifiedId);
 			buffer.append("&alarm="+alarm);
 			buffer.append("&stop="+stop);
@@ -291,14 +315,6 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			buffer.append("&rep="+timer.getEventRepeatId());
 			buffer.append("&channel_id="+timer.getChannelId());
 		}
-				
-		BufferedReader input = getConnection(buffer.toString());
-		System.out.println(buffer.toString());
-		String line;
-		while((line=input.readLine())!=null) {
-			timer.setModifiedId(null);
-			return line;
-		}
-		return line;
+		return buffer;
 	}
 }
