@@ -133,9 +133,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		JComboBox selectedChoice = (JComboBox)e.getSource();
 		this.setSelectedBouquet((BOBouquet)this.getBouquetList().get(selectedChoice.getSelectedIndex()));
 		this.reInitSender();
-		
-		this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(0,0);
-		this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(0));
+		if (this.getSelectedBouquet().getSender().size()> 0) {
+			this.getMainView().getTabProgramm().getJTableChannels().setRowSelectionInterval(0,0);
+			this.setSelectedSender((BOSender)this.getSelectedBouquet().getSender().get(0));
+		}
       }
 	
 	/**
@@ -239,8 +240,8 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		return selectedEpg;
 	}
 	/**
-	 * Setzen des aktuellen Epg, refreshen der dazugehörigen Epg-Details
-	 * Durch die Sortierung geht die Objektidentität verloren
+	 * Setzen des aktuellen Epg, refreshen der dazugehï¿½rigen Epg-Details
+	 * Durch die Sortierung geht die Objektidentitï¿½t verloren
 	 * Passendes EPG durch Event-ID finden
 	 */
 	public void setSelectedEpg(String eventId) {
