@@ -120,7 +120,6 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiTabRecordInfo getTabRecordInfo() {
 		if (tabRecordInfo == null) {
 			ControlRecordInfoTab control = new ControlRecordInfoTab(this.getView());
-			ControlMain.recordInfo = control;
 			tabRecordInfo = new GuiTabRecordInfo(control);
 			control.setRecordView(tabRecordInfo);
 		}

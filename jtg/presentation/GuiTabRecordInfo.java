@@ -220,7 +220,7 @@ public class GuiTabRecordInfo extends GuiTab {
 	}
 
 	/**
-	 * muss aufgerufen werden wenn eine AUfnahme gestartet wird
+	 * muss aufgerufen werden wenn eine Aufnahme gestartet wird
 	 * 
 	 * @param title
 	 *            Titel der Aufnahme (Filmtitel)
