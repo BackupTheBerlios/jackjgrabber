@@ -14,7 +14,10 @@ import java.util.ArrayList;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class BOMovieGuide {
-	 /**
+	
+	private static final String[] LIST_ENTRYS = {"Suche in...","Titel","Darsteller","Episode","Bild","Ton","Produktionsland","Produktionsjahr","Regie"};
+	
+	/**
      * Holds value of property sender.
      */
     private ArrayList sender;
@@ -384,16 +387,18 @@ public class BOMovieGuide {
     	return sucheList;
     }
  
-    public void setSucheList(){ 
-    	sucheList.add("Suche nach...");
-    	sucheList.add("Titel");
-    	sucheList.add("Darsteller");    	
-    	sucheList.add("Episode");
-    	sucheList.add("Bild");
-    	sucheList.add("Ton");
-    	sucheList.add("Produktionsland");
-    	sucheList.add("Produktionsjahr");
-    	sucheList.add("Regie");
+    public void setSucheList(){    
+    	try{
+	    	sucheList.add(LIST_ENTRYS[0]);
+	    	sucheList.add(LIST_ENTRYS[1]);
+	    	sucheList.add(LIST_ENTRYS[2]);    	
+	    	sucheList.add(LIST_ENTRYS[3]);
+	    	sucheList.add(LIST_ENTRYS[4]);
+	    	sucheList.add(LIST_ENTRYS[5]);
+	    	sucheList.add(LIST_ENTRYS[6]);
+	    	sucheList.add(LIST_ENTRYS[7]);
+	    	sucheList.add(LIST_ENTRYS[8]);
+    	}catch(Exception ex){}
     }
  
 }

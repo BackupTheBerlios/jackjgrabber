@@ -9,6 +9,7 @@ import control.ControlMovieGuideTab;
 public class MovieGuideFilmTableModel extends AbstractTableModel 
 {
 	ControlMovieGuideTab control;	    			
+	private static final String[] COLUMN_NAME = {"Titel"};
 	
 	public MovieGuideFilmTableModel(ControlMovieGuideTab ctrl){
 		this.setControl(ctrl);			
@@ -19,26 +20,33 @@ public class MovieGuideFilmTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
+		int value = 0;
+		try{
 		if (this.getControl().getTitelMap() == null) {
-			return 0;
-		} else {
-			return this.getControl().getTitelMap().size();
+			value = 0;
+		}else {
+			value =  this.getControl().getTitelMap().size();
 		}
+		}catch (Exception ex){}
+		return value;
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
+		Object value = null;
+		try{
 		if (columnIndex == 0) {				
-			return ((BOMovieGuide)this.getControl().getTitelMap().get(new Integer(rowIndex))).getTitel();
-		}else{
-			return null;
-		}	
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(new Integer(rowIndex))).getTitel();
+		}
+		}catch (Exception ex){}
+		return value;	
 	}
 	
 	public String getColumnName( int columnIndex ) {				
-		if (columnIndex == 0) {	
-			return "Titel";				
-		}else 		
-		return null;
+		String value = null;
+		try{
+			value = COLUMN_NAME[columnIndex];
+		}catch(Exception ex){}
+		return value;	
 	}
 	
 	public boolean isCellEditable (int row, int col) {

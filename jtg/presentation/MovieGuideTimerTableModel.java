@@ -7,6 +7,7 @@ import control.ControlMovieGuideTab;
 public class MovieGuideTimerTableModel extends AbstractTableModel 
 {
 	ControlMovieGuideTab control;
+	private static final String[] COLUMN_NAME = {"Datum","Start","Ende","Dauer","Programm"};
 	
 	public MovieGuideTimerTableModel(ControlMovieGuideTab ctrl) {
 		this.setControl(ctrl);
@@ -17,52 +18,42 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 	}	
 
 	public int getRowCount() {
-		if (this.getControl().getTitelMap() == null) {
+		if (this.getControl().getTimerTableSize() <= 0) {
 			return 0;
-		} else {			
-			return 2;
-			//return this.getControl().getTitelMap().size();
-			//return ((BOMovieGuide)this.getControl().getTitelMap().get(this.getControl().getSelectRowFilmTable())).getDatum().toArray().length;			
-			//Integer selectRow = this.getControl().getSelectRowFilmTable();
-			//return ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow) ).getDatum().toArray().length;
+		} else {						
+			return this.getControl().getTimerTableSize();			
 		}
 	}
 
 	public Object getValueAt( int rowIndex, int columnIndex ) {
-		Integer selectRow = this.getControl().getSelectRowFilmTable();		
+		Object value = null;
+		try{
+		Integer selectRow = this.getControl().getSelectRowFilmTable();				
 		if (columnIndex == 0) {		
-			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().toArray()[rowIndex];
-		} if (columnIndex == 1) {
-			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().toArray()[rowIndex];
-		} if (columnIndex == 2) {			
-			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().toArray()[rowIndex];
-		} if (columnIndex == 3) {
-			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDauer().toArray()[rowIndex];
-		} if (columnIndex == 4) {
-			return ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getSender().toArray()[rowIndex];
-		} else {
-			return null;
-		}
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().toArray()[rowIndex];
+		}else if (columnIndex == 1) {
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().toArray()[rowIndex];
+		}else if (columnIndex == 2) {			
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().toArray()[rowIndex];
+		}else if (columnIndex == 3) {
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDauer().toArray()[rowIndex];
+		}else if (columnIndex == 4) {
+			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getSender().toArray()[rowIndex];
+		} 
+		}catch(Exception ex){}
+		return value;
 	}
-	
+		
 	public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
 
 	public String getColumnName( int columnIndex ) {
-		if (columnIndex == 0) {
-			return "Datum"; 
-		} if (columnIndex == 1) {
-			return "Start";
-		} if (columnIndex == 2) {
-			return "Ende";
-		} if (columnIndex == 3) {
-			return "Dauer";
-		} if (columnIndex == 4) {
-			return "Programm";
-		} else {
-			return null;
-		}
+		String value = null;
+		try{
+			value = COLUMN_NAME[columnIndex];
+		}catch(Exception ex){}
+		return value;		
 	}
 	
 	public boolean isCellEditable(int row, int col) {
@@ -84,5 +75,5 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 	public void setControl(ControlMovieGuideTab control) {
 		this.control = control;
 	}
-	
+
 }
