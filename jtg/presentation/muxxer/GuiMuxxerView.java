@@ -18,6 +18,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.ButtonGroup;
@@ -27,6 +29,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
@@ -61,8 +64,25 @@ public class GuiMuxxerView extends JDialog{
 
 	public GuiMuxxerView(ControlMuxxerView control) {
 		super(ControlMain.getControl().getView());
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setControl(control);
         this.setTitle("Demultiplex/Multiplex Options");
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if (getControl().isMuxing()) {
+                    int result = JOptionPane.showConfirmDialog(
+                            getControl().getView(),
+                            ControlMain.getProperty("msg_abortMux"),
+                            "",
+                            JOptionPane.YES_NO_OPTION
+                    );
+                    if (result==0) {
+                        getControl().stopAllProcesses();
+                        dispose();
+                    }
+                }   
+            }
+        });
 		initialize();
         pack();    
         SerGUIUtils.center(this);
