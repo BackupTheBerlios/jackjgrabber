@@ -245,6 +245,11 @@ public class SerHelper {
 			if (replaceWith == null || replaceWith.length() == 0) {
 				replaceWith = args.getEpgInfo1();
 			}
+			
+			if (replaceWith == null || replaceWith.length() == 0) {
+				replaceWith = "notavailable";
+			}
+			
 		} else if (patternToReplace.equals("%SERIE%")) {
 			replaceWith = args.getEpgInfo1();
 			if (replaceWith.length() > 0)
