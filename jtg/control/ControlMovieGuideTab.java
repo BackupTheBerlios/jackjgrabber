@@ -32,6 +32,7 @@ import java.util.GregorianCalendar;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -97,10 +98,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
           this.getTab().getComboBoxDatum().setEnabled(false);
           this.getTab().getComboBoxGenre().setEnabled(false);
           this.getTab().getComboBoxSender().setEnabled(false);
-          this.getTab().getComboBoxSucheNach().setEnabled(false);
+          this.getTab().getComboBoxSucheNach().setEnabled(false);          
           if(getSettings().getMgLoadType()==0){          	
-          	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){
-          		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
+          	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){          		
+          		if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info2"))){
+              		try{
+        				new SerMovieGuide2Xml(null, this.getMainView()).start();
+        			}catch (Exception ex){
+        				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+        			}
+              	}
           	}else{
           		if( (SerMovieGuide2Xml.checkNewMovieGuide()) && (!movieGuideFileNext.exists())){
         			try{
@@ -109,8 +116,8 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
         			}
         		}
-          		if( (!movieGuideFile.exists())){
-          			SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"),this.getMainView());
+          		if( (!movieGuideFile.exists())){          			          			
+          			infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"));
         			try{
         				new SerMovieGuide2Xml(null, this.getMainView()).start();
         			}catch (Exception ex){
@@ -119,8 +126,14 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         		}
           	}
           }
-          if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){
-          	SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"),this.getMainView());
+          if(getSettings().getMgLoadType()==1 && (!movieGuideFile.exists())){          	
+          	if (askToDownload(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_0+" "+ControlMain.getProperty("txt_mg_info2"))){
+          		try{
+    				new SerMovieGuide2Xml(null, this.getMainView()).start();
+    			}catch (Exception ex){
+    				Logger.getLogger("ControlMovieGuideTab").error(ControlMain.getProperty("error_not_download"));
+    			}
+          	}
           }
           if(this.getTitelMap()==null && (movieGuideFile.exists())){				          	
           	movieList.importXML(movieGuideFile,getSettings().getMgSelectedChannels());	  
@@ -165,10 +178,10 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	
 	private void downloadMovieGuide(){
 		if(getMovieGuideFile().exists()){
-			if(SerMovieGuide2Xml.checkNewMovieGuide()){
-				SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
-          	}else{
-          		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info3")+GET_AKTUELL_DATE_STRING_0+".\n"+ControlMain.getProperty("txt_mg_info4")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info5"),this.getMainView());
+			if(SerMovieGuide2Xml.checkNewMovieGuide()){				
+				infoNewMovieGuide(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"));
+          	}else{          		
+          		infoNewMovieGuide(ControlMain.getProperty("txt_mg_info3")+GET_AKTUELL_DATE_STRING_0+".\n"+ControlMain.getProperty("txt_mg_info4")+GET_AKTUELL_DATE_STRING_1+" "+ControlMain.getProperty("txt_mg_info5"));
           	}
 		}else{				
 			try{
@@ -202,17 +215,26 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 		if ( (action == "suchen") || (action == "textsuche") ) {		
 			if(this.getTitelMap()!=null){
-			setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
-			searchString = getSelectedItemJComboBox();
-			if(getSelectedItemJComboBoxSucheNach()==0) {								
-				reInitFilmTable(2);
-			}else{					
-				reInitFilmTable(getSelectedItemJComboBoxSucheNach());
-			}		
-			getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
-			getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
-			findAndReplaceGui(getSelectedItemJComboBox());
-			this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
+				setSelectedItemJComboBox(this.getTab().getTfSuche().getText());
+				searchString = getSelectedItemJComboBox();
+				if(getSelectedItemJComboBoxSucheNach()==0) {								
+					reInitFilmTable(2);
+				}else{					
+					reInitFilmTable(getSelectedItemJComboBoxSucheNach());
+				}		
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
+				getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));
+				findAndReplaceGui(getSelectedItemJComboBox());
+				this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
+			}
+		}
+		if ( (action == "zeitab") ) {				
+			if(this.getTitelMap()!=null){										
+				setSelectedItemJComboBox(this.getTab().getTfZeitab().getText());
+				reInitFilmTable(14);					
+				getJTableFilm().getSelectionModel().setSelectionInterval(0,0);		
+				getJTableFilm().scrollRectToVisible(getJTableFilm().getCellRect(1,1,true));				
+				this.getTab().getJLabelSearchCount().setText("Treffer: "+getTitelMap().size());
 			}
 		}
 		if (action == "allDates") {	
@@ -753,5 +775,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             homePath = dir.getAbsolutePath()+sep;    
         }
         return homePath;
+    }
+    private boolean askToDownload(String value) {
+		int res = JOptionPane.showOptionDialog(this.getTab(), value, ControlMain.getProperty("button_pmg_download"), 0, JOptionPane.QUESTION_MESSAGE, null, new String[]{
+				ControlMain.getProperty("button_pmg_download"), ControlMain.getProperty("button_cancel")}, "");
+		return res == 0;
+	}
+    private void infoNewMovieGuide(String value){
+    	JOptionPane.showMessageDialog(this.getTab(),value);
     }
 }

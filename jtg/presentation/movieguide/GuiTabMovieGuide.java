@@ -85,6 +85,7 @@ public class GuiTabMovieGuide extends JPanel {
 	private JScrollPane jScrollPaneGenre= null;
 	
 	private JTextField tfSuche;
+	private JTextField tfZeitAb;
 	
 	private JCheckBox  jCheckBoxAbAktuell;
 	
@@ -183,6 +184,7 @@ public class GuiTabMovieGuide extends JPanel {
 		}
 		return jPanelSuche;
 	}
+	
 	private JPanel getJPanelSucheErw() {
 		if (jPanelSucheErw == null) {
 			jPanelSucheErw = new JPanel();
@@ -201,6 +203,27 @@ public class GuiTabMovieGuide extends JPanel {
 		return jPanelSucheErw;
 	}
 	
+	/*
+	private JPanel getJPanelSucheErw() {
+		if (jPanelSucheErw == null) {
+			jPanelSucheErw = new JPanel();
+			FormLayout layout = new FormLayout(
+				      "110px:grow,10,140px:grow,10,60px:grow",	 		//columna 
+				      "pref,pref,pref");	//rows					
+			PanelBuilder builder = new PanelBuilder(jPanelSucheErw, layout);
+			CellConstraints cc = new CellConstraints();										
+			builder.add(this.getComboBoxSucheNach(), 	cc.xyw	(1, 1, 1));
+			builder.add(this.getJLabelSearchCount(), 	cc.xyw	(3, 1, 1));
+			builder.addSeparator(ControlMain.getProperty("suche_genre"), 	cc.xyw	(1, 2, 1));
+			builder.add(this.getComboBoxGenre(), 	 	cc.xyw	(1, 3, 1));
+			builder.addSeparator(ControlMain.getProperty("suche_sender"), 	cc.xyw	(3, 2, 1));
+			builder.add(this.getComboBoxSender(), 	 	cc.xyw	(3, 3, 1));
+			builder.addSeparator(ControlMain.getProperty("suche_time"), 	cc.xyw	(5, 2, 1));
+			builder.add(this.getTfZeitab(), 	cc.xyw	(5, 3, 1));
+		}
+		return jPanelSucheErw;
+	}
+	*/
 	private JPanel getJPanelProgressBar() {
 		if (jPanelProgressBar == null) {
 			jPanelProgressBar = new JPanel();
@@ -462,6 +485,17 @@ public class GuiTabMovieGuide extends JPanel {
 		return tfSuche;
 	}
 	
+	public JTextField getTfZeitab() {
+		if (tfZeitAb == null) {
+			tfZeitAb = new JTextField();
+			tfZeitAb.setEditable(true);			
+			tfZeitAb.setAutoscrolls(true);
+			tfZeitAb.setActionCommand("zeitab");
+			tfZeitAb.addActionListener(this.getControl());
+		}
+		return tfZeitAb;
+	}
+		
 	public JTextPane getTaGenre() {
 		if (taGenre == null) {
 			taGenre = new JTextPane();
