@@ -15,6 +15,7 @@ import org.dom4j.io.XMLWriter;
 import java.util.*;
 import java.text.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * @author ralph
@@ -23,6 +24,10 @@ import java.io.*;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class SerMovieGuide2Xml {
+	static Hashtable htToken = new Hashtable();
+    static Hashtable htGenreMap = new Hashtable();
+	
+	
 	 public static Document buildEmptyXMLFile() throws IOException {
         
         Document doc = DocumentHelper.createDocument();
@@ -63,108 +68,138 @@ public class SerMovieGuide2Xml {
         writer.close();
     }
     
-    public static void readGuide() throws FileNotFoundException, IOException{
-        String datei = "/tmp/1.txt";
-        //String datei = "/tmp/mguide_d_s_10_04.txt";
-        String input = "";
-        SimpleDateFormat formatter  = new SimpleDateFormat("dd.MM./HH:mm");
-        BufferedReader test = new BufferedReader(new FileReader(datei));
-        String sender ="";
-        String datum  ="";
-        String titel  ="";
-        String episode = "";
-        String genre = "";
-        String laenge = "";
-        String land = "";
-        String jahr = "";
-        String regie = "";
-        String bild = "";
-        String ton = "";
-        String darsteller = "";
-        String inhalt = "";
-        boolean value = false;
-        String lineCount = "";        
-        int i = 1;
-        while((input = test.readLine()) != null) {
-            StringTokenizer st = new StringTokenizer(input,":");
-            if (st.hasMoreTokens()){
-                lineCount=st.nextToken();
-                if (!value){                    
-                    
-                    try{
-                        sender = lineCount;
-                    }catch(StringIndexOutOfBoundsException ex){}
-                    datum = input.substring((sender.length()+2));
-                    try{
-                        datum = SerFormatter.setCorrectYear(formatter.parse(datum)).toString();
-                        System.out.println("1 "+sender);                        
-                        System.out.println("1 "+datum);                                  
-                    }catch(ParseException pex){
-                        value = true;
-                    }                                                        
-                }
-                if(lineCount.equalsIgnoreCase("Titel")){
-                    try{
-                        titel = input.substring((lineCount.length()+2));                        
-                    }catch(StringIndexOutOfBoundsException ex){}
-                    System.out.println("2 "+titel);                    
-                }else
-                    if(lineCount.equalsIgnoreCase("Episode")){
-                        try{
-                            episode = input.substring(9,input.indexOf("Genre")-2);
-                            genre= input.substring(input.indexOf("Genre")+7,input.indexOf("Länge")-2);
-                            laenge = input.substring(input.indexOf("Länge")+7,input.indexOf("Stunden")-1);                            
-                        }catch(StringIndexOutOfBoundsException ex){}
-                        System.out.println("3 "+episode);
-                        System.out.println("3 "+genre);
-                        System.out.println("3 "+laenge);
-                    }else
-                        if(lineCount.equalsIgnoreCase("Produktionsland")){
-                            try{
-                                land = input.substring(input.indexOf(":")+2,input.indexOf("Produktionsjahr")-2);
-                                jahr = input.substring(input.indexOf("Produktionsjahr")+17,input.indexOf("Regie")-2);
-                                regie = input.substring(input.indexOf("Regie")+7);                                
-                            }catch(StringIndexOutOfBoundsException ex){}
-                            System.out.println("4 "+land);
-                            System.out.println("4 "+jahr);
-                            System.out.println("4 "+regie);
-                        }else
-                            if(lineCount.equalsIgnoreCase("Bild- und Tonformate")){
-                                try{
-                                    bild = input.substring(input.indexOf(":")+2,input.indexOf("/"));
-                                    ton = input.substring(input.indexOf("/")+1);                                    
-                                }catch(StringIndexOutOfBoundsException ex){}
-                                System.out.println("5 "+bild);
-                                System.out.println("5 "+ton);
-                            }else
-                                if(lineCount.equalsIgnoreCase("Darsteller")){
-                                    try{
-                                        darsteller = input.substring((lineCount.length()+2));                                        
-                                    }catch(StringIndexOutOfBoundsException ex){}
-                                    System.out.println("6 "+darsteller);
-                                }
-                                else{
-                                    if(value){
-                                        inhalt = inhalt + input;
-                                    }
-                                }
-            }
-            else{
-                System.out.println("7 "+inhalt);                
-                //System.out.println("no token"+input);
-                inhalt = "";
-                value = false;                 
-            }
-        }        
+    private static void generateGenreMap(String entry){
+        htGenreMap.put(entry,entry);
     }
     
+    
+    public static void getNewMovieGuideOnline(){
+       try {
+            URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_10_04.txt");
+            Reader is = new InputStreamReader( url.openStream() );
+            BufferedReader in = new BufferedReader( is );
+            for ( String s; ( s = in.readLine() ) != null; )
+                System.out.println( s );
+            
+            in.close();
+        }
+        catch ( MalformedURLException e ) {
+            System.out.println( "MalformedURLException: " + e );
+        }
+        catch ( IOException e ) {
+            System.out.println( "IOException: " + e );
+        }
+    }
+    
+    private static void createHashTable(){
+        htToken.put((String)"Titel", new Integer(1));
+        htToken.put((String)"Episode", new Integer(2));
+        htToken.put((String)"Produktionsland", new Integer(3));
+        htToken.put((String)"Bild- und Tonformate", new Integer(4));
+        htToken.put((String)"Darsteller", new Integer(5));
+    }
+    
+    private static String[] createElement(Integer i, String input){
+        String value[] = new String[3];
+        
+        try{
+            switch(i.intValue()){
+                case 0:
+                    value[0] = input.substring(0,input.indexOf(":"));
+                    value[1] = SerFormatter.getCorrectDate(input.substring(input.indexOf(":")+2));
+                    break;
+                case 1:
+                case 5:
+                    value[0] = input.substring(input.indexOf(":")+2);
+                    break;
+                case 2:
+                    value[0] = input.substring(9,input.indexOf("Genre")-2);
+                    value[1] = input.substring(input.indexOf("Genre")+7,input.indexOf("Länge")-2);
+                    generateGenreMap(value[1]);
+                    value[2] = input.substring(input.indexOf("Länge")+7,input.indexOf("Stunden")-1);
+                    break;
+                case 3:
+                    value[0] = input.substring(input.indexOf(":")+2,input.indexOf("Produktionsjahr")-2);
+                    value[1] = input.substring(input.indexOf("Produktionsjahr")+17,input.indexOf("Regie")-2);
+                    value[2] = input.substring(input.indexOf("Regie")+7);
+                    break;
+                case 4:
+                    value[0] = input.substring(input.indexOf(":")+2,input.indexOf("/"));
+                    value[1] = input.substring(input.indexOf("/")+1);
+                    break;
+            }
+        }catch(StringIndexOutOfBoundsException ex){}
+        return value;
+    }
+    
+    public static void readGuide(String datei) throws FileNotFoundException, IOException{
+        String input = new String();
+        BufferedReader in = new BufferedReader(new FileReader(datei));                
+        String inhalt = "";
+        boolean line_begin = false;
+        boolean line_token = false;
+        int number = 0;
+        String[] out;
+        createHashTable();
+        while((input = in.readLine()) != null) {
+            try{
+                line_begin = false;
+                line_begin = SerFormatter.isCorrectDate(input.substring(input.indexOf(":")+2));
+            }catch(Exception ex){
+                line_begin = false;
+            }
+            try{
+                line_token = false;
+                line_token = htToken.containsKey(input.substring(0,input.indexOf(":")));
+                number = ((Integer)htToken.get((String)input.substring(0,input.indexOf(":")))).intValue();
+            }catch(Exception ex){
+                line_token = false;
+            }
+            if(line_begin){
+                out = createElement(new Integer(0),input);
+                System.out.println("1 "+out[0]);
+                System.out.println("1 "+out[1]);
+            }else
+                if (line_token){
+                    out = createElement(new Integer(number),input);
+                    switch(number){
+                        case 1:
+                            inhalt = "";
+                            System.out.println("2 "+out[0]);
+                            break;
+                        case 2:
+                            System.out.println("3 "+out[0]);
+                            System.out.println("3 "+out[1]);
+                            System.out.println("3 "+out[2]);
+                            break;
+                        case 3:
+                            System.out.println("4 "+out[0]);
+                            System.out.println("4 "+out[1]);
+                            System.out.println("4 "+out[2]);
+                            break;
+                        case 4:
+                            System.out.println("5 "+out[0]);
+                            System.out.println("5 "+out[1]);
+                            break;
+                        case 5:
+                            System.out.println("6 "+out[0]);
+                            break;
+                    }
+                }else
+                    if ( (line_begin==false) && (line_token==false) && (input.length()>0)){
+                        inhalt = inhalt + input;
+                        System.out.println("7 "+inhalt);
+                    }
+        }
+        //System.out.println(htGenreMap.size());
+    }
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try {
             //buildEmptyXMLFile();            
-            readGuide();
+            readGuide("/tmp/1.txt");
             
         }catch (Exception e){}
     }
