@@ -250,6 +250,7 @@ public class GuiTabProgramm extends GuiTab {
 			jButtonQuickRecord = new JButton();
 			jButtonQuickRecord.setText(ControlMain.getProperty("button_record"));
 			jButtonQuickRecord.setActionCommand("record");
+			jButtonQuickRecord.setPreferredSize(new Dimension(85,25));
 			jButtonQuickRecord.setToolTipText(ControlMain.getProperty("buttontt_record"));
 			jButtonQuickRecord.addActionListener(this.getControl());
 		}
