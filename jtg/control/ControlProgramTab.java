@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -45,6 +46,7 @@ import model.BOBox;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOPids;
+import model.BOPlaybackOption;
 import model.BORecordArgs;
 import model.BOSender;
 import model.BOTimer;
@@ -250,35 +252,64 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		}
 	}
 	/*
-	 * TV-Wiedergabe des laufenden Senders
+	 * Wiedergabe des laufenden Senders
 	 */
 	private void actionPlayback() {
-	    String execString = this.getPlaybackRequestString();
-		try {
-			Process run = Runtime.getRuntime().exec(execString);
-			new SerInputStreamReadThread(run.getInputStream()).start();
-            new SerErrorStreamReadThread(run.getErrorStream()).start();
-		} catch (IOException e) {
-		    Logger.getLogger("ControlProgrammTab").error("No valid Playback-String"+execString);
-		}
+	    if (ControlMain.getSettings().getPlaybackOptions() != null || ControlMain.getSettings().getPlaybackOptions().size()>0) {
+	        try {
+                this.zapToSelectedSender();
+                String execString = this.getPlaybackRequestString();
+                if (execString != null ) {
+                    Process run = Runtime.getRuntime().exec(execString);
+        			new SerInputStreamReadThread(run.getInputStream()).start();
+        	        new SerErrorStreamReadThread(run.getErrorStream()).start();   
+                }
+            } catch (IOException e) {
+                Logger.getLogger("ControlProgramTab").error(e.getMessage());
+            }
+	    } else {
+	        SerAlertDialog.alert("Es konnte keine Playback-Option gefunden werden", this.getMainView());
+	    }
 	}
 	private String getPlaybackRequestString() {
-	    try {
-            this.zapToSelectedSender();
-            String vPid = "0x"+(String)this.getPids().getVPid()[0];
-            String[] aPids = (String[])this.getPids().getAPids().get(0);
-            String aPid = "0x"+aPids[0];
-            String ip = ControlMain.getBoxIpOfActiveBox();
-            String execString =  ControlMain.getSettings().getPlaybackString();
-            
-            execString = SerFormatter.replace(execString, "$ip",  ip);
-            execString = SerFormatter.replace(execString, "$vPid", vPid);
-            execString = SerFormatter.replace(execString, "$aPid", aPid);
-            return execString;
-        } catch (IOException e) {
-            SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+	    BOPlaybackOption option;
+        
+        if (ControlMain.getSettings().isAlwaysUseStandardPlayback()) {
+            option = ControlMain.getSettings().getStandardPlaybackOption();
+        } else {
+            option = this.startPlaybackOptionsQuestDialog();
+            if (option==null) {
+                return null;
+            }
         }
-        return new String();
+        String vPid = "0x"+(String)this.getPids().getVPid()[0];
+        String[] aPids = (String[])this.getPids().getAPids().get(0);
+        String aPid = "0x"+aPids[0];
+        String ip = ControlMain.getBoxIpOfActiveBox();
+        
+        String execString =  option.getExecString();
+        execString = SerFormatter.replace(execString, "$ip",  ip);
+        execString = SerFormatter.replace(execString, "$vPid", vPid);
+        execString = SerFormatter.replace(execString, "$aPid", aPid);
+        return execString;
+	}
+	
+	private BOPlaybackOption startPlaybackOptionsQuestDialog() {
+	    ArrayList options = ControlMain.getSettings().getPlaybackOptions();
+	    
+	    String ret = (String)JOptionPane.showInputDialog(
+                this.getMainView(),
+                "Bitte eine Wiedergabe-Option auswählen",
+                "Wiedergabe-Optionen Auswahl",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                ControlMain.getSettings().getPlaybackOptionNames(),
+                ControlMain.getSettings().getPlaybackOptionNames()[0]
+              );
+	    if (ret!=null) {
+	        return ControlMain.getSettings().getPlaybackOption(ret);
+	    }
+	    return null;
 	}
 	
 	/**
