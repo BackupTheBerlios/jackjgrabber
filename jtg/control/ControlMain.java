@@ -226,8 +226,7 @@ public class ControlMain {
     public static void setResourceBundle(Locale loc){
         ControlMain.locale=loc;
         try{    	                 	
-        	File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();    
-        	System.out.println(f.getAbsoluteFile());
+        	File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();            	
         	InputStream is = new FileInputStream(f);
         	prop.load(is);                    	
         }catch (IOException ex){}       	        
