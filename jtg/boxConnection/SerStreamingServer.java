@@ -44,7 +44,10 @@ public class SerStreamingServer extends Thread {
 		try {
 			server = new ServerSocket(port);
 			isRunning=true;
-			Logger.getLogger("SerStreamingServer").info("Start Streaming-Server");
+			Logger.getLogger("SerStreamingServer").info(
+			        ControlMain.getProperty("msg_sserver")+
+			        ControlMain.getBoxIpOfActiveBox()+" Port: "+
+			        ControlMain.getSettingsRecord().getStreamingServerPort());
 			Socket socket = server.accept();
 			this.record(socket);
 		} catch (IOException e) {
@@ -89,6 +92,7 @@ public class SerStreamingServer extends Thread {
 		if (recordArgs.getCommand().equals("stop") ) {
 		    ControlMain.getControl().getView().getTabProgramm().stopStreamingServerModus();
 		    ControlMain.getControl().getView().getTabProgramm().getControl().stopRecord();
+		    Logger.getLogger("SerStreamingServer").info("From DBox: Stop record");
 		}
 		if (recordArgs.getCommand().equals("record")) {
 		    recordArgs.setQuickRecord(false);
@@ -96,6 +100,7 @@ public class SerStreamingServer extends Thread {
 			recordArgs.checkTitle();
 			ControlMain.getControl().getView().getTabProgramm().startStreamingServerModus();
 			ControlMain.getControl().getView().getTabProgramm().getControl().startRecord(recordArgs);
+			Logger.getLogger("SerStreamingServer").info("From DBox: Start record");
 		}
 		server.close();  //server restart
 		this.run();
