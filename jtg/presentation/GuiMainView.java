@@ -1,8 +1,14 @@
 package presentation;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.apache.log4j.Logger;
+import projectX.X;
 import service.SerGUIUtils;
+import service.SerXMLConverter;
 
 import com.jgoodies.plaf.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
@@ -23,6 +29,18 @@ public class GuiMainView extends JFrame {
 	
 	public GuiMainView(ControlMainView ctrl) {
 		super();
+		this.addWindowListener (new WindowAdapter() { 
+			public void windowClosing(WindowEvent e) { 
+				try {
+					SerXMLConverter.saveAllSettings();
+					Logger.getLogger("ControlMainView").info("Settings saved");
+				} catch (IOException e1) {
+					Logger.getLogger("ControlMainView").error("Error while save Settings");
+				}
+				X.inisave();
+				System.exit(0); 
+			}
+		});
 		setLookAndFeel();
 		control = ctrl;
 		initialize();
@@ -48,8 +66,6 @@ public class GuiMainView extends JFrame {
 		this.setTitle(ControlMain.version[0]+"/"+ControlMain.version[1]+
 				" "+ControlMain.version[2]+" "+ControlMain.version[3]);
 		this.setContentPane(getMainTabPane());
-		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-		
 	}
 	/**
 	 * Haupt-TabPane. Neue Tabs werden hier angemeldet.
