@@ -1,15 +1,75 @@
-Einige wichtige Hinweise zum ersten Testrelease von Jack the JGrabber!!
+ReadMe zu JtJG 0.1.6c, Stand 26.11.2004
 
-Folgendes Hinweise beachten, damit das Programm gestartet werden kann.
+1.Voraussetzungen
+2.Download und Installation von JtJG
+3.diverse Einstellungen
 
-1. SUN JRE > 1.4.0 muß installiert sein, zu bekommen unter http://java.sun.com/
+
+1.Voraussetzungen
+
+Um JtJG nutzen zu können, ist eine installierte JRE ab Version 1.4.0 erforderlich
+Die aktuelle Version kann unter http://java.sun.com/ herunter geladen weden.
 Mit java -version ermittelt man die installierta Java-Version.
-Die aktuelle und empfohlene Verion ist 5.0 aka Tiger.
-
-2. Das Programm kann mit start.sh(UNIX) bzw. start.bat(WINDOWS) gestartet werden.
-Wird das jar-File direkt ausgeführt und nicht ueber die oben ganannten
-Scripte, ist es zwingend notwendig sich beim Start im gleichen Verzeichnis zu befinden.
-
-Die Scripte muessen vorher nach den eigenen Gegebenheiten angepasst werden!!
+Die aktuelle Version ist 5.0 aka Tiger.
 
 
+2.Download und Installation von JtJG
+
+Nach dem Download muss JtJG in ein Verzeichnis nach Wahl entpackt werden.
+In diesem Verzeichnis befinden sich 2 vorbereitete Startscripte (start.bat für Win32, 
+start.sh für Linux)! Falls kein Startscript benutzt wird, ist es zwingend erfoderlich 
+das Programm aus dem Verzeichnis auszuführen, in dem sich die DateijackTheJGrabber.jar 
+befindet. Wird dies nicht getan, können Einstellungen, Icons 
+sowie Sprachdateien nicht geladen werden. 
+
+In diesen Scripten sind 2 Einstellungen nach eigenen Bedürfnissen anzupassen
+1. Pfad zum JDK bzw. JRE
+2. Pfad zum JtJG-Verzeichnis
+
+Unter Linux muss das Script gegebenfalls ausführbar gemacht werden.
+JtJG kann dann über die modifiziert Start-Datei gestartet werden.
+
+3.Allgemeine Einstellungen
+
+3.1 Eintragen der Box-IP und weitere Einstellungen:
+
+Reiter 'Einstellungen --> Allgemein'
+Anlegen eines Box-IP Eintrags über den Button 'Anlegen'.
+Diesen Eintrag durch Klick darauf editieren und die eigene Box-IP eintragen.
+
+Die anderen Einstellungen auf dieser Seite nach eigenem Geschmack vornehmen.
+
+Zur Nutzung des Systemtray-Icons unter Linux ist die Datei 'libsystray4j.so'
+(befindet sich im Jack-Verzeichnis) ins JAVA-Home kopieren.
+Genauere Auskunft über den Zielpfad gibt der Button 'Hilfe' in dem kleinen Fenster,
+welches bei aktiviertem SystemTray-Icon zusammen mit Jack erscheint,
+wenn diese Datei nicht im JAVA-Home liegt.
+
+
+3.2 Aufnahmeeinstellungen
+
+Reiter 'Einstellungen --> Aufnahme'
+Auswahl des Aufnahme-Verzeichnisses über den Browse-Button.
+Einige Einstellungen sind selbsterklärend und nach belieben zu setzen.
+
+3.2.1
+Nutzung von udrec unter Linux
+Um udrec nutzen zu können, muss mono installiert sein.
+Mono ist bei den grösseren Linux-Distributionenen dabei,
+sonst unter http://www.mono-project.com herunterladen und installieren.
+
+Unter 'Pfad zur udrec.exe' sinngemäss Folgendes eintragen:
+mono /Pfad/zu/udrec.exe
+Die Datei udrec.exe wird mit dem Programm ausgeliefert!!
+
+Desweiteren können udrec-Optionen gesetzt werden (z.B. -vsplit oder -asplit).
+Unabhängig von der ausgewählten Engine kann noch das Aufnahmeformat gewählt werden (TS, PES und bei udrec noch ES).
+
+3.3 Wiedergabeeinstellungen
+
+Reiter 'Einstellungen --> Wiedergabe'
+Dieser Eintrag kann aus dem angegebenen Beispiel übernommen werden.
+Wer einen anderen Player verwenden möchte,
+ersetzt einfach den Aufruf (im Beispiel 'xine' durch z.B. 'mplayer')
+
+Mit diesen Einstellungen ist JtJG einsatzbereit.
