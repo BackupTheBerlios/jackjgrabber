@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import model.BORecordArgs;
 import service.SerErrorStreamReadThread;
+import service.SerHelper;
 import service.SerInputStreamReadThread;
 import control.ControlMain;
 
@@ -99,13 +100,11 @@ public class UdrecRecord  extends Record {
         return null;
     }
 	
-    public ArrayList getFiles() {
-    	File[] files = recordControl.getDirectory().listFiles();
-    	ArrayList fullPathFiles = new ArrayList(files.length);
-    	for (int i=0; i<files.length; i++) {
-    	    fullPathFiles.add(files[i].getAbsolutePath());
-    	}
-    	return fullPathFiles;
-    	//TODO nicht alle Files übergeben!! Nur Files mit identischem Standardnamen
-    }
+		public ArrayList getFiles() {
+		    File[] files = recordControl.getDirectory().listFiles();
+		    ArrayList udrecFiles = new ArrayList(files.length);
+		    udrecFiles.add(SerHelper.getVideoFile(files));
+		    SerHelper.fillArrayWithAudioFiles(files, udrecFiles);
+		    return udrecFiles;
+		}
 }
