@@ -49,7 +49,7 @@ public class TcpRecord extends Record{
         recordArgs = args;
         boxIp = ControlMain.getBoxIpOfActiveBox();
         String[] pid = (String[])recordArgs.getAPids().get(0);
-        aPid = Integer.toHexString(Integer.parseInt(pid[0]));
+        aPid = pid[0];
         Logger.getLogger("TcpRecord").info("Start record Pid "+aPid);
         String baseFileName = recordControl.getFileName();
         writeStream[0] = new DataWriteStream(baseFileName, recordControl, ".mp2");
@@ -62,7 +62,7 @@ public class TcpRecord extends Record{
 			Logger.getLogger("TcpRecord").info("TCP-Connection established");
 			out = new PrintWriter(socket.getOutputStream());
 			
-			String requestString = "GET /0x00"+aPid+" HTTP/1.1\r\n\r\n";
+			String requestString = "GET /0x"+aPid+" HTTP/1.1\r\n\r\n";
 			out.write(requestString);
 			out.flush();
 			
@@ -79,8 +79,9 @@ public class TcpRecord extends Record{
 	
 	public void readStream(InputStream inStream) throws IOException {
 		BufferedInputStream in = new  BufferedInputStream(inStream);
+		Logger.getLogger("TcpRecord").info("Receiving data");
+		in.read(new byte[42]);
 		int length = 0;
-
 		do {
 			byte[] temp = new byte[65535];
 			length = in.read(temp, 0, 65535);
