@@ -19,7 +19,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
@@ -115,11 +118,11 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
         if(this.getView().getCbStartPX().isSelected()) {
             this.startProjectX(); 
         } else if (this.getView().getCbStartMplex().isSelected()) {
-            this.startMplex(); 
+            this.startMplex(this.getFiles()); 
         }
     }
     
-    private void startMplex() {
+    private void startMplex(ArrayList files) {
         String[] param = new String[7 + files.size()];
         param[0] = ControlMain.getSettingsPath().getMplexPath();
         param[1] = "-v";
@@ -155,7 +158,8 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
     
     public void processStopped(int exitCode, String processName) {
         if (processName.equals("ProjectX") && this.getView().getCbStartMplex().isSelected()) {
-          //mplex starten mit demuxten Files  
+            //mplex starten mit demuxten Files  
+            this.startMplex(this.getFilesForMplex());
         }
         if (processName.equals("mplex")) {
             if (this.getRecControl()!=null) {
@@ -163,7 +167,24 @@ public class ControlMuxxerView implements ActionListener, SerProcessStopListener
             }
             this.getView().dispose();
         }
+    }
+    
+    private ArrayList getFilesForMplex() {
+        String filename = ((File)this.getFiles().get(0)).getAbsolutePath();
+        String nameWithoutExtension = filename.substring(0, filename.lastIndexOf("."));
+        File logFile = new File(nameWithoutExtension+"_X.log");
+        ArrayList pxFiles = new ArrayList();
         
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(logFile));
+            String line;
+            while ((line=in.readLine())!=null) {
+                if (line.indexOf("---> neue Datei: ")>=0) {
+                    pxFiles.add(new File(line.substring(17)));
+                }
+            }
+        } catch (IOException e) {}
+        return pxFiles;
     }
 
 	/**
