@@ -333,10 +333,12 @@ public class GuiTabMovieGuide extends JPanel {
 			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Refresh16.gif"));
 			jButtonNeuEinlesen.setIcon(icon);		
 			jButtonNeuEinlesen.setText(ControlMain.getProperty("button_new_read"));
+			//jButtonNeuEinlesen.setText("RecordListe");
 			jButtonNeuEinlesen.setActionCommand("neuEinlesen");
 			jButtonNeuEinlesen.setToolTipText(ControlMain.getProperty("button_new_read_txt"));
+			//jButtonNeuEinlesen.setToolTipText("Liste der nicht zu verpassenden Filme");
 			jButtonNeuEinlesen.addActionListener(this.getControl());		
-			jButtonNeuEinlesen.setEnabled(false);
+			//jButtonNeuEinlesen.setEnabled(false);
 		}
 		return jButtonNeuEinlesen;
 	}
