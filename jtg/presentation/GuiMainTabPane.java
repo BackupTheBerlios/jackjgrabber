@@ -41,7 +41,6 @@ public class GuiMainTabPane extends JTabbedPane {
 		if (tabTimer == null) {
 			ControlTimerTab control = new ControlTimerTab(this.getView());
 			tabTimer = new GuiTabTimer(control);
-			control.initialize();
 		}
 		return tabTimer;
 	}
