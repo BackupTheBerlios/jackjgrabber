@@ -18,6 +18,8 @@ public class SerFormatter {
 	 * @param input
 	 * @return
 	 */
+	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
+	
 	public static String removeInvalidCharacters(String input) {
 
 		StringBuffer umlBuf = new StringBuffer();
@@ -147,7 +149,7 @@ public class SerFormatter {
 	}
 
 	public static String getCorrectEndTime(String start, String ende) {
-	    GregorianCalendar cal = SerFormatter.getDateFromString(start, "hh:mm");
+	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, "hh:mm");
 		cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
 		cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+ Integer.parseInt(ende.substring(3, 5)));
 		return out(cal.get(GregorianCalendar.HOUR_OF_DAY)) + ":"
@@ -155,7 +157,7 @@ public class SerFormatter {
 	}
 
 	public static String getCorrectDate(String datum) {
-	    GregorianCalendar cal = SerFormatter.getDateFromString(datum, "dd.MM./HH:mm");
+	    GregorianCalendar cal = SerFormatter.convString2GreCal(datum, "dd.MM./HH:mm");
 		DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
 		datum = formater2.format(cal.getTime()).toString();
 		return datum;
@@ -180,31 +182,26 @@ public class SerFormatter {
 		return b.toString();
 	}
 
-	public static String getAktuellDateString() {
-		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-		return "mguide_d_s_"
-				+ String.valueOf((cal.get(GregorianCalendar.MONTH) + 1))
-				+ "_"
-				+ String.valueOf((cal.get(GregorianCalendar.YEAR))).substring(2) + ".txt";
+	public static String getAktuellDateString(int monat) {
+		GregorianCalendar calmg = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+		calmg.set(GregorianCalendar.MONTH, (calmg.get(GregorianCalendar.MONTH)+monat));
+        return getFormatGreCal(calmg,"MM")+"_"+getFormatGreCal(calmg,"yy");				
 	}
 
 	public static String getDatumToday() {
-		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
-		DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
-		return formater2.format(cal.getTime()).toString();
+		GregorianCalendar caltoday = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
+		return getFormatGreCal(caltoday,DATE_FULL);
 	}
 	
-	public static String getShortDate(long i) {
-		SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MMM.yy");
-		return sdf.format(new Date(i));
-	}
-	
-	public static long getStringToLong(String start) {
-		 GregorianCalendar cal = SerFormatter.getDateFromString(start, "EEEE, dd. MMMM yyyy");
-		 return cal.getTimeInMillis();
+	public static String getFormatGreCal(GregorianCalendar value, String format){
+		SimpleDateFormat fmt = new SimpleDateFormat(format);		       
+        return fmt.format(value.getTime());                           
 	}
 	
     public static GregorianCalendar getDateFromString (String date, String format) {
+    	return convString2GreCal(date, format);
+    }
+    public static GregorianCalendar convString2GreCal (String date, String format) {	
         SimpleDateFormat formatter  = new SimpleDateFormat(format);
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
         try {
@@ -219,9 +216,14 @@ public class SerFormatter {
         newCal.set(GregorianCalendar.MINUTE, gc.get(GregorianCalendar.MINUTE)+value);
     	return newCal;
     }
-    public static String getGC2String(GregorianCalendar gc){
-    	return ( out(gc.get(GregorianCalendar.HOUR_OF_DAY))+":"+out(gc.get(GregorianCalendar.MINUTE)));
+  
+    public static boolean compareDates(String date1, String date2){    	
+    	if( date2.equals("today")){
+    		date2=getDatumToday();
+    	}    	  
+    	return convString2GreCal(date1, DATE_FULL).getTimeInMillis() >= convString2GreCal(date2, DATE_FULL).getTimeInMillis();
     }
+
     
     /**
      * @param cal1

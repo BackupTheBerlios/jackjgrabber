@@ -123,7 +123,7 @@ public class SerMovieGuide2Xml extends Thread{
     	if (path != null) {
         	con = (new File(path).toURL()).openConnection();
     	} else {
-    		URL url = new URL("http://www.premiere.de/content/download/"+ SerFormatter.getAktuellDateString());
+    		URL url = new URL("http://www.premiere.de/content/download/mguide_d_s_"+ SerFormatter.getAktuellDateString(0)+".txt");
             con =url.openConnection();
     	}
     	return con;

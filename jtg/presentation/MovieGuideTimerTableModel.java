@@ -11,6 +11,8 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 {
 	ControlMovieGuideTab control;
 	private static final String[] COLUMN_NAME = {"Datum","Start","Ende","Dauer","Programm"};
+	private static final String DATE_SHORT = "EEEE, dd.MMM.yy";
+	private static final String DATE_TIME = "HH:mm";
 	
 	public MovieGuideTimerTableModel(ControlMovieGuideTab ctrl) {
 		this.setControl(ctrl);
@@ -32,12 +34,12 @@ public class MovieGuideTimerTableModel extends AbstractTableModel
 		Object value = null;
 		try{
 		Integer selectRow = this.getControl().getSelectRowFilmTable();				
-		if (columnIndex == 0) {							
-			value = (SerFormatter.getShortDate(Long.parseLong(((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().get(rowIndex).toString())));
-		}else if (columnIndex == 1) {			
-			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().get(rowIndex) );
+		if (columnIndex == 0) {		
+			value = SerFormatter.getFormatGreCal((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDatum().get(rowIndex),DATE_SHORT);
+		}else if (columnIndex == 1) {						
+			value = SerFormatter.getFormatGreCal((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getStart().get(rowIndex),DATE_TIME );
 		}else if (columnIndex == 2) {	
-			value = SerFormatter.getGC2String((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().get(rowIndex) );
+			value = SerFormatter.getFormatGreCal((GregorianCalendar)((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getEnde().get(rowIndex),DATE_TIME );
 		}else if (columnIndex == 3) {
 			value = ((BOMovieGuide)this.getControl().getTitelMap().get(selectRow)).getDauer().get(rowIndex);
 		}else if (columnIndex == 4) {
