@@ -28,6 +28,13 @@ public class SerExternalProcessHandler {
 	
 	private static ArrayList processList;
 	
+	public static BOExternalProcess startProcess(SerProcessStopListener listener, String name, String[] execString, boolean logging) {
+		BOExternalProcess process = new BOExternalProcess(listener, name, execString, logging);
+		getProcessList().add(process);
+		process.start();
+		return process;
+	}
+	
 	public static BOExternalProcess startProcess(String name, String execString, boolean logging) {
 		BOExternalProcess process = new BOExternalProcess(name, execString, logging);
 		getProcessList().add(process);
@@ -36,11 +43,11 @@ public class SerExternalProcessHandler {
 	}
 	
 	public static BOExternalProcess startProcess(String name, String execString, boolean logging, boolean logErrorAsInfo) {
-			BOExternalProcess process = new BOExternalProcess(name, execString, logging, logErrorAsInfo);
-			getProcessList().add(process);
-			process.start();
-			return process;
-		}
+		BOExternalProcess process = new BOExternalProcess(name, execString, logging, logErrorAsInfo);
+		getProcessList().add(process);
+		process.start();
+		return process;
+	}
 	
 	public static BOExternalProcess startProcess(String name, String[] execStringArray, boolean logging) {
 		BOExternalProcess process = new BOExternalProcess(name, execStringArray, logging);
@@ -51,27 +58,28 @@ public class SerExternalProcessHandler {
 
 	public static void closeAll() {
 	    ArrayList list = getProcessList();
-			for (int i=0; i<list.size(); i++) {
-			    BOExternalProcess boProc = (BOExternalProcess)list.get(i);
-			    Process proc = boProc.getProcess();
-			    try {
-			        if (proc.exitValue()==0) {} //Prozess beendet            
-			    } catch (IllegalThreadStateException e) {
-			        if (boProc.isCloseWithoutPrompt()) {
-			            proc.destroy(); 
-			        } else {
-			            int ret = JOptionPane.showConfirmDialog(
-			                    ControlMain.getControl().getView(),
-			                    ControlMain.getProperty("msg_closeProcess1")+boProc.getName()+" "+ControlMain.getProperty("msg_closeProcess2"),
-			                    "",
-			                    JOptionPane.YES_NO_OPTION);
-			            if (ret==0) {
-			                proc.destroy();      
-			            }    
-			        }
-			    }		    
-			}
+		for (int i=0; i<list.size(); i++) {
+		    BOExternalProcess boProc = (BOExternalProcess)list.get(i);
+		    Process proc = boProc.getProcess();
+		    try {
+		        if (proc.exitValue()==0) {} //Prozess beendet            
+		    } catch (IllegalThreadStateException e) {
+		        if (boProc.isCloseWithoutPrompt()) {
+		            proc.destroy(); 
+		        } else {
+		            int ret = JOptionPane.showConfirmDialog(
+		                    ControlMain.getControl().getView(),
+		                    ControlMain.getProperty("msg_closeProcess1")+boProc.getProgName()+" "+ControlMain.getProperty("msg_closeProcess2"),
+		                    "",
+		                    JOptionPane.YES_NO_OPTION);
+		            if (ret==0) {
+		                proc.destroy();      
+		            }    
+		        }
+		    }		    
+		}
 	}
+	
 	/**
 	 * @return Returns the processList.
 	 */
