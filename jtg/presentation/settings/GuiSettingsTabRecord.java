@@ -410,6 +410,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 		if (jTextFieldUdrecOptions == null) {
 			jTextFieldUdrecOptions = new JTextField();
 			jTextFieldUdrecOptions.addKeyListener(control);
+			jTextFieldUdrecOptions.setEditable(false);
 			jTextFieldUdrecOptions.setName("udrecOptions");
 			jTextFieldUdrecOptions.setPreferredSize(new Dimension(280, 19));
 		}
