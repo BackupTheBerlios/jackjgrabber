@@ -112,8 +112,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	/*
-	 * Versetzen des Programm-Tabs in den Ausgangszustand und initialisiere
-	 * diesen neu
+	 * Versetzen des Programm-Tabs in den Ausgangszustand und initialisiere diesen neu
 	 */
 	public void reInitialize() {
 		firstStart = true;
@@ -128,8 +127,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	/*
-	 * Laufenden Sender in den Bouquets suchen und selektieren Wird beim Start
-	 * der Anwendung benötigt.
+	 * Laufenden Sender in den Bouquets suchen und selektieren Wird beim Start der Anwendung benötigt.
 	 */
 	public void selectRunningSender() {
 		try {
@@ -241,11 +239,9 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	/*
-	 * Steuerung der 2 Zustaende. Aufnahme läuft bereits ->stop Aufnahme läuft
-	 * nicht->start
+	 * Steuerung der 2 Zustaende. Aufnahme läuft bereits ->stop Aufnahme läuft nicht->start
 	 * 
-	 * Beim Start der Aufnahme vorher auf den selektierten Sender zappen im
-	 * TV-Modus falls erwünscht auf die aufzunehmenden Pids abfragen
+	 * Beim Start der Aufnahme vorher auf den selektierten Sender zappen im TV-Modus falls erwünscht auf die aufzunehmenden Pids abfragen
 	 */
 	private void actionRecord() {
 		try {
@@ -338,8 +334,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	/**
 	 * @param recordArgsl
-	 *            Start der Aufnahme und Versetzung der GUI in den
-	 *            Aufnahme-Modus Setzt die EPG Informationen in den Record Args
+	 *            Start der Aufnahme und Versetzung der GUI in den Aufnahme-Modus Setzt die EPG Informationen in den Record Args
 	 */
 	public void startRecord(BORecordArgs recordArgs) {
 		this.setRecordArgs(recordArgs);
@@ -374,8 +369,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	/**
-	 * @return BORecordArgs Erstellen des Objektes BORecordArgs und Setzen der
-	 *         Pids
+	 * @return BORecordArgs Erstellen des Objektes BORecordArgs und Setzen der Pids
 	 */
 	private BORecordArgs buildRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
@@ -405,8 +399,8 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	/*
-	 * Gibt das laufende EPG-Objekt zurück Die EPG's sind aufsteigend sortiert
-	 * Das 1. EPG vor dem 1. EPG mit negativer Zeit wird zurückgegeben
+	 * Gibt das laufende EPG-Objekt zurück Die EPG's sind aufsteigend sortiert Das 1. EPG vor dem 1. EPG mit negativer Zeit wird
+	 * zurückgegeben
 	 */
 	public BOEpg getRunnigEpg(ArrayList epgList) {
 		if (epgList != null) {
@@ -509,8 +503,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	/**
 	 * @param boxIpComboBox
-	 *            Setzen der neuen aktiven Box-IP Ermitteln des laufenden Images
-	 *            der neuen Box Reinitialisierung der Programm-GUI
+	 *            Setzen der neuen aktiven Box-IP Ermitteln des laufenden Images der neuen Box Reinitialisierung der Programm-GUI
 	 *            Reinitialisierung der Timer-GUI
 	 */
 	private void newBoxSelected(JComboBox boxIpComboBox) {
@@ -532,8 +525,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	/**
 	 * @param bouquetsComboBox
-	 *            Setzen des aktuellen Bouquets, refresh der Senderlist,
-	 *            Selektion des 1. Senders
+	 *            Setzen des aktuellen Bouquets, refresh der Senderlist, Selektion des 1. Senders
 	 */
 	public void reInitBouquetList(JComboBox bouquetsComboBox) {
 		if (this.getBouquetList().size() > 0) {
@@ -567,8 +559,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(2, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(3, 0);
 			this.getMainView().getTabProgramm().sorter.setSortingStatus(4, 0);
-			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung
-																			   // zuruecksetzen
+			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
 			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(modelIndex, modelIndex);
 			BOEpg selEpg = (BOEpg) this.getSelectedSender().getEpg().get(modelIndex);
 			this.setSelectedEpg(selEpg);
@@ -679,7 +670,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	private void actionAddToTimer() {
 		ArrayList list = this.getEpgTableModel().getEpgList();
 		int[] rows = this.getMainView().getTabProgramm().getJTableEPG().getSelectedRows(); //Selektierter
-																						   // EPG´s
+		// EPG´s
 		//		Schleife über die selektierten epg-Zeilen
 		for (int i = 0; i < rows.length; i++) {
 			String eventId = (String) this.getMainView().getTabProgramm().sorter.getValueAt(rows[i], 0);
@@ -701,8 +692,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	/**
 	 * @param epg
-	 * @return BOTimer Erstellein eines BOTimer-Objekts aus den
-	 *         EPG-Informationen
+	 * @return BOTimer Erstellein eines BOTimer-Objekts aus den EPG-Informationen
 	 */
 	private BOTimer buildTimer(BOEpg epg) {
 		BOTimer timer = new BOTimer();
@@ -798,8 +788,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 
 	/**
 	 * @param dateChooserDate
-	 *            Methode wird aufgerufen wenn Datum im DateChooser geaendert
-	 *            wurde
+	 *            Methode wird aufgerufen wenn Datum im DateChooser geaendert wurde
 	 */
 	public void setDateChooserDate(Date dateChooserDate) {
 		this.dateChooserDate = dateChooserDate;
