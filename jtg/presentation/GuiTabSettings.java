@@ -21,6 +21,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import control.ControlMain;
 import control.ControlSettingsTab;
 
 public class GuiTabSettings extends GuiTab {
@@ -50,9 +51,9 @@ public class GuiTabSettings extends GuiTab {
 		    settingsTabPane = new GuiSettingsTabPane(this);
 		    settingsTabPane.addChangeListener(control);
 			
-		    settingsTabPane.addTab("Allgemein", settingsTabPane.getTabSettingsMain());
-		    settingsTabPane.addTab("Aufnahme", settingsTabPane.getTabSettingsRecord());
-		    settingsTabPane.addTab("Wiedergabe", settingsTabPane.getTabSettingsPlayback());
+		    settingsTabPane.addTab(ControlMain.getProperty("label_general"), settingsTabPane.getTabSettingsMain());
+		    settingsTabPane.addTab(ControlMain.getProperty("label_record"), settingsTabPane.getTabSettingsRecord());
+		    settingsTabPane.addTab(ControlMain.getProperty("label_playback"), settingsTabPane.getTabSettingsPlayback());
 		}
 		return settingsTabPane;
 	}

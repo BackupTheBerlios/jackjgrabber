@@ -31,6 +31,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlAboutTab;
+import control.ControlMain;
 
 public class GuiTabAbout extends JPanel {
 
@@ -60,9 +61,9 @@ public class GuiTabAbout extends JPanel {
 				builder.setDefaultDialogBorder();
 				CellConstraints cc = new CellConstraints();
 		
-				builder.addSeparator("Version",					cc.xy	(1, 1));
+				builder.addSeparator(ControlMain.getProperty("label_version"),					cc.xy	(1, 1));
 				builder.add(this.getScrollPaneVersion(),		cc.xy	(1, 3));
-				builder.addSeparator("Authors",					cc.xy	(1, 5));
+				builder.addSeparator(ControlMain.getProperty("label_authors"),					cc.xy	(1, 5));
 				builder.add(this.getScrollPaneAuthors(),		cc.xywh	(1, 7, 1, 2));
 				builder.add(new JLabel(this.getImageLogo()),	cc.xywh	(3, 1, 1, 7));
 				builder.add(this.getLinkHomePage(),				cc.xywh	(3, 8, 1, 1, CellConstraints.CENTER, CellConstraints.FILL ));

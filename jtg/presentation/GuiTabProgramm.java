@@ -42,6 +42,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import calendar.JDateChooser;
 
+import control.ControlMain;
 import control.ControlProgramTab;
 
 public class GuiTabProgramm extends GuiTab {
@@ -101,18 +102,18 @@ public class GuiTabProgramm extends GuiTab {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 	
-		builder.addSeparator("Datum",		   							cc.xywh	(1, 1, 1, 1));
-		builder.add(this.getJPanelChannels(),  						cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.addSeparator("EPG",			   							cc.xywh	(3, 1, 7, 1));
-		builder.add(this.getJScrollPaneEPG(),							cc.xywh	(3, 2, 7, 1));
-		builder.addSeparator("Aktionen",								cc.xywh	(1, 4, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.add(this.getJPanelButtonsAktionen(),  			cc.xywh	(1, 5, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
-		builder.addSeparator("Record-Info",							cc.xywh	(7, 4, 1, 1));
-		builder.add(this.getJPanelRecordInfo(), 				    	cc.xywh	(7, 5, 1, 1));
-		builder.addSeparator("EPG-Details",							cc.xywh	(9, 4, 1, 1));
-		builder.add(this.getJScrollPaneEPGDetail(),	 				cc.xywh	(9, 5, 1, 4));
-		builder.addSeparator("Ausgabe",								cc.xywh	(1, 7, 7, 1));
-		builder.add(this.getJScrollPaneAusgabe(), 	 				cc.xywh	(1, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator(ControlMain.getProperty("label_date"),			cc.xywh	(1, 1, 1, 1));
+		builder.add(this.getJPanelChannels(),  												cc.xywh	(1, 2, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator(ControlMain.getProperty("label_epg"),				cc.xywh	(3, 1, 7, 1));
+		builder.add(this.getJScrollPaneEPG(),													cc.xywh	(3, 2, 7, 1));
+		builder.addSeparator(ControlMain.getProperty("label_actions"),		cc.xywh	(1, 4, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.add(this.getJPanelButtonsAktionen(),  									cc.xywh	(1, 5, 5, 1, CellConstraints.FILL, CellConstraints.FILL));
+		builder.addSeparator(ControlMain.getProperty("label_recordInfo"),	cc.xywh	(7, 4, 1, 1));
+		builder.add(this.getJPanelRecordInfo(), 				    							cc.xywh	(7, 5, 1, 1));
+		builder.addSeparator(ControlMain.getProperty("label_epgDetails"),	cc.xywh	(9, 4, 1, 1));
+		builder.add(this.getJScrollPaneEPGDetail(),							 				cc.xywh	(9, 5, 1, 4));
+		builder.addSeparator(ControlMain.getProperty("label_output"),			cc.xywh	(1, 7, 7, 1));
+		builder.add(this.getJScrollPaneAusgabe(), 	 										cc.xywh	(1, 8, 7, 1, CellConstraints.FILL, CellConstraints.FILL));
 	}
 	
 	/**
@@ -150,7 +151,7 @@ public class GuiTabProgramm extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(jPanelRecordInfo, layout);
 			CellConstraints cc = new CellConstraints();
 			
-			builder.add(new JLabel("Sofortaufnahme Stop-Zeit"),	  	cc.xy(1, 1));		
+			builder.add(new JLabel(ControlMain.getProperty("label_stopRecord")),	  	cc.xy(1, 1));		
 			builder.add(this.getJSpinnerRecordStopTime(),	 			cc.xy(1, 3));
 		}
 		return jPanelRecordInfo;
@@ -166,7 +167,7 @@ public class GuiTabProgramm extends GuiTab {
 			CellConstraints cc = new CellConstraints();
 			
 			builder.add(this.getJDateChooser(),		  						cc.xyw	(1, 1, 2, CellConstraints.FILL, CellConstraints.FILL));
-			builder.addSeparator("Sender, Doppelklick Zapping",				cc.xyw	(1, 3, 2));
+			builder.addSeparator(ControlMain.getProperty("label_zapping"),				cc.xyw	(1, 3, 2));
 			builder.add(this.getJComboBoxBouquets(), 						cc.xyw	(1, 4, 2, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJScrollPaneChannels(), 						cc.xyw	(1, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJButtonRefresh(), 							cc.xyw	(1, 6, 1, CellConstraints.FILL, CellConstraints.FILL));
@@ -247,9 +248,9 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonAufnahme() {
 		if (jButtonQuickRecord == null) {
 			jButtonQuickRecord = new JButton();
-			jButtonQuickRecord.setText("Record");
+			jButtonQuickRecord.setText(ControlMain.getProperty("button_record"));
 			jButtonQuickRecord.setActionCommand("record");
-			jButtonQuickRecord.setToolTipText("Sofortaufnahme starten");
+			jButtonQuickRecord.setToolTipText(ControlMain.getProperty("buttontt_record"));
 			jButtonQuickRecord.addActionListener(this.getControl());
 		}
 		return jButtonQuickRecord;
@@ -264,7 +265,7 @@ public class GuiTabProgramm extends GuiTab {
 			ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("ico/Refresh16.gif"));
 			jButtonRefresh = new JButton(icon);
 			jButtonRefresh.setActionCommand("refresh");
-			jButtonRefresh.setToolTipText("Aktualisieren");
+			jButtonRefresh.setToolTipText(ControlMain.getProperty("buttontt_refresh"));
 			jButtonRefresh.addActionListener(this.getControl());
 		}
 		return jButtonRefresh;
@@ -277,8 +278,9 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonReboot() {
 		if (jButtonReboot == null) {
 			jButtonReboot = new JButton();
-			jButtonReboot.setText("Box Reboot");
-			jButtonReboot.setToolTipText("Box neu starten");
+			jButtonReboot.setText(ControlMain.getProperty("button_reboot"));
+			jButtonReboot.setActionCommand("reboot");
+			jButtonReboot.setToolTipText(ControlMain.getProperty("buttontt_reboot"));
 			jButtonReboot.addActionListener(this.getControl());
 		}
 		return jButtonReboot;
@@ -291,9 +293,9 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonPlayback() {
 		if (jButtonPlayback == null) {
 			jButtonPlayback = new JButton();
-			jButtonPlayback.setText("Playback");
+			jButtonPlayback.setText(ControlMain.getProperty("button_playback"));
 			jButtonPlayback.setActionCommand("playback");
-			jButtonPlayback.setToolTipText("AKtuelles Programm abspielen.");
+			jButtonPlayback.setToolTipText(ControlMain.getProperty("buttontt_playback"));
 			jButtonPlayback.addActionListener(this.getControl());
 		}
 		return jButtonPlayback;
@@ -306,8 +308,9 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonNhttpdReset() {
 		if (jButtonNhttpdReset == null) {
 			jButtonNhttpdReset = new JButton();
-			jButtonNhttpdReset.setText("nhttpd reset");
-			jButtonNhttpdReset.setToolTipText("nhttpd resetten");
+			jButtonNhttpdReset.setText(ControlMain.getProperty("button_nhttpdReset"));
+			jButtonNhttpdReset.setActionCommand("nhttpdReset");
+			jButtonNhttpdReset.setToolTipText(ControlMain.getProperty("buttontt_nhttpdReset"));
 			jButtonNhttpdReset.addActionListener(this.getControl());
 		}
 		return jButtonNhttpdReset;
@@ -321,8 +324,9 @@ public class GuiTabProgramm extends GuiTab {
 		if (jButtonEPGReset == null) {
 			jButtonEPGReset = new JButton();
 			jButtonEPGReset.setPreferredSize(new java.awt.Dimension(100,25));
-			jButtonEPGReset.setText("EPG Reset");
-			jButtonEPGReset.setToolTipText("EPG resetten");
+			jButtonEPGReset.setText(ControlMain.getProperty("button_epgReset"));
+			jButtonEPGReset.setActionCommand("epgReset");
+			jButtonEPGReset.setToolTipText(ControlMain.getProperty("buttontt_epgReset"));
 			jButtonEPGReset.addActionListener(this.getControl());
 		}
 		return jButtonEPGReset;
@@ -339,7 +343,7 @@ public class GuiTabProgramm extends GuiTab {
 			JSpinner.DateEditor dateEditor   = new JSpinner.DateEditor(jSpinnerRecordStopTime, "HH:mm - dd.MM.yyyy");			
 			jSpinnerRecordStopTime.setEditor(dateEditor);
 			jSpinnerRecordStopTime.setPreferredSize(new java.awt.Dimension(105,25));
-			jSpinnerRecordStopTime.setToolTipText("Sofortaufnahme beenden um...");		
+			jSpinnerRecordStopTime.setToolTipText(ControlMain.getProperty("buttontt_quickRecord"));
 			jSpinnerRecordStopTime.addChangeListener(control);
 		}
 		return jSpinnerRecordStopTime;
@@ -352,8 +356,9 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonSelectedToTimer() {
 		if (jButtonToTimer == null) {
 			jButtonToTimer = new JButton();
-			jButtonToTimer.setText("Selected to Timer");
-			jButtonToTimer.setToolTipText("ausgewählte Programme zum Timer hinzufügen.");
+			jButtonToTimer.setText(ControlMain.getProperty("button_toTimer"));
+			jButtonToTimer.setActionCommand("toTimer");
+			jButtonToTimer.setToolTipText(ControlMain.getProperty("buttontt_toTimer"));
 			jButtonToTimer.addActionListener(this.getControl());
 		}
 		return jButtonToTimer;
@@ -366,9 +371,9 @@ public class GuiTabProgramm extends GuiTab {
 	public JButton getJButtonStartServer() {
 		if (jButtonStartServer == null) {
 			jButtonStartServer = new JButton();
+			jButtonStartServer.setText(ControlMain.getProperty("button_startServer"));
 			jButtonStartServer.setActionCommand("startServer");
-			jButtonStartServer.setText("Start Server");
-			jButtonStartServer.setToolTipText("Streamingserver starten");
+			jButtonStartServer.setToolTipText(ControlMain.getProperty("buttontt_startServer"));
 			jButtonStartServer.addActionListener(this.getControl());
 		}
 		return jButtonStartServer;
@@ -529,28 +534,28 @@ public class GuiTabProgramm extends GuiTab {
 	}
 	
 	public void stopStreamingServerModus() {
-		this.getJButtonStartServer().setText("Start Server");
-		this.getJButtonStartServer().setToolTipText("Streamingserver starten");
+		this.getJButtonStartServer().setText(ControlMain.getProperty("button_startServer"));
+		this.getJButtonStartServer().setToolTipText(ControlMain.getProperty("buttontt_startServer"));
 	}
 
 	public void startStreamingServerModus() {
-		this.getJButtonStartServer().setText("Stop Server");
-		this.getJButtonStartServer().setToolTipText("Streamingserver stoppen");
+		this.getJButtonStartServer().setText(ControlMain.getProperty("button_stopServer"));
+		this.getJButtonStartServer().setToolTipText(ControlMain.getProperty("buttontt_stopServer"));
 	}
 	/**
 	 * Versetzen des Aufnahme-Buttons in den Aufnahme-Warte-Modus
 	 */
 	public void stopRecordModus() {
-		this.getJButtonAufnahme().setText("Aufnahme");
-		this.getJButtonAufnahme().setToolTipText("Sofortaufnahme starten");
+		this.getJButtonAufnahme().setText(ControlMain.getProperty("button_record"));
+		this.getJButtonAufnahme().setToolTipText(ControlMain.getProperty("buttontt_record"));
 	}
 	
 	/**
 	 * Versetzen des Aufnahme-Buttons in den in den Aufnahme-Modus
 	 */
 	public void startRecordModus() {
-		this.getJButtonAufnahme().setText("Stop");
-		this.getJButtonAufnahme().setToolTipText("Sofortaufname stoppen");
+		this.getJButtonAufnahme().setText(ControlMain.getProperty("button_stopRecord"));
+		this.getJButtonAufnahme().setToolTipText(ControlMain.getProperty("buttontt_stopRecord"));
 	}
 	/**
 	 * @return Returns the dateModelSpinnerStopTime.
@@ -563,7 +568,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JRadioButton getJRadioButtonRadioMode() {
 		if (jRadioButtonRadioMode == null) {
-			jRadioButtonRadioMode = new JRadioButton("Radio");
+			jRadioButtonRadioMode = new JRadioButton(ControlMain.getProperty("button_tv"));
 			jRadioButtonRadioMode.addActionListener(control);
 			jRadioButtonRadioMode.setActionCommand("radioMode");
 			tvRadioButtonGroup.add(jRadioButtonRadioMode);
@@ -575,7 +580,7 @@ public class GuiTabProgramm extends GuiTab {
 	 */
 	public JRadioButton getJRadioButtonTVMode() {
 		if (jRadioButtonTVMode == null) {
-			jRadioButtonTVMode = new JRadioButton("TV");
+			jRadioButtonTVMode = new JRadioButton(ControlMain.getProperty("button_radio"));
 			jRadioButtonTVMode.addActionListener(control);
 			jRadioButtonTVMode.setActionCommand("tvMode");
 			tvRadioButtonGroup.add(jRadioButtonTVMode);

@@ -106,9 +106,9 @@ public class GuiSettingsTabMain extends GuiTab {
 			CellConstraints cc = new CellConstraints();
 
 			builder.addSeparator(ControlMain.getProperty("label_guiSettings"),	cc.xywh	(1, 1, 3, 1));
-			builder.add(new JLabel("Theme"),				  			cc.xy	(1, 2));
+			builder.add(new JLabel(ControlMain.getProperty("label_theme")),				  			cc.xy	(1, 2));
 			builder.add(this.getJComboBoxTheme(),						cc.xy	(3, 2));
-			builder.add(new JLabel("Sprache"),				  			cc.xy	(1, 4));
+			builder.add(new JLabel(ControlMain.getProperty("label_lang")),				  			cc.xy	(1, 4));
 			builder.add(this.getJComboBoxLocale(),						cc.xy	(3, 4));
 			
 			builder.add(this.getCbStartFullscreen(),				cc.xyw	(1, 6, 3));

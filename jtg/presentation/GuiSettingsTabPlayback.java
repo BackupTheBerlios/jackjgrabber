@@ -31,6 +31,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import control.ControlMain;
 import control.ControlSettingsTabPlayback;
 
 public class GuiSettingsTabPlayback extends GuiTab{
@@ -71,7 +72,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 			PanelBuilder builder = new PanelBuilder(panelPlaybackSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Wiedergabe-Optionen",										cc.xywh	(1, 1, 3, 1));
+			builder.addSeparator(ControlMain.getProperty("label_playbackOptions"),										cc.xywh	(1, 1, 3, 1));
 			builder.add(new JLabel("z.B. xine http://$ip:31339/$vPid,$aPid"),				cc.xywh	(1, 3, 3, 1));
 			builder.add(new JLabel("z.B. d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid"),	cc.xywh	(1, 4, 3, 1));
 			builder.add(this.getJScrollPanePlaybackSettings(),								cc.xywh	(1, 6, 1, 3));
@@ -123,7 +124,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 	private JButton getJButtonAnlegen() {
 		if (jButtonAnlegen == null) {
 			jButtonAnlegen = new JButton();
-			jButtonAnlegen.setText("Anlegen");
+			jButtonAnlegen.setText(ControlMain.getProperty("button_create"));
 			jButtonAnlegen.setActionCommand("add");
 			jButtonAnlegen.addActionListener(control);
 			jButtonAnlegen.setPreferredSize(new java.awt.Dimension(90,25));
@@ -138,7 +139,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
 	private JButton getJButtonLoeschen() {
 		if (jButtonLoeschen == null) {
 			jButtonLoeschen = new JButton();
-			jButtonLoeschen.setText("Löschen");
+			jButtonLoeschen.setText(ControlMain.getProperty("button_delete"));
 			jButtonLoeschen.setActionCommand("delete");
 			jButtonLoeschen.addActionListener(control);
 			jButtonLoeschen.setPreferredSize(new java.awt.Dimension(90,25));
@@ -169,7 +170,7 @@ public class GuiSettingsTabPlayback extends GuiTab{
      */
     public JCheckBox getCbUseStandardOption() {
         if (cbUseStandardOption == null) {
-            cbUseStandardOption = new JCheckBox("Immer Standard-Option verwenden");
+            cbUseStandardOption = new JCheckBox(ControlMain.getProperty("cbUseStandard"));
             cbUseStandardOption.setName("useStandard");
             cbUseStandardOption.addItemListener(control);
 		}

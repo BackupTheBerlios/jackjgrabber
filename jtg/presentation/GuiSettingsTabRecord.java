@@ -36,6 +36,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import control.ControlMain;
 import control.ControlSettingsTabRecord;
 
 public class GuiSettingsTabRecord extends GuiTab {
@@ -84,13 +85,13 @@ public class GuiSettingsTabRecord extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 8, 1));
+			builder.addSeparator(ControlMain.getProperty("label_recordSettings"),							cc.xywh	(1, 1, 8, 1));
 			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 5, 1));
-			builder.add(new JLabel("Streamingserver-Port"),	  					cc.xywh	(6, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
+			builder.add(new JLabel(ControlMain.getProperty("label_serverPort")),	  					cc.xywh	(6, 2, 1, 1, CellConstraints.RIGHT, CellConstraints.FILL));
 			builder.add(this.getTfServerPort(),									cc.xy	(8, 2));
 			builder.add(this.getCbRecordAllPids(),								cc.xy	(1, 3));
 			builder.add(this.getCbStartPX(),									cc.xywh	(1, 5, 5, 1));
-			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),				cc.xy	(1, 6));
+			builder.add(new JLabel(ControlMain.getProperty("label_recordPath")),				cc.xy	(1, 6));
 			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(4, 6, 3, 1));
 			builder.add(this.getJButtonRecordPathFileChooser(),					cc.xy	(8, 6));
 		}
@@ -106,11 +107,11 @@ public class GuiSettingsTabRecord extends GuiTab {
 			PanelBuilder builder = new PanelBuilder(panelEngineSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("TV-Aufname-Engine",							cc.xywh	(1, 1, 7, 1));	
+			builder.addSeparator(ControlMain.getProperty("label_engine"),							cc.xywh	(1, 1, 7, 1));	
 			builder.add(this.getJRadioButtonJGrabber(),							cc.xy	(1, 2));
 			builder.add(this.getJRadioButtonUdrec(),							cc.xy	(3, 2));
 			builder.add(this.getJComboBoxStreamType(),							cc.xywh	(5, 2, 2, 1));
-			builder.add(new JLabel("Pfad zur udrec.exe"),						cc.xy	(1, 4));
+			builder.add(new JLabel(ControlMain.getProperty("label_udrecPath")),						cc.xy	(1, 4));
 			builder.add(this.getJTextFieldUdrecPath(),							cc.xywh	(4, 4, 2, 1));
 			builder.add(this.getJButtonUdrecPathFileChooser(),					cc.xy	(7, 4));
 		}
@@ -160,7 +161,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JCheckBox getCbStartStreamingServer() {
 		if (cbStartStreamingServer == null) {
-			cbStartStreamingServer = new JCheckBox("Streamingserver beim Start starten");
+			cbStartStreamingServer = new JCheckBox(ControlMain.getProperty("cbStartServer"));
 			cbStartStreamingServer.setName("startStreamingServer");
 			cbStartStreamingServer.addItemListener(control);
 		}
@@ -228,7 +229,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JCheckBox getCbStartPX() {
 		if (cbStartPX == null) {
-			cbStartPX = new JCheckBox("Nach Aufnahmeende mit ProjectX demuxen");
+			cbStartPX = new JCheckBox(ControlMain.getProperty("cbStartPX"));
 			cbStartPX.setName("startPX");
 			cbStartPX.addItemListener(control);
 		}
@@ -239,7 +240,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 	 */
 	public JCheckBox getCbRecordAllPids() {
 		if (cbRecordAllPids == null) {
-			cbRecordAllPids = new JCheckBox("Immer alle Pids aufnehmen");
+			cbRecordAllPids = new JCheckBox(ControlMain.getProperty("cbRecordAllPids"));
 			cbRecordAllPids.setName("recordAllPids");
 			cbRecordAllPids.addItemListener(control);
 		}
