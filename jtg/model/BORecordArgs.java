@@ -24,7 +24,7 @@ public class BORecordArgs {
 	String senderName;
 	String epgTitle;
 	String bouquetNr;
-	String channelId;
+	String eventId;
 	String epgInfo1;
 	String epgInfo2;
 	String epgId;
@@ -48,14 +48,14 @@ public class BORecordArgs {
 	/**
 	 * @return Returns the channelId.
 	 */
-	public String getChannelId() {
-		return channelId;
+	public String getEventId() {
+		return eventId;
 	}
 	/**
 	 * @param channelId The channelId to set.
 	 */
-	public void setChannelId(String channelId) {
-		this.channelId = channelId;
+	public void setEventId(String channelId) {
+		this.eventId = channelId;
 	}
 	/**
 	 * @return Returns the epgId.
