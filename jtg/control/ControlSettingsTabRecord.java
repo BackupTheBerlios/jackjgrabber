@@ -35,6 +35,7 @@ import javax.swing.event.ChangeListener;
 
 import model.*;
 import model.BOSettingsRecord;
+import presentation.settings.*;
 import presentation.settings.GuiSettingsTabRecord;
 import presentation.settings.GuiStreamTypeComboModel;
 import presentation.settings.GuiTabSettings;
@@ -45,7 +46,7 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	GuiTabSettings settingsTab;
 	public final String[] streamTypesJGrabber = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport"};
 	public final String[] streamTypesUdrec = {"PES MPEG-Packetized Elementary", "TS MPEG-Transport", "ES MPEG-Elementary"};
-	private JFrame tagFrame;
+	private GuiTagFrame tagFrame;
 
 	public ControlSettingsTabRecord(GuiTabSettings tabSettings) {
 		this.setSettingsTab(tabSettings);
@@ -165,7 +166,11 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 				break;
 			}
 			if (action.equals("Tags")) {
-				openTagWindow();
+				openTagWindow(getTab().getDirPattern());
+				break;
+			}
+			if (action.equals("TagsFile")) {
+				openTagWindow(getTab().getFilePattern());
 				break;
 			}
 			if (action.equals("Test")) {
@@ -205,11 +210,12 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 	}
 
 	/**
+	 * @param field
 	 *  
 	 */
-	private void openTagWindow() {
+	private void openTagWindow(JTextField field) {
 		if (tagFrame == null) {
-			tagFrame = new JFrame(ControlMain.getProperty("filep_tagName"));
+			tagFrame = new GuiTagFrame(ControlMain.getProperty("filep_tagName"));
 			final JList list = new JList(BOPatternTag.getTags());
 			list.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
@@ -217,11 +223,19 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 						Object[] val = list.getSelectedValues();
 						for (int i = 0; i < val.length; i++) {
 							BOPatternTag t = (BOPatternTag) val[i];
-							String text = getTab().getDirPattern().getText();
+							String text = tagFrame.getField().getText();
 							text += t.getName();
-							getTab().getDirPattern().setText(text);
+							tagFrame.getField().setText(text);
 						}
-						getSettings().setDirPattern(getTab().getDirPattern().getText());
+
+						if (tagFrame.getField() == getTab().getDirPattern())
+						{
+							getSettings().setDirPattern(tagFrame.getField().getText());
+						}
+						else if (tagFrame.getField() == getTab().getFilePattern())
+						{
+							getSettings().setFilePattern(tagFrame.getField().getText());
+						}
 					}
 				}
 			});
@@ -230,8 +244,8 @@ public class ControlSettingsTabRecord extends ControlTabSettings implements KeyL
 			tagFrame.pack();
 			tagFrame.setLocationRelativeTo(getTab());
 		}
+		tagFrame.setField(field);
 		tagFrame.setVisible(true);
-
 	}
 
 	public void keyTyped(KeyEvent event) {

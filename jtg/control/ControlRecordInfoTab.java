@@ -572,7 +572,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 
 				// deactivated currently only for personal use of crazyreini
 			
-				  m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) { startMuxxi(file); } }));
+				  //m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) { startMuxxi(file); } }));
 				 
 
 			}

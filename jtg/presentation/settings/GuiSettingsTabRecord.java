@@ -70,7 +70,8 @@ public class GuiSettingsTabRecord extends GuiTab {
 	private SerIconManager iconManager = SerIconManager.getInstance();
 	private JButton testButton;
 	private JButton tagButton;
-
+	private JButton tagButtonFile;
+	
 	private JTextField dirPattern;
 	private JTextField filePattern;
 	private JPanel panelFileNameSettings;
@@ -212,6 +213,7 @@ public class GuiSettingsTabRecord extends GuiTab {
 
 			builder.add(new JLabel(ControlMain.getProperty("filep_file")), cc.xy(1, 4));
 			builder.add(getFilePattern(), cc.xy(3, 4));
+			builder.add(getTagButtonFile(), cc.xy(5, 4));
 
 		}
 		return panelFileNameSettings;
@@ -241,6 +243,18 @@ public class GuiSettingsTabRecord extends GuiTab {
 		return tagButton;
 	}
 
+	/**
+	 * @return
+	 */
+	public JButton getTagButtonFile() {
+		if (tagButtonFile == null) {
+			tagButtonFile = new JButton(ControlMain.getProperty("filep_tagName"));
+			tagButtonFile.setActionCommand("TagsFile");
+			tagButtonFile.addActionListener(control);
+		}
+		return tagButtonFile;
+	}
+	
 	/**
 	 * @return
 	 */
