@@ -175,11 +175,11 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	public ArrayList getTimer() throws IOException {
 		
 		ArrayList timerList = new ArrayList();
-	  	BOTimer botimer = new BOTimer();
 		BufferedReader input = getConnection("/control/timer");	
 		String text = new String();
 		String line, valueStart, valueStop, valueAnno;
-		while ((line = input.readLine()) != null) { 
+		while ((line = input.readLine()) != null) {
+			BOTimer botimer = new BOTimer();
 	        StringTokenizer st = new StringTokenizer(line);    
             botimer.setEventId(st.nextToken());
             botimer.setEventType(st.nextToken());
