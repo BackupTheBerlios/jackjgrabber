@@ -89,11 +89,15 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	int SelectedItemJComboBoxSucheNach;
     int timerTableSize;    
 	public ControlMovieGuideTab(GuiMainView view) {		
-		this.setMainView(view);						
+		this.setMainView(view);				
 	}
 	
 	public void run() {
-          this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());          
+          this.setTab((GuiTabMovieGuide)this.getMainView().getTabMovieGuide());     
+          this.getTab().getComboBoxDatum().setEnabled(false);
+          this.getTab().getComboBoxGenre().setEnabled(false);
+          this.getTab().getComboBoxSender().setEnabled(false);
+          this.getTab().getComboBoxSucheNach().setEnabled(false);
           if(getSettings().getMgLoadType()==0){          	
           	if(SerMovieGuide2Xml.checkNewMovieGuide()&& (!movieGuideFileNext.exists())){
           		SerAlertDialog.alert(ControlMain.getProperty("txt_mg_info1")+GET_AKTUELL_DATE_STRING_1+ControlMain.getProperty("txt_mg_info2"),this.getMainView()); 					
@@ -138,7 +142,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	 * Alle ComboBoxen auf das 1 Element gesetz, weiter hin wird bei der FilmTable die 
 	 * erste Row selectiert.
 	 */
-	private void beautifyGui(){		
+	private void beautifyGui(){
+		this.getTab().getComboBoxDatum().setEnabled(true);	
+		  this.getTab().getComboBoxGenre().setEnabled(true);
+          this.getTab().getComboBoxSender().setEnabled(true);
+          this.getTab().getComboBoxSucheNach().setEnabled(true);
 		if(getSettings().getMgDefault()==0){
 			setTitelMapSelected(GET_FORMAT_GRE_CAL,13);   // TitelMap Alles      
 		}else{
@@ -151,6 +159,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
         	this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         	getJTableFilm().getSelectionModel().setSelectionInterval(0,0); //1 Row selected
         }catch(ArrayIndexOutOfBoundsException ex){System.out.println(ex);}
+        
    }
 	
 	
@@ -299,7 +308,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 				searchAbHeute = checkBox.isSelected();		
 			}
 		}else{	
-			JComboBox comboBox = (JComboBox)event.getSource();
+			JComboBox comboBox = (JComboBox)event.getSource();			
 			if (comboBox.getName().equals("jComboBoxDatum")) {	
 				this.getTab().getTfSuche().setText("");				
 				setSelectedItemJComboBox(comboBox.getSelectedItem().toString());
