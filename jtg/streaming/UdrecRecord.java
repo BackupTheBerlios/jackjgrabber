@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -100,11 +101,11 @@ public class UdrecRecord  extends Record {
         return null;
     }
 	
-    public Object[] getFiles() {
+    public ArrayList getFiles() {
     	File[] files = recordControl.getDirectory().listFiles();
-    	String[] fullPathFiles = new String[files.length];
+    	ArrayList fullPathFiles = new ArrayList(files.length);
     	for (int i=0; i<files.length; i++) {
-    	    fullPathFiles[i] = files[i].getAbsolutePath();
+    	    fullPathFiles.add(files[i].getAbsolutePath());
     	}
     	return fullPathFiles;
     	//TODO nicht alle Files übergeben!! Nur Files mit identischem Standardnamen

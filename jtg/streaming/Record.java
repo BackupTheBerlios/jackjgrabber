@@ -26,7 +26,7 @@ public abstract class Record {
     public abstract void stop();
     public abstract DataWriteStream[] getWriteStream();
     
-    public Object[] getFiles() {
+    public ArrayList getFiles() {
     	ArrayList fileList = new ArrayList();
         for (int i=0; i<getWriteStream().length; i++) {
             ArrayList streamfileList = getWriteStream()[i].fileList;
@@ -35,6 +35,6 @@ public abstract class Record {
             }
         }
         
-        return fileList.toArray();
+        return fileList;
     }
 }

@@ -19,6 +19,7 @@ package streaming;
 
 import java.io.*;
 import java.io.File;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
@@ -27,7 +28,9 @@ import model.BORecordArgs;
 
 import org.apache.log4j.Logger;
 
+import service.SerErrorStreamReadThread;
 import service.SerFormatter;
+import service.SerInputStreamReadThread;
 import control.ControlMain;
 import control.ControlProgramTab;
 
@@ -155,17 +158,36 @@ public class RecordControl extends Thread {
 		controlProgramTab.getMainView().getTabProgramm().stopRecordModus();
 		controlProgramTab.getMainView().setSystrayDefaultIcon();
 		if (ControlMain.getSettings().isStartPX() && record.getFiles() != null
-				&& record.getFiles().length > 0) {
+				&& record.getFiles().size() > 0) {
 			this.startProjectX();
-			Logger.getLogger("RecordControl").info(
-					ControlMain.getProperty("msg_startPX"));
 		}
 		isRunning = false;
 	}
 
 	public void startProjectX() {
-//		ControlProjectXTab control = new ControlProjectXTab(controlProgramTab.getMainView(), record.getFiles());
-//		control.initialize();
+	    String separator = System.getProperty("file.separator");
+	    ArrayList files = record.getFiles();
+	    String fileString=new String();
+	    for (int i=0; i<files.size(); i++) {
+	        fileString+=((String)files.get(i))+" ";
+	    }
+	    try {
+            Object[] args = {
+                    System.getProperty("java.home")+separator+"bin"+separator+"java -jar",
+                    ControlMain.getSettings().getProjectXPath(),
+                    //"-g",
+                    fileString
+            };
+            MessageFormat form = new MessageFormat("{0} {1} {2}");
+            Logger.getLogger("RecordControl").info(form.format(args));
+            Process run = Runtime.getRuntime().exec(form.format(args));
+            
+			new SerInputStreamReadThread(true, run.getInputStream()).start();
+			new SerErrorStreamReadThread(true, run.getErrorStream()).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Logger.getLogger("RecordControl").error(ControlMain.getProperty("err_startPX")+e.getMessage());
+        }
 	}
 
 	public String getFileName() {
