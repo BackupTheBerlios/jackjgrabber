@@ -187,20 +187,6 @@ public class ControlProgramTab extends ControlTab
 				this.actionAddToTimer();
 				break;
 			}
-			if (action == "nhttpdRreset") {
-				try {
-					SerBoxTelnet.runNhttpdReset();
-				} catch (Exception ex) {
-				}
-				break;
-			}
-			if (action == "epgReset") {
-				try {
-					SerBoxTelnet.runSectiondReset();
-				} catch (Exception ex) {
-				}
-				break;
-			}
 			if (action == "startServer") {
 				this.actionStreamingServer();
 				break;
