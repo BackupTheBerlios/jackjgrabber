@@ -45,7 +45,7 @@ public class ControlMain {
     private static Properties prop = new Properties();
     
     public static String filename = "settings.xml";
-    public static String _MESSAGE_BUNDLE = "locale/messages_"+locale.getLanguage()+".properties.";
+    public static String _MESSAGE_BUNDLE = "locale/messages_"+locale.getLanguage()+".properties";
 	public static String version[] = { 
 		"Jack the JGrabber 0.1",
 		"18.09.2004",
@@ -226,7 +226,8 @@ public class ControlMain {
     public static void setResourceBundle(Locale loc){
         ControlMain.locale=loc;
         try{    	                 	
-        	File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();        	
+        	File f = new File(_MESSAGE_BUNDLE).getAbsoluteFile();    
+        	System.out.println(f.getAbsoluteFile());
         	InputStream is = new FileInputStream(f);
         	prop.load(is);                    	
         }catch (IOException ex){}       	        
