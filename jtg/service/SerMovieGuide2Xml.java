@@ -1,6 +1,6 @@
 package service;
 /*
- * SerMovieGuide2Xml.java by Ralph Henneberger
+ * SerMovieGuide2Xml.java by Ralph Henneberger, Alexander Geist
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -17,7 +17,7 @@ package service;
  *  
  */
 import java.io.BufferedReader;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -28,51 +28,36 @@ import java.util.Hashtable;
 import javax.swing.JProgressBar;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
+
+
+import presentation.GuiMainView;
 
 import control.ControlMovieGuideTab;
 
 public class SerMovieGuide2Xml extends Thread{
-    static Hashtable htToken = new Hashtable();
-    static Document doc;
-    static Element root;
-    static Element movie;
+    Hashtable htToken = new Hashtable();
+    GuiMainView mainView;
+    Document doc;
+    Element root;
+    Element movie;
     String path; 
     JProgressBar bar;
     
-    public SerMovieGuide2Xml(String file, JProgressBar comp) {
+    public SerMovieGuide2Xml(String file, GuiMainView view) {
     		try {
-				bar=comp;
+    			mainView=view;
+				bar=view.getTabMovieGuide().getJProgressBarDownload();
 				path = file;
-				buildEmptyXMLFile();
+				doc = SerXMLHandling.createEmptyMovieguideFile();
+				root = doc.getRootElement();
 				createHashTable();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+    		} catch (IOException e) {
 				e.printStackTrace();
 			}
     }
-    
-    private static void buildEmptyXMLFile() throws IOException {
-        doc = DocumentHelper.createDocument();
-        root = doc.addElement("movieguide");
-    }
-    
-    //public static void saveXMLFile(File path) throws IOException {
-    	public static void saveXMLFile(Document doc) throws IOException {
-        OutputFormat format = OutputFormat.createPrettyPrint();
-    //    XMLWriter writer = new XMLWriter(new FileWriter("/tmp/output.xml"), format);
-        //XMLWriter writer = new XMLWriter(new FileWriter(path), format);
-        XMLWriter writer = new XMLWriter(new FileWriter(ControlMovieGuideTab.movieGuideFileName), format);
-        //writer.write(ControlMovieGuideTab.getMovieGuideDocument());
-        writer.write(doc);
-        writer.close();    
-    }
           
-    private static final void createHashTable() {
+    private final void createHashTable() {
         htToken.put((String) "Titel", new Integer(1));
         htToken.put((String) "Episode", new Integer(2));
         htToken.put((String) "Produktionsland", new Integer(3));
@@ -80,7 +65,7 @@ public class SerMovieGuide2Xml extends Thread{
         htToken.put((String) "Darsteller", new Integer(5));
     }
     
-    private static void createElement(int i, String input) {
+    private void createElement(int i, String input) {
         try {
             switch (i) {
                 case 0:
@@ -112,7 +97,7 @@ public class SerMovieGuide2Xml extends Thread{
         } catch (StringIndexOutOfBoundsException ex) {}
     }
     
-    private static boolean[] getLineCounter(String input) {
+    private boolean[] getLineCounter(String input) {
         boolean[] value = new boolean[2];
         try {
             value[0] = false;
@@ -125,7 +110,7 @@ public class SerMovieGuide2Xml extends Thread{
         return value;
     }
     
-    private static int getNumber(String input) {
+    private int getNumber(String input) {
         int value = 0;
         try{
             value = ((Integer) htToken.get((String) input.substring(0, input.indexOf(":")))).intValue();
@@ -133,20 +118,23 @@ public class SerMovieGuide2Xml extends Thread{
         return value;
     }
     
+    private URLConnection getConnection() throws IOException {
+    	URLConnection con;
+    	if (path != null) {
+        	con = (new File(path).toURL()).openConnection();
+    	} else {
+    		URL url = new URL("http://www.premiere.de/content/download/"+ SerFormatter.getAktuellDateString());
+            con =url.openConnection();
+    	}
+    	return con;
+    }
+    
     public void run()  {
-        BufferedReader in;
-        URLConnection con;
         try {
-        	if (path != null) {
-            	con = (new URL(path)).openConnection();
-        	} else {
-        		URL url = new URL("http://www.premiere.de/content/download/"+ SerFormatter.getAktuellDateString());
-                con =url.openConnection();
-        	}
-        	
+        	URLConnection con = this.getConnection();
         	int fileLength = con.getContentLength();
             bar.setMaximum(fileLength);
-            in = new BufferedReader( new InputStreamReader(con.getInputStream()));
+            BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream()));
             
             String input = new String();
             StringBuffer inhalt = new StringBuffer();
@@ -171,23 +159,12 @@ public class SerMovieGuide2Xml extends Thread{
                 }
             }
             bar.setValue(fileLength);
-            saveXMLFile(doc);
+            SerXMLHandling.saveXMLFile(ControlMovieGuideTab.movieGuideFileName, doc);
+            mainView.getTabMovieGuide().getControl().initialize();
         } catch (MalformedURLException e) {
-            System.out.println("MalformedURLException: " + e);
+            System.out.println("MalformedURLException: " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("IOException: " + e);
+            System.out.println("IOException: " + e.getMessage());
         }        
-    }
-   
-    /**
-     * @param args
-     *            the command line arguments
-     */
-    public static void main(String[] args) {
-        try {
-            //readGuide("/tmp/1.txt",1);
-        	//System.out.println(getGenryList().get(1));
-        } catch (Exception e) {
-        }
     }
 }
