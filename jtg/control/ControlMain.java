@@ -93,7 +93,7 @@ public class ControlMain {
 		}
 		setResourceBundle();
 		detectActiveBox();
-		ControlMain.detectImage();
+		detectImage();
 		control = new ControlMainView();
 		if (screen != null) {
 			try {
@@ -132,6 +132,7 @@ public class ControlMain {
 		else if (image==2) {
 			boxAccess = new SerBoxControlEnigma();
 		}
+		Logger.getLogger("ControlMain").info(ControlMain.getBoxAccess().getName()+"-"+ControlMain.getProperty("msg_accessLoaded"));
 	}
 	
 	/**
