@@ -2,6 +2,8 @@ package presentation;
 
 
 
+import java.text.SimpleDateFormat;
+
 import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
 import control.ControlNeutrinoTimerTab;

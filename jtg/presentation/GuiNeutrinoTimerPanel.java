@@ -1,17 +1,22 @@
 package presentation;
 
 import java.awt.Dimension;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.NumberFormatter;
 
 import model.BOTimer;
 
@@ -62,13 +67,18 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JComboBox comboBoxEventType = null;
 	private JComboBox comboBoxRepeatSystemTimer = null;
 	private ImageIcon imageIconNeutrino = null;
-	private ControlNeutrinoTimerTab control;
-	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
-	public GuiNeutrinoSystemTimerTableModel systemTimerTableModel;
 	private JTable jTableRecordTimer = null;
 	private JTable jTableSystemTimer = null;
 	private JScrollPane jScrollPaneRecordTimerTable = null;
 	private JScrollPane jScrollPaneSystemTimerTable = null;
+	
+	private JFormattedTextField tfStartDate = null;
+	private JFormattedTextField tfStartTime = null;
+	private JFormattedTextField tfEndTime = null;
+	
+	private ControlNeutrinoTimerTab control;
+	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
+	public GuiNeutrinoSystemTimerTableModel systemTimerTableModel;
 	private GuiNeutrinoTimerSenderComboModel senderComboModel = null;
 	
 
@@ -134,9 +144,16 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(80);
 
 			
-			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);			
+			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);
+			TableColumn columnStartDate = jTableRecordTimer.getColumnModel().getColumn(1);
+			TableColumn columnStartTime = jTableRecordTimer.getColumnModel().getColumn(2);
+			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(2);
 			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
+			
 			columnSender.setCellEditor(new DefaultCellEditor(this.getComboBoxSender()));
+			columnStartDate.setCellEditor(new DefaultCellEditor(this.getTfStartDate()));
+			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfStartTime()));
+			columnEndTime.setCellEditor(new DefaultCellEditor(this.getTfEndTime()));
 			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatProgramTimer()));
 		}
 		return jTableRecordTimer;
@@ -706,6 +723,37 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonMit2().setEnabled(false);
 		this.getJRadioButtonDie2().setEnabled(false);
 		this.getJRadioButtonMon2().setEnabled(false);
+	}
+	/**
+	 * @return Returns the tfEndTime.
+	 */
+	public JFormattedTextField getTfEndTime() {
+		if (tfEndTime == null) {
+			tfEndTime = new JFormattedTextField(new DecimalFormat("00:00"));
+			((NumberFormatter)tfEndTime.getFormatter()).setAllowsInvalid(false);
+		}
+		return tfEndTime;
+	}
+	/**
+	 * @return Returns the tfStartDate.
+	 */
+	public JFormattedTextField getTfStartDate() {
+		if (tfStartDate == null) {
+			tfStartDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
+			((DateFormatter)tfStartDate.getFormatter()).setAllowsInvalid(false);
+			((DateFormatter)tfStartDate.getFormatter()).setOverwriteMode(true);
+		}
+		return tfStartDate;
+	}
+	/**
+	 * @return Returns the tfStartTime.
+	 */
+	public JFormattedTextField getTfStartTime() {
+		if (tfStartTime == null) {
+			tfStartTime = new JFormattedTextField(new DecimalFormat("00:00"));
+			((NumberFormatter)tfStartTime.getFormatter()).setAllowsInvalid(false);
+		}
+		return tfStartTime;
 	}
 }
 
