@@ -69,36 +69,34 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	private JTable jTableSystemTimer = null;
 	private JScrollPane jScrollPaneRecordTimerTable = null;
 	private JScrollPane jScrollPaneSystemTimerTable = null;
-	
-	private JFormattedTextField tfRecordTimerStartDate = null;
+
 	private JFormattedTextField tfRecordTimerStartTime = null;
 	private JFormattedTextField tfRecordTimerEndTime = null;
-	private JFormattedTextField tfSystemTimerStartDate = null;
 	private JFormattedTextField tfSystemTimerStartTime = null;
-	
+
 	private ControlNeutrinoTimerTab control;
 	public GuiNeutrinoRecordTimerTableModel recordTimerTableModel;
 	public GuiNeutrinoSystemTimerTableModel systemTimerTableModel;
 	private GuiNeutrinoTimerSenderComboModel senderComboModel = null;
-	
+
 
 	public GuiNeutrinoTimerPanel(ControlNeutrinoTimerTab control) {
 		this.setControl(control);
 		initialize();
 	}
-	
+
 	public GuiNeutrinoTimerPanel() {
 		initialize();
 	}
 
 	private  void initialize() {
 		FormLayout layout = new FormLayout(
-			      "f:330:grow, 110:grow, 160:grow, 4dlu, pref",  							// columns 
-			      "pref, t:220:grow, pref, 8dlu, pref, t:100, b:100, pref"); 			// rows
+			      "f:330:grow, 110:grow, 160:grow, 4dlu, pref",							// columns
+			      "pref, t:220:grow, pref, 8dlu, pref, t:100, b:100, pref");				// rows
 		PanelBuilder builder = new PanelBuilder(this, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
-		
+
 		builder.addSeparator("Aufnahme-Timer",					cc.xyw  (1, 1, 3));
 		builder.add(this.getJScrollPaneRecordTimerTable(),   	cc.xyw  (1, 2, 3));
 		builder.add(this.getJPanelDauerTimer(),	 				cc.xyw  (1, 3, 3));
@@ -119,7 +117,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public void setControl(ControlNeutrinoTimerTab control) {
 		this.control = control;
 	}
-	
+
 	private ImageIcon getImageIconNeutrino() {
 		if (imageIconNeutrino == null) {
 			//imageIconNeutrino = new ImageIcon(ClassLoader.getSystemResource("ico/neutrino.gif"));
@@ -127,57 +125,53 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return imageIconNeutrino;
 	}
- 
+
 	public JTable getJTableRecordTimer() {
-		if (jTableRecordTimer == null) {		
-			recordTimerTableModel = new GuiNeutrinoRecordTimerTableModel(control);	
-			
+		if (jTableRecordTimer == null) {
+			recordTimerTableModel = new GuiNeutrinoRecordTimerTableModel(control);
+
 			jTableRecordTimer = new JTable(recordTimerTableModel);
 			jTableRecordTimer.setName("recordTimerTable");
 			jTableRecordTimer.addMouseListener(control);
 			jTableRecordTimer.setRowHeight(20);
 			jTableRecordTimer.getColumnModel().getColumn(0).setMaxWidth(100);
 			jTableRecordTimer.getColumnModel().getColumn(0).setPreferredWidth(100);
-			jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(70);
+			jTableRecordTimer.getColumnModel().getColumn(1).setPreferredWidth(100);
+			jTableRecordTimer.getColumnModel().getColumn(1).setMaxWidth(100);
 			jTableRecordTimer.getColumnModel().getColumn(2).setMaxWidth(50);
-			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(50);
-			jTableRecordTimer.getColumnModel().getColumn(4).setPreferredWidth(80);
-			jTableRecordTimer.getColumnModel().getColumn(4).setMaxWidth(80);
+			jTableRecordTimer.getColumnModel().getColumn(3).setPreferredWidth(80);
+			jTableRecordTimer.getColumnModel().getColumn(3).setMaxWidth(80);
 
-			
+
 			TableColumn columnSender = jTableRecordTimer.getColumnModel().getColumn(0);
-			TableColumn columnStartDate = jTableRecordTimer.getColumnModel().getColumn(1);
-			TableColumn columnStartTime = jTableRecordTimer.getColumnModel().getColumn(2);
-			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(3);
-			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(4);
-			
+			TableColumn columnStartTime = jTableRecordTimer.getColumnModel().getColumn(1);
+			TableColumn columnEndTime = jTableRecordTimer.getColumnModel().getColumn(2);
+			TableColumn columnRepeat = jTableRecordTimer.getColumnModel().getColumn(3);
+
 			columnSender.setCellEditor(new DefaultCellEditor(this.getComboBoxSender()));
-			columnStartDate.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerStartDate()));
 			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerStartTime()));
 			columnEndTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerEndTime()));
-			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatRecordTimer()));			
+			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatRecordTimer()));
 		}
 		return jTableRecordTimer;
 	}
-	
+
 	public JTable getJTableSystemTimer() {
-		if (jTableSystemTimer == null) {		
+		if (jTableSystemTimer == null) {
 			systemTimerTableModel = new GuiNeutrinoSystemTimerTableModel(control);
 			jTableSystemTimer = new JTable(systemTimerTableModel);
 			jTableSystemTimer.setName("systemTimerTable");
 			jTableSystemTimer.addMouseListener(control);
 			jTableSystemTimer.setRowHeight(20);
-			jTableSystemTimer.getColumnModel().getColumn(0).setMaxWidth(100);
-			jTableSystemTimer.getColumnModel().getColumn(1).setMaxWidth(100);
-			jTableSystemTimer.getColumnModel().getColumn(2).setMaxWidth(40);
-			
+			//jTableSystemTimer.getColumnModel().getColumn(0).setMaxWidth(100);
+			jTableSystemTimer.getColumnModel().getColumn(1).setPreferredWidth(120);
+			jTableSystemTimer.getColumnModel().getColumn(1).setMaxWidth(120);
+
 			TableColumn columnEventType = jTableSystemTimer.getColumnModel().getColumn(0);
-			TableColumn columnStartDate = jTableSystemTimer.getColumnModel().getColumn(1);
-			TableColumn columnStartTime = jTableSystemTimer.getColumnModel().getColumn(2);
-			TableColumn columnRepeat = jTableSystemTimer.getColumnModel().getColumn(3);
-			
+			TableColumn columnStartTime = jTableSystemTimer.getColumnModel().getColumn(1);
+			TableColumn columnRepeat = jTableSystemTimer.getColumnModel().getColumn(2);
+
 			columnEventType.setCellEditor(new DefaultCellEditor(this.getComboBoxEventType()));
-			columnStartDate.setCellEditor(new DefaultCellEditor(this.getTfSystemTimerStartDate()));
 			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfSystemTimerStartTime()));
 			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatSystemTimer()));
 		}
@@ -191,7 +185,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jScrollPaneRecordTimerTable;
 	}
-	
+
 	private JScrollPane getJScrollPaneSystemTimerTable() {
 		if (jScrollPaneSystemTimerTable == null) {
 			jScrollPaneSystemTimerTable = new JScrollPane();
@@ -199,7 +193,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jScrollPaneSystemTimerTable;
 	}
-  
+
 	public GuiNeutrinoRecordTimerTableModel getRecordTimerTableModel() {
 		return recordTimerTableModel;
 	}
@@ -209,7 +203,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public void setRecordTimerTableModel(GuiNeutrinoRecordTimerTableModel TimerTableModel) {
 		this.recordTimerTableModel = TimerTableModel;
 	}
-	
+
 	private JRadioButton getJRadioButtonSon() {
 		if (jRadioButtonSon == null) {
 			jRadioButtonSon = new JRadioButton();
@@ -218,7 +212,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonSon;
 	}
-  
+
 	private JRadioButton getJRadioButtonSam() {
 		if (jRadioButtonSam == null) {
 			jRadioButtonSam = new JRadioButton();
@@ -227,7 +221,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonSam;
 	}
-   
+
 	private JRadioButton getJRadioButtonFri() {
 		if (jRadioButtonFri == null) {
 			jRadioButtonFri = new JRadioButton();
@@ -236,7 +230,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonFri;
 	}
-  
+
 	private JRadioButton getJRadioButtonDon() {
 		if (jRadioButtonDon == null) {
 			jRadioButtonDon = new JRadioButton();
@@ -245,7 +239,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonDon;
 	}
- 
+
 	private JRadioButton getJRadioButtonMit() {
 		if (jRadioButtonMit == null) {
 			jRadioButtonMit = new JRadioButton();
@@ -254,7 +248,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonMit;
 	}
-  
+
 	private JRadioButton getJRadioButtonDie() {
 		if (jRadioButtonDie == null) {
 			jRadioButtonDie = new JRadioButton();
@@ -263,7 +257,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonDie;
 	}
- 
+
 	private JRadioButton getJRadioButtonMon() {
 		if (jRadioButtonMon == null) {
 			jRadioButtonMon = new JRadioButton();
@@ -277,11 +271,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		if (jPanelButtonsRecordTimer == null) {
 			jPanelButtonsRecordTimer = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref",	 		//columna 
+				      "pref",	 		//columna
 		      "pref, pref, pref, 20, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsRecordTimer, layout);
 			CellConstraints cc = new CellConstraints();
-			
+
 			builder.add(this.getJButtonNewProgramtimer(),  				cc.xy	(1, 1));
 			builder.add(this.getJButtonDeleteSelectedRecordTimer(),	cc.xy	(1, 2));
 			builder.add(this.getJButtonDeleteAllRecordTimer(),			cc.xy	(1, 3));
@@ -289,48 +283,48 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jPanelButtonsRecordTimer;
 	}
-	
+
 	public JPanel getJPanelButtonsSystemTimer() {
 		if (jPanelButtonsSystemTimer == null) {
 			jPanelButtonsSystemTimer = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "f:pref",	 		//columna 
+				      "f:pref",	 		//columna
 				      "pref, pref, pref, ");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsSystemTimer, layout);
 			CellConstraints cc = new CellConstraints();
-			
+
 			builder.add(this.getJButtonNewSystemtimer(),  				cc.xyw	(1, 1, 1, CellConstraints.FILL, CellConstraints.FILL));
 			builder.add(this.getJButtonDeleteSelectedSystemTimer(),		cc.xy	(1, 2));
 			builder.add(this.getJButtonDeleteAllSystemTimer(),			cc.xy	(1, 3));
 		}
 		return jPanelButtonsSystemTimer;
 	}
-	
+
 	public JPanel getJPanelButtonsGui() {
 		if (jPanelButtonsGui == null) {
 			jPanelButtonsGui = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "Fill:pref",	 		//columna 
+				      "Fill:pref",	 		//columna
 		      "pref, pref, pref, ");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelButtonsGui, layout);
 			CellConstraints cc = new CellConstraints();
-			
+
 			builder.add(this.getJButtonDeleteAl(),					cc.xy(1, 1));
 			builder.add(this.getJButtonReload(),					cc.xy(1, 2));
 			builder.add(this.getJButtonSenden(),					cc.xy(1, 3));
 		}
 		return jPanelButtonsGui;
 	}
-	
+
 	public JPanel getJPanelDauerTimer() {
 		if (jPanelDauerTimer == null) {
 			jPanelDauerTimer = new JPanel();
 			FormLayout layout = new FormLayout(
-				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columna 
+				      "pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref, 20, pref",	 		//columna
 				      "pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer, layout);
 			CellConstraints cc = new CellConstraints();
-			
+
 			builder.add(this.getJRadioButtonMon(),  					cc.xy	(1, 1));
 			builder.add(this.getJRadioButtonDie(),						cc.xy	(3, 1));
 			builder.add(this.getJRadioButtonMit(),						cc.xy	(5, 1));
@@ -340,8 +334,8 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			builder.add(this.getJRadioButtonSon(),	  					cc.xy	(13, 1));
 		}
 		return jPanelDauerTimer;
-	}	
-  
+	}
+
 	private JRadioButton getJRadioButtonSon2() {
 		if (jRadioButtonSon2 == null) {
 			jRadioButtonSon2 = new JRadioButton();
@@ -359,7 +353,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonSam2;
 	}
-  
+
 	private JRadioButton getJRadioButtonFri2() {
 		if (jRadioButtonFri2 == null) {
 			jRadioButtonFri2 = new JRadioButton();
@@ -377,7 +371,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonDon2;
 	}
-   
+
 	private JRadioButton getJRadioButtonMit2() {
 		if (jRadioButtonMit2 == null) {
 			jRadioButtonMit2 = new JRadioButton();
@@ -386,7 +380,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonMit2;
 	}
-  
+
 	private JRadioButton getJRadioButtonDie2() {
 		if (jRadioButtonDie2 == null) {
 			jRadioButtonDie2 = new JRadioButton();
@@ -395,7 +389,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jRadioButtonDie2;
 	}
-  
+
 	private JRadioButton getJRadioButtonMon2() {
 		if (jRadioButtonMon2 == null) {
 			jRadioButtonMon2 = new JRadioButton();
@@ -409,11 +403,11 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		if (jPanelDauerTimer2 == null) {
 			jPanelDauerTimer2 = new JPanel();
 			FormLayout layout = new FormLayout(
-					 "pref",	 		//columna 
+					 "pref",	 		//columna
 			  "pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref, 10, pref");	//rows
 			PanelBuilder builder = new PanelBuilder(jPanelDauerTimer2, layout);
 			CellConstraints cc = new CellConstraints();
-			
+
 			builder.add(this.getJRadioButtonMon2(),  					cc.xy	(1, 1));
 			builder.add(this.getJRadioButtonDie2(),					cc.xy	(1, 3));
 			builder.add(this.getJRadioButtonMit2(),					cc.xy	(1, 5));
@@ -423,7 +417,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			builder.add(this.getJRadioButtonSon2(),					cc.xy	(1, 13));
 		}
 		return jPanelDauerTimer2;
-	}	
+	}
 
 	public JButton getJButtonDeleteAllRecordTimer() {
 		if (jButtonDeleteAllRecordTimer == null) {
@@ -434,7 +428,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jButtonDeleteAllRecordTimer;
 	}
-	
+
 	public JButton getJButtonDeleteAllSystemTimer() {
 		if (jButtonDeleteAllSystemTimer == null) {
 			jButtonDeleteAllSystemTimer = new JButton("Systemtimer löschen");
@@ -454,7 +448,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jButtonDeleteSelectedRecordTimer;
 	}
-	
+
 	public JButton getJButtonDeleteSelectedSystemTimer() {
 		if (jButtonDeleteSelectedSystemTimer == null) {
 			jButtonDeleteSelectedSystemTimer = new JButton("Selektierte löschen");
@@ -464,7 +458,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jButtonDeleteSelectedSystemTimer;
 	}
-	
+
 
 	public JButton getJButtonNewProgramtimer() {
 		if (jButtonNewProgramtimer == null) {
@@ -485,7 +479,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jButtonSenden;
 	}
-	
+
 	public JButton getJButtonDeleteAl() {
 		if (jButtonDeleteAll == null) {
 			jButtonDeleteAll = new JButton("Alle Löschen");
@@ -495,7 +489,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return jButtonDeleteAll;
 	}
-	
+
 	public JButton getJButtonReload() {
 		if (jButtonReload == null) {
 			jButtonReload = new JButton("Neu laden");
@@ -633,7 +627,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			result = result-5;
 		}
 	}
-	
+
 	public void selectRepeatDaysForSystemTimer(BOTimer timer) {
 		int result;
 		if (Integer.parseInt((String)timer.getEventRepeatId())>5) {
@@ -689,7 +683,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			result = result-5;
 		}
 	}
-	
+
 	public void enableRecordTimerWeekdays() {
 		this.getJRadioButtonSon().setEnabled(true);
 		this.getJRadioButtonSam().setEnabled(true);
@@ -699,7 +693,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonDie().setEnabled(true);
 		this.getJRadioButtonMon().setEnabled(true);
 	}
-	
+
 	public void enableSystemTimerWeekdays() {
 		this.getJRadioButtonSon2().setEnabled(true);
 		this.getJRadioButtonSam2().setEnabled(true);
@@ -709,7 +703,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonDie2().setEnabled(true);
 		this.getJRadioButtonMon2().setEnabled(true);
 	}
-	
+
 	public void disableRecordTimerWeekdays() {
 		this.getJRadioButtonSon().setEnabled(false);
 		this.getJRadioButtonSam().setEnabled(false);
@@ -719,7 +713,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		this.getJRadioButtonDie().setEnabled(false);
 		this.getJRadioButtonMon().setEnabled(false);
 	}
-	
+
 	public void disableSystemTimerWeekdays() {
 		this.getJRadioButtonSon2().setEnabled(false);
 		this.getJRadioButtonSam2().setEnabled(false);
@@ -740,46 +734,25 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		}
 		return tfRecordTimerEndTime;
 	}
-	/**
-	 * @return Returns the tfRecordTimerStartDate.
-	 */
-	public JFormattedTextField getTfRecordTimerStartDate() {
-		if (tfRecordTimerStartDate == null) {
-			tfRecordTimerStartDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
-			((DateFormatter)tfRecordTimerStartDate.getFormatter()).setAllowsInvalid(false);
-			((DateFormatter)tfRecordTimerStartDate.getFormatter()).setOverwriteMode(true);
-		}
-		return tfRecordTimerStartDate;
-	}
+
 	/**
 	 * @return Returns the tfRecordTimerStartTime.
 	 */
 	public JFormattedTextField getTfRecordTimerStartTime() {
 		if (tfRecordTimerStartTime == null) {
-			tfRecordTimerStartTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+			tfRecordTimerStartTime = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy   HH:mm"));
 			((DateFormatter)tfRecordTimerStartTime.getFormatter()).setAllowsInvalid(false);
 			((DateFormatter)tfRecordTimerStartTime.getFormatter()).setOverwriteMode(true);
 		}
 		return tfRecordTimerStartTime;
 	}
-	
-	/**
-	 * @return Returns the tfSystemTimerStartDate.
-	 */
-	public JFormattedTextField getTfSystemTimerStartDate() {
-		if (tfSystemTimerStartDate == null) {
-			tfSystemTimerStartDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
-			((DateFormatter)tfSystemTimerStartDate.getFormatter()).setAllowsInvalid(false);
-			((DateFormatter)tfSystemTimerStartDate.getFormatter()).setOverwriteMode(true);
-		}
-		return tfSystemTimerStartDate;
-	}
+
 	/**
 	 * @return Returns the tfSystemTimerStartTime.
 	 */
 	public JFormattedTextField getTfSystemTimerStartTime() {
 		if (tfSystemTimerStartTime == null) {
-			tfSystemTimerStartTime = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+			tfSystemTimerStartTime = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy   HH:mm"));
 			((DateFormatter)tfSystemTimerStartTime.getFormatter()).setAllowsInvalid(false);
 			((DateFormatter)tfSystemTimerStartTime.getFormatter()).setOverwriteMode(true);
 		}

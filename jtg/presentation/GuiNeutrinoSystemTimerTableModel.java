@@ -4,9 +4,7 @@ package presentation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
 import model.BOTimer;
@@ -24,7 +22,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 	}
 
 	public int getColumnCount() {
-		return 4;	
+		return 3;	
 	}	
 
 	public int getRowCount() {
@@ -39,8 +37,6 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return control.convertShortEventType(timer.getEventTypeId());
 		} if (columnIndex == 1) {
-			return timer.getStartDate();
-		} if (columnIndex == 2) {
 			return timer.getStartTime();
 		} else {
 			return control.convertShortEventRepeat(timer.getEventRepeatId());
@@ -56,35 +52,17 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 			}
 		}
 		if (col == 1) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			GregorianCalendar oldcal = timer.getUnformattedStartTime();
-			Calendar newcal = new GregorianCalendar();
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy   HH:mm");
 			try {
 				Date newDate = sdf.parse((String)value);
-				newcal.setTime(newDate);
-				oldcal.set(newcal.get(Calendar.YEAR), newcal.get(Calendar.MONTH), newcal.get(Calendar.DATE));
+				timer.setUnformattedStartTime(newDate.getTime());
 				if (timer.getModifiedId() == null) {
 					timer.setModifiedId("modify");
 				}
 			} catch (ParseException e) {}
 		}
 		if (col == 2) {
-			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
-			GregorianCalendar oldcal = timer.getUnformattedStartTime();
-			Calendar newcal = new GregorianCalendar();
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-			try {
-				Date newDate = sdf.parse((String)value);
-				newcal.setTime(newDate);
-				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
-				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
-				if (timer.getModifiedId() == null) {
-					timer.setModifiedId("modify");
-				}
-			} catch (ParseException e) {}
-		}
-		if (col == 3) {
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[1].get(row);
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.getTab().selectRepeatDaysForSystemTimer(timer);
@@ -98,9 +76,7 @@ public class GuiNeutrinoSystemTimerTableModel extends AbstractTableModel
 		if (columnIndex == 0) {
 			return "Timer-Typ"; 
 		} if (columnIndex == 1) {
-			return "Datum";
-		} if (columnIndex == 2) {
-			return "Zeit";
+			return "Nächster Zeitpunkt";
 		} else {
 			return "Wiederholung";
 		}
