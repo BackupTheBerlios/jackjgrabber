@@ -34,6 +34,14 @@ public class SerFormatter {
 		} else {
 			path += "\"";
 		}
+		int i=1;
+		int j=0;
+		while ((j=path.indexOf("\"",j+1))>0) {
+			i++;
+		}
+		if (i%2!=0) {
+			path += "\"";
+		}
 		return path;
 	}
 	
