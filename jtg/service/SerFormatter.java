@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.util.regex.*;
 import javax.swing.text.*;
 import java.awt.Color;
-import java.io.*;
 
 import javax.swing.ImageIcon;
 /**
