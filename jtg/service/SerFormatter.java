@@ -46,4 +46,11 @@ public class SerFormatter {
 		int stunden = dauer;
 		return out(stunden)+":"+out(minuten);      
 	}
+	
+	public static String replace(String sourcestring, String stringToReplace, String newString) {
+	    int i = -1;
+	    while ((i = sourcestring.indexOf(stringToReplace, i + 1)) != -1)
+	      sourcestring = sourcestring.substring(0, i) + newString + sourcestring.substring(i + stringToReplace.length());
+	    return sourcestring;
+	  }
 }
