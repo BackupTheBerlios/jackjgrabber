@@ -42,7 +42,7 @@ public class LocalTimerRecordDaemon extends Thread {
             } catch (InterruptedException e) {}
             BOTimer timer = ControlMain.getBoxAccess().detectNextLocalRecordTimer(false);
             
-            if (timer!=null) {
+            if (timer!=null && !timer.getLocalTimer().isLocked()) {
                 long now = new GregorianCalendar().getTimeInMillis();
                 if (now>timer.getLocalTimer().getStartTime() && now<timer.getLocalTimer().getStopTime()) {
                     Logger.getLogger("LocalTimerRecordDaemon").info(ControlMain.getProperty("msg_startRecord")+" "+timer.getLocalTimer().getDescription());
