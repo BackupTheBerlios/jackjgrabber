@@ -19,7 +19,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */ 
 import java.io.File;
 import java.io.PrintWriter;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -86,7 +85,7 @@ public class UdrecRecord  extends Record {
 	}
 	
 	public void start() {
-	    SerExternalProcessHandler.startProcess("udrec",  this.getRequestArray(), true);
+	    run=(SerExternalProcessHandler.startProcess("udrec",  this.getRequestArray(), true)).getProcess();
 	}	
 	
 	public void stop() {
