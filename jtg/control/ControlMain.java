@@ -87,16 +87,20 @@ public class ControlMain {
 	};
 
 	public static void main( String args[] ) {
-		screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application..." );
 		startLogger();
 		readSettings();
+		if (ControlMain.getSettings().showLogo) {
+			screen = new GuiSplashScreen("ico/grabber1.png", version[0], "Starting Application..." );
+		}
 		setResourceBundle();
 		detectActiveBox();
 		control = new ControlMainView();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
-		screen.dispose();
+		if (screen != null) {
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {}
+			screen.dispose();
+		}
 	};
 	
 	public static void startLogger() {
