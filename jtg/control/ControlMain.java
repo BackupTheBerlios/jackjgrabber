@@ -10,6 +10,10 @@ import boxConnection.SerBoxControlEnigma;
 import boxConnection.SerBoxControlNeutrino;
 import service.SerXMLConverter;
 import service.SerXMLHandling;
+import java.util.Properties;
+import java.util.Locale;
+import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * @author Alexander Geist
@@ -30,6 +34,9 @@ public class ControlMain {
 		"TEST PROJECT ONLY",
 		", User: "+System.getProperty("user.name")
 	};
+	private static final String _MESSAGE_BUNDLE = "/locale/messages";
+	private Locale locale = new Locale("de","DE");
+    private static Properties prop = new Properties();
 	
 	static String terms[] = { 
 		" ",
@@ -157,4 +164,23 @@ public class ControlMain {
 	public static void setTerms(String[] terms) {
 		ControlMain.terms = terms;
 	}
+	private void setLocale(String sprache, String land){
+        locale = new Locale(sprache,land);    	
+    }
+
+    private Locale getLocale(){
+        return locale;
+    }
+
+    public static String getProperty(String key){
+    	return prop.getProperty(key);
+    }
+
+    private void setResourceBundle(Locale locale){
+        this.locale = locale;    	    	  
+        try{    	            
+            InputStream is=getClass().getResourceAsStream(_MESSAGE_BUNDLE+"_"+locale.getLanguage()+".properties");            
+            prop.load(is);            
+        }catch (IOException ex){}
+    }     
 }
