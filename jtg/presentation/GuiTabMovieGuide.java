@@ -38,6 +38,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMovieGuideTab;
+import control.ControlTab;
 
 
 
@@ -268,7 +269,7 @@ public class GuiTabMovieGuide extends JPanel {
 			timerTableModel = new MovieGuideTimerTableModel(control);
 			jTableTimer = new JTable(timerTableModel);
 			jTableTimer.setName("timerTable");
-			jTableTimer.addMouseListener(control);
+			jTableTimer.addMouseListener(control);			
 			jTableTimer.setRowHeight(20);
 			jTableTimer.getColumnModel().getColumn(0).setPreferredWidth(120);
 			jTableTimer.getColumnModel().getColumn(0).setMaxWidth(120);
