@@ -199,7 +199,7 @@ public class SerHelper {
 		if (pattern == null || pattern.length() == 0) {
 
 			// default pattern
-			SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd_HH-mm");
+		/*	SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd_HH-mm");
 			String date = f.format(new Date());
 
 			if (args.getEpgTitle() != null) {
@@ -208,7 +208,11 @@ public class SerHelper {
 				return form.format(obj);
 			} 
 			return date + "_" + args.getSenderName();
+			*/
+			return "";
 		}
+		
+		
 		String[] availablePattern = {"%CHANNEL%", "%TIME%", "%NAME%","%SERIE%", "%DATE%", "%DATE "};
 		for (int i = 0; i < availablePattern.length; i++) {
 			int index = pattern.indexOf(availablePattern[i]);
