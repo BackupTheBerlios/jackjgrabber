@@ -25,9 +25,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
@@ -403,29 +403,27 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	 * zurückgegeben
 	 */
 	public BOEpg getRunnigEpg(ArrayList epgList) {
-		if (epgList != null) {
-			GregorianCalendar now = new GregorianCalendar();
-			long nowTime = now.getTimeInMillis();
-			for (int i = 0; i < epgList.size(); i++) {
-				BOEpg epgObj = (BOEpg) epgList.get(i);
-				long epgStart = Long.parseLong(epgObj.getUnformattedStart()) * 1000;
-				int epgIndex = i - 1;
-				if (now.get(GregorianCalendar.DATE) == epgObj.getStartdate().get(GregorianCalendar.DATE)) {
-					if (nowTime - epgStart < 0 && epgIndex > -1) {
-						BOEpg neededEpg = (BOEpg) epgList.get(i - 1);
-						if (neededEpg != null) {
-							return neededEpg;
-						}
-						//Wenn keines gefunden wurde, gib den letzten Eintrag
-						// zurück
-						if (i + 1 == epgList.size()) {
-							return (BOEpg) epgList.get(epgList.size() - 1);
-						}
-					}
-				}
-			}
-		}
-		return null;
+	    if (epgList != null) {
+	        GregorianCalendar now = new GregorianCalendar();
+	        long nowTime = now.getTimeInMillis();
+	        for (int i = 0; i < epgList.size(); i++) {
+	            BOEpg epgObj = (BOEpg) epgList.get(i);
+	            long epgStart = Long.parseLong(epgObj.getUnformattedStart()) * 1000;
+	            int epgIndex = i - 1;
+	            if (now.get(GregorianCalendar.DATE) == epgObj.getStartdate().get(GregorianCalendar.DATE)) {
+	                if (nowTime - epgStart < 0 && epgIndex > -1 ) {
+	                    BOEpg neededEpg = (BOEpg) epgList.get(epgIndex);
+	                    if (neededEpg != null) {
+	                        return neededEpg;
+	                    }
+	                }
+	                if (i+1==epgList.size()) {
+	                    return (BOEpg) epgList.get(i);
+	                }
+	            }
+	        }
+	    }
+	    return null;
 	}
 
 	/*
