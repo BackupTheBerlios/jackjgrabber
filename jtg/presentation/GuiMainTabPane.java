@@ -21,12 +21,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import model.BOBox;
-
 import presentation.about.GuiTabAbout;
 import presentation.movieguide.GuiTabMovieGuide;
 import presentation.program.GuiTabProgramm;
 import presentation.recordInfo.GuiTabRecordInfo;
 import presentation.settings.GuiTabSettings;
+import presentation.start.GuiTabStart;
 import presentation.timer.GuiTimerPanel;
 import control.ControlAboutTab;
 import control.ControlMain;
@@ -34,6 +34,7 @@ import control.ControlMovieGuideTab;
 import control.ControlProgramTab;
 import control.ControlRecordInfoTab;
 import control.ControlSettingsTab;
+import control.ControlStartTab;
 
 public class GuiMainTabPane extends JTabbedPane {
 
@@ -41,13 +42,12 @@ public class GuiMainTabPane extends JTabbedPane {
 	public GuiTabSettings tabSettings = null;
 	public GuiTabAbout tabAbout = null;
 	public GuiTimerPanel tabTimer=null;
+	public GuiTabStart tabStart=null;
 	public GuiMainView view;
 	public GuiTabMovieGuide tabMovieGuide = null;
 	private GuiTabRecordInfo tabRecordInfo;
 	public boolean firstIpSetted = false;
 	int index;
-	
-
 	
 	public GuiMainTabPane(GuiMainView mainView) {
 		super();
@@ -125,7 +125,7 @@ public class GuiMainTabPane extends JTabbedPane {
 	}
 	
 	/**
-	 * @return
+	 * @return Returns the tabRecordInfo.
 	 */
 	public GuiTabRecordInfo getTabRecordInfo() {
 		if (tabRecordInfo == null) {
@@ -134,7 +134,19 @@ public class GuiMainTabPane extends JTabbedPane {
 			control.setRecordView(tabRecordInfo);
 		}
 		return tabRecordInfo;
-	}	
+	}
+	
+	/**
+     * @return Returns the tabStart.
+     */
+    public GuiTabStart getTabStart() {
+        if (tabStart == null) {
+			ControlStartTab control = new ControlStartTab(this.getView());
+			tabStart = new GuiTabStart(control);
+			new Thread(control).start();
+		}
+        return tabStart;
+    }
 	
 	/**
 	 * @return Returns the tabSettings.
@@ -160,6 +172,4 @@ public class GuiMainTabPane extends JTabbedPane {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-
-	
 }

@@ -40,6 +40,20 @@ public class BOTimerList {
         }
         return null;
     }
+    
+    public BOTimer getFirstBoxRecordTimer() {
+        if (this.getRecordTimerList().size()>0) {
+            BOTimer timer = (BOTimer)this.getRecordTimerList().get(0);
+            for (int i=1; i<this.getRecordTimerList().size(); i++) {
+                BOTimer compareTimer = (BOTimer)this.getRecordTimerList().get(i);
+                if (SerFormatter.compareDates(compareTimer.getUnformattedStartTime(), timer.getUnformattedStartTime())==-1) {
+                    timer=compareTimer;
+                }
+            }
+            return timer;
+        }
+        return null;
+    }
     /**
      * @return Returns the recordTimerList.
      */

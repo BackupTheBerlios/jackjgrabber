@@ -12,19 +12,36 @@ package presentation;
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
-import presentation.about.*;
-import presentation.movieguide.*;
-import presentation.program.*;
-import presentation.recordInfo.*;
-import presentation.settings.*;
-import service.*;
-import snoozesoft.systray4j.*;
-import control.*;
+import presentation.about.GuiTabAbout;
+import presentation.movieguide.GuiTabMovieGuide;
+import presentation.program.GuiTabProgramm;
+import presentation.recordInfo.GuiTabRecordInfo;
+import presentation.settings.GuiTabSettings;
+import presentation.start.GuiTabStart;
+import service.SerGUIUtils;
+import service.SerIconManager;
+import snoozesoft.systray4j.SysTrayMenu;
+import snoozesoft.systray4j.SysTrayMenuIcon;
+import snoozesoft.systray4j.SysTrayMenuItem;
+import control.ControlMain;
+import control.ControlMainView;
 /*
  * Haupt-Gui, hier werden die einzelnen Tabs verwaltet
  */
@@ -119,6 +136,7 @@ public class GuiMainView extends JFrame {
 			mainTabPane = new GuiMainTabPane(this);
 			mainTabPane.addChangeListener(control);
 
+			mainTabPane.addTab("Start", iconManager.getIcon("gohome_2.png"), mainTabPane.getTabStart());
 			mainTabPane.addTab(ControlMain.getProperty("tab_program"), iconManager.getIcon("main.png"), mainTabPane.getTabProgramm());
 			mainTabPane.addTab(ControlMain.getProperty("tab_timerlist"), iconManager.getIcon("clock.png"), new JPanel());
 			mainTabPane.addTab(ControlMain.getProperty("tab_movieGuide"), iconManager.getIcon("download.png"), new JPanel());
@@ -195,6 +213,10 @@ public class GuiMainView extends JFrame {
 
 	public GuiTabSettings getTabSettings() {
 		return this.getMainTabPane().getTabSettings();
+	}
+	
+	public GuiTabStart getTabStart() {
+		return this.getMainTabPane().getTabStart();
 	}
 
 	public GuiTabAbout getTabAbout() {
