@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
 import service.SerAlertDialog;
 import control.ControlMain;
 
+import model.BOPid;
+import model.BOPids;
 import model.BORecordArgs;
 
 
@@ -125,6 +127,7 @@ public class UdpRecord  extends Record {
 		StringBuffer cmd = new StringBuffer();
 		String avString = new String();
 		String pidString= new String();
+		BOPids pids = recordArgs.getPids();
 		if (recordControl.controlProgramTab.isTvMode()) {
 			cmd.append("VIDEO");
 		} else {
@@ -137,27 +140,20 @@ public class UdpRecord  extends Record {
 		MessageFormat form = new MessageFormat(" {0} {1} 0 1 ");
 		cmd.append(form.format(args));
 		
-		if (recordArgs.getVPid() != null) {
+		if (pids.getVPid() != null) {
 		    avString+="v";
-		    pidString+=recordArgs.getVPid();
+		    pidString+=pids.getVPid().getNumber();
 		}
-		for (int i=0; i<recordArgs.getAPids().size(); i++){
+		for (int i=0; i<pids.getAPids().size(); i++){
 		    avString+="a";
-		    pidString+= " "+((String[])recordArgs.getAPids().get(i))[0];
+		    pidString+= " "+((BOPid)pids.getAPids().get(i)).getNumber();
 		}
-		if (recordArgs.getVideotextPid() != null) {
+		if (pids.getVtxtPid() != null) {
 		    avString+="a";
-		    pidString+=" "+recordArgs.getVideotextPid();
+		    pidString+=" "+pids.getVtxtPid().getNumber();
 		} 
 		cmd.append(avString);
 		cmd.append(" "+pidString);
-//		if (recordArgs.getVPid() != null) {
-//			cmd.append(" "+recordArgs.getVPid());
-//		}
-//		for (int i=0; i<recordArgs.getAPids().size(); i++){
-//		    String[] aPid = (String[])recordArgs.getAPids().get(i);
-//		    cmd.append(" "+aPid[0]);
-//		}
 		return cmd.toString();
 	}
 	

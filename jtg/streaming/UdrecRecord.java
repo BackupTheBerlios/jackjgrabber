@@ -23,9 +23,12 @@ import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
+import model.BOPid;
+import model.BOPids;
+import model.BORecordArgs;
+
 import org.apache.log4j.Logger;
 
-import model.BORecordArgs;
 import service.SerErrorStreamReadThread;
 import service.SerHelper;
 import service.SerInputStreamReadThread;
@@ -51,6 +54,7 @@ public class UdrecRecord  extends Record {
 	
 	private String getRequestString() {
 	    StringBuffer cmd = new StringBuffer();
+	    BOPids pids = recordArgs.getPids();
 	    Object[] args = {
 	            ControlMain.getSettingsRecord().getUdrecPath(), 
 	            boxIp, 
@@ -63,12 +67,11 @@ public class UdrecRecord  extends Record {
 	    MessageFormat mf = new MessageFormat("{0} -host {1} -buf {2} -now -{3} -o {4} {5}");
 	    cmd.append(mf.format(args));
 	    
-	    if (recordArgs.getVPid() != null) {
-		    cmd.append(" -vp "+recordArgs.getVPid());
+	    if (recordArgs.getPids().getVPid() != null) {
+		    cmd.append(" -vp "+pids.getVPid().getNumber());
 		}
-		for (int i=0; i<recordArgs.getAPids().size(); i++){
-		    String[] aPid = (String[])recordArgs.getAPids().get(i);
-		    cmd.append(" -ap "+aPid[0]);
+		for (int i=0; i<recordArgs.getPids().getAPids().size(); i++){
+		    cmd.append(" -ap "+((BOPid)pids.getAPids().get(i)).getNumber());
 		}
 		return cmd.toString();
 	}
