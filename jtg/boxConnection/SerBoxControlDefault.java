@@ -37,6 +37,10 @@ public class SerBoxControlDefault extends SerBoxControl {
 		return "Default";
 	}
 	
+	public boolean isTvMode()  throws IOException {
+		throw new IOException();
+	}
+	
 	public String getChanIdOfRunningSender() throws IOException {
 		throw new IOException();
 	}

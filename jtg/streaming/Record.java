@@ -127,34 +127,31 @@ public class Record {
 	
 	public String getRequestString() {
 		StringBuffer cmd = new StringBuffer();
-		cmd.append("VIDEO");
+		if (recordControl.controlProgramTab.isTvMode()) {
+			cmd.append("VIDEO");
+		} else {
+			cmd.append("AUDIO");
+		}
 		if (ControlMain.getSettings().getStreamType().equals("TS")) {
 			cmd.append("TS");
 		}
 		cmd.append(" "+udpPort+" ");
 		cmd.append(spktBufNum+" ");
-		if (recordArgs.getBouquetNr() == null) { //Timer-Record hat keine bouquetNr
-		    cmd.append("0 ");
-			cmd.append("1 ");
-			
-			if (recordArgs.getVPid() > 0) {
-			    cmd.append("v");
-			}
-			for (int i=0; i<recordArgs.getAPids().size(); i++){
-			    cmd.append("a");
-			}
-			if (recordArgs.getVPid() > 0) {
-			    cmd.append(" "+Integer.toHexString(recordArgs.getVPid()));
-			}
-			for (int i=0; i<recordArgs.getAPids().size(); i++){
-			    Object test = recordArgs.getAPids().get(i);
-			    String[] aPid = (String[])recordArgs.getAPids().get(i);
-			    String hexPid = Integer.toHexString(Integer.parseInt(aPid[0]));
-			    cmd.append(" "+hexPid);
-			}
-		} else { 
-		    cmd.append(recordArgs.getBouquetNr()+" ");
-			cmd.append(recordArgs.getEventId()+" ");
+		cmd.append("0 ");
+		cmd.append("1 ");
+		
+		if (recordArgs.getVPid() != null) {
+		    cmd.append("v");
+		}
+		for (int i=0; i<recordArgs.getAPids().size(); i++){
+		    cmd.append("a");
+		}
+		if (recordArgs.getVPid() != null) {
+			cmd.append(" "+recordArgs.getVPid());
+		}
+		for (int i=0; i<recordArgs.getAPids().size(); i++){
+		    String[] aPid = (String[])recordArgs.getAPids().get(i);
+		    cmd.append(" "+aPid[0]);
 		}
 		return cmd.toString();
 	}

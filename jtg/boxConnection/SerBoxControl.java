@@ -86,5 +86,5 @@ public abstract class SerBoxControl {
 	public abstract ArrayList[] readTimer() throws IOException;
 	public abstract String writeTimer(BOTimer timer) throws IOException;		
 	public abstract String getChanIdOfRunningSender() throws IOException;
-
+	public abstract boolean isTvMode() throws IOException;
 }

@@ -33,6 +33,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
@@ -71,6 +72,7 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	GuiMainView mainView;	
 	RecordControl recordControl;
 	SerStreamingServer streamingServerThread;
+	boolean tvMode;
 	
 	public ControlProgramTab(GuiMainView view) {
 		this.setMainView(view);		
@@ -78,11 +80,40 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	
 	public void initialize() {
 		try {
-			this.setBouquetList(this.getBoxAccess().getBouquetList());
+			if (this.getBoxAccess().isTvMode()) {
+				this.initializeTVMode();
+			} else {
+				this.initializeRadioMode();
+			}
 			this.selectRunningSender();
 			this.getMainView().getTabProgramm().setConnectModus();
 			this.reInitStreamingServer();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		}
+	}
+	
+	public void initializeTVMode() {
+		try {
+			this.setTvMode(true);
+			this.setBouquetList(this.getBoxAccess().getBouquetList());
 		} catch (IOException e) {			
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
+		}
+	}
+	
+	public void initializeRadioMode() {
+		try {
+			this.setTvMode(false);
+			TableColumn nummerColumn = this.getJTableSender().getColumnModel().getColumn(0);
+			 this.getJTableSender().getTableHeader().getColumnModel().removeColumn(nummerColumn); //eventId ausblenden
+			 
+			BOBouquet bouquet = new BOBouquet("0", "Radio-Sender");
+			bouquet.setSender(this.getBoxAccess().getAllSender());
+			ArrayList bouquetList = new ArrayList();
+			bouquetList.add(bouquet);
+			this.setBouquetList(bouquetList); 
+		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
@@ -170,7 +201,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	private void actionRecord() {
 		try {
 			if (recordControl ==  null || !recordControl.isRunning) {
-				this.startRecord(this.buildRecordArgs());                          
+				BORecordArgs args;
+				if (this.isTvMode()) {
+					args = this.buildTVRecordArgs();
+				} else {
+					args = this.buildRadioRecordArgs();
+				}
+				this.startRecord(args);                          
 			} else {
 				this.stopRecord();
 			}
@@ -225,18 +262,48 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * @return BORecordArgs
 	 * Erstellen des Objektes BORecordArgs aus den Sender und EPG-Informationen
 	 */
-	private BORecordArgs buildRecordArgs() throws IOException {
+	private BORecordArgs buildRadioRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
-		args.setBouquetNr(this.getSelectedBouquet().getBouquetNummer());
-		args.setEventId(this.getSelectedSender().getChanId());
-		args.setSenderName(this.getSelectedSender().getName());
+		this.zapToSelectedSender();
 		
+		ArrayList pidList = new ArrayList();
+			
+		String[] aPids = new String[this.getPids().size()-1];
+		for (int i=0; i<this.getPids().size()-1; i++) {
+			aPids[i]=(String)this.getPids().get(i+1);
+		}
+		pidList.add(aPids);
+		args.setAPids(pidList);
+			
+		this.fillRecordArgsWithEpgData(args);
+		return args;
+	}
+	
+	private BORecordArgs buildTVRecordArgs() throws IOException {
+		this.zapToSelectedSender();
+		BORecordArgs args = new BORecordArgs();
+		args.setVPid((String)this.getPids().get(0));
+		
+		ArrayList pidList = new ArrayList();
+		
+		String[] aPids = new String[this.getPids().size()-1];
+		for (int i=0; i<this.getPids().size()-1; i++) {
+			aPids[i]=(String)this.getPids().get(i+1);
+		}
+		pidList.add(aPids);
+		args.setAPids(pidList);
+
+		this.fillRecordArgsWithEpgData(args);
+		return args;
+	}
+	
+	private void fillRecordArgsWithEpgData(BORecordArgs args) throws IOException {
+		args.setSenderName(this.getSelectedSender().getName());
 		BOEpg epg = this.getSelectedSender().getRunnigEpgWithUpdate();
 		if (epg != null) {
 			String title = epg.getTitle();
 			args.setEpgTitle(title.substring(0, title.length()-1));
 		}
-		return args;
 	}
 	
 	/*
@@ -604,6 +671,10 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	private JTable getJTableEPG() {
 		return this.getMainView().getTabProgramm().getJTableEPG();
 	}
+	
+	private JTable getJTableSender() {
+		return this.getMainView().getTabProgramm().getJTableChannels();
+	}
 	/**
 	 * @return Returns the recordControl.
 	 */
@@ -652,5 +723,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	public void setRecordArgs(BORecordArgs recordArgs) {
 		this.recordArgs = recordArgs;
+	}
+	/**
+	 * @return Returns the tvMode.
+	 */
+	public boolean isTvMode() {
+		return tvMode;
+	}
+	/**
+	 * @param tvMode The tvMode to set.
+	 */
+	public void setTvMode(boolean tvMode) {
+		this.tvMode = tvMode;
 	}
 }

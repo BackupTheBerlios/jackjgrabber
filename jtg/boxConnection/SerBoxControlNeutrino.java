@@ -106,9 +106,19 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 				name += st.nextToken();
 				name += " ";
 			}
-			senderList.add(new BOSender("1",chanId, name.substring(0, name.length()-1))); 
+			senderList.add(new BOSender("1",chanId, name.trim())); 
         }
         return senderList;
+	}
+	
+	public boolean isTvMode() throws IOException{
+		BufferedReader input = getConnection("/control/getmode");
+		
+		String line;
+		while((line=input.readLine())!=null) {
+			return line.equalsIgnoreCase("tv");
+		}
+		return true;
 	}
 	
 	public ArrayList getSender(BOBouquet bouquet) throws IOException {
@@ -169,7 +179,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 			endTime = SerFormatter.getShortTime(Long.parseLong(valueStart) * 1000 + Long.parseLong(valueDuration) * 1000);
 			endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart)*1000 + Long.parseLong(valueDuration)*1000);                        
 			
-			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title, valueStart, valueDuration));                        
+			epgList.add(new BOEpg(sender, eventId, startTime, startDate, endTime, endDate, duration, title.trim(), valueStart, valueDuration));                        
 		}
 		return epgList;
 	} 

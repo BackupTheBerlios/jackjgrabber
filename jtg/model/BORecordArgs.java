@@ -28,7 +28,7 @@ public class BORecordArgs {
 	String epgInfo1;
 	String epgInfo2;
 	String epgId;
-	int vPid;
+	String vPid;
 	String mode;
 	ArrayList aPids;
 	String VideotextPid;
@@ -144,14 +144,14 @@ public class BORecordArgs {
 	/**
 	 * @return Returns the vPid.
 	 */
-	public int getVPid() {
+	public String getVPid() {
 		return vPid;
 	}
 	/**
 	 * @param pid The vPid to set.
 	 */
 	public void setVPid(String pid) {
-		vPid = Integer.parseInt(pid);
+		vPid = pid;
 	}
 	/**
 	 * @return Returns the command.
