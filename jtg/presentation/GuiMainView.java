@@ -2,22 +2,20 @@ package presentation;
 /*
  * GuiMainView.java by Geist Alexander
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 675 Mass
- * Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation,
+ * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *  
  */
+import java.awt.*;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -70,11 +68,31 @@ public class GuiMainView extends JFrame {
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			device.setFullScreenWindow(this);
 		}
+
+		Point loc = ControlMain.getSettingsLayout().getLocation();
+		if (loc != null) {
+			setLocation(loc);
+		}
+		Dimension dim = ControlMain.getSettingsLayout().getSize();
+		if (dim != null) {
+			setSize(dim);
+		}
+
+		addComponentListener(new ComponentAdapter() {
+			public void componentMoved(ComponentEvent e) {
+				ControlMain.getSettingsLayout().setLocation(GuiMainView.this.getLocation());
+			}
+
+			public void componentResized(ComponentEvent e) {
+				ControlMain.getSettingsLayout().setSize(GuiMainView.this.getSize());
+
+			}
+		});
 		setVisible(true);
 	}
-	
+
 	public void repaintGui() {
-	    dispose();
+		dispose();
 		SwingUtilities.updateComponentTreeUI(this);
 		setVisible(true);
 	}
@@ -140,8 +158,7 @@ public class GuiMainView extends JFrame {
 	}
 
 	/**
-	 * Setzt das Tray Menü in Abhängigkeit von useTray Wird vom Einstellungstab
-	 * aufgerufen wenn die CheckBox ihren Status ändert.
+	 * Setzt das Tray Menü in Abhängigkeit von useTray Wird vom Einstellungstab aufgerufen wenn die CheckBox ihren Status ändert.
 	 * 
 	 * @param useTray
 	 * @author Reinhard Achleitner (crazyreini)

@@ -17,8 +17,10 @@ package service;
  * Ave, Cambridge, MA 02139, USA.
  *  
  */
+import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 import model.*;
 
@@ -66,6 +68,8 @@ public class SerSettingsHandler {
 		getSettingsRecordVtxt(root,settings);
 		getSettingsStartVlc(root,settings);
 		getSettingsVlcPath(root,settings);
+		
+		getSettingsLayout(root,settings);
 		
 		settings.getMainSettings().setBoxList(buildBoxSettings(root));
 		settings.getPlaybackSettings().setPlaybackOptions(buildPlaybackSettings(root));
@@ -393,6 +397,40 @@ public class SerSettingsHandler {
 		
 		
 	}	
+	
+	private static void getSettingsLayout(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/screensize");
+		if (node != null) {
+			String strText = node.getText();
+			Dimension dim = new Dimension(Integer.parseInt(strText.substring(0,strText.indexOf(","))),Integer.parseInt(strText.substring(strText.indexOf(",") + 1)));
+			settings.getLayoutSettings().setSize(dim);
+		} else {
+		    SerXMLHandling.setElementInElement(root, "screensize", "800,600");
+				settings.getLayoutSettings().setSize(new Dimension(800,600));
+		}
+		
+		node = root.selectSingleNode("/settings/screenpos");
+		if (node != null) {
+			String text = node.getText();
+			if (text != null && text.length() > 0)
+			{
+				Point pos = new Point(Integer.parseInt(text.substring(0,text.indexOf(","))),Integer.parseInt(text.substring(text.indexOf(",") + 1)));
+				settings.getLayoutSettings().setLocation(pos);
+			}
+		} else {
+		    SerXMLHandling.setElementInElement(root, "screenpos", "");
+		}
+		
+		node = root.selectSingleNode("/settings/recordInfoDirectorySplitPos");
+		if (node != null) {
+			String strText = node.getText();
+			settings.getLayoutSettings().setRecordInfoDirectorySplitPos(Integer.parseInt(strText));
+		} else {
+			SerXMLHandling.setElementInElement(root, "recordInfoDirectorySplitPos", "300");
+			settings.getLayoutSettings().setRecordInfoDirectorySplitPos(300);
+		}
+	}	
+	
 
 	/**
 	 * @param rootElement of the Settings-Document
@@ -616,12 +654,36 @@ public class SerSettingsHandler {
 		mgDefault.setText(ControlMain.getSettings().getMovieGuideSettings().getMgDefault() + "");
 		mgStoreOriginal.setText(ControlMain.getSettings().getMovieGuideSettings().isMgStoreOriginal() + "");
 	}
+	
+	public static void saveLayoutSettings() throws IOException {
+		Element settingsDocument = ControlMain.getSettingsDocument().getRootElement();
+		
+		Node screenSize = settingsDocument.selectSingleNode("/settings/screensize");
+		Node screenPos = settingsDocument.selectSingleNode("/settings/screenpos");
+		Node recordInfoDirectorySplitPos = settingsDocument.selectSingleNode("/settings/recordInfoDirectorySplitPos");
+		
+		
+		Dimension size = ControlMain.getSettings().getLayoutSettings().getSize();
+		Point pos = ControlMain.getSettings().getLayoutSettings().getLocation();
+		int recordInfoDirectorySplitPosValue = ControlMain.getSettings().getLayoutSettings().getRecordInfoDirectorySplitPos(); 
+
+		if (size != null)
+		{
+			screenSize.setText(size.width + "," + size.height);
+		}
+		if (pos != null)
+		{
+			screenPos.setText(pos.x + "," + pos.y);
+		}
+		recordInfoDirectorySplitPos.setText("" + recordInfoDirectorySplitPosValue);
+	}	
 
 	public static void saveAllSettings() throws IOException {
 		saveRecordSettings();
 		saveMainSettings();
 		saveMovieGuideSettings();
 		savePlaybackSettings();
+		saveLayoutSettings();
 		SerXMLHandling.saveXMLFile(new File(ControlMain.settingsFilename), ControlMain.getSettingsDocument());
 	}
 }

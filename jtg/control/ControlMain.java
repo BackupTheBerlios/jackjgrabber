@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
 
+import model.*;
 import model.BOBox;
 import model.BOSettings;
 import model.BOSettingsMain;
@@ -88,6 +89,7 @@ public class ControlMain {
 	};
 
 	public static void main( String args[] ) {
+		
 		startLogger();
 		readSettings();
 		if (ControlMain.getSettingsMain().showLogo) {
@@ -234,6 +236,14 @@ public class ControlMain {
 	public static BOSettingsMovieGuide getSettingsMovieGuide() {
 		return settings.getMovieGuideSettings();
 	}
+	
+	/**
+	 * 
+	 */
+	public static BOSettingsLayout getSettingsLayout() {
+		return settings.getLayoutSettings();
+		
+	}
 	/**
 	 * @param settings The settings to set.
 	 */
@@ -328,4 +338,6 @@ public class ControlMain {
 		System.exit(0); 
 		
 	}
+
+	
 }
