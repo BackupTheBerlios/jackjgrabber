@@ -24,7 +24,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -169,10 +168,14 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Aufnahme läuft nicht->start
 	 */
 	private void actionRecord() {
-		if (recordControl ==  null || !recordControl.isRunning) {
-			this.startRecord(this.buildRecordArgs());                          
-		} else {
-			this.stopRecord();
+		try {
+			if (recordControl ==  null || !recordControl.isRunning) {
+				this.startRecord(this.buildRecordArgs());                          
+			} else {
+				this.stopRecord();
+			}
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
 	}
 	/*
@@ -222,14 +225,17 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * @return BORecordArgs
 	 * Erstellen des Objektes BORecordArgs aus den Sender und EPG-Informationen
 	 */
-	private BORecordArgs buildRecordArgs() {
+	private BORecordArgs buildRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
 		args.setBouquetNr(this.getSelectedBouquet().getBouquetNummer());
 		args.setEventId(this.getSelectedSender().getChanId());
 		args.setSenderName(this.getSelectedSender().getName());
-		if (this.getSelectedEpg() != null) {
-		    args.setEpgTitle(" "+this.getSelectedEpg().getTitle());
-		}; 
+		
+		BOEpg epg = this.getSelectedSender().getRunnigEpgWithUpdate();
+		if (epg != null) {
+			String title = epg.getTitle();
+			args.setEpgTitle(title.substring(0, title.length()-1));
+		}
 		return args;
 	}
 	
@@ -269,8 +275,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 					}
 				}
 			}
-		} catch (ConnectException e) {
-			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		} catch (IOException e) {
 			SerAlertDialog.alertConnectionLost("ControlProgrammTab", this.getMainView());
 		}
@@ -289,11 +293,13 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 * Select-Events der Combobox
 	 */
 	public void itemStateChanged( ItemEvent e ) {
-		JComboBox comboBox = (JComboBox)e.getSource();
-		if (comboBox.getName().equals("ipList")) {
-			this.newBoxSelected(comboBox);		}
-		if (comboBox.getName().equals("bouquets")) {
-			this.reInitBouquetList(comboBox);
+		if (e.getStateChange()==1) {
+			JComboBox comboBox = (JComboBox)e.getSource();
+			if (comboBox.getName().equals("ipList")) {
+				this.newBoxSelected(comboBox);		}
+			if (comboBox.getName().equals("bouquets")) {
+				this.reInitBouquetList(comboBox);
+			}
 		}
 	}
 	
@@ -353,6 +359,16 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	public void reInitEpg() {
 		this.getEpgTableModel().fireTableDataChanged();
 		this.selectedEpg=null;
+		int indexRunningEpg = this.getEpgTableModel().getIndexRunningEpg();
+		if (indexRunningEpg >= 0) {
+			this.getMainView().getTabProgramm().sorter.setSortingStatus(2, 0);
+			this.getMainView().getTabProgramm().sorter.setSortingStatus(3, 0);
+			this.getMainView().getTabProgramm().sorter.setSortingStatus(4, 0);
+			this.getMainView().getTabProgramm().sorter.setSortingStatus(1, 1); //Sortierung zuruecksetzen
+			this.getMainView().getTabProgramm().getJTableEPG().setRowSelectionInterval(indexRunningEpg, indexRunningEpg);
+			BOEpg selEpg = (BOEpg)this.getSelectedSender().getEpg().get(indexRunningEpg);
+			this.setSelectedEpg(selEpg.getEventId());
+		}
 		this.reInitEpgDetail();
 	}
 	/**
@@ -410,7 +426,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	}
 	/**
 	 * Setzen des aktuellen Senders, und zeigen des richtigen EPG
-	 * Setze die Selektion des EPG-Tables an die 1. Zeile
 	 */
 	public void setSelectedSender(BOSender selectedSender) {
 		this.selectedSender = selectedSender;
