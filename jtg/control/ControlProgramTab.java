@@ -47,6 +47,7 @@ import model.BOSender;
 import model.BOTimer;
 import presentation.GuiEpgTableModel;
 import presentation.GuiMainView;
+import presentation.GuiPidsQuestionDialog;
 import presentation.GuiSenderTableModel;
 import presentation.GuiTabProgramm;
 import service.SerAlertDialog;
@@ -239,7 +240,9 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 		try {
 			if (recordControl ==  null || !recordControl.isRunning) {
 				BORecordArgs args;
+				this.zapToSelectedSender();
 				if (this.isTvMode()) {
+					new GuiPidsQuestionDialog(this.getPids(), this.getMainView());
 					args = this.buildTVRecordArgs();
 				} else {
 					args = this.buildRadioRecordArgs();
@@ -301,8 +304,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	 */
 	private BORecordArgs buildRadioRecordArgs() throws IOException {
 		BORecordArgs args = new BORecordArgs();
-		this.zapToSelectedSender();
-		
 		ArrayList pidList = new ArrayList();
 			
 		String[] aPids = new String[this.getPids().size()-1];
@@ -317,7 +318,6 @@ public class ControlProgramTab extends ControlTab implements ActionListener, Mou
 	}
 	
 	private BORecordArgs buildTVRecordArgs() throws IOException {
-		this.zapToSelectedSender();
 		BORecordArgs args = new BORecordArgs();
 		args.setVPid((String)this.getPids().get(0));
 		
