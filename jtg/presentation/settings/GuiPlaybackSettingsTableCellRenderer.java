@@ -46,10 +46,10 @@ public class GuiPlaybackSettingsTableCellRenderer extends DefaultTableCellRender
 			JCheckBox checkbox = new JCheckBox();
 			checkbox.setHorizontalAlignment(SwingConstants.CENTER);
 			if (column==3) {
-				checkbox.setSelected(playbackOption.isStandard().booleanValue());
+				checkbox.setSelected(playbackOption.isStandard());
 				return checkbox;
 			} else {
-				checkbox.setSelected(playbackOption.isLogOutput().booleanValue());
+				checkbox.setSelected(playbackOption.isLogOutput());
 				return checkbox;
 			}
 		}

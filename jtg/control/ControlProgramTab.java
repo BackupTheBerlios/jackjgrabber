@@ -291,7 +291,7 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 				this.zapToSelectedSender();
 				String execString = this.getPlaybackRequestString(option);
 				if (execString != null) {
-					SerExternalProcessHandler.startProcess(option.getName(), execString, option.isLogOutput().booleanValue());
+					SerExternalProcessHandler.startProcess(option.getName(), execString, option.isLogOutput());
 				}
 			} catch (IOException e) {
 				Logger.getLogger("ControlProgramTab").error(e.getMessage());

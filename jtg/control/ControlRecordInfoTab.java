@@ -480,7 +480,7 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 						exec += " " + file.getAbsolutePath();
 					}
 
-					SerExternalProcessHandler.startProcess(play.getName(), exec, play.isLogOutput().booleanValue());
+					SerExternalProcessHandler.startProcess(play.getName(), exec, play.isLogOutput());
 				}
 			}
 
@@ -571,9 +571,9 @@ public class ControlRecordInfoTab extends ControlTab implements ActionListener, 
 			if (SerHelper.isVideo(file.getName())) {
 
 				// deactivated currently only for personal use of crazyreini
-				/*
-				 * m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) { startMuxxi(file); } }));
-				 */
+			
+				  m.add(new JMenuItem(new AbstractAction("Muxxi") { public void actionPerformed(ActionEvent e) { startMuxxi(file); } }));
+				 
 
 			}
 

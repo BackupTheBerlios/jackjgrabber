@@ -561,14 +561,14 @@ public class SerSettingsHandler {
 						playbackOption.execString = (value.getText());
 						break;
 					case 2 :
-						playbackOption.standard = (Boolean.valueOf(value.getText()));
+						playbackOption.standard = (Boolean.valueOf(value.getText()).booleanValue());
 						break;
 					case 3 :
-						playbackOption.logOutput = (Boolean.valueOf(value.getText()));
+						playbackOption.logOutput = (Boolean.valueOf(value.getText()).booleanValue());
 						break;
 				}
 			}
-			if ((playbackOption.isStandard().booleanValue())) {
+			if ((playbackOption.isStandard())) {
 			}
 			boxList.add(playbackOption);
 		}
@@ -597,8 +597,8 @@ public class SerSettingsHandler {
 			Element boxElement = DocumentHelper.createElement("playbackOption");
 			boxElement.addElement("name").addText(playback.getName());
 			boxElement.addElement("execString").addText(playback.getExecString());
-			boxElement.addElement("standard").addText(playback.isStandard().toString());
-			boxElement.addElement("logOutput").addText(playback.isLogOutput().toString());
+			boxElement.addElement("standard").addText(playback.isStandard() + "");
+			boxElement.addElement("logOutput").addText(playback.isLogOutput() + "");
 			newPlaybackListRoot.add(boxElement);
 		}
 		settingsDocument.add(newPlaybackListRoot);

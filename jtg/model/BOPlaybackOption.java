@@ -27,8 +27,8 @@ public class BOPlaybackOption {
 
 	public String name = "mplayer";
 	public String execString = "d://programme/mplayer/mplayer.exe http://$ip:31339/$vPid,$aPid1";
-	public Boolean standard = Boolean.FALSE;
-	public Boolean logOutput = Boolean.TRUE;
+	public boolean standard = false;
+	public boolean logOutput = true;
 
 	/**
 	 * @return Returns the execString.
@@ -71,15 +71,15 @@ public class BOPlaybackOption {
 	/**
 	 * @return Returns the standard.
 	 */
-	public Boolean isStandard() {
+	public boolean isStandard() {
 		return standard;
 	}
 	/**
 	 * @param standard
 	 *            The standard to set.
 	 */
-	public void setStandard(Boolean standard) {
-		if (this.standard.booleanValue() != standard.booleanValue()) {
+	public void setStandard(boolean standard) {
+		if (this.standard != standard) {
 			this.standard = standard;
 			this.setSettingsChanged(true);
 		}
@@ -98,8 +98,8 @@ public class BOPlaybackOption {
 	 * @param printOutput
 	 *            The printOutput to set.
 	 */
-	public void setLogOutput(Boolean printOutput) {
-		if (this.logOutput.booleanValue() != printOutput.booleanValue()) {
+	public void setLogOutput(boolean printOutput) {
+		if (this.logOutput != printOutput) {
 			this.logOutput = printOutput;
 			this.setSettingsChanged(true);
 		}
@@ -107,7 +107,7 @@ public class BOPlaybackOption {
 	/**
 	 * @return Returns the printOutput.
 	 */
-	public Boolean isLogOutput() {
+	public boolean isLogOutput() {
 		return logOutput;
 	}
 

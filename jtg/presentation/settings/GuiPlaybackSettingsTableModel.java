@@ -55,9 +55,9 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 			return playbackOption.getExecString();
 		}
 		if (columnIndex == 2) {
-			return playbackOption.isLogOutput();
+			return new Boolean(playbackOption.isLogOutput());
 		}
-		return playbackOption.isStandard();
+		return new Boolean(playbackOption.isStandard());
 	}
 			
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -69,7 +69,7 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 		    playbackOption.setExecString((String)aValue);
 		}
 		if (columnIndex == 2) {
-		    playbackOption.setLogOutput((Boolean)aValue);
+		    playbackOption.setLogOutput(((Boolean)aValue).booleanValue());
 		}
 		//nur eine Checkbox darf selektiert sein!!
 		if (columnIndex == 3) {
@@ -77,11 +77,11 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 				ArrayList playbackList = ControlMain.getSettingsPlayback().getPlaybackOptions();
 				for (int i=0; i<playbackList.size(); i++) { 
 				    BOPlaybackOption boxx = (BOPlaybackOption)playbackList.get(i);
-					boxx.setStandard(Boolean.FALSE);
+					boxx.setStandard(false);
 					this.fireTableDataChanged();
 				}
 			}
-			playbackOption.setStandard((Boolean)aValue);
+			playbackOption.setStandard(((Boolean)aValue).booleanValue());
 		}
 	}
 
@@ -104,8 +104,8 @@ public class GuiPlaybackSettingsTableModel extends AbstractTableModel  {
 	 */
 	public void addRow(BOPlaybackOption playbackOption) {
 		if (ControlMain.getSettingsPlayback().getPlaybackOptions().size()==0) {
-		    playbackOption.setStandard(Boolean.TRUE);
-		    playbackOption.setLogOutput(Boolean.TRUE);
+		    playbackOption.setStandard(true);
+		    playbackOption.setLogOutput(true);
 		}
 		ControlMain.getSettingsPlayback().addPlaybackOption(playbackOption);
 		fireTableDataChanged();

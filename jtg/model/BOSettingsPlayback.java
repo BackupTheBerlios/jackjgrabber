@@ -112,7 +112,7 @@ public class BOSettingsPlayback {
 		}
 		for (int i = 0; i < this.getPlaybackOptions().size(); i++) {
 			BOPlaybackOption option = (BOPlaybackOption) this.getPlaybackOptions().get(i);
-			if (option.isStandard().booleanValue()) {
+			if (option.isStandard()) {
 				return option;
 			}
 		}
