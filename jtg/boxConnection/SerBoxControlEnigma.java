@@ -8,24 +8,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
-import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
-
-import control.ControlMain;
 import model.BOBouquet;
 import model.BOEpg;
 import model.BOEpgDetails;
 import model.BOPids;
 import model.BOSender;
 import model.BOTimer;
+
+import org.apache.log4j.Logger;
+
 import service.SerFormatter;
+import control.ControlMain;
 
 /*
 SerBoxControlEnigma.java by Geist Alexander, Treito
@@ -234,8 +231,8 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		                startpos=endpos+3;
 		                endpos=line2.indexOf(" ", startpos+1);
 		                endTime=line2.substring(startpos, endpos);
-		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime);
-		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime);
+		                startDate=SerFormatter.getDateFromString(startDateString+"/"+startTime, "dd.MM./HH:mm");
+		                endDate=SerFormatter.getDateFromString(endDateString+"/"+endTime, "dd.MM./HH:mm");
 		                valueStart=""+(startDate.getTimeInMillis()/1000);
 		                valueDuration = ""+((endDate.getTimeInMillis()/1000-startDate.getTimeInMillis()/1000));
 		                duration=SerFormatter.formatedEndTime(valueDuration);
