@@ -39,6 +39,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import model.BOMovieGuide;
+import model.BOSender;
 import model.BOTimer;
 
 import org.apache.log4j.Logger;
@@ -53,7 +54,6 @@ import presentation.MovieGuideTimerTableModel;
 import service.SerFormatter;
 import service.SerMovieGuide2Xml;
 import service.SerXMLHandling;
-import service.SerAlertDialog;
 
 
 public class ControlMovieGuideTab extends ControlTab implements ActionListener,ItemListener, MouseListener,ChangeListener  {
@@ -71,10 +71,11 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 	ArrayList genreList = new ArrayList();
 	ArrayList datumList = new ArrayList();
 	ArrayList senderList = new ArrayList();
+	ArrayList boxSenderList;
 	
 	Element root;
 
-	public static File movieGuideFileName = new File("movieguide.xml");
+	public static File movieGuideFile = new File("movieguide.xml");
 	String SelectedItemJComboBox;
 	int SelectedItemJComboBoxSucheNach;
     int timerTableSize; 
@@ -96,7 +97,7 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
             this.getTab().getComboBoxDatum().setSelectedItem(SerFormatter.getDatumToday());			
             this.getTab().mgFilmTableSorter.setSortingStatus(0,2); //alphabetisch geordnet
         } catch (MalformedURLException e) {
-            Logger.getLogger("ControlMovieGuideTab").error(movieGuideFileName.getName()+" not found");
+            Logger.getLogger("ControlMovieGuideTab").error(movieGuideFile.getName()+" not found");
         } catch (DocumentException e) {
             e.printStackTrace();
         }		
@@ -218,41 +219,71 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		setTimerTableSize(getBOMovieGuide4Timer().getDatum().size());
 		reInitTimerTable();
 	}
+	/*
+	private BOTimer buildTimer(BOEpg epg) {
+		BOTimer timer = new BOTimer();		
+		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*60;
+		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter())*60;
+		long unformattedStart = Long.parseLong(epg.getUnformattedStart());
+		long unformattedDuration = Long.parseLong(epg.getUnformattedDuration());
+		long endtime = unformattedStart+unformattedDuration;
+		long announce = unformattedStart-(120);
+		
+		timer.setModifiedId("new");
+		timer.setChannelId(this.getSelectedSender().getChanId());
+		timer.setSenderName(this.getSelectedSender().getName());
+		timer.setAnnounceTime(Long.toString(announce)); //Vorwarnzeit
+		timer.setUnformattedStartTime(SerFormatter.formatUnixDate(unformattedStart-timeBefore));
+		timer.setUnformattedStopTime(SerFormatter.formatUnixDate(endtime+timeAfter));
+		
+		timer.setEventRepeatId("0");
+		timer.setEventTypeId("5");
+		timer.setDescription(epg.getTitle());
+		return timer;
+	}
+	*/
+	private BOSender getSenderObject(String senderName) throws IOException{
+	    BOSender sender;
+        ArrayList senderList = this.getBoxSenderList();
+        for (int i=0; i<senderList.size(); i++) {
+            sender = (BOSender)senderList.get(i);
+            if (sender.getName().equals(senderName)) {
+                return sender;
+            }
+        }
+        throw new IOException();
+	}
 	
 	private void getTimerTableSelectToTimer(){
-		int modelIndexTimer=getSelectRowTimerTable();
-		
-		BOTimer botimer = new BOTimer();  //FIXME timer aufbauen			
-		int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*-1;
-		int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter());
-		int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*-1;
-		// timer
-			botimer.setModifiedId("new");
-		//	botimer.setChannelId(this.getSelectedSender().getChanId());
-		//	botimer.setSenderName(this.getSelectedSender().getName());		
-			/*  FIXME schein irgendwie nicht zu gehen
-			botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore));
-			botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter));			
-			botimer.setAnnounceTime( String.valueOf((SerFormatter.getGC(botimer.getUnformattedStartTime(),2)).getTimeInMillis()) );
-			botimer.setEventRepeatId("0");
-			botimer.setEventTypeId("5");
-			botimer.setDescription(getBOMovieGuide4Timer().getTitel());
-			*/
-			/*
-			try {
-                ControlMain.getBoxAccess().writeTimer(botimer);
-            } catch (IOException e) {
-                SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
-            }
-            */		          
-		//
+		try {
+            int modelIndexTimer=getSelectRowTimerTable();
+            String senderName = (String)getBOMovieGuide4Timer().getSender().get(modelIndexTimer);
+            BOSender sender = this.getSenderObject(senderName);
+            
+            BOTimer botimer = new BOTimer();  	
+            int timeBefore = Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())*-1;
+            int timeAfter = Integer.parseInt(ControlMain.getSettings().getRecordTimeAfter());
+            int timeAnnounce = (Integer.parseInt(ControlMain.getSettings().getRecordTimeBefore())+2)*-1;
+            
+            botimer.setModifiedId("new");
+            botimer.setChannelId(sender.getChanId());
+            botimer.setSenderName(sender.getName());		
+            botimer.setUnformattedStartTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer],timeBefore));
+            botimer.setUnformattedStopTime(SerFormatter.getGC((GregorianCalendar)getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer],timeAfter));			
+            botimer.setAnnounceTime( String.valueOf((SerFormatter.getGC(botimer.getUnformattedStartTime(),2)).getTimeInMillis()) );
+            botimer.setEventRepeatId("0");
+            botimer.setEventTypeId("5");
+            botimer.setDescription(getBOMovieGuide4Timer().getTitel());
 
-		System.out.println(getBOMovieGuide4Timer().getTitel());
-		System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
-		System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);
-		System.out.println(getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer]);
-		System.out.println(getBOMovieGuide4Timer().getDauer().toArray()[modelIndexTimer]);
-		System.out.println(getBOMovieGuide4Timer().getSender().toArray()[modelIndexTimer]); //FIXME senderid holen
+            System.out.println(getBOMovieGuide4Timer().getTitel());
+            System.out.println(getBOMovieGuide4Timer().getDatum().toArray()[modelIndexTimer]);
+            System.out.println(getBOMovieGuide4Timer().getStart().toArray()[modelIndexTimer]);
+            System.out.println(getBOMovieGuide4Timer().getEnde().toArray()[modelIndexTimer]);
+            System.out.println(getBOMovieGuide4Timer().getDauer().toArray()[modelIndexTimer]);
+            System.out.println(getBOMovieGuide4Timer().getSender().toArray()[modelIndexTimer]);
+        } catch (IOException e) {
+            Logger.getLogger("ControlMovieGuideTab").error("Keinen passenden Sender in der Box gefunden");
+        }
 		
 	}
 	
@@ -303,16 +334,16 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		}
 	}
 	
-	private File getMovieGuideFileName(){
-		return movieGuideFileName;
+	private File getMovieGuideFile(){
+		return movieGuideFile;
 	}
 	
-	private void setMovieGuideFileName(File filename){
-		movieGuideFileName = filename;		
+	private void setMovieGuideFile(File filename){
+		movieGuideFile = filename;		
 	}
 	
 	private void setRootElement()throws DocumentException, MalformedURLException {
-		Document doc = SerXMLHandling.readDocument(getMovieGuideFileName());
+		Document doc = SerXMLHandling.readDocument(getMovieGuideFile());
 		root = doc.getRootElement();
 	}
     private Element getRootElement() throws Exception{
@@ -546,4 +577,13 @@ public class ControlMovieGuideTab extends ControlTab implements ActionListener,I
 		//SerMovieGuide2Xml.op
 		return value;
 	}
+    /**
+     * @return Returns the boxSenderList.
+     */
+    public ArrayList getBoxSenderList() throws IOException {
+        if (boxSenderList==null) {
+            boxSenderList=ControlMain.getBoxAccess().getAllSender();
+        }
+        return boxSenderList;
+    }
 }
