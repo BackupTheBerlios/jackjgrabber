@@ -262,18 +262,28 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 	} 
 	
 	public String writeTimer(BOTimer timer) throws IOException {
+		String modifiedId = timer.getModifiedId();
 		String alarm = Long.toString(timer.getUnformattedStartTime().getTimeInMillis()/1000);
 		String stop = Long.toString(timer.getUnformattedStopTime().getTimeInMillis()/1000);
-		String modifiedId = timer.getModifiedId();
-		String announce = timer.getAnnounceTime();
-		String type = timer.getEventTypeId();
-		String repeat = timer.getEventRepeatId();
-		String chanId = timer.getChannelId();
 
-		String requestString = "/control/timer?action="+modifiedId+"&alarm="+alarm+
-			"&stop="+stop+"&announce="+announce+"&type="+type+"&rep="+repeat+"&channel_id="+chanId;
-		BufferedReader input = getConnection(requestString);
-		Logger.getLogger("test").info(requestString);
+		StringBuffer buffer = new StringBuffer();
+		if (modifiedId.equals("remove")) {
+			buffer.append("/fb/timer.dbox2?action="+modifiedId);
+			buffer.append("&id="+timer.getTimerNumber());
+		} else {
+			buffer.append("/control/timer?action="+modifiedId);
+			if (modifiedId.equals("modify")) {
+				buffer.append("&id="+timer.getTimerNumber()); //id nur bei mofifierierten timern nötig
+			}
+			buffer.append("&alarm="+alarm);
+			buffer.append("&stop="+stop);
+			buffer.append("&announce="+timer.getAnnounceTime());
+			buffer.append("&type="+timer.getEventTypeId());
+			buffer.append("&rep="+timer.getEventRepeatId());
+			buffer.append("&channel_id="+timer.getChannelId());
+		}
+				
+		BufferedReader input = getConnection(buffer.toString());
 		String line;
 		while((line=input.readLine())!=null) {
 			return line;

@@ -103,13 +103,13 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 		builder.add(this.getJScrollPaneRecordTimerTable(),   	cc.xyw  (1, 2, 3));
 		builder.add(this.getJPanelDauerTimer(),	 				cc.xyw  (1, 3, 3));
 		builder.addSeparator("Sytem-Timer",						cc.xyw  (1, 5, 1));
-		builder.add(this.getJScrollPaneSystemTimerTable(),  	cc.xywh(1, 6, 1, 2));
-		builder.add(this.getJPanelDauerTimer2(), 				cc.xywh(2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle("Aktionen Aufnahme-Timer",				cc.xy    (5, 1));
-		builder.add(this.getJPanelButtonsRecordTimer(), 		cc.xywh(5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
-		builder.addTitle("Aktionen System-Timer",				cc.xy    (3, 5));
-		builder.add(this.getJPanelButtonsSystemTimer(),			cc.xy    (3, 6));
-		builder.add(this.getJPanelButtonsGui(),					cc.xywh(5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
+		builder.add(this.getJScrollPaneSystemTimerTable(),  	cc.xywh (1, 6, 1, 2));
+		builder.add(this.getJPanelDauerTimer2(), 				cc.xywh (2, 6, 1, 2, CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle("Aktionen Aufnahme-Timer",				cc.xy   (5, 1));
+		builder.add(this.getJPanelButtonsRecordTimer(), 		cc.xywh (5, 2, 1, 1,  CellConstraints.CENTER, CellConstraints.TOP));
+		builder.addTitle("Aktionen System-Timer",				cc.xy   (3, 5));
+		builder.add(this.getJPanelButtonsSystemTimer(),			cc.xy   (3, 6));
+		builder.add(this.getJPanelButtonsGui(),					cc.xywh (5, 7, 1, 2, CellConstraints.CENTER, CellConstraints.BOTTOM));
 	}
 
 	public ControlTab getControl() {
@@ -155,7 +155,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 			columnStartDate.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerStartDate()));
 			columnStartTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerStartTime()));
 			columnEndTime.setCellEditor(new DefaultCellEditor(this.getTfRecordTimerEndTime()));
-			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatRecordTimer()));
+			columnRepeat.setCellEditor(new DefaultCellEditor(this.getComboBoxRepeatRecordTimer()));			
 		}
 		return jTableRecordTimer;
 	}
@@ -428,7 +428,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonDeleteAllRecordTimer() {
 		if (jButtonDeleteAllRecordTimer == null) {
 			jButtonDeleteAllRecordTimer = new JButton("Aufnahmetimer löschen");
-			jButtonDeleteAllRecordTimer.setActionCommand("deleteAllProgramTimer");
+			jButtonDeleteAllRecordTimer.setActionCommand("deleteAllRecordTimer");
 			jButtonDeleteAllRecordTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteAllRecordTimer.addActionListener(control);
 		}
@@ -448,7 +448,7 @@ public class GuiNeutrinoTimerPanel extends GuiTimerPanel {
 	public JButton getJButtonDeleteSelectedRecordTimer() {
 		if (jButtonDeleteSelectedRecordTimer == null) {
 			jButtonDeleteSelectedRecordTimer = new JButton("Selektierte löschen");
-			jButtonDeleteSelectedRecordTimer.setActionCommand("deleteSelectedProgramTimer");
+			jButtonDeleteSelectedRecordTimer.setActionCommand("deleteSelectedRecordTimer");
 			jButtonDeleteSelectedRecordTimer.setPreferredSize(new Dimension(150,25));
 			jButtonDeleteSelectedRecordTimer.addActionListener(control);
 		}

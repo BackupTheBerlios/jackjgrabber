@@ -51,19 +51,19 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action == "deleteAll") {
-			
+			this.actionDeleteAll();
 		}
-		if (action == "deleteAllProgramTimer") {
-			
+		if (action == "deleteAllRecordTimer") {
+			this.actionDeleteAllRecordTimer();
 		}
 		if (action == "deleteAllSystemTimer") {
-			
+			this.actionDeleteAllSystemTimer();
 		}
-		if (action == "deleteSelectedProgramTimer") {
-			
+		if (action == "deleteSelectedRecordTimer") {
+			this.actionDeleteSelectedRecordTimer();
 		}
 		if (action == "deleteSelectedSystemTimer") {
-			
+			this.actionDeleteSelectedSystemTimer();
 		}
 		if (action == "addProgramTimer") {
 			this.getTimerList()[0].add(this.buildRecordTimer());
@@ -74,30 +74,98 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 			this.getTab().getSystemTimerTableModel().fireTableDataChanged();
 		}
 		if (action == "reload") {
-			
+			this.actionReload();
 		}
 		if (action == "send") {
 			this.actionSend();
 		}
 	}
 	
-	private void actionSend() {
-		this.sendTimer(this.getTimerList()[0]);
-		this.sendTimer(this.getTimerList()[1]);
+	private void actionDeleteAll() {
+		this.setChanId(this.getTimerList()[0]);
+		this.deleteAllTimer(this.getTimerList()[0]);
+		this.deleteAllTimer(this.getTimerList()[1]);
+		try {
+			this.setTimerList(ControlMain.getBoxAccess().readTimer());
+			this.getTab().getRecordTimerTableModel().fireTableDataChanged();
+			this.getTab().getSystemTimerTableModel().fireTableDataChanged();
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlNeutrinoTimerTab", this.getMainView());
+		}
 	}
 	
-	private void sendTimer(ArrayList timerList) {
+	private void actionDeleteAllRecordTimer() {
+		
+	}
+	
+	private void actionDeleteAllSystemTimer() {
+		
+	}
+	
+	private void actionDeleteSelectedRecordTimer() {
+		
+	}
+	
+	private void actionDeleteSelectedSystemTimer() {
+		
+	}
+	
+	private void actionReload() {
+		
+	}
+	
+	private void actionSend() {
+		this.setChanId(this.getTimerList()[0]);
+		this.writeAllTimer(this.getTimerList()[0]);
+		this.writeAllTimer(this.getTimerList()[1]);
+	}
+	
+	private void deleteAllTimer(ArrayList timerList) {
+		for (int i=0; i<timerList.size(); i++) {
+			BOTimer timer = (BOTimer)timerList.get(i);
+			if (timer.getTimerNumber() != null) {  //Neu angelegte Timer muessen nicht geloescht werden
+				timer.setModifiedId("remove");
+				this.writeTimer(timer);
+			}
+		}
+	}
+	
+	private void writeTimer(BOTimer timer) {
+		try {
+			if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
+				Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
+			} else {
+				Logger.getLogger("ControlProgramTab").error(timer.getInfo());
+			}
+		} catch (IOException e) {
+			SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
+		}
+	}
+	
+	private void writeAllTimer(ArrayList timerList) {
 		for (int i=0; i<timerList.size(); i++) {
 			BOTimer timer = (BOTimer)timerList.get(i);
 			if (timer.getModifiedId() != null) { //nur neue und modifizierte Timer wegschreiben
-				try {
-					if (ControlMain.getBoxAccess().writeTimer(timer) != null) {
-						Logger.getLogger("ControlProgramTab").info("Timer übertragen "+timer.getInfo());
-					} else {
-						Logger.getLogger("ControlProgramTab").error(timer.getInfo());
+				this.writeTimer(timer);
+			}
+		}
+	}
+	
+	/**
+	 * Ermitteln der Channel-Id, da neu gelesene Timer nur den Sendernamen enthalten
+	 * channel-id notwendig um modifizierte Timer wegzuschreiben
+	 * channel-id nur für Record-Timer relevant
+	 */
+	private void setChanId(ArrayList timerList) {
+		for (int i=0; i<timerList.size(); i++) {
+			BOTimer timer = (BOTimer)timerList.get(i);
+			if (timer.getEventTypeId().equals("5")) { //Sendernamen nur für Record-Timer suchen
+				for (int i2=0; i2<this.getSenderList().size(); i2++) {
+					BOSender sender = (BOSender)this.getSenderList().get(i2);
+					if (sender.getName().equals(timer.getSenderName())) {
+						timer.setChannelId(sender.getChanId());
+						break;
 					}
-				} catch (IOException e) {
-					SerAlertDialog.alertConnectionLost("ControlProgramTab", this.getMainView());
 				}
 			}
 		}
@@ -234,6 +302,7 @@ public class ControlNeutrinoTimerTab extends ControlTab implements ActionListene
 		timer.setEventTypeId("5");
 		return timer;
 	}
+	
 	private BOTimer buildSystemTimer() {
 		BOTimer timer = new BOTimer();
 		
