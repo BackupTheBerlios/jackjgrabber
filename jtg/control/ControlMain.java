@@ -1,5 +1,6 @@
 package control;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -85,7 +86,7 @@ public class ControlMain implements ActionListener, ChangeListener {
 	}
 	
 	private void init() {
-		this.writeSystemInfo();
+		this.logSystemInfo();
 		//lesen und Setzen des Settings-XMLdokuments beim Start der Anwendung
 		this.readSettings();
 		//Aufbereitung des Settings-XML-Dokuments
@@ -96,7 +97,7 @@ public class ControlMain implements ActionListener, ChangeListener {
 		mainLogger.info(getBox().getName()+"-Access loaded");
 	}
 	
-	private void writeSystemInfo() {
+	private void logSystemInfo() {
 		mainLogger.info(version[0]+"/"+version[1]+" "+version[2]+" "+version[3]);
 		mainLogger.info("java.version\t"+System.getProperty("java.version"));
 		mainLogger.info("java.vendor\t"+System.getProperty("java.vendor"));
@@ -195,16 +196,32 @@ public class ControlMain implements ActionListener, ChangeListener {
 		JPanel comp = (JPanel)pane.getComponent(count);
 		
 		if (count == 0) { //ProgrammTab
-			comp.add(pane.getTabProgramm());
+			try {
+				comp.getComponent(0);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				comp.add(pane.getTabProgramm());
+			}
 		}
 		if (count == 1) { //TimerTab
-			comp.add(pane.getTabTimer());
+			try {
+				comp.getComponent(0);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				comp.add(pane.getTabTimer());
+			}
 		}
 		if (count == 2) { //ProjectXTab
-			comp.add(pane.getTabProjectX());
+			try {
+				comp.getComponent(0);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				comp.add(pane.getTabProjectX());
+			}
 		}
 		if (count == 3) { //SettingsTab
-			comp.add(pane.getTabSettings());
+			try {
+				comp.getComponent(0);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				comp.add(pane.getTabSettings());
+			}
 		}
 	}
 	
