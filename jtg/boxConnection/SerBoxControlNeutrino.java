@@ -224,9 +224,9 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 						
 	        StringTokenizer st = new StringTokenizer(line);
 	        
-            botimer.setTimerNumber(st.nextToken());
-            botimer.setEventTypeId(st.nextToken());
-            botimer.setEventRepeatId(st.nextToken());
+            botimer.timerNumber=st.nextToken();
+            botimer.eventTypeId=st.nextToken();
+            botimer.eventRepeatId=st.nextToken();
             
             valueAnno=st.nextToken(); 
 		    valueStart=st.nextToken();
@@ -236,10 +236,10 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 		    		valueSenderName += st.nextToken();
 		    		valueSenderName += " ";
 				}
-		    	botimer.setSenderName( valueSenderName.substring(0, valueSenderName.length()-1) );
+		    	botimer.senderName=valueSenderName.substring(0, valueSenderName.length()-1);
 		    }
 
-		    botimer.setAnnounceTime(valueAnno);
+		    botimer.announceTime=valueAnno;
 		    botimer.setUnformattedStartTime(SerFormatter.formatUnixDate(valueStart));  
 			botimer.setUnformattedStopTime(SerFormatter.formatUnixDate(valueStop)); 
 		    
@@ -269,7 +269,7 @@ public class SerBoxControlNeutrino extends SerBoxControl{
 					BOTimer timer = (BOTimer)timerList.get(i);
 					if (timer.getSenderName() != null && line.indexOf(timer.getSenderName())>0 && line.indexOf(timer.getShortStartTime())>0) {
 						indexIdentifier= line.indexOf(">", indexSearchString);
-						timer.setDescription(line.substring(indexIdentifier+1, line.length()-4));
+						timer.description=line.substring(indexIdentifier+1, line.length()-4);
 					}
 				}
 			}
