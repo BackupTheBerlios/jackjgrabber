@@ -150,7 +150,7 @@ public class SerTimerHandler {
 		localTimer.addElement("startTime").addText(timer.getMainTimer().getLongStartTime());
         localTimer.addElement("stopTime").addText(timer.getMainTimer().getLongStopTime());
 		localTimer.addElement("local").addText(Boolean.toString(timer.isLocal()));
-
+		
         if (timer.isLocal()) {
 //          BOTimer
             Element mainTimer = DocumentHelper.createElement("mainTimer");
@@ -339,7 +339,7 @@ public class SerTimerHandler {
     public static boolean saveTimer(BOTimer reqTimer, boolean validate, boolean reloadList) {
         //prüfen neuer und modifizerter Aufnahme-Timer auf Dubletten
         if (reqTimer.getEventTypeId().equals("5") &&
-                (reqTimer.getModifiedId()!=null && !reqTimer.getModifiedId().equals("remove")) &&
+                (reqTimer.getModifiedId()!=null && !reqTimer.getModifiedId().equals("remove")) && !reqTimer.getModifiedId().equals("localModify") &&
                     ControlMain.getBoxAccess().getTimerList(false).getRecordTimerList().contains(reqTimer) ) {
             reqTimer.setModifiedId(null);
             return false; //Timer ist eine Dublette, nicht speichern
