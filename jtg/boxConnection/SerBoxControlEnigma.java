@@ -138,13 +138,13 @@ public class SerBoxControlEnigma extends SerBoxControl {
 			while((line=input.readLine())!=null) {
 			    if (line.indexOf("vpid:</td><td>")>0) {
 			        startpos=(line.indexOf("vpid:</td><td>")+14);
-			        pids.setVPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos))+1), "video", 0));
+			        pids.setVPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos)+1)), "video", 0));
 			        
 			    }
 			    if (line.indexOf("tpid:</td><td>")>0) {
 			        startpos=(line.indexOf("tpid:</td><td>")+14);
 			        if ((line.indexOf("h",startpos)-startpos)<5) {
-			        	 pids.setVtxtPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos))+1), "vtxt", 2));
+			        	 pids.setVtxtPid(new BOPid((line.substring(startpos,line.indexOf("h", startpos)+1)), "vtxt", 2));
 			        }
 			    }
 			}
@@ -156,7 +156,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 		    	startpos=0;
 		    	while ((startpos=line.indexOf("value=", startpos+1))> 1) {
 		    		endpos=line.indexOf("\"", startpos+7);
-		    		System.out.println(line.substring(startpos+9, endpos));
+		    		System.out.println(zaptries);
 		    		pids.getAPids().add(new BOPid(line.substring(startpos+9, endpos)+"h",line.substring(endpos+2,line.indexOf("<", endpos)), 1));
 		    	}
 		    } else {
@@ -164,6 +164,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 				if (zaptries>20) {
 					throw new IOException();
 				}
+				System.out.println(zaptries);
 				zapTo(getChanIdOfRunningSender());
 				input = getConnection("/cgi-bin/audioChannels");
 		    }
@@ -265,7 +266,6 @@ public class SerBoxControlEnigma extends SerBoxControl {
 
 	public String zapTo(String channelId) throws IOException {
 		String status = "ok";
-		System.out.println(channelId);
 		if (isRecording()) {
 		    Logger.getLogger("SerBoxControlEnigma").error(ControlMain.getProperty("err_zappingRecord"));
 		    status="error";
