@@ -28,6 +28,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import com.sun.org.apache.xerces.internal.impl.*;
+
 import presentation.about.GuiTabAbout;
 import presentation.movieguide.GuiTabMovieGuide;
 import presentation.program.GuiTabProgramm;
@@ -102,6 +104,9 @@ public class GuiMainView extends JFrame {
 		Dimension dim = ControlMain.getSettingsLayout().getSize();
 		if (dim != null) {
 			setSize(dim);
+			doLayout();
+			invalidate();
+			validate();
 		}
 	}
 
