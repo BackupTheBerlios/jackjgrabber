@@ -59,7 +59,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			BOSender sender = (BOSender)this.getControl().getSenderList().get(senderIndex);
 			timer.setChannelId(sender.getChanId());
 			timer.setSenderName((String)value);
-			if (timer.getModifiedId() == null || timer.getModifiedId().equals("new")) {
+			if (timer.getModifiedId() == null) {
 				timer.setModifiedId("modify");
 			}
 		}
@@ -72,7 +72,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 				Date newDate = sdf.parse((String)value);
 				newcal.setTime(newDate);
 				oldcal.set(newcal.get(Calendar.YEAR), newcal.get(Calendar.MONTH), newcal.get(Calendar.DATE));
-				if (timer.getModifiedId() == null || timer.getModifiedId().equals("new")) {
+				if (timer.getModifiedId() == null) {
 					timer.setModifiedId("modify");
 				}
 			} catch (ParseException e) {}
@@ -87,7 +87,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 				newcal.setTime(newDate);
 				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
 				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
-				if (timer.getModifiedId() == null || timer.getModifiedId().equals("new")) {
+				if (timer.getModifiedId() == null) {
 					timer.setModifiedId("modify");
 				}
 			} catch (ParseException e) {}
@@ -102,7 +102,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 				newcal.setTime(newDate);
 				oldcal.set(Calendar.HOUR_OF_DAY, newcal.get(Calendar.HOUR_OF_DAY));
 				oldcal.set(Calendar.MINUTE, newcal.get(Calendar.MINUTE));
-				if (timer.getModifiedId() == null || timer.getModifiedId().equals("new")) {
+				if (timer.getModifiedId() == null) {
 					timer.setModifiedId("modify");
 				}
 			} catch (ParseException e) {}
@@ -111,7 +111,7 @@ public class GuiNeutrinoRecordTimerTableModel extends AbstractTableModel
 			BOTimer timer = (BOTimer)this.getControl().getTimerList()[0].get(row);
 			timer.setEventRepeatId(control.convertLongEventRepeat((String)value));
 			control.getTab().selectRepeatDaysForRecordTimer(timer);
-			if (timer.getModifiedId() == null || timer.getModifiedId().equals("new")) {
+			if (timer.getModifiedId() == null) {
 				timer.setModifiedId("modify");
 			}
 		}
