@@ -187,10 +187,7 @@ public class UdpRecord  extends Record {
 	    try {
 	        outputStream.write("STOP\n");
 	        outputStream.flush();
-	        Logger.getLogger("UdpRecord").info("to DBox: STOP");
-	        
-	        udpReceiver.closeSocket();
-	        tcpReceiver.closeSocket();
+	        Logger.getLogger("UdpRecord").info("to DBox: STOP");	        
             for (int i=0; i<writeStream.length; i++) {
                 writeStream[i].stop();
             }
