@@ -79,7 +79,7 @@ public class GuiTabRecordInfo extends GuiTab {
 
 		JPanel currentRecord = new JPanel();
 		FormLayout layout = new FormLayout("pref:grow", // columns
-				"50,75,pref, f:150:grow"); // rows
+				"55,75,pref, f:150:grow"); // rows
 		PanelBuilder builder = new PanelBuilder(currentRecord, layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
@@ -99,7 +99,7 @@ public class GuiTabRecordInfo extends GuiTab {
 	}
 
 	private JPanel initRecordPanel() {
-		recordTitle = new JTextArea();
+		recordTitle = new JTextArea("");
 
 		recordTitle.setEditable(false);
 		recordTitle.setBorder(BorderFactory.createEtchedBorder());
