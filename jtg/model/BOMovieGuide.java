@@ -6,6 +6,7 @@
  */
 package model;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 /**
@@ -100,7 +101,7 @@ public class BOMovieGuide {
     public BOMovieGuide() {  
     	
     }
-    public BOMovieGuide(String sender, String datum , String start, String ende, String titel, String episode,
+    public BOMovieGuide(String sender, String datum , GregorianCalendar start, GregorianCalendar ende, String titel, String episode,
             String genre, String dauer, String land, String jahr, String regie,
             String bild, String ton, String darsteller, String inhalt){
     		this.sender = new ArrayList();
@@ -190,7 +191,7 @@ public class BOMovieGuide {
      * Setter for property start.
      * @param start New value of property start.
      */
-    public void setStart(String start) {
+    public void setStart(GregorianCalendar start) {
         this.start.add(start);
     }
     
@@ -202,7 +203,7 @@ public class BOMovieGuide {
      * Setter for property start.
      * @param start New value of property start.
      */
-    public void setEnde(String ende) {
+    public void setEnde(GregorianCalendar ende) {
         this.ende.add(ende);
     }
     
