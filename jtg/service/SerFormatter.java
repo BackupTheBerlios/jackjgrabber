@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.GregorianCalendar;
 import java.text.ParseException;
-import java.text.DateFormat;
 
 /**
  * @author ralix
@@ -19,6 +18,8 @@ public class SerFormatter {
 	 * @return
 	 */
 	private static final String DATE_FULL = "EEEE, dd. MMMM yyyy";
+	private static final String DATE_SHORT_TIME = "dd.MM./HH:mm";
+	private static final String TIME = "HH:mm";
 	
 	public static String removeInvalidCharacters(String input) {
 
@@ -149,23 +150,19 @@ public class SerFormatter {
 	}
 
 	public static String getCorrectEndTime(String start, String ende) {
-	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, "hh:mm");
+	    GregorianCalendar cal = SerFormatter.convString2GreCal(start, TIME);
 		cal.set(GregorianCalendar.HOUR_OF_DAY, cal.get(GregorianCalendar.HOUR_OF_DAY)+ Integer.parseInt(ende.substring(0, 2)));
 		cal.set(GregorianCalendar.MINUTE, cal.get(GregorianCalendar.MINUTE)+ Integer.parseInt(ende.substring(3, 5)));
-		return out(cal.get(GregorianCalendar.HOUR_OF_DAY)) + ":"
-				+ out(cal.get(GregorianCalendar.MINUTE));
+		return getFormatGreCal(cal, TIME);
 	}
 
-	public static String getCorrectDate(String datum) {
-	    GregorianCalendar cal = SerFormatter.convString2GreCal(datum, "dd.MM./HH:mm");
-		DateFormat formater2 = DateFormat.getDateInstance(DateFormat.FULL);
-		datum = formater2.format(cal.getTime()).toString();
-		return datum;
+	public static String getCorrectDate(String datum) {	   
+		return getFormatGreCal(convString2GreCal(datum,DATE_SHORT_TIME),DATE_FULL);
 	}
 
 	public static boolean isCorrectDate(String datum) {
 		boolean value = true;
-		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM./HH:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat(DATE_SHORT_TIME);
 		try {
 			datum = SerFormatter.setCorrectYear(formatter.parse(datum)).toString();
 		} catch (ParseException pex) {
@@ -181,11 +178,11 @@ public class SerFormatter {
 		while (t.hasMoreTokens())b.append(t.nextToken());
 		return b.toString();
 	}
-
-	public static String getAktuellDateString(int monat) {
+		
+	public static String getAktuellDateString(int monat,String format) {
 		GregorianCalendar calmg = new GregorianCalendar(TimeZone.getTimeZone("ECT"));
 		calmg.set(GregorianCalendar.MONTH, (calmg.get(GregorianCalendar.MONTH)+monat));
-        return getFormatGreCal(calmg,"MM")+"_"+getFormatGreCal(calmg,"yy");				
+		return getFormatGreCal(calmg,format);			
 	}
 
 	public static String getFormatGreCal() {
