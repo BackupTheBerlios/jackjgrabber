@@ -3,17 +3,18 @@
  */
 package presentation;
 
-import javax.swing.JPanel;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
-import javax.swing.JTable;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import model.BOLocale;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlMain;
 import control.ControlSettingsTab;
@@ -23,224 +24,71 @@ import control.ControlSettingsTab;
  */
 public class GuiTabSettings extends JPanel {
 
-	private JPanel jPanel = null;
-	private JPanel panelLayoutSettings = null;
 	private JPanel panelBoxSettings = null;
-	private JPanel jPanel3 = null;
-	private JPanel jPanel4 = null;
-	private JPanel jPanel5 = null;
+	private JPanel panelLayoutSettings = null;
 	private JComboBox jComboBoxTheme = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JScrollPane jScrollPaneBoxSettings = null;
 	private JTable jTableBoxSettings = null;
-	private JLabel jLabel = null;
 	private ControlSettingsTab control;
 	private GuiBoxSettingsTableModel modelBoxTable;
 	private JLabel jLabel1 = null;
 	private JComboBox jComboBoxLocale = null;
-	private JPanel jPanel1 = null;
-	private JLabel jLabel2 = null;
-	/**
-	 * This is the default constructor
-	 */
+
 	public GuiTabSettings(ControlSettingsTab ctrl) {
 		super();
 		this.setControl(ctrl);
 		initialize();
 	}
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
+
 	private  void initialize() {
-		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-		GridBagConstraints constraintsBoxSettings = new GridBagConstraints();
-		GridBagConstraints constraintsLayoutSettings = new GridBagConstraints();
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		this.setLayout(new GridBagLayout());
-		//this.setSize(770, 400);		
-		this.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.gridy = 1;
-		gridBagConstraints1.gridheight = 1;
-		gridBagConstraints1.gridwidth = 1;
-		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-		constraintsLayoutSettings.gridx = 1;
-		constraintsLayoutSettings.gridy = 0;
-		constraintsLayoutSettings.gridheight = 1;
-		constraintsLayoutSettings.gridwidth = 1;
-		constraintsLayoutSettings.fill = java.awt.GridBagConstraints.BOTH;
-		constraintsBoxSettings.gridx = 0;
-		constraintsBoxSettings.gridy = 0;
-		constraintsBoxSettings.gridheight = 1;
-		constraintsBoxSettings.fill = java.awt.GridBagConstraints.BOTH;
-		constraintsBoxSettings.anchor = java.awt.GridBagConstraints.CENTER;
-		constraintsBoxSettings.insets = new java.awt.Insets(0,0,0,0);
-		gridBagConstraints4.gridx = 1;
-		gridBagConstraints4.gridy = 2;
-		gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints5.gridx = 0;
-		gridBagConstraints5.gridy = 2;
-		gridBagConstraints5.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints6.gridx = 1;
-		gridBagConstraints6.gridy = 1;
-		gridBagConstraints6.gridwidth = 1;
-		gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
-		this.add(getJPanel(), gridBagConstraints1);
-		this.add(getPanelLayoutSettings(), constraintsLayoutSettings);
-		this.add(getPanelBoxSettings(), constraintsBoxSettings);
-		this.add(getJPanel3(), gridBagConstraints4);
-		this.add(getJPanel4(), gridBagConstraints5);
-		this.add(getJPanel5(), gridBagConstraints6);
+		FormLayout layout = new FormLayout(
+						  "f:pref:grow, 20, f:200:grow",  		// columns 
+						  "pref"); 			// rows
+				PanelBuilder builder = new PanelBuilder(this, layout);
+				builder.setDefaultDialogBorder();
+				CellConstraints cc = new CellConstraints();
+		
+				builder.add(this.getPanelBoxSettings(),		   		cc.xywh(1, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));
+				builder.add(this.getPanelLayoutSettings(),			cc.xywh(3, 1, 1, 1, CellConstraints.LEFT, CellConstraints.TOP));				
 	}
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			jPanel = new JPanel();
-			jPanel.setPreferredSize(new java.awt.Dimension(100,160));
-			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		}
-		return jPanel;
-	}
-	/**
-	 * This method initializes panelLayoutSettings	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getPanelLayoutSettings() {
-		if (panelLayoutSettings == null) {
-			jLabel2 = new JLabel();
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			jLabel1 = new JLabel();
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			jLabel = new JLabel();
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			panelLayoutSettings = new JPanel();
-			panelLayoutSettings.setLayout(new GridBagLayout());
-			panelLayoutSettings.setPreferredSize(new java.awt.Dimension(370,100));
-			panelLayoutSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints7.gridx = 1;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 2.0;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints7.anchor = java.awt.GridBagConstraints.NORTH;
-			gridBagConstraints7.gridwidth = 2;
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.anchor = java.awt.GridBagConstraints.NORTH;
-			jLabel.setText("Theme");
-			gridBagConstraints11.gridx = 0;
-			gridBagConstraints11.gridy = 2;
-			jLabel1.setText("locale");
-			gridBagConstraints2.gridx = 1;
-			gridBagConstraints2.gridy = 2;
-			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints2.anchor = java.awt.GridBagConstraints.NORTH;
-			gridBagConstraints2.gridwidth = 2;
-			gridBagConstraints31.gridx = 1;
-			gridBagConstraints31.gridy = 3;
-			gridBagConstraints31.weightx = 3.0D;
-			gridBagConstraints31.weighty = 3.0D;
-			gridBagConstraints31.gridwidth = 3;
-			gridBagConstraints12.gridx = 1;
-			gridBagConstraints12.gridy = 4;
-			gridBagConstraints12.gridwidth = 3;
-			jLabel2.setText("(Anwendungs-Neustart erforderlich)");
-			jLabel2.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD | java.awt.Font.ITALIC, 10));
-			panelLayoutSettings.add(getJComboBoxTheme(), gridBagConstraints7);
-			panelLayoutSettings.add(jLabel, gridBagConstraints8);
-			panelLayoutSettings.add(jLabel1, gridBagConstraints11);
-			panelLayoutSettings.add(getJComboBoxLocale(), gridBagConstraints2);
-			panelLayoutSettings.add(getJPanel1(), gridBagConstraints31);
-			panelLayoutSettings.add(jLabel2, gridBagConstraints12);
-		}
-		return panelLayoutSettings;
-	}
-	/**
-	 * This method initializes jPanel2	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	    
 	private JPanel getPanelBoxSettings() {
 		if (panelBoxSettings == null) {
-			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			panelBoxSettings = new JPanel();
-			panelBoxSettings.setLayout(new GridBagLayout());
-			panelBoxSettings.setPreferredSize(new java.awt.Dimension(390,140));
-			panelBoxSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Box-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints42.gridx = 0;
-			gridBagConstraints42.gridy = 1;
-			gridBagConstraints42.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints51.gridx = 1;
-			gridBagConstraints51.gridy = 0;
-			gridBagConstraints51.weightx = 1.0;
-			gridBagConstraints51.weighty = 1.0;
-			gridBagConstraints51.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints51.gridheight = 5;
-			panelBoxSettings.add(getJButtonAnlegen(), gridBagConstraints3);
-			panelBoxSettings.add(getJButtonLoeschen(), gridBagConstraints42);
-			panelBoxSettings.add(getJScrollPaneBoxSettings(), gridBagConstraints51);
+			FormLayout layout = new FormLayout(
+					  "pref:grow, 5, pref",	 		//columna 
+			  "pref:grow, pref:grow, pref:grow, 40:grow");				//rows
+			PanelBuilder builder = new PanelBuilder(panelBoxSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator("Box-Settings",						cc.xywh	(1, 1, 3, 1));
+			builder.add(this.getJScrollPaneBoxSettings(),	  			cc.xywh	(1, 2, 1, 3));
+			builder.add(this.getJButtonAnlegen(),						cc.xy	(3, 2));
+			builder.add(this.getJButtonLoeschen(),						cc.xy	(3, 3));
 		}
 		return panelBoxSettings;
 	}
-	/**
-	 * This method initializes jPanel3	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getJPanel3() {
-		if (jPanel3 == null) {
-			jPanel3 = new JPanel();
-			jPanel3.setMinimumSize(new java.awt.Dimension(100,100));
-			jPanel3.setPreferredSize(new java.awt.Dimension(100,100));
-			jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+  
+	private JPanel getPanelLayoutSettings() {
+		if (panelLayoutSettings == null) {
+			panelLayoutSettings = new JPanel();
+			FormLayout layout = new FormLayout(
+					  "pref, 10, pref",	 		//columna 
+			  "pref, pref, pref, pref");	//rows
+			PanelBuilder builder = new PanelBuilder(panelLayoutSettings, layout);
+			CellConstraints cc = new CellConstraints();
+
+			builder.addSeparator("Layout-Settings",						cc.xywh	(1, 1, 3, 1));
+			builder.add(new JLabel("Theme"),				  			cc.xy	(1, 2));
+			builder.add(this.getJComboBoxTheme(),						cc.xy	(3, 2));
+			builder.add(new JLabel("Locale"),				  			cc.xy	(1, 4));
+			builder.add(this.getJComboBoxLocale(),						cc.xy	(3, 4));
 		}
-		return jPanel3;
+		return panelLayoutSettings;
 	}
-	/**
-	 * This method initializes jPanel4	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getJPanel4() {
-		if (jPanel4 == null) {
-			jPanel4 = new JPanel();
-			jPanel4.setPreferredSize(new java.awt.Dimension(100,160));
-			jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		}
-		return jPanel4;
-	}
-	/**
-	 * This method initializes jPanel5	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getJPanel5() {
-		if (jPanel5 == null) {
-			jPanel5 = new JPanel();
-			jPanel5.setPreferredSize(new java.awt.Dimension(100,100));
-			jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Layout-Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		}
-		return jPanel5;
-	}
+	
 	/**
 	 * This method initializes jComboBoxLocale	
 	 * 	
@@ -256,7 +104,7 @@ public class GuiTabSettings extends JPanel {
 		return jComboBoxTheme;
 	}
 	/**
-	 * This method initializes jButton	
+	 * This method initializes jButtonAnlegen	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
@@ -271,7 +119,7 @@ public class GuiTabSettings extends JPanel {
 		return jButtonAnlegen;
 	}
 	/**
-	 * This method initializes jButton1	
+	 * This method initializes getJButtonLoeschen	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */    
@@ -298,7 +146,7 @@ public class GuiTabSettings extends JPanel {
 		return jScrollPaneBoxSettings;
 	}
 	/**
-	 * This method initializes jTable	
+	 * This method initializes jTableBoxSettings	
 	 * 	
 	 * @return javax.swing.JTable	
 	 */    
@@ -307,9 +155,10 @@ public class GuiTabSettings extends JPanel {
 			modelBoxTable = new GuiBoxSettingsTableModel(control);
 			jTableBoxSettings = new JTable(modelBoxTable);
 			jTableBoxSettings.setName("BoxSettings");
-			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(140);
+			jTableBoxSettings.getColumnModel().getColumn(0).setPreferredWidth(80);
 			jTableBoxSettings.getColumnModel().getColumn(1).setPreferredWidth(100);
 			jTableBoxSettings.getColumnModel().getColumn(2).setPreferredWidth(80);
+			jTableBoxSettings.getColumnModel().getColumn(3).setPreferredWidth(40);
 			jTableBoxSettings.getColumnModel().getColumn(3).setCellRenderer( new GuiBoxSettingsTableCellRenderer(control));
 		}
 		return jTableBoxSettings;
@@ -352,15 +201,4 @@ public class GuiTabSettings extends JPanel {
 		}
 		return jComboBoxLocale;
 	}
-	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			jPanel1 = new JPanel();
-		}
-		return jPanel1;
-	}
-        }
+}
