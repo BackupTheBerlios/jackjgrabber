@@ -55,8 +55,11 @@ public class PESWriteStream {
 			default:
 				return;
 		}
+		File base = new File(ControlMain.getSettings().getSavePath(), filename);
+		base.mkdir();
+		
 		String fullFileName = filename+"_"+stremNum+fileNameExtension;
-		File file = new File(ControlMain.getSettings().getSavePath(), fullFileName);
+		File file = new File(base, fullFileName);
 		recordControl.recordFiles.add(file);
 		fileOut = new BufferedOutputStream(new FileOutputStream(file));			
 	}
