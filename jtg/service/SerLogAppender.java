@@ -50,13 +50,13 @@ public class SerLogAppender extends RollingFileAppender {
 		super.doAppend(event);
 	}
 	/**
-	 * @return Returns the view.
+	 * @return Returns the tabSettings.
 	 */
 	public GuiMainView getView() {
 		return view;
 	}
 	/**
-	 * @param view The view to set.
+	 * @param tabSettings The tabSettings to set.
 	 */
 	public void setView(GuiMainView view) {
 		this.view = view;

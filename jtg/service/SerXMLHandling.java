@@ -42,7 +42,7 @@ public class SerXMLHandling {
 		Document doc = DocumentHelper.createDocument();
 		Element root = doc.addElement( "settings" );	
 		
-		setElementInElement(root,"playbackPlayer", "vlc");
+		setElementInElement(root,"playbackPlayer", "d: http://$ip:31339/$vPid,$aPid");
 		setElementInElement(root,"savePath", new File(System.getProperty("user.home")).getAbsolutePath());
 		setElementInElement(root,"startStreamingServer", "true");
 		setElementInElement(root,"streamingServerPort", "4000");

@@ -1,6 +1,6 @@
 package control;
 /*
-ControlTimerTab.java by Geist Alexander 
+ControlTabTimer.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /*
  * Superklasse fuer die Timer-Controls
  */
-public abstract class ControlTimerTab extends ControlTab{
+public abstract class ControlTabTimer extends ControlTab{
 
 	public abstract ArrayList getSenderList();
 	public abstract String[] getRepeatOptions();

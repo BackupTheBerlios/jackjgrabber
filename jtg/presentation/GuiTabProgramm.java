@@ -93,7 +93,7 @@ public class GuiTabProgramm extends GuiTab {
 		this.setDisconnectModus();
 	}
 	
-	private  void initialize() {
+	protected  void initialize() {
 		FormLayout layout = new FormLayout(
 			      "pref, 10, 150, 10, pref, 10, pref, 10, 250:grow",  							// columns 
 			      "pref, 263px:grow, 10, pref, pref, 3dlu, pref, 100px:grow");	// rows

@@ -39,7 +39,7 @@ import service.SerAlertDialog;
 import service.SerFormatter;
 
 
-public class ControlNeutrinoTimerTab extends ControlTimerTab implements ActionListener, MouseListener {
+public class ControlNeutrinoTimerTab extends ControlTabTimer implements ActionListener, MouseListener {
 	
 	GuiMainView mainView;
 	ArrayList[] timerList;

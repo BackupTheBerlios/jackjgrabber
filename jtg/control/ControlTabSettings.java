@@ -1,6 +1,5 @@
-package presentation;
 /*
-GuiTabProjectX.java by Geist Alexander 
+ControlTabSettings.java by Geist Alexander 
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,26 +16,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-import control.ControlProjectXTab;
+package control;
 
-public class GuiTabProjectX extends GuiTab {
+import presentation.GuiTabSettings;
 
-	private ControlProjectXTab control;
+public abstract class ControlTabSettings {
+    
+    public abstract GuiTabSettings getSettingsTab();
+	public abstract void setSettingsTab(GuiTabSettings view);
+	/**
+	 * Mit dieser Methode wird der zugehörige TAB mit Daten versorgt 
+	 */
+	public abstract void initialize();
 
-	public GuiTabProjectX(ControlProjectXTab control) {
-		this.setControl(control);
-		initialize();
-	}
-
-	protected  void initialize() {
-
-	}
-
-	public ControlProjectXTab getControl() {
-		return control;
-	}
-
-	public void setControl(ControlProjectXTab control) {
-		this.control = control;
-	}
- }
+}

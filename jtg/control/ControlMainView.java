@@ -169,13 +169,13 @@ public class ControlMainView implements ActionListener, ChangeListener {
 		this.guiTerms = guiTerms;
 	}
 	/**
-	 * @return Returns the view.
+	 * @return Returns the tabSettings.
 	 */
 	public GuiMainView getView() {
 		return view;
 	}
 	/**
-	 * @param view The view to set.
+	 * @param tabSettings The tabSettings to set.
 	 */
 	public void setView(GuiMainView view) {
 		this.view = view;

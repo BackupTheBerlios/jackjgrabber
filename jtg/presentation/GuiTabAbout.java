@@ -17,10 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
 
 */ 
-
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -30,7 +26,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import control.ControlAboutTab;
 
-public class GuiTabAbout extends JPanel {
+public class GuiTabAbout extends GuiTab {
 
 	private ControlAboutTab control;
 	private JTextArea taVersion;
@@ -48,7 +44,7 @@ public class GuiTabAbout extends JPanel {
 		initialize();
 	}
 
-	private  void initialize() {
+	protected  void initialize() {
 		FormLayout layout = new FormLayout(
 						  "150:grow, 8dlu, pref:grow, 8dlu, pref:grow, 8dlu,  pref:grow",  		// columns 
 						  "pref, 4dlu, f:50:grow, 4dlu, pref, 4dlu, f:330:grow"); 			// rows

@@ -18,20 +18,20 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */ 
 
-import javax.swing.table.AbstractTableModel ;
-import java.util.*;
+import java.util.ArrayList;
+
+import javax.swing.table.AbstractTableModel;
+
 import model.BOBox;
-
 import service.SerAlertDialog;
-
 import control.ControlMain;
-import control.ControlSettingsTab;
+import control.ControlSettingsTabMain;
 
 public class GuiBoxSettingsTableModel extends AbstractTableModel  {
 	
-	ControlSettingsTab control;
+    ControlSettingsTabMain control;
 	
-	public GuiBoxSettingsTableModel(ControlSettingsTab ctrl) {
+	public GuiBoxSettingsTableModel(ControlSettingsTabMain ctrl) {
 		control = ctrl;
 	}
 

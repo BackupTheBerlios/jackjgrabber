@@ -25,7 +25,6 @@ import control.ControlMain;
 import control.ControlProgramTab;
 import control.ControlProjectXTab;
 import control.ControlSettingsTab;
-import control.ControlMovieGuideTab;
 
 public class GuiMainTabPane extends JTabbedPane {
 
@@ -122,13 +121,13 @@ public class GuiMainTabPane extends JTabbedPane {
 	}
 	*/
 	/**
-	 * @return Returns the view.
+	 * @return Returns the tabSettings.
 	 */
 	public GuiMainView getView() {
 		return view;
 	}
 	/**
-	 * @param view The view to set.
+	 * @param tabSettings The tabSettings to set.
 	 */
 	public void setView(GuiMainView view) {
 		this.view = view;

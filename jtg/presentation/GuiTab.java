@@ -24,5 +24,6 @@ import javax.swing.JPanel;
  */
 public abstract class GuiTab extends JPanel {
 	
+    abstract protected void initialize();
 	
 }
