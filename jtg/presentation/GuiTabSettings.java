@@ -20,6 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 import java.awt.Dimension;
 import java.text.ParseException;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,6 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -53,10 +55,15 @@ public class GuiTabSettings extends JPanel {
 	private JComboBox jComboBoxStreamType = null;
 	private JComboBox jComboBoxLocale = null;
 	private JTextField jTextFieldRecordSavePath;
+	private JTextField jTextFieldUdrecPath;
 	private JTextField jTextFieldPlaybackString = null;
 	private JButton jButtonAnlegen = null;
 	private JButton jButtonLoeschen = null;
 	private JButton jButtonRecordPathFileChooser;
+	private JButton jButtonUdrecPathFileChooser;
+	private JRadioButton jRadioButtonUdrec;
+	private JRadioButton jRadioButtonJGrabber;
+	private ButtonGroup buttonGroupStreamingEngine = new ButtonGroup();
 	private JScrollPane jScrollPaneBoxSettings = null;
 	private JTable jTableBoxSettings = null;
 	private JFormattedTextField tfServerPort = null;
@@ -107,21 +114,26 @@ public class GuiTabSettings extends JPanel {
 		if (panelRecordSettings == null) {
 			panelRecordSettings = new JPanel();
 			FormLayout layout = new FormLayout(
-					  "pref, 5, pref, pref:grow,  5, pref",	 		//columna 
-			  "pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow");				//rows
+					  "pref, 5, pref, 10, pref:grow,  5, pref",	 		//columns 
+			  "pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref:grow, pref, 4, pref:grow");		//rows
 			PanelBuilder builder = new PanelBuilder(panelRecordSettings, layout);
 			CellConstraints cc = new CellConstraints();
 
-			builder.addSeparator("Aufname-Settings",								cc.xywh	(1, 1, 6, 1));
+			builder.addSeparator("Aufname-Settings",							cc.xywh	(1, 1, 7, 1));
 			builder.add(this.getCbStartStreamingServer(),						cc.xywh	(1, 2, 5, 1));
-			builder.add(new JLabel("Streamingserver-Port"),	  				cc.xy	(1, 3));
-			builder.add(this.getTfServerPort(),											cc.xy	(3, 3));
-			builder.add(new JLabel("Stream-Typ"),					  				cc.xy	(1, 4));
-			builder.add(this.getJComboBoxStreamType(),							cc.xy	(3, 4));			
-			builder.add(this.getCbStartPX(),												cc.xywh	(1, 5, 5, 1));
-			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),			cc.xy	(1, 6));
-			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(3, 6, 2, 1));
-			builder.add(this.getJButtonRecordPathFileChooser(),				cc.xy	(6, 6));
+			builder.add(new JLabel("Streamingserver-Port"),	  					cc.xy	(1, 3));
+			builder.add(this.getTfServerPort(),									cc.xy	(3, 3));			
+			builder.add(this.getCbStartPX(),									cc.xywh	(1, 5, 5, 1));
+			builder.add(new JLabel("Aufnahme-Zielverzeichniss"),				cc.xy	(1, 6));
+			builder.add(this.getJTextFieldRecordSavePath(),						cc.xywh	(4, 6, 2, 1));
+			builder.add(this.getJButtonRecordPathFileChooser(),					cc.xy	(7, 6));
+			builder.addSeparator("TV-Aufname-Engine",							cc.xywh	(1, 7, 7, 1));	
+			builder.add(this.getJRadioButtonJGrabber(),							cc.xy	(1, 8));
+			builder.add(this.getJRadioButtonUdrec(),							cc.xy	(3, 8));
+			builder.add(this.getJComboBoxStreamType(),							cc.xywh	(5, 8, 2, 1));
+			builder.add(new JLabel("Pfad zur udrec.exe"),						cc.xy	(1, 10));
+			builder.add(this.getJTextFieldUdrecPath(),							cc.xywh	(4, 10, 2, 1));
+			builder.add(this.getJButtonUdrecPathFileChooser(),					cc.xy	(7, 10));
 		}
 		return panelRecordSettings;
 	}
@@ -183,7 +195,7 @@ public class GuiTabSettings extends JPanel {
 	 */    
 	public JComboBox getJComboBoxStreamType() {
 		if (jComboBoxStreamType == null) {
-			jComboBoxStreamType = new JComboBox(ControlMain.streamTypes);
+			jComboBoxStreamType = new JComboBox();
 			jComboBoxStreamType.addItemListener(control);
 			jComboBoxStreamType.setName("streamType");
 			jComboBoxStreamType.setPreferredSize(new java.awt.Dimension(50,19));
@@ -348,16 +360,38 @@ public class GuiTabSettings extends JPanel {
 		return jButtonRecordPathFileChooser;
 	}
 	/**
+	 * @return Returns the jButtonUdrecPathFileChooser.
+	 */
+	public JButton getJButtonUdrecPathFileChooser() {
+		if (jButtonUdrecPathFileChooser == null) {
+			jButtonUdrecPathFileChooser = new JButton("...");
+			jButtonUdrecPathFileChooser.setActionCommand("udrecPath");
+			jButtonUdrecPathFileChooser.addActionListener(control);
+		}
+		return jButtonUdrecPathFileChooser;
+	}
+	/**
 	 * @return Returns the jTextFieldRecordSavePath.
 	 */
 	public JTextField getJTextFieldRecordSavePath() {
 		if (jTextFieldRecordSavePath == null) {
 			jTextFieldRecordSavePath = new JTextField();
-			jTextFieldRecordSavePath.addActionListener(control);
 			jTextFieldRecordSavePath.setPreferredSize(new Dimension(340, 19));
 			jTextFieldRecordSavePath.setEditable(false);
 		}
 		return jTextFieldRecordSavePath;
+	}
+	/**
+	 * @return Returns the jTextFieldUdrecPath.
+	 */
+	public JTextField getJTextFieldUdrecPath() {
+		if (jTextFieldUdrecPath == null) {
+			jTextFieldUdrecPath = new JTextField();
+			jTextFieldUdrecPath.addKeyListener(control);
+			jTextFieldUdrecPath.setName("udrecPath");
+			jTextFieldUdrecPath.setPreferredSize(new Dimension(340, 19));
+		}
+		return jTextFieldUdrecPath;
 	}
 	/**
 	 * @return Returns the jTextFieldPlaybackString.
@@ -381,5 +415,36 @@ public class GuiTabSettings extends JPanel {
 			cbStartPX.addItemListener(control);
 		}
 		return cbStartPX;
+	}
+	/**
+	 * @return Returns the jRadioButtonJGrabber.
+	 */
+	public JRadioButton getJRadioButtonJGrabber() {
+		if (jRadioButtonJGrabber == null) {
+			jRadioButtonJGrabber = new JRadioButton("JGrabber");
+			jRadioButtonJGrabber.addActionListener(control);
+			jRadioButtonJGrabber.setActionCommand("jgrabber");
+			buttonGroupStreamingEngine.add(jRadioButtonJGrabber);
+		}
+		return jRadioButtonJGrabber;
+	}
+	/**
+	 * @return Returns the jRadioButtonUdrec.
+	 */
+	public JRadioButton getJRadioButtonUdrec() {
+		if (jRadioButtonUdrec == null) {
+			jRadioButtonUdrec = new JRadioButton("udrec");
+			jRadioButtonUdrec.addActionListener(control);
+			jRadioButtonUdrec.setActionCommand("udrec");
+			buttonGroupStreamingEngine.add(jRadioButtonUdrec);
+		}
+		return jRadioButtonUdrec;
+	}
+	/**
+	 * @return Returns the streamTypeComboModel.
+	 */
+	public GuiStreamTypeComboModel getStreamTypeComboModel() {
+		GuiStreamTypeComboModel model = (GuiStreamTypeComboModel)this.getJComboBoxStreamType().getModel();
+		return model;
 	}
 }

@@ -49,11 +49,35 @@ public class SerXMLConverter {
 		getSettingsSavePath(root, settings);
 		getSettingsLocale(root, settings);
 		getSettingsPlaybackPlayer(root, settings);
-		getSettingsStreamType(root, settings);
+		getJGrabberStreamType(root, settings);
+		getUdrecStreamType(root, settings);
 		getSettingsStartPX(root, settings);
+		getSettingsStreamingEngine(root, settings);
+		getSettingsUdrecPath(root, settings);
 		
 		settings.setBoxList(buildBoxSettings(root));
 		return settings;
+	}
+	
+	private static void getSettingsStreamingEngine(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/engine");
+		if (node != null) {
+			settings.streamingEngine=Integer.parseInt(node.getText());
+		} else {
+			SerXMLHandling.setElementInElement(root,"engine", "0");
+			settings.setStreamingEngine(0);
+		}
+	}
+	
+	private static void getSettingsUdrecPath(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/udrecPath");
+		if (node != null) {
+			settings.udrecPath=node.getText();
+		} else {
+			String path = new File("udrec.exe").getAbsolutePath();
+			SerXMLHandling.setElementInElement(root,"udrecPath", path);
+			settings.setUdrecPath(path);
+		}
 	}
 	
 	private static void getSettingsStartPX(Element root, BOSettings settings) {
@@ -66,13 +90,23 @@ public class SerXMLConverter {
 		}
 	}
 	
-	private static void getSettingsStreamType(Element root, BOSettings settings) {
-		Node node = root.selectSingleNode("/settings/streamType");
+	private static void getJGrabberStreamType(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/jgrabberStreamType");
 		if (node != null) {
-			settings.streamType=node.getText();
+			settings.jgrabberStreamType=node.getText();
 		} else {
-			SerXMLHandling.setElementInElement(root,"streamType", "PES");
-			settings.setStreamType("PES");
+			SerXMLHandling.setElementInElement(root,"jgrabberStreamType", "PES MPEG-Packetized Elementary");
+			settings.setJgrabberStreamType("PES");
+		}
+	}
+	
+	private static void getUdrecStreamType(Element root, BOSettings settings) {
+		Node node = root.selectSingleNode("/settings/udrecStreamType");
+		if (node != null) {
+			settings.udrecStreamType=node.getText();
+		} else {
+			SerXMLHandling.setElementInElement(root,"udrecStreamType", "PES MPEG-Packetized Elementary");
+			settings.setUdrecPath("PES");
 		}
 	}
 	
@@ -203,11 +237,17 @@ public class SerXMLConverter {
 		Node startServer = settingsDocument.selectSingleNode("/settings/startStreamingServer");
 		Node savePath = settingsDocument.selectSingleNode("/settings/savePath");
 		Node playbackPlayer = settingsDocument.selectSingleNode("/settings/playbackPlayer");
-		Node streamType = settingsDocument.selectSingleNode("/settings/streamType");
+		Node jgrabberStreamType = settingsDocument.selectSingleNode("/settings/jgrabberStreamType");
+		Node udrecStreamType = settingsDocument.selectSingleNode("/settings/udrecStreamType");
 		Node startPx = settingsDocument.selectSingleNode("/settings/startPX");
+		Node engine = settingsDocument.selectSingleNode("/settings/engine");
+		Node udrecPath = settingsDocument.selectSingleNode("/settings/udrecPath");
 
+		engine.setText(Integer.toString(ControlMain.getSettings().getStreamingEngine()));
+		udrecPath.setText(ControlMain.getSettings().getUdrecPath());
 		startPx.setText(Boolean.toString(ControlMain.getSettings().isStartPX()));
-		streamType.setText(ControlMain.getSettings().getStreamType());
+		jgrabberStreamType.setText(ControlMain.getSettings().getJgrabberStreamType());
+		udrecStreamType.setText(ControlMain.getSettings().getUdrecStreamType());
 		playbackPlayer.setText(ControlMain.getSettings().getPlaybackString());
 		startServer.setText(Boolean.toString(ControlMain.getSettings().isStartStreamingServer()));
 		savePath.setText(ControlMain.getSettings().getSavePath());
@@ -250,14 +290,14 @@ public class SerXMLConverter {
 		recordArgs.setEpgInfo2(epgInfo2.getText());
 		recordArgs.setEpgId(epgid.getText());
 		recordArgs.setMode(mode.getText());
-		recordArgs.setVPid(Integer.toHexString(Integer.parseInt(videopid.getText())));
+		recordArgs.setVPid(videopid.getText());
 		recordArgs.setVideotextPid(vtxtpid.getText());
 		
 		ArrayList pidList = new ArrayList();
 		for( int i=0; i<aPidNodes.size(); i++ ) {
 			String[] pidInfo = new String[2];
 			Element aPid = (Element)aPidNodes.get(i);
-			pidInfo[0] = Integer.toHexString(Integer.parseInt(aPid.attributeValue("pid")));
+			pidInfo[0] = aPid.attributeValue("pid");
 			pidInfo[1] = aPid.attributeValue("name");
 			pidList.add(pidInfo);
 		}

@@ -48,8 +48,11 @@ public class SerXMLHandling {
 		setElementInElement(root,"streamingServerPort", "4000");
 		setElementInElement(root,"theme", "Silver");
 		setElementInElement(root,"locale", "DE");
-		setElementInElement(root,"streamType", "PES");
+		setElementInElement(root,"jgrabberStreamType", "PES MPEG-Packetized Elementary");
+		setElementInElement(root,"udrecStreamType", "PES MPEG-Packetized Elementary");
 		setElementInElement(root,"startPX", "true");
+		setElementInElement(root,"udrecPath", new File("udrec.exe").getAbsolutePath());
+		setElementInElement(root,"engine", "0");
 
 		root.addElement("boxList");
 		ControlMain.setSettingsDocument(doc);
