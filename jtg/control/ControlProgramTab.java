@@ -717,10 +717,12 @@ public class ControlProgramTab extends ControlTab implements Runnable, ActionLis
 	}
 
 	private void startStreamingSever() {
-		int port = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
-		setStreamingServerThread(new SerStreamingServer(port, this));
-		getStreamingServerThread().start();
-		this.getMainView().getTabProgramm().startStreamingServerModus();
+	    if (this.getStreamingServerThread()==null) {
+	        int port = Integer.parseInt(ControlMain.getSettings().getRecordSettings().getStreamingServerPort());
+	    		setStreamingServerThread(new SerStreamingServer(port, this));
+	    		getStreamingServerThread().start();
+	    		this.getMainView().getTabProgramm().startStreamingServerModus();  
+	    }
 	}
 
 	public void stopStreamingServer() {
