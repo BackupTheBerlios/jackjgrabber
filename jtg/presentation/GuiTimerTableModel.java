@@ -71,9 +71,9 @@ public class GuiTimerTableModel extends AbstractTableModel
 		}catch(Exception ex){}		
 	}
 	
-	public void fireTableRowsInserted(int i, int i2) {
+	public void fireTableDataChanged() {
 		this.createTimerList();
-		super.fireTableRowsInserted(i, i2);
+		super.fireTableDataChanged();
 	}
 	
 	public ArrayList getTimerList() {
