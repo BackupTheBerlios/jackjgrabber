@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import service.SerFormatter;
+
 import control.ControlMain;
 
 
@@ -54,10 +56,6 @@ public class PESWriteStream {
 	    fileNumber = 1;
 	    fileName = filename;
 		switch (dataType) {
-//			case 'v':
-//				fileNameExtension = ".mpv";
-//				foundHeader=true;
-//				break;
 			case 't':
 				fileNameExtension = ".ts";
 				foundHeader=true;
@@ -71,7 +69,7 @@ public class PESWriteStream {
 	private void createFileOutput () {
 	    try {
             fileNumber = fileList.size();
-            String fullFileName = fileName+"_"+streamNumber+"_"+fileNumber+fileNameExtension;
+            String fullFileName = SerFormatter.stripOff(fileName+"_"+streamNumber+"_"+fileNumber+"<>*?|"+fileNameExtension);
             currentFile = new File(this.getDirectory(), fullFileName);
             
             fileOut = new BufferedOutputStream(new FileOutputStream(currentFile));
