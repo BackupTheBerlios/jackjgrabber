@@ -340,7 +340,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 							endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));    
 							//epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
 							epgObj.setEventId(eventId);
-							if (!epgList.contains(eventId)) {
+							if (!epgList.contains(epgObj)) {
 								epgObj.setUnformattedStart(startDateString);
 								epgObj.setUnformattedDuration(valueDuration);
 								epgObj.setTitle(title.trim());
