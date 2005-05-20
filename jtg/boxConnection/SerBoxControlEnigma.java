@@ -283,7 +283,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 	}
 	
 	public ArrayList getEpg(BOSender sender) throws IOException {
-	    ArrayList epgList=new ArrayList();
+		ArrayList epgList=sender.getEpg();
 	    
 	    int startEpgInfo;
 		int endEpgInfo, startpos, endpos, reload=0;
@@ -312,6 +312,7 @@ public class SerBoxControlEnigma extends SerBoxControl {
 				if (startpos > 0){
 					while ((line2=input.readLine())!=null) {
 						if (line2.indexOf("ID: ")>0) {
+							BOEpg epgObj = new BOEpg();
 							startpos+=4;
 							endpos=line.indexOf(" ", startpos+1);
 							eventId=line.substring(startpos, endpos);
@@ -337,7 +338,18 @@ public class SerBoxControlEnigma extends SerBoxControl {
 							startDate = SerFormatter.formatUnixDate(valueStart);
 							duration = Integer.toString(Integer.parseInt(valueDuration)/60) +" Min";
 							endDate = SerFormatter.formatUnixDate(Long.parseLong(valueStart) + Long.parseLong(valueDuration));    
-							epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
+							//epgList.add(new BOEpg(sender, eventId, startDate, endDate, duration, title, valueStart, valueDuration));
+							epgObj.setEventId(eventId);
+							if (!epgList.contains(eventId)) {
+								epgObj.setUnformattedStart(startDateString);
+								epgObj.setUnformattedDuration(valueDuration);
+								epgObj.setTitle(title.trim());
+				                epgObj.setStartDate(startDate);
+				                epgObj.setDuration(duration);
+				                epgObj.setEndDate(endDate);
+				                epgObj.setSender(sender);
+							    epgList.add(epgObj);
+							};
 							line=line2;
 							startpos=line2.indexOf("ID: ");
 						}
